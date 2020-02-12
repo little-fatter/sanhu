@@ -1,0 +1,139 @@
+/* 新建全局样式,用于覆盖antd默认的样式 */
+
+/* 字体设置 */
+@font-face {
+    font-family: 'PingFang-Regular';
+    src: url('../font/PingFang-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 表格字体大小定义 */
+@table_font_size: 13px;
+@thend_font_color: #64697B;
+@tbody_font_color: #222328;
+
+/* 定义表格斑马线颜色 */
+@table_even_bgcolor: #fefefe;
+@table_odd_bgcolor: #eaedf4;
+
+/* 修改表格的一些基础样式 */
+.ant-table-thead {
+    font-family: 'PingFang-Regular';
+    font-size: @table_font_size;
+    border-bottom: 4px solid #edeff5;
+    color: @thend_font_color;
+    font-weight: 400;
+}
+.ant-table-tbody {
+    font-family: 'PingFang-Regular';
+    font-size: @table_font_size;
+    color: @tbody_font_color;
+    font-weight: 400;
+}
+.even-tr {
+    background-color: @table_even_bgcolor;
+}
+.odd-tr {
+    background-color: @table_odd_bgcolor;
+}
+
+/* 修改表格排序时，小箭头的颜色 */
+.ant-table-column-sorter {
+    .ant-table-column-sorter-up {
+        &.on {
+            color: red !important;
+        }
+    }
+    .ant-table-column-sorter-down {
+        &.on {
+            color: green !important;
+        }
+    }
+}
+/* 修改菜单在top上时，整体靠右对其 */
+.top-menu {
+    flex: 1;
+    text-align: right;
+}
+
+/* 修改菜单在top上时，border的颜色和大小 */
+.ant-menu-horizontal {
+    .ant-menu-item-selected {
+        border-bottom: 3px solid #1890ff !important;
+    }
+}
+
+/*  修改左侧菜单栏缩进时的距离为50px */
+.ant-layout-sider-collapsed {
+    // &.cover-width {
+        flex: 0 0 50px !important;
+        max-width: 50px !important;
+        min-width: 50px !important;
+        width: 50px !important;
+    // }
+}
+
+/* 修改菜单栏的active为左边 */
+.cover-width {
+    .ant-menu-item-selected {
+        &::after{
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            border-left: 3px solid #1890ff;
+            border-right: none;
+        }
+    }
+}
+
+.ant-menu-submenu-vertical {
+    &.ant-menu-submenu-selected {
+        border-left: 3px solid #1890ff;
+    }
+}
+
+/* 修改菜单栏的active为左边 */
+.ant-menu-inline-collapsed {
+    .ant-menu-item-selected {
+        &::before{
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            border-left: 3px solid #1890ff;
+            border-right: none;
+        }
+    }
+}
+
+/* 修改头部menu的高度 */
+.ant-menu-horizontal {
+    height: 50px !important;
+    line-height: 50px !important;
+}
+
+/* 修改头部logo部分的垂直居中 */
+.top-nav-header {
+    height: 50px !important;
+    line-height: 50px !important;
+}
+
+/* 修改头部缩进的垂直居中 */
+.trigger {
+    line-height: 50px !important;
+}
+
+/* 总览 */
+.overview {
+    height: 40px;
+    line-height: 40px;
+    color: #A1A6BB;
+    font-size: 12px;
+    font-family: 'PingFang-Regular';
+    text-align: center;
+    cursor: pointer;
+}
