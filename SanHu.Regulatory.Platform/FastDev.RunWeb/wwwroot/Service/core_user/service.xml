@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_user" title="用户" textField="RealName" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="Department" dbName="DepartmentID" title="部门" type="many2one" relationModel="res_department" enabledSearch="Y" isPK="N" />
+        <field name="QQ" dbName="QQ" title="QQ" type="string" length="50" isPK="N" />
+        <field name="Sex" dbName="Sex" title="性别" type="boolean" isPK="N" />
+        <field name="Role" dbName="core_userRole" title="角色" type="many2many" relationModel="core_role" isPK="N" />
+        <field name="Age" dbName="Age" title="年龄" type="integer" length="0" isPK="N" />
+        <field name="RealName" dbName="RealName" title="姓名" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="UserNo" dbName="UserNo" title="用户名" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="NickName" dbName="NickName" title="昵称" type="string" length="50" isPK="N" />
+        <field name="Fax" dbName="Fax" title="传真" type="string" length="50" isPK="N" />
+        <field name="BankCode" dbName="BankCode" title="银行账号" type="string" length="50" isPK="N" />
+        <field name="Phone" dbName="Phone" title="手机号" type="string" length="50" isPK="N" />
+        <field name="LastLoginTime" dbName="LastLoginTime" title="最后登录时间" type="datetime" isPK="N" />
+        <field name="Email" dbName="Email" title="Email" type="string" length="50" isPK="N" />
+        <field name="LoginName" dbName="LoginName" title="登录账号" type="string" length="50" isPK="N" />
+        <field name="Title" dbName="Title" title="称呼" type="string" length="50" isPK="N" />
+        <field name="MyPic" dbName="MyPic" title="用户头像" type="string" length="50" isPK="N" />
+        <field name="LoginPassword" dbName="LoginPassword" title="登录密码" type="string" length="50" isPK="N" />
+        <field name="Address" dbName="Address" title="地址" type="string" length="50" isPK="N" />
+        <field name="HomeStyle" dbName="HomeStyle" title="首页样式" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Store" dbName="StoreID" title="门店" type="many2one" relationModel="res_store" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Store" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Store" one2many="" many2many="" />
+</freedesign>

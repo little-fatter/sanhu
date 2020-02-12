@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="v_Northwind_Order" title="v_Northwind_Order" textField="订单ID" moduleName="case" moduleTitle="示例" notIncludeSysFields="Y" dbName="" />
+    <fields>
+        <field name="订单ID" dbName="订单ID" title="订单ID" type="string" length="50" isPK="Y" />
+        <field name="客户ID" dbName="客户ID" title="客户ID" type="string" length="50" isPK="N" />
+        <field name="客户名" dbName="客户名" title="客户名" type="string" length="50" isPK="N" />
+        <field name="雇员ID" dbName="雇员ID" title="雇员ID" type="string" length="50" isPK="N" />
+        <field name="雇员姓名" dbName="雇员姓名" title="雇员姓名" type="string" length="50" isPK="N" />
+        <field name="订购日期" dbName="订购日期" title="订购日期" type="string" length="50" isPK="N" />
+        <field name="到货日期" dbName="到货日期" title="到货日期" type="string" length="50" isPK="N" />
+        <field name="发货日期" dbName="发货日期" title="发货日期" type="string" length="50" isPK="N" />
+        <field name="运货商" dbName="运货商" title="运货商" type="string" length="50" isPK="N" />
+        <field name="运货费" dbName="运货费" title="运货费" type="string" length="50" isPK="N" />
+        <field name="货主名称" dbName="货主名称" title="货主名称" type="string" length="50" isPK="N" />
+        <field name="货主地址" dbName="货主地址" title="货主地址" type="string" length="50" isPK="N" />
+        <field name="货主城市" dbName="货主城市" title="货主城市" type="string" length="50" isPK="N" />
+        <field name="货主地区" dbName="货主地区" title="货主地区" type="string" length="50" isPK="N" />
+        <field name="货主邮政编码" dbName="货主邮政编码" title="货主邮政编码" type="string" length="50" isPK="N" />
+        <field name="货主国家" dbName="货主国家" title="货主国家" type="string" length="50" isPK="N" />
+        <field name="运货商公司" dbName="运货商公司" title="运货商公司" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

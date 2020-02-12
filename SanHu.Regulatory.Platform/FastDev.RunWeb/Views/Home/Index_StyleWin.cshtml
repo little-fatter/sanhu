@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title =  ViewBag.AppName;
+    Layout = null;
+    var AppID = FastDev.DevDB.SysContext.AppId;
+}
+ 
+
+<!DOCTYPE html >
+<html>
+<head>
+<title>@ViewBag.AppName</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit"> 
+    <script src="~/Scripts/requirejs/require.js"></script>
+    <script src="~/Contents/windows/app.js"></script>
+    <script src="~/Scripts/jquery/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/ligerUI/js/ligerui.all.js"></script>
+
+    <script src="~/Scripts/application/ne.js" type="text/javascript"></script>
+    <script src="~/Scripts/application/ne.web.js?11"></script>
+    <link href="~/Scripts/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
+    <link href="~/Scripts/ligerUI/skins/ne/css/all.css" rel="stylesheet" />
+
+    <script src="~/Scripts/application/ligerui.expand.js"></script>
+    <link href="~/Scripts/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />    
+
+    <link href="~/Contents/application/ne.css" rel="stylesheet" /> 
+    <link href="~/Contents/windows/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="~/Contents/windows/css/skins/black.css" rel="stylesheet" /> 
+    <script type="text/javascript" src="~/Contents/windows/js/jquery-ui-1.8.24.custom.min.js"></script>
+    <script type="text/javascript" src="~/Contents/windows/js/main-min.js"></script>
+    <script type="text/javascript" src="~/Contents/windows/js/artDialog.js"></script>
+    <script type="text/javascript" src="~/Contents/windows/js/iframeTools.js"></script> 
+    <script type="text/javascript" src="~/Contents/windows/js/interface.js"></script>
+    <script type="text/javascript" src="~/Contents/windows/js/win-desk-all.js"></script>  
+ 
+
+ 
+<!--[if lt IE 7]>
+<style type="text/css">
+div, img { behavior: url(js/iepngfix.htc) }
+</style>
+<![endif]-->
+ 
+</head>
+<body>
+ 
+<div id="themeSetting_wrap" style="display:none;">
+ <div id="themeSetting_head" class="themeSetting_head">
+ <div id="themeSetting_tabTheme" class="themeSetting_tab current" style="display: block;">系统主题</div>
+ </div>
+ <div id="themeSetting_body" class="themeSetting_body">
+ <div id="themeSetting_area"  class="themeSetting_area" style="display: block;"> <a href="javascript:;" themeid="theme_1" class="themeSetting_settingButton themeSetting_selected" id="themeSetting_theme_1">
+ <div class="themeSetting_settingButton_icon"><img src="~/Contents/windows/images/bg/bg1_small.jpg" width="140" height="100"></div>
+ <div class="themeSetting_settingButton_text">诠释简约</div>
+ </a> <a href="javascript:;" themeid="theme_2" class="themeSetting_settingButton" id="themeSetting_theme_2">
+ <div class="themeSetting_settingButton_icon"><img src="~/Contents/windows/images/bg/bg2_small.jpg" width="140" height="100"></div>
+ <div class="themeSetting_settingButton_text">创意设计</div>
+ </a> <a href="javascript:;" themeid="theme_3" class="themeSetting_settingButton" id="themeSetting_theme_3">
+ <div class="themeSetting_settingButton_icon"><img src="~/Contents/windows/images/bg/bg3_small.jpg" width="140" height="100"></div>
+ <div class="themeSetting_settingButton_text">Win8壁纸</div>
+ </a> <a href="javascript:;" themeid="theme_4" class="themeSetting_settingButton" id="themeSetting_theme_4">
+ <div class="themeSetting_settingButton_icon"><img src="~/Contents/windows/images/bg/bg4_small.jpg" width="140" height="100"></div>
+ <div class="themeSetting_settingButton_text">英雄联盟</div>
+ </a> <a href="javascript:;" themeid="theme_5" class="themeSetting_settingButton" id="themeSetting_theme_5">
+ <div class="themeSetting_settingButton_icon"><img src="~/Contents/windows/images/bg/bg5_small.jpg" width="140" height="100"></div>
+ <div class="themeSetting_settingButton_text">唯美风景</div>
+ </a> <a href="javascript:;" themeid="theme_6" class="themeSetting_settingButton" id="themeSetting_theme_6">
+ <div class="themeSetting_settingButton_icon"><img src="~/Contents/windows/images/bg/bg6_small.jpg" width="140" height="100"></div>
+ <div class="themeSetting_settingButton_text">养眼美女</div>
+ </a> </div>
+ <div id="themeSetting_wallpaper" class="themeSetting_wallpaper" style="display: none;"></div>
+ </div>
+</div>
+<div id="zoomWallpaperGrid" class="zoomWallpaperGrid" style="position: absolute; z-index: -10; left: 0pt; top: 0pt; overflow: hidden; height: 381px; width: 1440px;"> <img id="zoomWallpaper" class="zoomWallpaper" style="position: absolute; top: 0pt; left: 0pt; height: 381px; width: 1440px;" src="~/Contents/windows/images/bg/bg1.jpg"> </div>
+ 
+ <div id="lock"><div class="title" style="top: 10%;"><div class="time"></div><div class="week"></div></div><div id="lock-info" style="display: none;"><div class="img"><img src="img/ui/avatar_120.jpg" title="demo12" alt="demo12"></div><div class="text"><input type="password" id="lockpassword" placeholder="请输入解锁密码"></div><div class="text-tip"></div><div class="text"><input type="button" id="lockbtn" value="解 锁"></div></div><a href="javascript:pageunlock()" class="tip" style="top: 80%;">点击屏幕，开启解锁</a></div>
+
+  
+<style>
+#RightDesk1{ width:300px; height:200px; overflow:hidden; position:fixed; right:30px; top:42px; z-index:1001;}
+#RightDesk2{ width:300px; height:200px; overflow:hidden; position:fixed; right:30px; top:252px; z-index:1002;}
+.RDclass{ border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; background: url(/Contents/windows/images/bobg.png) no-repeat;}
+.RDtitle{ line-height:26px; color:#fff; padding:0 3px 0 3px; background:url(/Contents/windows/images/bobg-t.png);}
+.RDtitle span{ float:right; padding-top:5px; line-height:22px;}
+</style>
+</body>
+</html>

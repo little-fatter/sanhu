@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="dev_product" title="实例_产品" textField="Productname" moduleName="dev" moduleTitle="开发实例" />
+    <fields>
+        <field name="Productname" dbName="Productname" title="产品名" type="string" length="100" enabledSearch="Y" />
+        <field name="UnitPrice" dbName="UnitPrice" title="单价" type="float" relationModel="" relationField="" />
+        <field name="Specifications" dbName="Specifications" title="规格" type="string" length="50" />
+        <field name="Productimage" dbName="Productimage" title="产品图片" type="string" length="50" />
+        <field name="Productaccessories" dbName="Productaccessories" title="产品附件" type="string" length="50" />
+        <field name="Producttype" dbName="ProducttypeID" title="产品类型" type="many2one" relationModel="dev_productType" relationField="" enabledSearch="Y" />
+        <field name="Productdescription" dbName="Productdescription" title="产品描述" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Model" dbName="Model" title="型号" type="string" length="50" />
+        <field name="Brand" dbName="Brand" title="品牌" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Producttype" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Producttype" one2many="" many2many="" />
+</freedesign>

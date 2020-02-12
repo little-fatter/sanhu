@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="v_purchaseorderdetail" title="供应商交易明细" textField="OrderNo" moduleName="erp" moduleTitle="企业资源计划" dbName="" />
+    <fields>
+        <field name="UnitPrice" dbName="UnitPrice" title="单价" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Address" dbName="Address" title="地区" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Price" dbName="Price" title="价格" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Payment" dbName="Payment" title="付款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="WarehouseID" dbName="WarehouseID" title="WarehouseID" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="TotalPrice" dbName="TotalPrice" title="总价" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="OrderNo" dbName="OrderNo" title="OrderNo" type="string" length="50" isPK="N" />
+        <field name="DetailID" dbName="DetailID" title="DetailID" type="string" length="50" isPK="N" />
+        <field name="MValue" dbName="MValue" title="米数" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Weight" dbName="Weight" title="重量" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="ProName" dbName="ProName" title="产品名" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="OrderID" dbName="OrderID" title="OrderID" type="string" length="50" isPK="N" />
+        <field name="SupplierName" dbName="SupplierName" title="供应商名" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="ProCode" dbName="ProCode" title="型号" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="ProductID" dbName="ProductID" title="ProductID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Arrears" dbName="Arrears" title="欠款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="TotalArrears" dbName="TotalArrears" title="累计欠款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="SupplierID" dbName="SupplierID" title="SupplierID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ProMode" dbName="ProMode" title="规格型号" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="UnitName" dbName="UnitName" title="单位名" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Quantity" dbName="Quantity" title="数量" type="integer" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

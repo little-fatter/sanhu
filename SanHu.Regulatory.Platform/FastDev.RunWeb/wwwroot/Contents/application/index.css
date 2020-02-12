@@ -1,0 +1,69 @@
+﻿body, html {
+    overflow: hidden;
+}
+body,html{height:100%;}
+body{ padding:0px; margin:0;   overflow:hidden;}  
+.l-link{ display:block; height:26px; line-height:26px; padding-left:10px; text-decoration:underline; color:#333;}
+.l-link2{text-decoration:underline; color:white; margin-left:2px;margin-right:2px;}
+.l-layout-top{background:#102A49; color:White;}
+.l-layout-bottom{ background:#E5EDEF; text-align:center;}
+
+.l-link{ display:block; line-height:28px; height:28px; padding-left:16px;border:1px solid white; margin:4px; color:#333; text-decoration:none; cursor:pointer; }
+.l-link-over{ background:#438EB9;  color:white; } 
+.l-winbar{ background:#2B5A76; height:30px; position:absolute; left:0px; bottom:0px; width:100%; z-index:99999;}
+.space{ color:#E7E7E7;}
+/* 顶部 */ 
+.l-topmenu{ margin:0; padding:0; height:44px; line-height:44px; background:#438EB9;  position:relative;  }
+.l-topmenu-logo{ color:white; font-size:16px; margin-left:10px;}
+.l-topmenu-welcome{  position:absolute; height:24px; line-height:24px;  right:30px; top:2px;color:#070A0C;}
+.l-topmenu-welcome a{ color:#E7E7E7; text-decoration:underline} 
+ 
+.viewsourcelink {
+        background:#B3D9F7;  display:block; position:absolute; right:10px; top:3px; padding:6px 4px; color:#333; text-decoration:underline;
+}
+.viewsourcelink-over {
+    background:#81C0F2;
+}
+.l-topmenu-welcome label {color:white;
+}
+#skinSelect {
+    margin-right: 6px;
+}
+
+
+/* 菜单列表 */
+.menulist{ margin-left:2px; margin-right:2px; margin-top:2px;text-align:left; color:#000;}
+.menulist li{ height:24px; line-height:24px; padding-left:5px; display:block; position:relative; cursor:pointer; text-align:left;}
+.menulist li img{ position:absolute; left:4px; top:4px; width:16px; height:16px;}
+.menulist li.over{ background:url('../images/index/menuitem.gif') repeat-x 0px 0px;}
+.menulist li.over .menuitem-l{background:url('../images/index/menuitem.gif') repeat-x 0px -24px; width:2px; height:24px; position:absolute; left:0; top:0;}
+.menulist li.over .menuitem-r{background:url('../images/index/menuitem.gif') repeat-x -1px -24px; width:2px; height:24px; position:absolute; right:0; top:0;}
+
+
+.l-layout-header,.l-accordion-header {
+    background: #FAFAFA;line-height: 30px;
+    color: #585858;
+    text-shadow: none!important;
+    font-size: 13px; font-weight:normal; height:30px;
+}
+.l-accordion-header {
+    line-height: 26px;  height:26px;
+}
+.l-accordion-header-over {
+    background:#ffffff;
+}
+.l-layout-left .l-accordion-panel {
+    border-top:none;
+}
+.l-accordion-header {
+    border-bottom:1px solid #D0D0D0;
+}
+.l-layout-left {
+    border-left:0px;
+}
+.l-layout-left, .l-layout-right, .l-layout-center, .l-layout-top {
+    border-top: none;
+}
+.l-accordion-header-downfirst {
+      border-top:1px solid #D0D0D0;
+}

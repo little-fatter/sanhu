@@ -1,0 +1,60 @@
+﻿#drawPanel{background:url('../images/backimg.png');}
+#drawToolbar {background:#F5F5F5;border-bottom:1px solid #C6C6C6; height:30px; line-height:30px;}
+#drawToolbar img{ width:20px; height:20px; float:left; margin-top:4px; margin-left:15px; cursor:pointer;}
+#drawToolbar .btn{ float:left; margin-top:2px; margin-left:15px; cursor:pointer; display:inherit;}
+ 
+
+ .l-icon-start{ background:url('../images/circle.png');}
+ .l-easytab-panelbox{ width:100%;}
+.connectMode circle{display:block;} 
+.selectMode circle{display:none;}
+
+path, ._jsPlumb_endpoint { cursor:pointer; }
+.flownode{ cursor:pointer;}
+.flownode-selected{ } 
+.flownode-selected .corner{ display:block;} 
+.flownode .handle
+{
+    position:absolute; left:2px; top:2px; width:90%; height:90%;
+ }
+ .flownode .nodename
+ {
+     text-align:center; width:100%; position:absolute; top:50%; height:24px; line-height:24px; margin-top:-12px; 
+ }
+ .flownode img
+ {
+     cursor:pointer;  
+     margin:2px; width:64px; height:64px;
+ }
+    
+.corner{ display:none;font-size:0px; width:5px; height:5px; border:1px solid #000; background-color:#00F; position:absolute; z-index:1;background-color:#008000;z-index:1;}
+.topLeft{ cursor:nw-resize; left:0px; top:0px; }
+.topMiddle{ cursor:n-resize;left:50%; top:0px; }
+.topRight{ cursor:ne-resize;right:0px; top:0px; }
+.middleLeft{ cursor:w-resize; left:0px; top:50%;}
+.middleRight{ cursor:w-resize;right:0px; top:50%; }
+.bottomLeft{ cursor:sw-resize;left:0px; bottom:0px; }
+.bottomMiddle{ cursor:s-resize;left:50%; bottom:0px; }
+.bottomRight{ cursor:nw-resize;right:0px; bottom:0px; }
+
+
+ .middle
+ {
+     position:relative;
+ }
+ .middle input {
+    display: block;width:30px; margin:2px;
+}
+.persontree
+{
+   overflow:auto; 
+}
+.persontree,.l-listbox
+{
+    border:1px solid #ABADB3;  
+}
+.middle .btn
+{
+    position:absolute; top:50%; left:0px; margin-top:-8px; height:16px; width:12px; overflow:hidden; 
+    cursor:pointer;background:url('../images/arrow.gif');
+}

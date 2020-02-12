@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_setting" title="配置信息" textField="SettingKey" moduleName="res" moduleTitle="基础资料" />
+    <fields>
+        <field name="SettingName" dbName="SettingName" title="SettingName" type="string" length="100" />
+        <field name="SettingKey" dbName="SettingKey" title="SettingKey" type="string" length="200" />
+        <field name="SettingValue" dbName="SettingValue" title="SettingValue" type="string" length="200" />
+        <field name="ValueType" dbName="ValueType" title="ValueType" type="string" length="100" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

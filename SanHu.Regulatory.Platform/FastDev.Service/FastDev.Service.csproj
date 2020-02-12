@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FastDev.Common">
+      <HintPath>..\libs\netcoreapp3.1\FastDev.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="FastDev.DevDB">
+      <HintPath>..\libs\netcoreapp3.1\FastDev.DevDB.dll</HintPath>
+    </Reference>
+    <Reference Include="FastDev.Model.Core">
+      <HintPath>..\libs\netcoreapp3.1\FastDev.Model.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PetaPoco">
+      <HintPath>..\libs\netcoreapp3.1\PetaPoco.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_View.cshtml";
+}  
+@section header{
+   <style type="text/css">
+           @Html.Raw(ViewBag.ViewStyle)
+    </style>
+}
+@section body{
+   @Html.Raw(ViewBag.ViewContent)
+}  
+
+<script type="text/javascript">   
+    @Html.Raw(ViewBag.ViewScript)
+</script> 

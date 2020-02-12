@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="v_qingjia" title="开发库（本库）v_qingjia" textField="ID" moduleName="case" moduleTitle="示例" notIncludeSysFields="Y" dbName="开发库（本库）" />
+    <fields>
+        <field name="ID" dbName="ID" title="ID" type="string" length="50" isPK="Y" />
+        <field name="username" dbName="username" title="username" type="string" length="50" isPK="N" />
+        <field name="title" dbName="title" title="title" type="string" length="50" isPK="N" />
+        <field name="starttime" dbName="starttime" title="starttime" type="string" length="50" isPK="N" />
+        <field name="Endtime" dbName="Endtime" title="Endtime" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

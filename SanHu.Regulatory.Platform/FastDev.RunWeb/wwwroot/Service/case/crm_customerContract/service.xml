@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="crm_customerContract" title="客户联系人" textField="Contactname" moduleName="case" moduleTitle="示例" />
+    <fields>
+        <field name="Contactname" dbName="Contactname" title="联系人名称" type="string" length="200" />
+        <field name="phone" dbName="phone" title="电话" type="string" length="100" />
+        <field name="remark" dbName="remark" title="备注" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Email" dbName="Email" title="Email" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="CustomerID" dbName="CustomerID" title="CustomerID" type="string" length="36" relationModel="" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

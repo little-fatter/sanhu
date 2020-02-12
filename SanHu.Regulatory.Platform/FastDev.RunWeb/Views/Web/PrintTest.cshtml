@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+<html>
+   <head>
+      <title>我的第一个打印文档</title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+     
+       <script src="~/Scripts/lopod/LodopFuncs.js"></script>
+       <style id="style1">
+           .ne-report-table,.ne-report-detail{
+                width:100%; 
+            }
+            .ne-report-table,.ne-report-detail,.ne-report-sign{ 
+                font-family: tahoma,arial,宋体;
+                font-size:12px;
+            }
+            .ne-report-detail td { 
+             border-bottom-color:#000000;border-bottom-style:solid;border-bottom-width:1px;
+            border-right-color:#000000;border-right-style:solid;border-right-width:1px; 
+            }
+            .ne-report-detail .firsttr td,.ne-report-detail .firstRow td {
+                 border-top-color:#000000;border-top-style:solid;border-top-width:1px;
+            }
+            .ne-report-detail .firstcell {
+                 border-left-color:#000000;border-left-style:solid;border-left-width:1px;
+            } 
+
+            .line {
+                border-bottom-color:#000000;border-bottom-style:solid;border-bottom-width:1px; 
+            }
+       </style>
+   </head>
+   <body style='padding:10px;'> 
+       <a href="javascript:printd()">打印</a>
+
+       <div id="content" style="display:none;">  
+       <p><input type="hidden" data-config="eyJmaWVsZHNTaG93IjoiT3JkZXJEYXRlO0N1c3RvbWVyO1BheW1lbnQ7QXJyZWFycyIsImZpZWxkRGV0YWlsIjoiRGV0YWlscyIsImRldGFpbEZpZWxkcyI6Ik1WYWx1ZTtVbml0UHJpY2U7V2VpZ2h0O1dhcmVob3VzZTtQcmljZTtQcm9kdWN0cyIsImRldGFpbFRvdGFsRmllbGRzIjoiTVZhbHVlO1dlaWdodDtQcmljZSIsImRldGFpbFRvdGFsRmllbGRzMiI6IlByaWNlIiwiZmllbGRzU2lnbiI6IiIsInRpdGxlIjoi6ZSA5ZSu6K6i5Y2VIiwicm93U2l6ZSI6IjMiLCJyb3dudW1iZXJzIjoxfQ=="/></p><h2 style="text-align: center;">销售订单</h2><table class="ne-report-table" cellpadding="5" cellspacing="0" border="0"><tbody><tr class="firstRow"><td class="firstcell">单据日期：2015-09-25 00:00:00</td><td>客户：荆门礼品店</td><td>付款：340,000.00</td></tr><tr><td class="firstcell" colspan="3">欠款：60,000.00</td></tr></tbody></table><p style="line-height: 0.4em;"><br/></p><table class="ne-report-detail" cellpadding="3" cellspacing="0" border="0" data-field="Details" data-sort="sortDisabled"><tbody><tr class="header firstRow"><td class="firstcell" align="center"><span style="font-size: 14px;"><strong>序号</strong></span></td><td align="center" style="word-break: break-all;"><span style="font-size: 14px;"><strong>仓库</strong></span></td><td align="center" style="word-break: break-all;"><span style="font-size: 14px;"><strong>产品</strong></span></td><td align="center"><span style="font-size: 14px;"><strong>重量</strong></span></td><td align="center" style="word-break: break-all;"><span style="font-size: 14px;"><strong>米数</strong></span></td><td align="center" style="word-break: break-all;"><span style="font-size: 14px;"><strong>单价</strong></span></td><td align="center" style="word-break: break-all;"><span style="font-size: 14px;"><strong>总价</strong></span></td></tr><tr class="row"><td class="firstcell" align="center" height="12">1</td><td align="center" style="word-break: break-all;" height="12" valign="middle">坯布仓库</td><td align="center" style="word-break: break-all;" height="12" valign="middle">2015081313440</td><td align="right" valign="middle" height="12">100.00</td><td align="right" style="word-break: break-all;" valign="middle" height="12">&nbsp;</td><td align="right" style="word-break: break-all;" valign="middle" height="12">4,000.00</td><td align="right" style="word-break: break-all;" valign="middle" height="12">400,000.00</td></tr><tr class="total"><td class="firstcell" align="right" rowspan="1" colspan="3"><strong>合计：</strong></td><td align="right" valign="middle">100.00</td><td style="word-break: break-all;" align="right" valign="middle"><span style="font-family: tahoma, arial, 宋体; font-size: 12px; text-align: -webkit-right; white-space: normal;">0.00</span></td><td align="right" valign="middle" style="word-break: break-all;"></td><td align="right" valign="middle" style="word-break: break-all;"><span style="font-family: tahoma, arial, 宋体; font-size: 12px; text-align: -webkit-right; white-space: normal;">400,000.00</span></td></tr><tr class="total"><td class="firstcell" colspan="7" style="text-align:left"><strong>合计 金额大写：</strong> &nbsp;肆拾万元整</td></tr></tbody></table><p style="line-height: 0.4em;"><br/></p> 
+       </div>
+   </body>
+    <script type="text/javascript">
+        var LODOP; //声明为全局变量 
+        function printd()
+        {
+            LODOP = getLodop();
+
+            //LODOP.PRINT_INITA(0, 0, 760, 321, "打印控件功能演示_Lodop功能_在线编辑获得程序代码");
+
+
+            //var strBodyStyle = "<style>" + document.getElementById("style1").innerHTML + "</style>";
+            //var strFormHtml = strBodyStyle + "<body>" + document.getElementById("content").innerHTML + "</body>";
+            //LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_样式风格");
+            //LODOP.ADD_PRINT_HTM(30, 10, 700, 300, strFormHtml);
+
+
+            LODOP.PRINT_INITA(0, 0, "217.01mm", "142mm", "快递单测试"); 
+            //LODOP.ADD_PRINT_SETUP_BKIMG("<img border='0' src='http://192.168.1.118:865/Contents/images/sfkd.jpg'>");
+            //LODOP.ADD_PRINT_SETUP_BKIMG("C:\\Users\\Administrator\\Desktop\\顺丰快递.jpg");
+            var top = 8,left = 0;
+
+            LODOP.ADD_PRINT_TEXT(147 + top, 109 + left, 175, 40, "寄货公司");
+            LODOP.ADD_PRINT_TEXT(147 + top, 311 + left, 175, 40, "寄货联络人");
+            LODOP.ADD_PRINT_TEXT(175 + top, 102 + left, 175, 40, "地址");
+            LODOP.ADD_PRINT_TEXT(227 + top, 172 + left, 175, 40, "电话");
+            LODOP.ADD_PRINT_TEXT(303 + top, 109 + left, 175, 40, "收货公司");
+            LODOP.ADD_PRINT_TEXT(304 + top, 311 + left, 175, 40, "收货联络人");
+            LODOP.ADD_PRINT_TEXT(331 + top, 101 + left, 175, 40, "地址");
+            LODOP.ADD_PRINT_TEXT(381 + top, 178 + left, 175, 40, "电话");
+
+            LODOP.ADD_PRINT_SETUP_BKIMG("<img border='0' src='/Contents/images/sfkd.jpg'>");
+
+            LODOP.SET_SHOW_MODE("BKIMG_IN_PREVIEW", 1); //注："BKIMG_IN_PREVIEW"-预览包含背景图 "BKIMG_IN_FIRSTPAGE"- 仅首页包含背景图		
+            LODOP.SET_SHOW_MODE("BKIMG_HEIGHT", 536);
+
+            LODOP.PREVIEW();
+
+             
+        }
+    </script>
+</html>

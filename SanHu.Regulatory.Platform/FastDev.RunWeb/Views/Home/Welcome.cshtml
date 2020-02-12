@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_View.cshtml";
+}  
+@section header{
+    <link href="~/Contents/portal/css/style.css" rel="stylesheet" />
+    <style type="text/css">
+        .homebtn { 
+            padding: 6px 12px;
+            margin-bottom: 0;margin-right:10px;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 1.428571429;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+
+            color: #fff;
+            background-color: #428bca;
+            border-color: #357ebd; 
+            text-decoration:none;
+        } 
+        .portal,.printitp {
+            margin: 20px;
+        }
+        .printitp {
+            font-size:14px;
+        }
+    </style>
+}
+ 
+<script type="text/javascript">   
+
+    $(function ()
+    {
+        ne.ajax({
+            loading: null,
+            data: {
+                model: 'core_portal'
+            },
+            url: ne.toUrl('/web/listdata'),
+            success: function (r)
+            {
+                if (r.StatusCode == "2") //应用级错误
+                {
+                    ne.tips({ type: 2, content: r.Message });
+                    return;
+                } else if (r.StatusCode == "3") //系统级错误
+                {
+                    ne.showError(r.Message);
+                    return;
+                }
+
+                var rows = getRows(r);
+
+                init(rows);
+            }
+        });
+
+    });
+
+
+    function getRows(items)
+    {
+
+        var rownumbers = [];
+        $(items).each(function ()
+        {
+            if ($.inArray(this.RowNumber, rownumbers) == -1)
+            {
+                rownumbers.push(this.RowNumber);
+            }
+        });
+        rownumbers = rownumbers.sort();
+        var rows = [];
+        $(rownumbers).each(function (i, rownumber)
+        {
+            var row = {
+                columns: []
+            };
+            var currentItems = [];
+            $(items).each(function ()
+            {
+                if (this.RowNumber == rownumber) currentItems.push(this);
+            });
+            rows.push({
+                columns: getColumns(currentItems)
+            });
+        });
+        return rows;
+    }
+
+    function getColumns(items)
+    {
+        var columnNumbers = [];
+
+        $(items).each(function ()
+        {
+            if ($.inArray(this.ColumnNumber, columnNumbers) == -1)
+            {
+                columnNumbers.push(this.ColumnNumber);
+            }
+        });
+        columnNumbers = columnNumbers.sort();
+
+        var columns = [];
+        $(columnNumbers).each(function (i, columnNumber)
+        {
+            var currentItems = [];
+            $(items).each(function ()
+            {
+                if (this.ColumnNumber == columnNumber) currentItems.push(this);
+            });
+            columns.push({
+                panels: getPanels(currentItems)
+            });
+        });
+        return columns;
+    }
+
+
+    function getPanels(items)
+    {
+        var panelNumbers = [];
+        $(items).each(function ()
+        {
+            if ($.inArray(this.PanelNumber, panelNumbers) == -1)
+            {
+                panelNumbers.push(this.PanelNumber);
+            }
+        });
+        panelNumbers = panelNumbers.sort();
+
+        var currentItems = [];
+        $(panelNumbers).each(function (i, panelNumber)
+        {
+
+            $(items).each(function ()
+            {
+                if (this.PanelNumber == panelNumber) currentItems.push(this);
+            });
+        });
+        var panels = [];
+        $(currentItems).each(function (i, item)
+        {
+            panels.push(convertPanel(item));
+        });
+        return panels;
+    }
+
+    function convertPanel(item)
+    {
+        var portal = {
+            title: item.Title,
+            width: item.Width,
+            showClose: true,
+            showRefresh: true,
+            height: item.Height,
+            url: ne.toUrl(item.Link)
+        };
+
+        if (item.LinkBind)
+        {
+            portal.url += "&bind=" + item.LinkBind;
+        }
+        return portal;
+    }
+
+    function init(rows)
+    { 
+        var jportal = $('<div class="portal"></div>').appendTo('body');
+        jportal.ligerPortal({
+            draggable: false,
+            rows: rows
+        });
+    }
+
+  
+</script> 

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_view" title="视图" textField="ViewName" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="ViewName" dbName="ViewName" title="视图名" type="string" />
+        <field name="ViewScript" dbName="ViewScript" title="ViewScript" type="string" />
+        <field name="ViewIndex" dbName="ViewIndex" title="视图索引" type="integer" />
+        <field name="ViewStyle" dbName="ViewStyle" title="ViewStyle" type="string" />
+        <field name="Model" dbName="ModelID" title="所属模型" type="many2one" />
+        <field name="ViewType" dbName="ViewType" title="视图类型" type="string" />
+        <field name="Module" dbName="ModuleID" title="所属模块" type="many2one" />
+        <field name="ViewContent" dbName="ViewContent" title="视图内容" type="string" />
+        <field name="PageName" dbName="PageName" title="视图标示" type="string" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_autoCode" title="自动编码" textField="Remark" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="DatePart" dbName="DatePart" title="包括日期部分" type="string" isPK="N" />
+        <field name="SerialNumberStep" dbName="SerialNumberStep" title="流水号递增长度" type="integer" isPK="N" />
+        <field name="Prefix" dbName="Prefix" title="前缀" type="string" isPK="N" />
+        <field name="SerialNumberLenght" dbName="SerialNumberLenght" title="流水号长度" type="integer" isPK="N" />
+        <field name="SerialNumberStart" dbName="SerialNumberStart" title="流水号开始编号" type="integer" isPK="N" />
+        <field name="Infix" dbName="Infix" title="中缀" type="string" isPK="N" />
+        <field name="Suffix" dbName="Suffix" title="后缀" type="string" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="Enabled" dbName="Enabled" title="是否启用" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="string" length="50" isPK="N" />
+        <field name="FieldName" dbName="FieldName" title="字段名" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="运货商" title="Northwind_ZH运货商" textField="公司名称" moduleName="Northwind" moduleTitle="Northwind" notIncludeSysFields="Y" dbName="Northwind_ZH" />
+    <fields>
+        <field name="运货商ID" dbName="运货商ID" title="运货商ID" type="autoincrement" relationModel="" relationField="" isPK="Y" />
+        <field name="公司名称" dbName="公司名称" title="公司名称" type="string" length="50" isPK="N" />
+        <field name="电话" dbName="电话" title="电话" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

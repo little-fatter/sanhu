@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_modelField" title="模型字段" textField="FieldTitle" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="FieldSelection" dbName="FieldSelection" title="选项" type="string" length="200" />
+        <field name="FieldName" dbName="FieldName" title="字段名" type="string" length="200" enabledSearch="Y" />
+        <field name="Model" dbName="ModelID" title="所属模型" type="many2one" length="50" relationModel="core_model" enabledSearch="Y" />
+        <field name="IsFormField" dbName="IsFormField" title="只在表单使用" type="boolean" />
+        <field name="FieldTitle" dbName="FieldTitle" title="字段标题" type="string" length="100" enabledSearch="Y" />
+        <field name="IsRequired" dbName="IsRequired" title="必填" type="boolean" />
+        <field name="IsReadonly" dbName="IsReadonly" title="只读" type="boolean" />
+        <field name="IsSearchField" dbName="IsSearchField" title="可搜索" type="boolean" />
+        <field name="IsTextField" dbName="IsTextField" title="IsTextField" type="boolean" />
+        <field name="FieldType" dbName="FieldType" title="字段类型" type="string" length="100" />
+        <field name="SourceFilter" dbName="SourceFilter" title="来源过滤" type="text" length="4000" relationModel="" relationField="" />
+        <field name="SeqNo" dbName="SeqNo" title="SeqNo" type="integer" relationModel="" relationField="" />
+        <field name="DbName" dbName="DbName" title="数据库映射" type="string" length="100" />
+        <field name="RelationField" dbName="RelationField" title="关联模型字段" type="string" />
+        <field name="RelationModel" dbName="RelationModel" title="关联模型" type="string" />
+        <field name="FieldLength" dbName="FieldLength" title="字段长度" type="integer" />
+        <field name="IsPK" dbName="IsPK" title="是否主键" type="boolean" relationModel="" relationField="" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Model" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Model" one2many="" many2many="" />
+</freedesign>

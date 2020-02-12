@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_dataAssign" title="core_dataAssign" textField="MasterName" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="MasterName" dbName="MasterName" title="MasterName" type="string" length="50" isPK="N" />
+        <field name="MasterID" dbName="MasterID" title="MasterID" type="string" length="50" isPK="N" />
+        <field name="ValueContent" dbName="ValueContent" title="ValueContent" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="ModelName" dbName="ModelName" title="ModelName" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,6 @@
+﻿.grid_attr_name .l-text ,.grid_attr_value .tagsinput{
+    border: 1px solid #AAA;
+}
+.grid_attr_name .l-text:hover {
+    border: 1px solid #74B7F9;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="net_order" title="跟单管理" textField="Product" dbName="" />
+    <fields>
+        <field name="Zipcode" dbName="Zipcode" title="邮编" type="string" length="50" isPK="N" />
+        <field name="OrderTime" dbName="OrderTime" title="订单时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="UnitPrice" dbName="UnitPrice" title="单价" type="string" length="50" isPK="N" />
+        <field name="CustomerName" dbName="CustomerName" title="客户名" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="OrderStatus" dbName="OrderStatus" title="订单状态" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Product" dbName="Product" title="订购产品" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="Phone" dbName="Phone" title="电话" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="MValue" dbName="MValue" title="米数" type="string" length="50" isPK="N" />
+        <field name="Weight" dbName="Weight" title="重量" type="string" length="50" isPK="N" />
+        <field name="UserName" dbName="UserName" title="下单人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Receiver" dbName="Receiver" title="收货人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="OrderNo" dbName="OrderNo" title="订单号" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="Price" dbName="Price" title="总金额" type="string" length="50" isPK="N" />
+        <field name="UserID" dbName="UserID" title="下单人ID" type="string" length="50" isPK="N" />
+        <field name="Arrears" dbName="Arrears" title="欠款" type="string" length="50" isPK="N" />
+        <field name="Address" dbName="Address" title="地址" type="string" length="200" enabledSearch="Y" isPK="N" />
+        <field name="Payment" dbName="Payment" title="付款" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

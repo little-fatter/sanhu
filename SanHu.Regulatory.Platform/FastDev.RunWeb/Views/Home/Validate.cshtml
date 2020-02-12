@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "开发平台授权使用";
+    Layout = "~/Views/Shared/_Layout_View.cshtml";
+}  
+@section header{
+
+    <style type="text/css">
+        html { background: white;
+        }
+        body {
+            padding: 10px;
+            background: white;
+        }
+        h1 {
+            line-height: 50px;
+        }
+        #txtcode {
+            width: 521px;
+            height: 18px;
+            padding: 9px 7px;
+            font: 16px arial;
+            border: 1px solid #b8b8b8;
+            vertical-align: top;
+            outline: none;
+            box-shadow: none;
+        }
+        #btnsubmit {
+            cursor: pointer;
+            width: 102px;
+            height: 38px;
+            line-height: 38px;
+            padding: 0;
+            border: 0;
+            background: none;
+            background-color: #38f;
+            font-size: 16px;
+            color: white;
+            box-shadow: none;
+            font-weight: normal;
+        }
+
+    </style>
+}
+@section body{
+ 
+    <h1>请输入授权号</h1>
+    <input type="text" id="txtcode" maxlength="100" autocomplete="off" style="">
+
+    <input type="submit" value="授权" id="btnsubmit">
+    
+
+}
+
+<script type="text/javascript">   
+
+   
+    $("#btnsubmit").click(function ()
+    {
+        var code = $("#txtcode").val();
+        if (!code)
+        {
+            alert('不能为空!');
+            return;
+        }
+
+        if (confirm("授权以后就不能切换电脑,确定吗?"))
+        {
+            $("#btnsubmit").attr("readonly", "readonly").val("授权中...");
+
+            $.ajax({
+                url: '../home/Authcode/',
+                data : {
+                    id : code
+                },
+                cache: false,
+                async: true,
+                dataType: 'json',
+                type: 'post',
+                beforeSend: function ()
+                {
+                  
+                },
+                complete: function ()
+                {
+                    $("#btnsubmit").attr("readonly", "").val("授权");
+                },
+                success: function (result)
+                {
+                    if (!result) return;
+
+                    alert(result.message);
+                },
+                error: function (result, b)
+                {
+                    //ne.showError('发现系统错误 <BR>错误码：' + result.status);
+                }
+            });
+        }
+    });
+
+</script> 

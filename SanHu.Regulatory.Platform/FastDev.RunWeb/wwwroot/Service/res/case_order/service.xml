@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="case_order" title="订单" textField="Ordertitle" moduleName="res" moduleTitle="基础资料" />
+    <fields>
+        <field name="customer" dbName="customerID" title="客户" type="many2one" relationModel="crm_customer" relationField="" enabledSearch="Y" />
+        <field name="Ordertitle" dbName="Ordertitle" title="订单标题" type="string" length="50" />
+        <field name="Amount" dbName="Amount" title="金额" type="float" relationModel="" relationField="" />
+        <field name="Payment" dbName="Payment" title="本期还款" type="float" relationModel="" relationField="" />
+        <field name="orderdetails" title="订单明细" type="one2many" relationModel="case_orderDetail" relationField="OrderID" />
+        <field name="remarks" dbName="remarks" title="备注" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Orderdate" dbName="Orderdate" title="订单日期" type="datetime" relationModel="" relationField="" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="customer" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="customer" one2many="" many2many="" />
+</freedesign>

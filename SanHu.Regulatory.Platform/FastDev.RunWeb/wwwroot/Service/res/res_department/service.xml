@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="res_department" title="部门" textField="DeptName" moduleName="res" moduleTitle="基础资料" />
+    <fields>
+        <field name="Remarks" dbName="Remarks" title="备注" type="text" length="4000" relationModel="" relationField="" />
+        <field name="DeptName" dbName="DeptName" title="部门名称" type="string" enabledSearch="Y" />
+        <field name="Company" dbName="CompanyID" title="公司" type="many2one" relationModel="res_company" />
+        <field name="Parent" dbName="ParentID" title="上级部门" type="many2one" relationModel="res_department" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Company,Parent" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Company,Parent" one2many="" many2many="" />
+</freedesign>

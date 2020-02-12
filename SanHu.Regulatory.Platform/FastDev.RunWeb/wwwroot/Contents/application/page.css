@@ -1,0 +1,86 @@
+﻿
+
+ 
+.ui_dialog {
+    background: #fff;
+}
+.ui_dialog iframe{
+    background: #fff;
+}
+input,textarea,select{font-family:\5b8b\4f53;font-size:inherit;font-weight:inherit;color: #555;}
+input,textarea,select{*font-size:100%;}
+li{list-style:none;}
+a { cursor:pointer; color: #555; text-decoration: none; outline:none; }
+a:hover { color: #2383c0; outline:none; }
+a:focus{ outline:none; }
+a img { border: 0; }
+em, i{ font-style:normal; }
+
+/* 一条线 导航线 */
+.navline{ height:1px; line-height:1px; width:100%;border-bottom:1px solid #f5f5f5; background-color:#D9D9D9;width:99%; }
+
+
+/* 搜索框 */
+.searchtitle{ padding-left:28px; position:relative;}
+.searchtitle img{ width:22px; height:22px; position:absolute; left:0; top:0;}
+.searchtitle span{ font-size:14px; font-weight:bold;}
+.searchtitle .togglebtn{ position:absolute; top:6px; right:15px; background:url(../images/ui/toggle.gif) no-repeat 0px 0px; height:10px; width:9px; cursor:pointer;}
+.searchtitle .togglebtn-down{ background-position:0px -10px;}
+
+
+
+.l-textarea{ width:99%; margin:0px; height:80px;}
+
+.l-form .l-group {
+    border-bottom: solid 1px #DBDBDB;
+}
+
+.l-form {
+    margin:0px;
+}
+.l-form ul{
+    margin:0px;
+}
+.l-form li {
+    line-height: 28px;
+}
+.l-text {
+    height: 22px;
+    line-height: 22px;
+}
+.l-text-field { 
+    height:22px;
+    line-height:22px;
+}
+ 
+.l-text-readonly {
+    background: #fafafa;
+    border-color: #ddd;
+    color: #999; 
+}
+.l-form li textarea {
+height: 140px;
+}
+
+.e-select {
+    height: 22px;
+    line-height: 22px;
+}
+
+.ruler {
+background: url(../images/ruler.gif) repeat-x 0px 5px;
+}
+
+.searchbox {
+    border:1px solid #d4d4d4; background:#fafbfc;
+     line-height: 25px;padding-left:10px;
+} 
+.leftcategory {
+   border:1px solid #aaa; margin:1px; position:absolute;top:1px;left:1px;padding:2px;
+}
+.rightcontent {
+   border:1px solid #aaa;margin:1px; position:absolute;top:1px;left:1px;padding:2px;
+}
+.layoutleft {
+   overflow-y: auto;
+}

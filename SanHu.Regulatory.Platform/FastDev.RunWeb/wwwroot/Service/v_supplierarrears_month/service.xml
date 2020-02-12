@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="v_supplierarrears_month" title="供应商欠款月份统计" textField="SupplierName" moduleName="erp" moduleTitle="企业资源计划" dbName="" />
+    <fields>
+        <field name="TheYear" dbName="TheYear" title="年份" type="integer" relationModel="" relationField="" isPK="N" />
+        <field name="SupplierName" dbName="SupplierName" title="供应商名" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="TotalArrears" dbName="TotalArrears" title="总欠款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="SupplierID" dbName="SupplierID" title="供应商ID" type="string" length="50" isPK="N" />
+        <field name="Arrears" dbName="Arrears" title="欠款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="TheMonth" dbName="TheMonth" title="月份" type="integer" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

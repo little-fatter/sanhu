@@ -1,0 +1,28 @@
+﻿p {  
+}
+h2 {
+    text-align: center;
+    font-size: 18px;
+    font-weight:bold;   margin-bottom:10px; 
+}
+.ne-report-table,.ne-report-detail{
+    width:100%; 
+}
+.ne-report-table,.ne-report-detail,.ne-report-sign{ 
+    font-family: tahoma,arial,宋体;
+    font-size:12px;
+}
+.ne-report-detail td { 
+ border-bottom-color:#000000;border-bottom-style:solid;border-bottom-width:1px;
+border-right-color:#000000;border-right-style:solid;border-right-width:1px; 
+}
+.ne-report-detail .firsttr td,.ne-report-detail .firstRow td {
+     border-top-color:#000000;border-top-style:solid;border-top-width:1px;
+}
+.ne-report-detail .firstcell {
+     border-left-color:#000000;border-left-style:solid;border-left-width:1px;
+} 
+
+.line {
+    border-bottom-color:#000000;border-bottom-style:solid;border-bottom-width:1px; 
+}

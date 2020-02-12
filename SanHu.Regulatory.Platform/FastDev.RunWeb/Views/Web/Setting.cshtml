@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_View.cshtml";
+}  
+ 
+
+<script type="text/javascript">   
+    show();
+
+    function show()
+    { 
+        var model = 'core_setting';
+        var options = {
+            viewType: 'form',
+            model: {
+                name : model,
+                title : '设置'
+            },
+            showInDialog: true,
+            //renderTo: document.body,
+            //tabOpener: frameElement ? frameElement.tab : null,
+            tabId: model + "-custom",
+            id: 'all',
+            actions: {
+                get: '/web/getSetting/', 
+                save: '/web/saveSetting/',
+            },
+            isView: false, 
+            form: {
+                fields: [
+                    {
+                        label: '应用标题',
+                        name: 'AppName',
+                        group:'基本设置',
+                        type: 'text'
+                    },
+                    {
+                        label: '数据删除模式',
+                        name: 'DataDeleteMode',
+                        group:'基本设置',
+                        type: 'select',
+                        editor: {
+                            data : [
+                                { id: '', text: '默认（物理删除）' },
+                                { id: 'flag', text: '状态标识' }
+                            ]
+                        }
+                    }, 
+                    {
+                        label: '寄货公司',
+                        name: 'PostCompany',
+                        group: '快递设置',
+                        type: 'text'
+                    },
+                    {
+                        label: '寄货人',
+                        name: 'PostCharge',
+                        group: '快递设置',
+                        type: 'text'
+                    },
+                    {
+                        label: '寄货电话',
+                        name: 'PostPhone',
+                        group: '快递设置',
+                        type: 'text'
+                    },
+                    {
+                        label: '寄货地址',
+                        name: 'PostAddress',
+                        group: '快递设置',
+                        type: 'text'
+                    },
+                    {
+                        label: '销售公司名',
+                        name: 'SalesCompany',
+                        group: '打印设置',
+                        type: 'text'
+                    }
+                ]
+            }
+        };
+
+        options.onSaved = function (result)
+        {
+            $('body').html('');
+
+            showForm(options);
+        };
+
+        showForm(options);
+
+        function showForm(options)
+        {
+            var loaders = ne.web.getFormDepends(options.form);
+            loaders.push("view_form");
+            ne.web.loader(loaders, function ()
+            {
+                var page = new ne.web.view(options);
+                
+                page.render();
+            });
+        }
+    }
+
+
+
+
+</script> 

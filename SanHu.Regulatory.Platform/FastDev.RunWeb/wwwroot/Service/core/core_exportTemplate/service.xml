@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_exportTemplate" title="导出模板" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="IsDefault" dbName="IsDefault" title="是否默认" type="boolean" />
+        <field name="Details" title="明细" type="one2many" relationModel="core_exportTemplateDetail" relationField="TemplateID" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="text" length="90" />
+        <field name="Title" dbName="Title" title="模板名" type="string" length="50" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,64 @@
+﻿html, body {
+            background: #fff;
+}
+.portal {
+    margin:10px;
+}
+.portal .l-panel{ 
+    border-radius: 5px 5px 2px 2px;
+    box-shadow: 1px 2px 5px #CCCCCC;
+    border: 1px solid #DDDDDD;
+    margin-bottom: 20px;
+    width: 100%;
+    background: #fafafa;
+    filter: alpha(opacity = 90);
+    -moz-opacity: 0.9;
+    opacity: 0.9; 
+}
+.portal .l-panel-header {
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid #dddddd;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    padding: 5px 10px;
+    cursor:default;
+    position: relative;
+      padding: 0px 10px;
+}
+.portal .l-panel-header span {
+    font: bold 14px/28px arial;
+    margin: 0 0 0 5px;
+}
+.portal .l-panel-content {
+    color: #000000;
+    font-size: 12px;
+    line-height: 28px;
+    position: relative;
+}
+.portal .icons {
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.portal .l-panel-header:hover .l-panel-icon,.portal .l-panel-header-hover .l-panel-icon {
+    display:block;
+}
+.portal .l-panel-icon { 
+    display:none;
+    background: url('../img/icons.gif') no-repeat;width:10px;height:10px;line-height:10px;
+    float: right;margin:4px;cursor:pointer;margin-left:6px;margin-right:6px;
+}
+.portal .l-panel-header-refresh {
+    background-position:0px 0px;
+}
+.portal .l-panel-header-close {
+    background-position:0px -10px;
+}
+.portal .l-panel-header-toggle {
+    background-position:0px -20px;
+}
+.portal .l-panel-header-toggle-hide {
+    background-position:0px -30px;
+}

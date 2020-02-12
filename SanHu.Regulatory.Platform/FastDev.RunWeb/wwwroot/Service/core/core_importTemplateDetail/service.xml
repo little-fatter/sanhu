@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_importTemplateDetail" title="导入模板明细" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="HeaderAlign" dbName="HeaderAlign" title="标题对齐方式" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="Title" dbName="Title" title="显示标题" type="string" length="50" />
+        <field name="RefFilter" dbName="RefFilter" title="关联数据过滤" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Format" dbName="Format" title="格式化" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="XlsColumn" dbName="XlsColumn" title="列名" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="Align" dbName="Align" title="对齐方式" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="TemplateID" dbName="TemplateID" title="TemplateID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="Width" dbName="Width" title="宽度" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="FieldName" dbName="FieldName" title="字段名" type="string" length="50" />
+        <field name="Variable" dbName="Variable" title="变量" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_workflow" title="工作流定义" textField="Name" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="Name" dbName="Name" title="流程名" type="string" isPK="N" />
+        <field name="ViewData" dbName="ViewData" title="视图定义结构" type="text" isPK="N" />
+        <field name="Enabled" dbName="Enabled" title="是否启用" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

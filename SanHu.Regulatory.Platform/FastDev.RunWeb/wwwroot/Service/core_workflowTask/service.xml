@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_workflowTask" title="流程执行实例节点" textField="Description" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="Description" dbName="Description" title="描述" type="string" isPK="N" />
+        <field name="NodeType" dbName="NodeType" title="节点类型" type="string" isPK="N" />
+        <field name="NodeTitle" dbName="NodeTitle" title="节点标题" type="string" isPK="N" />
+        <field name="ExecutorStatus" title="执行状态" type="one2many" relationModel="core_workflowExecutorStatus" relationField="TaskID" isPK="N" />
+        <field name="EndTime" dbName="EndTime" title="结束时间" type="datetime" isPK="N" />
+        <field name="FromReturnTaskID" dbName="FromReturnTaskID" title="退回的来源任务" type="string" isPK="N" />
+        <field name="NodeID" dbName="NodeID" title="节点标示" type="string" isPK="N" />
+        <field name="ProjectID" dbName="ProjectID" title="所属流程实例" type="string" isPK="N" />
+        <field name="ReceiveTime" dbName="ReceiveTime" title="接收时间" type="datetime" isPK="N" />
+        <field name="StartTime" dbName="StartTime" title="开始时间" type="datetime" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="ExecutorStatus" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="ExecutorStatus" many2many="" />
+</freedesign>

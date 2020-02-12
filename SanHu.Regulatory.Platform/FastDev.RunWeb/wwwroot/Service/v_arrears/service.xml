@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="v_arrears" title="客户总欠款" textField="CustomerID" moduleName="sales" moduleTitle="销售模块" notIncludeSysFields="Y" dbName="" />
+    <fields>
+        <field name="CustomerID" dbName="CustomerID" title="客户ID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TotalArrears" dbName="TotalArrears" title="总欠款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="CustomerName" dbName="CustomerName" title="客户名" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

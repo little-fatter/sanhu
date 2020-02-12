@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_dataRightsRule" title="数据权限规则" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="RuleContent" dbName="RuleContent" title="规则" type="text" length="4000" />
+        <field name="RuleEnabled" dbName="RuleEnabled" title="是否启用" type="boolean" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="string" length="90" />
+        <field name="Title" dbName="Title" title="标题" type="string" length="200" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "开发平台";
+    Layout = null;
+}  
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Language" content="zh-CN" /> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" /> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <script src="~/Scripts/jquery/jquery-1.9.0-min.js"></script>
+    <title>开发平台</title>    
+    <style type="text/css">
+        #home {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        body {
+            width: 100%;
+        }
+        body, html {
+            height: 100%;
+            overflow: hidden;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+    $('body').height($(window).height());
+
+    $(window).resize(function ()
+    {
+        $('body').height($(window).height());
+    });
+
+
+    window.addEventListener('message', function (e)
+    {
+        listener(e.data);
+    }, false);
+
+    function listener(data)
+    {
+        if (data.action == "init")
+        {
+            init(data.service,data.project);
+        }
+        if (data.action == "setup")
+        {
+            setup(data.project, data.data);
+        }
+    }
+
+    function init(service,project)
+    {
+
+        $.ajax({
+            cache: false,
+            async: true,
+            dataType: 'json',
+            type: 'post',
+            url : '/designer/init',
+            data: {
+                service : service,
+                project : project
+            },
+            success: function (result)
+            {
+                location.href = location.href;
+            }
+        });
+    }
+    //设计端调用  window.parent.postMessage
+    function setup(project, data)
+    {
+        //提高效率，暂时不跑这个
+        $.ajax({
+            cache: false,
+            async: true,
+            dataType: 'json',
+            type: 'post',
+            url: '/designer/setup',
+            data: {
+                content: data
+            },
+            success: function (result)
+            {
+
+            }
+        });
+    }
+    function website_designer_setup(project, data)
+    {
+
+    }
+
+
+
+    function test_setup( data)
+    {
+        ne.openNew({
+            parms: {
+                content: data
+            },
+            url: '/designer/test_setup'
+        });
+    }
+    </script>
+</head>
+<body>   
+    <iframe frameborder="0" name="home" id="home" src="@ViewBag.DesignerUrl"></iframe> 
+</body> 
+</html>

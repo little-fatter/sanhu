@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+}
+
+<html>
+   <head>
+      <title></title>
+	  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+     
+       <script src="~/Scripts/lopod/LodopFuncs.js"></script>
+       <style id="style1">
+         
+       </style>
+   </head>
+   <body style='padding:10px;'>  
+   </body>
+    <script type="text/javascript">
+        var callback = frameElement.callback; //调用页面的dialog对象(ligerui对象)
+        if (callback)
+        {
+            //CheckIsInstall();
+        }
+
+
+        function CheckIsInstall()
+        {
+            try
+            {
+                var LODOP = getLodop();
+                if ((LODOP != null) && (typeof (LODOP.VERSION) != "undefined"))
+                {
+                    if (callback)
+                    {
+                        callback();
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            } catch (err)
+            {
+                return false;
+            }
+        };
+    </script>
+</html>

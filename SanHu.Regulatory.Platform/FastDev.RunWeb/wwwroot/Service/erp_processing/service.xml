@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="erp_processing" title="外加工" textField="ProcessingNo" moduleName="erp" moduleTitle="企业资源计划" dbName="" />
+    <fields>
+        <field name="OldProduct" dbName="OldProductID" title="原料产品" type="many2one" relationModel="res_product" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ProcessingNo" dbName="ProcessingNo" title="加工单编号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="NewProduct" dbName="NewProductID" title="成品" type="many2one" relationModel="res_product" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="OldWeight" dbName="OldWeight" title="原重量" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="OldMValue" dbName="OldMValue" title="原米数" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="NewWeight" dbName="NewWeight" title="新重量" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="NewMValue" dbName="NewMValue" title="新米数" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Progress" dbName="Progress" title="进度" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="Finishtime" dbName="Finishtime" title="完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="OrderDate" dbName="OrderDate" title="时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Rate" dbName="Rate" title="出码率" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="NewWidth" dbName="NewWidth" title="成品幅宽" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="NewHeight" dbName="NewHeight" title="成品花高" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="OldWidth" dbName="OldWidth" title="幅宽" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="NewCodeValue" dbName="NewCodeValue" title="成品码数" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Lossrate" dbName="Lossrate" title="损耗率" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="OldCodeValue" dbName="OldCodeValue" title="码数" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="OldHeight" dbName="OldHeight" title="花高" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="NewWarehouse" dbName="NewWarehouseID" title="新仓库" type="many2one" relationModel="stock_warehouse" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="OldWarehouse" dbName="OldWarehouseID" title="仓库" type="many2one" relationModel="stock_warehouse" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="OldProduct,NewProduct,NewWarehouse,OldWarehouse" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="OldProduct,NewProduct,NewWarehouse,OldWarehouse" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,33 @@
+function view() {
+    var options = {
+        form: {
+            fields: [{
+                newline: true,
+                name: "Typename",
+                label: "类型名",
+                editor: {
+                    type: "text"
+                },
+                type: "text",
+                type_textfield: "单行"
+            },
+            {
+                newline: 1,
+                name: "Description",
+                label: "描述",
+                editor: {
+                    height: "80"
+                },
+                type: "textarea",
+                type_textfield: "多行",
+                name_textfield: "描述",
+                width: ""
+            }]
+        },
+        common: {
+            saveCallbackType: "toView"
+        },
+        link: {}
+    };
+    return options;
+}

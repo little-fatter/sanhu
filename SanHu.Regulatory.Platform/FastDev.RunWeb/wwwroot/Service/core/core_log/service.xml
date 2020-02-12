@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_log" title="系统日志" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="200" />
+        <field name="Logcontent" dbName="Logcontent" title="内容" type="string" length="4000" />
+        <field name="Logtype" dbName="Logtype" title="日志类型" type="string" length="200" />
+        <field name="StackTrace" dbName="StackTrace" title="StackTrace" type="string" length="4000" />
+        <field name="OperatorIP" dbName="OperatorIP" title="OperatorIP" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="User" dbName="UserID" title="User" type="many2one" relationModel="core_user" relationField="" enabledSearch="Y" />
+        <field name="Systempath" dbName="Systempath" title="Systempath" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="Logtime" dbName="Logtime" title="日期时间" type="datetime" relationModel="" relationField="" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="User" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="User" one2many="" many2many="" />
+</freedesign>

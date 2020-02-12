@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="res_prodcut" title="产品" textField="ProductnNme" moduleName="res" moduleTitle="基础资料" dbName="" />
+    <fields>
+        <field name="ProductType" dbName="ProductTypeID" title="产品类别" type="many2one" relationModel="res_prodctType" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="model" dbName="model" title="型号" type="string" length="100" isPK="N" />
+        <field name="specification" dbName="specification" title="规格" type="string" length="100" enabledSearch="Y" isPK="N" />
+        <field name="brand" dbName="brandID" title="品牌" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ProductnNme" dbName="ProductnNme" title="产品名称" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="color" dbName="color" title="颜色" type="string" length="100" isPK="N" />
+        <field name="unit" dbName="unit" title="单位" type="string" length="100" isPK="N" />
+        <field name="price" dbName="price" title="价格" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="ProductPic" dbName="ProductPic" title="产品图片" type="string" length="100" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="ProductType,brand" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="ProductType,brand" one2many="" many2many="" />
+</freedesign>

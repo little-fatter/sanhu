@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="psi_inventory_info" title="进销存单据详情" textField="billNo" moduleName="psi" moduleTitle="进销存" notIncludeSysFields="Y" dbName="" />
+    <fields>
+        <field name="buId" dbName="buId" title="buId" type="integer" isPK="N" />
+        <field name="billNo" dbName="billNo" title="billNo" type="string" length="50" isPK="N" />
+        <field name="transType" dbName="transType" title="transType" type="integer" isPK="N" />
+        <field name="amount" dbName="amount" title="amount" type="float" isPK="N" />
+        <field name="billDate" dbName="billDate" title="billDate" type="datetime" isPK="N" />
+        <field name="serialno" dbName="serialno" title="serialno" type="string" length="50" isPK="N" />
+        <field name="description" dbName="description" title="description" type="string" length="50" isPK="N" />
+        <field name="invId" dbName="invId" title="商品id" type="integer" isPK="N" />
+        <field name="price" dbName="price" title="price" type="float" isPK="N" />
+        <field name="deduction" dbName="deduction" title="deduction" type="float" isPK="N" />
+        <field name="discountRate" dbName="discountRate" title="discountRate" type="float" isPK="N" />
+        <field name="qty" dbName="qty" title="qty" type="float" isPK="N" />
+        <field name="locationId" dbName="locationId" title="locationId" type="integer" isPK="N" />
+        <field name="tax" dbName="tax" title="tax" type="float" isPK="N" />
+        <field name="taxRate" dbName="taxRate" title="taxRate" type="float" isPK="N" />
+        <field name="taxAmount" dbName="taxAmount" title="taxAmount" type="float" isPK="N" />
+        <field name="unitId" dbName="unitId" title="unitId" type="integer" isPK="N" />
+        <field name="uid" dbName="uid" title="uid" type="integer" isPK="N" />
+        <field name="skuId" dbName="skuId" title="skuId" type="integer" isPK="N" />
+        <field name="entryId" dbName="entryId" title="entryId" type="boolean" isPK="N" />
+        <field name="transTypeName" dbName="transTypeName" title="transTypeName" type="string" length="50" isPK="N" />
+        <field name="srcOrderEntryId" dbName="srcOrderEntryId" title="srcOrderEntryId" type="integer" isPK="N" />
+        <field name="srcOrderId" dbName="srcOrderId" title="srcOrderId" type="integer" isPK="N" />
+        <field name="srcOrderNo" dbName="srcOrderNo" title="srcOrderNo" type="string" length="50" isPK="N" />
+        <field name="billType" dbName="billType" title="billType" type="string" length="50" isPK="N" />
+        <field name="salesId" dbName="salesId" title="销售人员id" type="integer" isPK="N" />
+        <field name="isDelete" dbName="isDelete" title="isDelete" type="boolean" isPK="N" />
+        <field name="srcDopey" dbName="srcDopey" title="srcDopey" type="string" length="50" isPK="N" />
+        <field name="srcDopeyName" dbName="srcDopeyName" title="srcDopeyName" type="string" length="50" isPK="N" />
+        <field name="udf01" dbName="udf01" title="udf01" type="string" length="50" isPK="N" />
+        <field name="udf02" dbName="udf02" title="udf02" type="string" length="50" isPK="N" />
+        <field name="udf03" dbName="udf03" title="udf03" type="string" length="50" isPK="N" />
+        <field name="udf04" dbName="udf04" title="udf04" type="string" length="50" isPK="N" />
+        <field name="udf05" dbName="udf05" title="udf05" type="string" length="50" isPK="N" />
+        <field name="udf06" dbName="udf06" title="udf06" type="string" length="50" isPK="N" />
+        <field name="udf07" dbName="udf07" title="udf07" type="string" length="50" isPK="N" />
+        <field name="udf08" dbName="udf08" title="udf08" type="string" length="50" isPK="N" />
+        <field name="id" dbName="id" title="单据信息Id" type="autoincrement" relationModel="" relationField="" isPK="Y" />
+        <field name="iid" dbName="iid" title="单据id" type="integer" relationModel="" relationField="" isPK="N" />
+        <field name="Productinformation" dbName="ProductinformationID" title="产品信息" type="many2one" relationModel="psi_goods" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="InventoryInformation" dbName="InventoryInformationID" title="单据信息" type="many2one" relationModel="psi_inventory" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Productinformation,InventoryInformation" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Productinformation,InventoryInformation" one2many="" many2many="" />
+</freedesign>

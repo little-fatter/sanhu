@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="供应商" title="Northwind_ZH供应商" textField="公司名称" moduleName="Northwind" moduleTitle="Northwind" notIncludeSysFields="Y" dbName="Northwind_ZH" />
+    <fields>
+        <field name="供应商ID" dbName="供应商ID" title="供应商ID" type="autoincrement" relationModel="" relationField="" isPK="Y" />
+        <field name="公司名称" dbName="公司名称" title="公司名称" type="string" length="50" isPK="N" />
+        <field name="联系人姓名" dbName="联系人姓名" title="联系人姓名" type="string" length="50" isPK="N" />
+        <field name="联系人职务" dbName="联系人职务" title="联系人职务" type="string" length="50" isPK="N" />
+        <field name="地址" dbName="地址" title="地址" type="string" length="50" isPK="N" />
+        <field name="城市" dbName="城市" title="城市" type="string" length="50" isPK="N" />
+        <field name="地区" dbName="地区" title="地区" type="string" length="50" isPK="N" />
+        <field name="邮政编码" dbName="邮政编码" title="邮政编码" type="string" length="50" isPK="N" />
+        <field name="国家" dbName="国家" title="国家" type="string" length="50" isPK="N" />
+        <field name="电话" dbName="电话" title="电话" type="string" length="50" isPK="N" />
+        <field name="传真" dbName="传真" title="传真" type="string" length="50" isPK="N" />
+        <field name="主页" dbName="主页" title="主页" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

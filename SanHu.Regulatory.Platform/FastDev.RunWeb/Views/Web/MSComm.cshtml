@@ -1,0 +1,93 @@
+﻿@{
+    Layout = null;
+}
+
+<html>    
+<head>    
+<title>JavaScript MSCOMM32.OCX </title>    
+<script type="text/javascript" >
+    function trim(text)
+    {
+        text = text.replace(/^[ |\n|\r|\t|\x0B|\0|?]+/, "");
+        text = text.replace(/[ |\n|\r|\t|\x0B|\0|?]+$/, "");
+        return text;
+    }
+
+    function isEmpty(str)
+    {
+        return ((trim(str) == null) || (trim(str).length == 0));
+    }
+
+    function isNumber(str)
+    {
+        if (isEmpty(str))
+            return false;
+        return !isNaN(str);
+    }
+</script>
+<SCRIPT ID=clientEventHandlersJS LANGUAGE=javascript>
+    var readWeight = frameElement ? frameElement.readWeight : null;
+  
+
+    function MSComm1_OnComm()
+    { 
+        var len = 0;
+        if (MSComm1.CommEvent == 1)
+        {
+            //window.alert("barcode");
+        }
+        else if (MSComm1.CommEvent == 2)
+        {
+            var value = MSComm1.Input;
+            value = value.replace("kg", "");
+            value = trim(value);
+            if (isNumber(value))
+            {
+                if (readWeight)
+                {
+                    readWeight(value);
+                }
+            }
+
+        }
+    } 
+
+    function autoPort()
+    {
+        if (!MSComm1.PortOpen)
+        {
+            MSComm1.PortOpen = true;
+            //MSComm1.Output="AA 00 03 88 18 0A 99 BB";
+        }
+    }
+</SCRIPT>    
+
+<SCRIPT LANGUAGE=javascript FOR=MSComm1 EVENT=OnComm >
+    MSComm1_OnComm();
+</SCRIPT>    
+
+</head>    
+<body onload="autoPort();">
+<OBJECT CLASSID=clsid:648A5600-2C6E-101B-82B6-000000000014 id=MSComm1 name=MSComm1 codebase=mscomm32.ocx  type="application/x-oleobject"    
+ style="border-style:outset; border-width:0px; WIDTH: 10px; HEIGHT: 10px"  >    
+	<PARAM NAME="CommPort" VALUE="1">    
+	<PARAM NAME="DTREnable" VALUE="1">    
+	<PARAM NAME="Handshaking" VALUE="0">    
+	<PARAM NAME="InBufferSize" VALUE="1024">    
+	<PARAM NAME="InputLen" VALUE="0">
+	<PARAM NAME="NullDiscard" VALUE="0">    
+	<PARAM NAME="OutBufferSize" VALUE="512">    
+	<PARAM NAME="ParityReplace" VALUE="?">    
+	<PARAM NAME="RThreshold" VALUE="1">    
+	<PARAM NAME="RTSEnable" VALUE="1">    
+	<PARAM NAME="SThreshold" VALUE="2">    
+	<PARAM NAME="EOFEnable" VALUE="0">    
+	<PARAM NAME="InputMode" VALUE="0">    
+	
+	<PARAM NAME="DataBits" VALUE="8">    
+	<PARAM NAME="StopBits" VALUE="1">    
+	<PARAM NAME="BaudRate" VALUE="9600">    
+	<PARAM NAME="Settings" VALUE="9600,N,8,1">    
+</OBJECT>   
+</body>    
+</html>

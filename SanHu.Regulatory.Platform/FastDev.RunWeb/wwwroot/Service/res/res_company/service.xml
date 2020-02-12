@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="res_company" title="公司" textField="CompanyName" moduleName="res" moduleTitle="基础资料" />
+    <fields>
+        <field name="CompanyName" dbName="CompanyName" title="公司名" type="string" length="0" />
+        <field name="IdentiyNo" dbName="IdentiyNo" title="执照号" type="string" length="0" />
+        <field name="Remark" dbName="Remark" title="备注" type="string" length="0" />
+        <field name="WebSite" dbName="WebSite" title="网址" type="string" length="0" />
+        <field name="SeqNo" dbName="SeqNo" title="排序" type="integer" length="0" />
+        <field name="CompanyNo" dbName="CompanyNo" title="公司编码" type="string" length="0" />
+        <field name="Email" dbName="Email" title="Email" type="string" length="0" />
+        <field name="Phone" dbName="Phone" title="手机号" type="string" length="0" />
+        <field name="Fax" dbName="Fax" title="传真" type="string" length="0" />
+        <field name="CompanyType" dbName="CompanyType" title="公司类型" type="string" length="0" />
+        <field name="CompanyAddress" dbName="CompanyAddress" title="公司地址" type="string" length="0" />
+        <field name="Parent" dbName="ParentID" title="Parent" type="many2one" relationModel="res_company" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Parent" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Parent" one2many="" many2many="" />
+</freedesign>

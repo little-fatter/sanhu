@@ -1,0 +1,30 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+              
+            <div class="contact-box">
+              
+                <div class="col-sm-4">
+                    <div class="text-center">
+                            <a href="javascript:void()" class="link" data-url="<%= openUrl %>" data-target="<%= openTarget %>"  >  
+                    <img alt="image" class="img-circle m-t-xs img-responsive" src="{{ data.<%= fieldImg %> }}"> 
+                                </a>
+                        <div class="m-t-xs font-bold">{{ data.<%= fieldTitle %> }}</div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <h3><strong>{{ data.<%= fieldName %> }}</strong></h3>
+                    <address v-if="data.<%= fieldAddress %>"><i class="fa fa-map-marker"></i> {{ data.<%= fieldAddress %> }}</address>
+         
+                        <p  v-if="data.<%= fieldCompany %>">   <strong>{{ data.<%= fieldCompany %> }}</strong> </p>
+                        <p v-if="data.<%= fieldWeixin %>">   微信： {{ data.<%= fieldWeixin %> }}</p>
+                        <p v-if="data.<%= fieldWeibo %>">      微博： {{ data.<%= fieldWeibo %> }}</p>
+                        <p v-if="data.<%= fieldPhone %>">    <abbr title="Phone">Tel:</abbr> {{ data.<%= fieldPhone %> }}</p>
+               
+                </div>
+                <div class="clearfix"></div>
+                       
+            </div> 
+            
+            
+        </div>
+        </div>

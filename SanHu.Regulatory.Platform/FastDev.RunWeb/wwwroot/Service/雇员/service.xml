@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="雇员" title="Northwind_ZH雇员" textField="姓氏" moduleName="Northwind" moduleTitle="Northwind" notIncludeSysFields="Y" dbName="Northwind_ZH" />
+    <fields>
+        <field name="雇员ID" dbName="雇员ID" title="雇员ID" type="autoincrement" relationModel="" relationField="" isPK="Y" />
+        <field name="姓氏" dbName="姓氏" title="姓氏" type="string" length="50" isPK="N" />
+        <field name="名字" dbName="名字" title="名字" type="string" length="50" isPK="N" />
+        <field name="职务" dbName="职务" title="职务" type="string" length="50" isPK="N" />
+        <field name="尊称" dbName="尊称" title="尊称" type="string" length="50" isPK="N" />
+        <field name="出生日期" dbName="出生日期" title="出生日期" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="雇用日期" dbName="雇用日期" title="雇用日期" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="地址" dbName="地址" title="地址" type="string" length="50" isPK="N" />
+        <field name="城市" dbName="城市" title="城市" type="string" length="50" isPK="N" />
+        <field name="地区" dbName="地区" title="地区" type="string" length="50" isPK="N" />
+        <field name="邮政编码" dbName="邮政编码" title="邮政编码" type="string" length="50" isPK="N" />
+        <field name="国家" dbName="国家" title="国家" type="string" length="50" isPK="N" />
+        <field name="家庭电话" dbName="家庭电话" title="家庭电话" type="string" length="50" isPK="N" />
+        <field name="分机" dbName="分机" title="分机" type="string" length="50" isPK="N" />
+        <field name="照片" dbName="照片" title="照片" type="string" length="50" isPK="N" />
+        <field name="备注" dbName="备注" title="备注" type="string" length="50" isPK="N" />
+        <field name="上级" dbName="上级" title="上级" type="integer" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

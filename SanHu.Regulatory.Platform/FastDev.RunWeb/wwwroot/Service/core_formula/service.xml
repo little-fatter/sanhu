@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_formula" title="界面动作" textField="title" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="model" dbName="model" title="model" type="string" length="50" isPK="N" />
+        <field name="viewname" dbName="viewname" title="viewname" type="string" length="50" isPK="N" />
+        <field name="formulaA" dbName="formulaA" title="formulaA" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="formulaB" dbName="formulaB" title="formulaB" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="formulaC" dbName="formulaC" title="formulaC" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="formulaD" dbName="formulaD" title="formulaD" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="formulaE" dbName="formulaE" title="formulaE" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="content" dbName="content" title="content" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="title" dbName="title" title="title" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="type" dbName="type" title="type" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="isStop" dbName="isStop" title="isStop" type="boolean" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

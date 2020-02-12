@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="purchase_order" title="采购单" textField="OrderNo" moduleName="erp" moduleTitle="企业资源计划" dbName="" />
+    <fields>
+        <field name="OrderDate" dbName="OrderDate" title="单据日期" type="string" length="50" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="OrderNo" dbName="OrderNo" title="单据编号" type="string" length="200" isPK="N" />
+        <field name="Details" title="明细" type="one2many" relationModel="purchase_orderdetail" relationField="OrderID" isPK="N" />
+        <field name="DeliveryDate" dbName="DeliveryDate" title="交货日期" type="string" length="50" isPK="N" />
+        <field name="Supplier" dbName="SupplierID" title="供应商" type="many2one" relationModel="crm_supplier" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Purchaser" dbName="PurchaserID" title="采购人" type="many2one" relationModel="core_user" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Price" dbName="Price" title="采购价" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Arrears" dbName="Arrears" title="欠款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Payment" dbName="Payment" title="付款" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Warehouse" dbName="WarehouseID" title="仓库" type="many2one" relationModel="stock_warehouse" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Account" dbName="AccountID" title="结算账号" type="many2one" relationModel="res_account" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Supplier,Purchaser,Warehouse,Account" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Supplier,Purchaser,Warehouse,Account" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_menu" title="菜单" textField="MenuName" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="IsVisible" dbName="IsVisible" title="可视" type="boolean" length="0" isPK="N" />
+        <field name="IsLeaf" dbName="IsLeaf" title="是否叶节点" type="boolean" length="0" isPK="N" />
+        <field name="SeqNo" dbName="SeqNo" title="SeqNo" type="string" length="0" isPK="N" />
+        <field name="Parent" dbName="ParentID" title="父菜单" type="many2one" relationModel="core_menu" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="View" dbName="ViewID" title="视图" type="many2one" relationModel="core_view" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="MenuUrl" dbName="MenuUrl" title="链接地址" type="string" length="0" isPK="N" />
+        <field name="MenuUrlBind" dbName="MenuUrlBind" title="链接绑定参数" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="MenuName" dbName="MenuName" title="菜单名称" type="string" length="0" enabledSearch="Y" isPK="N" />
+        <field name="MenuNo" dbName="MenuNo" title="菜单编码" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="MenuGroup" dbName="MenuGroup" title="菜单分组" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="MenuIcon" dbName="MenuIcon" title="菜单图标" type="string" length="100" relationModel="" relationField="" isPK="N" />
+        <field name="MenuGroupSeqNo" dbName="MenuGroupSeqNo" title="MenuGroupSeqNo" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ShowInDesign" dbName="ShowInDesign" title="仅设计时可见" type="boolean" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Parent" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Parent" one2many="" many2many="" />
+</freedesign>

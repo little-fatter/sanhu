@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="base_area" title="地区" textField="Title" moduleName="res" moduleTitle="基础资料" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="200" />
+        <field name="Type" dbName="Type" title="类型" type="string" length="100" />
+        <field name="Remarks" dbName="Remarks" title="备注" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Parent" dbName="ParentID" title="上一级" type="many2one" relationModel="base_area" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Parent" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Parent" one2many="" many2many="" />
+</freedesign>

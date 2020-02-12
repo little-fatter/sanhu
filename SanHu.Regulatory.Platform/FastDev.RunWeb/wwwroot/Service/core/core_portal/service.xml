@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_portal" title="门户设置" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="RowNumber" dbName="RowNumber" title="行数" type="float" />
+        <field name="ColumnNumber" dbName="ColumnNumber" title="列数" type="float" />
+        <field name="Link" dbName="Link" title="链接" type="string" length="400" />
+        <field name="LinkBind" dbName="LinkBind" title="绑定参数" type="string" length="400" />
+        <field name="Height" dbName="Height" title="高度" type="string" length="50" />
+        <field name="PanelNumber" dbName="PanelNumber" title="排序" type="float" />
+        <field name="Title" dbName="Title" title="标题" type="string" length="200" />
+        <field name="Width" dbName="Width" title="宽度" type="string" length="50" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

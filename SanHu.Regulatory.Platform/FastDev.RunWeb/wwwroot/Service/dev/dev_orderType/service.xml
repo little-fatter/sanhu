@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="dev_orderType" title="实例_订单类型" textField="Title" moduleName="dev" moduleTitle="开发实例" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="200" />
+        <field name="Remarks" dbName="Remarks" title="备注" type="string" length="200" />
+        <field name="Personincharge" dbName="Personincharge" title="负责人" type="string" length="200" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

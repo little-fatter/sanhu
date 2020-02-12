@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="产品" title="Northwind_ZH产品" textField="产品名称" moduleName="Northwind" moduleTitle="Northwind" notIncludeSysFields="Y" dbName="Northwind_ZH" />
+    <fields>
+        <field name="产品名称" dbName="产品名称" title="产品名称" type="string" length="50" isPK="N" />
+        <field name="供应商ID" dbName="供应商ID" title="供应商ID" type="string" length="50" isPK="N" />
+        <field name="类别ID" dbName="类别ID" title="类别ID" type="string" length="50" isPK="N" />
+        <field name="单位数量" dbName="单位数量" title="单位数量" type="string" length="50" isPK="N" />
+        <field name="单价" dbName="单价" title="单价" type="string" length="50" isPK="N" />
+        <field name="库存量" dbName="库存量" title="库存量" type="string" length="50" isPK="N" />
+        <field name="订购量" dbName="订购量" title="订购量" type="string" length="50" isPK="N" />
+        <field name="再订购量" dbName="再订购量" title="再订购量" type="string" length="50" isPK="N" />
+        <field name="中止" dbName="中止" title="中止" type="string" length="50" isPK="N" />
+        <field name="产品ID" dbName="产品ID" title="产品ID" type="autoincrement" relationModel="" relationField="" isPK="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

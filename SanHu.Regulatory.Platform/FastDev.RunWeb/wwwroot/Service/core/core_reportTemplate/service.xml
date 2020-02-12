@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_reportTemplate" title="报表模板" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="50" relationModel="" relationField="" />
+        <field name="IsDefault" dbName="IsDefault" title="是否默认" type="boolean" relationModel="" relationField="" />
+        <field name="TemplateStyle" dbName="TemplateStyle" title="内容" type="string" length="50" />
+        <field name="TemplateBody" dbName="TemplateBody" title="模板" type="string" length="50" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="string" length="50" />
+        <field name="Height" dbName="Height" title="高度" type="float" relationModel="" relationField="" />
+        <field name="Width" dbName="Width" title="宽度" type="float" relationModel="" relationField="" />
+        <field name="MarginTop" dbName="MarginTop" title="上边距" type="float" relationModel="" relationField="" />
+        <field name="MarginBottom" dbName="MarginBottom" title="下边距" type="float" relationModel="" relationField="" />
+        <field name="MarginLeft" dbName="MarginLeft" title="左边距" type="float" relationModel="" relationField="" />
+        <field name="MarginRight" dbName="MarginRight" title="右边距" type="float" relationModel="" relationField="" />
+        <field name="PageSize" dbName="PageSize" title="每页记录数" type="integer" relationModel="" relationField="" />
+        <field name="PrintPage" dbName="PrintPage" title="打印纸张" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="TemplateName" dbName="TemplateName" title="模板标示" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

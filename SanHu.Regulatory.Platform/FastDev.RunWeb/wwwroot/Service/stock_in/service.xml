@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="stock_in" title="入库单" textField="OrderNo" moduleName="stock" moduleTitle="仓库管理" dbName="" />
+    <fields>
+        <field name="OrderDate" dbName="OrderDate" title="单据日期" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="OrderNo" dbName="OrderNo" title="单据编码" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="string" length="400" isPK="N" />
+        <field name="Details" title="Details" type="one2many" relationModel="stock_indetails" relationField="OrderID" isPK="N" />
+        <field name="Supplier" dbName="SupplierID" title="供应商" type="many2one" relationModel="crm_supplier" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="InType" dbName="InType" title="入库类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Supplier" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Supplier" one2many="" many2many="" />
+</freedesign>

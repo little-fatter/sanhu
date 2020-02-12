@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_autoCodeInfo" title="自动编码字典" textField="ID" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="Year" dbName="Year" title="Year" type="integer" />
+        <field name="AutoCode" dbName="AutoCodeID" title="AutoCode" type="many2one" relationModel="core_autoCode" relationField="" />
+        <field name="Day" dbName="Day" title="Day" type="integer" />
+        <field name="SerialNumber" dbName="SerialNumber" title="SerialNumber" type="float" />
+        <field name="Month" dbName="Month" title="Month" type="integer" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

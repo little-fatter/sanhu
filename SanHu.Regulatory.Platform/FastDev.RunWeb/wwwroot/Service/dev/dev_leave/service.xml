@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="dev_leave" title="请假单" textField="Title" moduleName="dev" moduleTitle="开发实例" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="100" />
+        <field name="Content" dbName="Content" title="内容" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Leavedays" dbName="Leavedays" title="请假天数" type="integer" relationModel="" relationField="" />
+        <field name="Starttime" dbName="Starttime" title="开始时间" type="datetime" relationModel="" relationField="" />
+        <field name="Endtime" dbName="Endtime" title="结束时间" type="datetime" relationModel="" relationField="" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

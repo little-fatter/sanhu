@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="psi_category" title="产品分类" textField="Id" moduleName="psi" moduleTitle="进销存" notIncludeSysFields="Y" dbName="mall" />
+    <fields>
+        <field name="Id" dbName="Id" title="Id" type="string" length="50" isPK="N" />
+        <field name="Name" dbName="Name" title="Name" type="string" length="50" isPK="N" />
+        <field name="Icon" dbName="Icon" title="Icon" type="string" length="50" isPK="N" />
+        <field name="DisplaySequence" dbName="DisplaySequence" title="DisplaySequence" type="string" length="50" isPK="N" />
+        <field name="ParentCategoryId" dbName="ParentCategoryId" title="ParentCategoryId" type="string" length="50" isPK="N" />
+        <field name="Depth" dbName="Depth" title="Depth" type="integer" isPK="N" />
+        <field name="Path" dbName="Path" title="Path" type="string" length="50" isPK="N" />
+        <field name="RewriteName" dbName="RewriteName" title="RewriteName" type="string" length="50" isPK="N" />
+        <field name="HasChildren" dbName="HasChildren" title="HasChildren" type="boolean" isPK="N" />
+        <field name="TypeId" dbName="TypeId" title="TypeId" type="string" length="50" isPK="N" />
+        <field name="CommisRate" dbName="CommisRate" title="CommisRate" type="string" length="50" isPK="N" />
+        <field name="Meta_Title" dbName="Meta_Title" title="Meta_Title" type="string" length="50" isPK="N" />
+        <field name="Meta_Description" dbName="Meta_Description" title="Meta_Description" type="string" length="50" isPK="N" />
+        <field name="Meta_Keywords" dbName="Meta_Keywords" title="Meta_Keywords" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

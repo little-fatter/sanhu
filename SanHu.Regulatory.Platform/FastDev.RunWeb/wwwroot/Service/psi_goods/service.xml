@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="psi_goods" title="产品信息" textField="ID" moduleName="psi" moduleTitle="进销存" notIncludeSysFields="Y" dbName="mall" />
+    <fields>
+        <field name="ID" dbName="ID" title="ID" type="string" length="50" isPK="N" />
+        <field name="CategoryId" dbName="CategoryId" title="CategoryId" type="string" length="50" isPK="N" />
+        <field name="ProductName" dbName="ProductName" title="ProductName" type="string" length="50" isPK="N" />
+        <field name="ProductCode" dbName="ProductCode" title="ProductCode" type="string" length="50" isPK="N" />
+        <field name="BrandId" dbName="BrandId" title="BrandId" type="string" length="50" isPK="N" />
+        <field name="ShortDescription" dbName="ShortDescription" title="ShortDescription" type="string" length="50" isPK="N" />
+        <field name="CategoryName" dbName="CategoryName" title="CategoryName" type="string" length="50" isPK="N" />
+        <field name="SaleStatus" dbName="SaleStatus" title="SaleStatus" type="integer" isPK="N" />
+        <field name="AuditStatus" dbName="AuditStatus" title="AuditStatus" type="integer" isPK="N" />
+        <field name="AddedDate" dbName="AddedDate" title="AddedDate" type="datetime" isPK="N" />
+        <field name="DisplaySequence" dbName="DisplaySequence" title="DisplaySequence" type="string" length="50" isPK="N" />
+        <field name="ImagePath" dbName="ImagePath" title="ImagePath" type="string" length="50" isPK="N" />
+        <field name="MarketPrice" dbName="MarketPrice" title="MarketPrice" type="string" length="50" isPK="N" />
+        <field name="MinSalePrice" dbName="MinSalePrice" title="MinSalePrice" type="string" length="50" isPK="N" />
+        <field name="HasSKU" dbName="HasSKU" title="HasSKU" type="boolean" isPK="N" />
+        <field name="VistiCounts" dbName="VistiCounts" title="VistiCounts" type="string" length="50" isPK="N" />
+        <field name="BrandName" dbName="BrandName" title="BrandName" type="string" length="50" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

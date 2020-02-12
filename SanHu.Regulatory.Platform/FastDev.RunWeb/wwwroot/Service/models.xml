@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <models>
+        <models name="core_menu" title="菜单" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_toDo" title="代办" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_workflowTrack" title="WorkflowTrack" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_workflowExecutorStatus" title="流程执行实例节点执行情况" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="res_department" title="部门" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="core_printTemplate" title="打印模板" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_user" title="用户" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_importTemplate" title="导入模板" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_role" title="角色" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_importTemplateDetail" title="导入模板明细" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_workflowProject" title="流程执行实例" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_modelField" title="模型字段" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="res_employee" title="员工" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_company" title="公司" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="core_module" title="模块" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_workflow" title="工作流定义" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_workflowTask" title="流程执行实例节点" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_autoCode" title="自动编码" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_fieldRightsRule" title="字段权限规则" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_funRightsRule" title="功能权限规则" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_reportTemplate" title="报表模板" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_model" title="模型" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_rights" title="权限表" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_workflowTrackDetails" title="core_workflowTrackDetails" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_view" title="视图" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_exportTemplateDetail" title="导出模板明细" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_exportTemplate" title="导出模板" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_dataRightsRule" title="数据权限规则" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_setting" title="配置信息" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="core_portal" title="门户设置" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_autoCodeInfo" title="自动编码字典" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="case_qingjia" title="请假单" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="base_area" title="地区" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_dictionary" title="字典" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_dictionaryItems" title="字典明细项" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="crm_customer" title="客户" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="crm_customerType" title="客户类别" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="crm_customerContract" title="客户联系人" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_store" title="门店" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_meeting" title="会议" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_orderDetail" title="订单明细" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_order" title="订单" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_employee" title="员工" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_qingjiaType" title="请假类型" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="core_log" title="系统日志" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_variables" title="系统变量" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_myMenus" title="自定义菜单" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="core_dataAssign" title="core_dataAssign" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="core_dblinks" title="数据库链接库" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="core_links" title="快捷链接(首页按钮)" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="客户" title="Northwind_ZH客户" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="产品" title="Northwind_ZH产品" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="stock_warehouse" title="仓库" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="v_user" title="用户视图" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="stock_InventoryClass" title="库存编码种类" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="core_formula" title="界面动作" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="case_saleOrder" title="实例-销售订单" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_saleOrderDetails" title="实例销售订单明细" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_saleProduct" title="实例销售产品" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_saleCustomer" title="实例销售客户" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="case_personnel" title="实例人员管理" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="Common" title="通用" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="供应商" title="Northwind_ZH供应商" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="类别" title="Northwind_ZH类别" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="雇员" title="Northwind_ZH雇员" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="运货商" title="Northwind_ZH运货商" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="订单" title="Northwind_ZH订单" textField="Title" moduleName="Northwind" moduleTitle="Northwind" />
+        <models name="v_qingjia" title="开发库（本库）v_qingjia" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="v_Northwind_Order" title="v_Northwind_Order" textField="Title" moduleName="case" moduleTitle="示例" />
+        <models name="platform_plugins" title="平台插件" textField="Title" moduleName="core" moduleTitle="系统模块" />
+        <models name="crm_supplierContract" title="供应商联系人" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="crm_supplierType" title="供应商类别" textField="Title" />
+        <models name="crm_supplier" title="供应商" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="purchase_order" title="采购单" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="crm_customerlevel" title="客户等级" textField="Title" />
+        <models name="res_productType" title="物品类别" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="purchase_orderdetail" title="采购单明细" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="stock_stockPile" title="库存" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="res_productUnit" title="单位" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_product" title="产品" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="sales_orderdetail" title="销售订单明细" textField="Title" moduleName="sales" moduleTitle="线下销售模块" />
+        <models name="sales_order" title="销售订单" textField="Title" moduleName="sales" moduleTitle="线下销售模块" />
+        <models name="stock_indetails" title="入库单明细" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="stock_in" title="入库单" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="stock_outdetails" title="出库单明细" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="stock_out" title="出库单" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="erp_processing" title="外加工" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="stock_pileDetail" title="进出库明细" textField="Title" moduleName="stock" moduleTitle="仓库管理" />
+        <models name="net_user" title="跟单系统账号" textField="Title" />
+        <models name="v_arrears_month" title="客户欠款月份统计" textField="Title" moduleName="sales" moduleTitle="线下销售模块" />
+        <models name="purchase_repayment" title="供应商还款" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="net_order" title="跟单管理" textField="Title" />
+        <models name="v_arrears" title="客户总欠款" textField="Title" moduleName="sales" moduleTitle="线下销售模块" />
+        <models name="v_salesorderdetail" title="客户交易明细" textField="Title" moduleName="sales" moduleTitle="线下销售模块" />
+        <models name="crm_repayment" title="客户还款" textField="Title" moduleName="sales" moduleTitle="线下销售模块" />
+        <models name="v_supplierarrears" title="供应商总欠款" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="v_supplierarrears_month" title="供应商欠款月份统计" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="v_purchaseorderdetail" title="供应商交易明细" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="erp_weigh" title="称重数据" textField="Title" moduleName="erp" moduleTitle="企业资源计划" />
+        <models name="res_accountType" title="资金账号类型" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="res_account" title="资金账号" textField="Title" moduleName="res" moduleTitle="基础资料" />
+    </models>
+</freedesign>

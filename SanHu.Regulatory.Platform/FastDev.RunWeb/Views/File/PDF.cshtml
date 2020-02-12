@@ -1,0 +1,29 @@
+﻿@{ 
+    Layout = null;
+}
+
+<html> 
+<head>
+    <title></title>
+    <style type="text/css">
+        body {
+            background-color: rgb(38,38,38);
+
+        }
+        .maincontent {
+            margin:0 auto;width:800px;            font-size:12px;
+            background: #ffffff;
+            margin-bottom: 20px;
+            border: 1px solid #c8c8dd;
+            -moz-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            -webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body marginwidth="0" marginheight="0">
+<div class="maincontent">
+    @Html.Raw(ViewBag.Content)
+</div> 
+</body> 
+</html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="psi_invoice_sales" title="销售订单" textField="buId" moduleName="psi" moduleTitle="进销存" notIncludeSysFields="Y" dbName="LocalMySql" />
+    <fields>
+        <field name="buId" dbName="buId" title="buId" type="string" length="50" isPK="N" />
+        <field name="billNo" dbName="billNo" title="billNo" type="string" length="50" isPK="N" />
+        <field name="uid" dbName="uid" title="uid" type="string" length="50" isPK="N" />
+        <field name="userName" dbName="userName" title="userName" type="string" length="50" isPK="N" />
+        <field name="transType" dbName="transType" title="transType" type="string" length="50" isPK="N" />
+        <field name="totalAmount" dbName="totalAmount" title="totalAmount" type="string" length="50" isPK="N" />
+        <field name="amount" dbName="amount" title="amount" type="string" length="50" isPK="N" />
+        <field name="rpAmount" dbName="rpAmount" title="rpAmount" type="string" length="50" isPK="N" />
+        <field name="billDate" dbName="billDate" title="billDate" type="string" length="50" isPK="N" />
+        <field name="description" dbName="description" title="description" type="string" length="50" isPK="N" />
+        <field name="arrears" dbName="arrears" title="arrears" type="string" length="50" isPK="N" />
+        <field name="disRate" dbName="disRate" title="disRate" type="string" length="50" isPK="N" />
+        <field name="disAmount" dbName="disAmount" title="disAmount" type="string" length="50" isPK="N" />
+        <field name="totalQty" dbName="totalQty" title="totalQty" type="string" length="50" isPK="N" />
+        <field name="totalArrears" dbName="totalArrears" title="totalArrears" type="string" length="50" isPK="N" />
+        <field name="billStatus" dbName="billStatus" title="billStatus" type="string" length="50" isPK="N" />
+        <field name="checkName" dbName="checkName" title="checkName" type="string" length="50" isPK="N" />
+        <field name="totalTax" dbName="totalTax" title="totalTax" type="string" length="50" isPK="N" />
+        <field name="totalTaxAmount" dbName="totalTaxAmount" title="totalTaxAmount" type="string" length="50" isPK="N" />
+        <field name="createTime" dbName="createTime" title="createTime" type="string" length="50" isPK="N" />
+        <field name="checked" dbName="checked" title="checked" type="string" length="50" isPK="N" />
+        <field name="accId" dbName="accId" title="accId" type="string" length="50" isPK="N" />
+        <field name="billType" dbName="billType" title="billType" type="string" length="50" isPK="N" />
+        <field name="modifyTime" dbName="modifyTime" title="modifyTime" type="string" length="50" isPK="N" />
+        <field name="hxStateCode" dbName="hxStateCode" title="hxStateCode" type="string" length="50" isPK="N" />
+        <field name="transTypeName" dbName="transTypeName" title="transTypeName" type="string" length="50" isPK="N" />
+        <field name="totalDiscount" dbName="totalDiscount" title="totalDiscount" type="string" length="50" isPK="N" />
+        <field name="salesId" dbName="salesId" title="salesId" type="string" length="50" isPK="N" />
+        <field name="customerFree" dbName="customerFree" title="customerFree" type="string" length="50" isPK="N" />
+        <field name="hxAmount" dbName="hxAmount" title="hxAmount" type="string" length="50" isPK="N" />
+        <field name="payment" dbName="payment" title="payment" type="string" length="50" isPK="N" />
+        <field name="discount" dbName="discount" title="discount" type="string" length="50" isPK="N" />
+        <field name="srcOrderNo" dbName="srcOrderNo" title="srcOrderNo" type="string" length="50" isPK="N" />
+        <field name="srcOrderId" dbName="srcOrderId" title="srcOrderId" type="string" length="50" isPK="N" />
+        <field name="postData" dbName="postData" title="postData" type="string" length="50" isPK="N" />
+        <field name="locationId" dbName="locationId" title="locationId" type="string" length="50" isPK="N" />
+        <field name="inLocationId" dbName="inLocationId" title="inLocationId" type="string" length="50" isPK="N" />
+        <field name="outLocationId" dbName="outLocationId" title="outLocationId" type="string" length="50" isPK="N" />
+        <field name="paySettacctId" dbName="paySettacctId" title="paySettacctId" type="string" length="50" isPK="N" />
+        <field name="recSettacctId" dbName="recSettacctId" title="recSettacctId" type="string" length="50" isPK="N" />
+        <field name="isDelete" dbName="isDelete" title="isDelete" type="string" length="50" isPK="N" />
+        <field name="serialno" dbName="serialno" title="serialno" type="string" length="50" isPK="N" />
+        <field name="udf01" dbName="udf01" title="udf01" type="string" length="50" isPK="N" />
+        <field name="udf02" dbName="udf02" title="udf02" type="string" length="50" isPK="N" />
+        <field name="udf03" dbName="udf03" title="udf03" type="string" length="50" isPK="N" />
+        <field name="udf04" dbName="udf04" title="udf04" type="string" length="50" isPK="N" />
+        <field name="udf05" dbName="udf05" title="udf05" type="string" length="50" isPK="N" />
+        <field name="udf06" dbName="udf06" title="udf06" type="string" length="50" isPK="N" />
+        <field name="udf07" dbName="udf07" title="udf07" type="string" length="50" isPK="N" />
+        <field name="udf08" dbName="udf08" title="udf08" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

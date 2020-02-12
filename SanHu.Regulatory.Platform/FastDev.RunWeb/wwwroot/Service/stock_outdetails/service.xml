@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="stock_outdetails" title="出库单明细" textField="Remark" moduleName="stock" moduleTitle="仓库管理" dbName="" />
+    <fields>
+        <field name="Product" dbName="ProductID" title="产品" type="many2one" relationModel="res_product" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Warehouse" dbName="WarehouseID" title="仓库" type="many2one" relationModel="stock_warehouse" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Quantity" dbName="Quantity" title="数量" type="integer" relationModel="" relationField="" isPK="N" />
+        <field name="UnitPrice" dbName="UnitPrice" title="单价" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Price" dbName="Price" title="价格" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="OrderID" dbName="OrderID" title="OrderID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Weight" dbName="Weight" title="重量" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="MValue" dbName="MValue" title="米" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Unit" dbName="UnitID" title="单位" type="many2one" relationModel="res_productUnit" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ProMode" dbName="ProMode" title="规格型号" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="UnitName" dbName="UnitName" title="单位名" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Product,Warehouse,Unit" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Product,Warehouse,Unit" one2many="" many2many="" />
+</freedesign>

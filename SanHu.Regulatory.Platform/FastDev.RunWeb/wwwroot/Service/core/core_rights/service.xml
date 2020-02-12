@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_rights" title="权限表" textField="Remark" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="Remark" dbName="Remark" title="备注" type="string" length="200" />
+        <field name="MasterType" dbName="MasterType" title="权限拥有者类型" type="string" length="50" />
+        <field name="MasterID" dbName="MasterID" title="权限拥有者主键" type="string" length="50" />
+        <field name="RightsValue" dbName="RightsValue" title="拥有权限" type="text" length="8000" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

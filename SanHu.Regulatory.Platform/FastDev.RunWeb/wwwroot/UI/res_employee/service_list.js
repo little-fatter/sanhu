@@ -1,0 +1,7 @@
+function service(page)
+{
+
+    
+    
+    
+}

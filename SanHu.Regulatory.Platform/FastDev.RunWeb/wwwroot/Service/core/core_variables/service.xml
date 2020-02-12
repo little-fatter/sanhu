@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_variables" title="系统变量" textField="VariableTitle" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="VariableTitle" dbName="VariableTitle" title="变量名" type="string" length="50" />
+        <field name="VariableName" dbName="VariableName" title="变量标示" type="string" length="50" />
+        <field name="VariableValue" dbName="VariableValue" title="变量值" type="string" length="200" relationModel="" relationField="" />
+        <field name="VariableExpression" dbName="VariableExpression" title="变量表达式(SQL)" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" length="4000" relationModel="" relationField="" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

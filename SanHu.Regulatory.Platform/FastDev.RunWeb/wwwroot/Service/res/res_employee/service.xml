@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="res_employee" title="员工" textField="EmpName" moduleName="res" moduleTitle="基础资料" />
+    <fields>
+        <field name="IDNo" dbName="IDNo" title="身份证号" type="string" length="50" />
+        <field name="GGE" dbName="GGE" title="GGE" type="string" length="50" />
+        <field name="Address" dbName="Address" title="住址" type="string" length="50" />
+        <field name="Email" dbName="Email" title="Email" type="string" length="50" />
+        <field name="User" dbName="UserID" title="关联用户" type="many2one" relationModel="core_user" relationField="" />
+        <field name="ContractExpirationDate" dbName="ContractExpirationDate" title="合同到期日期" type="datetime" />
+        <field name="Department" dbName="DepartmentID" title="部门" type="many2one" relationModel="res_department" relationField="" />
+        <field name="Remarks" dbName="Remarks" title="备注" type="text" length="4000" />
+        <field name="Position" dbName="Position" title="职务" type="string" length="50" />
+        <field name="EmpImage" dbName="EmpImage" title="员工图像" type="string" length="200" />
+        <field name="Birthdate" dbName="Birthdate" title="出生日期" type="datetime" />
+        <field name="Telephone" dbName="Telephone" title="电话" type="string" length="50" />
+        <field name="DateOfAgreement" dbName="DateOfAgreement" title="合约签订日期" type="datetime" />
+        <field name="Gender" dbName="Gender" title="性别" type="string" length="50" />
+        <field name="EmpName" dbName="EmpName" title="名称" type="string" length="200" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

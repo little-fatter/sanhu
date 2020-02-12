@@ -1,0 +1,51 @@
+﻿   <div id="header" class="navbar navbar-inverse"> 
+       <div class="navbar-inner">
+           <div class="container-fluid">  
+ 
+               <div class="brand">
+                   <img src="/contents/img/logo.png" />
+                   <h3>{{appName}}</h3>
+               </div> 
+               <div class="topmenu">
+                   <ul class="menu">
+                       
+                   </ul>
+               </div>
+               <div class="top-nav ">
+                   <ul class="nav pull-right top-menu" > 
+   
+                       <li class="dropdown"  >
+                           <a href="#" v-on:click="showUserMenus" class="dropdown-toggle"   style="display:block;padding:3px;margin:0;margin-top: -5px;background:#4a8bc2;">
+                               <div style="width:32px;height:32px; overflow:hidden;border-radius: 50% !important; border: 2px solid rgba(255,255,255,0.5);float:left;">
+                                    <img width="32" height="32" src="{{myPic}}" alt="">
+                               </div>
+                               <div style="float:left;margin-left:10px;line-height: 28px;margin-top: 2px;">
+                                   <span class="username">{{realName}}</span>
+                                    <b class="caret"></b>
+                               </div> 
+                               <div style="clear:both;"></div>
+                           </a>
+                           <ul class="dropdown-menu" id="usermenus" style="background:#fff;">
+                                <li><a href="/Designer/index" target="_blank" class="todesign"><i class="icon-user"></i>开发模式</a></li>
+
+
+
+                               <li><a href="javascript:void(0)" data-url="pages/core_user/custom.w?id={{id}}" data-tabid="myinfo" data-title="修改我的资料" class="tablink link"><i class="icon-user"></i>我的资料</a></li>
+
+                               <li><a href="javascript:void(0)" data-url="pages/application/index/editPass.w" data-target="none" class="link"  ><i class="icon-user"></i>修改密码</a></li>
+
+
+                               <!--<li><a href="javascript:void(0)" data-url="web/main?model=core_myMenus&viewtype=list" data-tabid="mymenus" data-title="设置我的菜单" class="tablink"><i class="icon-user"></i>设置我的菜单</a></li>-->
+                               
+                               <li><a href="/home/LoginOut"><i class="icon-key"></i>退出</a></li>
+                           </ul>
+                       </li> 
+                   </ul> 
+               </div>
+           </div>
+       </div> 
+   </div>  
+    <div id="sidebar">  
+    </div> 
+    <div id="maincontent"> 
+    </div>   

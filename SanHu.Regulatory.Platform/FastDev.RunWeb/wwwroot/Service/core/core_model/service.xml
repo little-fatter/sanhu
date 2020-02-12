@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_model" title="模型" textField="ModelTitle" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="Module" dbName="ModuleID" title="所属模块" type="many2one" length="200" relationModel="core_module" enabledSearch="Y" />
+        <field name="Fields" title="模型字段" type="one2many" length="200" relationModel="core_modelField" relationField="ModelID" enabledSearch="Y" />
+        <field name="EnabledFlow" dbName="EnabledFlow" title="启用工作流程" type="boolean" relationModel="" relationField="" />
+        <field name="ModelTitle" dbName="ModelTitle" title="模型标题" type="string" length="100" enabledSearch="Y" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="string" length="200" enabledSearch="Y" />
+        <field name="ModelType" dbName="ModelType" title="模型类型" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="NotIncludeSysFields" dbName="NotIncludeSysFields" title="不包括系统字段" type="boolean" />
+        <field name="DbName" dbName="DbName" title="DbName" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Module" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Module" one2many="" many2many="" />
+</freedesign>

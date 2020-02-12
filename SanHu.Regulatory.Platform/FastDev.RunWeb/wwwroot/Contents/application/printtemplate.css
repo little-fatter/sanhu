@@ -1,0 +1,63 @@
+.ne-report-table,.ne-report-detail{
+    width:100%; 
+}
+.ne-report-table,.ne-report-detail,.ne-report-sign{ 
+    font-family: tahoma,arial,宋体;
+    font-size:12px;
+}
+.ne-report-detail td { 
+ border-bottom-color:#000000;border-bottom-style:solid;border-bottom-width:1px;
+border-right-color:#000000;border-right-style:solid;border-right-width:1px; 
+}
+.ne-report-detail .firsttr td,.ne-report-detail .firstRow td {
+     border-top-color:#000000;border-top-style:solid;border-top-width:1px;
+}
+.ne-report-detail .firstcell {
+     border-left-color:#000000;border-left-style:solid;border-left-width:1px;
+} 
+
+strong, b {
+  font-weight: bold;
+}
+.line {
+    border-bottom-color:#000000;border-bottom-style:solid;border-bottom-width:1px; 
+}
+.view {
+    background: rgb(232, 232, 232);font-family:宋体;  font-size:16px;
+}
+p {
+  margin: 5px 0;
+}
+
+.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}body{margin:8px;font-family:sans-serif;font-size:16px;}p{margin:5px 0;}
+table.sortEnabled tr.firstRow th,table.sortEnabled tr.firstRow td{padding-right:20px;background-repeat: no-repeat;background-position: center right;   background-image:url(/lib/ueditor1_4_3/themes/default/images/sortable.png);}
+.selectTdClass{background-color:#edf5fa !important}table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:none;}table{margin-bottom:10px;border-collapse:collapse;display:table;}td,th{padding: 5px 10px;border: none;}caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}th{border-top:1px solid #BBB;background-color:#F7F7F7;}table tr.firstRow th{border-top-width:2px;}.ue-table-interlace-color-single{ background-color: #fcfcfc; } .ue-table-interlace-color-double{ background-color: #f7faff; }td p{margin:0;padding:0;}
+
+.l-dialog td, .l-dialog th, .l-dialog table {
+    padding: 0;margin:0;
+}
+
+          .print h1{padding:  0px; width: auto;text-align: left; margin: 0px;font-weight:bold;font-size: 17px;}
+           .print h2{padding: 0px;width: 100%; font-weight: bold;margin: 0px;line-height: 24px;font-size: 14px; }
+            .print{width: 100%;font-size: 12px; margin: 0px; padding: 0px; font-family:"Microsoft YaHei";}
+            .main{border-top: 1px solid #000;border-bottom: 1px solid #000;padding: 6px 0 0 0;width: 100%;float: left; margin-top:5px}
+            .number{float:left;margin-right:20px; display:inline; text-align: left;}
+           .print ul{width: 100%;float: left; margin: 0px;padding: 0px;}
+           .print ul li{float: left;line-height: 18px; list-style-type: none; width:300px;}
+          .print   label{width: 67px;text-align: left;float: left; }
+          .print      b{font-weight: lighter; width:90px;float: left; text-align: left;}
+          .print  table.lth{text-align: center;width: 480px; border-right:1px solid #333;border-bottom:1px solid #333;font-size: 12px;font-family:"Microsoft YaHei";}
+          .print  table.lth td, table.wxts td{border-left:1px solid #333;border-top:1px solid #333;line-height:20px}
+          .print  table.lth tr{ line-height:22px}
+          .print  table .fr{ text-align: right;}
+          .print  table .fl{ text-align: left;}
+           .print .form{width: 100%; float: left;}
+          .print  .sign{width: 100%;float: left;padding-top:5px;}
+          .print  .sign .l{float: left;white-space: normal;min-width: 60px;}
+          .print  .sign .r{float: right;white-space: normal; min-width: 145px;text-align: right; padding-right:10px}
+          .print  .wxts{color: #000;padding-top: 5px;width: 100%;border: 0px;font-size: 12px;}
+          .print  .wxts td{text-align: left;}
+          .print  .wxts label{width: 70px;text-align: left;line-height: 20px; float:left}
+        .pull-right { float: right;}
+             .pull-left { float: left;}
+        .wechatimg { }

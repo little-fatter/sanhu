@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="psi_inventory_sales_img" title="销售单图" textField="name" moduleName="psi" moduleTitle="进销存" dbName="" />
+    <fields>
+        <field name="name" dbName="name" title="name" type="string" length="50" isPK="N" />
+        <field name="billNo" dbName="billNoID" title="billNo" type="many2one" length="50" relationModel="psi_inventory_purchase" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="type" dbName="type" title="type" type="string" length="100" isPK="N" />
+        <field name="url" dbName="url" title="url" type="string" length="255" isPK="N" />
+        <field name="thumbnailUrl" dbName="thumbnailUrl" title="thumbnailUrl" type="string" length="255" isPK="N" />
+        <field name="size" dbName="size" title="size" type="float" length="11" relationModel="" relationField="" isPK="N" />
+        <field name="deleteUrl" dbName="deleteUrl" title="deleteUrl" type="string" length="255" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="deleteType" dbName="deleteType" title="deleteType" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="isDelete" dbName="isDelete" title="isDelete" type="integer" length="11" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="billNo" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="billNo" one2many="" many2many="" />
+</freedesign>

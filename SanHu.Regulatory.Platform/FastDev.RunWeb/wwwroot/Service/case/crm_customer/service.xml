@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="crm_customer" title="客户" textField="CustomerName" moduleName="case" moduleTitle="示例" />
+    <fields>
+        <field name="CustomerName" dbName="CustomerName" title="客户名称" type="string" length="200" />
+        <field name="Telephone" dbName="Telephone" title="电话" type="string" length="50" />
+        <field name="IsCompany" dbName="IsCompany" title="是否公司" type="string" length="50" />
+        <field name="CustomerLevel" dbName="CustomerLevelID" title="客户等级" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" />
+        <field name="Industry" dbName="IndustryID" title="所属行业" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" length="4000" relationModel="" relationField="" />
+        <field name="Clientarea" dbName="ClientareaID" title="客户地区" type="many2one" relationModel="base_area" relationField="" enabledSearch="Y" />
+        <field name="Customeraddress" dbName="Customeraddress" title="客户地址" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" />
+        <field name="Province" dbName="ProvinceID" title="客户省份" type="many2one" relationModel="base_area" relationField="" enabledSearch="Y" />
+        <field name="City" dbName="CityID" title="客户城市" type="many2one" relationModel="base_area" relationField="" enabledSearch="Y" />
+        <field name="CustomerType" dbName="CustomerTypeID" title="客户类别" type="many2one" relationModel="crm_customerType" relationField="" enabledSearch="Y" />
+        <field name="Contracts" title="联系人" type="one2many" relationModel="crm_customerContract" relationField="CustomerID" />
+        <field name="CustomerImage" dbName="CustomerImage" title="客户图像" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="CustomerLevel,Industry,Clientarea,Province,City,CustomerType" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="CustomerLevel,Industry,Clientarea,Province,City,CustomerType" one2many="" many2many="" />
+</freedesign>

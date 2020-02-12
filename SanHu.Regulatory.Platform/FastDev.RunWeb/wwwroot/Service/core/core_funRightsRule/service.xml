@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="core_funRightsRule" title="功能权限规则" textField="Title" moduleName="core" moduleTitle="系统模块" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="50" />
+        <field name="EnabledAdd" dbName="EnabledAdd" title="新增" type="boolean" />
+        <field name="EnabledVisit" dbName="EnabledVisit" title="访问" type="boolean" />
+        <field name="EnabledExport" dbName="EnabledExport" title="导出" type="boolean" />
+        <field name="EnabledDel" dbName="EnabledDel" title="删除" type="boolean" />
+        <field name="RuleEnabled" dbName="RuleEnabled" title="启用" type="boolean" />
+        <field name="EnabledPrint" dbName="EnabledPrint" title="打印" type="boolean" />
+        <field name="EnabledButtons" dbName="EnabledButtons" title="自定义功能" type="text" length="4000" />
+        <field name="ModelName" dbName="ModelName" title="模型名" type="text" length="90" />
+        <field name="EnabledImport" dbName="EnabledImport" title="导入" type="boolean" />
+        <field name="EnabledEdit" dbName="EnabledEdit" title="修改" type="boolean" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+</freedesign>

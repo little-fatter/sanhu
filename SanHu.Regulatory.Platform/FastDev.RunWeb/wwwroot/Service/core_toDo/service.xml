@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_toDo" title="代办" textField="Title" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" isPK="N" />
+        <field name="Link" dbName="Link" title="链接" type="string" isPK="N" />
+        <field name="RefTable" dbName="RefTable" title="关联对象" type="string" isPK="N" />
+        <field name="Remark" dbName="Remark" title="备注" type="text" isPK="N" />
+        <field name="RefRecordID" dbName="RefRecordID" title="关联对象ID" type="string" isPK="N" />
+        <field name="User" dbName="UserID" title="指定人" type="many2one" relationModel="core_user" isPK="N" />
+        <field name="CompleteTime" dbName="CompleteTime" title="完成时间" type="datetime" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="User" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="User" one2many="" many2many="" />
+</freedesign>

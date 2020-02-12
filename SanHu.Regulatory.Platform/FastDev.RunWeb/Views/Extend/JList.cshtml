@@ -1,0 +1,56 @@
+﻿@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="../../Scripts/jquery-ui/themes/base/jquery.ui.all.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet" />
+          <link href="../../Scripts/jqgrid/css/ui.jqgrid.css" rel="stylesheet" />
+    <link href="../../Scripts/jqgrid/css/ui.jqgrid-bootstrap.css" rel="stylesheet" />
+  
+    <link href="../../Scripts/jqgrid/css/ui.jqgrid-bootstrap-ui.css" rel="stylesheet" />
+
+    <script src="../../Scripts/jqgrid/js/jquery-1.11.0.min.js"></script>
+    <script src="../../Scripts/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script src="../../Scripts/jqgrid/js/i18n/grid.locale-cn.js"></script>
+
+ 
+</head>
+<body>
+ 
+<table id="list4"></table>
+
+    <script type="text/javascript">
+        jQuery("#list4").jqGrid({
+            datatype: "local",
+            height: $(window).height() - 70, 
+            colNames: ['CustomerName', 'Telephone', 'Customeraddress'],
+            colModel: [
+                { name: 'CustomerName', index: 'CustomerName', width: 320  },
+                { name: 'Telephone', index: 'Telephone', width: 120  },
+                { name: 'Customeraddress', index: 'Customeraddress', width: 220 } 
+            ],
+            multiselect: true,
+           // caption: "Manipulating Array Data"
+        });
+    
+        var mydata = @(Html.Raw(ViewBag.DataJson)) 
+
+        @* var filterJson = '@(Html.Raw(ViewBag.FilterJson))';
+
+        if (filterJson)
+        {
+            var filter = JSON.parse(filterJson);
+            console.log(filter);
+        }*@
+ 
+        for (var i = 0; i <= mydata.length; i++)
+        {
+            jQuery("#list4").jqGrid('addRowData', i + 1, mydata[i]); 
+        }
+    </script>
+</body>
+</html>

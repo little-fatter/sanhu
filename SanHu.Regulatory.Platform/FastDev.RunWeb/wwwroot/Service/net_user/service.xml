@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="net_user" title="跟单系统账号" textField="RealName" dbName="" />
+    <fields>
+        <field name="NickName" dbName="NickName" title="微信昵称" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Address" dbName="Address" title="地址" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="Headimgurl" dbName="Headimgurl" title="头像" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Country" dbName="Country" title="国家" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="ValidatePhone" dbName="ValidatePhone" title="手机" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="LoginPassword" dbName="LoginPassword" title="登录密码" type="string" length="100" isPK="N" />
+        <field name="RealName" dbName="RealName" title="姓名" type="string" length="100" enabledSearch="Y" isPK="N" />
+        <field name="City" dbName="City" title="城市" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="IsValid" dbName="IsValid" title="是否验证" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="Province" dbName="Province" title="省份" type="string" length="50" isPK="N" />
+        <field name="Phone" dbName="Phone" title="电话" type="string" length="100" isPK="N" />
+        <field name="LoginUserName" dbName="LoginUserName" title="登录名" type="string" length="100" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

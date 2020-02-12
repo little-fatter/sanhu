@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <model name="core_workflowExecutorStatus" title="流程执行实例节点执行情况" textField="ExecutorID" moduleName="core" moduleTitle="系统模块" dbName="" />
+    <fields>
+        <field name="ExecutorTime" dbName="ExecutorTime" title="执行时间" type="datetime" isPK="N" />
+        <field name="ExecutorID" dbName="ExecutorID" title="执行人" type="string" isPK="N" />
+        <field name="TaskID" dbName="TaskID" title="实例节点" type="string" isPK="N" />
+        <field name="Remark" dbName="Remark" title="处理说明" type="string" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>
