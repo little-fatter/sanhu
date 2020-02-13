@@ -2,21 +2,35 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using Autofac;
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using UEditor.Core;
+using WanJiang.Framework.Web.Core;
+using WanJiang.Framework.Web.Core.Authentication;
+using WanJiang.Framework.Web.Core.Builder;
+using WanJiang.Framework.Web.Core.Configuration;
+using WanJiang.Framework.Web.Core.DependencyInjection;
+using WanJiang.Framework.Web.Core.Filters;
 
 namespace FastDev.RunWeb
 {
@@ -36,15 +50,82 @@ namespace FastDev.RunWeb
             Configuration = configuration;// builder.Build();
             WebEnvironment = env;
         }
-
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            var mysqlConnectionString = Configuration.GetConnectionString("MySQLConnection");
+            var redisConnectionString = Configuration.GetConnectionString("RedisConnection");
+            builder.RegisterModule(new DependencyRegistrationModule(mysqlConnectionString, redisConnectionString));
+            //var mongoConnection = Configuration.GetConnectionString("MongoConnection");
+            //var mongoDbName = Configuration.GetConnectionString("MongoDbName");
+            //builder.Register<IMongoClient>(c => new MongoClient(mongoConnection)).SingleInstance();
+            //builder.Register(c => c.Resolve<IMongoClient>().GetDatabase(mongoDbName)).InstancePerDependency();
+            //DDServerBaseUrl.SetValue(Configuration.GetSection("DDServer").GetSection("BaseUrl").Value);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddConfigsSeivce(Configuration);
+            //读取设置配置项
+            JwtParameterConfiguration jwtParameterConfig = new JwtParameterConfiguration();
+            Configuration.Bind("JwtParameters", jwtParameterConfig);
+            services.AddSingleton(jwtParameterConfig);
+            ExpiresTime expiresTime = new ExpiresTime();
+            Configuration.Bind("ExpiresTime", expiresTime);
+            services.AddSingleton(expiresTime);
+            SecurityKeys securityKeys = new SecurityKeys();
+            Configuration.Bind("SecurityKeys", securityKeys);
+            services.AddSingleton(securityKeys);
+
+            //生成RsaSecurityKey用于JWT Token签名
+            var rsaKeyBytes = Convert.FromBase64String(securityKeys.RSAKey);
+            var rsaProvider = new RSACryptoServiceProvider();
+            rsaProvider.ImportCspBlob(rsaKeyBytes);
+            RSAParameters rsaParams = rsaProvider.ExportParameters(true);
+            var rsaSecurityKey = new RsaSecurityKey(rsaParams);
+            services.AddSingleton(rsaSecurityKey);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
+                {
+                    //option.Cookie.Expiration = TimeSpan.FromDays(14);
+                    option.Cookie.Path = "/";
+                    option.ExpireTimeSpan = TimeSpan.FromDays(14);
+                    option.Cookie.SameSite = SameSiteMode.Lax;
+                    option.SlidingExpiration = true;
+                    option.LoginPath = "/Account/Login";
+                    option.LogoutPath = "/Account/Logout";
+                    option.AccessDeniedPath = "/Account/AccessDenied";
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
+                {
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = JwtClaimTypes.Name,
+                        RoleClaimType = JwtClaimTypes.Role,
+
+                        ValidIssuer = jwtParameterConfig.Issuer,
+                        ValidAudience = jwtParameterConfig.Audience,
+                        IssuerSigningKey = rsaSecurityKey
+                    };
+                    option.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                            new TokenValidatedInvoker(expiresTime.SessionTimeout).Invoke(context),
+                    };
+                })
+                .AddAppKey(AppKeyDefaults.AuthenticationScheme, option =>
+                {
+                    option.XWsseTimeout = expiresTime.XWsseTimeout;
+                });
+
+
             services.AddMvc(options =>
             {
                 options.ValueProviderFactories.Add(new JsonValueProviderFactory());//
+                options.Filters.Add<SessionValidationActionFilter>();
+                //options.Filters.Add<ActionLogFilter>();
+                options.Filters.Add<RestResultFilter>();
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
@@ -92,12 +173,41 @@ namespace FastDev.RunWeb
                 options.Cookie.HttpOnly = true;
             });
             services.AddControllersWithViews();
+
+            //配置数据保护共享的机器秘钥
+            services.AddDataProtection(configure =>
+            {
+                //需要使用共享Session的业务系统此处的名字必须设置一样
+                configure.ApplicationDiscriminator = "WanJiang.Framework";
+            })
+               .AddKeyManagementOptions(option => option.XmlRepository = new CustomFileXmlRepository(WebEnvironment.ContentRootPath));
+
+            //配置Redis缓存
+            services.AddStackExchangeRedisCache(redisOption =>
+            {
+                redisOption.Configuration = Configuration.GetConnectionString("RedisConnection");
+                redisOption.InstanceName = "Framework";
+            });
+
+            //配置Session
+            services.AddSession(sessionOption =>
+            {
+                sessionOption.IdleTimeout = TimeSpan.FromMinutes(expiresTime.SessionTimeout);
+                sessionOption.Cookie.HttpOnly = true;
+            });
             services.AddSwaggerGen();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //此处需要注意UsePathBase,UserSpaService,UseDefaultFiles,UseStaticFiles的顺序不能错乱
+            AppInfo appInfo = new AppInfo();
+            Configuration.GetSection("AppInfo").Bind(appInfo);
+            var pathBase = $"/{appInfo.ServiceName.Trim()}";
+            app.UsePathBase(new PathString(pathBase), false);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -106,13 +216,27 @@ namespace FastDev.RunWeb
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            var mainServiceName = $"/{Configuration["MainServiceName"].Trim()}";
+            app.UseGlobalExceptionHandler(mainServiceName);
+
             app.UseStaticFiles();
+            //绕过SameSite Cookie的设置，如果不使用此语句，会导致部分版本的360浏览器无法登陆
+            //app.UseSameSiteBypass();
+            //使用Session，注意此语句必须在UseMvc之前，否则在Controller-Action中操作Session会报错。
+            app.UseSession();
+            //使用ForwardHeader，如果没有添加此语句，在使用nginx进行反向代理并配置为HTTPS部署模式时,会导致无法进行正常的跳转
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            app.UserSpaService(new PathString("/api"));
 
             app.UseStaticHttpContext();
 
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseMultipleAuthentication();
 
             app.UseSession();
 
@@ -130,7 +254,7 @@ namespace FastDev.RunWeb
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/home/swagger", "Data Center API V1");
+                c.SwaggerEndpoint($"{pathBase}/swagger", "Data Center API V1");
             });
         }
     }

@@ -15,6 +15,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FastDev.RunWeb.Controllers
 {
@@ -479,6 +480,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [Authorize]
         public ActionResult Index(string homestyle)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
