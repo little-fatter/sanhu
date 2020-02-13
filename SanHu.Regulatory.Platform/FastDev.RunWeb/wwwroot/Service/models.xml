@@ -51,7 +51,7 @@
         <models name="res_department" title="部门" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="res_staff" title="人员" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="loc_static_location" title="静态位置" textField="Title" moduleName="loc" moduleTitle="定位" />
-        <models name="loc_event" title="事件上报" textField="Title" moduleName="loc" moduleTitle="定位" />
+        <models name="loc_event_report" title="事件上报" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_camera" title="摄像头" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_uav" title="无人机" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_boat" title="船只" textField="Title" moduleName="loc" moduleTitle="定位" />
