@@ -9,6 +9,11 @@ public IList<IList<string>> Attachs
 get;
 set;
 }
+public IList<string> MatterType
+{
+get;
+set;
+}
 }
 
 }

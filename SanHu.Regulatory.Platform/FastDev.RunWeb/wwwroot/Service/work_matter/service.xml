@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="work_matter" title="事件" textField="ContactName" moduleName="work" moduleTitle="工作" dbName="" />
+    <fields>
+        <field name="ContactName" dbName="ContactName" title="联系人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ContactPhone" dbName="ContactPhone" title="联系电话" type="string" length="50" isPK="N" />
+        <field name="ContactAddress" dbName="ContactAddress" title="联系地址" type="string" length="50" isPK="N" />
+        <field name="Latitude" dbName="Latitude" title="经度" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Longitude" dbName="Longitude" title="维度" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="MatterAddress" dbName="MatterAddress" title="地址" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Remarks" dbName="Remarks" title="事件描述" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="Attachs" dbName="work_matterAttachs" title="附件" type="many2many" relationModel="res_attach" relationField="" isPK="N" />
+        <field name="MatterType" dbName="MatterTypeID" title="事件类型" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="MatterType" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="MatterType" one2many="" many2many="" />
+</freedesign>
