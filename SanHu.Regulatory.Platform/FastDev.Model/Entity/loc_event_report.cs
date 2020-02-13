@@ -2,39 +2,24 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class work_matter
+public partial class loc_event_report
 {
 public string ID
 {
 get;
 set;
 }
-public string ContactName
+public string EventName
 {
 get;
 set;
 }
-public string ContactPhone
+public string Reporter
 {
 get;
 set;
 }
-public string ContactAddress
-{
-get;
-set;
-}
-public string Latitude
-{
-get;
-set;
-}
-public string Longitude
-{
-get;
-set;
-}
-public string MatterAddress
+public string ReporterType
 {
 get;
 set;
@@ -44,7 +29,7 @@ public string Remarks
 get;
 set;
 }
-public string MatterTypeID
+public string EventLocationID
 {
 get;
 set;

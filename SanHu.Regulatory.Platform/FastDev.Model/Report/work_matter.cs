@@ -9,11 +9,6 @@ public string ID
 get;
 set;
 }
-public string MatterType
-{
-get;
-set;
-}
 public string ContactName
 {
 get;
@@ -45,6 +40,11 @@ get;
 set;
 }
 public string Remarks
+{
+get;
+set;
+}
+public string MatterTypeID
 {
 get;
 set;

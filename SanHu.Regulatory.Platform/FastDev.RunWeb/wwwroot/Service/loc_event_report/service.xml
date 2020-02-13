@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="loc_event_report" title="事件上报" textField="EventName" moduleName="loc" moduleTitle="定位" dbName="" />
+    <fields>
+        <field name="EventName" dbName="EventName" title="事件名" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="Reporter" dbName="Reporter" title="上报者" type="string" length="50" isPK="N" />
+        <field name="ReporterType" dbName="ReporterType" title="上报者类型" type="status" relationModel="" relationField="" isPK="N" />
+        <field name="Remarks" dbName="Remarks" title="事件描述" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="EventLocation" dbName="EventLocationID" title="事件位置" type="many2one" relationModel="loc_dynamic_location" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="EventLocation" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="EventLocation" one2many="" many2many="" />
+</freedesign>
