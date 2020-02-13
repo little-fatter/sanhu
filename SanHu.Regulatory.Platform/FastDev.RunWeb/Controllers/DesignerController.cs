@@ -278,7 +278,8 @@ namespace FastDev.RunWeb.Controllers
                     string[] files = Directory.GetFiles(zipRootPath, "*", SearchOption.AllDirectories);
                     dictionary["files_count"] = files.Count();
                     dictionary["files"] = files;
-                    bool flag = false;
+                    bool modelBuild = false;
+                    bool serviceBuild = false;
                     string[] array = files;
                     foreach (string f in array)
                     {
@@ -288,28 +289,28 @@ namespace FastDev.RunWeb.Controllers
                             lstLogs.Add("path:" + fileName);
                             if (fileName.StartsWith("db\\"))
                             {
-                                string text4 = System.IO.File.ReadAllText(f);
+                                string sqlContent = System.IO.File.ReadAllText(f);
                                 int num = 0;
                                 if (fileName.EndsWith(".sqljson"))
                                 {
-                                    Dictionary<string, object> dictionary2 = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(text4);
-                                    text4 = ObjectExtensions.ToStr(dictionary2["sql"]);
-                                    List<object> list3 = JsonHelper.DeserializeJsonToObject<List<object>>(JsonHelper.SerializeObject(dictionary2["args"]));
-                                    num = currentDb.Execute(text4, list3.ToArray());
+                                    Dictionary<string, object> sqlJson = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(sqlContent);
+                                    sqlContent = ObjectExtensions.ToStr(sqlJson["sql"]);
+                                    List<object> list3 = JsonHelper.DeserializeJsonToObject<List<object>>(JsonHelper.SerializeObject(sqlJson["args"]));
+                                    num = currentDb.Execute(sqlContent, list3.ToArray());
                                 }
                                 else
                                 {
-                                    currentDb.Execute(text4, new object[0]);
+                                    currentDb.Execute(sqlContent, new object[0]);
                                 }
                                 try
                                 {
-                                    lstLogs.Add("写入SQL:" + text4 + "(" + num + ")");
-                                    Log("写入SQL:" + text4 + "(" + num + ")");
+                                    lstLogs.Add("写入SQL:" + sqlContent + "(" + num + ")");
+                                    Log("写入SQL:" + sqlContent + "(" + num + ")");
                                 }
                                 catch (Exception ex)
                                 {
-                                    lstLogs.Add("写入SQL:" + text4 + "\n出错：" + ex.Message);
-                                    Log("写入SQL:" + text4 + "\n出错：" + ex.Message);
+                                    lstLogs.Add("写入SQL:" + sqlContent + "\n出错：" + ex.Message);
+                                    Log("写入SQL:" + sqlContent + "\n出错：" + ex.Message);
                                 }
                             }
                             else if (fileName == "update.json")
@@ -318,39 +319,39 @@ namespace FastDev.RunWeb.Controllers
                                 updateinfo updateinfo = JsonHelper.DeserializeJsonToObject<updateinfo>(input);
                                 if (updateinfo.model != null && updateinfo.model.Any())
                                 {
-                                    AddProjectFiles("Model", zipRootPath, updateinfo.model);
-                                    flag = true;
+                                    AddCSFiles("Model", zipRootPath, updateinfo.model);
+                                    modelBuild = true;
                                 }
                                 if (updateinfo.model_remove != null && updateinfo.model_remove.Any())
                                 {
-                                    RemvoeProjectFiles("Model", zipRootPath, updateinfo.model_remove);
-                                    flag = true;
+                                    RemvoeCSFiles("Model", zipRootPath, updateinfo.model_remove);
+                                    modelBuild = true;
                                 }
                                 if (updateinfo.web != null && updateinfo.web.Any())
                                 {
-                                    AddProjectFiles("web", zipRootPath, updateinfo.web);
+                                    AddStaticFiles("web", zipRootPath, updateinfo.web);
                                 }
                                 if (updateinfo.web_remove != null && updateinfo.web_remove.Any())
                                 {
-                                    RemvoeProjectFiles("web", zipRootPath, updateinfo.web_remove);
+                                    RemvoeStaticFiles("web", zipRootPath, updateinfo.web_remove);
                                 }
                                 if (updateinfo.mobileWeb != null && updateinfo.mobileWeb.Any())
                                 {
-                                    AddProjectFiles("mobileWeb", zipRootPath, updateinfo.mobileWeb);
+                                    AddStaticFiles("mobileWeb", zipRootPath, updateinfo.mobileWeb);
                                 }
                                 if (updateinfo.mobileWeb_remove != null && updateinfo.mobileWeb_remove.Any())
                                 {
-                                    RemvoeProjectFiles("mobileWeb", zipRootPath, updateinfo.mobileWeb_remove);
+                                    RemvoeStaticFiles("mobileWeb", zipRootPath, updateinfo.mobileWeb_remove);
                                 }
                                 if (updateinfo.service != null && updateinfo.service.Any())
                                 {
-                                    AddProjectFiles("Service", zipRootPath, updateinfo.service);
-                                    flag = true;
+                                    AddCSFiles("Service", zipRootPath, updateinfo.service);
+                                    serviceBuild = true;
                                 }
                                 if (updateinfo.service_remove != null && updateinfo.service_remove.Any())
                                 {
-                                    RemvoeProjectFiles("Service", zipRootPath, updateinfo.service_remove);
-                                    flag = true;
+                                    RemvoeCSFiles("Service", zipRootPath, updateinfo.service_remove);
+                                    serviceBuild = true;
                                 }
                                 if (updateinfo.bin != null && updateinfo.bin.Any())
                                 {
@@ -389,9 +390,20 @@ namespace FastDev.RunWeb.Controllers
                             lstLogs.Add("Error2:" + ex2.Message + ",StackTrace2:" + ex2.StackTrace);
                         }
                     }
-                    if (flag)
+                    if (modelBuild)
                     {
-                        CompileProject(projectPath + "FastDev.Model\\FastDev.Model.csproj");
+                        string projectName = ConfigurationManager.AppSettings["ModelProjectName"];
+                        CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
+                    }
+                    if (serviceBuild)
+                    {
+                        string projectName = ConfigurationManager.AppSettings["ServiceProjectName"];
+                        CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
+                    }
+                    if (modelBuild || serviceBuild)
+                    {
+                        string projectName = ConfigurationManager.AppSettings["WebProjectName"];
+                        CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
                     }
                 }
                 else
@@ -415,13 +427,15 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 string projectPath = GetProjectPath();
+                string serviceProjectName = ConfigurationManager.AppSettings["ServiceProjectName"];
+                string modelProjectName = ConfigurationManager.AppSettings["ModelProjectName"];
                 if (id == "all" || string.IsNullOrEmpty(id) || id == "model")
                 {
-                    CompileProject(projectPath + "FastDev.Model\\FastDev.Model.csproj");
+                    CompileProject(projectPath + modelProjectName + "\\"+ modelProjectName + ".csproj");
                 }
                 if (id == "all" || string.IsNullOrEmpty(id) || id == "service")
                 {
-                    CompileProject(projectPath + "FastDev.Service\\FastDev.Service.csproj");
+                    CompileProject(projectPath + serviceProjectName + "\\" + serviceProjectName + ".csproj");
                 }
                 return Content("编译成功");
             }
@@ -448,7 +462,67 @@ namespace FastDev.RunWeb.Controllers
             return fileName + ".zip";
         }
 
-        private void AddProjectFiles(string projectType, string fileSourcePath, List<string> files)
+        /// <summary>
+        /// 添加CS文件
+        /// </summary>
+        /// <param name="projectType">Model,Service</param>
+        /// <param name="fileSourcePath"></param>
+        /// <param name="files"></param>
+        private void AddCSFiles(string projectType, string fileSourcePath, List<string> files)
+        {
+            string projectPath = GetProjectPath();
+            string projectName = ConfigurationManager.AppSettings["ServiceProjectName"];
+            if (projectType == "Model")
+                projectName = ConfigurationManager.AppSettings["ModelProjectName"];
+
+            string projectFilename = string.Format("{0}{1}\\{1}.csproj", projectPath, projectName);
+            List<string> list = new List<string>();
+            foreach (string file in files)
+            {
+                string text = file.Replace("\\\\", "\\");
+                list.Add(text);
+                string srcPath = fileSourcePath + projectType + "\\" + text;
+                string targetPath = string.Format("{0}{1}\\{2}", projectPath, projectName, text);
+                FileHelper.Copy(srcPath, targetPath);
+            }
+        }
+        private void RemvoeCSFiles(string projectType, string fileSourcePath, List<string> files)
+        {
+            string projectPath = GetProjectPath();
+            string projectName = ConfigurationManager.AppSettings["ServiceProjectName"];
+            if (projectType == "Model")
+                projectName = ConfigurationManager.AppSettings["ModelProjectName"];
+            string projectFilename = string.Format("{0}{1}\\{1}.csproj", projectPath, projectName);
+            List<string> list = new List<string>();
+            foreach (string file in files)
+            {
+                list.Add(file.Replace("\\\\", "\\"));
+            }
+            foreach (string item in list)
+            {
+                string fPath = ObjectExtensions.ToStr((object)item);
+                if (fPath.StartsWith("service\\"))
+                {
+                    fPath = fPath.Replace("service\\", "");
+                }
+                if (fPath.StartsWith("model\\"))
+                {
+                    fPath = fPath.Replace("model\\", "");
+                }
+                string current = string.Format("{0}{1}\\{2}", projectPath, projectName, fPath);
+                FileHelper.Delete(current);
+            }
+            //现在的vs 已经不直接从xml读文件了，所以这个没有用处了
+            //ProjectHelper.AddInclude(projectFilename, "Compile", list.ToArray());
+           
+        }
+        /// <summary>
+        /// 添加网页静态文件
+        /// </summary>
+        /// <param name="projectType"></param>
+        /// <param name="fileSourcePath"></param>
+        /// <param name="files"></param>
+        private void AddStaticFiles(string projectType, string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
             string webProject = ConfigurationManager.AppSettings["WebProjectName"];
@@ -459,16 +533,17 @@ namespace FastDev.RunWeb.Controllers
                 string text = file.Replace("\\\\", "\\");
                 list.Add(text);
                 string srcPath = fileSourcePath + projectType + "\\" + text;
-                string targetPath = string.Format("{0}{1}\\{2}\\{3}", projectPath, webProject,"wwwroot",text);
+                string targetPath = string.Format("{0}{1}\\{2}\\{3}", projectPath, webProject, "wwwroot", text);
                 FileHelper.Copy(srcPath, targetPath);
             }
-            if (string.Compare(projectType, "web", true) != 0 && string.Compare(projectType, "mobileweb", true) != 0)
-            {
-                ProjectHelper.AddInclude(projectFilename, "Compile", list.ToArray());
-            }
         }
-
-        private void RemvoeProjectFiles(string projectType, string fileSourcePath, List<string> files)
+        /// <summary>
+        /// 删除网页静态文件
+        /// </summary>
+        /// <param name="projectType">web,mobileweb</param>
+        /// <param name="fileSourcePath"></param>
+        /// <param name="files"></param>
+        private void RemvoeStaticFiles(string projectType, string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
             string webProject = ConfigurationManager.AppSettings["WebProjectName"];
@@ -493,16 +568,8 @@ namespace FastDev.RunWeb.Controllers
                 {
                     text = text.Replace("mobileweb\\", "");
                 }
-                if (text.StartsWith("model\\"))
-                {
-                    text = text.Replace("model\\", "");
-                }
                 string current = string.Format("{0}{1}\\{2}\\{3}", projectPath, webProject, "wwwroot", text);
                 FileHelper.Delete(current);
-            }
-            if (string.Compare(projectType, "web", true) != 0 && string.Compare(projectType, "mobileweb", true) != 0)
-            {
-                ProjectHelper.RemoveInclude(projectFilename, "Compile", list.ToArray());
             }
         }
 
@@ -510,7 +577,7 @@ namespace FastDev.RunWeb.Controllers
         {
             string projectPath = GetProjectPath();
             string webProject = ConfigurationManager.AppSettings["WebProjectName"];
-            string debugPath = ConfigurationManager.AppSettings["DebugPath"]; 
+            string debugPath = ConfigurationManager.AppSettings["DebugPath"];
             foreach (string file in files)
             {
                 string str = file.Replace("\\\\", "\\");

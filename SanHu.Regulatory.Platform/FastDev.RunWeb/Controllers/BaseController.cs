@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FastDev.RunWeb.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : WanJiang.Framework.Web.Core.Mvc.BaseController
     {
 
         /// <summary>

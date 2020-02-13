@@ -29,6 +29,61 @@ public string CaseStatus
 get;
 set;
 }
+public string ApplicableProcedureID
+{
+get;
+set;
+}
+public string CauseOfAction
+{
+get;
+set;
+}
+public string PenaltyDecisionNo
+{
+get;
+set;
+}
+public string PenaltyTypeID
+{
+get;
+set;
+}
+public DateTime? CaseRegisterDay
+{
+get;
+set;
+}
+public DateTime? CaseCloseDay
+{
+get;
+set;
+}
+public string Investigators
+{
+get;
+set;
+}
+public DateTime? OnDocDay
+{
+get;
+set;
+}
+public string DocRetentionTimes
+{
+get;
+set;
+}
+public string DocNo
+{
+get;
+set;
+}
+public string DocPeople
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
