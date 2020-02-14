@@ -22,6 +22,11 @@
 
         public static T DeserializeJsonToObject<T>(string json) where T : class
         {
+            var revType = typeof(T);
+            if (revType == typeof(Dictionary<string, object>) || revType == typeof(IDictionary<string, object>))
+            {
+                return (T)ToDictionary(JObject.Parse(json));
+            }
             JsonSerializer serializer = new JsonSerializer();
             StringReader reader = new StringReader(json);
             return (serializer.Deserialize(new JsonTextReader(reader), typeof(T)) as T);
