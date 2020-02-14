@@ -480,7 +480,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
-        [Authorize]
+        //[Authorize]
         public ActionResult Index(string homestyle)
         {
             DbContext currentDb = SysContext.GetCurrentDb();

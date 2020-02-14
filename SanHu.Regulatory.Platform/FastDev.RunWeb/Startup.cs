@@ -206,7 +206,7 @@ namespace FastDev.RunWeb
             AppInfo appInfo = new AppInfo();
             Configuration.GetSection("AppInfo").Bind(appInfo);
             var pathBase = $"/{appInfo.ServiceName.Trim()}";
-            app.UsePathBase(new PathString(pathBase), false);
+            //app.UsePathBase(new PathString(pathBase), false);
 
             if (env.IsDevelopment())
             {

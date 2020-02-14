@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="case_filing_report" title="立案报告" textField="PersionName" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="RefCase" dbName="RefCaseID" title="案件" type="many2one" relationModel="case_law_case" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PersionName" dbName="PersionName" title="姓名" type="string" length="50" isPK="N" />
+        <field name="CompanyName" dbName="CompanyName" title="单位名" type="string" length="50" isPK="N" />
+        <field name="IllegalCause" dbName="IllegalCause" title="案由" type="string" length="50" isPK="N" />
+        <field name="BaseInfo" dbName="BaseInfo" title="基本情况" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="IllegalCauseInfo" dbName="IllegalCauseInfo" title="案情" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="LawDesc" dbName="LawDesc" title="法律描述" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="RefCase" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="RefCase" one2many="" many2many="" />
+</freedesign>
