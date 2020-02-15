@@ -2,14 +2,14 @@ namespace FastDev.Model.Name
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class res_company
+public partial class case_filing_report
 {
 public string ID
 {
 get;
 set;
 }
-public string CompanyName
+public string PersionName
 {
 get;
 set;

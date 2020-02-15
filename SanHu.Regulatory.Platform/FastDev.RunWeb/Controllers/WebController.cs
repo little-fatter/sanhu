@@ -1362,11 +1362,11 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
-        public ActionResult TreeData(string model, string filterTree, string loadDataRights = "Y")
+        public ActionResult TreeData(string model, string fullJson, string loadDataRights = "Y")
         {
             try
             {
-                FilterTree fTree = FullJsonValue.GetObject<FilterTree>(filterTree);
+                FilterTree fTree = FullJsonValue.GetObject<FilterTree>(fullJson);
                 if (string.IsNullOrEmpty(model))
                 {
                     model = fTree.sourceModel;

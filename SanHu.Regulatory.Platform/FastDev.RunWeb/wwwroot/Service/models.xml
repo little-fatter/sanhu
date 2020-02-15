@@ -42,20 +42,13 @@
         <models name="platform_plugins" title="平台插件" textField="Title" moduleName="core" moduleTitle="系统模块" />
         <models name="crm_supplierType" title="供应商类别" textField="Title" />
         <models name="crm_customerlevel" title="客户等级" textField="Title" />
-        <models name="res_productType" title="物品类别" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="res_productUnit" title="单位" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="net_user" title="跟单系统账号" textField="Title" />
         <models name="net_order" title="跟单管理" textField="Title" />
-        <models name="res_lake" title="湖泊" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="res_company" title="管理单位" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="res_department" title="部门" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="res_staff" title="人员" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="loc_static_location" title="静态位置" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_event_report" title="事件上报" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_camera" title="摄像头" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_uav" title="无人机" textField="Title" moduleName="loc" moduleTitle="定位" />
         <models name="loc_boat" title="船只" textField="Title" moduleName="loc" moduleTitle="定位" />
-        <models name="res_real_name_people" title="实名人员" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="work_on_duty" title="巡检值班" textField="Title" moduleName="work" moduleTitle="工作" />
         <models name="work_postion" title="工作地点" textField="Title" moduleName="work" moduleTitle="工作" />
         <models name="res_attach" title="附件" textField="Title" moduleName="res" moduleTitle="基础资料" />
@@ -67,6 +60,7 @@
         <models name="perm_free_captive_animals" title="放生许可" textField="Title" moduleName="perm" moduleTitle="许可" />
         <models name="work_matter" title="事件" textField="Title" moduleName="work" moduleTitle="工作" />
         <models name="case_law_case" title="案件" textField="Title" moduleName="case" moduleTitle="案件" />
-        <models name="res_message" title="消息" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="user" title="frameworkuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="case_filing_report" title="立案报告" textField="Title" moduleName="case" moduleTitle="案件" />
     </models>
 </freedesign>

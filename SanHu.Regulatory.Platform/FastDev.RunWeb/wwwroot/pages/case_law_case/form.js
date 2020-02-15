@@ -8,8 +8,8 @@ function() {
             form: {
                 fields: [{
                     newline: true,
-                    name: "CompanyNo",
-                    label: "单位编码",
+                    name: "CaseType",
+                    label: "案件类型",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -24,8 +24,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "CompanyName",
-                    label: "单位名称",
+                    name: "CaseTitle",
+                    label: "标题",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -40,8 +40,8 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "SeqNo",
-                    label: "排序",
+                    name: "CaseStatus",
+                    label: "案件状态",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -50,14 +50,57 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "int"
+                        type: "text"
                     },
-                    type: "int"
+                    type: "text"
                 },
                 {
                     newline: false,
-                    name: "Email",
-                    label: "Email",
+                    name: "ApplicableProcedure",
+                    label: "适用程序",
+                    editor: {
+                        url: "/web/listdata",
+                        parms: {
+                            model: "res_dictionaryItems"
+                        },
+                        valueField: "ID",
+                        textField: "Title",
+                        many2one: true,
+                        type: "ref_select",
+                        sourceFilter: {
+                            rules: [{
+                                field: "DicID",
+                                op: "equal",
+                                value: "3d19da90-56e4-46c4-9a17-a606f7d3febe",
+                                type: "select"
+                            }],
+                            op: "and"
+                        },
+                        select_updatematch_source: "",
+                        select_updatematch_target: ""
+                    },
+                    type: "ref_select"
+                },
+                {
+                    newline: true,
+                    name: "CauseOfAction",
+                    label: "案由",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "PenaltyDecisionNo",
+                    label: "处罚决定书文号",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -72,8 +115,72 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "IdentiyNo",
-                    label: "执照号",
+                    name: "PenaltyType",
+                    label: "处罚种类",
+                    editor: {
+                        url: "/web/listdata",
+                        parms: {
+                            model: "res_dictionaryItems"
+                        },
+                        valueField: "ID",
+                        textField: "Title",
+                        many2one: true,
+                        type: "ref_select"
+                    },
+                    type: "ref_select"
+                },
+                {
+                    newline: false,
+                    name: "CaseRegisterDay",
+                    label: "立案日期",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "datepicker"
+                    },
+                    type: "datepicker"
+                },
+                {
+                    newline: true,
+                    name: "CaseCloseDay",
+                    label: "结案日期",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "datepicker"
+                    },
+                    type: "datepicker"
+                },
+                {
+                    newline: false,
+                    name: "OnDocDay",
+                    label: "归档日期",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "datepicker"
+                    },
+                    type: "datepicker"
+                },
+                {
+                    newline: true,
+                    name: "Investigators",
+                    label: "办案人员",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -88,8 +195,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "Remark",
-                    label: "备注",
+                    name: "DocRetentionTimes",
+                    label: "保存期限",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -104,8 +211,8 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "CompanyType",
-                    label: "单位类型",
+                    name: "DocNo",
+                    label: "归档号",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -120,8 +227,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "WebSite",
-                    label: "网址",
+                    name: "DocPeople",
+                    label: "归档人",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -136,47 +243,37 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "CompanyAddress",
-                    label: "公司地址",
+                    name: "CaseSource",
+                    label: "案件来源",
                     editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
+                        url: "/web/listdata",
+                        parms: {
+                            model: "res_dictionaryItems"
+                        },
+                        valueField: "ID",
+                        textField: "Title",
+                        many2one: true,
+                        type: "ref_select"
                     },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "Phone",
-                    label: "联系电话",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
+                    type: "ref_select"
                 }]
             },
             common: {
                 saveCallbackType: "toClose"
-            }
+            },
+            link: {},
+            addins: {}
         },
-        dataset: 'web/dataset?model=res_company&viewname=form'
+        dataset: 'web/dataset?model=case_law_case&viewname=form'
     };
     exports.options.model = {
-        name: 'res_company',
-        title: '管理单位'
+        name: 'case_law_case',
+        title: '案件'
     };
+
+    exports.service = function service(page) {
+
+};
 
     return exports;
 });

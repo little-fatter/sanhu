@@ -19,7 +19,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "regulatory/home/index",
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://localhost:5023",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -14,11 +14,6 @@ public string CaseType
 get;
 set;
 }
-public string CaseSource
-{
-get;
-set;
-}
 public string CaseTitle
 {
 get;
@@ -80,6 +75,11 @@ get;
 set;
 }
 public string DocPeople
+{
+get;
+set;
+}
+public string CaseSourceID
 {
 get;
 set;

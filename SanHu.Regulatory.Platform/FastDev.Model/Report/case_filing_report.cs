@@ -1,30 +1,45 @@
-namespace FastDev.Model.Entity
+namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class res_productType
+public partial class case_filing_report
 {
 public string ID
 {
 get;
 set;
 }
-public string TypeName
+public string RefCaseID
 {
 get;
 set;
 }
-public string ParentID
+public string PersionName
 {
 get;
 set;
 }
-public string Remark
+public string CompanyName
 {
 get;
 set;
 }
-public string Typecode
+public string IllegalCause
+{
+get;
+set;
+}
+public string BaseInfo
+{
+get;
+set;
+}
+public string IllegalCauseInfo
+{
+get;
+set;
+}
+public string LawDesc
 {
 get;
 set;
