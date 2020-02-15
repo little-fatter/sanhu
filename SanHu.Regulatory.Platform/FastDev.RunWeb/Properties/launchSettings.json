@@ -18,6 +18,7 @@
     "FastDev.RunWeb": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "regulatory/home/index",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

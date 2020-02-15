@@ -478,12 +478,11 @@ namespace FastDev.RunWeb.Controllers
                 return ex.Message;
             }
         }
-
-        [VaildateUser]
         [Authorize]
         public ActionResult Index(string homestyle)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
+            
             core_user core_user = currentDb.FirstOrDefault<core_user>("where id = @0", new object[1]
             {
             SysContext.CurrentUserID

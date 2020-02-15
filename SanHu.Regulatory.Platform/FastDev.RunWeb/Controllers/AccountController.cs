@@ -38,6 +38,7 @@ namespace FastDev.RunWeb.Controllers
             {
                 return Redirect($"/{mainservicename}/Account/Login?toolid=SHJG");
             }
+
             return Redirect($"/{mainservicename}/Account/Login?toolid=SHJG&returnulr={WebUtility.UrlEncode(returnUrl)}");
         }
         public IActionResult Logout()

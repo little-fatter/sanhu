@@ -12,6 +12,7 @@ using FastDev.Common.Extensions;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,7 @@ using Newtonsoft.Json;
 using UEditor.Core;
 using WanJiang.Framework.Web.Core;
 using WanJiang.Framework.Web.Core.Authentication;
+using WanJiang.Framework.Web.Core.Authorization;
 using WanJiang.Framework.Web.Core.Builder;
 using WanJiang.Framework.Web.Core.Configuration;
 using WanJiang.Framework.Web.Core.DependencyInjection;
@@ -85,6 +87,7 @@ namespace FastDev.RunWeb
             RSAParameters rsaParams = rsaProvider.ExportParameters(true);
             var rsaSecurityKey = new RsaSecurityKey(rsaParams);
             services.AddSingleton(rsaSecurityKey);
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
                 {
@@ -120,8 +123,9 @@ namespace FastDev.RunWeb
                 });
 
 
-            services.AddMvc(options =>
+            services.AddControllersWithViews(options =>
             {
+                //options.EnableEndpointRouting = false;
                 options.ValueProviderFactories.Add(new JsonValueProviderFactory());//
                 options.Filters.Add<SessionValidationActionFilter>();
                 //options.Filters.Add<ActionLogFilter>();
@@ -131,6 +135,7 @@ namespace FastDev.RunWeb
                 options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
+            //.AddControllersAsServices(); 
 
             string editorPath = Configuration.GetSection("AppConfig")["EditorPath"];//这里还不能使用ConfigurationManager,就直接读配置文件吧
             services.AddUEditorService(basePath: Path.Combine(WebEnvironment.WebRootPath, editorPath));
@@ -172,8 +177,9 @@ namespace FastDev.RunWeb
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.HttpOnly = true;
             });
-            services.AddControllersWithViews();
-
+            services.AddCors();
+            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddTransient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>();
             //配置数据保护共享的机器秘钥
             services.AddDataProtection(configure =>
             {
@@ -206,7 +212,7 @@ namespace FastDev.RunWeb
             AppInfo appInfo = new AppInfo();
             Configuration.GetSection("AppInfo").Bind(appInfo);
             var pathBase = $"/{appInfo.ServiceName.Trim()}";
-            app.UsePathBase(new PathString(pathBase), false);
+            app.UsePathBase(new PathString(pathBase), true);
 
             if (env.IsDevelopment())
             {
@@ -216,9 +222,15 @@ namespace FastDev.RunWeb
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseCors(configurePolicy: builder => {
+                builder.AllowAnyOrigin() //允许任何来源的主机访问
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
             var mainServiceName = $"/{Configuration["MainServiceName"].Trim()}";
             app.UseGlobalExceptionHandler(mainServiceName);
-
+            app.UserSpaService(new PathString("/api"));
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             //绕过SameSite Cookie的设置，如果不使用此语句，会导致部分版本的360浏览器无法登陆
             //app.UseSameSiteBypass();
@@ -229,17 +241,20 @@ namespace FastDev.RunWeb
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            app.UserSpaService(new PathString("/api"));
+           
 
             app.UseStaticHttpContext();
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseMultipleAuthentication();
-
-            app.UseSession();
-
+            app.UseAuthorization();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
