@@ -138,7 +138,7 @@ namespace FastDev.RunWeb
             //.AddControllersAsServices(); 
 
             string editorPath = Configuration.GetSection("AppConfig")["EditorPath"];//这里还不能使用ConfigurationManager,就直接读配置文件吧
-            services.AddUEditorService(basePath: Path.Combine(WebEnvironment.WebRootPath, editorPath));
+            services.AddUEditorService(basePath: WebEnvironment.WebRootPath, editorPath: editorPath);
 
             // If using Kestrel:
             services.Configure<KestrelServerOptions>(options =>
@@ -222,7 +222,8 @@ namespace FastDev.RunWeb
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseCors(configurePolicy: builder => {
+            app.UseCors(configurePolicy: builder =>
+            {
                 builder.AllowAnyOrigin() //允许任何来源的主机访问
                     .AllowAnyMethod()
                     .AllowAnyHeader();
@@ -241,7 +242,7 @@ namespace FastDev.RunWeb
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-           
+
 
             app.UseStaticHttpContext();
 

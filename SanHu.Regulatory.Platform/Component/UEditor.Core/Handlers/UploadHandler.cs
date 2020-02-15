@@ -67,7 +67,7 @@ namespace UEditor.Core.Handlers
             Result.OriginFileName = uploadFileName;
 
             var savePath = PathFormatter.Format(uploadFileName, UploadConfig.PathFormat);
-            var localPath = Path.Combine(Config.WebRootPath, savePath);
+            var localPath = Path.Combine(Config.WebRootPath, Config.UploadPath, savePath);
             UEditorResult result;
             try
             {
