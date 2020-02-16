@@ -8,6 +8,7 @@ using UEditor.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
+    [Route("[controller]/[action]")]
     public class UEditorController : Controller
     {
         private readonly UEditorService _ueditorService;

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 namespace FastDev.RunWeb.Controllers
 {
+    [Route("[controller]/[action]")]
     public class DesignerController : Controller
     {
         public class projectinfo
@@ -134,6 +135,7 @@ namespace FastDev.RunWeb.Controllers
                 return new HttpServerUtility();
             }
         }
+        [HttpGet]
         public ActionResult Index(string sid, string appid, string viewid)
         {
             projectinfo pinfo = null;
@@ -168,7 +170,7 @@ namespace FastDev.RunWeb.Controllers
             base.ViewBag.DesignerUrl = rev;
             return View();
         }
-
+        [HttpPost]
         public ActionResult init(string service, string project)
         {
             projectinfo pinfo = null;
@@ -202,7 +204,7 @@ namespace FastDev.RunWeb.Controllers
                 statusCode = "1"
             });
         }
-
+        [NonAction]
         private string GetRootPath()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(ConfigurationManager.AppSettings["FastDevRoot"]);
@@ -211,7 +213,7 @@ namespace FastDev.RunWeb.Controllers
             else
                 throw new Exception("请设置代码根目录FastDevRoot");
         }
-
+        [NonAction]
         private string GetProjectPath()
         {
             string projectPath = ConfigurationManager.AppSettings["ProjectPath"];
@@ -222,7 +224,7 @@ namespace FastDev.RunWeb.Controllers
             }
             return projectPath;
         }
-
+        [NonAction]
         public static void Log(string content)
         {
             try
@@ -246,7 +248,7 @@ namespace FastDev.RunWeb.Controllers
             {
             }
         }
-
+        [HttpGet]
         public ActionResult test_setup(string content)
         {
             string updatePackagePath = GetUpdatePackagePath();
@@ -259,6 +261,7 @@ namespace FastDev.RunWeb.Controllers
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult setup(string content)
         {
             string updatePackagePath = GetUpdatePackagePath();
@@ -421,7 +424,7 @@ namespace FastDev.RunWeb.Controllers
                 statusCode = "1"
             });
         }
-
+        [HttpGet]
         public ActionResult ToCompile(string id)
         {
             try
@@ -444,7 +447,7 @@ namespace FastDev.RunWeb.Controllers
                 return Content("编译出错:" + ex.Message);
             }
         }
-
+        [NonAction]
         private string GetUpdatePackagePath()
         {
             string appId = SysContext.AppId;
@@ -468,6 +471,7 @@ namespace FastDev.RunWeb.Controllers
         /// <param name="projectType">Model,Service</param>
         /// <param name="fileSourcePath"></param>
         /// <param name="files"></param>
+        [NonAction]
         private void AddCSFiles(string projectType, string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
@@ -486,6 +490,7 @@ namespace FastDev.RunWeb.Controllers
                 FileHelper.Copy(srcPath, targetPath);
             }
         }
+        [NonAction]
         private void RemvoeCSFiles(string projectType, string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
@@ -522,6 +527,7 @@ namespace FastDev.RunWeb.Controllers
         /// <param name="projectType"></param>
         /// <param name="fileSourcePath"></param>
         /// <param name="files"></param>
+        [NonAction]
         private void AddStaticFiles(string projectType, string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
@@ -543,6 +549,7 @@ namespace FastDev.RunWeb.Controllers
         /// <param name="projectType">web,mobileweb</param>
         /// <param name="fileSourcePath"></param>
         /// <param name="files"></param>
+        [NonAction]
         private void RemvoeStaticFiles(string projectType, string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
@@ -572,7 +579,7 @@ namespace FastDev.RunWeb.Controllers
                 FileHelper.Delete(current);
             }
         }
-
+        [NonAction]
         private void AddBinFiles(string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
@@ -586,7 +593,7 @@ namespace FastDev.RunWeb.Controllers
                 FileHelper.Copy(text, text2);
             }
         }
-
+        [NonAction]
         private void RemoveBinFiles(string fileSourcePath, List<string> files)
         {
             string projectPath = GetProjectPath();
@@ -598,7 +605,7 @@ namespace FastDev.RunWeb.Controllers
                 FileHelper.Delete(text);
             }
         }
-
+        [HttpGet]
         public void CompileProject(string csproj_filename)
         {
             string msBuild = ConfigurationManager.AppSettings["MSBuildPath"];
@@ -626,6 +633,7 @@ namespace FastDev.RunWeb.Controllers
             }
             Console.Write(cmdRev);
         }
+        [HttpGet]
         public ActionResult Error(string msg)
         {
             base.ViewBag.ErrorMessage = Server.UrlDecode(msg);

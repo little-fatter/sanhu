@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using System.Threading.Tasks;
 using Autofac;
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
@@ -24,7 +16,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using UEditor.Core;
 using WanJiang.Framework.Web.Core;
 using WanJiang.Framework.Web.Core.Authentication;
@@ -125,7 +122,7 @@ namespace FastDev.RunWeb
 
             services.AddControllersWithViews(options =>
             {
-                //options.EnableEndpointRouting = false;
+                options.EnableEndpointRouting = false;
                 options.ValueProviderFactories.Add(new JsonValueProviderFactory());//
                 options.Filters.Add<SessionValidationActionFilter>();
                 //options.Filters.Add<ActionLogFilter>();
@@ -201,8 +198,39 @@ namespace FastDev.RunWeb
                 sessionOption.IdleTimeout = TimeSpan.FromMinutes(expiresTime.SessionTimeout);
                 sessionOption.Cookie.HttpOnly = true;
             });
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "框架 HTTP API",
+                    Version = "v1",
+                    Description = "框架 HTTP API",
+                    //TermsOfService = "Terms Of Service"
+                });
 
+                var basePath = AppContext.BaseDirectory;
+                var xmlPath = Path.Combine(basePath, "FastDev.RunWeb.xml");
+                var ModelPath = Path.Combine(basePath, "FastDev.Model.xml");
+                option.IncludeXmlComments(xmlPath);
+                option.IncludeXmlComments(ModelPath);
+                option.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Description = "JWT授权登录."
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" }
+            },
+            new string[] {}
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -222,7 +250,8 @@ namespace FastDev.RunWeb
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseCors(configurePolicy: builder => {
+            app.UseCors(configurePolicy: builder =>
+            {
                 builder.AllowAnyOrigin() //允许任何来源的主机访问
                     .AllowAnyMethod()
                     .AllowAnyHeader();
@@ -241,9 +270,16 @@ namespace FastDev.RunWeb
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-           
+
 
             app.UseStaticHttpContext();
+            app.UseSwagger();
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "Data Center API V1");
+            });
 
             app.UseRouting();
 
@@ -264,13 +300,7 @@ namespace FastDev.RunWeb
             FastDev.Common.HttpContext.ServiceProvider = app.ApplicationServices;//后面通过这个来获取已注入的服务
 
 
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint($"{pathBase}/swagger", "Data Center API V1");
-            });
+           
         }
     }
 }

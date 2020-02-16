@@ -32,6 +32,7 @@ using System.Web;
 
 namespace FastDev.RunWeb.Controllers
 {
+    [Route("[controller]/[action]")]
     public class WebController : BaseController
     {
         public class GridColumn
@@ -292,9 +293,11 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
-        public object MimeTypes { get; private set; }
+        public object MimeTypes { get; [NonAction]
+        private set; }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Api(string id, string model, string data, string context)
         {
             try
@@ -338,7 +341,7 @@ namespace FastDev.RunWeb.Controllers
                 });
             }
         }
-
+        [HttpPost]
         public ActionResult code39preview(string id)
         {
             List<string> list = new List<string>();
@@ -352,7 +355,7 @@ namespace FastDev.RunWeb.Controllers
             list.Add("</div>");
             return Content(string.Join("", list));
         }
-
+        [HttpPost]
         public ActionResult code39(string id)
         {
             Bitmap bitmap = Code39.GetBitmap(id);
@@ -361,6 +364,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult dataset(string model, string viewname)
         {
             try
@@ -410,6 +414,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult PageData(string model, string viewtype, string viewname, string context)
         {
             try
@@ -461,6 +466,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult searchDataset(string model, string key)
         {
             try
@@ -484,6 +490,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ModelConfig(string id, string modelName)
         {
             try
@@ -507,6 +514,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ModelDataset(string modelName)
         {
             try
@@ -551,6 +559,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ImportExcel(string templateId, IFormFile file)
         {
             try
@@ -763,6 +772,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ImportTemplate(string templateId)
         {
             try
@@ -901,6 +911,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ExportExcel(string templateId, string filterCode)
         {
             try
@@ -1011,6 +1022,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ExportGrid(string string_7, string listdataJSON, string totaldataJSON, string string_8, string title, int? totalCellLeft)
         {
             try
@@ -1216,7 +1228,8 @@ namespace FastDev.RunWeb.Controllers
                 });
             }
         }
-
+        [HttpPost]
+        [NonAction]
         private void ChangeFilterGroup(string modelName, string key, FilterGroup filters)
         {
             if (!string.IsNullOrEmpty(modelName) && !string.IsNullOrEmpty(key))
@@ -1246,6 +1259,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult PagedData(string id, string model, string fullJson, Dictionary<string, object> treeCondition, string key)
         {
             try
@@ -1276,12 +1290,14 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult CPD(string id, string model, string fullJson)
         {
             return CommonPagedData(id, model, fullJson);
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult CommonPagedData(string id, string model, string fullJson)
         {
             try
@@ -1311,6 +1327,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult CommonListData(string id, string model, string filter, string orderby)
         {
             try
@@ -1340,6 +1357,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ListData(string model, string filter, string key)
         {
             try
@@ -1362,6 +1380,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult TreeData(string model, string fullJson, string loadDataRights = "Y")
         {
             try
@@ -1391,6 +1410,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult NameData(string id, string model, string filter, string key)
         {
             try
@@ -1413,6 +1433,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult IdData(string id, string model, string key, string filter, string orderBy)
         {
             try
@@ -1445,6 +1466,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult DetailData(string model, string id, string filter)
         {
             try
@@ -1468,12 +1490,12 @@ namespace FastDev.RunWeb.Controllers
                 });
             }
         }
-
+        [HttpPost]
         public ActionResult PrintCheck()
         {
             return View();
         }
-
+        [HttpPost]
         public ActionResult Preview(string Context, string TemplateId, string isreport, string descriptorCode)
         {
             base.ViewBag.Context = Context;
@@ -1482,12 +1504,13 @@ namespace FastDev.RunWeb.Controllers
             base.ViewBag.descriptorCode = descriptorCode;
             return View();
         }
-
+        [HttpPost]
         public ActionResult PreviewFrame()
         {
             return View();
         }
 
+        [NonAction]
         private List<TemplatePageInfo> method_1(string string_7)
         {
             List<TemplatePageInfo> list = new List<TemplatePageInfo>();
@@ -1561,6 +1584,7 @@ namespace FastDev.RunWeb.Controllers
             return list;
         }
 
+        [NonAction]
         private void method_2()
         {
             if (core_printTemplate_0 != null)
@@ -1628,6 +1652,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult GetTemplateConents(string context, string TemplateId, int? pageIndex, string isReport, string descriptorCode)
         {
             try
@@ -1732,6 +1757,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void method_3(FastDev.DevDB.Model.core_user core_user_0, int int_2, int int_3, string string_7 = null)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -1742,6 +1768,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult GetCommonPrint(List<GridColumn> columns, List<Dictionary<string, object>> listdata, Dictionary<string, object> totaldata, string title, int? pageSize, Dictionary<string, object> detaildata)
         {
             try
@@ -1954,6 +1981,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private List<string> method_4(string string_7, int? NHTadHyHOIGc31lUi0, bool bool_0)
         {
             IService service = ServiceHelper.GetService(core_printTemplate_0.ModelName);
@@ -2057,6 +2085,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public HttpResponseMessage PrintPDF(string context, string templateId, string isdownload)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -2138,13 +2167,14 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private string method_5(string string_7, string string_8, int int_2)
         {
             string text = base.Request.Path.ToString();
             text = text.Substring(0, text.IndexOf("web"));
             return text + "web/printjpg?context=" + string_7 + "&templateId=" + string_8 + "&pageindex=" + int_2 + "&isjpg=N";
         }
-
+        [HttpPost]
         public HttpResponseMessage PrintJPG(string context, string templateId, int pageindex, string isjpg)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -2242,6 +2272,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public HttpResponseMessage PrintPDF_Report(string context, string templateId, string isdownload, string descriptorCode)
         {
             try
@@ -2341,13 +2372,14 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private string method_6(string string_7, string string_8, int int_2)
         {
             string text = base.Request.Path.ToString();
             text = text.Substring(0, text.IndexOf("web"));
             return text + "web/printjpg_Report?context=" + string_7 + "&templateId=" + string_8 + "&pageindex=" + int_2 + "&isjpg=N";
         }
-
+        [HttpPost]
         public HttpResponseMessage PrintJPG_Report(string context, string templateId, int pageindex, string isjpg, string descriptorCode)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -2466,7 +2498,7 @@ namespace FastDev.RunWeb.Controllers
             response.Content = new StringContent(content);
             return response;
         }
-
+        [NonAction]
         public byte[] Bitmap2Bytes(Bitmap bm)
         {
             MemoryStream memoryStream = new MemoryStream();
@@ -2476,7 +2508,7 @@ namespace FastDev.RunWeb.Controllers
             return buffer;
         }
 
-        [HttpGet]
+        [HttpPost]
         [VaildateUser]
         public ActionResult PrintPreview(string context, string templateId)
         {
@@ -2495,6 +2527,7 @@ namespace FastDev.RunWeb.Controllers
             return View("Print");
         }
 
+        [NonAction]
         private string method_7()
         {
             try
@@ -2521,6 +2554,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void method_8()
         {
             try
@@ -2698,6 +2732,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void method_9()
         {
             try
@@ -2772,6 +2807,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void method_10()
         {
             //using (WebBrowser webBrowser = new WebBrowser())
@@ -2790,6 +2826,7 @@ namespace FastDev.RunWeb.Controllers
             //}
         }
 
+        [HttpPost]
         public byte[] ConvertImages2PDF(List<iTextSharp.text.Image> imgs, bool isPrint = false)
         {
             MemoryStream memoryStream = new MemoryStream();
@@ -2821,7 +2858,7 @@ namespace FastDev.RunWeb.Controllers
             memoryStream.Close();
             return memoryStream.ToArray();
         }
-
+        [HttpPost]
         public byte[] ConvertHtml2PDF(string[] contents, bool isPrint = false)
         {
             MemoryStream memoryStream = new MemoryStream();
@@ -2859,6 +2896,7 @@ namespace FastDev.RunWeb.Controllers
             return memoryStream.ToArray();
         }
 
+        [NonAction]
         private void method_11(PdfWriter pdfWriter_0, Document document_0, string string_7)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(string_7);
@@ -2871,6 +2909,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ReportData(string model, ReportArg arg)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -2931,6 +2970,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private string method_12(DbContext dbContext_3, string tabName, string fieldName, string IdValue)
         {
             Field field = null;
@@ -2962,6 +3002,7 @@ namespace FastDev.RunWeb.Controllers
             });
         }
 
+        [NonAction]
         private List<NameValue> method_13(DbContext dbContext_3, ReportArg rArg)
         {
             List<NameValue> list = new List<NameValue>();
@@ -3063,6 +3104,7 @@ namespace FastDev.RunWeb.Controllers
             return list;
         }
 
+        [NonAction]
         private List<NameValue> method_14(DbContext dbContext_3, ReportArg reportArg_0)
         {
             List<NameValue> list = new List<NameValue>();
@@ -3145,6 +3187,7 @@ namespace FastDev.RunWeb.Controllers
             return list;
         }
 
+        [NonAction]
         private FilterGroup method_15(DbContext dbContext_3, ReportArg reportArg_0, object object_0, object object_1)
         {
             FilterGroup filterGroup = new FilterGroup();
@@ -3209,6 +3252,7 @@ namespace FastDev.RunWeb.Controllers
             return filterGroup;
         }
 
+        [NonAction]
         private FilterGroup method_16(DbContext dbContext_3, ReportArg reportArg_0, object object_0)
         {
             FilterGroup filterGroup = new FilterGroup();
@@ -3261,6 +3305,7 @@ namespace FastDev.RunWeb.Controllers
             return filterGroup;
         }
 
+        [NonAction]
         private RangeDateValue method_17(DbContext dbContext_3, string string_7, string string_8)
         {
             DateTime min = dbContext_3.ExecuteScalar<DateTime>(string.Format("select min({0}) from {1}", string_8, string_7), new object[0]);
@@ -3268,6 +3313,7 @@ namespace FastDev.RunWeb.Controllers
             return new RangeDateValue(min, max);
         }
 
+        [NonAction]
         private List<RangeDateItem> method_18(DbContext dbContext_3, string string_7, string string_8, string string_9)
         {
             RangeDateValue rangeDateValue = method_17(dbContext_3, string_7, string_8);
@@ -3337,6 +3383,7 @@ namespace FastDev.RunWeb.Controllers
             return list;
         }
 
+        [NonAction]
         private object method_19(DbContext dbContext_3, string string_7, string string_8, string string_9, params object[] args)
         {
             string arg = "count(*)";
@@ -3348,6 +3395,7 @@ namespace FastDev.RunWeb.Controllers
             return dbContext_3.ExecuteScalar<double?>(text, args);
         }
 
+        [NonAction]
         private string GetModuleTitle(DbContext db, string moduleId)
         {
             if (dicModuleTitles.ContainsKey(moduleId))
@@ -3362,6 +3410,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Rights(string id, string roleId, string userId, string loginName, RightsSaveModel value)
         {
             try
@@ -3416,6 +3465,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult getDataAssign(FastDev.DevDB.Model.core_dataAssign data)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -3445,6 +3495,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult delDataAssign(FastDev.DevDB.Model.core_dataAssign data)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -3473,6 +3524,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult saveDataAssign(FastDev.DevDB.Model.core_dataAssign data)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -3519,6 +3571,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Save(string model, string method, string fullJson, string parm)
         {
             //IL_004f: Unknown result type (might be due to invalid IL or missing references)
@@ -3562,6 +3615,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult SaveList(string model, string fullJson, string parm)
         {
             //IL_004f: Unknown result type (might be due to invalid IL or missing references)
@@ -3604,6 +3658,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Delete(string model, string[] arg)
         {
             //IL_0011: Unknown result type (might be due to invalid IL or missing references)
@@ -3632,6 +3687,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [HttpPost]
         [VaildateUser]
         public ActionResult Setting()
         {
@@ -3706,6 +3762,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void method_21(DbContext dbContext_3, string string_7, string string_8, string string_9)
         {
             dbContext_3.Insert("core_setting", "ID", false, (object)new FastDev.DevDB.Model.core_setting
@@ -3740,6 +3797,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public HttpResponseMessage Template(string id, string templateId, string dbViewName, string template, string model, string filterCode, string filter, string descriptor)
         {
             FilterGroup filterGroup = FullJsonValue.GetObject<FilterGroup>(filter);
@@ -3871,6 +3929,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void PerpareKanban(ServiceConfig sConfig)
         {
             Regex regex = new Regex("{(.*?)}");
@@ -3927,6 +3986,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private void method_23(ServiceConfig serviceConfig_1)
         {
             Regex regex = new Regex("<!--START-->([\\s\\S]*?)<!--END-->");
@@ -4102,6 +4162,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult user_menus(string appId)
         {
             try
@@ -4159,6 +4220,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult user_homestyles()
         {
             List<object> list = new List<object>();
@@ -4184,6 +4246,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult user_getcurrent(string appId)
         {
             try
@@ -4207,6 +4270,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult user_resetpassword(string[] args)
         {
             try
@@ -4245,6 +4309,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult user_changepassword(string oldpassword, string password1, string password2)
         {
             //IL_0017: Unknown result type (might be due to invalid IL or missing references)
@@ -4344,6 +4409,7 @@ namespace FastDev.RunWeb.Controllers
 
         }
 
+        [NonAction]
         private bool IsWebLocked()
         {
             try
@@ -4357,12 +4423,14 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Home(string dbid)
         {
             return Content("dbid:" + dbid);
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult GetTemlate(string path)
         {
             try
@@ -4376,12 +4444,14 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Main(string model, string viewtype, string viewname)
         {
             return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.Path)));
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult M(string model, string viewtype, string viewname)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -4407,6 +4477,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult saveTempVariable(string data)
         {
             string text = "TempVariable";
@@ -4418,6 +4489,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult getTempVariable()
         {
             string name = "TempVariable";
@@ -4433,6 +4505,7 @@ namespace FastDev.RunWeb.Controllers
             });
         }
 
+        [NonAction]
         private string method_25(object object_0, string string_7)
         {
             string text = "";
@@ -4494,6 +4567,7 @@ namespace FastDev.RunWeb.Controllers
             return text;
         }
 
+        [NonAction]
         private string method_26(string string_7)
         {
             string arg = "";
@@ -4505,6 +4579,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult Workflow(string id, WorkflowContext wfContext)
         {
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
@@ -4562,6 +4637,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult ImportOrderDetail(string templateId, string orderId, IFormFile file)
         {
             try
@@ -4730,6 +4806,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult DicTree(string id, string model, FilterTree filterTree)
         {
             try
@@ -4780,6 +4857,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult DicItems(string id)
         {
             try
@@ -4812,6 +4890,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult DicGridItems(string id)
         {
             try
@@ -4844,6 +4923,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult UI_List()
         {
             ModelsConfig modelsConfig = ServiceHelper.GetModelsConfig();
@@ -4858,6 +4938,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult UI_Save(string module, string model, string viewname, string content, string isService)
         {
             try
@@ -4889,6 +4970,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
+        [HttpPost]
         public ActionResult UI_Get(string module, string model, string viewname)
         {
             try
@@ -4926,6 +5008,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+        [NonAction]
         private Dictionary<string, object> method_27(string string_7, ModelsConfig mSetting)
         {
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
@@ -4957,6 +5040,7 @@ namespace FastDev.RunWeb.Controllers
             return dictionary;
         }
 
+        [NonAction]
         private Dictionary<string, object> method_28(string string_7, ModelsConfig modelsConfig_0, string string_8)
         {
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
@@ -4969,31 +5053,35 @@ namespace FastDev.RunWeb.Controllers
             dictionary["model"] = string_8;
             return dictionary;
         }
-
+        [HttpPost]
         public ActionResult Pay(PayInfo data)
         {
             return new EmptyResult();
         }
 
 
+        [NonAction]
         private static bool smethod_0(Field field_0)
         {
             return field_0.type.Contains("2");
         }
 
 
+        [NonAction]
         private static string smethod_1(PropertyInfo propertyInfo_0)
         {
             return propertyInfo_0.Name;
         }
 
 
+        [NonAction]
         private static string smethod_2(SelectionItem selectionItem_0)
         {
             return selectionItem_0.text;
         }
 
 
+        [NonAction]
         private static bool smethod_3(GridColumn gridColumn_0)
         {
             return gridColumn_0.columns != null && gridColumn_0.columns.Any();
@@ -5002,18 +5090,21 @@ namespace FastDev.RunWeb.Controllers
 
 
 
+        [NonAction]
         private static bool smethod_5(GridColumn gridColumn_0)
         {
             return gridColumn_0.columns != null && gridColumn_0.columns.Any();
         }
 
 
+        [NonAction]
         private static string smethod_6(PropertyInfo propertyInfo_0)
         {
             return propertyInfo_0.Name;
         }
 
 
+        [NonAction]
         private static string smethod_7(FastDev.DevDB.Model.Config.Model model_0)
         {
             return model_0.title;

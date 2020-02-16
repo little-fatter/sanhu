@@ -5,5 +5,9 @@
     <RootNamespace>FD.Model</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>FastDev.Model.xml</DocumentationFile>
+  </PropertyGroup>
+
 
 </Project>
