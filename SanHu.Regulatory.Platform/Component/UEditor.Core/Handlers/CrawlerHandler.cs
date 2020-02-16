@@ -78,7 +78,7 @@ namespace UEditor.Core.Handlers
 
                 ServerUrl = PathFormatter.Format(Path.GetFileName(sourceUri.AbsolutePath), Config.GetString("catcherPathFormat"));
 
-                var savePath = Path.Combine(Config.WebRootPath, ServerUrl);
+                var savePath = Path.Combine(Config.WebRootPath,Config.UploadPath, ServerUrl);
 
                 if (!Directory.Exists(Path.GetDirectoryName(savePath)))
                 {
