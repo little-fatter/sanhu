@@ -16,7 +16,7 @@ namespace FastDev.Service
         {
             List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
             string model = null;
-            if (filter.groups.Any<FilterGroup>() && filter.groups[0].rules.Any<FilterRule>())
+            if (filter.groups.Any() && filter.groups[0].rules.Any())
             {
                 model = filter.groups[0].rules[0].value.ToString();
             }
@@ -36,8 +36,8 @@ namespace FastDev.Service
 
         public override object GetPageData(QueryDescriptor descriptor)
         {
-            var data=this.GetListData(descriptor.Condition);
-            return new PagedData(new List<object>(), 0L) { Records = this.GetListData(descriptor.Condition), Total = data.Count };
+            var data = this.GetListData(descriptor.Condition);
+            return new PagedData(data, data.Count);
         }
     }
 }
