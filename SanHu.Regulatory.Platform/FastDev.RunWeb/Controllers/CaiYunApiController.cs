@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace FastDev.RunWeb.Controllers
 {
+    [Route("[controller]/[action]")]
     public class CaiYunApiController : Controller
     {
         public CaiYunApiController(IConfiguration configuration)
@@ -16,7 +17,8 @@ namespace FastDev.RunWeb.Controllers
         }
         private CaiYunApiService _caiYunApiService;
 
-
+        [HttpGet]
+        [ProducesResponseType(typeof(WeatherResponse), 200)]
         public IActionResult GetWeather()
         {
             return Json(_caiYunApiService.GetWeather());
