@@ -2,7 +2,7 @@ namespace FastDev.Model.Name
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class case_law_case
+public partial class case_Info
 {
 public string ID
 {

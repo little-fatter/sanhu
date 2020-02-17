@@ -59,8 +59,8 @@
         <models name="perm_activity" title="活动许可" textField="Title" />
         <models name="perm_free_captive_animals" title="放生许可" textField="Title" moduleName="perm" moduleTitle="许可" />
         <models name="work_matter" title="事件" textField="Title" moduleName="work" moduleTitle="工作" />
-        <models name="case_law_case" title="案件" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="user" title="frameworkuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="case_filing_report" title="立案报告" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="case_Info" title="案件" textField="Title" moduleName="case" moduleTitle="案件" />
     </models>
 </freedesign>

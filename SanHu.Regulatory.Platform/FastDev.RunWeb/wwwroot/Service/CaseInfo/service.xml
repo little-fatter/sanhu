@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="CaseInfo" title="案件" textField="CaseType" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="CaseType" dbName="CaseType" title="案件类型" type="string" length="50" isPK="N" />
+        <field name="CaseTitle" dbName="CaseTitle" title="标题" type="string" length="50" isPK="N" />
+        <field name="CaseStatus" dbName="CaseStatus" title="案件状态" type="status" relationModel="" relationField="" isPK="N" />
+        <field name="ApplicableProcedure" dbName="ApplicableProcedureID" title="适用程序" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="350" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PenaltyDecisionNo" dbName="PenaltyDecisionNo" title="处罚决定书文号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PenaltyType" dbName="PenaltyTypeID" title="处罚种类" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseRegisterDay" dbName="CaseRegisterDay" title="立案日期" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="CaseCloseDay" dbName="CaseCloseDay" title="结案日期" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Investigators" dbName="Investigators" title="办案人员" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="OnDocDay" dbName="OnDocDay" title="归档日期" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="DocRetentionTimes" dbName="DocRetentionTimes" title="保存期限" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="DocNo" dbName="DocNo" title="归档号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="DocPeople" dbName="DocPeople" title="归档人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseSource" dbName="CaseSourceID" title="案件来源" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ProcessingProgram" dbName="ProcessingProgramID" title="处理程序" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Region" dbName="RegionID" title="区域" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="ApplicableProcedure,PenaltyType,CaseSource,ProcessingProgram,Region" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="ApplicableProcedure,PenaltyType,CaseSource,ProcessingProgram,Region" one2many="" many2many="" />
+</freedesign>

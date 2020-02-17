@@ -1,8 +1,8 @@
-namespace FastDev.Model.Report
+namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class case_law_case
+public partial class case_Info
 {
 public string ID
 {
@@ -79,7 +79,7 @@ public string DocPeople
 get;
 set;
 }
-public string CaseSourceID
+public string Relatedevents
 {
 get;
 set;
