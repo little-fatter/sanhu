@@ -14,6 +14,11 @@ public IList<string> PenaltyType
 get;
 set;
 }
+public IList<string> Region
+{
+get;
+set;
+}
 }
 
 }

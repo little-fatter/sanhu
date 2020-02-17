@@ -66,7 +66,18 @@ function() {
                         valueField: "ID",
                         textField: "Title",
                         many2one: true,
-                        type: "ref_select"
+                        type: "ref_select",
+                        sourceFilter: {
+                            rules: [{
+                                field: "DicID",
+                                op: "equal",
+                                value: "3d19da90-56e4-46c4-9a17-a606f7d3febe",
+                                type: "select"
+                            }],
+                            op: "and"
+                        },
+                        select_updatematch_source: "",
+                        select_updatematch_target: ""
                     },
                     type: "ref_select"
                 },
@@ -114,7 +125,18 @@ function() {
                         valueField: "ID",
                         textField: "Title",
                         many2one: true,
-                        type: "ref_select"
+                        type: "ref_select",
+                        sourceFilter: {
+                            rules: [{
+                                field: "DicID",
+                                op: "equal",
+                                value: "6524150d-4ea7-44ce-9255-eda1b8752f55",
+                                type: "select"
+                            }],
+                            op: "and"
+                        },
+                        select_updatematch_source: "",
+                        select_updatematch_target: ""
                     },
                     type: "ref_select"
                 },
@@ -245,6 +267,33 @@ function() {
                         type: "text"
                     },
                     type: "text"
+                },
+                {
+                    newline: false,
+                    name: "Region",
+                    label: "区域",
+                    editor: {
+                        url: "/web/listdata",
+                        parms: {
+                            model: "res_dictionaryItems"
+                        },
+                        valueField: "ID",
+                        textField: "Title",
+                        many2one: true,
+                        type: "ref_select",
+                        sourceFilter: {
+                            rules: [{
+                                field: "DicID",
+                                op: "equal",
+                                value: "156ab037-df00-4cf7-b11a-69661cbd00c5",
+                                type: "select"
+                            }],
+                            op: "and"
+                        },
+                        select_updatematch_source: "",
+                        select_updatematch_target: ""
+                    },
+                    type: "ref_select"
                 }]
             },
             common: {

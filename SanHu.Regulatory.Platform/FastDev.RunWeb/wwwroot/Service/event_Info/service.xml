@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="event_info" title="事件信息" textField="Title" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="Title" dbName="Title" title="标题" type="string" length="50" isPK="N" />
+        <field name="ReportAddress" dbName="ReportAddress" title="地址" type="string" length="200" isPK="N" />
+        <field name="ReportAddressx" dbName="ReportAddressx" title="地址x" type="string" length="50" isPK="N" />
+        <field name="ReportAddressy" dbName="ReportAddressy" title="地址y" type="string" length="50" isPK="N" />
+        <field name="ReportTime" dbName="ReportTime" title="上报时间" type="string" length="50" isPK="N" />
+        <field name="ReporterName" dbName="ReporterName" title="上报人名称" type="string" length="50" isPK="N" />
+        <field name="ReporterPhone" dbName="ReporterPhone" title="上报人手机" type="string" length="50" isPK="N" />
+        <field name="EventState" dbName="EventStateID" title="事件状态" type="many2one" relationModel="res_dictionaryItems" relationField="" isPK="N" />
+        <field name="ProcessingResult" dbName="ProcessingResult" title="处理结果" type="string" length="50" isPK="N" />
+        <field name="NeedLawEnforcement" dbName="NeedLawEnforcement" title="需要执法" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="NeedTracking" dbName="NeedTracking" title="需要跟踪" type="string" length="50" isPK="N" />
+        <field name="ReportDescription" dbName="ReportDescription" title="上报描述" type="string" length="500" isPK="N" />
+        <field name="ConfirmationDescription" dbName="ConfirmationDescription" title="确认描述" type="string" length="500" isPK="N" />
+        <field name="ConfirmEventType" dbName="ConfirmEventTypeID" title="确认事件类型" type="many2one" relationModel="res_dictionaryItems" relationField="" isPK="N" />
+        <field name="ConfirmTime" dbName="ConfirmTime" title="确认发生时间" type="string" length="50" isPK="N" />
+        <field name="ConfirmLocation" dbName="ConfirmLocation" title="确认地点" type="string" length="200" isPK="N" />
+        <field name="ReportEventType" dbName="ReportEventTypeID" title="上报事件类型" type="many2one" relationModel="res_dictionaryItems" relationField="" isPK="N" />
+        <field name="ConfirmAddress" dbName="ConfirmAddress" title="确认上报地址" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="ConfirmAddressx" dbName="ConfirmAddressx" title="确认上报地址x" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="ConfirmAddressy" dbName="ConfirmAddressy" title="确认上报地址y" type="string" length="50" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="EventState,ConfirmEventType,ReportEventType" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="EventState,ConfirmEventType,ReportEventType" one2many="" many2many="" />
+</freedesign>
