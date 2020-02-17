@@ -213,6 +213,7 @@ namespace FastDev.RunWeb
                 var ModelPath = Path.Combine(basePath, "FastDev.Model.xml");
                 option.IncludeXmlComments(xmlPath);
                 option.IncludeXmlComments(ModelPath);
+                option.DocumentFilter<ModelDocumentFilter>();
                 option.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.Http,
@@ -279,6 +280,7 @@ namespace FastDev.RunWeb
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint($"/swagger/v1/swagger.json", "Data Center API V1");
+                
             });
 
             app.UseRouting();
