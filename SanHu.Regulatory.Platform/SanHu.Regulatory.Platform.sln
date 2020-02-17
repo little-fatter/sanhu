@@ -21,16 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.Model.Core", "Compo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.Service", "FastDev.Service\FastDev.Service.csproj", "{A959423A-CE69-4936-9506-47AA8EBAEDE1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{DBA9BFDE-D936-4B64-8DB8-EE00A09E6137}"
-	ProjectSection(SolutionItems) = preProject
-		libs\netcoreapp3.1\FastDev.Common.dll = libs\netcoreapp3.1\FastDev.Common.dll
-		libs\netcoreapp3.1\FastDev.DevDB.dll = libs\netcoreapp3.1\FastDev.DevDB.dll
-		libs\netcoreapp3.1\FastDev.Model.Core.dll = libs\netcoreapp3.1\FastDev.Model.Core.dll
-		libs\netcoreapp3.1\PetaPoco.dll = libs\netcoreapp3.1\PetaPoco.dll
-		libs\netstandard2.0\PetaPoco.dll = libs\netstandard2.0\PetaPoco.dll
-		libs\netcoreapp3.1\UEditor.Core.dll = libs\netcoreapp3.1\UEditor.Core.dll
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,7 +62,6 @@ Global
 		{BC4EE6C7-CB67-409E-8135-4037E4BA8181} = {B2285389-1787-4D5F-B46E-91BC6B8175E7}
 		{523D3BA2-5943-4565-A71A-940194B5FBFC} = {B2285389-1787-4D5F-B46E-91BC6B8175E7}
 		{D7C1C40A-F15C-4642-A55D-F2D901B2F148} = {B2285389-1787-4D5F-B46E-91BC6B8175E7}
-		{DBA9BFDE-D936-4B64-8DB8-EE00A09E6137} = {B2285389-1787-4D5F-B46E-91BC6B8175E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EB01D92A-5AA8-4BA0-A06A-A6A4C8848340}

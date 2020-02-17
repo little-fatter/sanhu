@@ -211,8 +211,11 @@ namespace FastDev.RunWeb
                 var basePath = AppContext.BaseDirectory;
                 var xmlPath = Path.Combine(basePath, "FastDev.RunWeb.xml");
                 var ModelPath = Path.Combine(basePath, "FastDev.Model.xml");
+                var devDbPath = Path.Combine(basePath, "FastDev.DevDB.xml");
+                
                 option.IncludeXmlComments(xmlPath);
                 option.IncludeXmlComments(ModelPath);
+                option.IncludeXmlComments(devDbPath);
                 option.DocumentFilter<ModelDocumentFilter>();
                 option.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
                 {

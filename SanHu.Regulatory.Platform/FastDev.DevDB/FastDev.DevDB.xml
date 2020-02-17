@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastDev.DevDB</name>
+    </assembly>
+    <members>
+        <member name="T:FastDev.DevDB.Auth.AESHelper">
+            <summary>
+            AES
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.AESHelper.GetLegalKey(System.Security.Cryptography.SymmetricAlgorithm,System.String)">
+            <summary>
+            获得密钥
+            </summary>
+            <returns>密钥</returns>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.AESHelper.GetLegalIV(System.Security.Cryptography.SymmetricAlgorithm)">
+            <summary>
+            获得初始向量IV
+            </summary>
+            <returns>初始向量IV</returns>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.AESHelper.EncryptString(System.String,System.String)">
+            <summary>
+            加密方法
+            </summary>
+            <param name="Source">待加密的串</param>
+            <param name="sKey">密码</param>
+            <returns>经过加密的串</returns>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.AESHelper.HexStrToByte(System.String)">
+            <summary>
+            将16进制的字符串转为byte[]
+            </summary>
+            <param name="hexString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.AESHelper.DecryptString(System.String,System.String)">
+            <summary>
+            解密方法
+            </summary>
+            <param name="Source">待解密的串</param>
+            <param name="sKey">密码</param>
+            <returns>经过解密的串</returns>
+        </member>
+        <member name="T:FastDev.DevDB.Auth.RSAEncryptBase">
+            <summary> 
+            RSACryption 的摘要说明。 
+            </summary> 
+        </member>
+        <member name="M:FastDev.DevDB.Auth.RSAHelper.DoKeySplit(System.String,System.Byte[]@,System.Byte[]@)">
+            <summary>
+            将密码分成两个部分
+            </summary>
+            <param name="strKey"></param>
+            <param name="byteKeyOne"></param>
+            <param name="byteKeyTow"></param>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.RSAHelper.SiginData(System.String,System.String)">
+            <summary>
+            进行数字签名
+            </summary>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.RSAHelper.SiginCheck(System.String,System.String,System.String)">
+            <summary>
+            数字签名验证
+            </summary>
+            <param name="Data"></param>
+            <param name="EncryptedSignatureData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.Auth.SoftReg.GetMACIp">
+            <summary>
+            获取电脑 MAC（物理） 地址
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.DevDB.AutoCode.AutoCodeService">
+            <summary>
+            自动编码
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.DataAccessHelper.GetModelAssembly">
+            <summary>
+            FastDev Model 动态生成
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:FastDev.DevDB.ServiceBase.MainDb">
+            <summary>
+            core_表格所在的数据库的db
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.ServiceBase.QueryDb">
+            <summary>
+            临时
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceBase.ValueCompare(System.String,System.Int32,System.Int32)">
+            <summary>
+            用汉字命令来比较两个数字的大小
+            </summary>
+            <param name="strCmd"></param>
+            <param name="iOne"></param>
+            <param name="iTow"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceBase.CreateUpdateData(System.Object,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="objData"></param>
+            <param name="isAdd">是否是新增</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceBase.ExecuteContentSql(FastDev.DevDB.DbContext,System.Collections.Generic.Dictionary{System.String,System.Object},System.String,System.Boolean)">
+            <summary>
+            执行文件中的sql
+            </summary>
+            <param name="dbContext"></param>
+            <param name="dics"></param>
+            <param name="strContent"></param>
+            <param name="isGetValue">是否有指定的查询值 true ExecuteScalar false Execute</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceBase.PrepareModel(FastDev.DevDB.DbContext,System.String,System.Boolean,System.Object,System.Boolean)">
+            <summary>
+            在执行查找 对model做准备
+            </summary>
+            <param name="dbContext"></param>
+            <param name="modelName"></param>
+            <param name="isAdd"></param>
+            <param name="objData"></param>
+            <param name="isUseDefault"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceHelper.GetFilePath(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="modelName"></param>
+            <param name="mtype">模块类型</param>
+            <param name="mtype2"></param>
+            <param name="isService"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.SwaggerDoc.FastDevDoc.GetDoc">
+            <summary>
+            获取swagger json
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.SwaggerDoc.FastDevDoc.GetComponents(FastDev.DevDB.Model.Config.ModelsConfig)">
+            <summary>
+            获取 components 节点
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.SwaggerDoc.FastDevDoc.GetResponseNode(System.String)">
+            <summary>
+            获取路径 
+            </summary>
+            <returns>只需要生成几个复杂的，关键性的函数的文档</returns>
+        </member>
+        <member name="P:FastDev.DevDB.SysContext.IsDev">
+            <summary>
+            是否处于开发模式
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.SysContext.GetProviderName(System.String)">
+            <summary>
+            根据简写获取providerName
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.SysContext.GetOtherDB(System.String)">
+            <summary>
+            根据模型的配置，获取数据库对象
+            </summary>
+            <param name="dbName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.WorkflowService.GenNewStatus(System.String,System.String)">
+            <summary>
+            创建一个新的工作流状态
+            </summary>
+            <param name="strTaskId"></param>
+            <param name="strExcutorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.RunWeb.Core.UpdateHelper.GetOneItemPath(FastDev.RunWeb.Core.UpdateInfo)">
+            <summary>
+            获取该项的路径
+            </summary>
+            <param name="uInfo"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
