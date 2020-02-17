@@ -24,7 +24,7 @@ namespace UEditor.Core
             }
             else
             {
-                var configFilePath = Path.Combine(WebRootPath, ConfigFile);
+                var configFilePath = Path.Combine(WebRootPath, EditorPath, ConfigFile);
                 if (!File.Exists(configFilePath))
                 {
                     throw new Exception("未找到UEditor配置文件，请检查！若有问题，请参阅文档：https://github.com/baiyunchen/UEditor.Core");
@@ -50,7 +50,15 @@ namespace UEditor.Core
 
         public static string WebRootPath { get; set; }
 
-        // public static string WwwRootPath { get; set; }
+        /// <summary>
+        /// 上传的目录
+        /// </summary>
+        public static string UploadPath { get; set; }
+
+        /// <summary>
+        /// editor在系统中的相对位置
+        /// </summary>
+        public static string EditorPath { get; set; }
 
         public static string ConfigFile { set; get; } = "ueditor.json";
 

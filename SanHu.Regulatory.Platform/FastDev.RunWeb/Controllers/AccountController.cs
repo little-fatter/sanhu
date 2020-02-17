@@ -10,14 +10,28 @@ using Microsoft.Extensions.Options;
 
 namespace FastDev.RunWeb.Controllers
 {
-    public class AccountController : WanJiang.Framework.Web.Core.Mvc.BaseController
+    /// <summary>
+    /// 登录管理
+    /// </summary>
+    [Route("[controller]/[action]")]
+    public class AccountController : BaseController
     {
         readonly ServerNameConfig _serverNameConfig;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appsettingsModel"></param>
         public AccountController(IOptionsSnapshot<ServerNameConfig> appsettingsModel)
         {
             _serverNameConfig=appsettingsModel.Value;
         }
-        // GET: /<controller>/
+
+        /// <summary>
+        /// 登录跳转至框架登录
+        /// </summary>
+        /// <param name="returnUrl">回跳url</param>
+        /// <returns></returns>
+        [HttpGet]
         public IActionResult Login([FromQuery]string returnUrl)
         {
             var mainservicename = _serverNameConfig.MainServiceName;
@@ -41,11 +55,22 @@ namespace FastDev.RunWeb.Controllers
 
             return Redirect($"/{mainservicename}/Account/Login?toolid=SHJG&returnulr={WebUtility.UrlEncode(returnUrl)}");
         }
+        /// <summary>
+        /// 退出跳转至框架退出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public IActionResult Logout()
         {
             var mainservicename = _serverNameConfig.MainServiceName;
             return Redirect($"/{mainservicename}/Account/Logout");
         }
+        /// <summary>
+        /// 未授权跳转至框架未授权页面
+        /// </summary>
+        /// <param name="returnUrl">回跳url</param>
+        /// <returns></returns>
+        [HttpGet]
         public IActionResult AccessDenied([FromQuery]string returnUrl)
         {
             var mainservicename = _serverNameConfig.MainServiceName;

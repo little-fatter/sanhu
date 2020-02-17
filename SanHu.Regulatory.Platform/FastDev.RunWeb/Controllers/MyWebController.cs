@@ -7,6 +7,7 @@ using System.IO;
 
 namespace FastDev.RunWeb.Controllers
 {
+	[Route("[controller]/[action]")]
 	public class MyWebController : Controller
 	{
 		public HttpServerUtility Server
@@ -17,6 +18,7 @@ namespace FastDev.RunWeb.Controllers
 			}
 		}
 		[VaildateUser]
+		[HttpGet]
 		public ActionResult DownloadUserPics1(string context)
 		{
 			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
@@ -63,6 +65,7 @@ namespace FastDev.RunWeb.Controllers
 		}
 
 		[VaildateUser]
+		[HttpGet]
 		public ActionResult DownloadUserPics2(string context)
 		{
 			//IL_0016: Unknown result type (might be due to invalid IL or missing references)

@@ -50,10 +50,10 @@ namespace UEditor.Core.Handlers
             var buildingList = new List<String>();
             try
             {
-                var localPath = Path.Combine(Config.WebRootPath, PathToList);
+                var localPath = Path.Combine(Config.WebRootPath, Config.UploadPath, PathToList.Replace("/", "\\"));
                 buildingList.AddRange(Directory.GetFiles(localPath, "*", SearchOption.AllDirectories)
                     .Where(x => SearchExtensions.Contains(Path.GetExtension(x).ToLower()))
-                    .Select(x => PathToList + x.Substring(localPath.Length).Replace("\\", "/")));
+                    .Select(x => Config.UploadPath +"/"+ PathToList + x.Substring(localPath.Length).Replace("\\", "/")));
                 Total = buildingList.Count;
                 FileList = buildingList.OrderBy(x => x).Skip(Start).Take(Size).ToArray();
             }

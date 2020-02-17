@@ -306,14 +306,34 @@ namespace FastDev.DevDB
         }
 
 
+
         public static Assembly GetModelAssembly()
         {
             if (IsDev)
             {
+
                 if (designModelAssembly == null)
                 {
-                    byte[] buffs = File.ReadAllBytes(GetCurrentAppPath() + "FastDev.Model.dll");
-                    designModelAssembly = Assembly.Load(buffs);
+                    string dllPath = GetCurrentAppPath() + "FastDev.Model.dll";
+                    string dllBakPath = dllPath + ".bak";
+                    if (File.Exists(dllPath))
+                    {
+                        try
+                        {
+                            byte[] buffs = File.ReadAllBytes(dllPath);
+                            designModelAssembly = Assembly.Load(buffs);
+                            File.WriteAllBytes(dllBakPath, buffs);
+                            return designModelAssembly;
+                        }
+                        catch
+                        {//因为某些原因会导致dll生成失败，这时候，需要启动备份文件，去检查备份文件是否可读
+                        }
+                    }
+                    if (File.Exists(dllPath))
+                    {//如果不存在，就加载备份文件
+                        byte[] buffs = File.ReadAllBytes(dllPath);
+                        designModelAssembly = Assembly.Load(buffs);
+                    }
                 }
             }
             else
@@ -322,7 +342,6 @@ namespace FastDev.DevDB
             }
             return designModelAssembly;
         }
-
         public static void ResetModelAssembly()
         {
             designModelAssembly = null;
