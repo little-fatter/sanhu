@@ -17,11 +17,12 @@
         <field name="DocNo" dbName="DocNo" title="归档号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="DocPeople" dbName="DocPeople" title="归档人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Relatedevents" dbName="Relatedevents" title="关联事件" type="string" length="50" isPK="N" />
+        <field name="Region" dbName="RegionID" title="区域" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
-    <getlist base_fields="*" base_ignore_fields="" many2one="ApplicableProcedure,PenaltyType" one2many="" many2many="" />
-    <getpageddata base_fields="*" base_ignore_fields="" many2one="ApplicableProcedure,PenaltyType" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="ApplicableProcedure,PenaltyType,Region" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="ApplicableProcedure,PenaltyType,Region" one2many="" many2many="" />
 </freedesign>

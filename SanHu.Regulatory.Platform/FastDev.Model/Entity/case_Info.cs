@@ -84,6 +84,11 @@ public string Relatedevents
 get;
 set;
 }
+public string RegionID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
