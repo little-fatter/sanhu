@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="from_InvestigatingParty" title="询问记录" textField="Reason" moduleName="form" moduleTitle="表单" dbName="" />
+    <fields>
+        <field name="Reason" dbName="Reason" title="原因" type="string" length="50" isPK="N" />
+        <field name="Locationaddress" dbName="Locationaddress" title="地点地址" type="string" length="50" isPK="N" />
+        <field name="Party" dbName="Party" title="当事人" type="string" length="500" isPK="N" />
+        <field name="Interrogator1" dbName="Interrogator1" title="询问员1" type="string" length="50" isPK="N" />
+        <field name="Interrogator2" dbName="Interrogator2" title="询问员2" type="string" length="50" isPK="N" />
+        <field name="InvestigationTime" dbName="InvestigationTime" title="调查时间" type="string" length="50" isPK="N" />
+        <field name="lawexecutor1" dbName="lawexecutor1" title="执法人员1" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="lawexecutor2" dbName="lawexecutor2" title="执法人员2" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="lawexecutor1Num" dbName="lawexecutor1Num" title="执法人员1编号" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="lawexecutor2Num" dbName="lawexecutor2Num" title="执法人员2编号" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="questions" dbName="questions" title="问题" type="string" length="500" isPK="N" />
+        <field name="answer1" dbName="answer1" title="回答1" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="answer2" dbName="answer2" title="回答2" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="Record" dbName="Record" title="记录" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Typeofinquiry" dbName="Typeofinquiry" title="询问类型" type="string" length="50" isPK="N" />
+        <field name="InvestigationType" dbName="InvestigationType" title="询问类型" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

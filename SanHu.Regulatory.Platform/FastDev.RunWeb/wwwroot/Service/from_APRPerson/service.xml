@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="from_APRPerson" title="行政处罚案件结案报告_个人" textField="CauseOfAction" moduleName="form" moduleTitle="表单" dbName="" />
+    <fields>
+        <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="50" isPK="N" />
+        <field name="Source" dbName="Source" title="来源" type="string" length="50" isPK="N" />
+        <field name="PartyName" dbName="PartyName" title="当事人姓名" type="string" length="50" isPK="N" />
+        <field name="PartySex" dbName="PartySex" title="当事人性别" type="string" length="50" isPK="N" />
+        <field name="PartyAge" dbName="PartyAge" title="当事人年龄" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="PartyJob" dbName="PartyJob" title="当事人职业" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="PartyPhone" dbName="PartyPhone" title="当事人电话" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="PartyIDCard" dbName="PartyIDCard" title="当事人身份证" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="PartyAddress" dbName="PartyAddress" title="当事人住址" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="RegisterTime" dbName="RegisterTime" title="立案时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="CrimeScene" dbName="CrimeScene" title="案发地点" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="CaseHandler" dbName="CaseHandler" title="案件承办人" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CaseHandlerNo" dbName="CaseHandlerNo" title="证件编号" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Content" dbName="Content" title="简要案情及调查经过" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="PenaltyResult" dbName="PenaltyResult" title="处罚结果" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="ExecuteResult" dbName="ExecuteResult" title="执行情况" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="CaseHandlerOp" dbName="CaseHandlerOp" title="承办人意见" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="CaseOrgOp" dbName="CaseOrgOp" title="承办机构意见" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="CaseOrgLeader" dbName="CaseOrgLeader" title="承办机构负责人" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="DeptOp" dbName="DeptOp" title="单位负责人意见" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="DeptLeader" dbName="DeptLeader" title="单位负责人" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CaseHandlerTime" dbName="CaseHandlerTime" title="承办人签字时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="CaseOrgTime" dbName="CaseOrgTime" title="承办机构签字时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="DeptLeaderTime" dbName="DeptLeaderTime" title="单位负责人签字时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Recorder" dbName="Recorder" title="填表人员" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="RecorderTime" dbName="RecorderTime" title="填表时间" type="datetime" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>
