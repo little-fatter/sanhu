@@ -46,28 +46,13 @@
     <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.5.7" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Component\FastDev.Model.Core\FastDev.Model.Core.csproj" />
+    <ProjectReference Include="..\Component\PetaPoco\PetaPoco.csproj" />
+    <ProjectReference Include="..\Component\UEditor.Core\UEditor.Core.csproj" />
+    <ProjectReference Include="..\FastDev.Common\FastDev.Common.csproj" />
+    <ProjectReference Include="..\FastDev.DevDB\FastDev.DevDB.csproj" />
     <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
     <ProjectReference Include="..\FastDev.Service\FastDev.Service.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="FastDev.Common">
-      <HintPath>..\libs\netcoreapp3.1\FastDev.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="FastDev.DevDB">
-      <HintPath>..\libs\netcoreapp3.1\FastDev.DevDB.dll</HintPath>
-    </Reference>
-    <Reference Include="FastDev.Model.Core">
-      <HintPath>..\libs\netcoreapp3.1\FastDev.Model.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="PetaPoco">
-      <HintPath>..\libs\netcoreapp3.1\PetaPoco.dll</HintPath>
-    </Reference>
-    <Reference Include="UEditor.Core">
-      <HintPath>..\libs\netcoreapp3.1\UEditor.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="FastDev.RunWeb.xml">

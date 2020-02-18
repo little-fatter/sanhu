@@ -103,8 +103,8 @@ namespace FastDev.Common
                     var item = config.GetSection(sectionName).GetSection(name);//第一种方法
                     foreach(var kv in item.AsEnumerable())
                     {
-                        if (kv.Key == "ConnectionString") rev.ConnectionString = kv.Value;
-                        if (kv.Key == "ProviderName") rev.ProviderName = kv.Value;
+                        if (kv.Key == $"ConnectionStrings:{name}:ConnectionString") rev.ConnectionString = kv.Value;
+                        if (kv.Key == $"ConnectionStrings:{name}:ProviderName") rev.ProviderName = kv.Value;
                     }
                     return rev;
                 }

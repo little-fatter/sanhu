@@ -15,9 +15,9 @@ namespace FastDev.DevDB
 
         private static Assembly assModelCore;
 
-        private static Dictionary<string, string> dictionary_0;
+        private static Dictionary<string, string> dicFields;//存储字段名
 
-        private static Dictionary<string, string> dictionary_1;
+        private static Dictionary<string, string> dicValues;//存在字段值
 
         /// <summary>
         /// FastDev Model 动态生成
@@ -468,9 +468,9 @@ namespace FastDev.DevDB
 
         public static string GetModeTextField(string modelName)
         {
-            if (dictionary_0.ContainsKey(modelName))
+            if (dicFields.ContainsKey(modelName))
             {
-                return dictionary_0[modelName];
+                return dicFields[modelName];
             }
             ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(modelName);
             if (serviceConfig == null)
@@ -478,23 +478,23 @@ namespace FastDev.DevDB
                 return null;
             }
             string textField = serviceConfig.model.textField;
-            dictionary_0[modelName] = textField;
+            dicFields[modelName] = textField;
             return textField;
         }
 
         public static string GetModeEntityText(DbContext db, string model, string id)
         {
             string key = model + "_" + id;
-            if (dictionary_1.ContainsKey(key))
+            if (dicValues.ContainsKey(key))
             {
-                return dictionary_1[key];
+                return dicValues[key];
             }
             string modeTextField = GetModeTextField(model);
-            dictionary_1[key] = db.ExecuteScalar<string>(string.Format("select {0} from {1} where ID = @0", modeTextField, model), new object[1]
+            dicValues[key] = db.ExecuteScalar<string>(string.Format("select {0} from {1} where ID = @0", modeTextField, model), new object[1]
             {
                 id
             });
-            return dictionary_1[key];
+            return dicValues[key];
         }
 
         public static void ClearModelEntityText(DbContext db, string model, string id)
@@ -502,7 +502,7 @@ namespace FastDev.DevDB
             try
             {
                 string key = model + "_" + id;
-                dictionary_1.Remove(key);
+                dicValues.Remove(key);
             }
             catch
             {
@@ -518,8 +518,8 @@ namespace FastDev.DevDB
         static DataAccessHelper()
         {
             assModelCore = null;
-            dictionary_0 = new Dictionary<string, string>();
-            dictionary_1 = new Dictionary<string, string>();
+            dicFields = new Dictionary<string, string>();
+            dicValues = new Dictionary<string, string>();
         }
     }
 }

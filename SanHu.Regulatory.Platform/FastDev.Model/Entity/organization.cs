@@ -2,7 +2,7 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class user
+public partial class organization
 {
 public string Id
 {
@@ -14,7 +14,7 @@ public string Name
 get;
 set;
 }
-public string AccountId
+public string ParentId
 {
 get;
 set;
@@ -24,37 +24,27 @@ public string TenantId
 get;
 set;
 }
-public string Sex
+public int Level
 {
 get;
 set;
 }
-public string Mobile
-{
-get;
-set;
-}
-public string Email
-{
-get;
-set;
-}
-public string Address
-{
-get;
-set;
-}
-public string Password
-{
-get;
-set;
-}
-public string Avatar
+public string AreaId
 {
 get;
 set;
 }
 public string Remark
+{
+get;
+set;
+}
+public string Latitude
+{
+get;
+set;
+}
+public string Longitude
 {
 get;
 set;

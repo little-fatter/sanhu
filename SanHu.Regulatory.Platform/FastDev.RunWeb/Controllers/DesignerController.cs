@@ -211,7 +211,16 @@ namespace FastDev.RunWeb.Controllers
             if (directoryInfo.Exists)
                 return directoryInfo.FullName + "\\";
             else
-                throw new Exception("请设置代码根目录FastDevRoot");
+            {
+                try
+                {
+                    return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName + "\\";
+                }
+                catch
+                {
+                    throw new Exception("请设置代码根目录FastDevRoot");
+                }
+            }
         }
         [NonAction]
         private string GetProjectPath()

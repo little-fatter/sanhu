@@ -2137,7 +2137,7 @@
                 });
             }
             if (row.value && $.isArray(row.value) && row.value.length) {
-                if (!/ID$/.test(row.field)) {
+                if (!(/ID$/.test(row.field) || /Id$/.test(row.field)) || /id$/.test(row.field)) {
                     row.field += "ID";
                 }
                 if ($.isArray(row.value[0])) { /** @type {!Array} */
