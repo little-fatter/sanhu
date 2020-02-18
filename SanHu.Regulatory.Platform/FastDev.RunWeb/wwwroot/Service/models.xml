@@ -77,5 +77,7 @@
         <models name="from_confiscateVouch" title="没收物品凭证" textField="Title" />
         <models name="from_inventory" title="没收物品清单" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_punishmentInfoDetail" title="没收物品清单详情" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="from_APRPerson" title="行政处罚案件结案报告_个人" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="from_APROrg" title="行政处罚案件结案报告_单位" textField="Title" moduleName="form" moduleTitle="表单" />
     </models>
 </freedesign>
