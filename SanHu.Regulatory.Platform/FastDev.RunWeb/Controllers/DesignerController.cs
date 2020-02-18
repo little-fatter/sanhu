@@ -312,7 +312,14 @@ namespace FastDev.RunWeb.Controllers
                                 }
                                 else
                                 {
-                                    currentDb.Execute(sqlContent, new object[0]);
+                                    try
+                                    {
+                                        currentDb.Execute(sqlContent, new object[0]);
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Log("写入SQL失败:" + sqlContent + "(" + ex.Message + ")");
+                                    }
                                 }
                                 try
                                 {
