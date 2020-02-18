@@ -2,7 +2,7 @@ namespace FastDev.Model.Form
 {
    using System;
    using System.Collections.Generic;
-public partial class case_law_case : FastDev.Model.Entity.case_law_case
+public partial class case_Info : FastDev.Model.Entity.case_Info
 {
 public IList<string> ApplicableProcedure
 {
@@ -14,7 +14,7 @@ public IList<string> PenaltyType
 get;
 set;
 }
-public IList<string> CaseSource
+public IList<string> Region
 {
 get;
 set;
