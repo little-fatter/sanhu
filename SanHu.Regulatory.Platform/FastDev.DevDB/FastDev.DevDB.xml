@@ -116,6 +116,13 @@
             <param name="isAdd">是否是新增</param>
             <returns></returns>
         </member>
+        <member name="M:FastDev.DevDB.ServiceBase.GetIsLogicDelete(System.String)">
+            <summary>
+            获取是否含有系统字段，如果没有在 core_setting NoSysTable配置的都默认含有 系统字段 运行假删除
+            </summary>
+            <param name="modelName"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.DevDB.ServiceBase.ExecuteContentSql(FastDev.DevDB.DbContext,System.Collections.Generic.Dictionary{System.String,System.Object},System.String,System.Boolean)">
             <summary>
             执行文件中的sql
