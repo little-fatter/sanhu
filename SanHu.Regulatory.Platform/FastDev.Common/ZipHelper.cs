@@ -97,16 +97,15 @@ namespace FastDev.Common
 						using (FileStream fileStream = File.Create(unZipDir + nextEntry.Name))
 						{
 							int num = 2048;
-							byte[] array = new byte[2048];
+							byte[] array = new byte[num];
 							while (true)
 							{
-								bool flag = true;
-								num = zipInputStream.Read(array, 0, array.Length);
-								if (num <= 0)
+								int redCount = zipInputStream.Read(array, 0, array.Length);
+								if (redCount <= 0)
 								{
 									break;
 								}
-								fileStream.Write(array, 0, num);
+								fileStream.Write(array, 0, redCount);
 							}
 						}
 					}

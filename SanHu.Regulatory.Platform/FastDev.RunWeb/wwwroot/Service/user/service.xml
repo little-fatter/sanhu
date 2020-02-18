@@ -2,7 +2,7 @@
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <model name="user" title="frameworkuser" textField="Id" moduleName="res" moduleTitle="基础资料" notIncludeSysFields="Y" dbName="framework" />
     <fields>
-        <field name="Id" dbName="Id" title="Id" type="string" length="50" isPK="N" />
+        <field name="Id" dbName="Id" title="Id" type="string" length="50" isPK="Y" />
         <field name="Name" dbName="Name" title="Name" type="string" length="50" isPK="N" />
         <field name="AccountId" dbName="AccountId" title="AccountId" type="string" length="50" isPK="N" />
         <field name="TenantId" dbName="TenantId" title="TenantId" type="string" length="50" isPK="N" />
@@ -13,13 +13,7 @@
         <field name="Password" dbName="Password" title="Password" type="string" length="50" isPK="N" />
         <field name="Avatar" dbName="Avatar" title="Avatar" type="string" length="50" isPK="N" />
         <field name="Remark" dbName="Remark" title="Remark" type="string" length="50" isPK="N" />
-        <field name="CreateTime" dbName="CreateTime" title="CreateTime" type="datetime" isPK="N" />
-        <field name="Creator" dbName="Creator" title="Creator" type="string" length="50" isPK="N" />
-        <field name="CreatorId" dbName="CreatorId" title="CreatorId" type="string" length="50" isPK="N" />
-        <field name="UpdateTime" dbName="UpdateTime" title="UpdateTime" type="datetime" isPK="N" />
-        <field name="Updator" dbName="Updator" title="Updator" type="string" length="50" isPK="N" />
-        <field name="UpdatorId" dbName="UpdatorId" title="UpdatorId" type="string" length="50" isPK="N" />
-        <field name="Thirdparty" dbName="Thirdparty" title="Thirdparty" type="string" length="50" isPK="N" />
+        <field name="Organizations" dbName="userOrganizations" title="组织" type="many2many" relationModel="organizationuser" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

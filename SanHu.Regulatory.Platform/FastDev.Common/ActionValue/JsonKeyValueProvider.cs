@@ -20,14 +20,15 @@ namespace FastDev.Common.ActionValue
                 {
                     var body = actionContext.HttpContext.Request.Body;
                     actionContext.HttpContext.Request.EnableBuffering();
-                    using (var reader = new StreamReader(body, Encoding.UTF8))
+                    using (var reader = new BinaryReader(body, Encoding.UTF8))
                     {
-                        char[] buff = new char[4096];
+                        int len = 4096;
+                        byte[] buff = new byte[len];
                         StringBuilder jsonBody = new StringBuilder();
                         while (reader.Read(buff, 0, buff.Length) > 0)
                         {
-                            jsonBody.Append(buff);
-                            buff = new char[4096];
+                            jsonBody.Append(Encoding.UTF8.GetString(buff));
+                            buff = new byte[len];
                         }
                         if (jsonBody.Length != 0)
                         {

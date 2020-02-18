@@ -63,7 +63,7 @@ namespace FastDev.DevDB
 
         protected Dictionary<string, object> _modelConfigCache;
 
-
+        private static List<string> RealDeleteTable = null;
 
         protected string ModelName
         {
@@ -643,7 +643,7 @@ namespace FastDev.DevDB
 
         public virtual void Init(string model)
         {
-            ModelName = model;           
+            ModelName = model;
             QueryDb = GetConfigDB();
         }
 
@@ -800,7 +800,7 @@ namespace FastDev.DevDB
             DbContext dbContext = GetConfigDB();
             try
             {
-                
+
                 List<core_formula> actions = GetActions("where model = @0 and (type = 'C1' or type = 'D1') and (isStop is null or isStop = 0)", ModelName);
                 Dictionary<string, object> dics = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(objData));
                 foreach (core_formula item in actions)
@@ -891,11 +891,11 @@ namespace FastDev.DevDB
             return viewData;
         }
 
-        public FilterGroup PrevFilter(FilterGroup filter)
+        public FilterGroup PrevFilter(FilterGroup filter,string modelName)
         {
             try
             {
-                if (!GetCanDelete())
+                if (!GetIsLogicDelete(modelName))
                 {
                     return filter;
                 }
@@ -934,7 +934,7 @@ namespace FastDev.DevDB
             {
                 descriptor.Condition = new RightsServer(MainDb).AppendDataFilter(ModelName, descriptor.Condition);
             }
-            descriptor.Condition = PrevFilter(descriptor.Condition);
+            descriptor.Condition = PrevFilter(descriptor.Condition,ModelName);
             PagedData pageData = DataAccessHelper.GetPageData(QueryDb, ModelName, descriptor);
             if (pageData == null || pageData.Records == null || pageData.Records.Count == 0)
             {
@@ -958,9 +958,9 @@ namespace FastDev.DevDB
             if (EnabledRights)
             {
                 filterTree.filter = new RightsServer(MainDb).AppendDataFilter(filterTree.sourceModel, filterTree.filter);
-                filterTree.filter = PrevFilter(filterTree.filter);
+                filterTree.filter = PrevFilter(filterTree.filter, filterTree.sourceModel);
                 filterTree.filter2 = new RightsServer(MainDb).AppendDataFilter(filterTree.sourceModel2, filterTree.filter2);
-                filterTree.filter2 = PrevFilter(filterTree.filter2);
+                filterTree.filter2 = PrevFilter(filterTree.filter2,filterTree.sourceModel2);
             }
             return DataAccessHelper.GetTreeData(db, filterTree);
         }
@@ -983,7 +983,7 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter);
+            filter = PrevFilter(filter,ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, orderby);
             if (listData == null || listData.Count == 0)
             {
@@ -1009,7 +1009,7 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter);
+            filter = PrevFilter(filter,ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, null, "Name");
             afterGetDataDelegate_OnAfterGetNameData?.Invoke(filter, listData);
             return listData;
@@ -1020,14 +1020,46 @@ namespace FastDev.DevDB
             return null;
         }
 
-        private bool GetCanDelete()
+
+        private void InitRealDeleteTable()
+        {
+            if (RealDeleteTable == null)
+            {
+                RealDeleteTable = new List<string>();
+                string delModel = MainDb.ExecuteScalar<string>("select SettingValue from core_setting where SettingKey = @0", new object[1]
+              {
+                    "DataDeleteMode"
+              }).ToLower();
+                RealDeleteTable.Add(delModel);
+
+                string noSys = MainDb.ExecuteScalar<string>("select SettingValue from core_setting where SettingKey = @0", new object[1]
+              {
+                    "NoSysTable"
+              }).ToLower();
+                string[] tabs = noSys.Split(new char[] { ',', '，' });
+                RealDeleteTable.AddRange(tabs);
+            }
+        }
+        /// <summary>
+        /// 获取是否含有系统字段，如果没有在 core_setting NoSysTable配置的都默认含有 系统字段 运行假删除
+        /// </summary>
+        /// <param name="modelName"></param>
+        /// <returns></returns>
+        private bool GetIsLogicDelete(string modelName)
         {
             try
             {
-                return MainDb.ExecuteScalar<string>("select SettingValue from core_setting where SettingKey = @0", new object[1]
+                if (RealDeleteTable == null)
                 {
-                    "DataDeleteMode"
-                }).ToLower() == "flag";
+                    InitRealDeleteTable();
+                }
+                if (RealDeleteTable.Contains(modelName.ToLower())) return false;//不含有系统字段的，默认不允许逻辑删除
+
+                if (RealDeleteTable[0] == "flag")
+                {
+                    return true;
+                }
+                return false;
             }
             catch
             {
@@ -1041,7 +1073,7 @@ namespace FastDev.DevDB
             if (object_1 != null && object_1.Any())
             {
                 List<core_formula> actions = GetActions("where model = @0 and (type = 'C1' or type = 'D1')  and (isStop is null or isStop = 0)", modelName);
-                
+
                 ServiceConfig serviceConfig = GetServiceConfig(modelName);
                 if (EnabledRights)
                 {
@@ -1079,7 +1111,7 @@ namespace FastDev.DevDB
                             }
                         }
                     }
-                    if (GetCanDelete())
+                    if (GetIsLogicDelete(modelName))
                     {
                         num += dbContext.Execute("update " + modelName + " set status = @0 , modifydate = @1 , ModifyUserID = @2 where ID = @3", new object[4]
                         {
@@ -1093,7 +1125,7 @@ namespace FastDev.DevDB
                 }
                 filterTranslator.Group.op = "or";
                 filterTranslator.Translate();
-                if (!GetCanDelete())
+                if (!GetIsLogicDelete(modelName))
                 {
                     num += helper.Delete("where " + filterTranslator.CommandText, filterTranslator.Parms.ToArray());
                     List<Field> fields = serviceConfig.fields;
@@ -1170,7 +1202,7 @@ namespace FastDev.DevDB
             {
                 return ObEx.ToStr((object)Guid.NewGuid());
             }
-            
+
             ScriptEngine scriptEngine = new ScriptEngine();
             string code = "\r\n                function getResult()\r\n                { \r\n                    var data = #data#;\r\n                    return #exp#;\r\n                }\r\n            ".Replace("#data#", JsonHelper.SerializeObject(dics)).Replace("#exp#", uiType);
             scriptEngine.Execute(code);
@@ -1189,7 +1221,7 @@ namespace FastDev.DevDB
         {
             Type entityType = DataAccessHelper.GetEntityType(modelName);
             ServiceConfig modelConfig = GetServiceConfig(modelName);
-            
+
             List<string> igFields = new List<string>();
             object obj = FillDefaultValue(dbContext, modelName, isAdd, objData, ref igFields);
             object propertyValue = DataHelper.GetPropertyValue(entityType, obj, modelConfig.PKName);
@@ -1737,7 +1769,7 @@ namespace FastDev.DevDB
             PropertyInfo[] properties = type.GetProperties();
             List<string> recordProNames = properties.Select(p => p.Name).ToList();
             Func<object, object[]> func = DataHelper.CreateGetProperties(properties);
-            List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+            List<Dictionary<string, object>> lstRev = new List<Dictionary<string, object>>();
             foreach (object item in pageDatas)
             {
                 object[] recordValues = func(item);
@@ -1758,13 +1790,13 @@ namespace FastDev.DevDB
                         dictionary[item2] = func2(item2);
                     }
                 }
-                list.Add(dictionary);
+                lstRev.Add(dictionary);
             }
-            foreach (Field item3 in fields)
+            foreach (Field f in fields)
             {
-                if (!lstFileds.Contains(item3.name))
+                if (!lstFileds.Contains(f.name))
                 {
-                    if (item3.type == "many2one")
+                    if (f.type == "many2one")
                     {
                         if (isFromPagedData)
                         {
@@ -1775,7 +1807,7 @@ namespace FastDev.DevDB
                             if (serviceCfg.getpageddata.many2one != "*")
                             {
                                 string[] source = serviceCfg.getpageddata.many2one.Split(',');
-                                if (!source.Contains(item3.name))
+                                if (!source.Contains(f.name))
                                 {
                                     continue;
                                 }
@@ -1790,14 +1822,14 @@ namespace FastDev.DevDB
                             if (serviceCfg.getlist.many2one != "*")
                             {
                                 string[] source = serviceCfg.getlist.many2one.Split(',');
-                                if (!source.Contains(item3.name))
+                                if (!source.Contains(f.name))
                                 {
                                     continue;
                                 }
                             }
                         }
                     }
-                    else if (item3.type == "many2many")
+                    else if (f.type == "many2many")
                     {
                         if (isFromPagedData)
                         {
@@ -1808,7 +1840,7 @@ namespace FastDev.DevDB
                             if (serviceCfg.getpageddata.many2many != "*")
                             {
                                 string[] source = serviceCfg.getpageddata.many2many.Split(',');
-                                if (!source.Contains(item3.name))
+                                if (!source.Contains(f.name))
                                 {
                                     continue;
                                 }
@@ -1823,14 +1855,14 @@ namespace FastDev.DevDB
                             if (serviceCfg.getlist.many2many != "*")
                             {
                                 string[] source = serviceCfg.getlist.many2many.Split(',');
-                                if (!source.Contains(item3.name))
+                                if (!source.Contains(f.name))
                                 {
                                     continue;
                                 }
                             }
                         }
                     }
-                    else if (item3.type == "one2many")
+                    else if (f.type == "one2many")
                     {
                         if (isFromPagedData)
                         {
@@ -1841,7 +1873,7 @@ namespace FastDev.DevDB
                             if (serviceCfg.getpageddata.one2many != "*")
                             {
                                 string[] source = serviceCfg.getpageddata.one2many.Split(',');
-                                if (!source.Contains(item3.name))
+                                if (!source.Contains(f.name))
                                 {
                                     continue;
                                 }
@@ -1856,23 +1888,23 @@ namespace FastDev.DevDB
                             if (serviceCfg.getlist.one2many != "*")
                             {
                                 string[] source = serviceCfg.getlist.one2many.Split(',');
-                                if (!source.Contains(item3.name))
+                                if (!source.Contains(f.name))
                                 {
                                     continue;
                                 }
                             }
                         }
                     }
-                    foreach (Dictionary<string, object> item4 in list)
+                    foreach (Dictionary<string, object> itm in lstRev)
                     {
-                        if (item3.type == "many2one")
+                        if (f.type == "many2one")
                         {
-                            if (item4.ContainsKey(item3.dbName))
+                            if (itm.ContainsKey(f.dbName))
                             {
-                                object obj = item4[item3.dbName];
+                                object obj = itm[f.dbName];
                                 if (obj == null || ObEx.ToStr(obj) == "")
                                 {
-                                    item4[item3.name] = new List<string>
+                                    itm[f.name] = new List<string>
                                     {
                                         "",
                                         ""
@@ -1880,8 +1912,8 @@ namespace FastDev.DevDB
                                 }
                                 else
                                 {
-                                    string modeEntityText = DataAccessHelper.GetModeEntityText(dbContext, item3.relationModel, ObEx.ToStr(obj));
-                                    item4[item3.name] = new List<string>
+                                    string modeEntityText = DataAccessHelper.GetModeEntityText(dbContext, f.relationModel, ObEx.ToStr(obj));
+                                    itm[f.name] = new List<string>
                                     {
                                         ObEx.ToStr(obj),
                                         modeEntityText
@@ -1889,13 +1921,13 @@ namespace FastDev.DevDB
                                 }
                             }
                         }
-                        else if (item3.type == "many2many" && item4.ContainsKey(serviceCfg.PKName))
+                        else if (f.type == "many2many" && itm.ContainsKey(serviceCfg.PKName))
                         {
-                            string text = ObEx.ToStr(item4[serviceCfg.PKName]);
-                            string dbName = item3.dbName;
-                            string arg = modelName.Replace("_", "") + "ID";
-                            string arg2 = item3.relationModel.Replace("_", "") + "ID";
-                            List<string> list2 = dbContext.Fetch<string>(string.Format("select {0} from {1} where {2} = @0", arg2, dbName, arg), new object[1]
+                            string text = ObEx.ToStr(itm[serviceCfg.PKName]);
+                            string dbName = f.dbName;
+                            string filterField = modelName.Replace("_", "") + "ID";
+                            string selField = f.relationModel.Replace("_", "") + "ID";
+                            List<string> list2 = dbContext.Fetch<string>(string.Format("select {0} from {1} where {2} = @0", selField, dbName, filterField), new object[1]
                             {
                                 text
                             });
@@ -1904,7 +1936,7 @@ namespace FastDev.DevDB
                             {
                                 foreach (string item5 in list2)
                                 {
-                                    string modeEntityText = DataAccessHelper.GetModeEntityText(dbContext, item3.relationModel, item5);
+                                    string modeEntityText = DataAccessHelper.GetModeEntityText(dbContext, f.relationModel, item5);
                                     list3.Add(new List<string>
                                     {
                                         item5,
@@ -1912,13 +1944,13 @@ namespace FastDev.DevDB
                                     });
                                 }
                             }
-                            item4[item3.name] = list3;
+                            itm[f.name] = list3;
                         }
-                        else if (item3.type == "one2many" && item4.ContainsKey(serviceCfg.PKName))
+                        else if (f.type == "one2many" && itm.ContainsKey(serviceCfg.PKName))
                         {
-                            string text = ObEx.ToStr(item4[serviceCfg.PKName]);
-                            string relationModel = item3.relationModel;
-                            string relationField = item3.relationField;
+                            string text = ObEx.ToStr(itm[serviceCfg.PKName]);
+                            string relationModel = f.relationModel;
+                            string relationField = f.relationField;
                             Type entityType = DataAccessHelper.GetEntityType(relationModel);
                             dbContext.GetHelper(entityType);
                             List<Dictionary<string, object>> list4 = new List<Dictionary<string, object>>();
@@ -1933,12 +1965,12 @@ namespace FastDev.DevDB
                                     list4.Add(GetViewData(dbContext, relationModel, item6, relationField));
                                 }
                             }
-                            item4[item3.name] = list4;
+                            itm[f.name] = list4;
                         }
                     }
                 }
             }
-            return list;
+            return lstRev;
         }
 
         public Func<APIContext, object> GetAPIHandler(string id)
