@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace FastDev.Service
 {
-    public class core_modelfield : ServiceBase, IService
+    public class core_modelfieldService : ServiceBase, IService
     {
         // Methods
-        public core_modelfield()
+        public core_modelfieldService()
         {
         }
 

@@ -293,8 +293,11 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
-        public object MimeTypes { get; [NonAction]
-        private set; }
+        public object MimeTypes
+        {
+            get; [NonAction]
+            private set;
+        }
 
         [VaildateUser]
         [HttpPost]
@@ -1255,6 +1258,16 @@ namespace FastDev.RunWeb.Controllers
                     }
                     filters.groups.Add(filterGroup);
                 }
+            }
+            else if (modelName == "core_modelfield")
+            {//如果是查字段列表
+                if (string.IsNullOrEmpty(filters.op))
+                {
+                    filters.op = "and";
+                }
+                FilterGroup filterGroup = new FilterGroup();
+                filterGroup.rules.Add(new FilterRule("ModelID", modelName));
+                filters.groups.Add(filterGroup);
             }
         }
 

@@ -1608,6 +1608,7 @@
             var g = this;
             var p = this.options;
             var qs = g.getQueryStringByName("bind");
+            debugger;
             if (!qs) {
                 return null;
             }

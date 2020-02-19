@@ -156,7 +156,7 @@
                 //默认的编辑区域高度
                 initialFrameHeight: 480,
                 //更多其他参数，请参考ueditor.config.js中的配置项
-                serverUrl: '/Contents/UE/Controller.ashx'
+                serverUrl: '/ueditor/upload'
             });
             ue.addListener('ready', function (editor)
             {
@@ -1097,6 +1097,7 @@
                             popupselect_title: "选择： 模型字段",
                             popupselect_url: function ()
                             {
+                                debugger;
                                 if (!modelName) return false;
                                 var url = "/web/main/?model=core_modelfield&viewtype=list";
                                 bindStr = new pbc.base64().encode(JSON.stringify({

@@ -7,6 +7,7 @@
         <field name="ReporterType" dbName="ReporterType" title="上报者类型" type="status" relationModel="" relationField="" isPK="N" />
         <field name="Remarks" dbName="Remarks" title="事件描述" type="text" length="4000" relationModel="" relationField="" isPK="N" />
         <field name="EventLocation" dbName="EventLocationID" title="事件位置" type="many2one" relationModel="loc_dynamic_location" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Locationdescription" dbName="Locationdescription" title="位置描述" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

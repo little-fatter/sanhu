@@ -34,6 +34,11 @@ public string EventLocationID
 get;
 set;
 }
+public string Locationdescription
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
