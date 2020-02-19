@@ -76,11 +76,14 @@ namespace FastDev.DevDB
 			Condition = new FilterGroup();
 		}
 	}
-
-	public class Query
+	/// <summary>
+	/// 通用查询参数
+	/// </summary>
+	public class QueryParameter
 	{
 		public string id { get; set; }
 		public string model { get; set; }
 		public string key { get; set; }
+		public QueryDescriptor query { get; set; }
 	}
 }

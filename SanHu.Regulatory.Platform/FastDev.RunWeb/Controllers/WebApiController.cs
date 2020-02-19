@@ -6,16 +6,24 @@ using FastDev.Common;
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
 using FD.Common.ActionValue;
+using FD.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastDev.RunWeb.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class WebApiController : DevDB.ControllerBase
     {
-        [HttpGet]
+        /// <summary>
+        /// 分页数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <param name="fullJson"></param>
+        /// <param name="treeCondition"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpPost]
         public object PagedData(string id, string model, string fullJson, Dictionary<string, object> treeCondition, string key)
         {
             try
@@ -32,8 +40,17 @@ namespace FastDev.RunWeb.Controllers
                 }
                 ChangeFilterGroup(model, key, descriptor.Condition);
                 object pageData = service.GetPageData(descriptor);
-
-                return pageData;
+                var presult = pageData as PagedData;
+                if (presult!=null)
+                {
+                    return new PageQueryResult<Dictionary<string, object>>()
+                    {
+                        Total = (int)presult.Total,
+                        Rows=(List<Dictionary<string, object>>)presult.Records
+                    };
+                }
+                
+                return null;
             }
             catch (Exception ex)
             {

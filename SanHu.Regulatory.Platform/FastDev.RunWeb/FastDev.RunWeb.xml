@@ -98,6 +98,17 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebApiController.PagedData(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+            分页数据
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <param name="fullJson"></param>
+            <param name="treeCondition"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.RunWeb.Controllers.WebController.ExportExcel(System.String,System.String)">
             <summary>
             导出模板到Excel
