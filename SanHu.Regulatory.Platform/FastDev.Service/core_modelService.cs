@@ -9,11 +9,11 @@ namespace FastDev.Service
     /// <summary>
     /// 运行 读取core_model
     /// </summary>
-    public class core_model : ServiceBase, IService
+    public class core_modelService : ServiceBase, IService
     {
 
         // Methods
-        public core_model()
+        public core_modelService()
         {
         }
         /// <summary>

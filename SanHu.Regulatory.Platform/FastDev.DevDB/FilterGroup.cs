@@ -3,15 +3,22 @@ using System.Runtime.CompilerServices;
 
 namespace FastDev.DevDB
 {
+	/// <summary>
+	/// 条件过滤模型
+	/// </summary>
 	public class FilterGroup
 	{
-		
+		/// <summary>
+		/// 过滤条件
+		/// </summary>
 		public IList<FilterRule> rules
 		{
 			get;
 			set;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public string op
 		{
 			get;
