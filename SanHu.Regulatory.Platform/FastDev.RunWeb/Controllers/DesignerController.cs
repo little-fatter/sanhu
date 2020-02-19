@@ -637,7 +637,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 process.Start();
-                process.StandardInput.WriteLine("\"" + msBuild + "\" \"" + csproj_filename + "\"");
+                process.StandardInput.WriteLine(msBuild + " build \"" + csproj_filename + "\"");
                 process.StandardInput.WriteLine("exit");
                 cmdRev = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();

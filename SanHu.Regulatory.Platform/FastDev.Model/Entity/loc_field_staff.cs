@@ -1,60 +1,60 @@
-namespace FastDev.Model.Report
+namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class case_law_case
+public partial class loc_field_staff
 {
 public string ID
 {
 get;
 set;
 }
-public string CaseType
+public string StaffName
 {
 get;
 set;
 }
-public string CaseSource
+public string DepartmentID
 {
 get;
 set;
 }
-public string CaseTitle
+public string IsOnline
 {
 get;
 set;
 }
-public string CaseStatus
+public string Videocall
 {
 get;
 set;
 }
-public string ApplicableProcedureID
+public string VoiceIntercom
 {
 get;
 set;
 }
-public string CauseOfAction
+public string PhoneCall
 {
 get;
 set;
 }
-public string PenaltyDecisionNo
+public string refUserID
 {
 get;
 set;
 }
-public string PenaltyTypeID
+public decimal? Longitude
 {
 get;
 set;
 }
-public DateTime? CaseRegisterDay
+public decimal? Latitude
 {
 get;
 set;
 }
-public DateTime? CaseCloseDay
+public string LocationDesc
 {
 get;
 set;

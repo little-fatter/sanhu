@@ -10,13 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="XML\machine.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="XML\machine.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Compile Remove="wwwroot\updates\**" />
+    <Content Remove="wwwroot\updates\**" />
+    <Compile Remove="wwwroot\uploads\**" />
+    <Content Remove="wwwroot\uploads\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.0.0" />

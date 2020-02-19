@@ -9,7 +9,7 @@ public string ID
 get;
 set;
 }
-public string Id
+public string Name
 {
 get;
 set;

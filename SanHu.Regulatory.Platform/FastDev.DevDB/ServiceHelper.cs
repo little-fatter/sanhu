@@ -197,7 +197,7 @@ namespace FastDev.DevDB
 
         public static object GetSearchDataset(string model, string key)
         {
-            if (string.IsNullOrEmpty(model) || string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(model))
             {
                 return null;
             }
@@ -231,14 +231,20 @@ namespace FastDev.DevDB
                 else if (item.type == "many2one")
                 {
                     ServiceConfig serviceConfig2 = GetServiceConfig(item.relationModel);
+                   
                     if (serviceConfig2 != null)
                     {
+                        var qDB = string.IsNullOrEmpty(serviceConfig2.model.dbName) ? currentDb : SysContext.GetOtherDB(serviceConfig2.model.dbName);
                         string title = serviceConfig2.model.title;
                         string textField = serviceConfig2.model.textField;
                         if (textField != null)
                         {
-                            string text = string.Format("select ID as 'Value',{0} as 'Text' from {1} where {0} like '%{2}%'", textField, item.relationModel, key);
-                            List<SearchResultItem> list4 = currentDb.Query<SearchResultItem>(text, new object[0]).ToList();
+                            string nvSql = string.Format("select ID as 'Value',{0} as 'Text' from {1} where {0} like '%{2}%'", textField, item.relationModel, key);
+                            if (string.IsNullOrEmpty(key))
+                            {
+                                nvSql = string.Format("select ID as 'Value',{0} as 'Text' from {1} where {0}", textField, item.relationModel);
+                            }
+                            List<SearchResultItem> list4 = qDB.Query<SearchResultItem>(nvSql, new object[0]).ToList();
                             if (list4 != null && list4.Any())
                             {
                                 list.Add(new

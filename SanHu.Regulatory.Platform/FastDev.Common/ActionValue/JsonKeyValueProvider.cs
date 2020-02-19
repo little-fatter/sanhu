@@ -32,7 +32,14 @@ namespace FastDev.Common.ActionValue
                         }
                         if (jsonBody.Length != 0)
                         {
-                            JsonData = JObject.Parse(jsonBody.ToString());
+                            try
+                            {
+                                JsonData = JObject.Parse(jsonBody.ToString());
+                            }
+                            catch
+                            {
+                                JsonData = null;
+                            }
                         }
                         else
                         {

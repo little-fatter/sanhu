@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="loc_field_staff" title="外勤员工" textField="StaffName" moduleName="loc" moduleTitle="定位" dbName="" />
+    <fields>
+        <field name="StaffName" dbName="StaffName" title="姓名" type="string" length="50" isPK="N" />
+        <field name="Department" dbName="DepartmentID" title="部门" type="many2one" relationModel="organization" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="IsOnline" dbName="IsOnline" title="是否在线" type="status" relationModel="" relationField="" isPK="N" />
+        <field name="Videocall" dbName="Videocall" title="视频通话" type="string" length="50" isPK="N" />
+        <field name="VoiceIntercom" dbName="VoiceIntercom" title="语音对讲" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PhoneCall" dbName="PhoneCall" title="电话直拨" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="refUser" dbName="refUserID" title="关联用户" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Longitude" dbName="Longitude" title="经度" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="Latitude" dbName="Latitude" title="纬度" type="float" relationModel="" relationField="" isPK="N" />
+        <field name="LocationDesc" dbName="LocationDesc" title="地址描述" type="string" length="300" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Department,refUser" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Department,refUser" one2many="" many2many="" />
+</freedesign>

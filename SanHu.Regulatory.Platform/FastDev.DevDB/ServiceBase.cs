@@ -649,7 +649,12 @@ namespace FastDev.DevDB
 
         private DbContext GetConfigDB()
         {
-            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            return GetConfigDB(ModelName);
+        }
+        private DbContext GetConfigDB(string refModelName)
+        {
+            if (refModelName == ModelName) return MainDb;
+            ServiceConfig serviceConfig = GetServiceConfig(refModelName);
             if (serviceConfig != null && !string.IsNullOrEmpty(serviceConfig.model.dbName))
             {
                 //根据数据库连接名称，查询数据，获取连接字符串，生成链接
@@ -657,7 +662,6 @@ namespace FastDev.DevDB
             }
             return MainDb;
         }
-
         public void SetDb(DbContext db)
         {
             QueryDb = db;
@@ -1912,7 +1916,8 @@ namespace FastDev.DevDB
                                 }
                                 else
                                 {
-                                    string modeEntityText = DataAccessHelper.GetModeEntityText(dbContext, f.relationModel, ObEx.ToStr(obj));
+                                    DbContext relationDB = GetConfigDB(f.relationModel);
+                                    string modeEntityText = DataAccessHelper.GetModeEntityText(relationDB, f.relationModel, ObEx.ToStr(obj));
                                     itm[f.name] = new List<string>
                                     {
                                         ObEx.ToStr(obj),
@@ -1934,9 +1939,10 @@ namespace FastDev.DevDB
                             List<List<string>> list3 = new List<List<string>>();
                             if (list2 != null && list2.Any())
                             {
+                                DbContext relationDB = GetConfigDB(f.relationModel);
                                 foreach (string item5 in list2)
                                 {
-                                    string modeEntityText = DataAccessHelper.GetModeEntityText(dbContext, f.relationModel, item5);
+                                    string modeEntityText = DataAccessHelper.GetModeEntityText(relationDB, f.relationModel, item5);
                                     list3.Add(new List<string>
                                     {
                                         item5,
@@ -1954,7 +1960,8 @@ namespace FastDev.DevDB
                             Type entityType = DataAccessHelper.GetEntityType(relationModel);
                             dbContext.GetHelper(entityType);
                             List<Dictionary<string, object>> list4 = new List<Dictionary<string, object>>();
-                            List<string> list5 = dbContext.Fetch<string>(string.Format("select {0} from {1} where {2} = @0 order by CreateDate asc", "ID", relationModel, relationField), new object[1]
+                            DbContext relationDB = GetConfigDB(f.relationModel);
+                            List<string> list5 = relationDB.Fetch<string>(string.Format("select {0} from {1} where {2} = @0 order by CreateDate asc", "ID", relationModel, relationField), new object[1]
                             {
                                 text
                             });

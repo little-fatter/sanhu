@@ -2870,54 +2870,51 @@
 		 * @param {string} string
 		 * @return {?}
 		 */
-        var _utf8_encode = function (string) {
-            string = string.replace(/\r\n/g, "\n"); /** @type {string} */
-            var utftext = ""; /** @type {number} */
-            var i = 0;
-            for (; i < string.length; i++) {
-                var c = string.charCodeAt(i);
-                if (c < 128) { /** @type {string} */
-                    utftext = utftext + String.fromCharCode(c);
-                } else {
-                    if (c > 127 && c < 2048) { /** @type {string} */
-                        utftext = utftext + String.fromCharCode(c >> 6 | 192); /** @type {string} */
-                        utftext = utftext + String.fromCharCode(c & 63 | 128);
-                    } else { /** @type {string} */
-                        utftext = utftext + String.fromCharCode(c >> 12 | 224); /** @type {string} */
-                        utftext = utftext + String.fromCharCode(c >> 6 & 63 | 128); /** @type {string} */
-                        utftext = utftext + String.fromCharCode(c & 63 | 128);
-                    }
+        var _utf8_encode = function (str) {
+            var rs = '';
+            for (var i of str) {
+                var code = i.codePointAt(0);
+                if (code < 128) {
+                    rs += i;
+                } else if (code > 127 && code < 2048) {
+                    rs += String.fromCharCode((code >> 6) | 192, (code & 63) | 128);
+                } else if (code > 2047 && code < 65536) {
+                    rs += String.fromCharCode((code >> 12) | 224, ((code >> 6) & 63) | 128, (code & 63) | 128);
+                } else if (code > 65536 && code < 1114112) {
+                    rs += String.fromCharCode((code >> 18) | 240, ((code >> 12) & 63) | 128, ((code >> 6) & 63) | 128, (code & 63) | 128);
                 }
             }
-            return utftext;
+            return rs;
         };
         /**
 		 * @param {string} utftext
 		 * @return {?}
 		 */
-        var _utf8_decode = function (utftext) { /** @type {string} */
-            var string = ""; /** @type {number} */
-            var i = 0; /** @type {number} */
-            var c = c1 = c2 = 0;
-            for (; i < utftext.length;) {
-                c = utftext.charCodeAt(i);
-                if (c < 128) { /** @type {string} */
-                    string = string + String.fromCharCode(c);
+        var _utf8_decode = function (str) { /** @type {string} */
+            var rs = '';
+            for (var i = 0; i < str.length; i++) {
+                var code = str.charCodeAt(i);
+                console.log(code);
+                if ((240 & code) == 240) {
+                    var code1 = str.charCodeAt(i + 1),
+                        code2 = str.charCodeAt(i + 2),
+                        code3 = str.charCodeAt(i + 3);
+                    rs += String.fromCodePoint(((code & 7) << 18) | ((code1 & 63) << 12) | ((code2 & 63) << 6) | (code3 & 63));
+                    i += 3;
+                } else if ((224 & code) == 224) {
+                    var code1 = str.charCodeAt(i + 1),
+                        code2 = str.charCodeAt(i + 2);
+                    rs += String.fromCodePoint(((code & 15) << 12) | ((code1 & 63) << 6) | (code2 & 63));
+                    i += 2;
+                } else if ((192 & code) == 192) {
+                    var code1 = str.charCodeAt(i + 1);
+                    rs += String.fromCodePoint(((code & 31) << 6) | (code1 & 63));
                     i++;
-                } else {
-                    if (c > 191 && c < 224) {
-                        c2 = utftext.charCodeAt(i + 1); /** @type {string} */
-                        string = string + String.fromCharCode((c & 31) << 6 | c2 & 63); /** @type {number} */
-                        i = i + 2;
-                    } else {
-                        c2 = utftext.charCodeAt(i + 1);
-                        c3 = utftext.charCodeAt(i + 2); /** @type {string} */
-                        string = string + String.fromCharCode((c & 15) << 12 | (c2 & 63) << 6 | c3 & 63); /** @type {number} */
-                        i = i + 3;
-                    }
+                } else if ((128 & code) == 0) {
+                    rs += String.fromCharCode(code);
                 }
             }
-            return string;
+            return rs;
         };
     };
 })(jQuery);

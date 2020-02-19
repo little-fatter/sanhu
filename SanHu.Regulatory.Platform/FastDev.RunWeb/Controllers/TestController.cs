@@ -12,6 +12,11 @@ namespace FastDev.RunWeb.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        /// <summary>
+        /// 测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         [Authorize]
         public IActionResult Get()
         {
