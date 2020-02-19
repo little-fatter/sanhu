@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using FastDev.Common;
+using FastDev.DevDB;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -6,14 +9,21 @@ using System.Text;
 
 namespace FastDev.Service
 {
-    public class CaiYunApiService
+    class CaiYunApi : ServiceBase, IService
     {
         private string _token;
-        public CaiYunApiService(string token)
+        public CaiYunApi()
         {
-            _token = token;
+            OnGetAPIHandler += CaiYunApi_OnGetAPIHandler;
+            _token = ConfigurationManager.AppSettings["CaiYunApiToken"];
         }
-        public WeatherResponse GetWeather()
+
+        private Func<APIContext, object> CaiYunApi_OnGetAPIHandler(string id)
+        {
+            return GetWeather;
+        }
+
+        public WeatherResponse GetWeather(APIContext aPIContext)
         {
             HttpClient httpClient = new HttpClient();
             var result = httpClient.GetAsync($"https://api.caiyunapp.com/v2/{_token}/121.6544,25.1552/realtime.json").Result;
@@ -154,7 +164,4 @@ namespace FastDev.Service
         {
         }
     }
-
-
-
 }
