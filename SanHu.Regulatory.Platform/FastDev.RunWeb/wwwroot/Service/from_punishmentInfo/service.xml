@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="from_punishmentInfo" title="当场行政处罚决定书" textField="FormNumber" moduleName="form" moduleTitle="表单" dbName="" />
+    <fields>
+        <field name="FormNumber" dbName="FormNumber" title="表单编号" type="string" length="50" isPK="N" />
+        <field name="Party" dbName="Party" title="当事人" type="string" length="50" isPK="N" />
+        <field name="Fact" dbName="Fact" title="事实" type="string" length="500" isPK="N" />
+        <field name="Regulations" dbName="Regulations" title="规定" type="string" length="200" isPK="N" />
+        <field name="Reason" dbName="Reason" title="根据" type="string" length="200" isPK="N" />
+        <field name="Result" dbName="Result" title="结果" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="Type" dbName="Type" title="方式" type="string" length="50" isPK="N" />
+        <field name="RecordingTime" dbName="RecordingTime" title="记录时间" type="string" length="50" isPK="N" />
+        <field name="lawexecutor1" dbName="lawexecutor1" title="执法人1" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="lawexecutor2" dbName="lawexecutor2" title="执法人2" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="lawexecutor1Num" dbName="lawexecutor1Num" title="执法人1编号" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="lawexecutor2Num" dbName="lawexecutor2Num" title="执法人2编号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="from_confiscateVouch" title="没收物品凭证" textField="FormNumber" dbName="" />
+    <fields>
+        <field name="FormNumber" dbName="FormNumber" title="表单编号" type="string" length="50" isPK="N" />
+        <field name="Reason" dbName="Reason" title="原因" type="string" length="50" isPK="N" />
+        <field name="Party" dbName="Party" title="当事人" type="string" length="500" isPK="N" />
+        <field name="PunishmentInfoNum" dbName="PunishmentInfoNum" title="决定书编号" type="string" length="50" isPK="N" />
+        <field name="Time" dbName="Time" title="时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Executor" dbName="Executor" title="执行者" type="string" length="200" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>
