@@ -89,6 +89,46 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastDev.DevDB.FilterGroup">
+            <summary>
+            条件过滤模型
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.FilterGroup.rules">
+            <summary>
+            过滤条件
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.FilterGroup.op">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:FastDev.DevDB.FilterRule">
+            <summary>
+            过滤规则
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.FilterRule.field">
+            <summary>
+            字段
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.FilterRule.value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.FilterRule.op">
+            <summary>
+            对比条件 
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.FilterRule.type">
+            <summary>
+            类型
+            </summary>
+        </member>
         <member name="P:FastDev.DevDB.ServiceBase.MainDb">
             <summary>
             core_表格所在的数据库的db

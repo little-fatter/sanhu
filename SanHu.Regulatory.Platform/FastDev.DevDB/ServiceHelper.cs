@@ -567,7 +567,7 @@ namespace FastDev.DevDB
             //string binPath= HttpContext.Current.Server.ma();
             string dllPath = typeof(ServiceHelper).Assembly.CodeBase;
             string binPath = dllPath.Substring(0, dllPath.LastIndexOf("/") + 1);
-            string desDllPath = new Uri(binPath + "FastDev.Design.Service.dll").AbsolutePath;
+            string desDllPath = new Uri(binPath + "FastDev.Design.Service.dll").LocalPath;
             Assembly assembly = null;
             if (File.Exists(desDllPath))
             {
@@ -578,7 +578,7 @@ namespace FastDev.DevDB
                 type = assembly.GetType("FastDev.Design.Service." + model + "Service", false, true);
             if (type == null)
             {
-                desDllPath = new Uri(binPath + "FastDev.Service.dll").AbsolutePath;
+                desDllPath = new Uri(binPath + "FastDev.Service.dll").LocalPath;
                 if (File.Exists(desDllPath))
                 {
                     assembly = Assembly.Load("FastDev.Service");
