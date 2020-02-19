@@ -2,14 +2,14 @@ namespace FastDev.Model.Name
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class organization
+public partial class loc_field_staff
 {
-public string Name
+public string ID
 {
 get;
 set;
 }
-public string Id
+public string StaffName
 {
 get;
 set;
