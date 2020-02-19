@@ -29,11 +29,6 @@ public string ReportAddressy
 get;
 set;
 }
-public string ReportTime
-{
-get;
-set;
-}
 public string ReporterName
 {
 get;
@@ -59,27 +54,12 @@ public byte? NeedLawEnforcement
 get;
 set;
 }
-public string NeedTracking
-{
-get;
-set;
-}
 public string ReportDescription
 {
 get;
 set;
 }
-public string ConfirmationDescription
-{
-get;
-set;
-}
 public string ConfirmEventTypeID
-{
-get;
-set;
-}
-public string ConfirmTime
 {
 get;
 set;
@@ -105,6 +85,21 @@ get;
 set;
 }
 public string ConfirmAddressy
+{
+get;
+set;
+}
+public DateTime? ConfirmTime
+{
+get;
+set;
+}
+public byte? NeedTracking
+{
+get;
+set;
+}
+public string ConfirmationDescription
 {
 get;
 set;
