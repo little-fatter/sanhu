@@ -92,6 +92,32 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastDev.RunWeb.Controllers.TestController.Get">
+            <summary>
+            测试
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebController.ExportExcel(System.String,System.String)">
+            <summary>
+            导出模板到Excel
+            </summary>
+            <param name="templateId"></param>
+            <param name="filterCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebController.ExportGrid(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Grid数据导出到Excel
+            </summary>
+            <param name="string_7"></param>
+            <param name="listdataJSON"></param>
+            <param name="totaldataJSON"></param>
+            <param name="string_8"></param>
+            <param name="title"></param>
+            <param name="totalCellLeft"></param>
+            <returns></returns>
+        </member>
         <member name="P:FastDev.RunWeb.ServerNameConfig.MainServiceName">
             <summary>
             主框架名称

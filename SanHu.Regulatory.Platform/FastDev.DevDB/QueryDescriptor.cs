@@ -76,4 +76,11 @@ namespace FastDev.DevDB
 			Condition = new FilterGroup();
 		}
 	}
+
+	public class Query
+	{
+		public string id { get; set; }
+		public string model { get; set; }
+		public string key { get; set; }
+	}
 }
