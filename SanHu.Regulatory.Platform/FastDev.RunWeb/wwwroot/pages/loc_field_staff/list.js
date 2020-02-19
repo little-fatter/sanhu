@@ -78,7 +78,7 @@ function() {
                     },
                     valueField: "ID",
                     sourceFilter: null,
-                    textField: "Id",
+                    textField: "Name",
                     css: "combobox-selector",
                     popupselect_ismul: true,
                     popupselect_type: "popupselect",
@@ -108,7 +108,7 @@ function() {
                     },
                     valueField: "ID",
                     sourceFilter: null,
-                    textField: "Id",
+                    textField: "Name",
                     css: "combobox-selector",
                     popupselect_ismul: true,
                     popupselect_type: "popupselect",
@@ -204,7 +204,9 @@ function() {
                 type: "text"
             }],
             link: {},
-            addins: {}
+            addins: {
+                items: []
+            }
         },
         dataset: 'web/dataset?model=loc_field_staff&viewname=list'
     };
