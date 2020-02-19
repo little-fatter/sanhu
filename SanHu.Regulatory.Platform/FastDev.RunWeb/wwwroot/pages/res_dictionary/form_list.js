@@ -1,7 +1,9 @@
-﻿define([],
+define([],
 function() {
-    function view() {
-        var options = {
+
+    var exports = {
+        type: 'form',
+        options: {
             form: {
                 fields: [{
                     newline: 0,
@@ -16,14 +18,10 @@ function() {
                                 align: "left",
                                 display: "标题",
                                 name: "Title",
-                                name_textfield: "标题",
-                                align_textfield: "左对齐",
-                                type_textfield: "文本型",
                                 editorType: "text",
                                 editor: {
                                     type: "text"
-                                },
-                                editorType_textfield: "单行"
+                                }
                             },
                             {
                                 width: "100",
@@ -31,14 +29,10 @@ function() {
                                 align: "left",
                                 display: "代码",
                                 name: "ItemCode",
-                                name_textfield: "代码",
-                                align_textfield: "左对齐",
-                                type_textfield: "文本型",
                                 editorType: "text",
                                 editor: {
                                     type: "text"
-                                },
-                                editorType_textfield: "单行"
+                                }
                             },
                             {
                                 width: "100",
@@ -46,14 +40,10 @@ function() {
                                 align: "left",
                                 display: "排序",
                                 name: "SortNo",
-                                name_textfield: "排序",
-                                align_textfield: "左对齐",
-                                type_textfield: "文本型",
                                 editorType: "number",
                                 editor: {
                                     type: "number"
-                                },
-                                editorType_textfield: "数值"
+                                }
                             },
                             {
                                 display: "备注",
@@ -61,19 +51,15 @@ function() {
                                 type: "string",
                                 align: "left",
                                 name: "Remark",
-                                name_textfield: "备注",
-                                align_textfield: "左对齐",
-                                type_textfield: "文本型",
                                 editorType: "text",
                                 editor: {
                                     type: "text"
-                                },
-                                editorType_textfield: "单行"
+                                }
                             }],
                             title: ""
                         },
                         modeType: "editgrid",
-                        detailUrl: "/web/main/?model=res_dictionaryItems&viewtype=form",
+                        detailUrl: "web/main/?model=res_dictionaryItems&viewtype=form",
                         titleEdit: "修改： 字典明细项",
                         titleAdd: "新增：字典明细项",
                         one2many: true,
@@ -83,8 +69,6 @@ function() {
                         detailHeight: ""
                     },
                     type: "ref_grid_edit",
-                    type_textfield: "编辑表格",
-                    name_textfield: "明细项",
                     width: "100%",
                     hideLabel: 1
                 }]
@@ -92,20 +76,31 @@ function() {
             common: {
                 saveCallbackType: "toView"
             },
-            link: {}
-        };
-        return options;
-    }
-
-    var exports = {
-        type: 'form',
-        options: view(),
+            link: {},
+            type: "form",
+            addins: {
+                items: [{
+                    name: "增加数据打印按钮",
+                    title: "增加数据打印按钮(增加数据打印按钮)",
+                    value: {
+                        title: "增加数据打印按钮",
+                        value: {
+                            buttonText: "打印数据"
+                        }
+                    }
+                }]
+            }
+        },
         dataset: 'web/dataset?model=res_dictionary&viewname=form_list'
     };
     exports.options.model = {
         name: 'res_dictionary',
         title: '字典'
     };
+
+    exports.service = function service(page) {
+
+};
 
     return exports;
 });
