@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace FastDev.Service
 {
-    public class core_module : ServiceBase, IService
+    public class core_moduleService : ServiceBase, IService
     {
 
         // Methods
-        public core_module()
+        public core_moduleService()
         {
         }
 
