@@ -4,12 +4,12 @@ namespace FastDev.Model.Name
  using System.Runtime.CompilerServices;
 public partial class organization
 {
-public string Name
+public string ID
 {
 get;
 set;
 }
-public string Id
+public string Name
 {
 get;
 set;

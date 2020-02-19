@@ -651,9 +651,10 @@ namespace FastDev.DevDB
         {
             return GetConfigDB(ModelName);
         }
-        private DbContext GetConfigDB(string modelName)
+        private DbContext GetConfigDB(string refModelName)
         {
-            ServiceConfig serviceConfig = GetServiceConfig(modelName);
+            if (refModelName == ModelName) return MainDb;
+            ServiceConfig serviceConfig = GetServiceConfig(refModelName);
             if (serviceConfig != null && !string.IsNullOrEmpty(serviceConfig.model.dbName))
             {
                 //根据数据库连接名称，查询数据，获取连接字符串，生成链接

@@ -36,10 +36,12 @@ function() {
                         detailParms: {
                             model: "organization"
                         },
-                        valueField: "Id",
+                        valueField: "ID",
                         sourceFilter: null,
                         textField: "Name",
-                        many2one: true
+                        many2one: true,
+                        select_updatematch_source: "",
+                        select_updatematch_target: ""
                     },
                     type: "ref_select",
                     width: "",
@@ -123,7 +125,7 @@ function() {
                         detailParms: {
                             model: "user"
                         },
-                        valueField: "Id",
+                        valueField: "ID",
                         sourceFilter: null,
                         textField: "Name",
                         many2one: true,
