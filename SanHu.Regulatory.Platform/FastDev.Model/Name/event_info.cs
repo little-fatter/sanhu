@@ -9,7 +9,7 @@ public string ID
 get;
 set;
 }
-public string Title
+public string objId
 {
 get;
 set;
