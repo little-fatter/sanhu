@@ -47,9 +47,39 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/form/base-form',
-            name: 'BaseForm',
-            component: () => import('@/views/form/BasicForm'),
-            meta: { title: '基础表单', keepAlive: true }
+            name: 'Index',
+            component: () => import('@/views/form/index'),
+            meta: { title: '表单列表', keepAlive: true }
+          },
+          {
+            path: '/form/form-details',
+            name: 'FormDetails',
+            component: () => import('@/views/form/formDetails'),
+            meta: { title: '表单详情', keepAlive: false }
+          },
+          {
+            path: '/form/form-edit',
+            name: 'FormEdit',
+            component: () => import('@/views/form/formEdit'),
+            meta: { title: '编辑表单', keepAlive: false }
+          },
+          {
+            path: '/form/form-add-list',
+            name: 'FormAddList',
+            component: () => import('@/views/form/formAddList'),
+            meta: { title: '新建表单列表', keepAlive: true }
+          },
+          {
+            path: '/form/form-add',
+            name: 'FormAdd',
+            component: () => import('@/views/form/formAdd'),
+            meta: { title: '新建表单', keepAlive: false }
+          },
+          {
+            path: '/form/form-print',
+            name: 'FormPrint',
+            component: () => import('@/views/form/formPrint'),
+            meta: { title: '表单打印', keepAlive: false }
           },
           {
             path: '/form/step-form',
