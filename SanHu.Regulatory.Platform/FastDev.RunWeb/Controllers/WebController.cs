@@ -4605,7 +4605,8 @@ namespace FastDev.RunWeb.Controllers
             //WorkflowContext wfContext = jsonContext..GetObject<WorkflowContext>(fullJson);
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
             DbContext currentDb = SysContext.GetCurrentDb();
-            IWorkflowService workflowService = new WorkflowService();
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
             workflowService.DbContext = currentDb;
             try
             {

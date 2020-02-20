@@ -1634,7 +1634,7 @@ namespace FastDev.DevDB
                       where !disabledFields.Contains(a.name)
                       select a).ToList();
             action(text, id);
-            if (string.IsNullOrEmpty(refField))
+            if (string.IsNullOrEmpty(refField)&&serviceConfig.model.notIncludeSysFields!="Y")
             {
                 try
                 {

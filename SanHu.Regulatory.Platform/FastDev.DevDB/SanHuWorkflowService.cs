@@ -6,15 +6,61 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using FastDev.DevDB;
-
-namespace FastDev.Service
+namespace FastDev.DevDB
 {
     /// <summary>
     /// 三湖项目关于工作流的实现
     /// </summary>
     public class SanHuWorkflowService : IWorkflowService
     {
+        public class user
+        {
+            public string Id
+            {
+                get;
+                set;
+            }
+            public string Name
+            {
+                get;
+                set;
+            }
+            public string AccountId
+            {
+                get;
+                set;
+            }
+            public string TenantId
+            {
+                get;
+                set;
+            }
+            public string Sex
+            {
+                get;
+                set;
+            }
+            public string Mobile
+            {
+                get;
+                set;
+            }
+            public string Email
+            {
+                get;
+                set;
+            }
+            public string Avatar
+            {
+                get;
+                set;
+            }
+            public string Remark
+            {
+                get;
+                set;
+            }
+        }
 
         private DbContext wfContext;
 
@@ -907,7 +953,7 @@ namespace FastDev.Service
                 {
                     dictionary["isToNext"] = item.IsToNextTask;
                 }
-                dictionary["user"] = dbContext.FirstOrDefault<FastDev.Model.Mini.user>("where ID = @0", new object[1]
+                dictionary["user"] = dbContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
                 {
                     core_workflowExecutorStatus.ExecutorID
                 });
@@ -1072,10 +1118,10 @@ namespace FastDev.Service
             string sql = "select ID,Name from user where ";
             sql = (string.IsNullOrEmpty(commandText) ? (sql + "1=1") : (sql + commandText));
             List<List<string>> list = new List<List<string>>();
-            List<Model.Mini.user> list2 = fwContext.Fetch<Model.Mini.user>(sql, filterTranslator.Parms.ToArray());
+            List<SanHuWorkflowService.user> list2 = fwContext.Fetch<SanHuWorkflowService.user>(sql, filterTranslator.Parms.ToArray());
             if (list2 != null)
             {
-                foreach (Model.Mini.user item in list2)
+                foreach (SanHuWorkflowService.user item in list2)
                 {
                     list.Add(new List<string>
                     {
@@ -1090,16 +1136,16 @@ namespace FastDev.Service
         private void FillWorkflowUser(Dictionary<string, object> dicNodes, ViewNode viewNode_0, core_workflowProject workflowProjectItem)
         {
             new List<string>();
-            List<string> list = new List<string>();
-            List<string> value = new List<string>();
+            List<string> lstDepartments = new List<string>();
+            List<string> lstCompanys = new List<string>();
             new List<string>();
-            List<List<string>> list2 = FindWorkflowExecutors(viewNode_0, workflowProjectItem);
-            if (list2.Any())
+            List<List<string>> lstUsers = FindWorkflowExecutors(viewNode_0, workflowProjectItem);
+            if (lstUsers.Any())
             {
                 FilterTranslator filterTranslator = new FilterTranslator();
                 filterTranslator.Group = new FilterGroup();
                 filterTranslator.Group.op = "or";
-                foreach (List<string> item in list2)
+                foreach (List<string> item in lstUsers)
                 {
                     filterTranslator.Group.rules.Add(new FilterRule
                     {
@@ -1108,40 +1154,26 @@ namespace FastDev.Service
                         value = item[0]
                     });
                 }
-                string str = "select ID from res_department where ";
+                string depSql = "select ID from organization where ";
                 string commandText = filterTranslator.CommandText;
-                str = (string.IsNullOrEmpty(commandText) ? (str + "1=1") : (str + commandText));
-                List<IdItem> lstDepartmentIds = wfContext.Fetch<IdItem>(str, filterTranslator.Parms.ToArray());
-                list = ((lstDepartmentIds == null) ? new List<string>() : lstDepartmentIds.Select(f => f.ID).ToList());
-                if (list.Any())
+                depSql = (string.IsNullOrEmpty(commandText) ? (depSql + "1=1") : (depSql + commandText));
+                List<IdItem> lstDepartmentIds = fwContext.Fetch<IdItem>(depSql, filterTranslator.Parms.ToArray());
+                lstDepartments = ((lstDepartmentIds == null) ? new List<string>() : lstDepartmentIds.Select(f => f.ID).ToList());
+                if (lstDepartments.Any())
                 {
-                    filterTranslator = new FilterTranslator();
-                    filterTranslator.Group = new FilterGroup();
-                    filterTranslator.Group.op = "or";
-                    foreach (string item2 in list)
-                    {
-                        filterTranslator.Group.rules.Add(new FilterRule
-                        {
-                            field = "ID in (select CompanyID from res_department where ID = {0})",
-                            type = "sql",
-                            value = item2
-                        });
-                    }
-                    string comSql = "select ID from res_company where ";
-                    commandText = filterTranslator.CommandText;
-                    comSql = (string.IsNullOrEmpty(commandText) ? (comSql + "1=1") : (comSql + commandText));
-                    List<IdItem> lstCompanyIds = wfContext.Fetch<IdItem>(comSql, filterTranslator.Parms.ToArray());
+                    string comSql = "select ID from organization where ParentID=0";
+                    List<IdItem> lstCompanyIds = fwContext.Fetch<IdItem>(comSql, filterTranslator.Parms.ToArray());
                     if (lstCompanyIds != null)
                     {
                         lstCompanyIds.Select(f => f.ID).ToList();
                     }
-                    value = ((lstCompanyIds == null) ? new List<string>() : lstCompanyIds.Select(d => d.ID).ToList());
+                    lstCompanys = ((lstCompanyIds == null) ? new List<string>() : lstCompanyIds.Select(d => d.ID).ToList());
                 }
             }
             dicNodes["userFilter"] = GetUserFilterByWorkflowProject(viewNode_0, workflowProjectItem);
-            dicNodes["users"] = list2;
-            dicNodes["departments"] = list;
-            dicNodes["companys"] = value;
+            dicNodes["users"] = lstUsers;
+            dicNodes["departments"] = lstDepartments;
+            dicNodes["companys"] = lstCompanys;
         }
 
         private ViewNode GetBranchNode(WorkflowContext workflowContext_0, ViewModel viewModel_0, ViewNode viewNode_0)
