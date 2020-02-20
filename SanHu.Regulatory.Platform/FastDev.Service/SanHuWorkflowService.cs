@@ -1,56 +1,20 @@
 using Jurassic;
 using FastDev.Common;
 using FastDev.DevDB.Model;
-using FastDev.DevDB.Model.Mini;
 using FastDev.DevDB.Workflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using FastDev.DevDB;
 
-namespace FastDev.DevDB
+namespace FastDev.Service
 {
-    public class WorkflowService : IWorkflowService
+    /// <summary>
+    /// 三湖项目关于工作流的实现
+    /// </summary>
+    public class SanHuWorkflowService : IWorkflowService
     {
-        public class WFLogItem
-        {
-
-            public string taskId
-            {
-                get;
-                set;
-            }
-
-            public string taskTitle
-            {
-                get;
-                set;
-            }
-
-            public string taskType
-            {
-                get;
-                set;
-            }
-
-            public string handlerType
-            {
-                get;
-                set;
-            }
-
-            public List<Dictionary<string, object>> items
-            {
-                get;
-                set;
-            }
-
-            public WFLogItem()
-            {
-
-
-            }
-        }
 
         private DbContext wfContext;
 
@@ -67,10 +31,11 @@ namespace FastDev.DevDB
                 wfContext = value;
             }
         }
+        private DbContext fwContext;//三湖框架的数据库
 
-        public WorkflowService()
+        public SanHuWorkflowService(DbContext SanHuFrameworkDb)
         {
-
+            fwContext = SanHuFrameworkDb;
             wfContext = null;
             wfModelName = null;
             wfModelObj = null;
@@ -782,7 +747,7 @@ namespace FastDev.DevDB
                 else if (activeNode.backType == "3")
                 {
                     IList<ViewNode> source = CombinNodesByTarget(viewNode, viewModel);
-                    List<FastDev.DevDB.Model.Mini.core_workflowTask> list7 = dbContext.Fetch<FastDev.DevDB.Model.Mini.core_workflowTask>("where ProejctID = @0", new object[1]
+                    List<core_workflowTask> list7 = dbContext.Fetch<core_workflowTask>("where ProejctID = @0", new object[1]
                     {
                         core_workflowProject.ID
                     });
@@ -942,7 +907,7 @@ namespace FastDev.DevDB
                 {
                     dictionary["isToNext"] = item.IsToNextTask;
                 }
-                dictionary["user"] = dbContext.FirstOrDefault<FastDev.DevDB.Model.Mini.core_user>("where ID = @0", new object[1]
+                dictionary["user"] = dbContext.FirstOrDefault<FastDev.Model.Mini.user>("where ID = @0", new object[1]
                 {
                     core_workflowExecutorStatus.ExecutorID
                 });
@@ -1086,7 +1051,7 @@ namespace FastDev.DevDB
             {
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = "ID in (select CoreUserID from core_userRole where CoreRoleID = {0})",
+                    field = "ID in (select UserID from roleuser where RoleId = {0})",
                     type = "sql",
                     value = item6
                 });
@@ -1094,7 +1059,6 @@ namespace FastDev.DevDB
             filterGroup.op = "or";
             return filterGroup;
         }
-
         private List<List<string>> FindWorkflowExecutors(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
         {
             if (viewNode_0.nodeType == WorkflowNodeType.End)
@@ -1105,18 +1069,18 @@ namespace FastDev.DevDB
             filterTranslator.Group = GetUserFilterByWorkflowProject(viewNode_0, core_workflowProject_0);
             filterTranslator.Translate();
             string commandText = filterTranslator.CommandText;
-            string sql = "select ID,RealName from core_user where ";
+            string sql = "select ID,Name from user where ";
             sql = (string.IsNullOrEmpty(commandText) ? (sql + "1=1") : (sql + commandText));
             List<List<string>> list = new List<List<string>>();
-            List<FastDev.DevDB.Model.Mini.core_user> list2 = wfContext.Fetch<FastDev.DevDB.Model.Mini.core_user>(sql, filterTranslator.Parms.ToArray());
+            List<Model.Mini.user> list2 = fwContext.Fetch<Model.Mini.user>(sql, filterTranslator.Parms.ToArray());
             if (list2 != null)
             {
-                foreach (FastDev.DevDB.Model.Mini.core_user item in list2)
+                foreach (Model.Mini.user item in list2)
                 {
                     list.Add(new List<string>
                     {
-                        item.ID,
-                        item.RealName
+                        item.Id,
+                        item.Name
                     });
                 }
             }
@@ -1139,7 +1103,7 @@ namespace FastDev.DevDB
                 {
                     filterTranslator.Group.rules.Add(new FilterRule
                     {
-                        field = "ID in (select DepartmentID from core_user where ID = {0})",
+                        field = "ID in (select OrganizationId from organizationuser where UserID = {0})",
                         type = "sql",
                         value = item[0]
                     });
