@@ -1,32 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="event_info" title="事件信息" textField="Title" moduleName="case" moduleTitle="案件" dbName="" />
+    <model name="event_info" title="事件信息" textField="objId" moduleName="loc" moduleTitle="定位" notIncludeSysFields="Y" dbName="" />
     <fields>
-        <field name="Title" dbName="Title" title="标题" type="string" length="50" isPK="N" />
-        <field name="ReportAddress" dbName="ReportAddress" title="地址" type="string" length="200" isPK="N" />
-        <field name="ReportAddressx" dbName="ReportAddressx" title="地址x" type="string" length="50" isPK="N" />
-        <field name="ReportAddressy" dbName="ReportAddressy" title="地址y" type="string" length="50" isPK="N" />
-        <field name="ReporterName" dbName="ReporterName" title="上报人名称" type="string" length="50" isPK="N" />
-        <field name="ReporterPhone" dbName="ReporterPhone" title="上报人手机" type="string" length="50" isPK="N" />
-        <field name="EventState" dbName="EventStateID" title="事件状态" type="many2one" relationModel="res_dictionaryItems" relationField="" isPK="N" />
-        <field name="ProcessingResult" dbName="ProcessingResult" title="处理结果" type="string" length="50" isPK="N" />
-        <field name="NeedLawEnforcement" dbName="NeedLawEnforcement" title="需要执法" type="boolean" relationModel="" relationField="" isPK="N" />
-        <field name="ReportDescription" dbName="ReportDescription" title="上报描述" type="string" length="500" isPK="N" />
-        <field name="ConfirmEventType" dbName="ConfirmEventTypeID" title="确认事件类型" type="many2one" relationModel="res_dictionaryItems" relationField="" isPK="N" />
-        <field name="ConfirmLocation" dbName="ConfirmLocation" title="确认地点" type="string" length="200" isPK="N" />
-        <field name="ReportEventType" dbName="ReportEventTypeID" title="上报事件类型" type="many2one" relationModel="res_dictionaryItems" relationField="" isPK="N" />
-        <field name="ConfirmAddress" dbName="ConfirmAddress" title="确认上报地址" type="string" length="200" relationModel="" relationField="" isPK="N" />
-        <field name="ConfirmAddressx" dbName="ConfirmAddressx" title="确认上报地址x" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name="ConfirmAddressy" dbName="ConfirmAddressy" title="确认上报地址y" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name="&#x9; ReportTime" dbName="&#x9; ReportTime" title="上报时间" type="datetime" relationModel="" relationField="" isPK="N" />
-        <field name="ConfirmTime" dbName="ConfirmTime" title="确认发生时间" type="datetime" relationModel="" relationField="" isPK="N" />
-        <field name="NeedTracking" dbName="NeedTracking" title="需要跟踪" type="boolean" relationModel="" relationField="" isPK="N" />
-        <field name="ConfirmationDescription" dbName="ConfirmationDescription" title="确认描述" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="objId" dbName="objId" title="主键ID" type="string" length="50" isPK="Y" />
+        <field name="gldwOid" dbName="gldwOid" title="管理单位" type="string" length="50" isPK="N" />
+        <field name="reportType" dbName="reportType" title="上报类型：企业号10、公众号20" type="string" length="50" isPK="N" />
+        <field name="evtCode" dbName="evtCode" title="事件编码" type="string" length="50" isPK="N" />
+        <field name="evtTypeId" dbName="evtTypeId" title="事件类型ID" type="string" length="50" isPK="N" />
+        <field name="evtTypeIds" dbName="evtTypeIds" title="多个事件类型" type="string" length="50" isPK="N" />
+        <field name="evtFileId" dbName="evtFileId" title="事件照片" type="string" length="50" isPK="N" />
+        <field name="posFileId" dbName="posFileId" title="位置照片" type="string" length="50" isPK="N" />
+        <field name="x1" dbName="x1" title="x" type="string" length="50" isPK="N" />
+        <field name="y1" dbName="y1" title="y" type="string" length="50" isPK="N" />
+        <field name="lng" dbName="lng" title="百度坐标经度" type="string" length="50" isPK="N" />
+        <field name="lat" dbName="lat" title="百度坐标纬度" type="string" length="50" isPK="N" />
+        <field name="address" dbName="address" title="地址信息" type="string" length="50" isPK="N" />
+        <field name="remark" dbName="remark" title="事件描述" type="string" length="50" isPK="N" />
+        <field name="targetId" dbName="targetId" title="事件对象ID" type="string" length="50" isPK="N" />
+        <field name="targetName" dbName="targetName" title="事件对象名称" type="string" length="50" isPK="N" />
+        <field name="evtState" dbName="evtState" title="事件状态" type="string" length="50" isPK="N" />
+        <field name="wxUserId" dbName="wxUserId" title="上报人微信ID" type="string" length="50" isPK="N" />
+        <field name="wxCoordinate" dbName="wxCoordinate" title="微信坐标" type="string" length="50" isPK="N" />
+        <field name="orderNo" dbName="orderNo" title="排序" type="string" length="50" isPK="N" />
+        <field name="extField" dbName="extField" title="扩展属性" type="string" length="50" isPK="N" />
+        <field name="createTime" dbName="createTime" title="创建时间" type="string" length="50" isPK="N" />
+        <field name="finishTime" dbName="finishTime" title="完成时间" type="string" length="50" isPK="N" />
+        <field name="reportTime" dbName="reportTime" title="上报时间" type="string" length="50" isPK="N" />
+        <field name="stateIconCode" dbName="stateIconCode" title="事件状态图标编码" type="string" length="50" isPK="N" />
+        <field name="finishUserId" dbName="finishUserId" title="处理人" type="string" length="50" isPK="N" />
+        <field name="finishUserName" dbName="finishUserName" title="处理人姓名" type="string" length="50" isPK="N" />
+        <field name="finishFileId" dbName="finishFileId" title="处理图片" type="string" length="50" isPK="N" />
+        <field name="reportPhotoUrl" dbName="reportPhotoUrl" title="上报照片url" type="string" length="50" isPK="N" />
+        <field name="reportPhotoDto" dbName="reportPhotoDto" title="上报照片" type="string" length="50" isPK="N" />
+        <field name="finishPhotoUrl" dbName="finishPhotoUrl" title="整改照片url" type="string" length="50" isPK="N" />
+        <field name="finishPhotoDto" dbName="finishPhotoDto" title="整改照片" type="string" length="50" isPK="N" />
+        <field name="reportPhotoGroupId" dbName="reportPhotoGroupId" title="上报照片GroupId" type="string" length="50" isPK="N" />
+        <field name="finishPhotoGroupId" dbName="finishPhotoGroupId" title="整改照片GroupId" type="string" length="50" isPK="N" />
+        <field name="evtStateName" dbName="evtStateName" title="事件状态名" type="string" length="50" isPK="N" />
+        <field name="needNotice" dbName="needNotice" title="needNotice" type="string" length="50" isPK="N" />
+        <field name="evtTypeDisplayName" dbName="evtTypeDisplayName" title="事件类型显��名称" type="string" length="50" isPK="N" />
+        <field name="gldwName" dbName="gldwName" title="管理单位名称" type="string" length="50" isPK="N" />
+        <field name="reporterName" dbName="reporterName" title="上报人姓名" type="string" length="50" isPK="N" />
+        <field name="reportPhotoIdList" dbName="reportPhotoIdList" title="上报照片集合" type="string" length="50" isPK="N" />
+        <field name="finishPhotoList" dbName="finishPhotoList" title="整改照片集合" type="string" length="50" isPK="N" />
+        <field name="dealerName" dbName="dealerName" title="处理人姓名" type="string" length="50" isPK="N" />
+        <field name="auditStateName" dbName="auditStateName" title="审核状态名称" type="string" length="50" isPK="N" />
+        <field name="auditState" dbName="auditState" title="审核状态" type="string" length="50" isPK="N" />
+        <field name="finishLimitTime" dbName="finishLimitTime" title="整改期限时间" type="string" length="50" isPK="N" />
+        <field name="evtNos" dbName="evtNos" title="事件编号" type="string" length="50" isPK="N" />
+        <field name="objectId" dbName="objectId" title="对象ID" type="string" length="50" isPK="N" />
+        <field name="responseIds" dbName="responseIds" title="责任单位IDS" type="string" length="50" isPK="N" />
+        <field name="responseIdList" dbName="responseIdList" title="责任单位ID集合" type="string" length="50" isPK="N" />
+        <field name="responseId" dbName="responseId" title="责任单位ID" type="string" length="50" isPK="N" />
+        <field name="responseName" dbName="responseName" title="责任单位名称" type="string" length="50" isPK="N" />
+        <field name="queryBy" dbName="queryBy" title="查询方式" type="string" length="50" isPK="N" />
+        <field name="deleteFlagEk" dbName="deleteFlagEk" title="是否删除" type="string" length="50" isPK="N" />
+        <field name="responseRefId" dbName="responseRefId" title="关联表主键" type="string" length="50" isPK="N" />
+        <field name="dateRange" dbName="dateRange" title="查询时间" type="string" length="50" isPK="N" />
+        <field name="startDay" dbName="startDay" title="查询开始时间" type="string" length="50" isPK="N" />
+        <field name="endDay" dbName="endDay" title="查询结束时间" type="string" length="50" isPK="N" />
+        <field name="dateType" dbName="dateType" title="上报时间段" type="string" length="50" isPK="N" />
+        <field name="reporterIds" dbName="reporterIds" title="上报人" type="string" length="50" isPK="N" />
+        <field name="evtStateList" dbName="evtStateList" title="事件状态List" type="string" length="50" isPK="N" />
+        <field name="evtTypeList" dbName="evtTypeList" title="事件类型List" type="string" length="50" isPK="N" />
+        <field name="gldwOidList" dbName="gldwOidList" title="管理单位List" type="string" length="50" isPK="N" />
+        <field name="responseRefList" dbName="responseRefList" title="关联表主键集合" type="string" length="50" isPK="N" />
+        <field name="keyWord" dbName="keyWord" title="关键字" type="string" length="50" isPK="N" />
+        <field name="queryModeMp" dbName="queryModeMp" title="公众事件查询" type="string" length="50" isPK="N" />
+        <field name="timeoutFlag" dbName="timeoutFlag" title="是否超期" type="string" length="50" isPK="N" />
+        <field name="finishLimitStartTime" dbName="finishLimitStartTime" title="完成期限查询条件，未超期和超期的条件" type="string" length="50" isPK="N" />
+        <field name="finishLimitEndTime" dbName="finishLimitEndTime" title="完成期限查询条件，未超期和超期的条件" type="string" length="50" isPK="N" />
+        <field name="createUser" dbName="createUser" title="创建人" type="string" length="50" isPK="N" />
+        <field name="tipId" dbName="tipId" title="tipId" type="string" length="50" isPK="N" />
+        <field name="evtTypeIconCode" dbName="evtTypeIconCode" title="事件类型图标编码" type="string" length="50" isPK="N" />
+        <field name="finishLimitId" dbName="finishLimitId" title="整改期限ID" type="string" length="50" isPK="N" />
+        <field name="timeLimit" dbName="timeLimit" title="填写的整改时间（小时）" type="string" length="50" isPK="N" />
+        <field name="finishRemark" dbName="finishRemark" title="整改描述" type="string" length="50" isPK="N" />
+        <field name="limitType" dbName="limitType" title="整改期限类型（1手选 2填写）" type="string" length="50" isPK="N" />
+        <field name="isDangerReport" dbName="isDangerReport" title="是否是隐患事件" type="string" length="50" isPK="N" />
+        <field name="dorgId" dbName="dorgId" title="主管单位" type="string" length="50" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
-    <getlist base_fields="*" base_ignore_fields="" many2one="EventState,ConfirmEventType,ReportEventType" one2many="" many2many="" />
-    <getpageddata base_fields="*" base_ignore_fields="" many2one="EventState,ConfirmEventType,ReportEventType" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
 </freedesign>

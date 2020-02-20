@@ -914,7 +914,12 @@ namespace FastDev.RunWeb.Controllers
                 });
             }
         }
-
+        /// <summary>
+        /// 导出模板到Excel
+        /// </summary>
+        /// <param name="templateId"></param>
+        /// <param name="filterCode"></param>
+        /// <returns></returns>
         [VaildateUser]
         [HttpPost]
         public ActionResult ExportExcel(string templateId, string filterCode)
@@ -1025,7 +1030,16 @@ namespace FastDev.RunWeb.Controllers
                 });
             }
         }
-
+        /// <summary>
+        /// Grid数据导出到Excel
+        /// </summary>
+        /// <param name="string_7"></param>
+        /// <param name="listdataJSON"></param>
+        /// <param name="totaldataJSON"></param>
+        /// <param name="string_8"></param>
+        /// <param name="title"></param>
+        /// <param name="totalCellLeft"></param>
+        /// <returns></returns>
         [VaildateUser]
         [HttpPost]
         public ActionResult ExportGrid(string string_7, string listdataJSON, string totaldataJSON, string string_8, string title, int? totalCellLeft)

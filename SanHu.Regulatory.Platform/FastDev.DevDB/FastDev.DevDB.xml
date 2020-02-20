@@ -129,6 +129,11 @@
             类型
             </summary>
         </member>
+        <member name="T:FastDev.DevDB.QueryParameter">
+            <summary>
+            通用查询参数
+            </summary>
+        </member>
         <member name="P:FastDev.DevDB.ServiceBase.MainDb">
             <summary>
             core_表格所在的数据库的db
@@ -246,6 +251,22 @@
             </summary>
             <param name="uInfo"></param>
             <returns></returns>
+        </member>
+        <member name="T:FD.Core.PageQueryResult`1">
+            <summary>
+            分页结果集
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:FD.Core.PageQueryResult`1.PageSize">
+             <summary>
+            每页结果数
+             </summary>
+        </member>
+        <member name="P:FD.Core.PageQueryResult`1.PageIndex">
+            <summary>
+            当前页数(从1开始)
+            </summary>
         </member>
     </members>
 </doc>
