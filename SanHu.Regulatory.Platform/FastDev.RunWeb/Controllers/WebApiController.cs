@@ -9,6 +9,7 @@ using FD.Common.ActionValue;
 using FD.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
@@ -45,6 +46,8 @@ namespace FastDev.RunWeb.Controllers
                 {
                     return new PageQueryResult<Dictionary<string, object>>()
                     {
+                        PageIndex= (int)descriptor.PageIndex,
+                        PageSize=(int)descriptor.PageSize,
                         Total = (int)presult.Total,
                         Rows=(List<Dictionary<string, object>>)presult.Records
                     };
@@ -58,7 +61,88 @@ namespace FastDev.RunWeb.Controllers
                 return new object();
             }
         }
+        /// <summary>
+        /// 明细
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="id"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public object DetailData(string model, string id, string filter)
+        {
+            try
+            {
+                FilterGroup filterGroup = FullJsonValue.GetObject<FilterGroup>(filter);
+                IService service = ServiceHelper.GetService(model);
+                Dictionary<string, object> detailData = service.GetDetailData(id, filterGroup);
+                return detailData;
+            }
+            catch (Exception ex)
+            {
+                ServiceHelper.Log(ex);
+                return null;
+            }
+        }
+        /// <summary>
+        /// 保存数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="method"></param>
+        /// <param name="fullJson"></param>
+        /// <param name="parm"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public RestResult<object> Save(string model, string method, string fullJson, string parm)
+        {
+            //IL_004f: Unknown result type (might be due to invalid IL or missing references)
+            try
+            {
+                Type entityType = DataAccessHelper.GetEntityType(model, "Form");
+                var postdata = FullJsonValue.GetObject(entityType, fullJson);
+                if (postdata == null)
+                {
+                    throw new Exception("提交数据处理失败");
+                }
+                if ((model.ToLower() == "core_user" || model.ToLower() == "core_role") && IsWebLocked())
+                {
+                    throw new UserException("没有操作权限");
+                }
+                IService service = ServiceHelper.GetService(model);
+                if (parm != null)
+                {
+                    service.ServiceParm = parm;
+                }
+                bool flag = method == "create";
+                object obj = null;
+                object propertyValue = DataHelper.GetPropertyValue(postdata.GetType(), postdata, "data");
+                obj = ((!flag) ? service.Update(propertyValue) : service.Create(propertyValue));
+                return new RestResult<object>
+                {
+                    Code = 200,
+                    Message = obj.ToString(),
+                    Data = service.ServiceData
+                };
+            }
+            catch (Exception ex)
+            {
+                ServiceHelper.Log(ex);
+                return null;
+            }
+        }
 
+        [NonAction]
+        private bool IsWebLocked()
+        {
+            try
+            {
+                return ConfigurationManager.AppSettings["WebLocked"] == "true";
+            }
+            catch
+            {
+                return false;
+            }
+        }
         [HttpPost]
         [NonAction]
         private void ChangeFilterGroup(string modelName, string key, FilterGroup filters)
