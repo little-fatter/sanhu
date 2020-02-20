@@ -134,6 +134,19 @@
             通用查询参数
             </summary>
         </member>
+        <member name="T:FastDev.DevDB.SanHuWorkflowService">
+            <summary>
+            三湖项目关于工作流的实现
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.GenNewStatus(System.String,System.String)">
+            <summary>
+            创建一个新的工作流状态
+            </summary>
+            <param name="strTaskId"></param>
+            <param name="strExcutorId"></param>
+            <returns></returns>
+        </member>
         <member name="P:FastDev.DevDB.ServiceBase.MainDb">
             <summary>
             core_表格所在的数据库的db

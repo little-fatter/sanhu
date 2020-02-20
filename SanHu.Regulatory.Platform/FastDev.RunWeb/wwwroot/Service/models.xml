@@ -82,5 +82,6 @@
         <models name="event_info" title="事件信息" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
         <models name="hasAttach" title="表测试有附件" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="roleuser" title="frameworkroleuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="event_info_tiny_view" title="事件信息简" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
     </models>
 </freedesign>
