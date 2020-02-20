@@ -56,7 +56,7 @@
         <field name="queryBy" dbName="queryBy" title="查询方式" type="string" length="50" isPK="N" />
         <field name="deleteFlagEk" dbName="deleteFlagEk" title="是否删除" type="string" length="50" isPK="N" />
         <field name="responseRefId" dbName="responseRefId" title="关联表主键" type="string" length="50" isPK="N" />
-        <field name="dateRange" dbName="dateRange" title="查询时间" type="string" length="50" isPK="N" />
+        <field name="dateRange" dbName="dateRange" title="���询时间" type="string" length="50" isPK="N" />
         <field name="startDay" dbName="startDay" title="查询开始时间" type="string" length="50" isPK="N" />
         <field name="endDay" dbName="endDay" title="查询结束时间" type="string" length="50" isPK="N" />
         <field name="dateType" dbName="dateType" title="上报时间段" type="string" length="50" isPK="N" />
