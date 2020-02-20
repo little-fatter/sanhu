@@ -475,7 +475,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-               
+
                 return Json(new
                 {
                     statusCode = "1",
@@ -4601,8 +4601,8 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public ActionResult Workflow(string id, string fullJson)
         {
-            var jsonContext= JObject.Parse(fullJson);
-            WorkflowContext wfContext =jsonContext.SelectToken("context").ToObject<WorkflowContext>();
+            var jsonContext = JObject.Parse(fullJson);
+            WorkflowContext wfContext = jsonContext.SelectToken("context").ToObject<WorkflowContext>();
             //WorkflowContext wfContext = jsonContext..GetObject<WorkflowContext>(fullJson);
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -4622,21 +4622,23 @@ namespace FastDev.RunWeb.Controllers
                     {
                         throw new UserException("业务单据必须指定");
                     }
-                    object context2 = workflowService.GetContext(wfContext);
+                    object bcontext = workflowService.GetContext(wfContext);
+                    var wfData = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(bcontext));
                     return Json(new AjaxResult
                     {
-                        data = context2,
+                        data = wfData,
                         statusCode = "1"
                     });
                 }
                 if (id == "log")
                 {
-                    object context2 = workflowService.GetLog(wfContext);
-                    return GetContentDataJson(new AjaxResult
+                    object logContext = workflowService.GetLog(wfContext);
+                    var wfData = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(logContext));
+                    return Json(new AjaxResult
                     {
-                        statusCode = "1"
-                    },
-                     JsonHelper.SerializeObject(context2));
+                        statusCode = "1",
+                        data= wfData
+                    });
                 }
                 return Json(new AjaxResult
                 {

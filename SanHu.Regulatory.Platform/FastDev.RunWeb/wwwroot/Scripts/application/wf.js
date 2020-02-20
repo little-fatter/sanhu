@@ -411,7 +411,7 @@
             var stateParam = this;
             var opts = this.options;
             pbc.ajax({
-                url: pbc.toUrl("/web/workflow/context"),
+                url: pbc.toUrl("/web/workflow?id=context"),
                 data: {
                     context: {
                         Context: opts.context,
