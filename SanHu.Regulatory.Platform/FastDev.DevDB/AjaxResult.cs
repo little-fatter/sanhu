@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FastDev.DevDB
 {
@@ -39,6 +40,20 @@ namespace FastDev.DevDB
 			{
 				statusCode = (value ? "1" : "3");
 			}
+		}
+		public string ToJsonString(string dataJson)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("{");
+			sb.Append("\"statusCode\":"+statusCode+",");
+			sb.Append("\"Success\":" + Success + ",");
+			if(!string.IsNullOrEmpty(id))
+				sb.Append("\"id\":\"" + id + "\",");
+			if (!string.IsNullOrEmpty(message))
+				sb.Append("\"message\":\"" + message + "\",");
+			sb.Append("\"data\":" + dataJson);
+			sb.Append("}");
+			return sb.ToString();
 		}
 
 		public AjaxResult()

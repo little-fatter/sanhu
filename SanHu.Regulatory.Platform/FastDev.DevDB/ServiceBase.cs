@@ -1928,13 +1928,13 @@ namespace FastDev.DevDB
                         }
                         else if (f.type == "many2many" && itm.ContainsKey(serviceCfg.PKName))
                         {
-                            string text = ObEx.ToStr(itm[serviceCfg.PKName]);
+                            string pkValue = ObEx.ToStr(itm[serviceCfg.PKName]);
                             string dbName = f.dbName;
                             string filterField = modelName.Replace("_", "") + "ID";
                             string selField = f.relationModel.Replace("_", "") + "ID";
                             List<string> list2 = dbContext.Fetch<string>(string.Format("select {0} from {1} where {2} = @0", selField, dbName, filterField), new object[1]
                             {
-                                text
+                                pkValue
                             });
                             List<List<string>> list3 = new List<List<string>>();
                             if (list2 != null && list2.Any())

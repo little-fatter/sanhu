@@ -31,6 +31,7 @@
         log: function () {
             var Piwik = this;
             var options = this.options;
+            debugger;
             Piwik.getLog(function () {
                 Piwik.openLogWin();
             });
@@ -443,7 +444,7 @@
             var objectCsv = this;
             var options = this.options;
             pbc.ajax({
-                url: pbc.toUrl("/web/workflow/log"),
+                url: pbc.toUrl("/web/workflow?id=log"),
                 data: {
                     context: {
                         Context: options.context,

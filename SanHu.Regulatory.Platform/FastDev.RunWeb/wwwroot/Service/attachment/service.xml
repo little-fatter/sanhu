@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="attachment" title="附件" textField="attach_type" moduleName="res" moduleTitle="基础资料" dbName="" />
+    <model name="attachment" title="附件" textField="url" moduleName="res" moduleTitle="基础资料" dbName="" />
     <fields>
         <field name="attach_type" dbName="attach_type" title="附件类型" type="string" length="50" enabledSearch="Y" isPK="N" />
         <field name="url" dbName="url" title="附件地址" type="string" length="50" isPK="N" />

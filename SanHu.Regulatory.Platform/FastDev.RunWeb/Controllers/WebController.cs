@@ -12,6 +12,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
@@ -4584,8 +4585,11 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult Workflow(string id, WorkflowContext wfContext)
+        public ActionResult Workflow(string id, string fullJson)
         {
+            var jsonContext= JObject.Parse(fullJson);
+            WorkflowContext wfContext =jsonContext.SelectToken("context").ToObject<WorkflowContext>();
+            //WorkflowContext wfContext = jsonContext..GetObject<WorkflowContext>(fullJson);
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
             DbContext currentDb = SysContext.GetCurrentDb();
             IWorkflowService workflowService = new WorkflowService();
@@ -4614,11 +4618,11 @@ namespace FastDev.RunWeb.Controllers
                 if (id == "log")
                 {
                     object context2 = workflowService.GetLog(wfContext);
-                    return Json(new AjaxResult
+                    return GetContentDataJson(new AjaxResult
                     {
-                        data = context2,
                         statusCode = "1"
-                    });
+                    },
+                     JsonHelper.SerializeObject(context2));
                 }
                 return Json(new AjaxResult
                 {

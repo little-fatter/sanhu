@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="hasAttach" title="表测试有附件" textField="NewField1" moduleName="res" moduleTitle="基础资料" dbName="" />
+    <fields>
+        <field name="NewField1" dbName="NewField1" title="字段1" type="string" length="50" isPK="N" />
+        <field name="NewField2" dbName="NewField2" title="字段2" type="string" length="50" isPK="N" />
+        <field name="NewField3" dbName="NewField3" title="字段3" type="string" length="50" isPK="N" />
+        <field name="Enclosure" dbName="EnclosureID" title="附件" type="many2one" relationModel="attachment" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="AttachmentMultiple" dbName="hasAttachAttachmentMultiple" title="附件多字段" type="many2many" relationModel="attachment" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Enclosure" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Enclosure" one2many="" many2many="" />
+</freedesign>
