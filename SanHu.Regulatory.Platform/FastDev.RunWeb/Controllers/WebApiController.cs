@@ -13,7 +13,8 @@ using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
-    public class WebApiController : DevDB.ControllerBase
+    [Route("[controller]/[action]")]
+    public class WebApiController : BaseController
     {
         /// <summary>
         /// 分页数据

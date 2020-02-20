@@ -33,7 +33,6 @@ using System.Web;
 
 namespace FastDev.RunWeb.Controllers
 {
-    [Route("[controller]/[action]")]
     public class WebController : BaseController
     {
         public class GridColumn
