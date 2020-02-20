@@ -1390,18 +1390,22 @@
             var options = this.options;
             var action = object.action;
             var readonly = object.readonly;
-            var type = object.viewName;
+            var viewName = object.viewName;
             var id = object.parm;
             var url = object.url;
+            
             if (!url) {
                 if (options.actions.viewForm) {
                     url = options.actions.viewForm;
                 } else {
+                    viewName = viewName || "form"; /** @type {string} */
                     if (options.formUrl) {
                         url = options.formUrl;
+                        if (url.indexOf(viewName + ".w") == -1) {//和默认的formUrl不一致
+                            url = "pages/" + options.model.name + "/" + viewName + ".w";
+                        }
                     } else {
-                        type = type || "form"; /** @type {string} */
-                        url = "pages/" + options.model.name + "/" + type + ".w";
+                        url = "pages/" + options.model.name + "/" + viewName + ".w";
                     }
                 }
             }
@@ -1486,7 +1490,7 @@
         },
         add: function () {
             var layoutController = this;
-            var opt = this.options;
+            var opt = this.options.common;
             layoutController.showFormView({
                 action: "add",
                 viewName: opt.formViewName
@@ -1494,7 +1498,8 @@
         },
         edit: function (p) {
             var layoutController = this;
-            var opt = this.options;
+            
+            var opt = this.options.common;
             layoutController.showFormView({
                 action: "edit",
                 viewName: opt.formViewName,
@@ -1503,7 +1508,7 @@
         },
         view: function (p) {
             var layoutController = this;
-            var opt = this.options;
+            var opt = this.options.common;
             layoutController.showFormView({
                 action: "view",
                 viewName: opt.formViewName,
@@ -1608,7 +1613,6 @@
             var g = this;
             var p = this.options;
             var qs = g.getQueryStringByName("bind");
-            debugger;
             if (!qs) {
                 return null;
             }

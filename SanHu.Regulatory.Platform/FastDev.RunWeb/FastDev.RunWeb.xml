@@ -48,11 +48,12 @@
             <param name="strJson"></param>
             <returns></returns>
         </member>
-        <member name="M:FastDev.RunWeb.Controllers.BaseController.GetContentDataJson(System.String)">
+        <member name="M:FastDev.RunWeb.Controllers.BaseController.GetContentDataJson(FastDev.DevDB.AjaxResult,System.String)">
             <summary>
             返回json
             </summary>
-            <param name="strJson"></param>
+            <param name="ajax">把AjaxResult 转为string输出，解决部分Json对象无法输出的问题</param>
+            <param name="dataJson">数据部分json</param>
             <returns></returns>
         </member>
         <member name="M:FastDev.RunWeb.Controllers.DesignerController.setup(System.String)">

@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
+using System.Text.Unicode;
 using System.Threading.Tasks;
+using FastDev.DevDB;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastDev.RunWeb.Controllers
@@ -30,14 +34,15 @@ namespace FastDev.RunWeb.Controllers
         /// <summary>
         /// 返回json
         /// </summary>
-        /// <param name="strJson"></param>
+        /// <param name="ajax">把AjaxResult 转为string输出，解决部分Json对象无法输出的问题</param>
+        /// <param name="dataJson">数据部分json</param>
         /// <returns></returns>
         [NonAction]
-        protected ContentResult GetContentDataJson(string strJson)
+        protected ContentResult GetContentDataJson(AjaxResult ajax, string dataJson)
         {
             var content = new ContentResult();
-            content.ContentType = "application/json";
-            content.Content = "{\"data\":" + strJson + "}";//把要返回的数据放入data字段中
+            content.ContentType = "application/json; charset=utf-8";
+            content.Content = "\r\n"+ajax.ToJsonString(dataJson)+"\r\n";//把要返回的数据放入data字段中
             return content;
         }
 
