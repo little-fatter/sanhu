@@ -44,6 +44,17 @@ function() {
                     name: "AssignUsers",
                     display: "分配用户",
                     type: "ref"
+                },
+                {
+                    width: "150",
+                    display: " 状态 ",
+                    name: "Status",
+                    name_text: " - 状态 - ",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "wfstatus",
+                    type_text: "工作流状态",
+                    editorType: ""
                 }]
             },
             common: {
@@ -116,14 +127,6 @@ function() {
                 type: "string"
             },
             {
-                display: "发起时间",
-                name: "InitiationTime",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
                 display: "主办人员",
                 name: "MainHandler",
                 editor: {
@@ -154,6 +157,14 @@ function() {
                     type: "string"
                 },
                 type: "string"
+            },
+            {
+                display: "发起时间",
+                name: "InitiationTime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
             },
             {
                 display: "AssignUsersID",

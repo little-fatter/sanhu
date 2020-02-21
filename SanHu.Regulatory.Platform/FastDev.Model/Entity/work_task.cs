@@ -49,6 +49,11 @@ public DateTime? InitiationTime
 get;
 set;
 }
+public DateTime? ExpectedCompletionTime
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

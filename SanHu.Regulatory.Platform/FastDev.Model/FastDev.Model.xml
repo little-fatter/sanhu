@@ -24,5 +24,25 @@
             巡检表
             </summary>
         </member>
+        <member name="T:FD.Model.Enum.EventState">
+            <summary>
+            事件状态
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventState.Undistributed">
+            <summary>
+            未分配
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventState.Allocation">
+            <summary>
+            分配
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventState.Close">
+            <summary>
+            已关闭
+            </summary>
+        </member>
     </members>
 </doc>

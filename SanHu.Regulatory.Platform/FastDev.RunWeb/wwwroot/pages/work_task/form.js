@@ -57,7 +57,7 @@ function() {
                     readonlyInEdit: 0
                 },
                 {
-                    newline: true,
+                    newline: 0,
                     name: "CoOrganizer",
                     label: "协办人员",
                     editor: {
@@ -70,10 +70,12 @@ function() {
                         boolean: "checkbox",
                         type: "text"
                     },
-                    type: "text"
+                    type: "text",
+                    width: "",
+                    readonlyInEdit: 0
                 },
                 {
-                    newline: false,
+                    newline: 1,
                     name: "WorkAddress",
                     label: "工作地址",
                     editor: {
@@ -86,7 +88,9 @@ function() {
                         boolean: "checkbox",
                         type: "text"
                     },
-                    type: "text"
+                    type: "text",
+                    width: "500",
+                    readonlyInEdit: 0
                 },
                 {
                     newline: true,
@@ -107,14 +111,23 @@ function() {
                 {
                     name: "InitiationTime",
                     type: "datepicker",
-                    label: "日期",
+                    label: "发起时间",
                     editor: {},
                     newline: 1,
                     width: "",
                     readonlyInEdit: 0
                 },
                 {
-                    newline: 0,
+                    name: "ExpectedCompletionTime",
+                    type: "datepicker",
+                    label: "期望完成时间",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    newline: 1,
                     name: "AssignUsers",
                     label: "分配用户",
                     editor: {

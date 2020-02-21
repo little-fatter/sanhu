@@ -10,6 +10,7 @@
         <field name="TaskContent" dbName="TaskContent" title="任务描述" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="AssignUsers" dbName="AssignUsersID" title="分配用户" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
         <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="ExpectedCompletionTime" dbName="ExpectedCompletionTime" title="期望完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
