@@ -82,16 +82,22 @@ export const asyncRouterMap = [
             meta: { title: '表单打印', keepAlive: false }
           },
           {
-            path: '/form/step-form',
-            name: 'StepForm',
-            component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: '分步表单', keepAlive: true }
+            path: '/form/form-approval',
+            name: 'FormApproval',
+            component: () => import('@/views/form/formAddroval'),
+            meta: { title: '表单审批', keepAlive: false }
           },
           {
-            path: '/form/advanced-form',
-            name: 'AdvanceForm',
-            component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: '高级表单', keepAlive: true }
+            path: '/form/close-report',
+            name: 'CloseReport',
+            component: () => import('@/views/form/closeReport'),
+            meta: { title: '结案报告', keepAlive: false }
+          },
+          {
+            path: '/form/file-cover',
+            name: 'FileCover',
+            component: () => import('@/views/form/fileCover'),
+            meta: { title: '卷宗封面', keepAlive: false }
           }
         ]
       },

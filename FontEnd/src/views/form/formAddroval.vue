@@ -137,6 +137,54 @@ padding:40px;
       <div class="boxContent">
         <component :is="formStyleName"></component>
       </div>
+      <div class="boxContent">
+        <a-form class="form">
+          <a-form-item
+            label="选择"
+            :labelCol="{span:8}"
+            :wrapperCol="{span:10}">
+            <a-radio-group :options="options" @change="radioChange" v-model="value2" />
+          </a-form-item>
+          <a-form-item
+            label="审批人员签字人签字"
+            :labelCol="{lg: {span:8}}"
+            :wrapperCol="{span:10}">
+            <div>签字</div>
+          </a-form-item>
+          <a-form-item
+            label="意见建议"
+            :labelCol="{lg: {span:8}}"
+            :wrapperCol="{span:10}">
+            <a-textarea placeholder="Basic usage" :rows="4"/>
+          </a-form-item>
+          <a-form-item
+            label="附件上传"
+            :labelCol="{lg: {span:8}}"
+            :wrapperCol="{span:10}">
+            <a-upload name="file" :multiple="true" action="//jsonplaceholder.typicode.com/posts/" :headers="headers" @change="handleChange">
+              <a-button>
+                <a-icon type="upload" /> 上传附件
+              </a-button>
+            </a-upload>
+          </a-form-item>
+          <a-form-item
+            label="其他"
+            :labelCol="{lg: {span:8}}"
+            :wrapperCol="{span:10}">
+            <div style="display:flex;justify-content:space-around;">
+              <div>
+                <a-button>盖章</a-button>
+              </div>
+              <div>
+                <a-button>催办</a-button>
+              </div>
+              <div>
+                <a-button>通知</a-button>
+              </div>
+            </div>
+          </a-form-item>
+        </a-form>
+      </div>
       <div class="formFooter">
         <div class="footSteps">
           <div class="stepsItemBox forLine">
@@ -255,17 +303,38 @@ padding:40px;
 import detailEnforce from './fromComponents/detail-enforce'
 import detailPunish from './fromComponents/detail-punish'
 export default {
-  name: 'FormDetails',
+  name: 'FormApproval',
   components: {
     detailEnforce, detailPunish
   },
   data () {
     return {
-      formStyleName: 'detailPunish', // 引用的组件名
-      approvalList: ['负责人1', '负责人2', '负责人3']
+      formStyleName: 'detailEnforce', // 引用的组件名
+      approvalList: ['负责人1', '负责人2', '负责人3'],
+      options: [
+        { label: '同意', value: '0' },
+        { label: '驳回', value: '1' }
+      ],
+      value2: '0',
+      headers: {
+        authorization: 'authorization-text'
+      }
     }
   },
   methods: {
+    handleChange (info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList)
+      }
+      if (info.file.status === 'done') {
+        this.$message.success(`${info.file.name} file uploaded successfully`)
+      } else if (info.file.status === 'error') {
+        this.$message.error(`${info.file.name} file upload failed.`)
+      }
+    },
+    radioChange2 (e) {
+      console.log(e.target.value)
+    }
   }
 }
 </script>

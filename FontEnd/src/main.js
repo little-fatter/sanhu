@@ -12,7 +12,7 @@ import '@/utils/directive'// 公共指令
 import '@/utils/filter' // 公共管道
 import '@/components/global.less'
 // import '@/assets/css/global.less' // 引用全局样式,覆盖默认样式
-import print from './views/components/printer'
+import print from './views/config/printer'
 Vue.use(print)
 
 console.log('当前环境', process.env.VUE_APP_CURRENTENV)
