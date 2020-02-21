@@ -653,7 +653,7 @@ namespace FastDev.DevDB
         }
         private DbContext GetConfigDB(string refModelName)
         {
-            if (refModelName == ModelName) return MainDb;
+            //if (refModelName == ModelName) return MainDb;
             ServiceConfig serviceConfig = GetServiceConfig(refModelName);
             if (serviceConfig != null && !string.IsNullOrEmpty(serviceConfig.model.dbName))
             {
@@ -895,7 +895,7 @@ namespace FastDev.DevDB
             return viewData;
         }
 
-        public FilterGroup PrevFilter(FilterGroup filter,string modelName)
+        public FilterGroup PrevFilter(FilterGroup filter, string modelName)
         {
             try
             {
@@ -938,13 +938,15 @@ namespace FastDev.DevDB
             {
                 descriptor.Condition = new RightsServer(MainDb).AppendDataFilter(ModelName, descriptor.Condition);
             }
-            descriptor.Condition = PrevFilter(descriptor.Condition,ModelName);
+
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            if (serviceConfig.model.notIncludeSysFields != "Y")
+                descriptor.Condition = PrevFilter(descriptor.Condition, ModelName);
             PagedData pageData = DataAccessHelper.GetPageData(QueryDb, ModelName, descriptor);
             if (pageData == null || pageData.Records == null || pageData.Records.Count == 0)
             {
                 return pageData;
             }
-            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
             List<Field> field = serviceConfig.fields;
             List<string> lstDisable = new List<string>();
             if (EnabledRights)
@@ -964,7 +966,7 @@ namespace FastDev.DevDB
                 filterTree.filter = new RightsServer(MainDb).AppendDataFilter(filterTree.sourceModel, filterTree.filter);
                 filterTree.filter = PrevFilter(filterTree.filter, filterTree.sourceModel);
                 filterTree.filter2 = new RightsServer(MainDb).AppendDataFilter(filterTree.sourceModel2, filterTree.filter2);
-                filterTree.filter2 = PrevFilter(filterTree.filter2,filterTree.sourceModel2);
+                filterTree.filter2 = PrevFilter(filterTree.filter2, filterTree.sourceModel2);
             }
             return DataAccessHelper.GetTreeData(db, filterTree);
         }
@@ -987,7 +989,7 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter,ModelName);
+            filter = PrevFilter(filter, ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, orderby);
             if (listData == null || listData.Count == 0)
             {
@@ -1013,7 +1015,7 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter,ModelName);
+            filter = PrevFilter(filter, ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, null, "Name");
             afterGetDataDelegate_OnAfterGetNameData?.Invoke(filter, listData);
             return listData;
@@ -1634,7 +1636,7 @@ namespace FastDev.DevDB
                       where !disabledFields.Contains(a.name)
                       select a).ToList();
             action(text, id);
-            if (string.IsNullOrEmpty(refField))
+            if (string.IsNullOrEmpty(refField) && serviceConfig.model.notIncludeSysFields != "Y")
             {
                 try
                 {

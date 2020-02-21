@@ -4,5 +4,45 @@
         <name>FastDev.Model</name>
     </assembly>
     <members>
+        <member name="P:FD.Model.Dto.FormSaveDto.FormBase">
+            <summary>
+            基础表单
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormSaveDto.Type">
+            <summary>
+            保存表单类型
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormSaveDto.Obj">
+            <summary>
+            表单对象
+            </summary>
+        </member>
+        <member name="F:FD.Model.Dto.FormType.PatrolRecord">
+            <summary>
+            巡检表
+            </summary>
+        </member>
+        <member name="T:FD.Model.Enum.EventState">
+            <summary>
+            事件状态
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventState.Undistributed">
+            <summary>
+            未分配
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventState.Allocation">
+            <summary>
+            分配
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventState.Close">
+            <summary>
+            已关闭
+            </summary>
+        </member>
     </members>
 </doc>

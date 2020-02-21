@@ -4462,14 +4462,15 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
-        [HttpPost]
+        [HttpGet]
         public ActionResult Main(string model, string viewtype, string viewname)
         {
-            return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.Path)));
+            return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.QueryString.ToString())));
         }
 
         [VaildateUser]
         [HttpPost]
+        [HttpGet]
         public ActionResult M(string model, string viewtype, string viewname)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -4605,7 +4606,8 @@ namespace FastDev.RunWeb.Controllers
             //WorkflowContext wfContext = jsonContext..GetObject<WorkflowContext>(fullJson);
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
             DbContext currentDb = SysContext.GetCurrentDb();
-            IWorkflowService workflowService = new WorkflowService();
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
             workflowService.DbContext = currentDb;
             try
             {

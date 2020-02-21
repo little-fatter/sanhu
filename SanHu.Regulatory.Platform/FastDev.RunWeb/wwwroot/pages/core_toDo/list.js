@@ -163,7 +163,7 @@ function() {
             });
             if (column == null) return;
             column.render = function(r) {
-                return '<a href="javascript:void()" data-link="' + r.Link + '" class="todolink">' + r.Title + '</a>';
+                return '<a href="javascript:void(0);" data-link="' + r.Link + '" class="todolink">' + r.Title + '</a>';
             };
             gridOptions.onAfterShowData = function() {
                 $("a.todolink", this.element).click(function() {

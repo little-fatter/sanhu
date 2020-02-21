@@ -259,7 +259,7 @@ namespace FastDev.DevDB
                                         }
                                         if (viewNode4.nodeType == WorkflowNodeType.Active)
                                         {
-                                            List<List<string>> executors = method_6(viewNode4, core_workflowProject);
+                                            List<List<string>> executors = FindWorkflowExecutors(viewNode4, core_workflowProject);
                                             context.ExecuteNodes.Add(new ExecuteNode
                                             {
                                                 NodeId = viewNode4.id,
@@ -276,12 +276,12 @@ namespace FastDev.DevDB
                         UpdateWFTask(currentTask, WFRecordStatus.Completed);
                     }
                     UpdateExecutor(core_workflowExecutorStatus, WFRecordStatus.Completed, context.Remark);
-                    core_toDo core_toDo_2 = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
+                    core_toDo toData = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
                     {
                         "core_workflowExecutorStatus",
                         core_workflowExecutorStatus.ID
                     });
-                    UpdateToDo(core_toDo_2, WFRecordStatus.Completed);
+                    UpdateToDo(toData, WFRecordStatus.Completed);
                 }
                 if (context.ExecuteNodes != null && context.Waitting != 1)
                 {
@@ -731,7 +731,7 @@ namespace FastDev.DevDB
                 }
                 if (list4.Any(l => l.nodeType == WorkflowNodeType.End))
                 {
-                    Dictionary<string, object> item = method_4(list4.FirstOrDefault(f => f.nodeType == WorkflowNodeType.End), core_workflowProject);
+                    Dictionary<string, object> item = FillEndNodeUsers(list4.FirstOrDefault(f => f.nodeType == WorkflowNodeType.End), core_workflowProject);
                     dictionary["nodes"] = new List<object>
                     {
                         item
@@ -748,7 +748,7 @@ namespace FastDev.DevDB
                     }
                     if (viewNode4.nodeType == WorkflowNodeType.Active || viewNode4.nodeType == WorkflowNodeType.End)
                     {
-                        Dictionary<string, object> item = method_4(viewNode4, core_workflowProject);
+                        Dictionary<string, object> item = FillEndNodeUsers(viewNode4, core_workflowProject);
                         if (viewNode4.nodeType == WorkflowNodeType.End)
                         {
                             dictionary["nodes"] = new List<object>
@@ -773,7 +773,7 @@ namespace FastDev.DevDB
                 List<object> list5 = new List<object>();
                 if (activeNode.backType == "1")
                 {
-                    list6.Add(method_14(viewNode, viewModel, v => !v.All(l => l.nodeType == WorkflowNodeType.Branch)).FirstOrDefault());
+                    list6.Add(FilterNodeCanBranch(viewNode, viewModel, v => !v.All(l => l.nodeType == WorkflowNodeType.Branch)).FirstOrDefault());
                 }
                 else if (activeNode.backType == "2")
                 {
@@ -822,7 +822,7 @@ namespace FastDev.DevDB
                 {
                     if (item3 != null)
                     {
-                        Dictionary<string, object> item = method_4(item3, core_workflowProject);
+                        Dictionary<string, object> item = FillEndNodeUsers(item3, core_workflowProject);
                         list5.Add(item);
                     }
                 }
@@ -874,14 +874,14 @@ namespace FastDev.DevDB
             core_workflowTrack currentTrack = source2.OrderBy(f => f.CreateDate).FirstOrDefault(f => f.NodeType == "start");
             FastDev.DevDB.Model.core_workflowTask currentTask = source.FirstOrDefault((FastDev.DevDB.Model.core_workflowTask a) => a.ID == currentTrack.TaskID);
             List<WFLogItem> list = new List<WFLogItem>();
-            list.Add(method_3(currentTask, currentTrack, viewModel));
+            list.Add(GenLogItem(currentTask, currentTrack, viewModel));
             while (currentTrack != null && currentTrack.NodeType != "end")
             {
                 currentTrack = source2.FirstOrDefault((core_workflowTrack a) => a.TaskID == currentTrack.NextTaskID);
                 if (currentTrack != null)
                 {
                     currentTask = source.FirstOrDefault((FastDev.DevDB.Model.core_workflowTask a) => a.ID == currentTrack.TaskID);
-                    list.Add(method_3(currentTask, currentTrack, viewModel));
+                    list.Add(GenLogItem(currentTask, currentTrack, viewModel));
                     if (!string.IsNullOrEmpty(currentTrack.NextTaskID))
                     {
                         ViewNode viewNode_ = viewModel.nodes.FirstOrDefault((ViewNode a) => a.id == currentTask.NodeID);
@@ -906,7 +906,7 @@ namespace FastDev.DevDB
             };
         }
 
-        private WFLogItem method_3(FastDev.DevDB.Model.core_workflowTask core_workflowTask_0, core_workflowTrack core_workflowTrack_0, ViewModel viewModel_0)
+        private WFLogItem GenLogItem(FastDev.DevDB.Model.core_workflowTask core_workflowTask_0, core_workflowTrack core_workflowTrack_0, ViewModel viewModel_0)
         {
             DbContext dbContext = wfContext;
             ViewNode viewNode = viewModel_0.nodes.FirstOrDefault((ViewNode a) => a.id == core_workflowTask_0.NodeID);
@@ -986,7 +986,7 @@ namespace FastDev.DevDB
             return wFLogItem2;
         }
 
-        private Dictionary<string, object> method_4(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
+        private Dictionary<string, object> FillEndNodeUsers(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
         {
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             if (viewNode_0.nodeType == WorkflowNodeType.Start || viewNode_0.nodeType == WorkflowNodeType.End)
@@ -997,7 +997,7 @@ namespace FastDev.DevDB
                     nodeType = viewNode_0.nodeType,
                     nodeTitle = viewNode_0.properties["text"].ToString()
                 };
-                method_7(dictionary, viewNode_0, core_workflowProject_0);
+                FillWorkflowUser(dictionary, viewNode_0, core_workflowProject_0);
                 return dictionary;
             }
             ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(viewNode_0);
@@ -1010,12 +1010,12 @@ namespace FastDev.DevDB
             };
             if (viewNode_0.nodeType == WorkflowNodeType.Active)
             {
-                method_7(dictionary, viewNode_0, core_workflowProject_0);
+                FillWorkflowUser(dictionary, viewNode_0, core_workflowProject_0);
             }
             return dictionary;
         }
 
-        private FilterGroup GenFilterByWFProject(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
+        private FilterGroup GetUserFilterByWorkflowProject(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
         {
             List<string> list = new List<string>();
             List<string> list2 = new List<string>();
@@ -1095,20 +1095,20 @@ namespace FastDev.DevDB
             return filterGroup;
         }
 
-        private List<List<string>> method_6(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
+        private List<List<string>> FindWorkflowExecutors(ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
         {
             if (viewNode_0.nodeType == WorkflowNodeType.End)
             {
                 return new List<List<string>>();
             }
             FilterTranslator filterTranslator = new FilterTranslator();
-            filterTranslator.Group = GenFilterByWFProject(viewNode_0, core_workflowProject_0);
+            filterTranslator.Group = GetUserFilterByWorkflowProject(viewNode_0, core_workflowProject_0);
             filterTranslator.Translate();
             string commandText = filterTranslator.CommandText;
-            string str = "select ID,RealName from core_user where ";
-            str = (string.IsNullOrEmpty(commandText) ? (str + "1=1") : (str + commandText));
+            string sql = "select ID,RealName from core_user where ";
+            sql = (string.IsNullOrEmpty(commandText) ? (sql + "1=1") : (sql + commandText));
             List<List<string>> list = new List<List<string>>();
-            List<FastDev.DevDB.Model.Mini.core_user> list2 = wfContext.Fetch<FastDev.DevDB.Model.Mini.core_user>(str, filterTranslator.Parms.ToArray());
+            List<FastDev.DevDB.Model.Mini.core_user> list2 = wfContext.Fetch<FastDev.DevDB.Model.Mini.core_user>(sql, filterTranslator.Parms.ToArray());
             if (list2 != null)
             {
                 foreach (FastDev.DevDB.Model.Mini.core_user item in list2)
@@ -1123,13 +1123,13 @@ namespace FastDev.DevDB
             return list;
         }
 
-        private void method_7(Dictionary<string, object> dicNodes, ViewNode viewNode_0, core_workflowProject core_workflowProject_0)
+        private void FillWorkflowUser(Dictionary<string, object> dicNodes, ViewNode viewNode_0, core_workflowProject workflowProjectItem)
         {
             new List<string>();
             List<string> list = new List<string>();
             List<string> value = new List<string>();
             new List<string>();
-            List<List<string>> list2 = method_6(viewNode_0, core_workflowProject_0);
+            List<List<string>> list2 = FindWorkflowExecutors(viewNode_0, workflowProjectItem);
             if (list2.Any())
             {
                 FilterTranslator filterTranslator = new FilterTranslator();
@@ -1147,8 +1147,8 @@ namespace FastDev.DevDB
                 string str = "select ID from res_department where ";
                 string commandText = filterTranslator.CommandText;
                 str = (string.IsNullOrEmpty(commandText) ? (str + "1=1") : (str + commandText));
-                List<IdItem> list3 = wfContext.Fetch<IdItem>(str, filterTranslator.Parms.ToArray());
-                list = ((list3 == null) ? new List<string>() : list3.Select(f => f.ID).ToList());
+                List<IdItem> lstDepartmentIds = wfContext.Fetch<IdItem>(str, filterTranslator.Parms.ToArray());
+                list = ((lstDepartmentIds == null) ? new List<string>() : lstDepartmentIds.Select(f => f.ID).ToList());
                 if (list.Any())
                 {
                     filterTranslator = new FilterTranslator();
@@ -1163,18 +1163,18 @@ namespace FastDev.DevDB
                             value = item2
                         });
                     }
-                    string str2 = "select ID from res_company where ";
+                    string comSql = "select ID from res_company where ";
                     commandText = filterTranslator.CommandText;
-                    str2 = (string.IsNullOrEmpty(commandText) ? (str2 + "1=1") : (str2 + commandText));
-                    List<IdItem> list4 = wfContext.Fetch<IdItem>(str2, filterTranslator.Parms.ToArray());
-                    if (list4 != null)
+                    comSql = (string.IsNullOrEmpty(commandText) ? (comSql + "1=1") : (comSql + commandText));
+                    List<IdItem> lstCompanyIds = wfContext.Fetch<IdItem>(comSql, filterTranslator.Parms.ToArray());
+                    if (lstCompanyIds != null)
                     {
-                        list4.Select(f => f.ID).ToList();
+                        lstCompanyIds.Select(f => f.ID).ToList();
                     }
-                    value = ((list4 == null) ? new List<string>() : list4.Select(d => d.ID).ToList());
+                    value = ((lstCompanyIds == null) ? new List<string>() : lstCompanyIds.Select(d => d.ID).ToList());
                 }
             }
-            dicNodes["userFilter"] = GenFilterByWFProject(viewNode_0, core_workflowProject_0);
+            dicNodes["userFilter"] = GetUserFilterByWorkflowProject(viewNode_0, workflowProjectItem);
             dicNodes["users"] = list2;
             dicNodes["departments"] = list;
             dicNodes["companys"] = value;
@@ -1208,14 +1208,6 @@ namespace FastDev.DevDB
             return JsonHelper.DeserializeJsonToObject<T>(input);
         }
 
-        private IList<string> method_11(ActiveNode activeNode_0)
-        {
-            List<string> result = new List<string>();
-            new List<string>();
-            new List<string>();
-            new List<string>();
-            return result;
-        }
 
         private string GetJsResult(string strTemplate, string strData)
         {
@@ -1273,10 +1265,10 @@ namespace FastDev.DevDB
             return list.Distinct().ToList();
         }
 
-        private IList<ViewNode> method_14(ViewNode viewNode_0, ViewModel viewModel_0, Func<IList<ViewNode>, bool> SVaVLOEutVme7Z2nQq)
+        private IList<ViewNode> FilterNodeCanBranch(ViewNode viewNode_0, ViewModel viewModel_0, Func<IList<ViewNode>, bool> func)
         {
             IList<ViewNode> list = CombinNodesByTarget(viewNode_0, viewModel_0);
-            while (!SVaVLOEutVme7Z2nQq(list))
+            while (!func(list))
             {
                 list = CombinNodesByTarget(list[0], viewModel_0);
             }

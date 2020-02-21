@@ -2894,7 +2894,6 @@
             var rs = '';
             for (var i = 0; i < str.length; i++) {
                 var code = str.charCodeAt(i);
-                console.log(code);
                 if ((240 & code) == 240) {
                     var code1 = str.charCodeAt(i + 1),
                         code2 = str.charCodeAt(i + 2),

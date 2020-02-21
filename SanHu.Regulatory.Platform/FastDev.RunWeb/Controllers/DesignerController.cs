@@ -409,21 +409,21 @@ namespace FastDev.RunWeb.Controllers
                             lstLogs.Add("Error2:" + ex2.Message + ",StackTrace2:" + ex2.StackTrace);
                         }
                     }
-                    if (modelBuild)
-                    {
-                        string projectName = ConfigurationManager.AppSettings["ModelProjectName"];
-                        CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
-                    }
-                    if (serviceBuild)
-                    {
-                        string projectName = ConfigurationManager.AppSettings["ServiceProjectName"];
-                        CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
-                    }
-                    if (modelBuild || serviceBuild)
-                    {
-                        string projectName = ConfigurationManager.AppSettings["WebProjectName"];
-                        CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
-                    }
+                    //if (modelBuild)
+                    //{
+                    //    string projectName = ConfigurationManager.AppSettings["ModelProjectName"];
+                    //    CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
+                    //}
+                    //if (serviceBuild)
+                    //{
+                    //    string projectName = ConfigurationManager.AppSettings["ServiceProjectName"];
+                    //    CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
+                    //}
+                    //if (modelBuild || serviceBuild)
+                    //{
+                    //    string projectName = ConfigurationManager.AppSettings["WebProjectName"];
+                    //    CompileProject($"{projectPath}{projectName}\\{projectName}.csproj");
+                    //}
                 }
                 else
                 {
