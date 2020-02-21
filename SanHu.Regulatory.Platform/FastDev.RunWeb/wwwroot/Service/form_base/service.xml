@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="form_base" title="表单汇总" textField="FormName" moduleName="form" moduleTitle="表单" dbName="" />
+    <model name="form_base" title="表单基础" textField="FormName" moduleName="form" moduleTitle="表单" dbName="" />
     <fields>
         <field name="Originator" dbName="OriginatorID" title="发起人" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
         <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
@@ -11,6 +11,9 @@
         <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" isPK="N" />
         <field name="NeedNotice" dbName="NeedNotice" title="需要通知" type="boolean" relationModel="" relationField="" isPK="N" />
         <field name="NeedFine" dbName="NeedFine" title="需要罚款" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="FormID" dbName="FormID" title="表单id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
