@@ -25,7 +25,6 @@ namespace FastDev.Service
             {
                 case "handOver":
                     return HandOver;
-                    break;
             }
             return null;
         }
