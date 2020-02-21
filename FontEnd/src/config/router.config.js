@@ -8,13 +8,12 @@ import { RouteView, BlankLayout, PageView } from '@/components/layouts'
  */
 
 export const asyncRouterMap = [
-
   {
     path: '/',
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/workplace',
+    redirect: '/workbench/backlog',
     children: [
       {
         path: '/dashboard',
@@ -206,6 +205,22 @@ export const asyncRouterMap = [
             meta: { title: '500' }
           }
         ]
+      },
+
+      // workbench
+      {
+        path: '/workbench',
+        name: 'workbench',
+        redirect: '/workbench/backlog',
+        component: RouteView,
+        meta: { title: '我的工作台' },
+        children: [
+          {
+            path: '/workbench/backlog',
+            name: 'Backlog',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/workbench/Backlog')
+          }
+        ]
       }
     ]
   },
@@ -220,7 +235,7 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
-    path: '/user/login',
+    path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login'),
     meta: { title: '登录页面' }
