@@ -85,5 +85,6 @@
         <models name="event_info_tiny_view" title="事件信息简" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
         <models name="work_task" title="任务" textField="Title" moduleName="work" moduleTitle="工作" />
         <models name="eventStateInfo" title="事件状态" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
+        <models name="task_patrol" title="任务-事件巡查" textField="Title" moduleName="task" moduleTitle="任务与表单" />
     </models>
 </freedesign>

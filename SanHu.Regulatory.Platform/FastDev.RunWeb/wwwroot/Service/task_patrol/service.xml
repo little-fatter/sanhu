@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="task_patrol" title="任务-事件巡查" textField="EventDescribe" moduleName="task" moduleTitle="任务与表单" dbName="" />
+    <fields>
+        <field name="EventDescribe" dbName="EventDescribe" title="描述" type="string" length="50" isPK="N" />
+        <field name="EventType" dbName="EventType" title="类型" type="status" relationModel="" relationField="" isPK="N" />
+        <field name="IncidentTime" dbName="IncidentTime" title="事发时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="IncidentAddress" dbName="IncidentAddress" title="事发地址" type="string" length="50" isPK="N" />
+        <field name="IncidentAddressXY" dbName="IncidentAddressXY" title="事发地址坐标" type="string" length="200" isPK="N" />
+        <field name="Result" dbName="Result" title="结果" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="Needlawenforcement" dbName="Needlawenforcement" title="需要执法" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="Needtracking" dbName="Needtracking" title="需要跟踪" type="boolean" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

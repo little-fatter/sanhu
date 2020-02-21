@@ -24,5 +24,75 @@
             巡检表
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.TaskHandOverReq">
+            <summary>
+            任务移交请求
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskHandOverReq.TaskId">
+            <summary>
+            当前任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskHandOverReq.UserId">
+            <summary>
+            移交目标
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.TaskPatrolRejectRequest">
+            <summary>
+            任务巡查拒绝请求
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskPatrolRejectRequest.TaskId">
+            <summary>
+            任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskPatrolRejectRequest.Reason">
+            <summary>
+            理由
+            </summary>
+        </member>
+        <member name="T:FD.Model.Enum.EventStatus">
+            <summary>
+            事件状态
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.Undistributed">
+            <summary>
+            未分配
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.Allocation">
+            <summary>
+            分配
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.Close">
+            <summary>
+            已关闭
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.WorkTaskStatus.Close">
+            <summary>
+            关闭
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.WorkTaskStatus.Normal">
+            <summary>
+            正常
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.WorkTaskStatus.Reject">
+            <summary>
+            拒绝
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.WorkTaskStatus.HandOver">
+            <summary>
+            已移交
+            </summary>
+        </member>
     </members>
 </doc>

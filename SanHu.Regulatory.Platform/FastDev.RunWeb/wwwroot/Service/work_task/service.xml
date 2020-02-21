@@ -2,7 +2,6 @@
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <model name="work_task" title="任务" textField="EventInfoId" moduleName="work" moduleTitle="工作" dbName="" />
     <fields>
-        <field name="Tasktype" dbName="Tasktype" title="任务类型" type="status" relationModel="" relationField="" isPK="N" />
         <field name="EventInfoId" dbName="EventInfoId" title="事件ID" type="string" length="50" isPK="N" />
         <field name="MainHandler" dbName="MainHandler" title="主办人员" type="string" length="50" enabledSearch="Y" isPK="N" />
         <field name="CoOrganizer" dbName="CoOrganizer" title="协办人员" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
@@ -10,6 +9,10 @@
         <field name="TaskContent" dbName="TaskContent" title="任务描述" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="AssignUsers" dbName="AssignUsersID" title="分配用户" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
         <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="ExpectedCompletionTime" dbName="ExpectedCompletionTime" title="期望完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Tasktype" dbName="Tasktype" title="任务类型" type="integer" relationModel="" relationField="" isPK="N" />
+        <field name="TaskStatus" dbName="TaskStatus" title="任务状态" type="integer" relationModel="" relationField="" isPK="N" />
+        <field name="RejectReason" dbName="RejectReason" title="拒绝原因" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

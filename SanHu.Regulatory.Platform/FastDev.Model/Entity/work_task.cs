@@ -9,11 +9,6 @@ public string ID
 get;
 set;
 }
-public string Tasktype
-{
-get;
-set;
-}
 public string EventInfoId
 {
 get;
@@ -45,6 +40,26 @@ get;
 set;
 }
 public DateTime? InitiationTime
+{
+get;
+set;
+}
+public DateTime? ExpectedCompletionTime
+{
+get;
+set;
+}
+public int? Tasktype
+{
+get;
+set;
+}
+public int? TaskStatus
+{
+get;
+set;
+}
+public string RejectReason
 {
 get;
 set;

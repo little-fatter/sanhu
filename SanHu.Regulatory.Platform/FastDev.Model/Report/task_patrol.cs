@@ -2,64 +2,49 @@ namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class work_task
+public partial class task_patrol
 {
 public string ID
 {
 get;
 set;
 }
-public string EventInfoId
+public string EventDescribe
 {
 get;
 set;
 }
-public string MainHandler
+public string EventType
 {
 get;
 set;
 }
-public string CoOrganizer
+public DateTime IncidentTime
 {
 get;
 set;
 }
-public string WorkAddress
+public string IncidentAddress
 {
 get;
 set;
 }
-public string TaskContent
+public string IncidentAddressXY
 {
 get;
 set;
 }
-public string AssignUsersID
+public string Result
 {
 get;
 set;
 }
-public DateTime? InitiationTime
+public byte? Needlawenforcement
 {
 get;
 set;
 }
-public DateTime? ExpectedCompletionTime
-{
-get;
-set;
-}
-public int? Tasktype
-{
-get;
-set;
-}
-public int? TaskStatus
-{
-get;
-set;
-}
-public string RejectReason
+public byte? Needtracking
 {
 get;
 set;
