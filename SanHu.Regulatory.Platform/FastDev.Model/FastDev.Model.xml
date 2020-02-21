@@ -4,5 +4,25 @@
         <name>FastDev.Model</name>
     </assembly>
     <members>
+        <member name="P:FD.Model.Dto.FormSaveDto.FormBase">
+            <summary>
+            基础表单
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormSaveDto.Type">
+            <summary>
+            保存表单类型
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormSaveDto.Obj">
+            <summary>
+            表单对象
+            </summary>
+        </member>
+        <member name="F:FD.Model.Dto.FormType.PatrolRecord">
+            <summary>
+            巡检表
+            </summary>
+        </member>
     </members>
 </doc>
