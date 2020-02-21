@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="from_baseinfo" title="表单基础1" textField="Initiationtime" moduleName="form" moduleTitle="表单" dbName="" />
+    <model name="from_baseinfo" title="表单基础-不用" textField="Initiationtime" moduleName="form" moduleTitle="表单" dbName="" />
     <fields>
         <field name="Initiationtime" dbName="Initiationtime" title="发起时间" type="string" length="50" isPK="N" />
         <field name="Completiontime" dbName="Completiontime" title="完成时间" type="string" length="50" isPK="N" />
