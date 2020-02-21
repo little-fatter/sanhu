@@ -653,7 +653,7 @@ namespace FastDev.DevDB
         }
         private DbContext GetConfigDB(string refModelName)
         {
-            if (refModelName == ModelName) return MainDb;
+            //if (refModelName == ModelName) return MainDb;
             ServiceConfig serviceConfig = GetServiceConfig(refModelName);
             if (serviceConfig != null && !string.IsNullOrEmpty(serviceConfig.model.dbName))
             {
