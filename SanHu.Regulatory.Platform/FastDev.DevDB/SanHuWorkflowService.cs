@@ -919,7 +919,6 @@ namespace FastDev.DevDB
 
         private WFLogItem GenLogItem(FastDev.DevDB.Model.core_workflowTask core_workflowTask_0, core_workflowTrack core_workflowTrack_0, ViewModel viewModel_0)
         {
-            DbContext dbContext = wfContext;
             ViewNode viewNode = viewModel_0.nodes.FirstOrDefault((ViewNode a) => a.id == core_workflowTask_0.NodeID);
             viewNode.status = core_workflowTask_0.Status;
             WFLogItem wFLogItem = new WFLogItem();
@@ -934,13 +933,13 @@ namespace FastDev.DevDB
             }
             ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(viewNode);
             wFLogItem2.handlerType = HandlerTypes.GetText(activeNode.handlerType);
-            List<core_workflowTrackDetail> list = dbContext.Fetch<core_workflowTrackDetail>("where TrackID = @0 order by CreateDate asc", new object[1]
+            List<core_workflowTrackDetail> list = wfContext.Fetch<core_workflowTrackDetail>("where TrackID = @0 order by CreateDate asc", new object[1]
             {
                 core_workflowTrack_0.ID
             });
             foreach (core_workflowTrackDetail item in list)
             {
-                core_workflowExecutorStatus core_workflowExecutorStatus = dbContext.FirstOrDefault<core_workflowExecutorStatus>("where ID = @0", new object[1]
+                core_workflowExecutorStatus core_workflowExecutorStatus = wfContext.FirstOrDefault<core_workflowExecutorStatus>("where ID = @0", new object[1]
                 {
                     item.ExecutorStatusID
                 });
@@ -953,7 +952,7 @@ namespace FastDev.DevDB
                 {
                     dictionary["isToNext"] = item.IsToNextTask;
                 }
-                dictionary["user"] = dbContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
+                dictionary["user"] = fwContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
                 {
                     core_workflowExecutorStatus.ExecutorID
                 });

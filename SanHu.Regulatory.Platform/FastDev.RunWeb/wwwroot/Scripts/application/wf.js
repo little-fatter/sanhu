@@ -31,7 +31,6 @@
         log: function () {
             var Piwik = this;
             var options = this.options;
-            debugger;
             Piwik.getLog(function () {
                 Piwik.openLogWin();
             });

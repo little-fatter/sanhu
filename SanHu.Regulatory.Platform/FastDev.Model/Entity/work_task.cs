@@ -2,14 +2,39 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class form_base
+public partial class work_task
 {
 public string ID
 {
 get;
 set;
 }
-public string OriginatorID
+public string EventInfoId
+{
+get;
+set;
+}
+public string MainHandler
+{
+get;
+set;
+}
+public string CoOrganizer
+{
+get;
+set;
+}
+public string WorkAddress
+{
+get;
+set;
+}
+public string TaskContent
+{
+get;
+set;
+}
+public string AssignUsersID
 {
 get;
 set;
@@ -19,52 +44,22 @@ public DateTime? InitiationTime
 get;
 set;
 }
-public DateTime? CompletionTime
+public DateTime? ExpectedCompletionTime
 {
 get;
 set;
 }
-public string FormName
+public int? Tasktype
 {
 get;
 set;
 }
-public string ContentValidity
+public int? TaskStatus
 {
 get;
 set;
 }
-public string Department
-{
-get;
-set;
-}
-public string FormState
-{
-get;
-set;
-}
-public byte? NeedNotice
-{
-get;
-set;
-}
-public byte? NeedFine
-{
-get;
-set;
-}
-public string FormID
-{
-get;
-set;
-}
-public string handler
-{
-get;
-set;
-}
-public string EventInfoId
+public string RejectReason
 {
 get;
 set;

@@ -37,7 +37,7 @@ namespace FastDev.Service
                 db.Update("attachment", "ID", new
                 {
                     ID = id,
-                    Remarks = "执行到：" + data.CurrentTask.NodeTitle
+                    Remark = "执行到：" + data.CurrentTask.NodeTitle
                 });
             }
 

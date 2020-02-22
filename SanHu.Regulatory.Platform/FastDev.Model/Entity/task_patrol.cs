@@ -2,69 +2,49 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class form_base
+public partial class task_patrol
 {
 public string ID
 {
 get;
 set;
 }
-public string OriginatorID
+public string EventDescribe
 {
 get;
 set;
 }
-public DateTime? InitiationTime
+public string EventType
 {
 get;
 set;
 }
-public DateTime? CompletionTime
+public DateTime IncidentTime
 {
 get;
 set;
 }
-public string FormName
+public string IncidentAddress
 {
 get;
 set;
 }
-public string ContentValidity
+public string IncidentAddressXY
 {
 get;
 set;
 }
-public string Department
+public string Result
 {
 get;
 set;
 }
-public string FormState
+public byte? Needlawenforcement
 {
 get;
 set;
 }
-public byte? NeedNotice
-{
-get;
-set;
-}
-public byte? NeedFine
-{
-get;
-set;
-}
-public string FormID
-{
-get;
-set;
-}
-public string handler
-{
-get;
-set;
-}
-public string EventInfoId
+public byte? Needtracking
 {
 get;
 set;

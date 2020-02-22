@@ -61,16 +61,16 @@
         <models name="user" title="frameworkuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="case_filing_report" title="立案报告" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="case_Info" title="案件" textField="Title" moduleName="case" moduleTitle="案件" />
-        <models name="from_baseinfo" title="表单基础" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="from_baseinfo" title="表单基础-不用" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="organization" title="frameworkorganization" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="attachment" title="附件" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="form_base" title="表单汇总" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="form_base" title="表单基础" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_patrolRecord" title="巡查记录表" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="organizationuser" title="frameworkorganizationuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="form_caseMove" title="案件移送" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_criminalCaseMove " title="犯罪案件移送" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_criminalCaseMoveMain" title="犯罪案件移送书" textField="Title" moduleName="form" moduleTitle="表单" />
-        <models name="from_inspectiontRecord&#x9;" title="勘验（检查）笔录" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="from_inspectiontRecord&#x9;" title="勘验笔录" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_InvestigatingParty" title="询问记录" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_punishmentInfo" title="当场行政处罚决定书" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_confiscateVouch" title="没收物品凭证" textField="Title" />
@@ -78,9 +78,13 @@
         <models name="from_punishmentInfoDetail" title="没收物品清单详情" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_APRPerson" title="行政处罚案件结案报告_个人" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_APROrg" title="行政处罚案件结案报告_单位" textField="Title" moduleName="form" moduleTitle="表单" />
-        <models name="loc_field_staff" title="外勤员工" textField="Title" moduleName="loc" moduleTitle="定位" />
+        <models name="loc_field_staff" title="外勤员工" textField="Title" moduleName="zhzf" moduleTitle="综合执法" />
         <models name="event_info" title="事件信息" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
         <models name="hasAttach" title="表测试有附件" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="roleuser" title="frameworkroleuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="event_info_tiny_view" title="事件信息简" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
+        <models name="work_task" title="任务" textField="Title" moduleName="work" moduleTitle="工作" />
+        <models name="eventStateInfo" title="事件状态" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
+        <models name="task_patrol" title="任务-事件巡查" textField="Title" moduleName="task" moduleTitle="任务与表单" />
     </models>
 </freedesign>
