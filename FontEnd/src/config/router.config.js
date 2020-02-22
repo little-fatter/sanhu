@@ -13,7 +13,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/workbench/backlog',
+    redirect: '/mission/dealt',
     children: [
       {
         path: '/dashboard',
@@ -170,23 +170,17 @@ export const asyncRouterMap = [
       },
       // profile
       {
-        path: '/profile',
-        name: 'profile',
+        path: '/mission',
+        name: 'Mission',
         component: RouteView,
-        redirect: '/profile/basic',
-        meta: { title: '详情页' },
+        redirect: '',
+        meta: { title: '我的任务' },
         children: [
           {
-            path: '/profile/basic',
-            name: 'ProfileBasic',
-            component: () => import('@/views/profile/basic/Index'),
-            meta: { title: '基础详情页' }
-          },
-          {
-            path: '/profile/advanced',
-            name: 'ProfileAdvanced',
-            component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: '高级详情页' }
+            path: '/mission/dealt',
+            name: '',
+            component: () => import('@/views/mymission/Index'),
+            meta: { title: '待办任务' }
           }
         ]
       },
