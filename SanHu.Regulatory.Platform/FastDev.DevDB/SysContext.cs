@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using WanJiang.Framework.Web.Core.Http;
 using MyHttpContext = FastDev.Common.HttpContext;
 
 namespace FastDev.DevDB
@@ -46,7 +47,7 @@ namespace FastDev.DevDB
         {
             get
             {
-                return !string.IsNullOrEmpty(CurrentUserID);
+                return !string.IsNullOrEmpty(WanJiangUserID);
             }
         }
 
@@ -64,8 +65,7 @@ namespace FastDev.DevDB
                 }
             }
         }
-
-        public static string CurrentUserID
+        public static string FastDevUserID
         {
             get
             {
@@ -95,6 +95,18 @@ namespace FastDev.DevDB
                     return null;
                 }
             }
+        }
+        public static string WanJiangUserID
+        {
+            get
+            {
+                return MyHttpContext.Current.GetUserId();
+            }
+        }
+
+        public static WanJiang.Framework.Infrastructure.Logging.ClientInfo GetWanJiangUser()
+        {
+            return MyHttpContext.Current.GetClientInfo();
         }
 
         public static string GetVariableValue(string key)

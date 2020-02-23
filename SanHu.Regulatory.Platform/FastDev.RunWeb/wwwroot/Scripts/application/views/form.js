@@ -1068,14 +1068,15 @@ define(["jquery", "text!/pages/application/templates/views_form.html", "views_pa
             if (options.saveCallbackType) { }
         },
         form_cancel: function () {
-            var Mixology = this;
+            var me = this;
             var opts = this.options;
-            if (Mixology.dialogOpener) {
-                Mixology.dialogOpener.close();
+            if (me.dialogOpener) {
+                me.dialogOpener.close();
             } else {
                 if (!opts.isView) { /** @type {null} */
                     opts.id = null;
-                    Mixology.form_clear();
+                    me.form_clear();
+                    me.form_close();
                     return;
                 }
             }

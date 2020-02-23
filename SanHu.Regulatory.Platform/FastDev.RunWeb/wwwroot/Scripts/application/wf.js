@@ -410,7 +410,7 @@
             var stateParam = this;
             var opts = this.options;
             pbc.ajax({
-                url: pbc.toUrl("/web/workflow?id=context"),
+                url: pbc.toUrl("/web/workflow/context"),
                 data: {
                     context: {
                         Context: opts.context,
@@ -443,7 +443,7 @@
             var objectCsv = this;
             var options = this.options;
             pbc.ajax({
-                url: pbc.toUrl("/web/workflow?id=log"),
+                url: pbc.toUrl("/web/workflow/log"),
                 data: {
                     context: {
                         Context: options.context,
