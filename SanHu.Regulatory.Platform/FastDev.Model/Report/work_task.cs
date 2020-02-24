@@ -64,6 +64,11 @@ public string RejectReason
 get;
 set;
 }
+public string Tasknumber
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

@@ -49,6 +49,11 @@ public byte? Needtracking
 get;
 set;
 }
+public string Associatedforms
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

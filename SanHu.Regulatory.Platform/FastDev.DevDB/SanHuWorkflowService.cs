@@ -263,7 +263,7 @@ namespace FastDev.DevDB
                                 {
                                     foreach (ViewNode item2 in list2)
                                     {
-                                        ViewNode viewNode4 = JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
+                                        ViewNode viewNode4 = item2;// JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
                                         while (viewNode4.nodeType == WorkflowNodeType.Branch)
                                         {
                                             viewNode4 = GetBranchNode(context, viewModel, viewNode4);
@@ -752,7 +752,7 @@ namespace FastDev.DevDB
                 List<object> list5 = new List<object>();
                 foreach (ViewNode item2 in list4)
                 {
-                    ViewNode viewNode4 = JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
+                    ViewNode viewNode4 = item2;// JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
                     while (viewNode4.nodeType == WorkflowNodeType.Branch)
                     {
                         viewNode4 = GetBranchNode(context, viewModel, viewNode4);
@@ -952,10 +952,14 @@ namespace FastDev.DevDB
                 {
                     dictionary["isToNext"] = item.IsToNextTask;
                 }
-                dictionary["user"] = fwContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
+                var sanUser = fwContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
                 {
                     core_workflowExecutorStatus.ExecutorID
                 });
+                if (sanUser != null) {
+                    var cu = new { RealName=sanUser.Name, LoginName=sanUser.AccountId, MyPic=sanUser.Avatar,ID=sanUser.Id };
+                    dictionary["user"] =cu;
+                }
                 dictionary["status"] = "暂未处理";
                 if (core_workflowExecutorStatus.Status == WFRecordStatus.Completed)
                 {
@@ -1087,8 +1091,8 @@ namespace FastDev.DevDB
             {
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = "DepartmentID",
-                    op = "equal",
+                    field = "ID in (select UserID from organizationuser where OrganizationId = {0})",
+                    type = "sql",
                     value = item5
                 });
             }

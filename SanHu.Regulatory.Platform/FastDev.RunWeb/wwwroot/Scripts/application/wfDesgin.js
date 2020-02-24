@@ -1329,7 +1329,7 @@
         wf.flowNodeWin = $.ligerDialog.open({
             title: "编辑 节点属性",
             target: $quantity,
-            width: 610,
+            width: 710,
             height: "auto",
             top: 100
         });

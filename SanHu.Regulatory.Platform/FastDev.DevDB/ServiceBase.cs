@@ -1498,6 +1498,7 @@ namespace FastDev.DevDB
                 {
                     if (isAdd)
                     {
+                        ///如果有自动编号的列
                         core_autoCode core_autoCode = source.FirstOrDefault((core_autoCode a) => a.FieldName == field.name);
                         if (core_autoCode != null)
                         {
