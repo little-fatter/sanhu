@@ -93,7 +93,16 @@ function() {
                     readonlyInEdit: 0
                 },
                 {
-                    newline: true,
+                    name: "IsRootTask",
+                    type: "checkbox",
+                    label: "是否手动创建",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    newline: false,
                     name: "TaskContent",
                     label: "任务描述",
                     editor: {
