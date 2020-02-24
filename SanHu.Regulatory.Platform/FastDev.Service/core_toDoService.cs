@@ -42,7 +42,7 @@ namespace FastDev.Service
         {
             var db = this.MainDb;
 
-            var userid = SysContext.CurrentUserID;
+            var userid = SysContext.WanJiangUserID;
 
             var todos = db.Fetch<core_toDo>("where UserID = @0 and Status = @1 order by CreateDate desc", userid, WFRecordStatus.Running);
 

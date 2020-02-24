@@ -31,7 +31,6 @@
         log: function () {
             var Piwik = this;
             var options = this.options;
-            debugger;
             Piwik.getLog(function () {
                 Piwik.openLogWin();
             });
@@ -245,10 +244,10 @@
                             many2many: true,
                             css: "combobox-selector",
                             popupselect_ismul: true,
-                            valueField: "ID",
-                            textField: "RealName",
+                            valueField: "Id",
+                            textField: "Name",
                             popupselect_type: "popupselect",
-                            popupselect_url: pbc.toUrl("/web/main/?model=core_user&viewtype=list&bind=" + ext),
+                            popupselect_url: pbc.toUrl("/web/main/?model=user&viewtype=list&bind=" + ext),
                             popupselect_width: "930",
                             popupselect_height: "700",
                             popupselect_title: "选择参与者 "
@@ -444,7 +443,7 @@
             var objectCsv = this;
             var options = this.options;
             pbc.ajax({
-                url: pbc.toUrl("/web/workflow?id=log"),
+                url: pbc.toUrl("/web/workflow/log"),
                 data: {
                     context: {
                         Context: options.context,

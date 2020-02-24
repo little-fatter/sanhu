@@ -1,6 +1,7 @@
 using Autofac;
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
+using FD.Common.ActionValue;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -131,6 +132,8 @@ namespace FastDev.RunWeb
             {
                 options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                options.JsonSerializerOptions.Converters.Add(new DateTimeNullConverter());
             });
             //.AddControllersAsServices(); 
 

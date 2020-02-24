@@ -1,27 +1,63 @@
-﻿define([],
+define([],
 function() {
-    function view() {
-        var options = {
+
+    var exports = {
+        type: 'list',
+        options: {
             search: {
                 conditions: [{
                     newline: false,
                     name: "Title",
                     operator: "contains",
                     type: "text",
-                    label: "标题"
+                    label: "标题",
+                    syseditor: "#editor,Title,text#"
                 }]
             },
             list: {
-                checkbox: false,
                 columns: [{
                     name: "Title",
                     type: "string",
                     display: "标题",
                     name_text: "标题",
-                    width: "500",
+                    width: "300",
                     align: "left",
                     align_textfield: "左对齐",
-                    type_text: "文本型"
+                    type_text: "文本型",
+                    editorType: ""
+                },
+                {
+                    width: "150",
+                    display: "创建时间 ",
+                    name: "CreateDate",
+                    name_text: " - 创建时间 - ",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "datetime",
+                    type_text: "日期",
+                    editorType: ""
+                },
+                {
+                    width: "200",
+                    display: "完成时间",
+                    name: "CompleteTime",
+                    name_text: "完成时间",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "datetime",
+                    type_text: "日期",
+                    editorType: ""
+                },
+                {
+                    width: "150",
+                    display: "备注",
+                    name: "Remark",
+                    name_text: "备注",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "string",
+                    type_text: "文本型",
+                    editorType: ""
                 },
                 {
                     width: "150",
@@ -51,6 +87,7 @@ function() {
             },
             link: {},
             report: {},
+            type: "list",
             filterFields: [{
                 display: "指定人",
                 name: "User",
@@ -136,53 +173,48 @@ function() {
                     type: "text"
                 },
                 type: "text"
-            }]
-        };
-        return options;
-    }
-
-    var exports = {
-        type: 'list',
-        options: view(),
+            }],
+            addins: {}
+        },
         dataset: 'web/dataset?model=core_toDo&viewname=list'
     };
     exports.options.model = {
         name: 'core_toDo',
-        title: '代办'
+        title: '待办'
     };
 
     exports.service = function server(page) {
         page.bind('beforeShowList',
-        function (e)
-        { 
-            var page = e.page,
-            gridOptions = e.options;
-            var column = pbc.web.helper.first(gridOptions.columns,
-            function(a) {
-                return a.name == "Title";
-            });
-            if (column == null) return;
-            column.render = function(r) {
-                return '<a href="javascript:void()" data-link="' + r.Link + '" class="todolink">' + r.Title + '</a>';
-            };
-            gridOptions.onAfterShowData = function() {
-                $("a.todolink", this.element).click(function() {
-                    var link = $(this).attr("data-link");
-                    top.openTab({
-                        text: "代办任务",
-                        url: link,
-                        tabid: 'core_todo_form',
-                        data: {
-                            callback: function() {
-                                page.reload();
-                            }
-                        }
+            function (e) {
+                var page = e.page,
+                    gridOptions = e.options;
+                var column = pbc.web.helper.first(gridOptions.columns,
+                    function (a) {
+                        return a.name == "Title";
                     });
-                });
-            };
-        });
+                if (column == null) return;
+                column.render = function (r) {
+                    return '<a href="javascript:void(0);" data-link="' + r.Link + '" class="todolink">' + r.Title + '</a>';
+                };
+                gridOptions.onAfterShowData = function () {
+                    $("a.todolink", this.element).click(function () {
+                        var link = $(this).attr("data-link");
+                        top.openTab({
+                            text: "代办任务",
+                            url: link,
+                            tabid: 'core_todo_form',
+                            data: {
+                                callback: function () {
+                                    page.reload();
+                                }
+                            }
+                        });
+                    });
+                };
+            });
 
     };
+
 
     return exports;
 });

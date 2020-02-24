@@ -115,9 +115,9 @@ namespace FastDev.DevDB.AutoCode
 			{
 				core_autoCodeInfo = new core_autoCodeInfo();
 				core_autoCodeInfo.CreateDate = DateTime.Now;
-				core_autoCodeInfo.CreateUserID = SysContext.CurrentUserID;
+				core_autoCodeInfo.CreateUserID = SysContext.WanJiangUserID;
 				core_autoCodeInfo.ModifyDate = DateTime.Now;
-				core_autoCodeInfo.ModifyUserID = SysContext.CurrentUserID;
+				core_autoCodeInfo.ModifyUserID = SysContext.WanJiangUserID;
 				core_autoCodeInfo.ID = Guid.NewGuid().ToString();
 				core_autoCodeInfo.AutoCodeID = data.ID;
 				core_autoCodeInfo.SerialNumber = ((!data.SerialNumberStart.HasValue) ? 1 : data.SerialNumberStart.Value);
@@ -141,7 +141,7 @@ namespace FastDev.DevDB.AutoCode
 				core_autoCodeInfo core_autoCodeInfo2 = core_autoCodeInfo;
 				core_autoCodeInfo2.SerialNumber += (decimal?)((!data.SerialNumberStep.HasValue) ? 1 : data.SerialNumberStep.Value);
 				core_autoCodeInfo.ModifyDate = DateTime.Now;
-				core_autoCodeInfo.ModifyUserID = SysContext.CurrentUserID;
+				core_autoCodeInfo.ModifyUserID = SysContext.WanJiangUserID;
 				DBMain.Update("core_autoCodeInfo", "ID", core_autoCodeInfo, core_autoCodeInfo.ID);
 				rev = Convert.ToInt32(core_autoCodeInfo.SerialNumber).ToString();
 			}

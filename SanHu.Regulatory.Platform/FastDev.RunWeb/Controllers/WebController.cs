@@ -298,7 +298,7 @@ namespace FastDev.RunWeb.Controllers
             get; [NonAction]
             private set;
         }
-
+        
         [VaildateUser]
         [HttpPost]
         public ActionResult Api(string id, string model, string data, string context)
@@ -474,7 +474,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-               
+
                 return Json(new
                 {
                     statusCode = "1",
@@ -630,7 +630,7 @@ namespace FastDev.RunWeb.Controllers
                                         string arg = ObjectExtensions.ToStr((object)variable);
                                         if (variable == "{CurrentUserID}")
                                         {
-                                            arg = SysContext.CurrentUserID;
+                                            arg = SysContext.WanJiangUserID;
                                         }
                                         else if (new Regex("^{\\w+}$", RegexOptions.IgnoreCase).IsMatch(variable))
                                         {
@@ -743,9 +743,9 @@ namespace FastDev.RunWeb.Controllers
                         }
                         action("ID", Guid.NewGuid().ToString());
                         action("CreateDate", DateTime.Now);
-                        action("CreateUserID", SysContext.CurrentUserID);
+                        action("CreateUserID", SysContext.WanJiangUserID);
                         action("ModifyDate", DateTime.Now);
-                        action("ModifyUserID", SysContext.CurrentUserID);
+                        action("ModifyUserID", SysContext.WanJiangUserID);
                         dbContext.Insert(entity);
                         num++;
                     }
@@ -1046,7 +1046,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
 
-                List<GridColumn> list = JsonHelper.DeserializeJsonToObject<List<GridColumn>>(string_7);
+                List<GridColumn> list = JsonHelper.DeserializeJsonToList<GridColumn>(string_7);
                 List<Dictionary<string, object>> list2 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(listdataJSON);
                 Dictionary<string, object> dictionary = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(totaldataJSON);
                 if (string.IsNullOrEmpty(string_8))
@@ -1776,12 +1776,13 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private void method_3(FastDev.DevDB.Model.core_user core_user_0, int int_2, int int_3, string string_7 = null)
+        private void FillUserInfo(int page, int pageCount)
         {
+            var u = SysContext.GetWanJiangUser();
             DbContext currentDb = SysContext.GetCurrentDb();
-            dictionary_1["page"] = ObjectExtensions.ToStr((object)int_2);
-            dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)int_3);
-            dictionary_1["loginname"] = core_user_0.LoginName;
+            dictionary_1["page"] = ObjectExtensions.ToStr((object)page);
+            dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)pageCount);
+            dictionary_1["loginname"] = u.AccountId;
             dictionary_1["now"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
 
@@ -1792,10 +1793,6 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 DbContext currentDb = SysContext.GetCurrentDb();
-                FastDev.DevDB.Model.core_user core_user_ = currentDb.FirstOrDefault<FastDev.DevDB.Model.core_user>("where id = @0", new object[1]
-                {
-                    SysContext.CurrentUserID
-                });
                 dbContext_1 = currentDb;
                 ServiceConfig serviceConfig = new ServiceConfig();
                 serviceConfig.fields = new List<Field>();
@@ -1916,9 +1913,9 @@ namespace FastDev.RunWeb.Controllers
                     method_2();
                     int num7 = listdata.Count();
                     double a = (double)num7 * 1.0 / (double)pageSize.Value;
-                    int num8 = (int)Math.Ceiling(a);
-                    string[] array = new string[num8];
-                    if (num8 == 0)
+                    int pageCount = (int)Math.Ceiling(a);
+                    string[] array = new string[pageCount];
+                    if (pageCount == 0)
                     {
                         strTemplateOut = coreReportTemp.TemplateBody;
                         method_23(serviceConfig_);
@@ -1936,9 +1933,9 @@ namespace FastDev.RunWeb.Controllers
                     }
                     else
                     {
-                        for (int j = 1; j <= num8; j++)
+                        for (int j = 1; j <= pageCount; j++)
                         {
-                            method_3(core_user_, j, num8);
+                            FillUserInfo(j, pageCount);
                             List<Dictionary<string, object>> list6 = new List<Dictionary<string, object>>();
                             for (int i = pageSize.Value * (j - 1); i < j * pageSize.Value && i < listdata.Count(); i++)
                             {
@@ -3085,7 +3082,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     return list;
                 }
-                List<SelectionItem> list4 = JsonHelper.DeserializeJsonToObject<List<SelectionItem>>(field.fieldSelection);
+                List<SelectionItem> list4 = JsonHelper.DeserializeJsonToList<SelectionItem>(field.fieldSelection);
                 if (list4 == null || !list4.Any())
                 {
                     return list;
@@ -3168,7 +3165,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     return list;
                 }
-                List<SelectionItem> list3 = JsonHelper.DeserializeJsonToObject<List<SelectionItem>>(field.fieldSelection);
+                List<SelectionItem> list3 = JsonHelper.DeserializeJsonToList<SelectionItem>(field.fieldSelection);
                 if (list3 == null || !list3.Any())
                 {
                     return list;
@@ -3429,7 +3426,7 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult Rights(string id, string roleId, string userId, string loginName, RightsSaveModel value)
+        public ActionResult Rights(string id, string roleId, string userId, string loginName, string fullJson)
         {
             try
             {
@@ -3438,10 +3435,7 @@ namespace FastDev.RunWeb.Controllers
                 object data = null;
                 if (!string.IsNullOrEmpty(loginName))
                 {
-                    userId = currentDb.ExecuteScalar<string>("select ID from core_user where loginname = @0", new object[1]
-                    {
-                        loginName
-                    });
+                    userId = SysContext.WanJiangUserID;
                 }
                 if (id == "get")
                 {
@@ -3456,6 +3450,9 @@ namespace FastDev.RunWeb.Controllers
                 }
                 else if (id == "save")
                 {
+
+                    var jsonContext = JObject.Parse(fullJson);
+                    RightsSaveModel value = jsonContext.SelectToken("value").ToObject<RightsSaveModel>();
                     if (!string.IsNullOrEmpty(roleId))
                     {
                         data = rightsServer.Save(RightsMasterType.Role, roleId, value);
@@ -3562,14 +3559,14 @@ namespace FastDev.RunWeb.Controllers
                 {
                     core_dataAssign.ValueContent = data.ValueContent;
                     core_dataAssign.ModifyDate = DateTime.Now;
-                    core_dataAssign.ModifyUserID = SysContext.CurrentUserID;
+                    core_dataAssign.ModifyUserID = SysContext.WanJiangUserID;
                     currentDb.Update("core_dataAssign", "ID", (object)core_dataAssign);
                 }
                 else
                 {
                     data.ID = ObjectExtensions.ToStr((object)Guid.NewGuid());
                     data.CreateDate = DateTime.Now;
-                    data.CreateUserID = SysContext.CurrentUserID;
+                    data.CreateUserID = SysContext.WanJiangUserID;
                     currentDb.Insert("core_dataAssign", "ID", false, (object)data);
                 }
                 return Json(new AjaxResult
@@ -3787,9 +3784,9 @@ namespace FastDev.RunWeb.Controllers
             {
                 ID = Guid.NewGuid().ToString(),
                 CreateDate = DateTime.Now,
-                CreateUserID = SysContext.CurrentUserID,
+                CreateUserID = SysContext.WanJiangUserID,
                 ModifyDate = DateTime.Now,
-                ModifyUserID = SysContext.CurrentUserID,
+                ModifyUserID = SysContext.WanJiangUserID,
                 SettingKey = string_7,
                 SettingName = string_8,
                 SettingValue = string_9
@@ -4270,7 +4267,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 DbContext currentDb = SysContext.GetCurrentDb();
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 return Json(new
                 {
                     id = currentUserID
@@ -4350,7 +4347,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     throw new UserException("两次密码输入不一致");
                 }
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 string a = currentDb.ExecuteScalar<string>("select LoginPassword from core_user where ID = @0", new object[1]
                 {
                     currentUserID
@@ -4462,14 +4459,15 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
-        [HttpPost]
+        [HttpGet]
         public ActionResult Main(string model, string viewtype, string viewname)
         {
-            return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.Path)));
+            return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.QueryString.ToString())));
         }
 
         [VaildateUser]
         [HttpPost]
+        [HttpGet]
         public ActionResult M(string model, string viewtype, string viewname)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -4600,12 +4598,13 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public ActionResult Workflow(string id, string fullJson)
         {
-            var jsonContext= JObject.Parse(fullJson);
-            WorkflowContext wfContext =jsonContext.SelectToken("context").ToObject<WorkflowContext>();
+            var jsonContext = JObject.Parse(fullJson);
+            WorkflowContext wfContext = jsonContext.SelectToken("context").ToObject<WorkflowContext>();
             //WorkflowContext wfContext = jsonContext..GetObject<WorkflowContext>(fullJson);
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
             DbContext currentDb = SysContext.GetCurrentDb();
-            IWorkflowService workflowService = new WorkflowService();
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
             workflowService.DbContext = currentDb;
             try
             {
@@ -4621,21 +4620,23 @@ namespace FastDev.RunWeb.Controllers
                     {
                         throw new UserException("业务单据必须指定");
                     }
-                    object context2 = workflowService.GetContext(wfContext);
+                    object bcontext = workflowService.GetContext(wfContext);
+                    var wfData = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(bcontext));
                     return Json(new AjaxResult
                     {
-                        data = context2,
+                        data = wfData,
                         statusCode = "1"
                     });
                 }
                 if (id == "log")
                 {
-                    object context2 = workflowService.GetLog(wfContext);
-                    return GetContentDataJson(new AjaxResult
+                    object logContext = workflowService.GetLog(wfContext);
+                    var wfData = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(logContext));
+                    return Json(new AjaxResult
                     {
-                        statusCode = "1"
-                    },
-                     JsonHelper.SerializeObject(context2));
+                        statusCode = "1",
+                        data = wfData
+                    });
                 }
                 return Json(new AjaxResult
                 {
@@ -4794,9 +4795,9 @@ namespace FastDev.RunWeb.Controllers
                         action("OrderID", orderId);
                         action("ID", Guid.NewGuid().ToString());
                         action("CreateDate", DateTime.Now);
-                        action("CreateUserID", SysContext.CurrentUserID);
+                        action("CreateUserID", SysContext.WanJiangUserID);
                         action("ModifyDate", DateTime.Now);
-                        action("ModifyUserID", SysContext.CurrentUserID);
+                        action("ModifyUserID", SysContext.WanJiangUserID);
                         dbContext.Insert(entity);
                         num++;
                     }
@@ -4832,7 +4833,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = currentDb.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", new object[1]
                 {
@@ -4883,7 +4884,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = currentDb.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", new object[1]
                 {
@@ -4916,7 +4917,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = currentDb.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", new object[1]
                 {

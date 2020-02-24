@@ -90,11 +90,7 @@ function() {
             common: {
                 saveCallbackType: "toClose"
             },
-            toolbar: {
-                items: [
-                    { text: '打印报表', id: 'myprint', cls: 'ne-btn-blue' }
-                ]
-            },
+            toolbar: null,
             //自定义打印按钮
             onmyprint: function () {
                 var g = this, p = this.options;

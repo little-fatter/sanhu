@@ -294,7 +294,7 @@
     $.ligerDefaults.Filter.operators['popupselect'] = $.ligerDefaults.Filter.operators['select'] = ["equal", "notequal", "in", "notin"];
     $.ligerDefaults.Filter.operators['string'] = $.ligerDefaults.Filter.operators['text'] = ["equal", "notequal", "startwith", "endwith", "like", "notstartwith", "notendwith", "notlike"];
     $.ligerDefaults.Filter.operators['number'] = $.ligerDefaults.Filter.operators['int'] = $.ligerDefaults.Filter.operators['float'] =
-    $.ligerDefaults.Filter.operators['date'] = $.ligerDefaults.Filter.operators['datepicker'] = ["greater", "greaterorequal", "less", "lessorequal"];
+        $.ligerDefaults.Filter.operators['date'] = $.ligerDefaults.Filter.operators['datepicker'] = ["equal","greater", "greaterorequal", "less", "lessorequal"];
 
 
     //表格 格式化

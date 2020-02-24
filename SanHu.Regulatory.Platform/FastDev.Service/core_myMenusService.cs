@@ -45,7 +45,7 @@ namespace FastDev.Service
 
             var apps = new List<Dictionary<string, object>>();
             var icons = new List<string>();
-            var my_menus = db.Fetch<FastDev.Model.Core.Entity.core_myMenus>("where UserID = @0 Order By SortNo asc", SysContext.CurrentUserID);
+            var my_menus = db.Fetch<FastDev.Model.Core.Entity.core_myMenus>("where UserID = @0 Order By SortNo asc", SysContext.WanJiangUserID);
  
             foreach (var my in my_menus)
             {
@@ -89,9 +89,9 @@ namespace FastDev.Service
             int index = 1;
             foreach (var appid in appids)
             {
-                var menuId = db.ExecuteScalar<string>("select ID from core_menu where MenuNo = @0 and ID in (select MenuID from core_myMenus where UserID = @1)", appid, SysContext.CurrentUserID);
+                var menuId = db.ExecuteScalar<string>("select ID from core_menu where MenuNo = @0 and ID in (select MenuID from core_myMenus where UserID = @1)", appid, SysContext.WanJiangUserID);
                 if(string.IsNullOrEmpty(menuId)) continue;
-                var result = db.Execute("update core_myMenus set SortNo = @0 where MenuID = @1 and UserID = @2", index++, menuId, SysContext.CurrentUserID);
+                var result = db.Execute("update core_myMenus set SortNo = @0 where MenuID = @1 and UserID = @2", index++, menuId, SysContext.WanJiangUserID);
             }
 
             return appids;
@@ -100,7 +100,7 @@ namespace FastDev.Service
         {
             var view = viewdata as Model.Core.Form.core_myMenus;
 
-            view.UserID = SysContext.CurrentUserID;
+            view.UserID = SysContext.WanJiangUserID;
             view.User = new List<string>() { view.UserID, view.UserID };
         }
 

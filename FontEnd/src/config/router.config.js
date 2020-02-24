@@ -8,13 +8,12 @@ import { RouteView, BlankLayout, PageView } from '@/components/layouts'
  */
 
 export const asyncRouterMap = [
-
   {
     path: '/',
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/workplace',
+    redirect: '/mission/dealt',
     children: [
       {
         path: '/dashboard',
@@ -47,21 +46,57 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/form/base-form',
-            name: 'BaseForm',
-            component: () => import('@/views/form/BasicForm'),
-            meta: { title: '基础表单', keepAlive: true }
+            name: 'Index',
+            component: () => import('@/views/form/index'),
+            meta: { title: '表单列表', keepAlive: true }
           },
           {
-            path: '/form/step-form',
-            name: 'StepForm',
-            component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: '分步表单', keepAlive: true }
+            path: '/form/form-details',
+            name: 'FormDetails',
+            component: () => import('@/views/form/formDetails'),
+            meta: { title: '表单详情', keepAlive: false }
           },
           {
-            path: '/form/advanced-form',
-            name: 'AdvanceForm',
-            component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: '高级表单', keepAlive: true }
+            path: '/form/form-edit',
+            name: 'FormEdit',
+            component: () => import('@/views/form/formEdit'),
+            meta: { title: '编辑表单', keepAlive: false }
+          },
+          {
+            path: '/form/form-add-list',
+            name: 'FormAddList',
+            component: () => import('@/views/form/formAddList'),
+            meta: { title: '新建表单列表', keepAlive: true }
+          },
+          {
+            path: '/form/form-add',
+            name: 'FormAdd',
+            component: () => import('@/views/form/formAdd'),
+            meta: { title: '新建表单', keepAlive: false }
+          },
+          {
+            path: '/form/form-print',
+            name: 'FormPrint',
+            component: () => import('@/views/form/formPrint'),
+            meta: { title: '表单打印', keepAlive: false }
+          },
+          {
+            path: '/form/form-approval',
+            name: 'FormApproval',
+            component: () => import('@/views/form/formAddroval'),
+            meta: { title: '表单审批', keepAlive: false }
+          },
+          {
+            path: '/form/close-report',
+            name: 'CloseReport',
+            component: () => import('@/views/form/closeReport'),
+            meta: { title: '结案报告', keepAlive: false }
+          },
+          {
+            path: '/form/file-cover',
+            name: 'FileCover',
+            component: () => import('@/views/form/fileCover'),
+            meta: { title: '卷宗封面', keepAlive: false }
           }
         ]
       },
@@ -135,23 +170,17 @@ export const asyncRouterMap = [
       },
       // profile
       {
-        path: '/profile',
-        name: 'profile',
+        path: '/mission',
+        name: 'Mission',
         component: RouteView,
-        redirect: '/profile/basic',
-        meta: { title: '详情页' },
+        redirect: '',
+        meta: { title: '我的任务' },
         children: [
           {
-            path: '/profile/basic',
-            name: 'ProfileBasic',
-            component: () => import('@/views/profile/basic/Index'),
-            meta: { title: '基础详情页' }
-          },
-          {
-            path: '/profile/advanced',
-            name: 'ProfileAdvanced',
-            component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: '高级详情页' }
+            path: '/mission/dealt',
+            name: '',
+            component: () => import('@/views/mymission/Index'),
+            meta: { title: '待办任务' }
           }
         ]
       },
@@ -206,6 +235,22 @@ export const asyncRouterMap = [
             meta: { title: '500' }
           }
         ]
+      },
+
+      // workbench
+      {
+        path: '/workbench',
+        name: 'workbench',
+        redirect: '/workbench/backlog',
+        component: RouteView,
+        meta: { title: '我的工作台' },
+        children: [
+          {
+            path: '/workbench/backlog',
+            name: 'Backlog',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/workbench/Backlog')
+          }
+        ]
       }
     ]
   },
@@ -220,7 +265,7 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
-    path: '/user/login',
+    path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login'),
     meta: { title: '登录页面' }

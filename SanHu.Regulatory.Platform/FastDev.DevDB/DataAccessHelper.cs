@@ -484,6 +484,11 @@ namespace FastDev.DevDB
 
         public static string GetModeEntityText(DbContext db, string model, string id)
         {
+            string dbName = ServiceHelper.GetServiceConfig(model)?.model.dbName;
+            if (!string.IsNullOrEmpty(dbName))
+            {
+                db = SysContext.GetOtherDB(dbName);
+            }
             string key = model + "_" + id;
             if (dicValues.ContainsKey(key))
             {
@@ -497,7 +502,7 @@ namespace FastDev.DevDB
             return dicValues[key];
         }
 
-        public static void ClearModelEntityText(DbContext db, string model, string id)
+        public static void ClearModelEntityText(string model, string id)
         {
             try
             {
