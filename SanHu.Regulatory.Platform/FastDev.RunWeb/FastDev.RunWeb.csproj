@@ -47,6 +47,7 @@
     <ProjectReference Include="..\Component\UEditor.Core\UEditor.Core.csproj" />
     <ProjectReference Include="..\FastDev.Common\FastDev.Common.csproj" />
     <ProjectReference Include="..\FastDev.DevDB\FastDev.DevDB.csproj" />
+    <ProjectReference Include="..\FastDev.IService\FastDev.IServices.csproj" />
     <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
     <ProjectReference Include="..\FastDev.Service\FastDev.Service.csproj" />
   </ItemGroup>

@@ -39,6 +39,16 @@
             移交目标
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskId">
+            <summary>
+            任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskPatrol">
+            <summary>
+            巡检信息
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.TaskPatrolRejectRequest">
             <summary>
             任务巡查拒绝请求

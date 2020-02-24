@@ -58,7 +58,7 @@ namespace FastDev.Service
                 var data = JsonHelper.DeserializeJsonToObject<TaskHandOverReq>(context.Data);
 
                 //关闭当前任务
-                var workTask = QueryDb.FirstOrDefault<work_task>("id=@id", new { id = data.TaskId });
+                var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
                 workTask.TaskStatus = (int)WorkTaskStatus.Close;  
                 QueryDb.Update(workTask);
 
@@ -90,7 +90,7 @@ namespace FastDev.Service
         private object Reject(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<TaskPatrolRejectRequest>(context.Data);
-            var workTask = QueryDb.FirstOrDefault<work_task>("id=@id", new { id = data.TaskId });
+            var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
             QueryDb.Update(workTask);
