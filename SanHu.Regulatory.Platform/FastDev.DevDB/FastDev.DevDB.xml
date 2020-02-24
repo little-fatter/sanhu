@@ -147,6 +147,12 @@
             <param name="strExcutorId"></param>
             <returns></returns>
         </member>
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            创建下一个任务
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:FastDev.DevDB.ServiceBase.MainDb">
             <summary>
             core_表格所在的数据库的db
@@ -248,6 +254,26 @@
             根据模型的配置，获取数据库对象
             </summary>
             <param name="dbName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.DevDB.WanJiangAuth">
+            <summary>
+            关于两个平台对接的过程种设计到的用户，角色，单位的信息同步
+            这里有些破坏平台的开放闭合规则，为了能迅速整合系统，出此下策
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.WanJiangAuth.GetRoleUsers(System.String)">
+            <summary>
+            获取万江的用户
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.WanJiangAuth.GetCurrentDepartmentId(System.String)">
+            <summary>
+            获取用户的部门，如果有多个也只获取一个
+            </summary>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:FastDev.DevDB.WorkflowService.GenNewStatus(System.String,System.String)">

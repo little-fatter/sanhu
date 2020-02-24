@@ -28,7 +28,7 @@ namespace FastDev.Service
                         var sql = item["ValueSQL"].ToString();
                         if (sql.Contains("@0"))
                         {
-                            item["Value"] = db.ExecuteScalar<string>(sql, SysContext.CurrentUserID);
+                            item["Value"] = db.ExecuteScalar<string>(sql, SysContext.WanJiangUserID);
                         }
                         else
                         {

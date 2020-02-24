@@ -50,14 +50,14 @@ namespace FastDev.DevDB
                 DbContext currentDb = SysContext.GetCurrentDb();
                 core_log core_log = new core_log();
                 core_log.CreateDate = DateTime.Now;
-                core_log.CreateUserID = SysContext.CurrentUserID;
+                core_log.CreateUserID = SysContext.WanJiangUserID;
                 core_log.ID = ObEx.ToStr((object)Guid.NewGuid());
                 core_log.Logtime = DateTime.Now;
                 core_log.Title = title;
                 core_log.Logcontent = content;
                 core_log.Logtype = "user";
                 core_log.Systempath = HttpContext.Current.Request.Path.ToString();
-                core_log.UserID = SysContext.CurrentUserID;
+                core_log.UserID = SysContext.WanJiangUserID;
                 currentDb.Insert("core_log", "ID", false, (object)core_log);
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@ namespace FastDev.DevDB
                 DbContext currentDb = SysContext.GetCurrentDb();
                 core_log core_log = new core_log();
                 core_log.CreateDate = DateTime.Now;
-                core_log.CreateUserID = SysContext.CurrentUserID;
+                core_log.CreateUserID = SysContext.WanJiangUserID;
                 core_log.ID = ObEx.ToStr((object)Guid.NewGuid());
                 core_log.Logtime = DateTime.Now;
                 core_log.Title = "系统异常";
@@ -81,7 +81,7 @@ namespace FastDev.DevDB
                 core_log.Logtype = "exception";
                 core_log.StackTrace = error.StackTrace;
                 core_log.Systempath = HttpContext.Current.Request.Path.ToString();
-                core_log.UserID = SysContext.CurrentUserID;
+                core_log.UserID = SysContext.WanJiangUserID;
                 currentDb.Insert("core_log", "ID", false, (object)core_log);
             }
             catch (Exception)
@@ -106,24 +106,20 @@ namespace FastDev.DevDB
             dictionary["rights"] = rightsServer.GetRunTime(model);
             try
             {
-                dictionary["CurrentUserID"] = SysContext.CurrentUserID;
-                dictionary["CurrentUserLoginName"] = newDb.ExecuteScalar<string>("select loginname from core_user where id = @0", new object[1]
-                {
-                    SysContext.CurrentUserID
-                });
-                dictionary["CurrentUserRealName"] = newDb.ExecuteScalar<string>("select realname from core_user where id = @0", new object[1]
-                {
-                    SysContext.CurrentUserID
-                });
-
-                dictionary["CurrentDepartmentID"] = newDb.ExecuteScalar<string>("select DepartmentID from core_user where id = @0", new object[1]
-                {
-                    SysContext.CurrentUserID
-                });
-                dictionary["CurrentCompanyID"] = newDb.ExecuteScalar<string>("select CompanyID from res_department where ID=@0", new object[1]
-                {
-                    dictionary["CurrentDepartmentID"]
-                });
+                var wanJianUser = SysContext.GetWanJiangUser();
+                dictionary["CurrentUserID"] = wanJianUser.UserId;
+                dictionary["CurrentUserLoginName"] = wanJianUser.AccountId;
+                dictionary["CurrentUserRealName"] = wanJianUser.UserName;
+                dictionary["CurrentDepartmentID"] = WanJiangAuth.GetCurrentDepartmentId(SysContext.WanJiangUserID);
+                //dictionary["CurrentDepartmentID"] = newDb.ExecuteScalar<string>("select DepartmentID from core_user where id = @0", new object[1]
+                //{
+                //    SysContext.WanJiangUserID
+                //});
+                dictionary["CurrentCompanyID"] = WanJiangAuth.GetCurrentCompanyId(SysContext.WanJiangUserID);
+                //dictionary["CurrentCompanyID"] = newDb.ExecuteScalar<string>("select CompanyID from res_department where ID=@0", new object[1]
+                //{
+                //    dictionary["CurrentDepartmentID"]
+                //});
             }
             catch
             {
@@ -154,14 +150,23 @@ namespace FastDev.DevDB
                                 {
                                     string value = currentDb.ExecuteScalar<string>(item.VariableExpression, new object[1]
                                     {
-                                        SysContext.CurrentUserID
+                                        SysContext.WanJiangUserID
                                     });
                                     userdata[item.VariableName] = value;
                                 }
                                 else
                                 {
-                                    string value = currentDb.ExecuteScalar<string>(item.VariableExpression, new object[0]);
-                                    userdata[item.VariableName] = value;
+                                    if (item.VariableExpression.Contains("select"))
+                                    {
+                                        string value = currentDb.ExecuteScalar<string>(item.VariableExpression, new object[0]);
+                                        userdata[item.VariableName] = value;
+                                    }
+                                    else
+                                    {
+                                        //typeof(object).GetField("").GetValue(userinfo);
+                                        //这里应该通过反射获取用户类
+                                        userdata[item.VariableName] = SysContext.WanJiangUserID;
+                                    }
                                 }
                             }
                             catch (Exception)

@@ -10,12 +10,22 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using FastDev.DevDB;
 using Microsoft.AspNetCore.Mvc;
+using WanJiang.Framework.Infrastructure.Logging;
+using WanJiang.Framework.Web.Core.Http;
 
 namespace FastDev.RunWeb.Controllers
 {
     public class BaseController : WanJiang.Framework.Web.Core.Mvc.BaseController
     {
-
+        /// <summary>
+        /// 获取三湖当前登录用户信息
+        /// </summary>
+        /// <returns></returns>
+        [NonAction]
+        protected ClientInfo GetUserInfo()
+        {
+            return HttpContext.GetClientInfo();
+        }
         /// <summary>
         /// 返回json
         /// </summary>

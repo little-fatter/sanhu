@@ -40,7 +40,6 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.7.0" />
-    <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.5.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Component\FastDev.Model.Core\FastDev.Model.Core.csproj" />
@@ -48,6 +47,7 @@
     <ProjectReference Include="..\Component\UEditor.Core\UEditor.Core.csproj" />
     <ProjectReference Include="..\FastDev.Common\FastDev.Common.csproj" />
     <ProjectReference Include="..\FastDev.DevDB\FastDev.DevDB.csproj" />
+    <ProjectReference Include="..\FastDev.IService\FastDev.IServices.csproj" />
     <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
     <ProjectReference Include="..\FastDev.Service\FastDev.Service.csproj" />
   </ItemGroup>

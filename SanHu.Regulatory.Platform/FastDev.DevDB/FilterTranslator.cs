@@ -190,7 +190,7 @@ namespace FastDev.DevDB
             }
             if (rule.value.ToStr() == "{CurrentUserID}")
             {
-                rule.value = SysContext.CurrentUserID;
+                rule.value = SysContext.WanJiangUserID;
             }
             else if (new Regex("^{\\w+}$", RegexOptions.IgnoreCase).IsMatch(rule.value.ToStr()))
             {

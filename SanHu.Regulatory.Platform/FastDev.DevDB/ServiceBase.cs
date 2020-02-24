@@ -651,7 +651,7 @@ namespace FastDev.DevDB
         {
             return GetConfigDB(ModelName);
         }
-        private DbContext GetConfigDB(string refModelName)
+        protected DbContext GetConfigDB(string refModelName)
         {
             //if (refModelName == ModelName) return MainDb;
             ServiceConfig serviceConfig = GetServiceConfig(refModelName);
@@ -989,13 +989,14 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter, ModelName);
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            if (serviceConfig.model.notIncludeSysFields != "Y")
+                filter = PrevFilter(filter, ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, orderby);
             if (listData == null || listData.Count == 0)
             {
                 return new List<Dictionary<string, object>>();
             }
-            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
             List<Field> field = serviceConfig.fields;
             List<string> lstFileds = new List<string>();
             if (EnabledRights)
@@ -1015,7 +1016,9 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter, ModelName);
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            if (serviceConfig.model.notIncludeSysFields != "Y")
+                filter = PrevFilter(filter, ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, null, "Name");
             afterGetDataDelegate_OnAfterGetNameData?.Invoke(filter, listData);
             return listData;
@@ -1123,11 +1126,11 @@ namespace FastDev.DevDB
                         {
                             RecordStatus.Deleted,
                             DateTime.Now,
-                            SysContext.CurrentUserID,
+                            SysContext.WanJiangUserID,
                             obj
                         });
                     }
-                    DataAccessHelper.ClearModelEntityText(dbContext, modelName, ObEx.ToStr(obj));
+                    DataAccessHelper.ClearModelEntityText(modelName, ObEx.ToStr(obj));
                 }
                 filterTranslator.Group.op = "or";
                 filterTranslator.Translate();
@@ -1390,7 +1393,7 @@ namespace FastDev.DevDB
                 {
                     dbContext.Update(modelName, modelConfig.PKName, obj, (IEnumerable<string>)list5);
                 }
-                DataAccessHelper.ClearModelEntityText(dbContext, modelName, ObEx.ToStr(propertyValue));
+                DataAccessHelper.ClearModelEntityText( modelName, ObEx.ToStr(propertyValue));
             }
             if (!isUseDefault && saveDelegate_OnSavedDetail != null)
             {
@@ -1458,7 +1461,7 @@ namespace FastDev.DevDB
                 }
                 SetValue(serviceConfig.PKName, text);
                 SetValue("CreateDate", DateTime.Now);
-                SetValue("CreateUserID", SysContext.CurrentUserID);
+                SetValue("CreateUserID", SysContext.WanJiangUserID);
             }
             else
             {
@@ -1467,7 +1470,7 @@ namespace FastDev.DevDB
                 entityValues = func(obj);
             }
             SetValue("ModifyDate", DateTime.Now);
-            SetValue("ModifyUserID", SysContext.CurrentUserID);
+            SetValue("ModifyUserID", SysContext.WanJiangUserID);
             object obj4 = findValue("Status");
             if (obj4 == null)
             {
@@ -1495,6 +1498,7 @@ namespace FastDev.DevDB
                 {
                     if (isAdd)
                     {
+                        ///如果有自动编号的列
                         core_autoCode core_autoCode = source.FirstOrDefault((core_autoCode a) => a.FieldName == field.name);
                         if (core_autoCode != null)
                         {
@@ -1640,26 +1644,20 @@ namespace FastDev.DevDB
             {
                 try
                 {
-                    string text2 = ObEx.ToStr(func2("CreateUserID"));
-                    string item = db.ExecuteScalar<string>("select RealName from core_user where ID = @0", new object[1]
-                    {
-                        text2
-                    });
-                    string text3 = ObEx.ToStr(func2("ModifyUserID"));
-                    string item2 = db.ExecuteScalar<string>("select RealName from core_user where ID = @0", new object[1]
-                    {
-                        text3
-                    });
+                    string cUId = ObEx.ToStr(func2("CreateUserID"));
+                    string item = WanJiangAuth.GetUserName(cUId);
+                    string mUId = ObEx.ToStr(func2("ModifyUserID"));
+                    string item2 = WanJiangAuth.GetUserName(mUId);
                     action("CreateDate", func2("CreateDate"));
                     action("CreateUser", new List<string>
                     {
-                        text2,
+                        cUId,
                         item
                     });
                     action("ModifyDate", func2("ModifyDate"));
                     action("ModifyUser", new List<string>
                     {
-                        text3,
+                        mUId,
                         item2
                     });
                     action("Status", func2("Status"));

@@ -279,7 +279,7 @@
                         var array = self.rows;
                         var index = highestPrioColumn; /** @type {number} */
                         var i = 0;
-                        for (; index < array.length; index++, i++) {
+                        for (; index < array.length; index++ , i++) {
                             if (i < data.length) {
                                 var node = doSaveProject(data[i]);
                                 if (D) {
@@ -414,161 +414,161 @@
         }
         if (element.editor.popupselect_type == "popupselect" || element.editor.popupselect_type == "popup") {
             element.editor.onButtonClick = element.editor.onButtonClick ||
-			function () {
-			    /**
-				 * @param {string} data
-				 * @return {undefined}
-				 */
+                function () {
+                    /**
+                     * @param {string} data
+                     * @return {undefined}
+                     */
 
-			    function render(data) {
-			        /**
-					 * @param {!Object} selector
-					 * @param {number} options
-					 * @return {?}
-					 */
+                    function render(data) {
+                        /**
+                         * @param {!Object} selector
+                         * @param {number} options
+                         * @return {?}
+                         */
 
-			        function jQuery(selector, options) {
-			            var ret = {}; /** @type {number} */
-			            var i = 0;
-			            for (; i < attributes.length && i < a.length; i++) {
-			                var tmp = pbc.getExpValue(selector, attributes[i], options);
-			                var c1 = a[i];
-			                ret[a[i]] = tmp;
-			            }
-			            return ret;
-			        }
-			        var reverseIsSingle = element.editor.select_updatematch_source;
-			        var reverseValue = element.editor.select_updatematch_target;
-			        var navCommonStyle = element.editor.popupselect_default; /** @type {!Array} */
-			        var attributes = []; /** @type {!Array} */
-			        var a = [];
-			        if (reverseIsSingle && reverseValue) {
-			            attributes = reverseIsSingle.split(";");
-			            a = reverseValue.split(";");
-			        }
-			        if (!data || !data.length) {
-			            return;
-			        }
-			        if (zoomAware) {
-			            var options = liger.lastEditGrid;
-			            if (!options) {
-			                return;
-			            }
-			            if (element.editor.popupselect_ismul) {
-			                options.endEdit();
-			                var firstDisplayed = options.lastEditRow["__index"];
-			                var rows = options.rows;
-			                var i = firstDisplayed; /** @type {number} */
-			                var j = 0;
-			                for (; i < rows.length; i++, j++) {
-			                    if (j < data.length) {
-			                        var result = jQuery(data[j], j);
-			                        if (F) {
-			                            result[element.name] = data[j][element.editor.valueField];
-			                        } else { /** @type {!Array} */
-			                            result[element.name] = [data[j][element.editor.valueField], data[j][element.editor.textField]];
-			                        }
-			                        if (navCommonStyle) {
-			                            $.extend(result, navCommonStyle);
-			                        }
-			                        $.extend(rows[i], result);
-			                    }
-			                }
-			                for (; j < data.length; j++) {
-			                    result = jQuery(data[j], j);
-			                    if (F) {
-			                        result[element.name] = data[j][element.editor.valueField];
-			                    } else { /** @type {!Array} */
-			                        result[element.name] = [data[j][element.editor.valueField], data[j][element.editor.textField]];
-			                    }
-			                    if (navCommonStyle) {
-			                        $.extend(result, navCommonStyle);
-			                    }
-			                    options._addData($.extend({}, result));
-			                }
-			                options.reRender();
-			            } else {
-			                result = jQuery(data[0], 0);
-			                options.endEdit();
-			                options.update(options.lastEditRow, result);
-			            }
-			        } else {
-			            var that = window.preview_page || window.freedesign_page;
-			            if (!that || !that.form) {
-			                return;
-			            }
-			            result = jQuery(data[0]);
-			            that.form.setData(result);
-			        }
-			    }
-			    var that = this; /** @type {null} */
-			    var sslServer = null;
-			    var requestOrUrl = $.isFunction(element.editor.popupselect_url) ? element.editor.popupselect_url.call(that) : element.editor.popupselect_url;
-			    if (requestOrUrl === false) {
-			        return;
-			    } /** @type {null} */
-			    var ongoingMessage = null;
-			    var message = that.getValue();
-			    if (message) {
-			        var spheres = message.split(";");
-			        var matmul_exprgenF = that.getText().split(";"); /** @type {!Array} */
-			        message = []; /** @type {number} */
-			        var iter_sph = 0;
-			        for (; iter_sph < spheres.length; iter_sph++) {
-			            message.push([spheres[iter_sph], matmul_exprgenF[iter_sph]]);
-			        } /** @type {!Array} */
-			        ongoingMessage = message;
-			    } /** @type {boolean} */
-			    var F = that.get("isTextBoxMode") ? true : false;
-			    var options = {
-			        url: requestOrUrl,
-			        top: 100,
-			        width: element.editor.popupselect_width,
-			        height: element.editor.popupselect_height,
-			        title: element.editor.popupselect_title,
-			        openerData: {
-			            selectorType: true,
-			            singleMode: onBindElement ? false : zoomAware && element.editor.popupselect_ismul ? false : true,
-			            isGridEditor: zoomAware,
-			            filter: [],
-			            selectorInitData: ongoingMessage,
-			            valueField: element.editor.valueField || "ID",
-			            textField: element.editor.textField,
-			            callback: function (el) { /** @type {!Array} */
-			                var kv = []; /** @type {!Array} */
-			                var drilldownLevelLabels = []; /** @type {number} */
-			                var i = 0;
-			                for (; i < el.length; i++) {
-			                    kv.push(pbc.getExpValue(el[i], element.editor.valueField));
-			                    drilldownLevelLabels.push(pbc.getExpValue(el[i], element.editor.textField));
-			                    if (!onBindElement) {
-			                        break;
-			                    }
-			                }
-			                that.selected = onBindElement ? el : el.length ? el[0] : null;
-			                if (F) {
-			                    if (kv.length) {
-			                        that._changeValue(kv[0], kv[0], true);
-			                    }
-			                } else {
-			                    that._changeValue(kv.join(";"), drilldownLevelLabels.join(";"), true);
-			                }
-			                if (!onBindElement) {
-			                    render(el);
-			                }
-			                setTimeout(function () {
-			                    if (sslServer) {
-			                        sslServer.close();
-			                    }
-			                }, 50);
-			            }
-			        }
-			    };
-			    pbc.preOptions(options, function () {
-			        sslServer = pbc.openPage(options, "dialog");
-			    });
-			    return false;
-			};
+                        function jQuery(selector, options) {
+                            var ret = {}; /** @type {number} */
+                            var i = 0;
+                            for (; i < attributes.length && i < a.length; i++) {
+                                var tmp = pbc.getExpValue(selector, attributes[i], options);
+                                var c1 = a[i];
+                                ret[a[i]] = tmp;
+                            }
+                            return ret;
+                        }
+                        var reverseIsSingle = element.editor.select_updatematch_source;
+                        var reverseValue = element.editor.select_updatematch_target;
+                        var navCommonStyle = element.editor.popupselect_default; /** @type {!Array} */
+                        var attributes = []; /** @type {!Array} */
+                        var a = [];
+                        if (reverseIsSingle && reverseValue) {
+                            attributes = reverseIsSingle.split(";");
+                            a = reverseValue.split(";");
+                        }
+                        if (!data || !data.length) {
+                            return;
+                        }
+                        if (zoomAware) {
+                            var options = liger.lastEditGrid;
+                            if (!options) {
+                                return;
+                            }
+                            if (element.editor.popupselect_ismul) {
+                                options.endEdit();
+                                var firstDisplayed = options.lastEditRow["__index"];
+                                var rows = options.rows;
+                                var i = firstDisplayed; /** @type {number} */
+                                var j = 0;
+                                for (; i < rows.length; i++ , j++) {
+                                    if (j < data.length) {
+                                        var result = jQuery(data[j], j);
+                                        if (F) {
+                                            result[element.name] = data[j][element.editor.valueField];
+                                        } else { /** @type {!Array} */
+                                            result[element.name] = [data[j][element.editor.valueField], data[j][element.editor.textField]];
+                                        }
+                                        if (navCommonStyle) {
+                                            $.extend(result, navCommonStyle);
+                                        }
+                                        $.extend(rows[i], result);
+                                    }
+                                }
+                                for (; j < data.length; j++) {
+                                    result = jQuery(data[j], j);
+                                    if (F) {
+                                        result[element.name] = data[j][element.editor.valueField];
+                                    } else { /** @type {!Array} */
+                                        result[element.name] = [data[j][element.editor.valueField], data[j][element.editor.textField]];
+                                    }
+                                    if (navCommonStyle) {
+                                        $.extend(result, navCommonStyle);
+                                    }
+                                    options._addData($.extend({}, result));
+                                }
+                                options.reRender();
+                            } else {
+                                result = jQuery(data[0], 0);
+                                options.endEdit();
+                                options.update(options.lastEditRow, result);
+                            }
+                        } else {
+                            var that = window.preview_page || window.freedesign_page;
+                            if (!that || !that.form) {
+                                return;
+                            }
+                            result = jQuery(data[0]);
+                            that.form.setData(result);
+                        }
+                    }
+                    var that = this; /** @type {null} */
+                    var sslServer = null;
+                    var requestOrUrl = $.isFunction(element.editor.popupselect_url) ? element.editor.popupselect_url.call(that) : element.editor.popupselect_url;
+                    if (requestOrUrl === false) {
+                        return;
+                    } /** @type {null} */
+                    var ongoingMessage = null;
+                    var message = that.getValue();
+                    if (message) {
+                        var spheres = message.split(";");
+                        var matmul_exprgenF = that.getText().split(";"); /** @type {!Array} */
+                        message = []; /** @type {number} */
+                        var iter_sph = 0;
+                        for (; iter_sph < spheres.length; iter_sph++) {
+                            message.push([spheres[iter_sph], matmul_exprgenF[iter_sph]]);
+                        } /** @type {!Array} */
+                        ongoingMessage = message;
+                    } /** @type {boolean} */
+                    var F = that.get("isTextBoxMode") ? true : false;
+                    var options = {
+                        url: requestOrUrl,
+                        top: 100,
+                        width: element.editor.popupselect_width,
+                        height: element.editor.popupselect_height,
+                        title: element.editor.popupselect_title,
+                        openerData: {
+                            selectorType: true,
+                            singleMode: onBindElement ? false : zoomAware && element.editor.popupselect_ismul ? false : true,
+                            isGridEditor: zoomAware,
+                            filter: [],
+                            selectorInitData: ongoingMessage,
+                            valueField: element.editor.valueField || "ID",
+                            textField: element.editor.textField,
+                            callback: function (el) { /** @type {!Array} */
+                                var kv = []; /** @type {!Array} */
+                                var drilldownLevelLabels = []; /** @type {number} */
+                                var i = 0;
+                                for (; i < el.length; i++) {
+                                    kv.push(pbc.getExpValue(el[i], element.editor.valueField));
+                                    drilldownLevelLabels.push(pbc.getExpValue(el[i], element.editor.textField));
+                                    if (!onBindElement) {
+                                        break;
+                                    }
+                                }
+                                that.selected = onBindElement ? el : el.length ? el[0] : null;
+                                if (F) {
+                                    if (kv.length) {
+                                        that._changeValue(kv[0], kv[0], true);
+                                    }
+                                } else {
+                                    that._changeValue(kv.join(";"), drilldownLevelLabels.join(";"), true);
+                                }
+                                if (!onBindElement) {
+                                    render(el);
+                                }
+                                setTimeout(function () {
+                                    if (sslServer) {
+                                        sslServer.close();
+                                    }
+                                }, 50);
+                            }
+                        }
+                    };
+                    pbc.preOptions(options, function () {
+                        sslServer = pbc.openPage(options, "dialog");
+                    });
+                    return false;
+                };
         }
     }
     /**
@@ -898,7 +898,7 @@
             cents = "0" + cents;
         } /** @type {number} */
         var i = 0;
-        for (; i < Math.floor((num.length - (1 + i)) / 3) ; i++) { /** @type {string} */
+        for (; i < Math.floor((num.length - (1 + i)) / 3); i++) { /** @type {string} */
             num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
         }
         return "" + ((sign ? "" : "-") + "" + num + "." + cents);
@@ -1390,6 +1390,11 @@
             if (typeof date == "string" && /^\/Date/.test(date)) { /** @type {string} */
                 date = date.replace(/^\//, "new ").replace(/\/$/, "");
                 eval("date = " + date);
+            } else {
+                if (typeof date == "string" && getIsDateTime(date)) {
+                    var nSateStr = date.replace(/-/g, "/");
+                    date = new Date(nSateStr);
+                }
             }
             if (isNaN(date)) {
                 return null;

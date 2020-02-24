@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using FastDev.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,9 @@ namespace FastDev.RunWeb
             //builder.Register(c => new IdWorker(1, 1)).As<IIdWorker>();
             //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => t.Name.EndsWith("Controller"))
             //    .PropertiesAutowired();
-            //var serviceInterfaceType = typeof(IApplicationService<>);
-            //builder.RegisterAssemblyTypes(serviceInterfaceType.Assembly).Where(t => t.Name.EndsWith("Service") && !t.IsInterface && !t.IsGenericType)
-            //    .AsClosedTypesOf(serviceInterfaceType).AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope();
+            var serviceInterfaceType = typeof(IApplicationServices);
+            builder.RegisterAssemblyTypes(serviceInterfaceType.Assembly).Where(t => t.Name.EndsWith("Service") && !t.IsInterface && !t.IsGenericType)
+                .AsClosedTypesOf(serviceInterfaceType).AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope();
 
             //builder.Register(c => new MySqlConnection(_dbConnectionString)).As<IDbConnection>().InstancePerLifetimeScope();
 

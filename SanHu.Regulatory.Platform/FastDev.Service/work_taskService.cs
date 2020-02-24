@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Model.Dto;
@@ -22,9 +23,16 @@ namespace FastDev.Service
 
         public work_taskService()
         {
-            OnGetAPIHandler += Work_taskService_OnGetAPIHandler; ;
+            OnGetAPIHandler += Work_taskService_OnGetAPIHandler;
         }
-
+        //public override object Create(object postdata)
+        //{
+        //    var rev= base.Create(postdata);
+        //    ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+        //    IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
+        //    workflowService.DbContext = QueryDb;
+        //    workflowService.GetContext(new DevDB.Workflow.WorkflowContext());
+        //}
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
         {
             switch (id.ToUpper())
@@ -50,7 +58,7 @@ namespace FastDev.Service
                 var data = JsonHelper.DeserializeJsonToObject<TaskHandOverReq>(context.Data);
 
                 //关闭当前任务
-                var workTask = QueryDb.FirstOrDefault<work_task>("id=@id", new { id = data.TaskId });
+                var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
                 workTask.TaskStatus = (int)WorkTaskStatus.Close;  
                 QueryDb.Update(workTask);
 
@@ -82,7 +90,7 @@ namespace FastDev.Service
         private object Reject(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<TaskPatrolRejectRequest>(context.Data);
-            var workTask = QueryDb.FirstOrDefault<work_task>("id=@id", new { id = data.TaskId });
+            var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
             QueryDb.Update(workTask);

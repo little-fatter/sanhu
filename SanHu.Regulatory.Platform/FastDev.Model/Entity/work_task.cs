@@ -64,6 +64,41 @@ public string RejectReason
 get;
 set;
 }
+public string Tasknumber
+{
+get;
+set;
+}
+public string RefTable
+{
+get;
+set;
+}
+public DateTime? CompleteTime
+{
+get;
+set;
+}
+public string RefRecordID
+{
+get;
+set;
+}
+public string LocalLinks
+{
+get;
+set;
+}
+public string RemoteLinks
+{
+get;
+set;
+}
+public byte? IsRootTask
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

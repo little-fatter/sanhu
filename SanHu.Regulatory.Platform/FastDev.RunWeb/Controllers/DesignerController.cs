@@ -242,14 +242,14 @@ namespace FastDev.RunWeb.Controllers
                 core_log coreLog = new core_log
                 {
                     CreateDate = DateTime.Now,
-                    CreateUserID = SysContext.CurrentUserID,
+                    CreateUserID = SysContext.WanJiangUserID,
                     ID = ObjectExtensions.ToStr((object)Guid.NewGuid()),
                     Logtime = DateTime.Now,
                     Title = "设计模式",
                     Logcontent = content,
                     Logtype = "designer",
                     Systempath = FastDev.Common.HttpContext.Current.Request.Path.ToString(),
-                    UserID = SysContext.CurrentUserID
+                    UserID = SysContext.WanJiangUserID
                 };
                 currentDb.Insert("core_log", "ID", false, coreLog);
             }
@@ -307,8 +307,15 @@ namespace FastDev.RunWeb.Controllers
                                 {
                                     Dictionary<string, object> sqlJson = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(sqlContent);
                                     sqlContent = ObjectExtensions.ToStr(sqlJson["sql"]);
-                                    List<object> list3 = JsonHelper.DeserializeJsonToObject<List<object>>(JsonHelper.SerializeObject(sqlJson["args"]));
-                                    num = currentDb.Execute(sqlContent, list3.ToArray());
+                                    var ags = sqlJson["args"];
+                                    if (ags is Array)
+                                    {
+                                        num = currentDb.Execute(sqlContent, ((Array)ags));
+                                    }
+                                    else
+                                    {
+                                        num = currentDb.Execute(sqlContent, ags);
+                                    }
                                 }
                                 else
                                 {
@@ -316,7 +323,7 @@ namespace FastDev.RunWeb.Controllers
                                     {
                                         currentDb.Execute(sqlContent, new object[0]);
                                     }
-                                    catch(Exception ex)
+                                    catch (Exception ex)
                                     {
                                         Log("写入SQL失败:" + sqlContent + "(" + ex.Message + ")");
                                     }
@@ -386,7 +393,7 @@ namespace FastDev.RunWeb.Controllers
                                     {
                                         core_menu core_menu = new core_menu();
                                         core_menu.ID = Guid.NewGuid().ToString();
-                                        core_menu.CreateUserID = SysContext.CurrentUserID;
+                                        core_menu.CreateUserID = SysContext.WanJiangUserID;
                                         core_menu.CreateDate = DateTime.Now;
                                         core_menu.MenuName = item.title;
                                         core_menu.MenuUrl = item.url;
@@ -450,7 +457,7 @@ namespace FastDev.RunWeb.Controllers
                 string modelProjectName = ConfigurationManager.AppSettings["ModelProjectName"];
                 if (id == "all" || string.IsNullOrEmpty(id) || id == "model")
                 {
-                    CompileProject(projectPath + modelProjectName + "\\"+ modelProjectName + ".csproj");
+                    CompileProject(projectPath + modelProjectName + "\\" + modelProjectName + ".csproj");
                 }
                 if (id == "all" || string.IsNullOrEmpty(id) || id == "service")
                 {
@@ -535,7 +542,7 @@ namespace FastDev.RunWeb.Controllers
             }
             //现在的vs 已经不直接从xml读文件了，所以这个没有用处了
             //ProjectHelper.AddInclude(projectFilename, "Compile", list.ToArray());
-           
+
         }
         /// <summary>
         /// 添加网页静态文件
