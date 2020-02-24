@@ -130,6 +130,39 @@ namespace FastDev.DevDB
                 get;
                 set;
             }
+
+            public string RefTable
+            {
+                get;
+                set;
+            }
+            public DateTime? CompleteTime
+            {
+                get;
+                set;
+            }
+            public string RefRecordID
+            {
+                get;
+                set;
+            }
+
+            public string LocalLinks
+            {
+                get;
+                set;
+            }
+            public string RemoteLinks
+            {
+                get;
+                set;
+            }
+
+            public byte? IsRootTask
+            {
+                get;
+                set;
+            }
             public DateTime? CreateDate
             {
                 get;
@@ -313,12 +346,12 @@ namespace FastDev.DevDB
                                 if (!(item.ExecutorID == SysContext.WanJiangUserID))
                                 {
                                     UpdateExecutor(item, WFRecordStatus.Canceled, "");
-                                    core_toDo core_toDo_ = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
+                                    core_toDo tdData = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
                                     {
                                         "core_workflowExecutorStatus",
                                         item.ID
                                     });
-                                    UpdateToDo(core_toDo_, WFRecordStatus.Canceled);
+                                    UpdateToDo(tdData, WFRecordStatus.Canceled);
                                 }
                             }
                             UpdateTrackDetailIsToNext(core_workflowTrack.ID, core_workflowExecutorStatus.ID, true);
@@ -462,12 +495,12 @@ namespace FastDev.DevDB
                                         {
                                             todoTitle += GetJsTemplateResult(activeNode.toDoTitleRule, JsonHelper.SerializeObject(wfModelObj));
                                         }
-                                        core_toDo core_toDo = CreateNewToDo(todoTitle, "web/main/?model=" + wfModelName + "&id=" + core_workflowProject.Context + "&viewtype=form&taskid=" + core_workflowTask.ID, core_workflowExecutorStatus2.ID);
-                                        
+                                        string linkUrl = $"web/main/?model={wfModelName}&id={core_workflowProject.Context}&viewtype=form&taskid={core_workflowTask.ID}";
+                                        core_toDo core_toDo = CreateNewToDo(todoTitle, linkUrl, core_workflowExecutorStatus2.ID);
                                         core_toDo.UserID = exeUserId;
                                         dbContext.Insert(core_toDo);
                                         var evId = GetJsKeyResult("EventInfoId", JsonHelper.SerializeObject(wfModelObj));
-                                        work_task wTask = CreateNewWorkTask(exeUserId, todoTitle, evId);
+                                        work_task wTask = CreateNewWorkTask(exeUserId, linkUrl, wfModelName, core_workflowProject.Context, todoTitle, evId);
                                         dbContext.Insert(wTask);
                                     }
                                 }
@@ -694,7 +727,21 @@ namespace FastDev.DevDB
                 "ExecutorTime"
             });
         }
-
+        private void UpdateWorkTask(work_task wTask, string strStatus)
+        {
+            DbContext dbContext = wfContext;
+            wTask.ModifyDate = DateTime.Now;
+            wTask.ModifyUserID = SysContext.WanJiangUserID;
+            wTask.Status = strStatus;
+            //wTask. = DateTime.Now;
+            dbContext.Update(wTask, wTask.ID, new string[4]
+            {
+                "ModifyDate",
+                "ModifyUserID",
+                "Status",
+                "CompleteTime"
+            });
+        }
         private void UpdateToDo(core_toDo toDoData, string strStatus)
         {
             DbContext dbContext = wfContext;
@@ -793,10 +840,16 @@ namespace FastDev.DevDB
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             ViewNode viewNode = (ViewNode)(dictionary["currentNode"] = (flag ? viewModel.nodes.FirstOrDefault(f => f.nodeType == "start") : viewModel.nodes.FirstOrDefault((ViewNode a) => a.id == currentTask.NodeID)));
             dictionary["taskId"] = context.TaskID;
-            string nodeUrl = viewNode.properties["formName"].ToString();
-            dictionary["formUrl"]=GetJsTemplateResult(nodeUrl, JsonHelper.SerializeObject(wfModelObj));//根据格式模板，生成url
             if (context.CurrentAction == WorkflowAction.Advance)
             {
+                if (viewNode.nodeType == WorkflowNodeType.Active)
+                {
+                    string nodeUrlTemplate = viewNode.properties["formName"].ToString();
+                    if (!string.IsNullOrEmpty(nodeUrlTemplate))
+                    {
+                        dictionary["formUrl"] = GetJsTemplateResult(nodeUrlTemplate, JsonHelper.SerializeObject(wfModelObj));//根据格式模板，生成url
+                    }
+                }
                 if (!flag && viewNode.nodeType == WorkflowNodeType.Active)
                 {
                     ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(viewNode);
@@ -1455,7 +1508,7 @@ namespace FastDev.DevDB
         /// 创建下一个任务
         /// </summary>
         /// <returns></returns>
-        private work_task CreateNewWorkTask(string exeUserId,string strTitle, string evId)
+        private work_task CreateNewWorkTask(string exeUserId, string localLink, string objName, string recordId, string strTitle, string evId)
         {
             work_task wTask = new work_task();
             wTask.CreateDate = DateTime.Now;
@@ -1469,24 +1522,28 @@ namespace FastDev.DevDB
             wTask.InitiationTime = DateTime.Now;
             wTask.Status = RecordStatus.Submitted;
             wTask.TaskContent = strTitle;
+            wTask.RefTable = objName;
+            wTask.RefRecordID = recordId;
+            wTask.LocalLinks = localLink;
             wTask.WorkAddress = "";
             wTask.TaskStatus = 0;
+            wTask.IsRootTask = 0;//自动创建的任务都不是根任务
             return wTask;
         }
         private core_toDo CreateNewToDo(string strTitle, string strLink, string strRecordId)
         {
-            core_toDo core_toDo = new core_toDo();
-            core_toDo.CreateDate = DateTime.Now;
-            core_toDo.CreateUserID = SysContext.WanJiangUserID;
-            core_toDo.ModifyDate = DateTime.Now;
-            core_toDo.ModifyUserID = SysContext.WanJiangUserID;
-            core_toDo.ID = Guid.NewGuid().ToString();
-            core_toDo.Title = strTitle;
-            core_toDo.Link = strLink;
-            core_toDo.RefTable = "core_workflowExecutorStatus";
-            core_toDo.RefRecordID = strRecordId;
-            core_toDo.Status = WFRecordStatus.Running;
-            return core_toDo;
+            core_toDo tdData = new core_toDo();
+            tdData.CreateDate = DateTime.Now;
+            tdData.CreateUserID = SysContext.WanJiangUserID;
+            tdData.ModifyDate = DateTime.Now;
+            tdData.ModifyUserID = SysContext.WanJiangUserID;
+            tdData.ID = Guid.NewGuid().ToString();
+            tdData.Title = strTitle;
+            tdData.Link = strLink;
+            tdData.RefTable = "core_workflowExecutorStatus";
+            tdData.RefRecordID = strRecordId;
+            tdData.Status = WFRecordStatus.Running;
+            return tdData;
         }
 
         private core_workflowProject CreateNewWFProject(string workflowId, string strContext)

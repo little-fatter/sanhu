@@ -14,6 +14,12 @@
         <field name="TaskStatus" dbName="TaskStatus" title="任务状态" type="integer" relationModel="" relationField="" isPK="N" />
         <field name="RejectReason" dbName="RejectReason" title="拒绝原因" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Tasknumber" dbName="Tasknumber" title="任务编号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="RefTable" dbName="RefTable" title="关联对象" type="string" length="50" isPK="N" />
+        <field name="CompleteTime" dbName="CompleteTime" title="完成时间" type="datetime" isPK="N" />
+        <field name="RefRecordID" dbName="RefRecordID" title="关联对象ID" type="string" length="50" isPK="N" />
+        <field name="LocalLinks" dbName="LocalLinks" title="本地链接" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="RemoteLinks" dbName="RemoteLinks" title="远程链接" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="IsRootTask" dbName="IsRootTask" title="是否Root" type="boolean" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

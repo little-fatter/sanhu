@@ -147,7 +147,7 @@
             <param name="strExcutorId"></param>
             <returns></returns>
         </member>
-        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String)">
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             创建下一个任务
             </summary>

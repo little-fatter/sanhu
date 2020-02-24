@@ -89,5 +89,7 @@
         <models name="role" title="frameworkrole" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="task_survey" title="任务-勘察" textField="Title" moduleName="task" moduleTitle="任务与表单" />
         <models name="task_surveyParty" title="勘察当事人" textField="Title" moduleName="task" moduleTitle="任务与表单" />
+        <models name="test_t1" title="测试1" textField="Title" moduleName="task" moduleTitle="任务与表单" />
+        <models name="test_t2" title="测试2" textField="Title" moduleName="task" moduleTitle="任务与表单" />
     </models>
 </freedesign>
