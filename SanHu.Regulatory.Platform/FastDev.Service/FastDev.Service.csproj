@@ -12,7 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Component\FastDev.Model.Core\FastDev.Model.Core.csproj" />
     <ProjectReference Include="..\FastDev.DevDB\FastDev.DevDB.csproj" />
-    <ProjectReference Include="..\FastDev.IService\FastDev.IService.csproj" />
+    <ProjectReference Include="..\FastDev.IService\FastDev.IServices.csproj" />
     <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
   </ItemGroup>
 

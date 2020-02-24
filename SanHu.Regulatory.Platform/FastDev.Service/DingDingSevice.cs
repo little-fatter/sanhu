@@ -1,11 +1,11 @@
-﻿using FastDev.IService;
+﻿using FastDev.IServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace FastDev.Service
 {
-    public class DingDingSevice: ApplicationService, IDingDingService
+    public class DingDingSevice: ApplicationService, IDingDingServices
     {
 
     }

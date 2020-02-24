@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.Model.Core", "Compo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.Service", "FastDev.Service\FastDev.Service.csproj", "{A959423A-CE69-4936-9506-47AA8EBAEDE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastDev.IService", "FastDev.IService\FastDev.IService.csproj", "{324D4A1C-00BF-4435-BC04-8F5B9D077A0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.IServices", "FastDev.IService\FastDev.IServices.csproj", "{324D4A1C-00BF-4435-BC04-8F5B9D077A0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1Service", "1Service", "{201E7492-27DE-4FB1-B1EA-E01A997F159E}"
 EndProject
