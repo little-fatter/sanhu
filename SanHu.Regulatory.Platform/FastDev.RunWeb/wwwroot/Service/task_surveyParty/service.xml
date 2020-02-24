@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="task_surveyParty" title="勘察当事人" textField="Name" moduleName="task" moduleTitle="任务与表单" dbName="" />
+    <fields>
+        <field name="survey" dbName="surveyID" title="勘察id" type="many2one" relationModel="task_survey" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="type" dbName="type" title="当事人类型" type="integer" relationModel="" relationField="" isPK="N" />
+        <field name="Name" dbName="Name" title="名称" type="string" length="50" isPK="N" />
+        <field name="Gender" dbName="Gender" title="性别" type="string" length="50" isPK="N" />
+        <field name="Occupation" dbName="Occupation" title="职业" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="IdCrad" dbName="IdCrad" title="身份证" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="address" dbName="address" title="住址" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="phone" dbName="phone" title="手机号" type="string" length="50" isPK="N" />
+        <field name="legalperson" dbName="legalperson" title="法人" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="survey" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="survey" one2many="" many2many="" />
+</freedesign>

@@ -86,5 +86,8 @@
         <models name="work_task" title="任务" textField="Title" moduleName="work" moduleTitle="工作" />
         <models name="eventStateInfo" title="事件状态" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
         <models name="task_patrol" title="任务-事件巡查" textField="Title" moduleName="task" moduleTitle="任务与表单" />
+        <models name="role" title="frameworkrole" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="task_survey" title="任务-勘察" textField="Title" moduleName="task" moduleTitle="任务与表单" />
+        <models name="task_surveyParty" title="勘察当事人" textField="Title" moduleName="task" moduleTitle="任务与表单" />
     </models>
 </freedesign>

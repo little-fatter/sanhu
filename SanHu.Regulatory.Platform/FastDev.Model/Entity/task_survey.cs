@@ -1,15 +1,10 @@
-namespace FastDev.Model.Report
+namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class task_patrol
+public partial class task_survey
 {
 public string ID
-{
-get;
-set;
-}
-public string EventDescribe
 {
 get;
 set;
@@ -19,7 +14,7 @@ public string EventType
 get;
 set;
 }
-public DateTime IncidentTime
+public DateTime? IncidentTime
 {
 get;
 set;
@@ -39,17 +34,12 @@ public string Result
 get;
 set;
 }
-public byte? Needlawenforcement
+public int? ProcessingDecisions
 {
 get;
 set;
 }
-public byte? Needtracking
-{
-get;
-set;
-}
-public string Associatedforms
+public string ExistCrim
 {
 get;
 set;

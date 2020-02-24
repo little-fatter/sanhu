@@ -1,55 +1,55 @@
-namespace FastDev.Model.Report
+namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class task_patrol
+public partial class task_surveyParty
 {
 public string ID
 {
 get;
 set;
 }
-public string EventDescribe
+public string surveyID
 {
 get;
 set;
 }
-public string EventType
+public int? type
 {
 get;
 set;
 }
-public DateTime IncidentTime
+public string Name
 {
 get;
 set;
 }
-public string IncidentAddress
+public string Gender
 {
 get;
 set;
 }
-public string IncidentAddressXY
+public string Occupation
 {
 get;
 set;
 }
-public string Result
+public string IdCrad
 {
 get;
 set;
 }
-public byte? Needlawenforcement
+public string address
 {
 get;
 set;
 }
-public byte? Needtracking
+public string phone
 {
 get;
 set;
 }
-public string Associatedforms
+public string legalperson
 {
 get;
 set;
