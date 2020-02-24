@@ -131,6 +131,74 @@ namespace FastDev.RunWeb.Controllers
                 return null;
             }
         }
+        /// <summary>
+        /// 获取列表数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="filter"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public object ListData(string model, string filter, string key)
+        {
+            try
+            {
+                FilterGroup filterGroup = FullJsonValue.GetObject<FilterGroup>(filter);
+                IService service = ServiceHelper.GetService(model);
+                ChangeFilterGroup(model, key, filterGroup);
+                List<Dictionary<string, object>> listData = service.GetListData(filterGroup);
+                return listData;
+            }
+            catch (Exception ex)
+            {
+                ServiceHelper.Log(ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 特殊api接口
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public object Api(string id, string model, string data, string context)
+        {
+            try
+            {
+                IService service = ServiceHelper.GetService(model);
+                if (service == null)
+                {
+                    return null;
+                }
+                Func<APIContext, object> aPIHandler;
+                try
+                {
+                    aPIHandler = service.GetAPIHandler(id);
+                    if (aPIHandler == null)
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+                return aPIHandler(new APIContext
+                {
+                    Context = context,
+                    Data = data
+                });
+            }
+            catch (Exception ex)
+            {
+                ServiceHelper.Log(ex);
+                return null;
+            }
+        }
 
         [NonAction]
         private bool IsWebLocked()
