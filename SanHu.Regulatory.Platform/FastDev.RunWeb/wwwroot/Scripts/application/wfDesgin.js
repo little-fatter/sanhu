@@ -936,10 +936,10 @@
                                 many2many: true,
                                 css: "combobox-selector",
                                 popupselect_ismul: true,
-                                valueField: "ID",
-                                textField: "DeptName",
+                                valueField: "Id",
+                                textField: "Name",
                                 popupselect_type: "popupselect",
-                                popupselect_url: "/web/main/?model=res_department&viewtype=list",
+                                popupselect_url: "/web/main/?model=organization&viewtype=list",
                                 popupselect_width: "1000",
                                 popupselect_height: "700",
                                 popupselect_title: "选择部门 "
@@ -955,10 +955,10 @@
                                 many2many: true,
                                 css: "combobox-selector",
                                 popupselect_ismul: true,
-                                valueField: "ID",
-                                textField: "RoleName",
+                                valueField: "Id",
+                                textField: "Name",
                                 popupselect_type: "popupselect",
-                                popupselect_url: "/web/main/?model=core_role&viewtype=list",
+                                popupselect_url: "/web/main/?model=role&viewtype=list",
                                 popupselect_width: "1000",
                                 popupselect_height: "700",
                                 popupselect_title: "选择角色 "
@@ -974,10 +974,10 @@
                                 many2many: true,
                                 css: "combobox-selector",
                                 popupselect_ismul: true,
-                                valueField: "ID",
-                                textField: "RealName",
+                                valueField: "Id",
+                                textField: "Name",
                                 popupselect_type: "popupselect",
-                                popupselect_url: "/web/main/?model=core_user&viewname=list",
+                                popupselect_url: "/web/main/?model=user&viewname=list",
                                 popupselect_width: "1000",
                                 popupselect_height: "700",
                                 popupselect_title: "选择用户 "
@@ -1329,7 +1329,7 @@
         wf.flowNodeWin = $.ligerDialog.open({
             title: "编辑 节点属性",
             target: $quantity,
-            width: 610,
+            width: 710,
             height: "auto",
             top: 100
         });

@@ -42,7 +42,7 @@ namespace FastDev.Service
         {
             var db = this.MainDb;
 
-            var userid = SysContext.CurrentUserID;
+            var userid = SysContext.WanJiangUserID;
             var code = context.Context;
 
             var dicID = db.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", code);

@@ -103,8 +103,8 @@ namespace FastDev.DevDB
             {
                 context.Context
             });
-            bool flag;
-            if (!(flag = (core_workflowProject == null)))
+            bool IsNewStart=core_workflowProject == null;
+            if (!IsNewStart)
             {
                 if (string.IsNullOrEmpty(context.TaskID))
                 {
@@ -130,11 +130,11 @@ namespace FastDev.DevDB
                 {
                     currentTask.ID
                 });
-                if (list == null || !list.Any() || !list.Any(l => l.ExecutorID == SysContext.CurrentUserID))
+                if (list == null || !list.Any() || !list.Any(l => l.ExecutorID == SysContext.WanJiangUserID))
                 {
                     throw new UserException("没有权限访问！");
                 }
-                core_workflowExecutorStatus = list.FirstOrDefault(l => l.ExecutorID == SysContext.CurrentUserID);
+                core_workflowExecutorStatus = list.FirstOrDefault(l => l.ExecutorID == SysContext.WanJiangUserID);
                 core_workflowTrack = dbContext.FirstOrDefault<core_workflowTrack>("where ProjectID = @0 and TaskID = @1", new object[2]
                 {
                     core_workflowProject.ID,
@@ -168,31 +168,31 @@ namespace FastDev.DevDB
             wfModelType = DataAccessHelper.GetEntityType(context.Model);
             wfModelObj = dbContext.GetHelper(wfModelType).FirstOrDefault("where ID = @0", context.Context);
             ViewModel viewModel = JsonHelper.DeserializeJsonToObject<ViewModel>(core_workflow.ViewData);
-            ViewNode viewNode = flag ? viewModel.nodes.FirstOrDefault(n => n.nodeType == "start") : viewModel.nodes.FirstOrDefault((ViewNode a) => a.id == currentTask.NodeID);
+            ViewNode currentNode = IsNewStart ? viewModel.nodes.FirstOrDefault(n => n.nodeType == "start") : viewModel.nodes.FirstOrDefault((ViewNode a) => a.id == currentTask.NodeID);
             if (context.CurrentAction == WorkflowAction.Advance)
             {
-                if (flag)
+                if (IsNewStart)
                 {
-                    ViewNode viewNode2 = viewModel.nodes.FirstOrDefault(n => n.nodeType == "start");
+                    ViewNode startNode = viewModel.nodes.FirstOrDefault(n => n.nodeType == "start");
                     core_workflowProject = CreateNewWFProject(core_workflow.ID, context.Context);
-                    core_workflowProject.SponsorID = SysContext.CurrentUserID;
-                    currentTask = CreateNewWFTask(core_workflowProject.ID, viewNode2.id, viewNode2.properties["text"].ToString(), viewNode2.nodeType);
+                    core_workflowProject.SponsorID = SysContext.WanJiangUserID;
+                    currentTask = CreateNewWFTask(core_workflowProject.ID, startNode.id, startNode.properties["text"].ToString(), startNode.nodeType);
                     currentTask.Status = WFRecordStatus.Completed;
                     currentTask.EndTime = DateTime.Now;
                     dbContext.Insert(currentTask);
-                    core_workflowExecutorStatus = GenNewStatus(currentTask.ID, SysContext.CurrentUserID);
+                    core_workflowExecutorStatus = GenNewStatus(currentTask.ID, SysContext.WanJiangUserID);
                     core_workflowExecutorStatus.Status = WFRecordStatus.Completed;
                     core_workflowExecutorStatus.ExecutorTime = DateTime.Now;
                     core_workflowExecutorStatus.Remark = context.Remark;
                     dbContext.Insert(core_workflowExecutorStatus);
-                    core_workflowTrack = CreateWorkflowTrack(core_workflowProject.ID, currentTask.ID, viewNode2.nodeType, null, null);
+                    core_workflowTrack = CreateWorkflowTrack(core_workflowProject.ID, currentTask.ID, startNode.nodeType, null, null);
                     core_workflowTrackDetail poco = CreateNewTrack(core_workflowTrack.ID, core_workflowExecutorStatus.ID);
                     dbContext.Insert(poco);
                     dbContext.Update(wfModelName, "ID", new
                     {
                         ID = context.Context,
                         ModifyDate = DateTime.Now,
-                        ModifyUserID = SysContext.CurrentUserID,
+                        ModifyUserID = SysContext.WanJiangUserID,
                         Status = RecordStatus.Submitted
                     }, context.Context);
                     service.ExecuteWorkflow(new WorkflowExecuteParm
@@ -205,14 +205,14 @@ namespace FastDev.DevDB
                 }
                 else
                 {
-                    if (viewNode.nodeType == WorkflowNodeType.Active)
+                    if (currentNode.nodeType == WorkflowNodeType.Active)
                     {
-                        ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(viewNode);
+                        ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(currentNode);
                         if (activeNode.handlerType == "1")
                         {
                             foreach (core_workflowExecutorStatus item in list)
                             {
-                                if (!(item.ExecutorID == SysContext.CurrentUserID))
+                                if (!(item.ExecutorID == SysContext.WanJiangUserID))
                                 {
                                     UpdateExecutor(item, WFRecordStatus.Canceled, "");
                                     core_toDo core_toDo_ = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
@@ -226,7 +226,7 @@ namespace FastDev.DevDB
                             UpdateTrackDetailIsToNext(core_workflowTrack.ID, core_workflowExecutorStatus.ID, true);
                             UpdateWFTask(currentTask, WFRecordStatus.Completed);
                         }
-                        if ((activeNode.handlerType == "2" || activeNode.handlerType == "3") && (list.Count == 1 || list.Where(l => l.ExecutorID != SysContext.CurrentUserID).All(l => l.Status != WFRecordStatus.Running)))
+                        if ((activeNode.handlerType == "2" || activeNode.handlerType == "3") && (list.Count == 1 || list.Where(l => l.ExecutorID != SysContext.WanJiangUserID).All(l => l.Status != WFRecordStatus.Running)))
                         {
                             if (context.Waitting == 1)
                             {
@@ -241,11 +241,11 @@ namespace FastDev.DevDB
                             {
                                 throw new UserException("流程异常，请联系相关管理员！");
                             }
-                            if (list.Count == 1 || list.Where(l => l.ExecutorID != SysContext.CurrentUserID).All(l => l.Status != WFRecordStatus.Running))
+                            if (list.Count == 1 || list.Where(l => l.ExecutorID != SysContext.WanJiangUserID).All(l => l.Status != WFRecordStatus.Running))
                             {
                                 UpdateWFTask(currentTask, WFRecordStatus.Completed);
                                 context.ExecuteNodes = new List<ExecuteNode>();
-                                IList<ViewNode> list2 = CombinNodesBySource(viewNode, viewModel);
+                                IList<ViewNode> list2 = CombinNodesBySource(currentNode, viewModel);
                                 if (list2 == null || !list2.Any())
                                 {
                                     throw new UserException("流程异常，请联系相关管理员！");
@@ -263,7 +263,7 @@ namespace FastDev.DevDB
                                 {
                                     foreach (ViewNode item2 in list2)
                                     {
-                                        ViewNode viewNode4 = JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
+                                        ViewNode viewNode4 = item2;// JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
                                         while (viewNode4.nodeType == WorkflowNodeType.Branch)
                                         {
                                             viewNode4 = GetBranchNode(context, viewModel, viewNode4);
@@ -282,7 +282,7 @@ namespace FastDev.DevDB
                             }
                         }
                     }
-                    else if (viewNode.nodeType == WorkflowNodeType.Start)
+                    else if (currentNode.nodeType == WorkflowNodeType.Start)
                     {
                         UpdateWFTask(currentTask, WFRecordStatus.Completed);
                     }
@@ -307,7 +307,7 @@ namespace FastDev.DevDB
                             {
                                 if (num >= context.ExecuteNodes.Count)
                                 {
-                                    if (flag)
+                                    if (IsNewStart)
                                     {
                                         dbContext.Insert(core_workflowProject);
                                         dbContext.Insert(core_workflowTrack);
@@ -338,7 +338,7 @@ namespace FastDev.DevDB
                                     dbContext.Insert(core_workflowTask);
                                     core_workflowTrack core_workflowTrack2 = CreateWorkflowTrack(core_workflowProject.ID, core_workflowTask.ID, viewNode2.nodeType, null, null);
                                     dbContext.Insert(core_workflowTrack2);
-                                    if (flag)
+                                    if (IsNewStart)
                                     {
                                         core_workflowTrack.NextTaskID = core_workflowTask.ID;
                                         core_workflowTrack.NextLinkType = "advance";
@@ -362,7 +362,7 @@ namespace FastDev.DevDB
                                         string text3 = activeNode.text;
                                         if (!string.IsNullOrEmpty(activeNode.toDoTitleRule))
                                         {
-                                            text3 += GetJsResult(activeNode.toDoTitleRule, JsonHelper.SerializeObject(wfModelObj));
+                                            text3 += GetJsTemplateResult(activeNode.toDoTitleRule, JsonHelper.SerializeObject(wfModelObj));
                                         }
                                         core_toDo core_toDo = CreateNewToDo(text3, "web/main/?model=" + wfModelName + "&id=" + core_workflowProject.Context + "&viewtype=form&taskid=" + core_workflowTask.ID, core_workflowExecutorStatus2.ID);
                                         core_toDo.UserID = text2;
@@ -387,7 +387,7 @@ namespace FastDev.DevDB
                     }
                     core_workflowProject.Status = WFRecordStatus.Completed;
                     core_workflowProject.EndTime = DateTime.Now;
-                    if (flag)
+                    if (IsNewStart)
                     {
                         dbContext.Insert(core_workflowProject);
                     }
@@ -405,11 +405,11 @@ namespace FastDev.DevDB
                     core_workflowTask2.Status = WFRecordStatus.Completed;
                     core_workflowTask2.EndTime = DateTime.Now;
                     dbContext.Insert(core_workflowTask2);
-                    core_workflowExecutorStatus core_workflowExecutorStatus3 = GenNewStatus(core_workflowTask2.ID, SysContext.CurrentUserID);
+                    core_workflowExecutorStatus core_workflowExecutorStatus3 = GenNewStatus(core_workflowTask2.ID, SysContext.WanJiangUserID);
                     core_workflowExecutorStatus3.Status = WFRecordStatus.Completed;
                     core_workflowExecutorStatus3.ExecutorTime = DateTime.Now;
                     dbContext.Insert(core_workflowExecutorStatus3);
-                    if (flag)
+                    if (IsNewStart)
                     {
                         core_workflowTrack.NextTaskID = core_workflowTask2.ID;
                         core_workflowTrack.NextLinkType = "advance";
@@ -426,7 +426,7 @@ namespace FastDev.DevDB
                     {
                         ID = context.Context,
                         ModifyDate = DateTime.Now,
-                        ModifyUserID = SysContext.CurrentUserID,
+                        ModifyUserID = SysContext.WanJiangUserID,
                         Status = RecordStatus.Completed
                     }, context.Context);
                     service.ExecuteWorkflow(new WorkflowExecuteParm
@@ -436,7 +436,7 @@ namespace FastDev.DevDB
                         CurrentProject = core_workflowProject,
                         CurrentTask = currentTask
                     });
-                    if (flag)
+                    if (IsNewStart)
                     {
                         dbContext.Insert(core_workflowTrack);
                     }
@@ -466,7 +466,7 @@ namespace FastDev.DevDB
                 {
                     foreach (core_workflowExecutorStatus item3 in list)
                     {
-                        if (!(item3.ExecutorID == SysContext.CurrentUserID))
+                        if (!(item3.ExecutorID == SysContext.WanJiangUserID))
                         {
                             UpdateExecutor(item3, WFRecordStatus.Canceled, "");
                             core_toDo core_toDo_ = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
@@ -487,7 +487,7 @@ namespace FastDev.DevDB
                     UpdateWFTrack(core_workflowProject.ID, currentTask.ID, core_workflowTask.ID, "back");
                     foreach (List<string> executor2 in executeNode.Executors)
                     {
-                        string text5 = viewNode2.properties.ContainsKey("backToDoTitleRule") ? viewNode2.properties["backToDoTitleRule"].ToString() : "退回";
+                        string backTitle = viewNode2.properties.ContainsKey("backToDoTitleRule") ? viewNode2.properties["backToDoTitleRule"].ToString() : "退回";
                         string text2 = executor2[0];
                         core_workflowExecutorStatus core_workflowExecutorStatus2 = GenNewStatus(core_workflowTask.ID, text2);
                         core_workflowExecutorStatus2.Status = WFRecordStatus.Running;
@@ -495,9 +495,9 @@ namespace FastDev.DevDB
                         core_workflowTrackDetail poco2 = CreateNewTrack(core_workflowTrack2.ID, core_workflowExecutorStatus2.ID);
                         dbContext.Insert(poco2);
                         string text3 = text4;
-                        if (!string.IsNullOrEmpty(text5))
+                        if (!string.IsNullOrEmpty(backTitle))
                         {
-                            text3 += GetJsResult(text5, JsonHelper.SerializeObject(wfModelObj));
+                            text3 += GetJsTemplateResult(backTitle, JsonHelper.SerializeObject(wfModelObj));
                         }
                         core_toDo core_toDo = CreateNewToDo(text3, "web/main/?model=" + wfModelName + "&id=" + core_workflowProject.Context + "&viewtype=form&tasid=" + core_workflowTask.ID, core_workflowExecutorStatus2.ID);
                         core_toDo.UserID = text2;
@@ -508,14 +508,14 @@ namespace FastDev.DevDB
             else if (context.CurrentAction == WorkflowAction.Rejected)
             {
                 bool flag2 = false;
-                if (viewNode.nodeType == WorkflowNodeType.Active)
+                if (currentNode.nodeType == WorkflowNodeType.Active)
                 {
-                    ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(viewNode);
+                    ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(currentNode);
                     if (activeNode.handlerType == "2" || activeNode.handlerType == "3")
                     {
                         foreach (core_workflowExecutorStatus item4 in list)
                         {
-                            if (!(item4.ExecutorID == SysContext.CurrentUserID))
+                            if (!(item4.ExecutorID == SysContext.WanJiangUserID))
                             {
                                 UpdateExecutor(item4, WFRecordStatus.Canceled, "");
                                 core_toDo core_toDo_ = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
@@ -528,13 +528,13 @@ namespace FastDev.DevDB
                         }
                         flag2 = true;
                     }
-                    if (activeNode.handlerType == "1" && list.Where(d => d.ExecutorID != SysContext.CurrentUserID).All(w => w.Status == WFRecordStatus.Rejected))
+                    if (activeNode.handlerType == "1" && list.Where(d => d.ExecutorID != SysContext.WanJiangUserID).All(w => w.Status == WFRecordStatus.Rejected))
                     {
                         flag2 = true;
                     }
                 }
                 UpdateWFTask(currentTask, WFRecordStatus.Rejected);
-                core_workflowExecutorStatus core_workflowExecutorStatus2 = list.FirstOrDefault(l => l.ExecutorID == SysContext.CurrentUserID);
+                core_workflowExecutorStatus core_workflowExecutorStatus2 = list.FirstOrDefault(l => l.ExecutorID == SysContext.WanJiangUserID);
                 UpdateExecutor(core_workflowExecutorStatus2, WFRecordStatus.Rejected, context.Remark);
                 core_toDo core_toDo_2 = dbContext.FirstOrDefault<core_toDo>("where RefTable = @0 and RefRecordID = @1", new object[2]
                 {
@@ -545,7 +545,7 @@ namespace FastDev.DevDB
                 if (flag2)
                 {
                     core_workflowProject.ModifyDate = DateTime.Now;
-                    core_workflowProject.ModifyUserID = SysContext.CurrentUserID;
+                    core_workflowProject.ModifyUserID = SysContext.WanJiangUserID;
                     core_workflowProject.Status = WFRecordStatus.Rejected;
                     core_workflowProject.EndTime = DateTime.Now;
                     dbContext.Update("core_workflowProject", "ID", core_workflowProject, new string[4]
@@ -565,7 +565,7 @@ namespace FastDev.DevDB
             workflowTaskData.Status = strStatus;
             workflowTaskData.EndTime = DateTime.Now;
             workflowTaskData.CreateDate = DateTime.Now;
-            workflowTaskData.CreateUserID = SysContext.CurrentUserID;
+            workflowTaskData.CreateUserID = SysContext.WanJiangUserID;
             dbContext.Update(workflowTaskData, workflowTaskData.ID, new string[4]
             {
                 "CreateDate",
@@ -579,7 +579,7 @@ namespace FastDev.DevDB
         {
             DbContext dbContext = wfContext;
             workflowExecutorStatusData.ModifyDate = DateTime.Now;
-            workflowExecutorStatusData.ModifyUserID = SysContext.CurrentUserID;
+            workflowExecutorStatusData.ModifyUserID = SysContext.WanJiangUserID;
             workflowExecutorStatusData.Status = strStatus;
             workflowExecutorStatusData.Remark = strRemark;
             workflowExecutorStatusData.ExecutorTime = DateTime.Now;
@@ -597,7 +597,7 @@ namespace FastDev.DevDB
         {
             DbContext dbContext = wfContext;
             toDoData.ModifyDate = DateTime.Now;
-            toDoData.ModifyUserID = SysContext.CurrentUserID;
+            toDoData.ModifyUserID = SysContext.WanJiangUserID;
             toDoData.Status = strStatus;
             toDoData.CompleteTime = DateTime.Now;
             dbContext.Update(toDoData, toDoData.ID, new string[4]
@@ -655,11 +655,11 @@ namespace FastDev.DevDB
                 {
                     currentTask.ID
                 });
-                if (list == null || !list.Any() || !list.Any(l => l.ExecutorID == SysContext.CurrentUserID))
+                if (list == null || !list.Any() || !list.Any(l => l.ExecutorID == SysContext.WanJiangUserID))
                 {
                     throw new UserException("没有权限访问！");
                 }
-                core_workflowExecutorStatus = list.FirstOrDefault(l => l.ExecutorID == SysContext.CurrentUserID);
+                core_workflowExecutorStatus = list.FirstOrDefault(l => l.ExecutorID == SysContext.WanJiangUserID);
                 if (core_workflowExecutorStatus.Status == WFRecordStatus.Canceled)
                 {
                     throw new UserException("任务已经取消！");
@@ -701,7 +701,7 @@ namespace FastDev.DevDB
                         dictionary["signMode"] = 1;
                         return dictionary;
                     }
-                    if (activeNode.handlerType != "1" && list.Any(wf => wf.ExecutorID != SysContext.CurrentUserID && wf.Status != WFRecordStatus.Completed))
+                    if (activeNode.handlerType != "1" && list.Any(wf => wf.ExecutorID != SysContext.WanJiangUserID && wf.Status != WFRecordStatus.Completed))
                     {
                         dictionary["waitting"] = 1;
                         return dictionary;
@@ -752,7 +752,7 @@ namespace FastDev.DevDB
                 List<object> list5 = new List<object>();
                 foreach (ViewNode item2 in list4)
                 {
-                    ViewNode viewNode4 = JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
+                    ViewNode viewNode4 = item2;// JsonHelper.DeserializeJsonToObject<ViewNode>(JsonHelper.SerializeObject(item2));
                     while (viewNode4.nodeType == WorkflowNodeType.Branch)
                     {
                         viewNode4 = GetBranchNode(context, viewModel, viewNode4);
@@ -952,10 +952,14 @@ namespace FastDev.DevDB
                 {
                     dictionary["isToNext"] = item.IsToNextTask;
                 }
-                dictionary["user"] = fwContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
+                var sanUser = fwContext.FirstOrDefault<SanHuWorkflowService.user>("where ID = @0", new object[1]
                 {
                     core_workflowExecutorStatus.ExecutorID
                 });
+                if (sanUser != null) {
+                    var cu = new { RealName=sanUser.Name, LoginName=sanUser.AccountId, MyPic=sanUser.Avatar,ID=sanUser.Id };
+                    dictionary["user"] =cu;
+                }
                 dictionary["status"] = "暂未处理";
                 if (core_workflowExecutorStatus.Status == WFRecordStatus.Completed)
                 {
@@ -1087,8 +1091,8 @@ namespace FastDev.DevDB
             {
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = "DepartmentID",
-                    op = "equal",
+                    field = "ID in (select UserID from organizationuser where OrganizationId = {0})",
+                    type = "sql",
                     value = item5
                 });
             }
@@ -1204,7 +1208,7 @@ namespace FastDev.DevDB
         }
 
 
-        private string GetJsResult(string strTemplate, string strData)
+        private string GetJsTemplateResult(string strTemplate, string strData)
         {
             ScriptEngine scriptEngine = new ScriptEngine();
             string code = "\r\n                function getResult()\r\n                { \r\n                    return getR(\"#template#\",#data#);\r\n                    function getR(template, data)\r\n                    {\r\n                        return template.replace(/\\{([\\w\\.]*)\\}/g, function (str, key)\r\n                        {\r\n                            var keys = key.split(\".\"), v = data[keys.shift()];\r\n                            for (var i = 0, l = keys.length; i < l; i++) v = v[keys[i]];\r\n                            return (typeof v !== \"undefined\" && v !== null) ? v : \"\";\r\n                        });\r\n                    }\r\n                }\r\n            ".Replace("#template#", strTemplate).Replace("#data#", strData);
@@ -1327,9 +1331,9 @@ namespace FastDev.DevDB
         {
             core_workflowExecutorStatus core_workflowExecutorStatus = new core_workflowExecutorStatus();
             core_workflowExecutorStatus.CreateDate = DateTime.Now;
-            core_workflowExecutorStatus.CreateUserID = SysContext.CurrentUserID;
+            core_workflowExecutorStatus.CreateUserID = SysContext.WanJiangUserID;
             core_workflowExecutorStatus.ModifyDate = DateTime.Now;
-            core_workflowExecutorStatus.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowExecutorStatus.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowExecutorStatus.ID = Guid.NewGuid().ToString();
             core_workflowExecutorStatus.TaskID = strTaskId;
             core_workflowExecutorStatus.ExecutorID = strExcutorId;
@@ -1341,9 +1345,9 @@ namespace FastDev.DevDB
         {
             core_toDo core_toDo = new core_toDo();
             core_toDo.CreateDate = DateTime.Now;
-            core_toDo.CreateUserID = SysContext.CurrentUserID;
+            core_toDo.CreateUserID = SysContext.WanJiangUserID;
             core_toDo.ModifyDate = DateTime.Now;
-            core_toDo.ModifyUserID = SysContext.CurrentUserID;
+            core_toDo.ModifyUserID = SysContext.WanJiangUserID;
             core_toDo.ID = Guid.NewGuid().ToString();
             core_toDo.Title = strTitle;
             core_toDo.Link = strLink;
@@ -1357,9 +1361,9 @@ namespace FastDev.DevDB
         {
             core_workflowProject core_workflowProject = new core_workflowProject();
             core_workflowProject.CreateDate = DateTime.Now;
-            core_workflowProject.CreateUserID = SysContext.CurrentUserID;
+            core_workflowProject.CreateUserID = SysContext.WanJiangUserID;
             core_workflowProject.ModifyDate = DateTime.Now;
-            core_workflowProject.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowProject.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowProject.ID = Guid.NewGuid().ToString();
             core_workflowProject.StartTime = DateTime.Now;
             core_workflowProject.WorkflowID = workflowId;
@@ -1373,9 +1377,9 @@ namespace FastDev.DevDB
             FastDev.DevDB.Model.core_workflowTask core_workflowTask = new FastDev.DevDB.Model.core_workflowTask();
             core_workflowTask.CreateDate = DateTime.Now;
             core_workflowTask.NodeType = string_4;
-            core_workflowTask.CreateUserID = SysContext.CurrentUserID;
+            core_workflowTask.CreateUserID = SysContext.WanJiangUserID;
             core_workflowTask.ModifyDate = DateTime.Now;
-            core_workflowTask.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowTask.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowTask.ID = Guid.NewGuid().ToString();
             core_workflowTask.StartTime = DateTime.Now;
             core_workflowTask.ProjectID = projectId;
@@ -1398,7 +1402,7 @@ namespace FastDev.DevDB
                 return null;
             }
             core_workflowTrack.ModifyDate = DateTime.Now;
-            core_workflowTrack.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowTrack.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowTrack.NextLinkType = nextLinkType;
             core_workflowTrack.NextTaskID = nextTaskId;
             dbContext.Update(core_workflowTrack, core_workflowTrack.ID, new string[4]
@@ -1415,9 +1419,9 @@ namespace FastDev.DevDB
         {
             core_workflowTrack core_workflowTrack = new core_workflowTrack();
             core_workflowTrack.CreateDate = DateTime.Now;
-            core_workflowTrack.CreateUserID = SysContext.CurrentUserID;
+            core_workflowTrack.CreateUserID = SysContext.WanJiangUserID;
             core_workflowTrack.ModifyDate = DateTime.Now;
-            core_workflowTrack.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowTrack.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowTrack.ID = Guid.NewGuid().ToString();
             core_workflowTrack.ProjectID = projectID;
             core_workflowTrack.TaskID = taskId;
@@ -1440,7 +1444,7 @@ namespace FastDev.DevDB
                 return null;
             }
             core_workflowTrackDetails.ModifyDate = DateTime.Now;
-            core_workflowTrackDetails.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowTrackDetails.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowTrackDetails.FromExecutorStatusID = statusId;
             dbContext.Update(core_workflowTrackDetails, core_workflowTrackDetails.ID, new string[3]
             {
@@ -1464,7 +1468,7 @@ namespace FastDev.DevDB
                 return null;
             }
             core_workflowTrackDetails.ModifyDate = DateTime.Now;
-            core_workflowTrackDetails.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowTrackDetails.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowTrackDetails.IsToNextTask = (byte)(IsToNextTask ? 1 : 0);
             dbContext.Update(core_workflowTrackDetails, core_workflowTrackDetails.ID, new string[3]
             {
@@ -1479,9 +1483,9 @@ namespace FastDev.DevDB
         {
             core_workflowTrackDetail core_workflowTrackDetails = new core_workflowTrackDetail();
             core_workflowTrackDetails.CreateDate = DateTime.Now;
-            core_workflowTrackDetails.CreateUserID = SysContext.CurrentUserID;
+            core_workflowTrackDetails.CreateUserID = SysContext.WanJiangUserID;
             core_workflowTrackDetails.ModifyDate = DateTime.Now;
-            core_workflowTrackDetails.ModifyUserID = SysContext.CurrentUserID;
+            core_workflowTrackDetails.ModifyUserID = SysContext.WanJiangUserID;
             core_workflowTrackDetails.ID = Guid.NewGuid().ToString();
             core_workflowTrackDetails.TrackID = trackId;
             core_workflowTrackDetails.ExecutorStatusID = strStatusID;

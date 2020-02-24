@@ -482,19 +482,19 @@ namespace FastDev.RunWeb.Controllers
         public ActionResult Index(string homestyle)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
-            
+
             core_user core_user = currentDb.FirstOrDefault<core_user>("where id = @0", new object[1]
             {
-            SysContext.CurrentUserID
+            SysContext.FastDevUserID
             });
-            if (core_user == null) 
+            if (core_user == null)
                 return new RedirectResult("/home/login");
             if (core_user.HomeStyle == "swin" || homestyle == "swin")
             {
                 return View("Index_StyleWin");
             }
             //return View();
-            return Content(System.IO.File.ReadAllText(Server.MapPath("~/index.html")),"text/html");
+            return Content(System.IO.File.ReadAllText(Server.MapPath("~/index.html")), "text/html");
         }
 
         [VaildateUser]
@@ -522,7 +522,7 @@ namespace FastDev.RunWeb.Controllers
             });
             core_user core_user = currentDb.FirstOrDefault<core_user>("where id = @0", new object[1]
             {
-            SysContext.CurrentUserID
+            SysContext.FastDevUserID
             });
             if (core_user == null)
             {
@@ -577,7 +577,7 @@ namespace FastDev.RunWeb.Controllers
 
         public ActionResult Login()
         {
-            return Content(System.IO.File.ReadAllText(Server.MapPath("~/Login.html")),"text/html");
+            return Content(System.IO.File.ReadAllText(Server.MapPath("~/Login.html")), "text/html");
         }
 
         public ActionResult Login2()

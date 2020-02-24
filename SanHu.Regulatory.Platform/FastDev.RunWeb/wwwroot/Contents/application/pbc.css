@@ -856,7 +856,7 @@ border-bottom: 1px solid #C1D9EA;
 }
 .l-selected .l-grid-row-cell, .l-selected {
     background: #6BA5D0;
-    color: white;
+    color: #4999bb;
 }
 .l-checkboxlist input {
     margin:2px 3px 3px 4px;

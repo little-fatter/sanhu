@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Model.Dto;
@@ -22,9 +23,16 @@ namespace FastDev.Service
 
         public work_taskService()
         {
-            OnGetAPIHandler += Work_taskService_OnGetAPIHandler; ;
+            OnGetAPIHandler += Work_taskService_OnGetAPIHandler;
         }
-
+        //public override object Create(object postdata)
+        //{
+        //    var rev= base.Create(postdata);
+        //    ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+        //    IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
+        //    workflowService.DbContext = QueryDb;
+        //    workflowService.GetContext(new DevDB.Workflow.WorkflowContext());
+        //}
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
         {
             switch (id.ToUpper())
