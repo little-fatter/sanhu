@@ -5,28 +5,28 @@ namespace FD.Common.ActionValue
 {
     public class FullJsonValue
     {
-        public static object GetObject(Type entityType, string strJson)
+
+
+        public static object GetObjectByType(Type entityType, string strJson)
         {
-            Type type = typeof(PostDataDescriptor<>).MakeGenericType(entityType);
-            var setting= new JsonSerializerSettings()
+            var setting = new JsonSerializerSettings()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
             };
             setting.Converters.Add(new JsonByteConvert());
-            return JsonConvert.DeserializeObject(strJson, type, setting);
+            return JsonConvert.DeserializeObject(strJson, entityType, setting);
+        }
+        public static object GetObject(Type entityType, string strJson)
+        {
+            Type type = typeof(PostDataDescriptor<>).MakeGenericType(entityType);
+            return GetObjectByType(type, strJson);
         }
 
         public static object GetListObject(Type entityType, string strJson)
         {
             Type type = typeof(ListPostDataDescriptor<>).MakeGenericType(entityType);
-            var setting = new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
-            }; 
-            setting.Converters.Add(new JsonByteConvert());
-            return JsonConvert.DeserializeObject(strJson, type, setting);
+            return GetObjectByType(type, strJson);
         }
        
 

@@ -3,6 +3,7 @@ using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using FD.Common;
+using FD.Common.ActionValue;
 using FD.Model.Dto;
 using FD.Model.Enum;
 using Microsoft.Extensions.Configuration;
@@ -25,14 +26,31 @@ namespace FastDev.Service
         {
             OnGetAPIHandler += Work_taskService_OnGetAPIHandler;
         }
-        //public override object Create(object postdata)
-        //{
-        //    var rev= base.Create(postdata);
-        //    ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
-        //    IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
-        //    workflowService.DbContext = QueryDb;
-        //    workflowService.GetContext(new DevDB.Workflow.WorkflowContext());
-        //}
+        /// <summary>
+        /// work_task一般是自动创建
+        /// 手动创建的话，需要创建其他工作流的表单,这里专门处理一下手动创建work_task的情况
+        /// 手动创建，必须指定 RefTable
+        /// </summary>
+        /// <param name="postdata"></param>
+        /// <returns></returns>
+        public override object Create(object postdata)
+        {
+            var rev= base.Create(postdata);
+            var data = (Model.Form.work_task)postdata;
+            if(!string.IsNullOrEmpty(data.RefTable))
+            {
+                Type entityType = DataAccessHelper.GetEntityType(data.RefTable,"Form");
+                if (entityType != null)
+                {
+                    var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
+                    //nextdata
+                    //entityType.GetProperty("TaskId").SetValue(nextdata, rev.ToString());
+                    IService svc = ServiceHelper.GetService(data.RefTable);
+                    svc.Create(nextdata);
+                }
+            }
+            return rev;
+        }
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
         {
             switch (id.ToUpper())

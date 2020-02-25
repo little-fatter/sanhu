@@ -20,6 +20,7 @@
         <field name="LocalLinks" dbName="LocalLinks" title="本地链接" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="RemoteLinks" dbName="RemoteLinks" title="远程链接" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="IsRootTask" dbName="IsRootTask" title="是否Root" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="FormPreparation" dbName="FormPreparation" title="表单准备" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

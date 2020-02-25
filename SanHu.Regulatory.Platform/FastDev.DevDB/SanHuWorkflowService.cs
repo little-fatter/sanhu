@@ -1520,7 +1520,7 @@ namespace FastDev.DevDB
             wTask.EventInfoId = evId;//事件Id
             wTask.ExpectedCompletionTime = DateTime.Now.AddDays(1);
             wTask.InitiationTime = DateTime.Now;
-            wTask.Status = RecordStatus.Submitted;
+            wTask.Status = RecordStatus.Active;
             wTask.TaskContent = strTitle;
             wTask.RefTable = objName;
             wTask.RefRecordID = recordId;

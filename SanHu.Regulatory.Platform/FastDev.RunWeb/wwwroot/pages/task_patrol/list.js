@@ -49,6 +49,17 @@ function() {
                     name: "Associatedforms",
                     display: "关联表单",
                     type: "string"
+                },
+                {
+                    width: "150",
+                    display: "状态",
+                    name: "Status",
+                    name_text: " - 状态 - ",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "wfstatus",
+                    type_text: "工作流状态",
+                    editorType: ""
                 }]
             },
             common: {

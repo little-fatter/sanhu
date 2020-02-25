@@ -99,6 +99,11 @@ public byte? IsRootTask
 get;
 set;
 }
+public string FormPreparation
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
