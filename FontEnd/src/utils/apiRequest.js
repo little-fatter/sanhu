@@ -317,7 +317,7 @@ const getContentType = (requestType) => {
 
   if (requestType === 'json') {
     contentType = {
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/json'
     }
   } else if (requestType === 'formData') {
     contentType = {

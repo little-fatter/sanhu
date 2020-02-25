@@ -4,10 +4,7 @@ function condition (params = []) {
   return {
     Condition: {
       rules: [],
-      groups: [{
-        rules: params,
-        op: 'and'
-      }],
+      groups: [],
       op: 'and'
     },
     PageIndex: 1,

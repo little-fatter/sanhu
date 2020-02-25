@@ -12,7 +12,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 // vue.config.js
 module.exports = {
-  publicPath: '/',
+  publicPath: '/webregulatory ',
   configureWebpack: config => {
     if (isDev) {
       return {
@@ -89,8 +89,7 @@ module.exports = {
     proxy: {
       // 必须使用/easymock开头的接口才使用该代理
       '/api': {
-        // target: 'https://www.easy-mock.com/mock/5caacf05828c3a52184cd2a0/wjfrontframe',
-        target: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata',
+        target: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web',
         ws: false,
         changeOrigin: true,
         // 真实接口是/api开头的，使用pathRewrite将/gateway替换为/api
