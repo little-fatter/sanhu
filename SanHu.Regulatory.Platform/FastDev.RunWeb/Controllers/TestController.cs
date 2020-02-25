@@ -26,7 +26,22 @@ namespace FastDev.RunWeb.Controllers
         [Authorize]
         public IActionResult Get()
         {
-            _dingDingServices.add();
+            //OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
+            //{
+            //    Userid = "2825136819665808",//user的accountID
+            //    CreateTime = DateTime.Now.GetTimeStamp(),
+            //    Title = "测试待办233",//待办事项的标题
+            //    Url = "https://oa.dingtalk.com",//待办事项的跳转链接
+            //    FormItemList_ = new List<OapiWorkrecordAddRequest.FormItemVoDomain>()
+            //    {
+            //        new OapiWorkrecordAddRequest.FormItemVoDomain
+            //        {
+            //            Title="待办表单标题",
+            //            Content="待办表单内容"
+            //        },
+            //    }
+            //};
+            //_dingDingServices.WorkrecordAdd(oapiWorkrecordAddRequest);
             return Content("ok");
         }
     }

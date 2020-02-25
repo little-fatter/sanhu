@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FD.Model.Configs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace FastDev.RunWeb
         public static void AddConfigsSeivce(this IServiceCollection services, IConfiguration Configuration)
         {
             //配置文件服务
-            services.Configure<ServerNameConfig>(Configuration);
+            services.Configure<ServerNameConfigModel>(Configuration);
 
         }
     }
