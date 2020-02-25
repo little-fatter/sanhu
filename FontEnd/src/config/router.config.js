@@ -178,9 +178,33 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/mission/dealt',
-            name: '',
+            name: 'Dealt',
             component: () => import('@/views/mymission/Index'),
             meta: { title: '待办任务' }
+          },
+          {
+            path: '/mission/donetask',
+            name: 'DoneTask',
+            component: () => import('@/views/mymission/doneTask'),
+            meta: { title: '已办任务' }
+          },
+          {
+            path: '/mission/mymission',
+            name: 'MyMission',
+            component: () => import('@/views/mymission/myMission'),
+            meta: { title: '我发起的任务' }
+          },
+          {
+            path: '/mission/eventinspection',
+            name: 'EventInspeion',
+            component: () => import('@/views/mymission/eventInspection'),
+            meta: { title: '事件巡查' }
+          },
+          {
+            path: '/mission/sceneInvestigation',
+            name: 'SceneInvestigation',
+            component: () => import('@/views/mymission/sceneInvestigation'),
+            meta: { title: '现场勘查' }
           }
         ]
       },
