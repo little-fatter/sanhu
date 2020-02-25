@@ -1537,7 +1537,7 @@ namespace FastDev.RunWeb.Controllers
             base.ViewBag.descriptorCode = descriptorCode;
             return View();
         }
-        [HttpPost]
+        [HttpGet]
         public ActionResult PreviewFrame()
         {
             return View();
@@ -1686,17 +1686,17 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult GetTemplateConents(string context, string TemplateId, int? pageIndex, string isReport, string descriptorCode)
+        public ActionResult GetTemplateConents(string context, string templateId, int? pageindex, string isReport, string descriptorCode)
         {
             try
             {
                 DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
                 if (isReport == "Y")
                 {
-                    int num = (!pageIndex.HasValue) ? 1 : pageIndex.Value;
+                    int num = (!pageindex.HasValue) ? 1 : pageindex.Value;
                     coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                     {
-                        TemplateId
+                        templateId
                     });
                     method_2();
                     string input = Base64Helper.DecodingString(descriptorCode);
@@ -1755,7 +1755,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 core_printTemplate_0 = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
                 {
-                    TemplateId
+                    templateId
                 });
                 if (core_printTemplate_0 == null)
                 {
@@ -1763,7 +1763,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 string_0 = core_printTemplate_0.TemplateBody;
                 method_2();
-                List<string> contents = method_4(context, pageIndex, false);
+                List<string> contents = method_4(context, pageindex, false);
                 return Json(new
                 {
                     Success = true,
