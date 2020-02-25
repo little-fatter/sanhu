@@ -185,10 +185,10 @@
             <summary>
             Grid数据导出到Excel
             </summary>
-            <param name="string_7"></param>
+            <param name="columnsJSON"></param>
             <param name="listdataJSON"></param>
             <param name="totaldataJSON"></param>
-            <param name="string_8"></param>
+            <param name="headerJSON"></param>
             <param name="title"></param>
             <param name="totalCellLeft"></param>
             <returns></returns>
