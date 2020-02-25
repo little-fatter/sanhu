@@ -19,25 +19,20 @@ const getHost = (moduleName, isRead = false) => {
   return host
 }
 
+// const getHost = () => {
+//   var host = ''
+//   if (appConfig.isUseGateWare) {
+//     host = appConfig.gatewayAddress
+//   } else {
+//     host = appConfig.hostConfig.host
+//   }
+//   return host
+// }
+
 /* 配置API接口应用访问地址 */
 const apiConfig = {
-  // 系统管理
-  admin: {
-    // 登录模块
-    login: {
-      login: getHost('admin') + '/api/auth/login'
-    },
-    // 基础信息模块
-    base: {
-      userInfo: getHost('admin') + '/api/auth/userInfo'
-    }
-  },
-  // 表格模块
-  list: {
-    serviceList: getHost('list') + '/api/service/list',
-    serviceAdd: getHost('list') + '/api/service/add',
-    orgList: getHost('list') + '/api/org/list'
-  }
+  // 任务模块
+  work_task: `${getHost('list')}/pageddata?model=work_task&appid=`
 }
 
 export default apiConfig
