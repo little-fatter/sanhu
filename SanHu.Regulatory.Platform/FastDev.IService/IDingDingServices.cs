@@ -6,5 +6,6 @@ namespace FastDev.IServices
 {
     public interface IDingDingServices:IApplicationServices
     {
+        void add();
     }
 }
