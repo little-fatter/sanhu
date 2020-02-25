@@ -54,6 +54,16 @@
             任务id
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.taskPatrolFinishReq.EventId">
+            <summary>
+            事件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.taskPatrolFinishReq.CaseId">
+            <summary>
+            案件id
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskPatrol">
             <summary>
             巡检信息
@@ -112,6 +122,16 @@
         <member name="F:FD.Model.Enum.WorkTaskStatus.HandOver">
             <summary>
             已移交
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.Patrol">
+            <summary>
+            巡查任务
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.Survey">
+            <summary>
+            勘察
             </summary>
         </member>
     </members>
