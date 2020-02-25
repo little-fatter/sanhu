@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FD.Model.Configs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -16,12 +17,12 @@ namespace FastDev.RunWeb.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : BaseController
     {
-        readonly ServerNameConfig _serverNameConfig;
+        readonly ServerNameConfigModel _serverNameConfig;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="appsettingsModel"></param>
-        public AccountController(IOptionsSnapshot<ServerNameConfig> appsettingsModel)
+        public AccountController(IOptionsSnapshot<ServerNameConfigModel> appsettingsModel)
         {
             _serverNameConfig=appsettingsModel.Value;
         }

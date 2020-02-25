@@ -6,6 +6,11 @@ using System.Text;
 using FD.Common.Extensions;
 using System.Threading.Tasks;
 using FastDev.DevDB.Common;
+using DingTalk.Api.Response;
+using DingTalk.Api.Request;
+using FastDev.Common.Extensions;
+using Microsoft.Extensions.Options;
+using FD.Model.Configs;
 
 namespace FastDev.Service
 {
@@ -15,14 +20,18 @@ namespace FastDev.Service
         /// httpclient工厂
         /// </summary>
         private readonly IHttpClientFactory _clientFactory;
-        public DingDingServices(IHttpClientFactory clientFactory)
+        readonly ServerNameConfigModel _serverNameConfig;
+        public DingDingServices(IOptionsSnapshot<ServerNameConfigModel> appsettingsModel, IHttpClientFactory clientFactory)
         {
+            _serverNameConfig = appsettingsModel.Value;
             _clientFactory = clientFactory;
         }
 
-        public void add()
+        public Task<OapiWorkrecordAddResponse> WorkrecordAdd(OapiWorkrecordAddRequest oapiWorkrecordAddRequest)
         {
-            var test = 'a';
+            var url = "framework/api/dingding/workrecordadd?"+ GetAgentIDString();
+            
+            return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
 
         /// <summary>
@@ -36,6 +45,10 @@ namespace FastDev.Service
         {
             var client = _clientFactory.CreateClient(HostData.FrameWorkSeverName);
             return await client.PostAsync<T>(apiurl, data);
+        }
+        private string GetAgentIDString()
+        {
+            return $"agentId={_serverNameConfig.AgentId}";
         }
     }
 }

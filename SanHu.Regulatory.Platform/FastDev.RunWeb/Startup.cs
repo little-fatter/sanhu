@@ -65,6 +65,9 @@ namespace FastDev.RunWeb
             SecurityKeys securityKeys = new SecurityKeys();
             Configuration.Bind("SecurityKeys", securityKeys);
             services.AddSingleton(securityKeys);
+            AppInfo appInfo = new AppInfo();
+            Configuration.Bind("AppInfo", appInfo);
+            services.AddSingleton(appInfo);
 
             //生成RsaSecurityKey用于JWT Token签名
             var rsaKeyBytes = Convert.FromBase64String(securityKeys.RSAKey);
@@ -233,8 +236,7 @@ namespace FastDev.RunWeb
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //此处需要注意UsePathBase,UserSpaService,UseDefaultFiles,UseStaticFiles的顺序不能错乱
-            AppInfo appInfo = new AppInfo();
-            Configuration.GetSection("AppInfo").Bind(appInfo);
+            var appInfo = app.ApplicationServices.GetRequiredService<AppInfo>();
             var pathBase = $"/{appInfo.ServiceName.Trim()}";
             app.UsePathBase(new PathString(pathBase), true);
 
