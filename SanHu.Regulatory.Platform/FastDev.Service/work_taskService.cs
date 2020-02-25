@@ -82,9 +82,8 @@ namespace FastDev.Service
 
                 //复制任务给指定用户
                 workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-                workTask.ID = CreateGuid.CreateId();
                 workTask.AssignUsersID = data.UserId;
-                QueryDb.Save(workTask);
+                base.Create(workTask);
 
                 //给指定用户发送待办
 
@@ -111,7 +110,7 @@ namespace FastDev.Service
             var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
-            QueryDb.Update(workTask);
+            base.Update(workTask);
             return true;
         }
     }
