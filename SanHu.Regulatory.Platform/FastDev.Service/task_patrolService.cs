@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Model.Dto;
@@ -23,6 +24,17 @@ namespace FastDev.Service
         {
             OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;
         }
+        /// <summary>
+        /// 是否需要创建新任务
+        /// 1、表单类型， 2、表单
+        /// </summary>
+        /// <returns></returns>
+        private bool NeedCreateNewTask(object postdata)
+        {
+            return true;
+        }
+
+
 
         private Func<APIContext, object> Task_patrolService_OnGetAPIHandler(string id)
         {

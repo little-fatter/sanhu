@@ -1,6 +1,6 @@
 <style scoped lang='less'>
 .formContent {
- padding:20px 40px;background-color:#EEEEEE;
+ background-color:#EEEEEE;
  .return {
      color :#101010;
      font-weight: 700;
@@ -9,7 +9,7 @@
      font-weight: bold;
  }
  .tags{
-    margin-bottom: 20px;margin-top:50px;
+    padding-bottom: 20px;padding-top:20px;background-color: #ffffff;margin-top:30px;
     .button {
         margin-left:40px;
     }
@@ -27,8 +27,15 @@
         margin-bottom: 20px;
     }
  }
+ .formStatus {
+display:flex;margin-bottom: 20px;background-color: #ffffff;padding-bottom: 20px;padding-left: 30px;
+div {
+  margin-right:40px;
+}
+ }
  .searchItemBox {
-        display:flex;justify-content: space-between;margin-bottom: 20px;
+        display:flex;justify-content: space-around;background-color: #ffffff;
+    padding-bottom: 20px;
         .formNameBox {
             display: flex;align-items: center;
             .itemName {
@@ -43,9 +50,6 @@
             .search {
                 margin-right:10px;
             }
-            .advancedSearch:hover {
-                cursor: pointer;
-            }
         }
     }
 
@@ -53,36 +57,32 @@
 </style>
 <template>
   <div class="formContent">
-    <div class="tags" v-show="AdvancedSearch">
-      <span class="title">选择</span>
+    <div class="tags" >
       <a-button class="button" :type="clickIndex == 1 ? 'primary' : 'default'" @click="clickIndex = 1">全部</a-button>
       <a-button class="button" :type="clickIndex == 2 ? 'primary' : 'default'" @click="clickIndex = 2">我发起的</a-button>
       <a-button class="button" :type="clickIndex == 3 ? 'primary' : 'default'" @click="clickIndex = 3">我审批的</a-button>
       <a-button class="button" :type="clickIndex == 4 ? 'primary' : 'default'" @click="clickIndex = 4">待我审批的</a-button>
       <a-button class="button" :type="clickIndex == 5 ? 'primary' : 'default'" @click="clickIndex = 5">抄送我的</a-button>
-      <a-button class="button" type="primary" @click="$router.push('/form/form-add-list')">新增</a-button>
-    </div>
-    <div class="return" v-show="!AdvancedSearch" @click="AdvancedSearch = true">
-      < 返回
-    </div>
-    <div class="searchLine">
-      搜索
-    </div>
-    <div class="searchItem">
-      <div class="submitTime" v-show="!AdvancedSearch">
-        <span>提交审批时间：</span>
-        <a-range-picker @change="onChange" />
-      </div>
+      <!-- <a-button class="button" type="primary" @click="$router.push('/form/form-add-list')">新增</a-button> -->
     </div>
     <div class="searchItemBox">
-      <div v-if="AdvancedSearch">
+      <div>
         <span>发起时间：</span>
         <a-range-picker @change="onChange" />
       </div>
-      <div v-else>
-        <span>完成审批时间：</span>
+      <div>
+        <span>完成时间：</span>
         <a-range-picker @change="onChange" />
       </div>
+      <div class="formNameBox">
+        <div class="itemName">表单名称：</div>
+        <a-input class="itemInput" v-model="formName" placeholder="请输入表单名称、申请人名字、审批意见"/>
+      </div>
+      <div class="searchButtonItem">
+        <a-button class="search" type="primary">搜索</a-button>
+      </div>
+    </div>
+    <div class="formStatus">
       <div>
         <span>表单状态：</span>
         <a-select v-model="formState" style="width: 120px" @change="formStateChange">
@@ -98,17 +98,6 @@
           <a-select-option value="类型2">类型2</a-select-option>
         </a-select>
       </div>
-      <div class="formNameBox">
-        <div class="itemName">表单名称：</div>
-        <a-input class="itemInput" v-model="formName" placeholder="请输入表单名称、申请人名字、审批意见"/>
-      </div>
-      <div class="searchButtonItem">
-        <a-button class="search" type="primary">搜索</a-button>
-        <div class="advancedSearch">
-          <span v-if="AdvancedSearch" @click="AdvancedSearch = false">高级搜索</span>
-          <span v-else @click="AdvancedSearch = true">关闭高级搜索</span>
-        </div>
-      </div>
     </div>
     <div>
       <a-table
@@ -118,22 +107,6 @@
         :rowKey="record => record.InitiationTime"
         :dataSource="formData"
         bordered>
-        <template slot="title" >
-          我发起的表单
-        </template>
-        <span slot="action" >
-          <a href="javascript:;" @click="gotoDetail">详情</a>
-          <a-divider type="vertical" />
-          <a href="javascript:;" @click="editForm()">修改</a>
-          <a-divider type="vertical" />
-          <a href="javascript:;" @click="$router.push('/form/form-print')">打印</a>
-          <a-divider type="vertical" />
-          <a href="javascript:;" @click="sendNotice()">通知<span>(不可用)</span></a>
-          <a-divider type="vertical" />
-          <a href="javascript:;">
-            罚款收取
-          </a>
-        </span>
       </a-table>
     </div>
     <a-modal
@@ -198,48 +171,41 @@ export default {
       clickIndex: 1,
       formState: '待审批',
       formTypes: '类型1',
-      AdvancedSearch: true, // true为普通搜索，false为高级搜索
       formName: '',
       columns: [{
-        title: '发起时间',
+        title: '',
         dataIndex: 'InitiationTime',
         className: 'backColorType',
         align: 'center'
       }, {
-        title: '完成时间',
+        title: '表单编号',
         dataIndex: 'finishTime',
         className: 'backColorType',
         align: 'center'
       }, {
-        title: '表单名称',
+        title: '表单标题',
         dataIndex: 'formName',
         className: 'backColorType',
         align: 'center'
       }, {
-        title: '内容简介',
+        title: '表单摘要',
         dataIndex: 'contentValidity',
         className: 'backColorType',
         align: 'center'
       }, {
-        title: '申请部门',
+        title: '发起时间',
         dataIndex: 'department',
         className: 'backColorType',
         align: 'center'
       }, {
-        title: '表单状态',
+        title: '完成时间',
         dataIndex: 'formStates',
         className: 'backColorType',
         align: 'center'
       }, {
-        title: '申请人',
+        title: '状态',
         dataIndex: 'applicant',
         className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '操作',
-        dataIndex: 'action',
-        className: 'backColorType',
-        scopedSlots: { customRender: 'action' },
         align: 'center'
       }],
       formData: [{
@@ -255,8 +221,7 @@ export default {
         defaultPageSize: 5,
         showTotal: total => `共 ${total} 条数据`,
         showSizeChanger: true,
-        pageSizeOptions: ['5', '10', '15', '20'],
-        onShowSizeChange: (current, pageSize) => this.pageSize = pageSize
+        pageSizeOptions: ['5', '10', '15', '20']
       }
     }
   },

@@ -13,30 +13,30 @@ console.log('currentUser', getCurrentUser())
 const whiteList = ['login']
 
 /** 路由进入事件 */
-router.beforeEach((to, from, next) => {
-  NProgress.start() // start progress bar
+// router.beforeEach((to, from, next) => {
+//   NProgress.start() // start progress bar
 
-  if (isNotEmpty(getCurrentUser().userInfo)) {
-    if (to.path === '/user/login') {
-      next({ path: '/dashboard/workplace' })
-      NProgress.done()
-    } else {
-      next()
-    }
-  } else {
-    if (isNotEmpty(appConfig.loginUrl)) {
-      next({ path: appConfig.loginUrl })
-    } else {
-      if (whiteList.includes(to.name)) {
-        // 在免登录白名单，直接进入
-        next()
-      } else {
-        next({ path: '/user/login', query: { redirect: to.fullPath } })
-        NProgress.done()
-      }
-    }
-  }
-})
+//   if (isNotEmpty(getCurrentUser().userInfo)) {
+//     if (to.path === '/login') {
+//       next({ path: '/dashboard/workplace' })
+//       NProgress.done()
+//     } else {
+//       next()
+//     }
+//   } else {
+//     if (isNotEmpty(appConfig.loginUrl)) {
+//       next({ path: appConfig.loginUrl })
+//     } else {
+//       if (whiteList.includes(to.name)) {
+//         // 在免登录白名单，直接进入
+//         next()
+//       } else {
+//         next({ path: '/login', query: { redirect: to.fullPath } })
+//         NProgress.done()
+//       }
+//     }
+//   }
+// })
 
 /** 路由完成事件 */
 router.afterEach(() => {

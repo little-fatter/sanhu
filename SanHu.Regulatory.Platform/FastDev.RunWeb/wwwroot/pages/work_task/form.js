@@ -93,7 +93,16 @@ function() {
                     readonlyInEdit: 0
                 },
                 {
-                    newline: true,
+                    name: "IsRootTask",
+                    type: "checkbox",
+                    label: "是否手动创建",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    newline: false,
                     name: "TaskContent",
                     label: "任务描述",
                     editor: {
@@ -122,7 +131,7 @@ function() {
                     type: "datepicker",
                     label: "期望完成时间",
                     editor: {},
-                    newline: 1,
+                    newline: 0,
                     width: "",
                     readonlyInEdit: 0
                 },
@@ -147,6 +156,31 @@ function() {
                     },
                     type: "ref_select",
                     width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    name: "RefTable",
+                    type: "text",
+                    label: "关联模型",
+                    editor: {},
+                    newline: 0,
+                    width: "",
+                    readonlyInEdit: 0,
+                    validate: {
+                        required: 1,
+                        minlength: "0",
+                        maxlength: "255",
+                        regexRule: "",
+                        equalTo: ""
+                    }
+                },
+                {
+                    name: "FormPreparation",
+                    type: "textarea",
+                    label: "新表必填",
+                    editor: {},
+                    newline: 1,
+                    width: "500",
                     readonlyInEdit: 0
                 }]
             },
