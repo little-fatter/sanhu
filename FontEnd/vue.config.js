@@ -88,13 +88,14 @@ module.exports = {
     // 配置开发环境代理
     proxy: {
       // 必须使用/easymock开头的接口才使用该代理
-      '/easymock': {
-        target: 'https://www.easy-mock.com/mock/5caacf05828c3a52184cd2a0/wjfrontframe',
+      '/api': {
+        // target: 'https://www.easy-mock.com/mock/5caacf05828c3a52184cd2a0/wjfrontframe',
+        target: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata',
         ws: false,
         changeOrigin: true,
         // 真实接口是/api开头的，使用pathRewrite将/gateway替换为/api
         pathRewrite: {
-          '^/easymock': ''
+          '^/api': ''
         }
       },
       '/filesystem': {

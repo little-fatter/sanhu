@@ -164,6 +164,8 @@
 </template>
 
 <script>
+import { getWorkTaskList } from '@/api/sampleApi'
+
 export default {
   data () {
     return {
@@ -192,9 +194,13 @@ export default {
     }
   },
   created () {
+    getWorkTaskList().then(res => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
   },
   methods: {
-
   }
 }
 </script>

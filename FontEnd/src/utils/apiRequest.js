@@ -81,7 +81,8 @@ export const delHttp = ({ url, params, options = {} }) => {
  */
 export const uploadFileHttp = ({ url, formData }) => {
   const headers = {
-    'Content-Type': 'multipart/form-data'
+    // 'Content-Type': 'multipart/form-data'
+    'Content-Type': 'application/json'
   }
   const options = {
     headers,

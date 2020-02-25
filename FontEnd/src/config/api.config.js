@@ -19,6 +19,16 @@ const getHost = (moduleName, isRead = false) => {
   return host
 }
 
+// const getHost = () => {
+//   var host = ''
+//   if (appConfig.isUseGateWare) {
+//     host = appConfig.gatewayAddress
+//   } else {
+//     host = appConfig.hostConfig.host
+//   }
+//   return host
+// }
+
 /* 配置API接口应用访问地址 */
 const apiConfig = {
   // 系统管理
@@ -37,7 +47,9 @@ const apiConfig = {
     serviceList: getHost('list') + '/api/service/list',
     serviceAdd: getHost('list') + '/api/service/add',
     orgList: getHost('list') + '/api/org/list'
-  }
+  },
+  // 任务模块
+  work_task: `${getHost('list')}?model=work_task&appid=`
 }
 
 export default apiConfig
