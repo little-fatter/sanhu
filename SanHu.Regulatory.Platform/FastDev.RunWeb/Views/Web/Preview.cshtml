@@ -17,12 +17,12 @@
     <link href="~/Scripts/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
     <link href="~/Scripts/ligerUI/skins/ne/css/all.css" rel="stylesheet" type="text/css" />   
     <link href="~/Scripts/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />   
-    <link href="~/Contents/application/ne.css" rel="stylesheet" type="text/css" />     
+    <link href="~/Contents/application/pbc.css" rel="stylesheet" type="text/css" />     
     <script src="~/Scripts/jquery/jquery-1.8.3.js"></script>
     <script src="~/Scripts/ligerUI/js/ligerui.all.js" type="text/javascript"></script> 
     <script src="~/Scripts/application/ligerui.expand.js"></script>      
-    <script src="~/Scripts/application/ne.js" type="text/javascript"></script>
-    <script src="~/Scripts/application/ne.web.js?11"></script>
+    <script src="~/Scripts/application/pbc.js" type="text/javascript"></script>
+    <script src="~/Scripts/application/pbc.web.js?11"></script>
     <script src="~/Scripts/layer/layer.js"></script>
     <script src="~/Scripts/lopod/LodopFuncs.js"></script>
     <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
@@ -32,15 +32,15 @@
     <script src="~/Scripts/editors/tabSelect/tabSelect.js"></script>
 
       <style type="text/css">
-        .ne-btn-group {
+        .pbc-btn-group {
           position: relative;
-          text-decoration: none;
+          text-decoration: nopbc;
         } 
-        .ne-btn-group i {
-          display: inline;
+        .pbc-btn-group i {
+          display: inlipbc;
           padding: 0 8px;
         }
-        .ne-btn-group  .dropdown-menu {
+        .pbc-btn-group  .dropdown-menu {
           left: 0px; 
           min-width: 80px; 
           width: 80px;
@@ -72,11 +72,11 @@
           top: 100%;
           left: 0;top:0px;
           z-index: 1000;
-          display: none; 
+          display: nopbc; 
           min-width: 160px;
           padding: 5px 0;
           margin: 2px 0 0;
-          list-style: none;
+          list-style: nopbc;
           font-size: 14px;
           text-align: left;
           background-color: #ffffff;
@@ -97,19 +97,19 @@
         }
         .pdftip {
             color: #E23838;
-            line-height: 250%;
+            lipbc-height: 250%;
             font-size:14px;
         }
-        .hideline .printline {
-            display: none;
+        .hidelipbc .printlipbc {
+            display: nopbc;
         }
     </style>
 </head>
 <body>   
         <div id="top"> 
         <div style="margin-right:100px; float:right;"> 
-            <a class="ne-btn" href="javascript:f_print()">打印</a>
-            <a class="ne-btn ne-btn-group" id="btnout"><span>输出</span><i class='ui-icon ui-icon-triangle-1-s'></i></a> 
+            <a class="pbc-btn" href="javascript:f_print()">打印</a>
+            <a class="pbc-btn pbc-btn-group" id="btnout"><span>输出</span><i class='ui-icon ui-icon-triangle-1-s'></i></a> 
         </div>
          <ul class="dropdown-menu" id="out_menus">
                 <li><a data-id="jpg" href="javascript:f_outJpg()">JPG</a></li> 
@@ -117,16 +117,16 @@
             </ul>
 
         <div style="margin-left:10px;float:left">
-             <a class="ne-btn" href="javascript:f_prev()" >上一页</a>
-             <span style="font-size: 14px;line-height: 20px;margin: 0 6px;" id="pagemessage">1/1</span>
-            <a class="ne-btn" href="javascript:f_next()" style="margin-left:10px;">下一页</a>
+             <a class="pbc-btn" href="javascript:f_prev()" >上一页</a>
+             <span style="font-size: 14px;lipbc-height: 20px;margin: 0 6px;" id="pagemessage">1/1</span>
+            <a class="pbc-btn" href="javascript:f_pbcxt()" style="margin-left:10px;">下一页</a>
         </div>
         <div style="clear:both;"></div>
     </div>
    <div id="content" style="overflow: auto; height: 457px; width: auto; background: rgb(232, 232, 232);text-align:center;" class="notprint">
      
-    <div id="contentinner" style="background:#ffffff;margin:0 auto;text-align:left; position:relative;">
-          <div style="height:1px;line-height:1px;"></div>
+    <div id="contentinpbcr" style="background:#ffffff;margin:0 auto;text-align:left; position:relative;">
+          <div style="height:1px;lipbc-height:1px;"></div>
  
             <iframe id="frame_content" width="100%" height="100%" frameborder="0" src="~/web/PreviewFrame"></iframe>
 
@@ -169,23 +169,27 @@
              
             winResize();
 
-            ne.ajax({
-                url: ne.toUrl('/web/GetTemplateConents'),
+            pbc.ajax({
+                url: pbc.toUrl('/web/GetTemplateConents'),
                 data: $.extend({
                     pageindex:1
                 },openParm),
                 success: function (r)
                 {
+                    if (!r.Success) {
+                        pbc.showError(r.message);
+                        return;
+                    }
                     updateParm(r.templateParm);
                     currentIndex = 0;
                     currentContents = r.contents;
 
                     updateContent();
 
-                    var jpage = $("#contentinner_content");
+                    var jpage = $("#contentinpbcr_content");
 
-                    $("#contentinner").css("width", allWidth + "px");
-                    $("#contentinner").css("height", (allHeight + 1) + "px");
+                    $("#contentinpbcr").css("width", allWidth + "px");
+                    $("#contentinpbcr").css("height", (allHeight + 1) + "px");
 
                     jpage.css({
                         width: pageWidth + "px",
@@ -220,7 +224,7 @@
             }
             return true;
         }
-        function loadNextPage(callback)
+        function loadpbcxtPage(callback)
         { 
             if ((currentIndex + 1) >= currentContents.length || isAllLoaded())
             {
@@ -241,7 +245,7 @@
                             callback();
                         } else
                         {
-                            loadNextPage(callback);
+                            loadpbcxtPage(callback);
                         }
                     }, 500);
 
@@ -249,8 +253,8 @@
             }
             else
             {
-                ne.ajax({
-                    url: ne.toUrl('/web/GetTemplateConents'),
+                pbc.ajax({
+                    url: pbc.toUrl('/web/GetTemplateCopbcnts'),
                     data: $.extend({
                         pageindex: currentIndex +1
                     }, openParm),
@@ -266,7 +270,7 @@
                                 callback();
                             } else
                             {
-                                loadNextPage(callback);
+                                loadpbcxtPage(callback);
                             }
                         }, 500);
                     }
@@ -285,8 +289,8 @@
             }
             else
             {
-                ne.ajax({
-                    url: ne.toUrl('/web/GetTemplateConents'),
+                pbc.ajax({
+                    url: pbc.toUrl('/web/GetTemplateCopbcnts'),
                     data: $.extend({
                         pageindex: currentIndex + 1
                     },openParm),
@@ -304,7 +308,7 @@
         function pageRender(callabck)
         {
             $("#pagemessage").html((currentIndex + 1) + "/" + currentContents.length);
-            $("#contentinner_content").html(currentContents[currentIndex]);
+            $("#contentinpbcr_content").html(currentContents[currentIndex]);
 
             var jpage = $("<div></div>").css({
                 margin: 0,
@@ -337,7 +341,7 @@
             currentIndex--;
             updateContent();
         }
-        function f_next()
+        function f_pbcxt()
         {
             if (currentIndex == currentContents.length - 1) return;
             currentIndex++;
@@ -346,11 +350,11 @@
         $(document).bind('click', function (e)
         {
             var jthis = $((e.target || e.srcElement));
-            if (jthis.hasClass("ne-btn-group"))
+            if (jthis.hasClass("pbc-btn-group"))
             {
                 return;
             }
-            if (jthis.closest(".dropdown-menu,.ne-btn-group").length == 0)
+            if (jthis.closest(".dropdown-menu,.pbc-btn-group").length == 0)
             {
                 $("#out_menus").hide();
             }
@@ -411,7 +415,7 @@
             });
 
             var tip1 = "为了保证您的正常打印，请正确 <a href='/printhelp.html' target='_blank'>配置浏览器打印</a>";
-            var tip2 = "为了保证您的正常打印，请先下载安装 <a href='http://dl.pconline.com.cn/html_2/1/81/id=1322&amp;pn=0&amp;linkPage=1.html' target='_blank'>Adobe PDF阅读器</a>";
+            var tip2 = "为了保证您的正常打印，请先下载安装 <a href='http://dl.pconlipbc.com.cn/html_2/1/81/id=1322&amp;pn=0&amp;linkPage=1.html' target='_blank'>Adobe PDF阅读器</a>";
 
             var showing = true;
             var form = jform.ligerForm({
@@ -450,7 +454,7 @@
 
         function print_win()
         {
-            loadNextPage(function ()
+            loadpbcxtPage(function ()
             {
                 var jwrap = $("<div class='view'></div>").css({
                     margin: 0, padding: 0,
@@ -500,7 +504,7 @@
             var action = openParm.isReport == "Y" ? "printpdf_report" : "printpdf";
 
 
-            openNew(ne.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=N&rnd=" + new Date().getTime()), {
+            openpbcw(pbc.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=N&rnd=" + (new Date).getTime()), {
                 descriptorCode: openParm.descriptorCode
             });
         }
@@ -514,7 +518,7 @@
             var isReport = openParm.isReport;
             var action = openParm.isReport == "Y" ? "printpdf_report" : "printpdf";
 
-            openNew(ne.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=Y&rnd=" + new Date().getTime()), {
+            openpbcw(pbc.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=Y&rnd=" + (new Date).getTime()), {
                 descriptorCode: openParm.descriptorCode
             });
             $("#out_menus").hide();
@@ -528,7 +532,7 @@
             var isReport = openParm.isReport;
             var action = openParm.isReport == "Y" ? "printjpg_report" : "printjpg";
  
-            openNew(ne.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId +  "&pageindex=0&rnd=" + new Date().getTime()), {
+            openpbcw(pbc.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId +  "&pageindex=0&rnd=" + (new Date).getTime()), {
                 descriptorCode: openParm.descriptorCode
             });
             $("#out_menus").hide();
@@ -544,12 +548,12 @@
             jframe.attr("src", url);
         }
 
-        function openNew(url, parms)
+        function openpbcw(url, parms)
         {
-            var jform = $('#opennew_form');
+            var jform = $('#openpbcw_form');
             if (jform.length == 0)
             {
-                jform = $('<form method="post" />').attr('id', 'opennew_form').hide().appendTo('body');
+                jform = $('<form method="post" />').attr('id', 'openpbcw_form').hide().appendTo('body');
             } else
             {
                 jform.empty();

@@ -5,8 +5,7 @@ using System.Text;
 
 namespace FastDev.Service
 {
-    public class DingDingSevice: ApplicationService, IDingDingServices
+    public class ApplicationServices: IApplicationServices
     {
-
     }
 }

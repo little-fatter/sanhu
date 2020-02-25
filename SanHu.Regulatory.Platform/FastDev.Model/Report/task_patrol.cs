@@ -19,7 +19,7 @@ public string EventType
 get;
 set;
 }
-public DateTime IncidentTime
+public DateTime? IncidentTime
 {
 get;
 set;
@@ -50,6 +50,21 @@ get;
 set;
 }
 public string Associatedforms
+{
+get;
+set;
+}
+public string EventID
+{
+get;
+set;
+}
+public string CaseID
+{
+get;
+set;
+}
+public string Formnumber
 {
 get;
 set;

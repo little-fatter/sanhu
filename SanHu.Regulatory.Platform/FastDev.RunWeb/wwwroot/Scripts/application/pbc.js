@@ -2588,7 +2588,7 @@
         } else {
             $el.empty();
         }
-        for (k in changedTouch) {
+        for (var k in changedTouch) {
             $('<input type="hidden" />').attr({
                 name: k,
                 value: changedTouch[k]

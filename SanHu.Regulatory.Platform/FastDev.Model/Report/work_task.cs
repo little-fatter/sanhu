@@ -104,6 +104,11 @@ public string FormPreparation
 get;
 set;
 }
+public string CaseID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

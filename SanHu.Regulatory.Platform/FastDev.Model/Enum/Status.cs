@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace FD.Model.Enum
@@ -43,5 +44,20 @@ namespace FD.Model.Enum
         HandOver = 3
     }
 
-    
+    public enum TaskType
+    {
+        /// <summary>
+        /// 巡查任务
+        /// </summary>
+        [Display(Name = "巡查任务")]
+        Patrol=0,
+        /// <summary>
+        /// 勘察
+        /// </summary>
+        [Display(Name = "勘察任务")]
+        Survey =1
+    }
+
+
+
 }
