@@ -83,6 +83,16 @@
             自动编码
             </summary>
         </member>
+        <member name="T:FastDev.DevDB.Common.HostData">
+            <summary>
+            主机名称
+            </summary>
+        </member>
+        <member name="F:FastDev.DevDB.Common.HostData.FrameWorkSeverName">
+            <summary>
+            主框架 http名称
+            </summary>
+        </member>
         <member name="M:FastDev.DevDB.DataAccessHelper.GetModelAssembly">
             <summary>
             FastDev Model 动态生成

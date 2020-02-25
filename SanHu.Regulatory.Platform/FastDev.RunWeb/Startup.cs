@@ -1,4 +1,3 @@
-using Autofac;
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
 using FD.Common.ActionValue;
@@ -49,17 +48,6 @@ namespace FastDev.RunWeb
               .AddEnvironmentVariables();
             Configuration = configuration;// builder.Build();
             WebEnvironment = env;
-        }
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            var mysqlConnectionString = Configuration.GetConnectionString("MySQLConnection");
-            var redisConnectionString = Configuration.GetConnectionString("RedisConnection");
-            builder.RegisterModule(new DependencyRegistrationModule(mysqlConnectionString, redisConnectionString));
-            //var mongoConnection = Configuration.GetConnectionString("MongoConnection");
-            //var mongoDbName = Configuration.GetConnectionString("MongoDbName");
-            //builder.Register<IMongoClient>(c => new MongoClient(mongoConnection)).SingleInstance();
-            //builder.Register(c => c.Resolve<IMongoClient>().GetDatabase(mongoDbName)).InstancePerDependency();
-            //DDServerBaseUrl.SetValue(Configuration.GetSection("DDServer").GetSection("BaseUrl").Value);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -119,7 +107,7 @@ namespace FastDev.RunWeb
                 {
                     option.XWsseTimeout = expiresTime.XWsseTimeout;
                 });
-
+            services.AddConfigHttpClient(Configuration);
 
             services.AddControllersWithViews(options =>
             {
@@ -238,6 +226,7 @@ namespace FastDev.RunWeb
                     }
                 });
             });
+            services.AddDependencyConfigs(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
