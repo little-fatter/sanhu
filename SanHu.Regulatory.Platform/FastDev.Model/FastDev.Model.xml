@@ -64,6 +64,11 @@
             理由
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.task_surveyFinishReq.TaskSurvey">
+            <summary>
+            勘察信息
+            </summary>
+        </member>
         <member name="T:FD.Model.Enum.EventStatus">
             <summary>
             事件状态
