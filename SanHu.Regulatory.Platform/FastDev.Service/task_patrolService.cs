@@ -34,54 +34,92 @@ namespace FastDev.Service
             return true;
         }
 
-
-
         private Func<APIContext, object> Task_patrolService_OnGetAPIHandler(string id)
         {
             switch (id.ToUpper())
             {
                 case "FINISH":
                     return Finish;
-
             }
             return null;
         }
-        public object Finish(APIContext context) {
-
+        public object Finish(APIContext context)
+        {
             var data = JsonHelper.DeserializeJsonToObject<taskPatrolFinishReq>(context.Data);
-
-            //当前任务信息
-            var taskInfo = QueryDb.FirstOrDefault<work_task>(" where id=@0", data.TaskId);
-
-            if (data.TaskPatrol.Needlawenforcement != null && data.TaskPatrol.Needlawenforcement == 1)
+            if (string.IsNullOrEmpty(data.CaseId) && string.IsNullOrEmpty(data.TaskId) && string.IsNullOrEmpty(data.EventId))
             {
-                //需要执法
-                //生成勘察任务
-                task_survey survey = new task_survey();
-                survey.ID = CreateGuid.CreateId();
-                survey.CreateDate = DateTime.Now;
-                work_task workTask = new work_task();
-                workTask.ID = survey.ID = CreateGuid.CreateId();
-                workTask.EventInfoId = taskInfo.EventInfoId;
-                
+                throw new Exception("缺少关联数据(任务或事件或案件)");
             }
-            else
+            //保存当前巡查表单
+            //开始事务
+            QueryDb.BeginTransaction();
+            try
             {
-                //不需要执法,需要判断是否跟踪
-                if (data.TaskPatrol.Needtracking != null && data.TaskPatrol.Needtracking == 1)
+                var patrol = data.TaskPatrol;
+                patrol.CaseID = data.CaseId;
+                patrol.EventID = data.EventId;
+                Create(patrol);
+
+                //当前任务信息
+                if (!string.IsNullOrEmpty(data.TaskId))
                 {
-                    //需要跟踪
-                    //生成巡查任务,并关联当前任务
-
+                    var workTask = UpdateWorkTask(data.TaskId);
+                    data.EventId = workTask.EventInfoId;
+                    data.CaseId = workTask.CaseID;
                 }
+
+                //执法与跟踪
+                work_task newWorkTask = null;
+                if (data.TaskPatrol.Needlawenforcement != null && data.TaskPatrol.Needlawenforcement == 1)
+                {
+                    //需要执法
+                    //生成勘察任务
+                    newWorkTask = CreateWorkTask(data.EventId, data.CaseId, TaskType.Survey);
+                }
+                else
+                {
+                    //不需要执法,需要判断是否跟踪
+                    if (data.TaskPatrol.Needtracking != null && data.TaskPatrol.Needtracking == 1)
+                    {
+                        //需要跟踪
+                        newWorkTask = CreateWorkTask(data.EventId, data.CaseId, TaskType.Patrol);
+                    }
+                }
+                //保存新任务
+                if (newWorkTask != null)
+                    ServiceHelper.GetService(newWorkTask.GetType().Name).Create(newWorkTask);
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                return false;
             }
 
-            return null;
+            QueryDb.CompleteTransaction();
+            return true;
         }
 
+        private work_task CreateWorkTask(string eventId, string caseId, TaskType type)
+        {
+            work_task workTask = new work_task();
+            workTask.EventInfoId = eventId;
+            workTask.CaseID = caseId;
+            workTask.Tasktype = (int)TaskType.Survey;
+            workTask.TaskStatus = (int)WorkTaskStatus.Normal;
+            workTask.TaskContent = type.GetDisplayName();
 
+            return workTask;
+        }
+        private work_task UpdateWorkTask(string taskId)
+        {
+            var taskInfo = QueryDb.FirstOrDefault<work_task>(" where id=@0", taskId);
 
-
+            //修改任务状态-已关闭
+            taskInfo.TaskStatus = (int)WorkTaskStatus.Close;
+            taskInfo.CompleteTime = DateTime.Now;
+            QueryDb.Update(taskInfo);
+            return taskInfo;
+        }
 
     }
 

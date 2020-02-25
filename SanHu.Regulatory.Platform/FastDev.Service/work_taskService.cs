@@ -36,19 +36,19 @@ namespace FastDev.Service
         public override object Create(object postdata)
         {
             var rev= base.Create(postdata);
-            var data = (Model.Form.work_task)postdata;
-            if(!string.IsNullOrEmpty(data.RefTable))
-            {
-                Type entityType = DataAccessHelper.GetEntityType(data.RefTable,"Form");
-                if (entityType != null)
-                {
-                    var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
-                    //nextdata
-                    //entityType.GetProperty("TaskId").SetValue(nextdata, rev.ToString());
-                    IService svc = ServiceHelper.GetService(data.RefTable);
-                    svc.Create(nextdata);
-                }
-            }
+            //var data = (Model.Form.work_task)postdata;
+            //if(!string.IsNullOrEmpty(data.RefTable))
+            //{
+            //    Type entityType = DataAccessHelper.GetEntityType(data.RefTable,"Form");
+            //    if (entityType != null)
+            //    {
+            //        var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
+            //        //nextdata
+            //        //entityType.GetProperty("TaskId").SetValue(nextdata, rev.ToString());
+            //        IService svc = ServiceHelper.GetService(data.RefTable);
+            //        svc.Create(nextdata);
+            //    }
+            //}
             return rev;
         }
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
