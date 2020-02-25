@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="loc_field_staff" title="外勤员工" textField="StaffName" moduleName="loc" moduleTitle="定位" dbName="" />
+    <model name="loc_field_staff" title="外勤员工" textField="StaffName" moduleName="zhzf" moduleTitle="综合执法" dbName="" />
     <fields>
         <field name="StaffName" dbName="StaffName" title="姓名" type="string" length="50" isPK="N" />
         <field name="Department" dbName="DepartmentID" title="部门" type="many2one" relationModel="organization" relationField="" enabledSearch="Y" isPK="N" />
@@ -12,6 +12,8 @@
         <field name="Longitude" dbName="Longitude" title="经度" type="float" relationModel="" relationField="" isPK="N" />
         <field name="Latitude" dbName="Latitude" title="纬度" type="float" relationModel="" relationField="" isPK="N" />
         <field name="LocationDesc" dbName="LocationDesc" title="地址描述" type="string" length="300" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Lawenforcer" dbName="Lawenforcer" title="执法者" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="EnforcementScope" dbName="EnforcementScope" title="执法范围" type="string" length="350" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

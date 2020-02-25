@@ -54,6 +54,17 @@ function() {
                     name: "LocationDesc",
                     display: "地址描述",
                     type: "string"
+                },
+                {
+                    width: "50",
+                    display: "执法者",
+                    name: "Lawenforcer",
+                    name_text: "执法者",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "checkbox",
+                    type_text: "复选框",
+                    editorType: ""
                 }]
             },
             common: {
@@ -182,6 +193,22 @@ function() {
             {
                 display: "地址描述",
                 name: "LocationDesc",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "执法者",
+                name: "Lawenforcer",
+                editor: {
+                    type: "checkbox"
+                },
+                type: "checkbox"
+            },
+            {
+                display: "执法范围",
+                name: "EnforcementScope",
                 editor: {
                     type: "string"
                 },

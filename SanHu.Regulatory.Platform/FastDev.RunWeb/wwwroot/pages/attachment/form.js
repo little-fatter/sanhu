@@ -91,7 +91,18 @@ function() {
                 saveCallbackType: "toClose"
             },
             link: {},
-            addins: {}
+            addins: {
+                items: [{
+                    name: "增加数据打印按钮",
+                    title: "增加数据打印按钮(增加数据打印按钮)",
+                    value: {
+                        title: "增加数据打印按钮",
+                        value: {
+                            buttonText: "打印数据"
+                        }
+                    }
+                }]
+            }
         },
         dataset: 'web/dataset?model=attachment&viewname=form'
     };

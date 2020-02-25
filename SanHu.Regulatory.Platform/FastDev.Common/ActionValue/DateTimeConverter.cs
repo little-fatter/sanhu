@@ -19,7 +19,12 @@ namespace FD.Common.ActionValue
             //return DateTime.Parse(reader.GetString());
             if (reader.TokenType == JsonTokenType.String)
             {
-                if (DateTime.TryParse(reader.GetString(), out DateTime date))
+                string timeStr = reader.GetString();
+                if (timeStr.Length == 14)
+                {//时间格式为 yyyyMMddHHmmss
+                    timeStr = $"{timeStr.Substring(0, 4)}-{timeStr.Substring(4, 2)}-{timeStr.Substring(6, 2)} {timeStr.Substring(8, 2)}:{timeStr.Substring(10, 2)}:{timeStr.Substring(12, 2)}";
+                }
+                if (DateTime.TryParse(timeStr, out DateTime date))
                     return date;
             }
             return reader.GetDateTime();
