@@ -2,54 +2,79 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class from_punishmentInfoDetail
+public partial class from_inspectiontRecord
 {
 public string ID
 {
 get;
 set;
 }
-public string PunishmentInfoNum
+public string Reason
 {
 get;
 set;
 }
-public string ProductName
+public string Address
 {
 get;
 set;
 }
-public string Enterprise
+public string Party
 {
 get;
 set;
 }
-public string Specifications
+public string Inspector1
 {
 get;
 set;
 }
-public string DateOfManufacture
+public string Inspector2
 {
 get;
 set;
 }
-public string Number
+public string NoteTaker
 {
 get;
 set;
 }
-public string UnitPrice
+public string InspectiontType
 {
 get;
 set;
 }
-public string Packing
+public string InspectionTime
 {
 get;
 set;
 }
-public string Remarks
+public string lawexecutor1
+{
+get;
+set;
+}
+public string lawexecutor2
+{
+get;
+set;
+}
+public string lawexecutor1Num
+{
+get;
+set;
+}
+public string lawexecutor2Num
+{
+get;
+set;
+}
+public string Company
+{
+get;
+set;
+}
+public string Content
 {
 get;
 set;
