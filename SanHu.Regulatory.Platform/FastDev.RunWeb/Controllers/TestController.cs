@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FastDev.IServices;
+using FD.Common.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,18 @@ namespace FastDev.RunWeb.Controllers
             //};
             //_dingDingServices.WorkrecordAdd(oapiWorkrecordAddRequest);
             return Content("ok");
+        }
+        [HttpGet("pdf")]
+        public IActionResult GetPdf()
+        {
+            string html =
+    "<!DOCTYPE html>" +
+    "<html>" +
+    "<head><meta charset='UTF-8'><title>Title</title></head>" +
+    "<body>Body text...</body>" +
+    "</html>";
+            var filebyte= PDFHelper.HmtlToPDF(html);
+            return File(filebyte, "application/pdf");
         }
     }
 }

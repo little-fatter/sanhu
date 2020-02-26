@@ -8,6 +8,7 @@ using FastDev.DevDB.Rights;
 using FastDev.DevDB.Workflow;
 using FastDev.Model.Entity;
 using FD.Common.ActionValue;
+using FD.Common.Helpers;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Http;
@@ -2124,7 +2125,7 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public HttpResponseMessage PrintPDF(string context, string templateId, string isdownload)
+        public ActionResult PrintPDF(string context, string templateId, string isdownload)
         {
             HttpResponseMessage response = new HttpResponseMessage();
             try
@@ -2140,68 +2141,26 @@ namespace FastDev.RunWeb.Controllers
                 string_0 = core_printTemplate_0.TemplateBody;
                 method_2();
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
-                string a = "img";
-                List<string> list = new List<string>();
-                List<iTextSharp.text.Image> list2 = new List<iTextSharp.text.Image>();
-                if (a == "img")
-                {
-                    string text = base.Request.Path.ToString().Replace("printpdf", "printjpg") + "&showhtml=Y";
-                    context.Split(';');
-                    List<TemplatePageInfo> list3 = method_1(context);
-                    int_0 = Convert.ToInt32((double)core_printTemplate_0.Width.Value * 3.78);
-                    int_1 = Convert.ToInt32((double)core_printTemplate_0.Height.Value * 3.78);
-                    foreach (TemplatePageInfo item in list3)
-                    {
-                        string_1 = method_5(context, templateId, item.AllPageIndex);
-                        Thread thread = new Thread(method_10);
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
-                        while (thread.IsAlive)
-                        {
-                            Thread.Sleep(100);
-                        }
-                        iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(bitmap_0, ImageFormat.Bmp);
-                        instance.ScalePercent(75f);
-                        list2.Add(instance);
-                    }
-                }
-                else
-                {
-                    list = method_4(context, null, true);
-                    list.Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", core_printTemplate_0.TemplateStyle));
-                }
-                core_printTemplate_0.Width = Convert.ToDecimal((double)core_printTemplate_0.Width.Value * 2.845);
-                core_printTemplate_0.Height = Convert.ToDecimal((double)core_printTemplate_0.Height.Value * 2.845);
-                core_printTemplate_0.MarginLeft = Convert.ToDecimal((double)core_printTemplate_0.MarginLeft.Value * 2.845);
-                core_printTemplate_0.MarginRight = Convert.ToDecimal((double)core_printTemplate_0.MarginRight.Value * 2.845);
-                core_printTemplate_0.MarginTop = Convert.ToDecimal((double)core_printTemplate_0.MarginTop.Value * 2.845);
-                core_printTemplate_0.MarginBottom = Convert.ToDecimal((double)core_printTemplate_0.MarginBottom.Value * 2.845);
-                byte[] array = null;
-                array = ((!(a == "img")) ? ConvertHtml2PDF(list.ToArray(), (!(isdownload == "Y")) ? true : false) : ConvertImages2PDF(list2, (!(isdownload == "Y")) ? true : false));
-                if (isdownload == "Y")
-                {
-                    response.Headers.Add("Content-Disposition", "attachment;filename=" + Server.UrlEncode("freedesign_" + serviceConfig.model.title + ".pdf"));
-                }
-                else
-                {
-                    response.Headers.Add("Content-Disposition", "inline; filename=" + Server.UrlEncode("freedesign_" + serviceConfig.model.title + ".pdf"));
-                }
 
-                response.StatusCode = System.Net.HttpStatusCode.OK;
-                response.Content = new ByteArrayContent(array);
-                response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/pdf; charset=UTF-8");
-                return response;
+
+                  var  list = method_4(context, null, true);
+                list[0]=list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", core_printTemplate_0.TemplateStyle));
+
+                byte[] array = PDFHelper.HmtlToPDF(list[0], (double)core_printTemplate_0.MarginLeft.Value, (double)core_printTemplate_0.MarginTop.Value,
+                    (double)core_printTemplate_0.MarginRight.Value, (double)core_printTemplate_0.MarginBottom.Value);
+
+
+                return File(array, "application/pdf;", serviceConfig.model.title + ".pdf");
             }
             catch (Exception ex)
             {
                 response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
                 ServiceHelper.Log(ex);
-                response.Content = new StringContent(JsonHelper.SerializeObject(new AjaxResult
+                return Json(new AjaxResult
                 {
                     Success = false,
                     message = ex.Message
-                }));
-                return response;
+                });
             }
         }
 
