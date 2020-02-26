@@ -14,11 +14,6 @@ public string EventDescribe
 get;
 set;
 }
-public string EventType
-{
-get;
-set;
-}
 public DateTime? IncidentTime
 {
 get;
@@ -70,6 +65,16 @@ get;
 set;
 }
 public string TaskId
+{
+get;
+set;
+}
+public string PreviousformID
+{
+get;
+set;
+}
+public string EventType
 {
 get;
 set;

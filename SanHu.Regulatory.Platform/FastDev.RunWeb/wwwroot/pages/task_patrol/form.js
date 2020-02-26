@@ -23,20 +23,32 @@ function() {
                     type: "text"
                 },
                 {
-                    newline: false,
+                    newline: 0,
                     name: "EventType",
                     label: "类型",
                     editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
+                        data: [],
+                        freedesign_source: {
+                            model: "res_dictionary",
+                            url: "/web/api",
+                            filter: {
+                                rules: [{
+                                    field: "ID",
+                                    op: "equal",
+                                    value: [["", ""]],
+                                    type: "select"
+                                }],
+                                op: "and"
+                            },
+                            valueField: "DicCode",
+                            textField: "Title"
+                        },
+                        isTextBoxMode: 0,
+                        value: ""
                     },
-                    type: "text"
+                    type: "select",
+                    width: "",
+                    readonlyInEdit: 0
                 },
                 {
                     newline: true,
