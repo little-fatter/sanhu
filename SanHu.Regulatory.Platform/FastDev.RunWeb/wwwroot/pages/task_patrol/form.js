@@ -149,6 +149,24 @@ function() {
                         type: "text"
                     },
                     type: "text"
+                },
+                {
+                    name: "CaseId",
+                    type: "text",
+                    label: "案件id",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    name: "EventInfoId",
+                    type: "text",
+                    label: "事件Id",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
                 }]
             },
             common: {
