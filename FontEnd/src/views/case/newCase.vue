@@ -189,10 +189,10 @@
                         </a-col>
                       </a-row>
                     </template>
-                    <a-row class="margin-bottom15" v-model="item.idNumber">
+                    <a-row class="margin-bottom15" >
                       <a-col :span="6">身份证：</a-col>
                       <a-col :span="18">
-                        <a-input placeholder="身份证号"/>
+                        <a-input placeholder="身份证号" v-model="item.idNumber"/>
                       </a-col>
                     </a-row>
                     <a-row class="margin-bottom15">
