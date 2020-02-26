@@ -2,59 +2,59 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class task_patrol
+public partial class form_confiscated_item
 {
 public string ID
 {
 get;
 set;
 }
-public string EventDescribe
+public string lawPartyID
 {
 get;
 set;
 }
-public string EventType
+public string ProductName
 {
 get;
 set;
 }
-public DateTime? IncidentTime
+public string Enterprise
 {
 get;
 set;
 }
-public string IncidentAddress
+public string Specifications
 {
 get;
 set;
 }
-public string IncidentAddressXY
+public string DateOfManufacture
 {
 get;
 set;
 }
-public string Result
+public string Number
 {
 get;
 set;
 }
-public byte? Needlawenforcement
+public string UnitPrice
 {
 get;
 set;
 }
-public byte? Needtracking
+public string Packing
 {
 get;
 set;
 }
-public string Associatedforms
+public string Remarks
 {
 get;
 set;
 }
-public string Formnumber
+public string handler
 {
 get;
 set;
@@ -69,12 +69,12 @@ public string CaseId
 get;
 set;
 }
-public string TaskId
+public string Associatedobjecttype
 {
 get;
 set;
 }
-public string PreviousformID
+public string AssociationobjectID
 {
 get;
 set;

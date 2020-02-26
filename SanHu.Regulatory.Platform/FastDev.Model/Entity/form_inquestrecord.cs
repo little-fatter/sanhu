@@ -2,64 +2,9 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class task_patrol
+public partial class form_inquestrecord
 {
 public string ID
-{
-get;
-set;
-}
-public string EventDescribe
-{
-get;
-set;
-}
-public string EventType
-{
-get;
-set;
-}
-public DateTime? IncidentTime
-{
-get;
-set;
-}
-public string IncidentAddress
-{
-get;
-set;
-}
-public string IncidentAddressXY
-{
-get;
-set;
-}
-public string Result
-{
-get;
-set;
-}
-public byte? Needlawenforcement
-{
-get;
-set;
-}
-public byte? Needtracking
-{
-get;
-set;
-}
-public string Associatedforms
-{
-get;
-set;
-}
-public string Formnumber
-{
-get;
-set;
-}
-public string EventInfoId
 {
 get;
 set;
@@ -69,12 +14,47 @@ public string CaseId
 get;
 set;
 }
-public string TaskId
+public string EventInfoId
 {
 get;
 set;
 }
 public string PreviousformID
+{
+get;
+set;
+}
+public string Inspectionreason
+{
+get;
+set;
+}
+public string Incidentlocation
+{
+get;
+set;
+}
+public string InspectiontypeID
+{
+get;
+set;
+}
+public DateTime? Starttime
+{
+get;
+set;
+}
+public DateTime? Endtime
+{
+get;
+set;
+}
+public string Companions
+{
+get;
+set;
+}
+public string Inspectionrecord
 {
 get;
 set;

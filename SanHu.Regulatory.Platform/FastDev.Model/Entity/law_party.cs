@@ -2,64 +2,9 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class task_patrol
+public partial class law_party
 {
 public string ID
-{
-get;
-set;
-}
-public string EventDescribe
-{
-get;
-set;
-}
-public string EventType
-{
-get;
-set;
-}
-public DateTime? IncidentTime
-{
-get;
-set;
-}
-public string IncidentAddress
-{
-get;
-set;
-}
-public string IncidentAddressXY
-{
-get;
-set;
-}
-public string Result
-{
-get;
-set;
-}
-public byte? Needlawenforcement
-{
-get;
-set;
-}
-public byte? Needtracking
-{
-get;
-set;
-}
-public string Associatedforms
-{
-get;
-set;
-}
-public string Formnumber
-{
-get;
-set;
-}
-public string EventInfoId
 {
 get;
 set;
@@ -69,12 +14,62 @@ public string CaseId
 get;
 set;
 }
-public string TaskId
+public string IDcard
 {
 get;
 set;
 }
-public string PreviousformID
+public string address
+{
+get;
+set;
+}
+public string Contactnumber
+{
+get;
+set;
+}
+public string Nameoflegalperson
+{
+get;
+set;
+}
+public string TypesofpartiesID
+{
+get;
+set;
+}
+public string EventId
+{
+get;
+set;
+}
+public string AssociationobjectID
+{
+get;
+set;
+}
+public string AssociatedobjecttypeID
+{
+get;
+set;
+}
+public string Name
+{
+get;
+set;
+}
+public string Gender
+{
+get;
+set;
+}
+public string Occupationofparties
+{
+get;
+set;
+}
+public string Nationality
 {
 get;
 set;
