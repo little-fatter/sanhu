@@ -54,17 +54,22 @@ public string Associatedforms
 get;
 set;
 }
-public string EventID
-{
-get;
-set;
-}
-public string CaseID
-{
-get;
-set;
-}
 public string Formnumber
+{
+get;
+set;
+}
+public string EventInfoId
+{
+get;
+set;
+}
+public string CaseId
+{
+get;
+set;
+}
+public string TaskId
 {
 get;
 set;
