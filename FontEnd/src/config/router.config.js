@@ -13,7 +13,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/mission/dealt',
+    redirect: '/mission/messagecenter',
     children: [
       {
         path: 'dashboard',
@@ -205,6 +205,12 @@ export const asyncRouterMap = [
             name: 'SceneInvestigation',
             component: () => import('@/views/mymission/sceneInvestigation'),
             meta: { title: '现场勘查' }
+          },
+          {
+            path: 'messagecenter',
+            name: 'Messagecenter',
+            component: () => import('@/views/mymission/messageCenter'),
+            meta: { title: '消息中心' }
           }
         ]
       },
