@@ -179,6 +179,15 @@ function() {
                     newline: 1,
                     width: "",
                     readonlyInEdit: 0
+                },
+                {
+                    name: "TaskId",
+                    type: "text",
+                    label: "TaskId",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
                 }]
             },
             common: {

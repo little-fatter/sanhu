@@ -157,7 +157,7 @@
             <param name="strExcutorId"></param>
             <returns></returns>
         </member>
-        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             创建下一个任务
             </summary>
@@ -172,6 +172,14 @@
             <summary>
             临时
             </summary>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceBase.WfCreate(System.Object,System.String[])">
+            <summary>
+            工作流创建
+            </summary>
+            <param name="postdata"></param>
+            <param name="exeUserIds">执行该工作流的用户</param>
+            <returns></returns>
         </member>
         <member name="M:FastDev.DevDB.ServiceBase.ValueCompare(System.String,System.Int32,System.Int32)">
             <summary>
@@ -217,6 +225,11 @@
             <param name="objData"></param>
             <param name="isUseDefault"></param>
             <returns></returns>
+        </member>
+        <member name="F:FastDev.DevDB.ServiceBase.workflowService">
+            <summary>
+            三湖工作流对象
+            </summary>
         </member>
         <member name="M:FastDev.DevDB.ServiceHelper.GetFilePath(System.String,System.String,System.String,System.Boolean)">
             <summary>
@@ -293,6 +306,11 @@
             <param name="strTaskId"></param>
             <param name="strExcutorId"></param>
             <returns></returns>
+        </member>
+        <member name="P:FastDev.DevDB.WorkflowService.LatestWorkTaskId">
+            <summary>
+            放回最新的任务id
+            </summary>
         </member>
         <member name="M:FastDev.RunWeb.Core.UpdateHelper.GetOneItemPath(FastDev.RunWeb.Core.UpdateInfo)">
             <summary>

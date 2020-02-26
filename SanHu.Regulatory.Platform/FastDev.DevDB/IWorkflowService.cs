@@ -14,5 +14,7 @@ namespace FastDev.DevDB
 		void Execute(WorkflowContext context);
 
 		object GetLog(WorkflowContext context);
+
+		string LatestWorkTaskId { get; }
 	}
 }
