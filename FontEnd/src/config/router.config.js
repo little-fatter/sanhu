@@ -1,4 +1,5 @@
 import { RouteView, BlankLayout, PageView } from '@/components/layouts'
+
 /**
  *  配置路由信息
  *  其中meta包含：
@@ -13,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/mission/messagecenter',
+    redirect: '/case/new-case/', // 临时定向开发页面
     children: [
       {
         path: 'dashboard',
@@ -36,7 +37,33 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // case 案件 cll
+      {
+        path: '/case',
+        redirect: '/case/case-list',
+        component: PageView,
+        meta: { title: '案件档案管理' },
+        children: [
+          {
+            path: '/case/case-list',
+            name: 'caseList',
+            component: () => import('@/views/case/index'),
+            meta: { title: '案件档案管理列表', keepAlive: true }
+          },
+          {
+            path: '/case/case-details',
+            name: 'caseDetails',
+            component: () => import('@/views/case/caseDetails'),
+            meta: { title: '案件详情', keepAlive: true }
+          },
+          {
+            path: '/case/new-case',
+            name: 'newCase',
+            component: () => import('@/views/case/newCase'),
+            meta: { title: '新增案件', keepAlive: false }
+          }
+        ]
+      },
       // forms
       {
         path: 'form',
