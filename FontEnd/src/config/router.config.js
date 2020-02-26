@@ -308,7 +308,42 @@ export const asyncRouterMap = [
             component: () => import(/* webpackChunkName: "fail" */ '@/views/workbench/Backlog')
           }
         ]
+      },
+      {
+        path: '/takewatermanage',
+        name: 'takewatermanage',
+        redirect: '/takewatermanage/takewatermanage',
+        component: RouteView,
+        meta: { title: '取水管理' },
+        children: [
+          {
+            path: 'takewatermanage',
+            name: 'takewatermanage',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterManage')
+          },
+          {
+            path: 'takewaterallowlist',
+            name: 'takewaterallowlist',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterAllowList')
+          }
+        ]
+      },
+      // boatmanage
+      {
+        path: '/boatmanage',
+        name: 'boatmanage',
+        redirect: '/boatmanage/boatmanage',
+        component: RouteView,
+        meta: { title: '船只管理' },
+        children: [
+          {
+            path: 'boatmanage',
+            name: 'boatmanage',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/boatmanage/BoatManage')
+          }
+        ]
       }
+
     ]
   },
   {
