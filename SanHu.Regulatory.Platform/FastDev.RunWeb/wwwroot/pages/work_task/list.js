@@ -16,9 +16,15 @@ function() {
                     type: "string"
                 },
                 {
-                    name: "InitiationTime",
-                    display: "发起时间",
-                    type: "string"
+                    name: "WorkflowtaskID",
+                    display: "工作流任务Id",
+                    type: "string",
+                    name_text: "工作流任务Id",
+                    width: "100",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type_text: "文本型",
+                    editorType: ""
                 },
                 {
                     name: "MainHandler",
@@ -111,14 +117,6 @@ function() {
                 type: "ref_popupselect_mul"
             },
             {
-                display: "任务类型",
-                name: "Tasktype",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
                 display: "事件ID",
                 name: "EventInfoId",
                 editor: {
@@ -165,6 +163,118 @@ function() {
                     type: "datepicker"
                 },
                 type: "datepicker"
+            },
+            {
+                display: "期望完成时间",
+                name: "ExpectedCompletionTime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
+            },
+            {
+                display: "任务类型",
+                name: "Tasktype",
+                editor: {
+                    type: "int"
+                },
+                type: "int"
+            },
+            {
+                display: "任务状态",
+                name: "TaskStatus",
+                editor: {
+                    type: "int"
+                },
+                type: "int"
+            },
+            {
+                display: "拒绝原因",
+                name: "RejectReason",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "任务编号",
+                name: "Tasknumber",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "关联对象",
+                name: "RefTable",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "完成时间",
+                name: "CompleteTime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
+            },
+            {
+                display: "关联对象ID",
+                name: "RefRecordID",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "本地链接",
+                name: "LocalLinks",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "远程链接",
+                name: "RemoteLinks",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "是否Root",
+                name: "IsRootTask",
+                editor: {
+                    type: "checkbox"
+                },
+                type: "checkbox"
+            },
+            {
+                display: "表单准备",
+                name: "FormPreparation",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "案件id",
+                name: "CaseID",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "工作流任务Id",
+                name: "WorkflowtaskID",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
             },
             {
                 display: "AssignUsersID",

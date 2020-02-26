@@ -1,6 +1,7 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
+using FastDev.DevDB.Workflow;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Model.Dto;
@@ -19,7 +20,85 @@ namespace FastDev.Service
     /// </summary>
     class task_patrolService : ServiceBase, IService
     {
+        
+        public override object WfCreate(object postdata, params string[] exeUserIds)
+        {
+            var nId = base.Create(postdata);
+            var wfId = AdvanceWorkflow(postdata, exeUserIds);
+            if (wfId != null) return wfId;
+            return nId;
+        }
 
+        private object AdvanceWorkflow(object postdata, params string[] exeUserIds)
+        {
+            var patrolData = (Model.Form.task_patrol)postdata;
+            if (!string.IsNullOrEmpty(patrolData.TaskId))
+            {//如果该表单有任务id，则，检查是否完成了某任务
+
+                workflowService.DbContext = QueryDb;
+                Dictionary<string, object> wfContext = (Dictionary<string, object>)workflowService.GetContext(new DevDB.Workflow.WorkflowContext() { TaskID = patrolData.TaskId, Action = "advance", Model = "task_patrol", Context = patrolData.EventInfoId });
+                //wfContext[]
+                if ((wfContext.ContainsKey("Success") && Convert.ToBoolean(wfContext["Success"]) || wfContext.ContainsKey("nodes")))
+                {//如果工作流可以往下走
+                    var nodes = ((List<object>)wfContext["nodes"]);
+                    if (nodes.Count > 0)
+                    {
+                        var ExeNode = ((Dictionary<string, object>)(nodes[0]));
+                        object nodeId = ExeNode["node"].GetType().GetProperty("id").GetValue(ExeNode["node"]);
+
+                        //nodeId = node.id.ToString();
+                        if (!string.IsNullOrEmpty(nodeId.ToString()))
+                        {
+                            WorkflowContext wfExe = new WorkflowContext()
+                            {
+                                Model = "task_patrol",
+                                Action = "advance",
+                                Context = patrolData.ID,
+                                TaskID = patrolData.TaskId,
+                                Remark = "完成了事件巡查表单填写",
+                                ExecuteNodes = new List<ExecuteNode>()
+                            };
+                            List<string> excutors = new List<string>();//用户id一个字符串，用户名一个字符串，用户名其实没有使用
+                            if (exeUserIds != null && exeUserIds.Length > 0)
+                            {
+                                for (int i = 0; i < exeUserIds.Length; i++)
+                                {
+                                    excutors.Add(exeUserIds[i]);            //使用哪个用户来执行 这里需要不同的情况的来处理
+                                    excutors.Add("用户名");//第二个参数 其实没有用到
+                                }
+                            }
+                            else
+                            {//默认使用当前用户来执行任务
+                                excutors.Add(SysContext.WanJiangUserID);            //使用哪个用户来执行 这里需要不同的情况的来处理
+                                excutors.Add("用户名");//第二个参数 其实没有用到
+                            }
+                            //如果由多个用户来执行，那 Executors可以是多个人，        
+                            //这里任务的下一步仍然由填表人完成，某些情况些，会由指定的人来完成，比如：？想到了再说？？？
+                            wfExe.ExecuteNodes.Add(new ExecuteNode() { Executors = new List<List<string>> { excutors }, NodeId = nodeId.ToString() });
+                            workflowService.Execute(wfExe);//工作流向下一步
+                            if (patrolData.TaskId == "MANUALLY_CREATE_TASK_ID")
+                            {//如果该任务是手动创建
+                                string latestWorkTaskId = workflowService.LatestWorkTaskId;
+                                return latestWorkTaskId;//返回所创建的任务Id,然后 work_task那边拿到以后，更新work_task自己的相关字段
+                            }
+                        }
+                    }
+
+                }
+            }
+            return null;
+        }
+        public override object Create(object postdata)
+        {
+            return WfCreate(postdata, new string[] { SysContext.WanJiangUserID });
+        }
+
+        public override object Update(object postdata)
+        {
+            var wfId = AdvanceWorkflow(postdata);
+            if (wfId != null) return wfId;
+            return base.Update(postdata);
+        }
         public task_patrolService()
         {
             OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;

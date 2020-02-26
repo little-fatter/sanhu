@@ -7,6 +7,16 @@ function() {
             type: "form",
             form: {
                 fields: [{
+                    name: "WorkflowtaskID",
+                    type: "text",
+                    label: "工作流TaskId",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonly: 1,
+                    readonlyInEdit: 0
+                },
+                {
                     newline: true,
                     name: "Tasktype",
                     label: "任务类型",
