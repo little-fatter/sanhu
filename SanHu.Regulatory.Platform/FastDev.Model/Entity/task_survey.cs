@@ -44,6 +44,26 @@ public string ExistCrim
 get;
 set;
 }
+public string EventInfoId
+{
+get;
+set;
+}
+public string CaseId
+{
+get;
+set;
+}
+public string TaskId
+{
+get;
+set;
+}
+public string PreviousformID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

@@ -24,12 +24,22 @@ public string thumbnail
 get;
 set;
 }
-public string CorrelationID
+public string Remark
 {
 get;
 set;
 }
-public string Remark
+public string Associatedobjecttype
+{
+get;
+set;
+}
+public string AssociationobjectID
+{
+get;
+set;
+}
+public string CorrelationId
 {
 get;
 set;

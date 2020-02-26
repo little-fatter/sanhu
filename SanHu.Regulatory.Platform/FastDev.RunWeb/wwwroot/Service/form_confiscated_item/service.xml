@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="form_confiscated_item" title="物品清单" textField="ProductName" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="lawParty" dbName="lawPartyID" title="当事人" type="many2one" relationModel="law_party" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="ProductName" dbName="ProductName" title="品名" type="string" length="200" isPK="N" />
+        <field name="Enterprise" dbName="Enterprise" title="企业" type="string" length="200" isPK="N" />
+        <field name="Specifications" dbName="Specifications" title="规格" type="string" length="50" isPK="N" />
+        <field name="DateOfManufacture" dbName="DateOfManufacture" title="生产日期" type="string" length="50" isPK="N" />
+        <field name="Number" dbName="Number" title="数量" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="UnitPrice" dbName="UnitPrice" title="单价" type="string" length="50" isPK="N" />
+        <field name="Packing" dbName="Packing" title="包装" type="string" length="50" isPK="N" />
+        <field name="Remarks" dbName="Remarks" title="备注" type="string" length="50" isPK="N" />
+        <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联表单类型" type="string" length="50" isPK="N" />
+        <field name="AssociationobjectID" dbName="AssociationobjectID" title="关联的id" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="lawParty" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="lawParty" one2many="" many2many="" />
+</freedesign>

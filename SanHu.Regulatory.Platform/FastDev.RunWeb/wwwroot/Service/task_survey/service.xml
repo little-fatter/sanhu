@@ -9,8 +9,10 @@
         <field name="Result" dbName="Result" title="结果" type="string" length="500" relationModel="" relationField="" isPK="N" />
         <field name="ProcessingDecisions" dbName="ProcessingDecisions" title="处理决定" type="integer" relationModel="" relationField="" isPK="N" />
         <field name="ExistCrim" dbName="ExistCrim" title="存在犯罪" type="string" length="50" isPK="N" />
-        <field name="EventID" dbName="EventID" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="CaseID" dbName="CaseID" title="案件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PreviousformID" dbName="PreviousformID" title="上一个表单的Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

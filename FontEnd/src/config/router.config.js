@@ -1,11 +1,12 @@
 import { RouteView, BlankLayout, PageView } from '@/components/layouts'
+
 /**
  *  配置路由信息
  *  其中meta包含：
  *  title：路由的描述信息,建议设置
  *  keepAlive:设置访问路由是否保持组件，功能参见Vue的keepAlive描述
  *  hiddenHeaderContent:设置是否需要隐藏页面头信息
- */
+*/
 
 export const asyncRouterMap = [
   {
@@ -13,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/mission/messagecenter',
+    redirect: '/case', // 临时定向开发页面
     children: [
       {
         path: 'dashboard',
@@ -36,7 +37,33 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // case 案件 cll
+      {
+        path: '/case',
+        redirect: '/case/case-list',
+        component: PageView,
+        meta: { title: '案件档案管理' },
+        children: [
+          {
+            path: 'case-list',
+            name: 'caseList',
+            component: () => import('@/views/case/index'),
+            meta: { title: '案件档案管理列表', keepAlive: true }
+          },
+          {
+            path: 'case-details',
+            name: 'caseDetails',
+            component: () => import('@/views/case/caseDetails'),
+            meta: { title: '案件详情', keepAlive: true }
+          },
+          {
+            path: 'new-case',
+            name: 'newCase',
+            component: () => import('@/views/case/newCase'),
+            meta: { title: '新增案件', keepAlive: false }
+          }
+        ]
+      },
       // forms
       {
         path: 'form',
@@ -281,7 +308,42 @@ export const asyncRouterMap = [
             component: () => import(/* webpackChunkName: "fail" */ '@/views/workbench/Backlog')
           }
         ]
+      },
+      {
+        path: '/takewatermanage',
+        name: 'takewatermanage',
+        redirect: '/takewatermanage/takewatermanage',
+        component: RouteView,
+        meta: { title: '取水管理' },
+        children: [
+          {
+            path: 'takewatermanage',
+            name: 'takewatermanage',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterManage')
+          },
+          {
+            path: 'takewaterallowlist',
+            name: 'takewaterallowlist',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterAllowList')
+          }
+        ]
+      },
+      // boatmanage
+      {
+        path: '/boatmanage',
+        name: 'boatmanage',
+        redirect: '/boatmanage/boatmanage',
+        component: RouteView,
+        meta: { title: '船只管理' },
+        children: [
+          {
+            path: 'boatmanage',
+            name: 'boatmanage',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/boatmanage/BoatManage')
+          }
+        ]
       }
+
     ]
   },
   {

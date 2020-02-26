@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="case_party" title="案件当事人" textField="CaseId" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="CaseId" dbName="CaseId" title="案件id" type="string" length="50" isPK="N" />
+        <field name="Typesofparties" dbName="Typesofparties" title="当事人类型" type="string" length="50" isPK="N" />
+        <field name="Nameofparties" dbName="Nameofparties" title="当事人名称" type="string" length="50" isPK="N" />
+        <field name="Genderofparties" dbName="Genderofparties" title="当事人性别" type="string" length="50" isPK="N" />
+        <field name="Occupationofparties" dbName="Occupationofparties" title="当事人职业" type="string" length="50" isPK="N" />
+        <field name="IDcard" dbName="IDcard" title="身份证号码" type="string" length="50" isPK="N" />
+        <field name="address" dbName="address" title="地址" type="string" length="50" isPK="N" />
+        <field name="Contactnumber" dbName="Contactnumber" title="联系电话" type="string" length="50" isPK="N" />
+        <field name="EventID" dbName="EventID" title="事件id" type="string" length="50" isPK="N" />
+        <field name="Nameoflegalperson" dbName="Nameoflegalperson" title="法人名称" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>
