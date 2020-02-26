@@ -166,7 +166,9 @@ function() {
                         boolean: "checkbox",
                         type: "float"
                     },
-                    type: "float"
+                    type: "float",
+                    width: "",
+                    readonlyInEdit: 0
                 },
                 {
                     newline: false,
@@ -182,7 +184,27 @@ function() {
                         boolean: "checkbox",
                         type: "text"
                     },
-                    type: "text"
+                    type: "text",
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    name: "Lawenforcer",
+                    type: "checkbox",
+                    label: "是否执法人员",
+                    editor: {},
+                    newline: true,
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    name: "EnforcementScope",
+                    type: "textarea",
+                    label: "执法范围",
+                    editor: {},
+                    newline: 1,
+                    width: "500",
+                    readonlyInEdit: 0
                 }]
             },
             common: {

@@ -251,5 +251,11 @@ namespace FastDev.RunWeb.Controllers
                 filters.groups.Add(filterGroup);
             }
         }
+
+        [HttpGet]
+        public object GetUserInfo()
+        {
+            return base.GetUserInfo();
+        }
     }
 }

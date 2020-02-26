@@ -101,7 +101,12 @@
             任务类型:
           </div>
           <div>
-            <a-select></a-select>
+            <a-select v-model="taskStyle">
+              <a-select-option value="全部">全部</a-select-option>
+              <a-select-option value="水政">水政</a-select-option>
+              <a-select-option value="渔政">渔政</a-select-option>
+              <a-select-option value="环保">环保</a-select-option>
+            </a-select>
           </div>
         </div>
         <div class="box">
@@ -109,7 +114,7 @@
             任务编号:
           </div>
           <div>
-            <a-input placeholder="编号"></a-input>
+            <a-input placeholder="编号" v-model="taskNum"></a-input>
           </div>
         </div>
         <div class="box">
@@ -118,10 +123,10 @@
       </div>
     </div>
     <div class="body">
-      <div class="body-item" v-for="(item,index) in dataList" :key="item.num + index">
+      <div class="body-item" v-for="item in dataList" :key="item.ID">
         <div class="item-head">
-          <span class="left">{{ item.style }}</span>
-          <span>{{ item.num }}</span>
+          <span class="left">{{ item.Tasktype }}</span>
+          <span>{{ item.Tasknumber }}</span>
         </div>
         <div class="item-body">
           <div class="left">
@@ -134,28 +139,28 @@
             </div>
             <div class="middle-body">
               <span class="left">上传时间：</span>
-              <span>{{ item.time }}</span>
+              <span>{{ item.InitiationTime }}</span>
             </div>
           </div>
           <div class="right">
             <div class="first">
               <span class="left">主办人：</span>
-              <span>{{ item.helper }}</span>
+              <span>{{ item.MainHandler }}</span>
             </div>
             <div class="second">
               <span class="left">协办人：</span>
-              <span>{{ item.helper }}</span>
+              <span>{{ item.CoOrganizer }}</span>
             </div>
           </div>
         </div>
         <div class="item-footer">
           <div>
             <span class="space">期望完成时间：</span>
-            <span>{{ item.time1 }}</span>
+            <span>{{ item.ExpectedCompletionTime }}</span>
           </div>
           <div>
-            <span class="space">{{ item.time2 }}</span>
-            <span>来自 {{ item.from }}</span>
+            <span class="space">{{ item.CompleteTime }}</span>
+            <span>来自 指挥中心</span>
           </div>
         </div>
       </div>
@@ -164,37 +169,26 @@
 </template>
 
 <script>
+import { getWorkTaskList } from '@/api/sampleApi'
+
 export default {
   data () {
     return {
       dataList: [
-        {
-          style: '事件核查',
-          num: 'SJHX23093432',
-          Tstyle: '非法捕捞',
-          time: '2020-02-21 18:54:44',
-          time1: '2020-02-21 18:56:44',
-          time2: '2020-02-21 18:57:44',
-          helper: '李四',
-          from: '指挥中心'
-        },
-        {
-          style: '事件核查',
-          num: 'SJHX23093432',
-          Tstyle: '非法捕捞',
-          time: '2020-02-21 18:54:44',
-          time1: '2020-02-21 18:56:44',
-          time2: '2020-02-21 18:57:44',
-          helper: '李四',
-          from: '指挥中心'
-        }
-      ]
+      ], // 任务列表
+      taskStyle: '全部', // 任务类型
+      taskNum: ' ' // 任务编号
     }
   },
   created () {
+    // 获取任务列表
+    getWorkTaskList().then(res => {
+      this.dataList = res.Records
+    }).catch((err) => {
+      console.log(err)
+    })
   },
   methods: {
-
   }
 }
 </script>

@@ -35,6 +35,8 @@ namespace FastDev.RunWeb.Controllers
 {
     public class WebController : BaseController
     {
+        #region Commom Class
+
         public class GridColumn
         {
             public List<GridColumn> columns
@@ -237,6 +239,19 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
+
+        public class PrintModel
+        {
+            public List<GridColumn> columns { get; set; }
+            public List<Dictionary<string, object>> listdata { get; set; }
+            public Dictionary<string, object> totaldata { get; set; }
+            public string title { get; set; }
+            public int? pageSize { get; set; }
+            public Dictionary<string, object> detaildata { get; set; }
+        }
+
+        #endregion
+
         private DbContext dbContext_0;
 
         private string string_0;
@@ -298,7 +313,7 @@ namespace FastDev.RunWeb.Controllers
             get; [NonAction]
             private set;
         }
-        
+
         [VaildateUser]
         [HttpPost]
         public ActionResult Api(string id, string model, string data, string context)
@@ -1032,28 +1047,28 @@ namespace FastDev.RunWeb.Controllers
         /// <summary>
         /// Grid数据导出到Excel
         /// </summary>
-        /// <param name="string_7"></param>
+        /// <param name="columnsJSON"></param>
         /// <param name="listdataJSON"></param>
         /// <param name="totaldataJSON"></param>
-        /// <param name="string_8"></param>
+        /// <param name="headerJSON"></param>
         /// <param name="title"></param>
         /// <param name="totalCellLeft"></param>
         /// <returns></returns>
         [VaildateUser]
         [HttpPost]
-        public ActionResult ExportGrid(string string_7, string listdataJSON, string totaldataJSON, string string_8, string title, int? totalCellLeft)
+        public ActionResult ExportGrid(string columnsJSON, string listdataJSON, string totaldataJSON, string headerJSON, string title, int? totalCellLeft)
         {
             try
             {
 
-                List<GridColumn> list = JsonHelper.DeserializeJsonToList<GridColumn>(string_7);
+                List<GridColumn> list = JsonHelper.DeserializeJsonToList<GridColumn>(columnsJSON);
                 List<Dictionary<string, object>> list2 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(listdataJSON);
                 Dictionary<string, object> dictionary = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(totaldataJSON);
-                if (string.IsNullOrEmpty(string_8))
+                if (string.IsNullOrEmpty(headerJSON))
                 {
-                    string_8 = "";
+                    headerJSON = "";
                 }
-                List<Dictionary<string, object>> list3 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(string_8);
+                List<Dictionary<string, object>> list3 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(headerJSON);
                 HSSFWorkbook hSSFWorkbook = new HSSFWorkbook();
                 ISheet sheet = hSSFWorkbook.CreateSheet("Sheet");
                 hSSFWorkbook.CreateDataFormat();
@@ -1522,7 +1537,7 @@ namespace FastDev.RunWeb.Controllers
             base.ViewBag.descriptorCode = descriptorCode;
             return View();
         }
-        [HttpPost]
+        [HttpGet]
         public ActionResult PreviewFrame()
         {
             return View();
@@ -1671,17 +1686,17 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult GetTemplateConents(string context, string TemplateId, int? pageIndex, string isReport, string descriptorCode)
+        public ActionResult GetTemplateConents(string context, string templateId, int? pageindex, string isReport, string descriptorCode)
         {
             try
             {
                 DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
                 if (isReport == "Y")
                 {
-                    int num = (!pageIndex.HasValue) ? 1 : pageIndex.Value;
+                    int num = (!pageindex.HasValue) ? 1 : pageindex.Value;
                     coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                     {
-                        TemplateId
+                        templateId
                     });
                     method_2();
                     string input = Base64Helper.DecodingString(descriptorCode);
@@ -1740,7 +1755,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 core_printTemplate_0 = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
                 {
-                    TemplateId
+                    templateId
                 });
                 if (core_printTemplate_0 == null)
                 {
@@ -1748,7 +1763,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 string_0 = core_printTemplate_0.TemplateBody;
                 method_2();
-                List<string> contents = method_4(context, pageIndex, false);
+                List<string> contents = method_4(context, pageindex, false);
                 return Json(new
                 {
                     Success = true,
@@ -1788,10 +1803,18 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult GetCommonPrint(List<GridColumn> columns, List<Dictionary<string, object>> listdata, Dictionary<string, object> totaldata, string title, int? pageSize, Dictionary<string, object> detaildata)
+        public ActionResult GetCommonPrint(string fullJson)
         {
             try
             {
+                PrintModel p = JsonHelper.DeserializeJsonToObject<PrintModel>(fullJson);
+                List<GridColumn> columns = p.columns;
+                List<Dictionary<string, object>> listdata = p.listdata;
+                Dictionary<string, object> totaldata = p.totaldata;
+                string title = p.title;
+                int? pageSize = p.pageSize;
+                Dictionary<string, object> detaildata = p.detaildata;
+
                 DbContext currentDb = SysContext.GetCurrentDb();
                 dbContext_1 = currentDb;
                 ServiceConfig serviceConfig = new ServiceConfig();

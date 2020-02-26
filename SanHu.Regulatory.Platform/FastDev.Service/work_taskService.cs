@@ -36,19 +36,19 @@ namespace FastDev.Service
         public override object Create(object postdata)
         {
             var rev= base.Create(postdata);
-            var data = (Model.Form.work_task)postdata;
-            if(!string.IsNullOrEmpty(data.RefTable))
-            {
-                Type entityType = DataAccessHelper.GetEntityType(data.RefTable,"Form");
-                if (entityType != null)
-                {
-                    var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
-                    //nextdata
-                    //entityType.GetProperty("TaskId").SetValue(nextdata, rev.ToString());
-                    IService svc = ServiceHelper.GetService(data.RefTable);
-                    svc.Create(nextdata);
-                }
-            }
+            //var data = (Model.Form.work_task)postdata;
+            //if(!string.IsNullOrEmpty(data.RefTable))
+            //{
+            //    Type entityType = DataAccessHelper.GetEntityType(data.RefTable,"Form");
+            //    if (entityType != null)
+            //    {
+            //        var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
+            //        //nextdata
+            //        //entityType.GetProperty("TaskId").SetValue(nextdata, rev.ToString());
+            //        IService svc = ServiceHelper.GetService(data.RefTable);
+            //        svc.Create(nextdata);
+            //    }
+            //}
             return rev;
         }
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
@@ -82,9 +82,8 @@ namespace FastDev.Service
 
                 //复制任务给指定用户
                 workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-                workTask.ID = CreateGuid.CreateId();
                 workTask.AssignUsersID = data.UserId;
-                QueryDb.Save(workTask);
+                base.Create(workTask);
 
                 //给指定用户发送待办
 
@@ -111,7 +110,7 @@ namespace FastDev.Service
             var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
-            QueryDb.Update(workTask);
+            base.Update(workTask);
             return true;
         }
     }

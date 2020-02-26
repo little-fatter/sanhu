@@ -8,8 +8,8 @@ function() {
             form: {
                 fields: [{
                     newline: true,
-                    name: "attach_type",
-                    label: "附件类型",
+                    name: "EventType",
+                    label: "类型",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -24,8 +24,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "url",
-                    label: "附件地址",
+                    name: "IncidentTime",
+                    label: "事发时间",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -34,14 +34,14 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: true,
-                    name: "thumbnail",
-                    label: "缩略图地址",
+                    name: "IncidentAddress",
+                    label: "事发地址",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -56,8 +56,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "CorrelationID",
-                    label: "关联id",
+                    name: "IncidentAddressXY",
+                    label: "事发地址坐标",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -72,8 +72,72 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "Remark",
-                    label: "备注",
+                    name: "Result",
+                    label: "结果",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "ProcessingDecisions",
+                    label: "处理决定",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "int"
+                    },
+                    type: "int"
+                },
+                {
+                    newline: true,
+                    name: "ExistCrim",
+                    label: "存在犯罪",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "EventID",
+                    label: "事件id",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "CaseID",
+                    label: "案件id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -91,24 +155,13 @@ function() {
                 saveCallbackType: "toClose"
             },
             link: {},
-            addins: {
-                items: [{
-                    name: "增加数据打印按钮",
-                    title: "增加数据打印按钮(增加数据打印按钮)",
-                    value: {
-                        title: "增加数据打印按钮",
-                        value: {
-                            buttonText: "打印数据"
-                        }
-                    }
-                }]
-            }
+            addins: {}
         },
-        dataset: 'web/dataset?model=attachment&viewname=form'
+        dataset: 'web/dataset?model=task_survey&viewname=form'
     };
     exports.options.model = {
-        name: 'attachment',
-        title: '附件'
+        name: 'task_survey',
+        title: '任务-勘察'
     };
 
     exports.service = function service(page) {

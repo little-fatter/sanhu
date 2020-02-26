@@ -59,6 +59,16 @@ public string LocationDesc
 get;
 set;
 }
+public byte? Lawenforcer
+{
+get;
+set;
+}
+public string EnforcementScope
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

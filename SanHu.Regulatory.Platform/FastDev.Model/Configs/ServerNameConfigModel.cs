@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastDev.RunWeb
+namespace FD.Model.Configs
 {
-    public class ServerNameConfig
+    public class ServerNameConfigModel
     {
         /// <summary>
         /// 主框架名称
@@ -15,5 +15,6 @@ namespace FastDev.RunWeb
         /// 主框架地址
         /// </summary>
         public string MainServiceUrl { get; set; }
+        public string AgentId { get; set; }
     }
 }
