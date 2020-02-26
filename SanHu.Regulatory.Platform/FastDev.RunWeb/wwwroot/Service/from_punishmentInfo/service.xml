@@ -3,7 +3,6 @@
     <model name="from_punishmentInfo" title="当场行政处罚决定书" textField="FormNumber" moduleName="form" moduleTitle="表单" dbName="" />
     <fields>
         <field name="FormNumber" dbName="FormNumber" title="表单编号" type="string" length="50" isPK="N" />
-        <field name="Party" dbName="Party" title="当事人" type="string" length="50" isPK="N" />
         <field name="Fact" dbName="Fact" title="事实" type="string" length="500" isPK="N" />
         <field name="Regulations" dbName="Regulations" title="规定" type="string" length="200" isPK="N" />
         <field name="Reason" dbName="Reason" title="根据" type="string" length="200" isPK="N" />
@@ -26,6 +25,8 @@
         <field name="FormID" dbName="FormID" title="表单id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PreviousformID" dbName="PreviousformID" title="上一个表单id" type="string" length="50" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

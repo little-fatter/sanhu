@@ -74,6 +74,11 @@ public string TaskId
 get;
 set;
 }
+public string PreviousformID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
