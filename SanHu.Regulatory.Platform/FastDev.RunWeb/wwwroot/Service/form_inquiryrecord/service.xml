@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="form_inquiryrecord" title="询问记录" textField="CaseId" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" isPK="N" />
+        <field name="PreviousformID" dbName="PreviousformID" title="上一个表单id" type="string" length="50" isPK="N" />
+        <field name="Recorder" dbName="Recorder" title="记录人员" type="string" length="50" isPK="N" />
+        <field name="Starttime" dbName="Starttime" title="开始时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Endtime" dbName="Endtime" title="结束时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="Isseeclearly" dbName="Isseeclearly" title="是否看清执法证件" type="string" length="50" isPK="N" />
+        <field name="Isunderstand" dbName="Isunderstand" title="是否明白权责义务" type="string" length="50" isPK="N" />
+        <field name="Inquiryrecord" dbName="Inquiryrecord" title="询问记录" type="string" length="200" isPK="N" />
+        <field name="Objectofinquiry" dbName="ObjectofinquiryID" title="询问对象" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Enquiryplace" dbName="Enquiryplace" title="询问地点" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Originofcase" dbName="Originofcase" title="案件由来" type="string" length="200" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Objectofinquiry" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Objectofinquiry" one2many="" many2many="" />
+</freedesign>

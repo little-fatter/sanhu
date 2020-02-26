@@ -5,8 +5,10 @@
         <field name="attach_type" dbName="attach_type" title="附件类型" type="string" length="50" enabledSearch="Y" isPK="N" />
         <field name="url" dbName="url" title="附件地址" type="string" length="50" isPK="N" />
         <field name="thumbnail" dbName="thumbnail" title="缩略图地址" type="string" length="50" isPK="N" />
-        <field name="CorrelationID" dbName="CorrelationID" title="关联id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Remark" dbName="Remark" title="备注" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联表单的类型" type="string" length="50" isPK="N" />
+        <field name="AssociationobjectID" dbName="AssociationobjectID" title="关联对象的Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CorrelationId" dbName="CorrelationId" title="关联Id" type="string" length="50" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

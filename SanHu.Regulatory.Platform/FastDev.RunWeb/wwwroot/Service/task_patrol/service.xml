@@ -11,9 +11,11 @@
         <field name="Needlawenforcement" dbName="Needlawenforcement" title="需要执法" type="boolean" relationModel="" relationField="" isPK="N" />
         <field name="Needtracking" dbName="Needtracking" title="需要跟踪" type="boolean" relationModel="" relationField="" isPK="N" />
         <field name="Associatedforms" dbName="Associatedforms" title="关联表单" type="string" length="500" isPK="N" />
-        <field name="EventID" dbName="EventID" title="事件id" type="string" length="50" isPK="N" />
-        <field name="CaseID" dbName="CaseID" title="案件id" type="string" length="50" isPK="N" />
         <field name="Formnumber" dbName="Formnumber" title="表单编号" type="string" length="50" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PreviousformID" dbName="PreviousformID" title="上一个表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

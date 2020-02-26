@@ -1,70 +1,70 @@
-namespace FastDev.Model.Report
+namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class from_punishmentInfo
+public partial class form_inquiryrecord
 {
 public string ID
 {
 get;
 set;
 }
-public string FormNumber
+public string CaseId
 {
 get;
 set;
 }
-public string Party
+public string EventInfoId
 {
 get;
 set;
 }
-public string Fact
+public string PreviousformID
 {
 get;
 set;
 }
-public string Regulations
+public string Recorder
 {
 get;
 set;
 }
-public string Reason
+public DateTime? Starttime
 {
 get;
 set;
 }
-public string Result
+public DateTime? Endtime
 {
 get;
 set;
 }
-public string Type
+public string Isseeclearly
 {
 get;
 set;
 }
-public string RecordingTime
+public string Isunderstand
 {
 get;
 set;
 }
-public string lawexecutor1
+public string Inquiryrecord
 {
 get;
 set;
 }
-public string lawexecutor2
+public string ObjectofinquiryID
 {
 get;
 set;
 }
-public string lawexecutor1Num
+public string Enquiryplace
 {
 get;
 set;
 }
-public string lawexecutor2Num
+public string Originofcase
 {
 get;
 set;

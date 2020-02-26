@@ -2,44 +2,44 @@ namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class attachment
+public partial class law_staff
 {
 public string ID
 {
 get;
 set;
 }
-public string attach_type
+public string CaseId
 {
 get;
 set;
 }
-public string url
+public string EventInfoId
 {
 get;
 set;
 }
-public string thumbnail
+public string PreviousformID
 {
 get;
 set;
 }
-public string Remark
+public string AssociatedobjecttypeID
 {
 get;
 set;
 }
-public string Associatedobjecttype
+public string AssociatedobjectID
 {
 get;
 set;
 }
-public string AssociationobjectID
+public string UserIdID
 {
 get;
 set;
 }
-public string CorrelationId
+public string Username
 {
 get;
 set;

@@ -70,9 +70,8 @@
         <models name="form_caseMove" title="案件移送" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_criminalCaseMove " title="犯罪案件移送" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_criminalCaseMoveMain" title="犯罪案件移送书" textField="Title" moduleName="form" moduleTitle="表单" />
-        <models name="from_inspectiontRecord&#x9;" title="勘验笔录" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="from_inspectiontRecord" title="勘验笔录" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_InvestigatingParty" title="询问记录" textField="Title" moduleName="form" moduleTitle="表单" />
-        <models name="from_punishmentInfo" title="当场行政处罚决定书" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_confiscateVouch" title="没收物品凭证" textField="Title" />
         <models name="from_inventory" title="没收物品清单" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="from_punishmentInfoDetail" title="没收物品清单详情" textField="Title" moduleName="form" moduleTitle="表单" />
@@ -90,5 +89,13 @@
         <models name="task_survey" title="任务-勘察" textField="Title" moduleName="task" moduleTitle="任务与表单" />
         <models name="task_surveyParty" title="勘察当事人" textField="Title" moduleName="task" moduleTitle="任务与表单" />
         <models name="test_t2" title="测试2" textField="Title" moduleName="task" moduleTitle="任务与表单" />
+        <models name="form_all" title="全部表单" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="event_info_wf" title="事件信息处理" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
+        <models name="law_punishmentInfo" title="处罚当场决定书" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="law_party" title="当事人" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="form_confiscated_item" title="物品清单" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="form_inquiryrecord" title="询问记录" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="form_inquestrecord" title="勘验记录" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="law_staff" title="执法检查人员" textField="Title" moduleName="case" moduleTitle="案件" />
     </models>
 </freedesign>

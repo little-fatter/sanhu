@@ -56,8 +56,8 @@ namespace FastDev.Service
             try
             {
                 var patrol = data.TaskPatrol;
-                patrol.CaseID = data.CaseId;
-                patrol.EventID = data.EventId;
+                patrol.CaseId = data.CaseId;
+                patrol.EventInfoId= data.EventId;
                 Create(patrol);
 
                 //当前任务信息
