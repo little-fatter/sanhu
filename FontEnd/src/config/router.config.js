@@ -6,7 +6,7 @@ import { RouteView, BlankLayout, PageView } from '@/components/layouts'
  *  title：路由的描述信息,建议设置
  *  keepAlive:设置访问路由是否保持组件，功能参见Vue的keepAlive描述
  *  hiddenHeaderContent:设置是否需要隐藏页面头信息
- */
+*/
 
 export const asyncRouterMap = [
   {
@@ -14,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/case/new-case/', // 临时定向开发页面
+    redirect: '/case', // 临时定向开发页面
     children: [
       {
         path: 'dashboard',
@@ -45,19 +45,19 @@ export const asyncRouterMap = [
         meta: { title: '案件档案管理' },
         children: [
           {
-            path: '/case/case-list',
+            path: 'case-list',
             name: 'caseList',
             component: () => import('@/views/case/index'),
             meta: { title: '案件档案管理列表', keepAlive: true }
           },
           {
-            path: '/case/case-details',
+            path: 'case-details',
             name: 'caseDetails',
             component: () => import('@/views/case/caseDetails'),
             meta: { title: '案件详情', keepAlive: true }
           },
           {
-            path: '/case/new-case',
+            path: 'new-case',
             name: 'newCase',
             component: () => import('@/views/case/newCase'),
             meta: { title: '新增案件', keepAlive: false }

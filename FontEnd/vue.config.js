@@ -12,7 +12,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 // vue.config.js
 module.exports = {
-  publicPath: '/webregulatory ',
+  publicPath: '/webregulatory',
   configureWebpack: config => {
     if (isDev) {
       return {
