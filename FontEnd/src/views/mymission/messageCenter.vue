@@ -47,7 +47,25 @@
     }
   }
 
+  .center-body {
+    /deep/ .record-not-read {
+      td:nth-child(2) {
+        color: #000;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    /deep/ .record-readed {
+      color: #aaa;
+    }
+  }
+
 }
+</style>
+
+<style lang="less">
+
 </style>
 
 <template>
@@ -59,7 +77,7 @@
             对话消息
           </a-badge>
         </a-radio-button>
-        <a-radio-button value="task">
+        <!-- <a-radio-button value="task">
           <a-badge :count="taskCount">
             任务通知
           </a-badge>
@@ -68,7 +86,7 @@
           <a-badge :count="warnCount">
             告警消息
           </a-badge>
-        </a-radio-button>
+        </a-radio-button> -->
       </a-radio-group>
       <div class="handle-wrapper">
         <div class="handle-before">
@@ -87,7 +105,13 @@
       </div>
     </div>
     <div class="center-body">
-      <a-table :pagination="{pageSize: 5}" v-if="tabValue === 'msg'" :rowSelection="{selectedRowKeys: msgSelectedRowKeys, onChange: onSelectChange}" :columns="msgColumns" :dataSource="msgData">
+      <a-table
+        :rowClassName="handleRowClass"
+        :pagination="{pageSize: 5}"
+        v-if="tabValue === 'msg'"
+        :rowSelection="{selectedRowKeys: msgSelectedRowKeys, onChange: onSelectChange}"
+        :columns="msgColumns"
+        :dataSource="msgData">
         <span slot="action" slot-scope="record">
           <span style="width: 28px;display:inline-block">
             <a href="javascript:;" v-if="!record.readed" @click="handleReaded(record)">已读</a>
@@ -103,7 +127,7 @@
           </a>
         </span>
       </a-table>
-      <a-table
+      <!-- <a-table
         :pagination="{pageSize: 5}"
         v-if="tabValue === 'task'"
         :rowSelection="{selectedRowKeys: taskSelectedRowKeys, onChange: onSelectChange}"
@@ -139,7 +163,7 @@
           <a href="javascript:;">查看</a>
           </a>
         </span>
-      </a-table>
+      </a-table> -->
     </div>
   </div>
 </template>
@@ -156,21 +180,26 @@ export default {
       searchValue: '',
       msgColumns: [
         {
-          title: '发送人',
-          dataIndex: 'name',
-          key: 'name'
+          title: '标题',
+          dataIndex: 'title',
+          key: 'title'
         }, {
           title: '消息内容',
-          dataIndex: 'message',
-          key: 'message'
+          dataIndex: 'content',
+          key: 'content',
+          width: '400px'
         }, {
-          title: '日期',
+          title: '类型',
+          dataIndex: 'type',
+          key: 'type'
+        }, {
+          title: '通知时间',
           dataIndex: 'date',
           key: 'date',
           sorter: (a, b) => {
             const timeA = new Date(a.date.replace(/-/g, '/'))
             const timeB = new Date(b.date.replace(/-/g, '/'))
-            return (timeA - timeB)
+            return timeA - timeB
           }
         }, {
           title: '操作',
@@ -180,114 +209,130 @@ export default {
       ],
       msgData: [
         {
-          name: '张三',
+          title: '张三',
           key: '张三',
-          message: '张三内容',
+          content: '我是一段很长的很长的的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长内容。',
+          type: '待办任务',
           date: '2020-05-21 23:12:22',
           readed: false
         },
         {
-          name: '李四',
+          title: '李四',
           key: '李四',
-          message: '李四内容',
+          content: '李四内容',
+          type: '事件告警',
           date: '2020-02-22 23:12:22',
           readed: false
         },
         {
-          name: '王五',
+          title: '王五',
           key: '王五',
-          message: '王五内容',
+          content: '王五内容',
+          type: '待办任务',
           date: '2020-02-23 23:12:22',
           readed: true
         },
         {
-          name: '赵六',
+          title: '赵六',
           key: '赵六',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-24 23:12:22',
           readed: true
         },
         {
-          name: 'coldplay',
+          title: 'coldplay',
           key: 'coldplay',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '待办任务',
           date: '2020-02-25 23:12:22',
           readed: true
         },
         {
-          name: 'maroon 5',
+          title: 'maroon 5',
           key: 'maroon 5',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'rihanna',
+          title: 'rihanna',
           key: 'rihanna',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '待办任务',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'mars',
+          title: 'mars',
           key: '赵六',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'ed',
+          title: 'ed',
           key: 'ed',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'oasis',
+          title: 'oasis',
           key: 'oasis',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'nirvana',
+          title: 'nirvana',
           key: 'nirvana',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '待办任务',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'grunge',
+          title: 'grunge',
           key: 'grunge',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'bealtes',
+          title: 'bealtes',
           key: 'bealtes',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '待办任务',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'bowie',
+          title: 'bowie',
           key: 'bowie',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'queen',
+          title: 'queen',
           key: 'queen',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:22',
           readed: true
         },
         {
-          name: 'red cape',
+          title: 'red cape',
           key: 'red cape',
-          message: '赵六内容',
+          content: '赵六内容',
+          type: '事件告警',
           date: '2020-02-26 23:12:24',
           readed: true
         }
@@ -445,6 +490,9 @@ export default {
     }
   },
   methods: {
+    handleRowClass (record) {
+      return !record.readed ? 'record-not-read' : 'record-readed'
+    },
     onChange (e) {
       console.log(`checked = ${e.target.value}`)
     },

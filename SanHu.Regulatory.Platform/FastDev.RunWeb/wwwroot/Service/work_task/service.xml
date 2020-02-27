@@ -10,7 +10,6 @@
         <field name="AssignUsers" dbName="AssignUsersID" title="分配用户" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
         <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="ExpectedCompletionTime" dbName="ExpectedCompletionTime" title="期望完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
-        <field name="Tasktype" dbName="Tasktype" title="任务类型" type="integer" relationModel="" relationField="" isPK="N" />
         <field name="TaskStatus" dbName="TaskStatus" title="任务状态" type="integer" relationModel="" relationField="" isPK="N" />
         <field name="RejectReason" dbName="RejectReason" title="拒绝原因" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Tasknumber" dbName="Tasknumber" title="任务编号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
@@ -23,6 +22,7 @@
         <field name="FormPreparation" dbName="FormPreparation" title="表单准备" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CaseID" dbName="CaseID" title="案件id" type="string" length="50" isPK="N" />
         <field name="WorkflowtaskID" dbName="WorkflowtaskID" title="工作流任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TaskType" dbName="TaskType" title="任务类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

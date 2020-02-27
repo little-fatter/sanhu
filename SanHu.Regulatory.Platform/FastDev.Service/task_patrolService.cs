@@ -93,7 +93,18 @@ namespace FastDev.Service
         }
         public override object Create(object postdata)
         {
-            return WfCreate(postdata, new string[] { SysContext.WanJiangUserID });
+            var data = ((Model.Form.task_patrol)postdata);
+            List<string> nextexecutor = new List<string>();
+            if (!string.IsNullOrEmpty(data.NextHandler))//如果系统带有下一步执行人
+            {
+                string[] nh = data.NextHandler.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                nextexecutor.AddRange(nh);
+            }
+            else
+            {
+                nextexecutor.Add(SysContext.WanJiangUserID);
+            }
+            return WfCreate(postdata, nextexecutor.ToArray());
         }
 
         public override object Update(object postdata)
@@ -186,7 +197,7 @@ namespace FastDev.Service
             work_task workTask = new work_task();
             workTask.EventInfoId = eventId;
             workTask.CaseID = caseId;
-            workTask.Tasktype = (int)TaskType.Survey;
+            workTask.TaskType = TaskType.Survey.ToString();
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
 
