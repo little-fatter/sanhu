@@ -517,7 +517,7 @@ namespace FastDev.DevDB
                                             evId = GetJsKeyResult("EventInfoId", JsonHelper.SerializeObject(wfModelObj));
                                         work_task wTask = CreateNewWorkTask(wfTask.ID, exeUserId, linkUrl, wfModelName, wfExeStatus.ID, todoTitle, evId);
                                         dbContext.Insert(wTask);
-                                        _latestWorkTaskId = wTask.ID;
+                                        _latestWorkTaskId = wfTask.ID;
                                     }
                                 }
                                 num++;
@@ -1535,7 +1535,7 @@ namespace FastDev.DevDB
             wTask.EventInfoId = evId;//事件Id
             wTask.ExpectedCompletionTime = DateTime.Now.AddHours(2);
             wTask.InitiationTime = DateTime.Now;
-            wTask.Status = RecordStatus.Active;
+            wTask.Status = WFRecordStatus.Running;
             wTask.TaskContent = strTitle;
             wTask.RefTable = objName;
             wTask.RefTable = TAB_NAME_CORE_WORKFLOWEXECUTORSTATUS;

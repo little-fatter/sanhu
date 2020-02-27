@@ -20,10 +20,11 @@ namespace FastDev.Service
     /// </summary>
     class task_patrolService : ServiceBase, IService
     {
-        
+
         public override object WfCreate(object postdata, params string[] exeUserIds)
         {
             var nId = base.Create(postdata);
+            ((Model.Form.task_patrol)postdata).ID = nId.ToString();
             var wfId = AdvanceWorkflow(postdata, exeUserIds);
             if (wfId != null) return wfId;
             return nId;
@@ -36,7 +37,7 @@ namespace FastDev.Service
             {//如果该表单有任务id，则，检查是否完成了某任务
 
                 workflowService.DbContext = QueryDb;
-                Dictionary<string, object> wfContext = (Dictionary<string, object>)workflowService.GetContext(new DevDB.Workflow.WorkflowContext() { TaskID = patrolData.TaskId, Action = "advance", Model = "task_patrol", Context = patrolData.EventInfoId });
+                Dictionary<string, object> wfContext = (Dictionary<string, object>)workflowService.GetContext(new DevDB.Workflow.WorkflowContext() { TaskID = patrolData.TaskId, Action = "advance", Model = "task_patrol", Context = patrolData.ID });
                 //wfContext[]
                 if ((wfContext.ContainsKey("Success") && Convert.ToBoolean(wfContext["Success"]) || wfContext.ContainsKey("nodes")))
                 {//如果工作流可以往下走
@@ -79,6 +80,8 @@ namespace FastDev.Service
                             if (patrolData.TaskId == "MANUALLY_CREATE_TASK_ID")
                             {//如果该任务是手动创建
                                 string latestWorkTaskId = workflowService.LatestWorkTaskId;
+
+                                QueryDb.Update<Model.Form.task_patrol>("set TaskId=@0 where ID=@1", new object[] { latestWorkTaskId, patrolData.ID });
                                 return latestWorkTaskId;//返回所创建的任务Id,然后 work_task那边拿到以后，更新work_task自己的相关字段
                             }
                         }
@@ -95,9 +98,9 @@ namespace FastDev.Service
 
         public override object Update(object postdata)
         {
+            var rev = base.Update(postdata);
             var wfId = AdvanceWorkflow(postdata);
-            if (wfId != null) return wfId;
-            return base.Update(postdata);
+            return rev;
         }
         public task_patrolService()
         {
@@ -136,7 +139,7 @@ namespace FastDev.Service
             {
                 var patrol = data.TaskPatrol;
                 patrol.CaseId = data.CaseId;
-                patrol.EventInfoId= data.EventId;
+                patrol.EventInfoId = data.EventId;
                 Create(patrol);
 
                 //当前任务信息
