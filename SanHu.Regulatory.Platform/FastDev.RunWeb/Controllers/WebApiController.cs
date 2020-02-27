@@ -13,7 +13,6 @@ using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
-    [Route("[controller]/[action]")]
     public class WebApiController : BaseController
     {
         /// <summary>

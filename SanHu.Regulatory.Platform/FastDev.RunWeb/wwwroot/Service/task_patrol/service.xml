@@ -3,7 +3,6 @@
     <model name="task_patrol" title="任务-事件巡查" textField="EventDescribe" moduleName="task" moduleTitle="任务与表单" dbName="" />
     <fields>
         <field name="EventDescribe" dbName="EventDescribe" title="描述" type="string" length="50" isPK="N" />
-        <field name="EventType" dbName="EventType" title="类型" type="status" relationModel="" relationField="" isPK="N" />
         <field name="IncidentTime" dbName="IncidentTime" title="事发时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="IncidentAddress" dbName="IncidentAddress" title="事发地址" type="string" length="50" isPK="N" />
         <field name="IncidentAddressXY" dbName="IncidentAddressXY" title="事发地址坐标" type="string" length="200" isPK="N" />
@@ -16,6 +15,8 @@
         <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="TaskId" dbName="TaskId" title="任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="PreviousformID" dbName="PreviousformID" title="上一个表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventType" dbName="EventType" title="事件类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="NextHandler" dbName="NextHandler" title="下一步用户" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

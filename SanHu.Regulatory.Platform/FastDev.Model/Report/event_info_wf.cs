@@ -2,114 +2,109 @@ namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class work_task
+public partial class event_info_wf
 {
 public string ID
 {
 get;
 set;
 }
-public string EventInfoId
+public string objId
 {
 get;
 set;
 }
-public string MainHandler
+public string gldwOid
 {
 get;
 set;
 }
-public string CoOrganizer
+public string evtCode
 {
 get;
 set;
 }
-public string WorkAddress
+public string evtTypeId
 {
 get;
 set;
 }
-public string TaskContent
+public string evtFileId
 {
 get;
 set;
 }
-public string AssignUsersID
+public string posFileId
 {
 get;
 set;
 }
-public DateTime? InitiationTime
+public string x1
 {
 get;
 set;
 }
-public DateTime? ExpectedCompletionTime
+public string y1
 {
 get;
 set;
 }
-public int? TaskStatus
+public string lng
 {
 get;
 set;
 }
-public string RejectReason
+public string lat
 {
 get;
 set;
 }
-public string Tasknumber
+public string address
 {
 get;
 set;
 }
-public string RefTable
+public string remark
 {
 get;
 set;
 }
-public DateTime? CompleteTime
+public string evtState
 {
 get;
 set;
 }
-public string RefRecordID
+public string finishUserId
 {
 get;
 set;
 }
-public string LocalLinks
+public string finishUserName
 {
 get;
 set;
 }
-public string RemoteLinks
+public string finishFileId
 {
 get;
 set;
 }
-public byte? IsRootTask
+public string reportPhotoUrl
 {
 get;
 set;
 }
-public string FormPreparation
+public string reportPhotoDto
 {
 get;
 set;
 }
-public string CaseID
+public string finishPhotoUrl
 {
 get;
 set;
 }
-public string WorkflowtaskID
-{
-get;
-set;
-}
-public string TaskType
+public string finishPhotoDto
 {
 get;
 set;

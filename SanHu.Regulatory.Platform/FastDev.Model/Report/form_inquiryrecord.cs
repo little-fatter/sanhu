@@ -124,11 +124,6 @@ public string handler
 get;
 set;
 }
-public string EventInfoId
-{
-get;
-set;
-}
 public DateTime? CreateDate
 {
 get;

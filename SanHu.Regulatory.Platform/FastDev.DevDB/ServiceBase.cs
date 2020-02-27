@@ -690,6 +690,17 @@ namespace FastDev.DevDB
             ServiceHelper.Log("【新增】" + ModelName, "");
             return CreateUpdateData(postdata, true);
         }
+        /// <summary>
+        /// 工作流创建
+        /// </summary>
+        /// <param name="postdata"></param>
+        /// <param name="exeUserIds">执行该工作流的用户</param>
+        /// <returns></returns>
+        public virtual object WfCreate(object postdata, params string[] exeUserIds)
+        {
+            ServiceHelper.Log("【新增】" + ModelName, "");
+            return CreateUpdateData(postdata, true);
+        }
 
         public virtual object Update(object postdata)
         {
@@ -1393,7 +1404,7 @@ namespace FastDev.DevDB
                 {
                     dbContext.Update(modelName, modelConfig.PKName, obj, (IEnumerable<string>)list5);
                 }
-                DataAccessHelper.ClearModelEntityText( modelName, ObEx.ToStr(propertyValue));
+                DataAccessHelper.ClearModelEntityText(modelName, ObEx.ToStr(propertyValue));
             }
             if (!isUseDefault && saveDelegate_OnSavedDetail != null)
             {
@@ -1451,21 +1462,21 @@ namespace FastDev.DevDB
             {
                 isAdd = true;
             }
-            string text = isAdd ? Guid.NewGuid().ToString() : obj3.ToString();
+            string pkValue = isAdd ? Guid.NewGuid().ToString() : obj3.ToString();
             if (isAdd)
             {
                 obj = entityType.Assembly.CreateInstance(entityType.FullName);
                 if (!serviceConfig.IsGuidPk && !serviceConfig.IsAutoIncrementPk)
                 {
-                    text = ObEx.ToStr(findValue(serviceConfig.PKName));
+                    pkValue = ObEx.ToStr(findValue(serviceConfig.PKName));
                 }
-                SetValue(serviceConfig.PKName, text);
+                SetValue(serviceConfig.PKName, pkValue);
                 SetValue("CreateDate", DateTime.Now);
                 SetValue("CreateUserID", SysContext.WanJiangUserID);
             }
             else
             {
-                obj = (obj2 = db.GetHelper(entityType).FirstOrDefault("where " + serviceConfig.PKName + " = @0", text));
+                obj = (obj2 = db.GetHelper(entityType).FirstOrDefault("where " + serviceConfig.PKName + " = @0", pkValue));
                 array = func(obj2);
                 entityValues = func(obj);
             }
@@ -1993,10 +2004,17 @@ namespace FastDev.DevDB
         {
             return null;
         }
-
+        /// <summary>
+        /// 三湖工作流对象
+        /// </summary>
+        protected static IWorkflowService workflowService;
         public ServiceBase()
         {
-
+            if (workflowService == null)
+            {
+                ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+                workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
+            }
             objCurrentModelData = null;
             objCurrentModelId = null;
             _enable_right = true;//开发环境是false,真实环境是true

@@ -1341,7 +1341,10 @@ namespace FastDev.DevDB
             core_workflowExecutorStatus.Status = WFRecordStatus.Running;
             return core_workflowExecutorStatus;
         }
-
+        /// <summary>
+        /// 放回最新的任务id
+        /// </summary>
+        public string LatestWorkTaskId { get { return ""; } }
         private core_toDo CreateNewToDo(string strTitle, string strLink, string strRecordId)
         {
             core_toDo core_toDo = new core_toDo();

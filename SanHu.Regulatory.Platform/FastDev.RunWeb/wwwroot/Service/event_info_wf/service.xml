@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="event_info_wf" title="事件信息处理" textField="objId" moduleName="zhzx" moduleTitle="指挥中心" dbName="" />
+    <fields>
+        <field name="objId" dbName="objId" title="主键ID" type="string" length="50" isPK="N" />
+        <field name="gldwOid" dbName="gldwOid" title="管理单位" type="string" length="50" isPK="N" />
+        <field name="evtCode" dbName="evtCode" title="事件编码" type="string" length="50" isPK="N" />
+        <field name="evtTypeId" dbName="evtTypeId" title="事件类型ID" type="string" length="50" isPK="N" />
+        <field name="evtFileId" dbName="evtFileId" title="事件照片" type="string" length="50" isPK="N" />
+        <field name="posFileId" dbName="posFileId" title="位置照片" type="string" length="50" isPK="N" />
+        <field name="x1" dbName="x1" title="x" type="string" length="50" isPK="N" />
+        <field name="y1" dbName="y1" title="y" type="string" length="50" isPK="N" />
+        <field name="lng" dbName="lng" title="百度坐标经度" type="string" length="50" isPK="N" />
+        <field name="lat" dbName="lat" title="百度坐标纬度" type="string" length="50" isPK="N" />
+        <field name="address" dbName="address" title="地址信息" type="string" length="50" isPK="N" />
+        <field name="remark" dbName="remark" title="事件描述" type="string" length="50" isPK="N" />
+        <field name="evtState" dbName="evtState" title="事件状态" type="string" length="50" isPK="N" />
+        <field name="finishUserId" dbName="finishUserId" title="处理人" type="string" length="50" isPK="N" />
+        <field name="finishUserName" dbName="finishUserName" title="处理人姓名" type="string" length="50" isPK="N" />
+        <field name="finishFileId" dbName="finishFileId" title="处理图片" type="string" length="50" isPK="N" />
+        <field name="reportPhotoUrl" dbName="reportPhotoUrl" title="上报照片url" type="string" length="200" isPK="N" />
+        <field name="reportPhotoDto" dbName="reportPhotoDto" title="上报照片" type="string" length="50" isPK="N" />
+        <field name="finishPhotoUrl" dbName="finishPhotoUrl" title="整改照片url" type="string" length="50" isPK="N" />
+        <field name="finishPhotoDto" dbName="finishPhotoDto" title="整改照片" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>
