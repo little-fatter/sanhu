@@ -97,5 +97,6 @@
         <models name="form_inquiryrecord" title="询问记录" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="form_inquestrecord" title="勘验记录" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="law_staff" title="执法检查人员" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="test_pdf" title="测试pdf" textField="Title" moduleName="res" moduleTitle="基础资料" />
     </models>
 </freedesign>
