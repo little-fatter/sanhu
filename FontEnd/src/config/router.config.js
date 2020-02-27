@@ -14,30 +14,8 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/data-manage', // 临时定向开发页面
+    redirect: '/mission', // 临时定向开发页面
     children: [
-      // {
-      //   path: 'dashboard',
-      //   name: 'dashboard',
-      //   redirect: '/dashboard/workplace',
-      //   component: RouteView,
-      //   meta: { title: '仪表盘', keepAlive: true },
-      //   children: [
-      //     {
-      //       path: 'monitor',
-      //       name: 'Monitor',
-      //       component: () => import('@/views/dashboard/Monitor'),
-      //       meta: { title: '监控页', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'workplace',
-      //       name: 'Workplace',
-      //       component: () => import('@/views/dashboard/Workplace'),
-      //       meta: { title: '工作台', keepAlive: true }
-      //     }
-      //   ]
-      // },
-      // 待办事项
       {
         path: 'mission',
         name: 'Mission',
@@ -160,13 +138,13 @@ export const asyncRouterMap = [
             path: 'case',
             redirect: '/case/case-list',
             component: RouteView,
-            meta: { title: '案件档案管理' },
+            meta: { title: '案件档案' },
             children: [
               {
                 path: 'case-list',
                 name: 'caseList',
                 component: () => import('@/views/case/index'),
-                meta: { title: '案件档案管理列表', keepAlive: true }
+                meta: { title: '案件档案管理', keepAlive: true }
               },
               {
                 path: 'case-details',
@@ -195,7 +173,7 @@ export const asyncRouterMap = [
           {
             path: 'take-water-manage',
             name: 'Takewatermanage',
-            meta: { title: '取水管理' },
+            meta: { title: '取水许可证管理' },
             component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterManage')
           },
           {
@@ -212,74 +190,6 @@ export const asyncRouterMap = [
           }
         ]
       },
-
-      // // list
-      // {
-      //   path: 'list',
-      //   name: 'list',
-      //   component: RouteView,
-      //   redirect: '/list/query-list',
-      //   meta: { title: '列表页' },
-      //   children: [
-      //     {
-      //       path: 'query-list',
-      //       name: 'QueryListWrapper',
-      //       component: () => import('@/views/list/TableList'),
-      //       meta: { title: '查询表格', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'tree-list',
-      //       name: 'TreeList',
-      //       component: () => import('@/views/list/TreeList'),
-      //       meta: { title: '树目录表格', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'edit-table',
-      //       name: 'EditList',
-      //       component: () => import('@/views/list/TableInnerEditList'),
-      //       meta: { title: '内联编辑表格', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'basic-list',
-      //       name: 'BasicList',
-      //       component: () => import('@/views/list/StandardList'),
-      //       meta: { title: '标准列表', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'card',
-      //       name: 'CardList',
-      //       component: () => import('@/views/list/CardList'),
-      //       meta: { title: '卡片列表', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'search',
-      //       name: 'SearchList',
-      //       component: () => import('@/views/list/search/SearchLayout'),
-      //       redirect: '/list/search/article',
-      //       meta: { title: '搜索列表', keepAlive: true },
-      //       children: [
-      //         {
-      //           path: 'article',
-      //           name: 'SearchArticles',
-      //           component: () => import('../views/list/TableList'),
-      //           meta: { title: '搜索列表（文章）' }
-      //         },
-      //         {
-      //           path: 'project',
-      //           name: 'SearchProjects',
-      //           component: () => import('../views/list/TableList'),
-      //           meta: { title: '搜索列表（项目）' }
-      //         },
-      //         {
-      //           path: 'application',
-      //           name: 'SearchApplications',
-      //           component: () => import('../views/list/TableList'),
-      //           meta: { title: '搜索列表（应用）' }
-      //         }
-      //       ]
-      //     }
-      //   ]
-      // },
 
       // result
       {
@@ -349,11 +259,103 @@ export const asyncRouterMap = [
           }
         ]
       }
+
+      // {
+      //   path: 'dashboard',
+      //   name: 'dashboard',
+      //   redirect: '/dashboard/workplace',
+      //   component: RouteView,
+      //   meta: { title: '仪表盘', keepAlive: true },
+      //   children: [
+      //     {
+      //       path: 'monitor',
+      //       name: 'Monitor',
+      //       component: () => import('@/views/dashboard/Monitor'),
+      //       meta: { title: '监控页', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'workplace',
+      //       name: 'Workplace',
+      //       component: () => import('@/views/dashboard/Workplace'),
+      //       meta: { title: '工作台', keepAlive: true }
+      //     }
+      //   ]
+      // },
+      // 待办事项
+
+      // // list
+      // {
+      //   path: 'list',
+      //   name: 'list',
+      //   component: RouteView,
+      //   redirect: '/list/query-list',
+      //   meta: { title: '列表页' },
+      //   children: [
+      //     {
+      //       path: 'query-list',
+      //       name: 'QueryListWrapper',
+      //       component: () => import('@/views/list/TableList'),
+      //       meta: { title: '查询表格', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'tree-list',
+      //       name: 'TreeList',
+      //       component: () => import('@/views/list/TreeList'),
+      //       meta: { title: '树目录表格', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'edit-table',
+      //       name: 'EditList',
+      //       component: () => import('@/views/list/TableInnerEditList'),
+      //       meta: { title: '内联编辑表格', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'basic-list',
+      //       name: 'BasicList',
+      //       component: () => import('@/views/list/StandardList'),
+      //       meta: { title: '标准列表', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'card',
+      //       name: 'CardList',
+      //       component: () => import('@/views/list/CardList'),
+      //       meta: { title: '卡片列表', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'search',
+      //       name: 'SearchList',
+      //       component: () => import('@/views/list/search/SearchLayout'),
+      //       redirect: '/list/search/article',
+      //       meta: { title: '搜索列表', keepAlive: true },
+      //       children: [
+      //         {
+      //           path: 'article',
+      //           name: 'SearchArticles',
+      //           component: () => import('../views/list/TableList'),
+      //           meta: { title: '搜索列表（文章）' }
+      //         },
+      //         {
+      //           path: 'project',
+      //           name: 'SearchProjects',
+      //           component: () => import('../views/list/TableList'),
+      //           meta: { title: '搜索列表（项目）' }
+      //         },
+      //         {
+      //           path: 'application',
+      //           name: 'SearchApplications',
+      //           component: () => import('../views/list/TableList'),
+      //           meta: { title: '搜索列表（应用）' }
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // },
     ]
   },
   {
     path: '*', redirect: '/404'
   }
+
 ]
 
 /**
