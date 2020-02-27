@@ -36,51 +36,51 @@ namespace FastDev.Service
         /// </summary>
         /// <param name="postdata"></param>
         /// <returns></returns>
-        public override object Create(object postdata)
-        {
-            object rev = null;
-            var data = (Model.Form.work_task)postdata;
-            if (!string.IsNullOrEmpty(data.RefTable))
-            {
-                Type entityType = DataAccessHelper.GetEntityType(data.RefTable, "Form");
-                if (entityType != null)
-                {
-                    var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
-                    //nextdata
-                    entityType.GetProperty("TaskId").SetValue(nextdata, "MANUALLY_CREATE_TASK_ID");//高速系统是手动创建的任务
-                    IService svc = ServiceHelper.GetService(data.RefTable);
-                    rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
-                    //
-                    var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
-                    {
-                        rev
-                    });
-                    //从工作流里面查询出
-                    //然后更新一些关键字段
-                    wTask.CompleteTime = data.CompleteTime;
-                    wTask.EventInfoId = data.EventInfoId;
-                    wTask.ExpectedCompletionTime = data.ExpectedCompletionTime;
-                    wTask.TaskContent = data.TaskContent;
-                    List<DevDB.Model.core_autoCode> source = new List<DevDB.Model.core_autoCode>();
-                    source = QueryDb.Fetch<DevDB.Model.core_autoCode>("where ModelName = @0", new object[1]
-                    {
-                        "work_task"
-                    });
-                    var rule = source.FirstOrDefault(a => a.FieldName == "Tasknumber");
-                    if (rule != null)
-                    {
-                        string newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
-                        wTask.Tasknumber = newAutoCode;
-                    }
-                    wTask.MainHandler = data.MainHandler;
-                    wTask.CoOrganizer = data.CoOrganizer;
-                    wTask.AssignUsersID = data.AssignUsersID;
-                    wTask.WorkAddress = data.WorkAddress;
-                    QueryDb.Update(wTask, wTask.ID);
-                }
-            }
-            return rev;
-        }
+        //public override object Create(object postdata)
+        //{
+        //    object rev = null;
+        //    var data = (Model.Form.work_task)postdata;
+        //    if (!string.IsNullOrEmpty(data.RefTable))
+        //    {
+        //        Type entityType = DataAccessHelper.GetEntityType(data.RefTable, "Form");
+        //        if (entityType != null)
+        //        {
+        //            var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
+        //            //nextdata
+        //            entityType.GetProperty("TaskId").SetValue(nextdata, "MANUALLY_CREATE_TASK_ID");//高速系统是手动创建的任务
+        //            IService svc = ServiceHelper.GetService(data.RefTable);
+        //            rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
+        //            //
+        //            var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
+        //            {
+        //                rev
+        //            });
+        //            //从工作流里面查询出
+        //            //然后更新一些关键字段
+        //            wTask.CompleteTime = data.CompleteTime;
+        //            wTask.EventInfoId = data.EventInfoId;
+        //            wTask.ExpectedCompletionTime = data.ExpectedCompletionTime;
+        //            wTask.TaskContent = data.TaskContent;
+        //            List<DevDB.Model.core_autoCode> source = new List<DevDB.Model.core_autoCode>();
+        //            source = QueryDb.Fetch<DevDB.Model.core_autoCode>("where ModelName = @0", new object[1]
+        //            {
+        //                "work_task"
+        //            });
+        //            var rule = source.FirstOrDefault(a => a.FieldName == "Tasknumber");
+        //            if (rule != null)
+        //            {
+        //                string newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
+        //                wTask.Tasknumber = newAutoCode;
+        //            }
+        //            wTask.MainHandler = data.MainHandler;
+        //            wTask.CoOrganizer = data.CoOrganizer;
+        //            wTask.AssignUsersID = data.AssignUsersID;
+        //            wTask.WorkAddress = data.WorkAddress;
+        //            QueryDb.Update(wTask, wTask.ID);
+        //        }
+        //    }
+        //    return rev;
+        //}
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
         {
             switch (id.ToUpper())
