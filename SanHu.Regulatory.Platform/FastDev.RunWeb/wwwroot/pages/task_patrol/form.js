@@ -188,6 +188,15 @@ function() {
                     newline: 1,
                     width: "",
                     readonlyInEdit: 0
+                },
+                {
+                    name: "NextHandler",
+                    type: "textarea",
+                    label: "下一步用户，逗号分割",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
                 }]
             },
             common: {

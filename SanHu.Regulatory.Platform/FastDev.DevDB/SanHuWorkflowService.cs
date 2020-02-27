@@ -514,7 +514,7 @@ namespace FastDev.DevDB
                                         string linkUrl = $"web/main/?model={wfModelName}&id={wfProject.Context}&viewtype=form&taskid={wfTask.ID}";
                                         string evId = "";
                                         if (wfModelObj != null)
-                                            evId = GetJsKeyResult("EventInfoId", JsonHelper.SerializeObject(wfModelObj));
+                                            evId = wfModelObj.GetType().GetProperty("EventInfoId").GetValue(wfModelObj)?.ToString();
                                         work_task wTask = CreateNewWorkTask(wfTask.ID, exeUserId, linkUrl, wfModelName, wfExeStatus.ID, todoTitle, evId);
                                         dbContext.Insert(wTask);
                                         _latestWorkTaskId = wfTask.ID;
@@ -658,7 +658,7 @@ namespace FastDev.DevDB
                         var linkUrl = "web/main/?model=" + wfModelName + "&id=" + wfProject.Context + "&viewtype=form&tasid=" + core_workflowTask.ID;
                         string evId = "";
                         if (wfModelObj != null)
-                            evId = GetJsKeyResult("EventInfoId", JsonHelper.SerializeObject(wfModelObj));
+                            evId = wfModelObj.GetType().GetProperty("EventInfoId").GetValue(wfModelObj)?.ToString();
                         work_task wTask = CreateNewWorkTask(core_workflowTask.ID, uId, linkUrl, wfModelName, core_workflowExecutorStatus2.ID, todoTitle, evId);
                         dbContext.Insert(wTask);
                         _latestWorkTaskId = wTask.ID;
@@ -667,33 +667,31 @@ namespace FastDev.DevDB
             }
             else if (context.CurrentAction == WorkflowAction.Rejected)
             {//拒绝
-                bool flag2 = false;
+                bool IsRejectAll = false;
                 if (currentNode.nodeType == WorkflowNodeType.Active)
                 {
                     ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(currentNode);
                     if (activeNode.handlerType == "2" || activeNode.handlerType == "3")
                     {
-                        foreach (core_workflowExecutorStatus item4 in list)
+                        foreach (core_workflowExecutorStatus exeStatus in list)
                         {
-                            if (!(item4.ExecutorID == SysContext.WanJiangUserID))
+                            if (!(exeStatus.ExecutorID == SysContext.WanJiangUserID))
                             {
-                                UpdateExecutor(item4, WFRecordStatus.Canceled, "");
-
-
+                                UpdateExecutor(exeStatus, WFRecordStatus.Canceled, "");
                                 work_task workRejectedCancel = dbContext.FirstOrDefault<work_task>("where RefTable = @0 and RefRecordID = @1", new object[2]
                                 {
                                     TAB_NAME_CORE_WORKFLOWEXECUTORSTATUS,
-                                    item4.ID
+                                    exeStatus.ID
                                 });
                                 UpdateWorkTask(workRejectedCancel, WFRecordStatus.Canceled);
 
                             }
                         }
-                        flag2 = true;
+                        IsRejectAll = true;
                     }
                     if (activeNode.handlerType == "1" && list.Where(d => d.ExecutorID != SysContext.WanJiangUserID).All(w => w.Status == WFRecordStatus.Rejected))
-                    {
-                        flag2 = true;
+                    {//抢占，且 其他用户已拒绝
+                        IsRejectAll = true;
                     }
                 }
                 UpdateWFTask(currentTask, WFRecordStatus.Rejected);
@@ -706,7 +704,7 @@ namespace FastDev.DevDB
                     core_workflowExecutorStatus2.ID
                 });
                 UpdateWorkTask(wTask, WFRecordStatus.Rejected);
-                if (flag2)
+                if (IsRejectAll)
                 {
                     wfProject.ModifyDate = DateTime.Now;
                     wfProject.ModifyUserID = SysContext.WanJiangUserID;
@@ -720,6 +718,12 @@ namespace FastDev.DevDB
                         "Status"
                     });
                 }
+            }
+            else if (context.CurrentAction == WorkflowAction.Transfer)
+            {//工作流转交
+
+
+
             }
         }
 
@@ -1532,7 +1536,8 @@ namespace FastDev.DevDB
             wTask.ID = Guid.NewGuid().ToString();
             wTask.WorkflowtaskID = workflowTaskId;
             wTask.AssignUsersID = exeUserId;
-            wTask.EventInfoId = evId;//事件Id
+            wTask.MainHandler = fwContext.ExecuteScalar<string>("select Name from user where Id=@0", new object[] { exeUserId });
+            wTask.EventInfoId = evId==null?"":evId;//事件Id
             wTask.ExpectedCompletionTime = DateTime.Now.AddHours(2);
             wTask.InitiationTime = DateTime.Now;
             wTask.Status = WFRecordStatus.Running;

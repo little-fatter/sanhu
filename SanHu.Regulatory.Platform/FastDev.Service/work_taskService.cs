@@ -1,6 +1,7 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
+using FastDev.DevDB.Workflow;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Common.ActionValue;
@@ -47,7 +48,8 @@ namespace FastDev.Service
                 {
                     var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
                     //nextdata
-                    entityType.GetProperty("TaskId").SetValue(nextdata, "MANUALLY_CREATE_TASK_ID");//高速系统是手动创建的任务
+                    entityType.GetProperty("TaskId").SetValue(nextdata, "");//告诉系统是手动创建的任务
+                    entityType.GetProperty("EventInfoId").SetValue(nextdata, data.EventInfoId);//告诉系统是手动创建的任务
                     IService svc = ServiceHelper.GetService(data.RefTable);
                     rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
                     //
@@ -106,14 +108,15 @@ namespace FastDev.Service
                 var data = JsonHelper.DeserializeJsonToObject<TaskHandOverReq>(context.Data);
 
                 //关闭当前任务
-                var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
-                workTask.TaskStatus = (int)WorkTaskStatus.Close;  
+                var workTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID=@id", data.TaskId);
+                workTask.TaskStatus = (int)WorkTaskStatus.Close;
+                workTask.Status = WFRecordStatus.Completed;
                 QueryDb.Update(workTask);
 
                 //复制任务给指定用户
                 workTask.TaskStatus = (int)WorkTaskStatus.Normal;
                 workTask.AssignUsersID = data.UserId;
-                base.Create(workTask);
+                Create(workTask);
 
                 //给指定用户发送待办
 
