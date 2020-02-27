@@ -49,9 +49,9 @@ namespace FastDev.Service
                     //nextdata
                     entityType.GetProperty("TaskId").SetValue(nextdata, "MANUALLY_CREATE_TASK_ID");//高速系统是手动创建的任务
                     IService svc = ServiceHelper.GetService(data.RefTable);
-                    rev = svc.WfCreate(nextdata,new string[] { data.AssignUsersID });//创建了工作流
+                    rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
                     //
-                    var  wTask = QueryDb.FirstOrDefault<work_task>("where ID = @0", new object[1]
+                    var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
                     {
                         rev
                     });
@@ -72,8 +72,11 @@ namespace FastDev.Service
                         string newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
                         wTask.Tasknumber = newAutoCode;
                     }
+                    wTask.MainHandler = data.MainHandler;
+                    wTask.CoOrganizer = data.CoOrganizer;
+                    wTask.AssignUsersID = data.AssignUsersID;
                     wTask.WorkAddress = data.WorkAddress;
-                    QueryDb.Update(wTask, rev);
+                    QueryDb.Update(wTask, wTask.ID);
                 }
             }
             return rev;
