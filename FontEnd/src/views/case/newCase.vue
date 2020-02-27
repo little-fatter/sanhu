@@ -195,7 +195,7 @@
                         </a-col>
                       </a-row>
                     </template>
-                    <a-row class="margin-bottom15" >
+                    <a-row class="margin-bottom15">
                       <a-col :span="6">身份证：</a-col>
                       <a-col :span="18">
                         <a-input placeholder="身份证号" v-model="item.idNumber"/>
@@ -245,6 +245,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'NewCase',
   data () {
@@ -297,8 +299,12 @@ export default {
     },
     // 删除当事人
     delCaseBreakLow (index) {
-      this.caseInfo.caseBreakLow.splice(index, 1)
-      alert('当事人已被删除')
+      if (index === 0) {
+        alert('最少有一个当事人')
+      } else {
+        this.caseInfo.caseBreakLow.splice(index, 1)
+        alert('当事人已被删除')
+      }
     },
     // 协办人输入
     handleChange (value) {
@@ -311,7 +317,10 @@ export default {
     },
     // 提交新建案件
     pushCaseInfo () {
-      console.log(this.caseInfo)
+      axios.post('api/addCase', {
+        caseData: this.caseInfo
+      })
+      // console.log(this.caseInfo)
     }
   },
   // 生命周期钩子

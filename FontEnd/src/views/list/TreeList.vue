@@ -55,7 +55,7 @@
 import STree from '@/components/Tree/Tree'
 import STable from '@/components/table/'
 import OrgModal from './modules/OrgModal'
-import { getOrgTree, getServiceList } from '@/api/sampleApi'
+import { getOrgTree } from '@/api/sampleApi'
 
 /**
  * 表格树演示实例
@@ -109,15 +109,15 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        var allParameter = {
-          ...parameter,
-          ...this.queryParam
-        }
-        return getServiceList(allParameter).then(res => {
-          return res
-        }).catch((error) => {
-          throw error
-        })
+        // var allParameter = {
+        //   ...parameter,
+        //   ...this.queryParam
+        // }
+        // return getServiceList(allParameter).then(res => {
+        //   return res
+        // }).catch((error) => {
+        //   throw error
+        // })
       },
       orgTree: [],
       selectedRowKeys: [],
