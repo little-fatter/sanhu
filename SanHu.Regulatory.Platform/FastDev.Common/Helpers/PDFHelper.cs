@@ -1,4 +1,4 @@
-﻿using OpenHtmlToPdf;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,18 +18,18 @@ namespace FD.Common.Helpers
         /// <returns></returns>
         public static byte[] HmtlToPDF(string html,double marginleft=1.25, double margintop = 1.25, double marginright = 1.25, double marginbottom = 1.25)
         {
-            PaperMargins paperMargins = PaperMargins.None()
-                .Left(marginleft.Centimeters())
-                .Top(margintop.Centimeters())
-                .Right(marginright.Centimeters())
-                .Botton(marginbottom.Centimeters());
-            var pdf = Pdf
-                .From(html)
-                .WithObjectSetting("web.defaultEncoding", "utf-8")
-                .OfSize(PaperSize.A4)
-                .WithMargins(paperMargins)
-                .Content();
-            return pdf;
+            //PaperMargins paperMargins = PaperMargins.None()
+            //    .Left(marginleft.Centimeters())
+            //    .Top(margintop.Centimeters())
+            //    .Right(marginright.Centimeters())
+            //    .Botton(marginbottom.Centimeters());
+            //var pdf = Pdf
+            //    .From(html)
+            //    .WithObjectSetting("web.defaultEncoding", "utf-8")
+            //    .OfSize(PaperSize.A4)
+            //    .WithMargins(paperMargins)
+            //    .Content();
+            return null;
         }
     }
 }
