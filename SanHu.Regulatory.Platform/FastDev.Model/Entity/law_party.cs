@@ -49,7 +49,7 @@ public string AssociationobjectID
 get;
 set;
 }
-public string AssociatedobjecttypeID
+public string Associatedobjecttype
 {
 get;
 set;

@@ -19,7 +19,7 @@
         <field name="Relatedevents" dbName="Relatedevents" title="关联事件" type="string" length="50" isPK="N" />
         <field name="Region" dbName="RegionID" title="区域" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
         <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="PreviousformID" dbName="PreviousformID" title="上一个表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PreviousformID" dbName="PreviousformID" title="原始表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
