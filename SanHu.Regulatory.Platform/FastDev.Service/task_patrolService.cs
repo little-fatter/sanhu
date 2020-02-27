@@ -181,14 +181,14 @@ namespace FastDev.Service
                 //保存新任务
                 if (newWorkTask != null)
                     ServiceHelper.GetService(newWorkTask.GetType().Name).Create(newWorkTask);
+
+                QueryDb.CompleteTransaction();
             }
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
                 return false;
             }
-
-            QueryDb.CompleteTransaction();
             return true;
         }
 
@@ -197,7 +197,7 @@ namespace FastDev.Service
             work_task workTask = new work_task();
             workTask.EventInfoId = eventId;
             workTask.CaseID = caseId;
-            workTask.TaskType = TaskType.Survey.ToString();
+            workTask.Tasktype = TaskType.Survey;
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
 

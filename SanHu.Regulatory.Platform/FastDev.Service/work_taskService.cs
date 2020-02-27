@@ -1,6 +1,7 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
+using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Common.ActionValue;
@@ -20,7 +21,7 @@ namespace FastDev.Service
     /// <summary>
     /// 任务
     /// </summary>
-    class work_taskService : ServiceBase, IService
+    class work_taskService : SHBaseService, IService
     {
 
         public work_taskService()
@@ -107,21 +108,21 @@ namespace FastDev.Service
 
                 //关闭当前任务
                 var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
-                workTask.TaskStatus = (int)WorkTaskStatus.Close;  
+                workTask.TaskStatus = (int)WorkTaskStatus.Close;
                 QueryDb.Update(workTask);
 
                 //复制任务给指定用户
                 workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-                workTask.AssignUsersID = data.UserId;
+                workTask.AssignUsersID = data.UserId.ToString();
                 base.Create(workTask);
 
                 //给指定用户发送待办
-
+                CreateWorkrecor(data.UserId, workTask.Tasktype.GetDisplayName(), "url", "标题", "内容");
 
                 QueryDb.CompleteTransaction();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
             }
@@ -140,7 +141,18 @@ namespace FastDev.Service
             var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
-            base.Update(workTask);
+            QueryDb.BeginTransaction();
+            try
+            {
+                base.Update(workTask);
+                base.UpdateEventState(workTask.EventInfoId, EventStatus.untreated);
+                QueryDb.CompleteTransaction();
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
             return true;
         }
     }

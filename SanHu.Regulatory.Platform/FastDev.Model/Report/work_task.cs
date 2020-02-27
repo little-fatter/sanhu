@@ -109,7 +109,7 @@ public string WorkflowtaskID
 get;
 set;
 }
-public string TaskType
+public int? Tasktype
 {
 get;
 set;

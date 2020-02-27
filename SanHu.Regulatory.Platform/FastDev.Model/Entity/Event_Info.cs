@@ -389,6 +389,11 @@ public string dorgId
 get;
 set;
 }
+public string OriginalID
+{
+get;
+set;
+}
 }
 
 }
