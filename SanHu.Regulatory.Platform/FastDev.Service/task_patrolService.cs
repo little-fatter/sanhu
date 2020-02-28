@@ -148,6 +148,7 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
+                //保存表单信息
                 var patrol = data.TaskPatrol;
                 patrol.CaseId = data.CaseId;
                 patrol.EventInfoId = data.EventId;
@@ -161,25 +162,32 @@ namespace FastDev.Service
                     data.CaseId = workTask.CaseID;
                 }
 
+                //修改事件信息
+                UpdateEventInfo(data.EventId, patrol);
+
                 //执法与跟踪
-                work_task newWorkTask = null;
                 if (data.TaskPatrol.Needlawenforcement != null && data.TaskPatrol.Needlawenforcement == 1)
                 {
-                    //需要执法
-                    //生成勘察任务
-                    newWorkTask = CreateWorkTask(data.EventId, data.CaseId, TaskType.Survey);
+                    //需要执法,生成勘察任务
+                    CreateSaveWorkTask(data.TaskId, TaskType.Survey);
+                    CreateWorkrecor(AccountId, TaskType.Survey.GetDisplayName(), data.Url, "标题", "内容");
                 }
                 else
                 {
-                    //不需要执法,需要判断是否跟踪
+                    //不需要执法
                     if (data.TaskPatrol.Needtracking != null && data.TaskPatrol.Needtracking == 1)
                     {
                         //需要跟踪
-                        newWorkTask = CreateWorkTask(data.TaskId, TaskType.Patrol);
-                        CreateWorkrecor(AccountId, newWorkTask.Tasktype.GetDisplayName(), data.Url, "标题", "内容");
+                        CreateSaveWorkTask(data.TaskId, TaskType.Patrol);
+                        CreateWorkrecor(AccountId, TaskType.Patrol.GetDisplayName(), data.Url, "标题", "内容");
+                    }
+                    else
+                    {
+                        //不需要跟踪,关闭任务和事件
+                        UpdateWorkTaskState(data.TaskId, WorkTaskStatus.Close);
+                        UpdateEventState(data.EventId, EventStatus.finish);
                     }
                 }
-                
 
                 QueryDb.CompleteTransaction();
             }
@@ -190,17 +198,12 @@ namespace FastDev.Service
             }
             return true;
         }
-
-        private work_task CreateWorkTask(string eventId, string caseId, TaskType type)
+        private void UpdateEventInfo(string eventId, task_patrol TaskPatrol)
         {
-            work_task workTask = new work_task();
-            workTask.EventInfoId = eventId;
-            workTask.CaseID = caseId;
-            workTask.Tasktype = TaskType.Survey;
-            workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-            workTask.TaskContent = type.GetDisplayName();
-
-            return workTask;
+            var eventInfo = QueryDb.FirstOrDefault<event_info>(" where id=@0", eventId);
+            eventInfo.remark = TaskPatrol.EventDescribe;
+            eventInfo.reportTime = TaskPatrol.IncidentTime;
+            ServiceHelper.GetService("event_info").Update(eventInfo);
         }
         private work_task UpdateWorkTask(string taskId)
         {
