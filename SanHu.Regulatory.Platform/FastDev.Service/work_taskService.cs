@@ -96,7 +96,9 @@ namespace FastDev.Service
                 case "CASE":
                     return NextStepCase;
                 case "SURVEY":
-                    return NextStepSurvey;                   
+                    return NextStepSurvey;
+                case "Create":
+                    return CreateTask;
             }
             return null;
         }
@@ -108,33 +110,21 @@ namespace FastDev.Service
         /// <returns></returns>
         private object HandOver(APIContext context)
         {
+            var data = JsonHelper.DeserializeJsonToObject<FormReqBase>(context.Data);
             QueryDb.BeginTransaction();
             try
             {
-                var data = JsonHelper.DeserializeJsonToObject<TaskHandOverReq>(context.Data);
-
-                //关闭当前任务
-                var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
-                workTask.TaskStatus = (int)WorkTaskStatus.Close;
-                QueryDb.Update(workTask);
-
-                //复制任务给指定用户
-                workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-                workTask.AssignUsersID = data.UserId.ToString();
-                base.Create(workTask);
-
-                //给指定用户发送待办
-                CreateWorkrecor(data.UserId, workTask.TaskType.ToString(), data.Url, "标题", "内容");
-
+                UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.HandOver);
+                CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 QueryDb.CompleteTransaction();
-                return true;
             }
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -144,15 +134,12 @@ namespace FastDev.Service
         /// <returns></returns>
         private object Reject(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<TaskPatrolRejectRequest>(context.Data);
-            var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
-            workTask.RejectReason = data.Reason;
-            workTask.TaskStatus = (int)WorkTaskStatus.Reject;
+            var data = JsonHelper.DeserializeJsonToObject<FormReqBase>(context.Data);
             QueryDb.BeginTransaction();
             try
             {
-                base.Update(workTask);  //修改任务状态
-                base.UpdateEventState(workTask.EventInfoId, EventStatus.untreated);  //修改事件状态
+                UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.HandOver);
+                UpdateEventState(data.EventInfoId, EventStatus.untreated);
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
@@ -166,10 +153,10 @@ namespace FastDev.Service
         private object NextStepCase(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
-            var  _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
             try
             {
-                return _sHBaseService.GetLastInfo(data.TaskId,"case_Info");
+                return _sHBaseService.GetLastInfo(data.TaskId, "case_Info");
             }
             catch (Exception e)
             {
@@ -189,6 +176,18 @@ namespace FastDev.Service
             {
                 return null;
             }
+        }
+        /// <summary>
+        /// 创建任务
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private object CreateTask(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<work_task>(context.Data);
+            data.RemoteLinks = "https://www.baidu.com";  //待办跳转地址
+            CreatTasksAndCreatWorkrecor(new work_task[] { data }, "");
+            return null;
         }
 
     }

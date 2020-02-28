@@ -5,11 +5,12 @@ using System.Text;
 
 namespace FD.Model.Dto
 {
-    public class taskPatrolFinishReq : FormReqBase
+   public class form_confiscated_itemFinishReq : FormReqBase
     {
         /// <summary>
-        /// 巡检信息
+        /// 没收物品列表
         /// </summary>
-        public task_patrol TaskPatrol { get; set; }
+        public List<form_confiscated_item> formConfiscatedItems { get; set; }
+
     }
 }

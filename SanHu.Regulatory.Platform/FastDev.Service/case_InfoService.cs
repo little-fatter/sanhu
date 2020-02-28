@@ -20,31 +20,35 @@ namespace FastDev.Service
         private Func<APIContext, object> case_InfoService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            switch (id.ToUpper())
-            {
-                case "FINISH":
+            //switch (id.ToUpper())
+            //{
+            //    case "FINISH":
                     return Handle;
-            }
-            return null;
+            //}
+            //return null;
         }
         public object Handle(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<case_InfoFinishReq>(context.Data);
-            case_Info caseInfo = new case_Info();
-            List<law_party> lawParties = new List<law_party>();
-            if (!string.IsNullOrEmpty(data.CaseInfo.TaskId)) return false;
-            string url = data.Url;
-            caseInfo = data.CaseInfo;
-            lawParties = data.LawParties;
-            switch (data.CaseInfo.ApplicableProcedure)
+            var data = JsonHelper.DeserializeJsonToObject<case_InfoFinishReq>(context.Data);    
+            if (data.CaseInfo == null) return false;
+            QueryDb.BeginTransaction();
+            try
             {
-                case "简易程序":
-                    return EasyProcess(caseInfo, lawParties);
-                case "一般程序":
-                    return NormalProcess(caseInfo);
+                CreateInfo(data.CaseInfo, data.LawParties);
+                _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
+                _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
             }
-            return false;
+            catch (Exception)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
+            QueryDb.CompleteTransaction();
+            return true;
         }
+
+/*
+
         /// <summary>
         /// 简易流程
         /// </summary>
@@ -77,6 +81,9 @@ namespace FastDev.Service
         {
             return null;
         }
+
+    */
+
 
         /// <summary>
         /// 创建表单和当事人

@@ -21,6 +21,21 @@ namespace FastDev.Service
     class task_patrolService : SHBaseService, IService
     {
 
+       
+        public task_patrolService()
+        {
+            OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;
+        }
+
+        /// <summary>
+        /// 是否需要创建新任务
+        /// 1、表单类型， 2、表单
+        /// </summary>
+        /// <returns></returns>
+        private bool NeedCreateNewTask(object postdata)
+        {
+            return true;
+        }
         public object WfCreate(string wfModel, object postdata, params string[] exeUserIds)
         {
             var nId = base.Create(postdata);
@@ -28,7 +43,6 @@ namespace FastDev.Service
             AdvanceWorkflow(wfModel, "事件巡查填表", postdata, true, exeUserIds);
             return nId;
         }
-
         public override object Create(object postdata)
         {
             var data = ((Model.Form.task_patrol)postdata);
@@ -44,19 +58,6 @@ namespace FastDev.Service
             }
             return WfCreate(WF_EventWorkflowModel, postdata, nextexecutor.ToArray());
         }
-        public task_patrolService()
-        {
-            OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;
-        }
-        /// <summary>
-        /// 是否需要创建新任务
-        /// 1、表单类型， 2、表单
-        /// </summary>
-        /// <returns></returns>
-        private bool NeedCreateNewTask(object postdata)
-        {
-            return true;
-        }
 
         private Func<APIContext, object> Task_patrolService_OnGetAPIHandler(string id)
         {
@@ -67,59 +68,25 @@ namespace FastDev.Service
             }
             return null;
         }
-        public object Finish(APIContext context)
+        private object Finish(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<taskPatrolFinishReq>(context.Data);
-            if (string.IsNullOrEmpty(data.CaseId) && string.IsNullOrEmpty(data.TaskId) && string.IsNullOrEmpty(data.EventId))
-            {
-                throw new Exception("缺少关联数据(任务或事件或案件)");
-            }
+           
             //保存当前巡查表单
             //开始事务
             QueryDb.BeginTransaction();
             try
             {
                 //保存表单信息
-                var patrol = data.TaskPatrol;
-                patrol.CaseId = data.CaseId;
-                patrol.EventInfoId = data.EventId;
-                Create(patrol);
-
-                //当前任务信息
-                if (!string.IsNullOrEmpty(data.TaskId))
+                Create(data.TaskPatrol);
+                //处理事件,任务状态
+                if (data.TaskPatrol.Needlawenforcement == 0 && data.TaskPatrol.Needtracking == 0)
                 {
-                    var workTask = UpdateWorkTask(data.TaskId);
-                    data.EventId = workTask.EventInfoId;
-                    data.CaseId = workTask.CaseID;
+                    UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);
+                    UpdateEventState(data.EventInfoId, EventStatus.finish);
                 }
-
-                //修改事件信息
-                UpdateEventInfo(data.EventId, patrol);
-
-                //执法与跟踪
-                if (data.TaskPatrol.Needlawenforcement != null && data.TaskPatrol.Needlawenforcement == 1)
-                {
-                    //需要执法,生成勘察任务
-                    CreateSaveWorkTask(data.TaskId, TaskType.Survey);
-                    CreateWorkrecor(AccountId, TaskType.Survey.GetDisplayName(), data.Url, "标题", "内容");
-                }
-                else
-                {
-                    //不需要执法
-                    if (data.TaskPatrol.Needtracking != null && data.TaskPatrol.Needtracking == 1)
-                    {
-                        //需要跟踪
-                        CreateSaveWorkTask(data.TaskId, TaskType.Patrol);
-                        CreateWorkrecor(AccountId, TaskType.Patrol.GetDisplayName(), data.Url, "标题", "内容");
-                    }
-                    else
-                    {
-                        //不需要跟踪,关闭任务和事件
-                        UpdateWorkTaskState(data.TaskId, WorkTaskStatus.Close);
-                        UpdateEventState(data.EventId, EventStatus.finish);
-                    }
-                }
-
+                //创建下一个任务
+                CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
@@ -129,25 +96,5 @@ namespace FastDev.Service
             }
             return true;
         }
-        private void UpdateEventInfo(string eventId, task_patrol TaskPatrol)
-        {
-            var eventInfo = QueryDb.FirstOrDefault<event_info>(" where id=@0", eventId);
-            eventInfo.remark = TaskPatrol.EventDescribe;
-            eventInfo.reportTime = TaskPatrol.IncidentTime;
-            ServiceHelper.GetService("event_info").Update(eventInfo);
-        }
-        private work_task UpdateWorkTask(string taskId)
-        {
-            var taskInfo = QueryDb.FirstOrDefault<work_task>(" where id=@0", taskId);
-
-            //修改任务状态-已关闭
-            taskInfo.TaskStatus = (int)WorkTaskStatus.Close;
-            taskInfo.CompleteTime = DateTime.Now;
-            QueryDb.Update(taskInfo);
-            return taskInfo;
-        }
-
     }
-
-
 }
