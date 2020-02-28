@@ -28,7 +28,7 @@ var publicAppConfig = {
   /** 后台应用的toolid，如果只对应一个后台应用可以配置在这里，否则请配置为链接参数  */
   toolId: 'SHJG',
   /** 是否强制刷新Token,是则每次都调用免登接口 */
-  isForceRefreshToken: false,
+  isForceRefreshToken: true,
   /** token的缓存过期时间(秒) */
   expiresTimeForTokenCache: 600,
   /** 是否使用本地菜单 */
