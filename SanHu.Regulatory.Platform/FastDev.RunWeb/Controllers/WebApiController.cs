@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model;
 using FastDev.DevDB.Model.Config;
 using FD.Common.ActionValue;
+using FD.Common.Helpers;
 using FD.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,8 @@ namespace FastDev.RunWeb.Controllers
 {
     public class WebApiController : BaseController
     {
+        private core_printTemplate core_printTemplate_0;
+
         /// <summary>
         /// 分页数据
         /// </summary>
@@ -196,6 +200,8 @@ namespace FastDev.RunWeb.Controllers
             });
         }
 
+        #region 私有方法
+
         [NonAction]
         private bool IsWebLocked()
         {
@@ -247,7 +253,7 @@ namespace FastDev.RunWeb.Controllers
                 filters.groups.Add(filterGroup);
             }
         }
-
+        #endregion
         [HttpGet]
         public object GetUserInfo()
         {
