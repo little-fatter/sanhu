@@ -20,8 +20,8 @@ var publicAppConfig = {
       order: 'http://localhost:9002'
     },
     writeHost: {
-      admin: '/easymock',
-      list: '/easymock'
+      admin: '/api',
+      list: '/api'
     }
   },
   /** 配置业务localStorage的key值 */

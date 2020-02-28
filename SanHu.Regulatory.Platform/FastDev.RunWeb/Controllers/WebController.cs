@@ -8,6 +8,7 @@ using FastDev.DevDB.Rights;
 using FastDev.DevDB.Workflow;
 using FastDev.Model.Entity;
 using FD.Common.ActionValue;
+using FD.Common.Helpers;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Http;
@@ -33,9 +34,10 @@ using System.Web;
 
 namespace FastDev.RunWeb.Controllers
 {
-    [Route("[controller]/[action]")]
     public class WebController : BaseController
     {
+        #region Commom Class
+
         public class GridColumn
         {
             public List<GridColumn> columns
@@ -237,6 +239,19 @@ namespace FastDev.RunWeb.Controllers
 
             }
         }
+
+
+        public class PrintModel
+        {
+            public List<GridColumn> columns { get; set; }
+            public List<Dictionary<string, object>> listdata { get; set; }
+            public Dictionary<string, object> totaldata { get; set; }
+            public string title { get; set; }
+            public int? pageSize { get; set; }
+            public Dictionary<string, object> detaildata { get; set; }
+        }
+
+        #endregion
 
         private DbContext dbContext_0;
 
@@ -475,7 +490,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-               
+
                 return Json(new
                 {
                     statusCode = "1",
@@ -631,7 +646,7 @@ namespace FastDev.RunWeb.Controllers
                                         string arg = ObjectExtensions.ToStr((object)variable);
                                         if (variable == "{CurrentUserID}")
                                         {
-                                            arg = SysContext.CurrentUserID;
+                                            arg = SysContext.WanJiangUserID;
                                         }
                                         else if (new Regex("^{\\w+}$", RegexOptions.IgnoreCase).IsMatch(variable))
                                         {
@@ -744,9 +759,9 @@ namespace FastDev.RunWeb.Controllers
                         }
                         action("ID", Guid.NewGuid().ToString());
                         action("CreateDate", DateTime.Now);
-                        action("CreateUserID", SysContext.CurrentUserID);
+                        action("CreateUserID", SysContext.WanJiangUserID);
                         action("ModifyDate", DateTime.Now);
-                        action("ModifyUserID", SysContext.CurrentUserID);
+                        action("ModifyUserID", SysContext.WanJiangUserID);
                         dbContext.Insert(entity);
                         num++;
                     }
@@ -1033,28 +1048,28 @@ namespace FastDev.RunWeb.Controllers
         /// <summary>
         /// Grid数据导出到Excel
         /// </summary>
-        /// <param name="string_7"></param>
+        /// <param name="columnsJSON"></param>
         /// <param name="listdataJSON"></param>
         /// <param name="totaldataJSON"></param>
-        /// <param name="string_8"></param>
+        /// <param name="headerJSON"></param>
         /// <param name="title"></param>
         /// <param name="totalCellLeft"></param>
         /// <returns></returns>
         [VaildateUser]
         [HttpPost]
-        public ActionResult ExportGrid(string string_7, string listdataJSON, string totaldataJSON, string string_8, string title, int? totalCellLeft)
+        public ActionResult ExportGrid(string columnsJSON, string listdataJSON, string totaldataJSON, string headerJSON, string title, int? totalCellLeft)
         {
             try
             {
 
-                List<GridColumn> list = JsonHelper.DeserializeJsonToObject<List<GridColumn>>(string_7);
+                List<GridColumn> list = JsonHelper.DeserializeJsonToList<GridColumn>(columnsJSON);
                 List<Dictionary<string, object>> list2 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(listdataJSON);
                 Dictionary<string, object> dictionary = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(totaldataJSON);
-                if (string.IsNullOrEmpty(string_8))
+                if (string.IsNullOrEmpty(headerJSON))
                 {
-                    string_8 = "";
+                    headerJSON = "";
                 }
-                List<Dictionary<string, object>> list3 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(string_8);
+                List<Dictionary<string, object>> list3 = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(headerJSON);
                 HSSFWorkbook hSSFWorkbook = new HSSFWorkbook();
                 ISheet sheet = hSSFWorkbook.CreateSheet("Sheet");
                 hSSFWorkbook.CreateDataFormat();
@@ -1523,7 +1538,7 @@ namespace FastDev.RunWeb.Controllers
             base.ViewBag.descriptorCode = descriptorCode;
             return View();
         }
-        [HttpPost]
+        [HttpGet]
         public ActionResult PreviewFrame()
         {
             return View();
@@ -1672,17 +1687,17 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult GetTemplateConents(string context, string TemplateId, int? pageIndex, string isReport, string descriptorCode)
+        public ActionResult GetTemplateConents(string context, string templateId, int? pageindex, string isReport, string descriptorCode)
         {
             try
             {
                 DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
                 if (isReport == "Y")
                 {
-                    int num = (!pageIndex.HasValue) ? 1 : pageIndex.Value;
+                    int num = (!pageindex.HasValue) ? 1 : pageindex.Value;
                     coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                     {
-                        TemplateId
+                        templateId
                     });
                     method_2();
                     string input = Base64Helper.DecodingString(descriptorCode);
@@ -1741,7 +1756,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 core_printTemplate_0 = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
                 {
-                    TemplateId
+                    templateId
                 });
                 if (core_printTemplate_0 == null)
                 {
@@ -1749,7 +1764,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 string_0 = core_printTemplate_0.TemplateBody;
                 method_2();
-                List<string> contents = method_4(context, pageIndex, false);
+                List<string> contents = method_4(context, pageindex, false);
                 return Json(new
                 {
                     Success = true,
@@ -1777,26 +1792,31 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private void method_3(FastDev.DevDB.Model.core_user core_user_0, int int_2, int int_3, string string_7 = null)
+        private void FillUserInfo(int page, int pageCount)
         {
+            var u = SysContext.GetWanJiangUser();
             DbContext currentDb = SysContext.GetCurrentDb();
-            dictionary_1["page"] = ObjectExtensions.ToStr((object)int_2);
-            dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)int_3);
-            dictionary_1["loginname"] = core_user_0.LoginName;
+            dictionary_1["page"] = ObjectExtensions.ToStr((object)page);
+            dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)pageCount);
+            dictionary_1["loginname"] = u.AccountId;
             dictionary_1["now"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult GetCommonPrint(List<GridColumn> columns, List<Dictionary<string, object>> listdata, Dictionary<string, object> totaldata, string title, int? pageSize, Dictionary<string, object> detaildata)
+        public ActionResult GetCommonPrint(string fullJson)
         {
             try
             {
+                PrintModel p = JsonHelper.DeserializeJsonToObject<PrintModel>(fullJson);
+                List<GridColumn> columns = p.columns;
+                List<Dictionary<string, object>> listdata = p.listdata;
+                Dictionary<string, object> totaldata = p.totaldata;
+                string title = p.title;
+                int? pageSize = p.pageSize;
+                Dictionary<string, object> detaildata = p.detaildata;
+
                 DbContext currentDb = SysContext.GetCurrentDb();
-                FastDev.DevDB.Model.core_user core_user_ = currentDb.FirstOrDefault<FastDev.DevDB.Model.core_user>("where id = @0", new object[1]
-                {
-                    SysContext.CurrentUserID
-                });
                 dbContext_1 = currentDb;
                 ServiceConfig serviceConfig = new ServiceConfig();
                 serviceConfig.fields = new List<Field>();
@@ -1917,9 +1937,9 @@ namespace FastDev.RunWeb.Controllers
                     method_2();
                     int num7 = listdata.Count();
                     double a = (double)num7 * 1.0 / (double)pageSize.Value;
-                    int num8 = (int)Math.Ceiling(a);
-                    string[] array = new string[num8];
-                    if (num8 == 0)
+                    int pageCount = (int)Math.Ceiling(a);
+                    string[] array = new string[pageCount];
+                    if (pageCount == 0)
                     {
                         strTemplateOut = coreReportTemp.TemplateBody;
                         method_23(serviceConfig_);
@@ -1937,9 +1957,9 @@ namespace FastDev.RunWeb.Controllers
                     }
                     else
                     {
-                        for (int j = 1; j <= num8; j++)
+                        for (int j = 1; j <= pageCount; j++)
                         {
-                            method_3(core_user_, j, num8);
+                            FillUserInfo(j, pageCount);
                             List<Dictionary<string, object>> list6 = new List<Dictionary<string, object>>();
                             for (int i = pageSize.Value * (j - 1); i < j * pageSize.Value && i < listdata.Count(); i++)
                             {
@@ -2105,7 +2125,7 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public HttpResponseMessage PrintPDF(string context, string templateId, string isdownload)
+        public ActionResult PrintPDF(string context, string templateId, string isdownload)
         {
             HttpResponseMessage response = new HttpResponseMessage();
             try
@@ -2121,68 +2141,26 @@ namespace FastDev.RunWeb.Controllers
                 string_0 = core_printTemplate_0.TemplateBody;
                 method_2();
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
-                string a = "img";
-                List<string> list = new List<string>();
-                List<iTextSharp.text.Image> list2 = new List<iTextSharp.text.Image>();
-                if (a == "img")
-                {
-                    string text = base.Request.Path.ToString().Replace("printpdf", "printjpg") + "&showhtml=Y";
-                    context.Split(';');
-                    List<TemplatePageInfo> list3 = method_1(context);
-                    int_0 = Convert.ToInt32((double)core_printTemplate_0.Width.Value * 3.78);
-                    int_1 = Convert.ToInt32((double)core_printTemplate_0.Height.Value * 3.78);
-                    foreach (TemplatePageInfo item in list3)
-                    {
-                        string_1 = method_5(context, templateId, item.AllPageIndex);
-                        Thread thread = new Thread(method_10);
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
-                        while (thread.IsAlive)
-                        {
-                            Thread.Sleep(100);
-                        }
-                        iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(bitmap_0, ImageFormat.Bmp);
-                        instance.ScalePercent(75f);
-                        list2.Add(instance);
-                    }
-                }
-                else
-                {
-                    list = method_4(context, null, true);
-                    list.Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", core_printTemplate_0.TemplateStyle));
-                }
-                core_printTemplate_0.Width = Convert.ToDecimal((double)core_printTemplate_0.Width.Value * 2.845);
-                core_printTemplate_0.Height = Convert.ToDecimal((double)core_printTemplate_0.Height.Value * 2.845);
-                core_printTemplate_0.MarginLeft = Convert.ToDecimal((double)core_printTemplate_0.MarginLeft.Value * 2.845);
-                core_printTemplate_0.MarginRight = Convert.ToDecimal((double)core_printTemplate_0.MarginRight.Value * 2.845);
-                core_printTemplate_0.MarginTop = Convert.ToDecimal((double)core_printTemplate_0.MarginTop.Value * 2.845);
-                core_printTemplate_0.MarginBottom = Convert.ToDecimal((double)core_printTemplate_0.MarginBottom.Value * 2.845);
-                byte[] array = null;
-                array = ((!(a == "img")) ? ConvertHtml2PDF(list.ToArray(), (!(isdownload == "Y")) ? true : false) : ConvertImages2PDF(list2, (!(isdownload == "Y")) ? true : false));
-                if (isdownload == "Y")
-                {
-                    response.Headers.Add("Content-Disposition", "attachment;filename=" + Server.UrlEncode("freedesign_" + serviceConfig.model.title + ".pdf"));
-                }
-                else
-                {
-                    response.Headers.Add("Content-Disposition", "inline; filename=" + Server.UrlEncode("freedesign_" + serviceConfig.model.title + ".pdf"));
-                }
 
-                response.StatusCode = System.Net.HttpStatusCode.OK;
-                response.Content = new ByteArrayContent(array);
-                response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/pdf; charset=UTF-8");
-                return response;
+
+                  var  list = method_4(context, null, true);
+                list[0]=list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", core_printTemplate_0.TemplateStyle));
+
+                byte[] array = PDFHelper.HmtlToPDF(list[0], (double)core_printTemplate_0.MarginLeft.Value, (double)core_printTemplate_0.MarginTop.Value,
+                    (double)core_printTemplate_0.MarginRight.Value, (double)core_printTemplate_0.MarginBottom.Value);
+
+
+                return File(array, "application/pdf;", serviceConfig.model.title + ".pdf");
             }
             catch (Exception ex)
             {
                 response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
                 ServiceHelper.Log(ex);
-                response.Content = new StringContent(JsonHelper.SerializeObject(new AjaxResult
+                return Json(new AjaxResult
                 {
                     Success = false,
                     message = ex.Message
-                }));
-                return response;
+                });
             }
         }
 
@@ -3086,7 +3064,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     return list;
                 }
-                List<SelectionItem> list4 = JsonHelper.DeserializeJsonToObject<List<SelectionItem>>(field.fieldSelection);
+                List<SelectionItem> list4 = JsonHelper.DeserializeJsonToList<SelectionItem>(field.fieldSelection);
                 if (list4 == null || !list4.Any())
                 {
                     return list;
@@ -3169,7 +3147,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     return list;
                 }
-                List<SelectionItem> list3 = JsonHelper.DeserializeJsonToObject<List<SelectionItem>>(field.fieldSelection);
+                List<SelectionItem> list3 = JsonHelper.DeserializeJsonToList<SelectionItem>(field.fieldSelection);
                 if (list3 == null || !list3.Any())
                 {
                     return list;
@@ -3430,7 +3408,7 @@ namespace FastDev.RunWeb.Controllers
 
         [VaildateUser]
         [HttpPost]
-        public ActionResult Rights(string id, string roleId, string userId, string loginName, RightsSaveModel value)
+        public ActionResult Rights(string id, string roleId, string userId, string loginName, string fullJson)
         {
             try
             {
@@ -3439,10 +3417,7 @@ namespace FastDev.RunWeb.Controllers
                 object data = null;
                 if (!string.IsNullOrEmpty(loginName))
                 {
-                    userId = currentDb.ExecuteScalar<string>("select ID from core_user where loginname = @0", new object[1]
-                    {
-                        loginName
-                    });
+                    userId = SysContext.WanJiangUserID;
                 }
                 if (id == "get")
                 {
@@ -3457,6 +3432,9 @@ namespace FastDev.RunWeb.Controllers
                 }
                 else if (id == "save")
                 {
+
+                    var jsonContext = JObject.Parse(fullJson);
+                    RightsSaveModel value = jsonContext.SelectToken("value").ToObject<RightsSaveModel>();
                     if (!string.IsNullOrEmpty(roleId))
                     {
                         data = rightsServer.Save(RightsMasterType.Role, roleId, value);
@@ -3563,14 +3541,14 @@ namespace FastDev.RunWeb.Controllers
                 {
                     core_dataAssign.ValueContent = data.ValueContent;
                     core_dataAssign.ModifyDate = DateTime.Now;
-                    core_dataAssign.ModifyUserID = SysContext.CurrentUserID;
+                    core_dataAssign.ModifyUserID = SysContext.WanJiangUserID;
                     currentDb.Update("core_dataAssign", "ID", (object)core_dataAssign);
                 }
                 else
                 {
                     data.ID = ObjectExtensions.ToStr((object)Guid.NewGuid());
                     data.CreateDate = DateTime.Now;
-                    data.CreateUserID = SysContext.CurrentUserID;
+                    data.CreateUserID = SysContext.WanJiangUserID;
                     currentDb.Insert("core_dataAssign", "ID", false, (object)data);
                 }
                 return Json(new AjaxResult
@@ -3788,9 +3766,9 @@ namespace FastDev.RunWeb.Controllers
             {
                 ID = Guid.NewGuid().ToString(),
                 CreateDate = DateTime.Now,
-                CreateUserID = SysContext.CurrentUserID,
+                CreateUserID = SysContext.WanJiangUserID,
                 ModifyDate = DateTime.Now,
-                ModifyUserID = SysContext.CurrentUserID,
+                ModifyUserID = SysContext.WanJiangUserID,
                 SettingKey = string_7,
                 SettingName = string_8,
                 SettingValue = string_9
@@ -4271,7 +4249,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 DbContext currentDb = SysContext.GetCurrentDb();
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 return Json(new
                 {
                     id = currentUserID
@@ -4351,7 +4329,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     throw new UserException("两次密码输入不一致");
                 }
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 string a = currentDb.ExecuteScalar<string>("select LoginPassword from core_user where ID = @0", new object[1]
                 {
                     currentUserID
@@ -4463,14 +4441,15 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [VaildateUser]
-        [HttpPost]
+        [HttpGet]
         public ActionResult Main(string model, string viewtype, string viewname)
         {
-            return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.Path)));
+            return Redirect("/main.html?page=" + GetNewUrl(ObjectExtensions.ToStr((object)base.Request.QueryString.ToString())));
         }
 
         [VaildateUser]
         [HttpPost]
+        [HttpGet]
         public ActionResult M(string model, string viewtype, string viewname)
         {
             DbContext currentDb = SysContext.GetCurrentDb();
@@ -4601,12 +4580,13 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public ActionResult Workflow(string id, string fullJson)
         {
-            var jsonContext= JObject.Parse(fullJson);
-            WorkflowContext wfContext =jsonContext.SelectToken("context").ToObject<WorkflowContext>();
+            var jsonContext = JObject.Parse(fullJson);
+            WorkflowContext wfContext = jsonContext.SelectToken("context").ToObject<WorkflowContext>();
             //WorkflowContext wfContext = jsonContext..GetObject<WorkflowContext>(fullJson);
             //IL_005b: Unknown result type (might be due to invalid IL or missing references)
             DbContext currentDb = SysContext.GetCurrentDb();
-            IWorkflowService workflowService = new WorkflowService();
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            IWorkflowService workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
             workflowService.DbContext = currentDb;
             try
             {
@@ -4622,21 +4602,23 @@ namespace FastDev.RunWeb.Controllers
                     {
                         throw new UserException("业务单据必须指定");
                     }
-                    object context2 = workflowService.GetContext(wfContext);
+                    object bcontext = workflowService.GetContext(wfContext);
+                    var wfData = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(bcontext));
                     return Json(new AjaxResult
                     {
-                        data = context2,
+                        data = wfData,
                         statusCode = "1"
                     });
                 }
                 if (id == "log")
                 {
-                    object context2 = workflowService.GetLog(wfContext);
-                    return GetContentDataJson(new AjaxResult
+                    object logContext = workflowService.GetLog(wfContext);
+                    var wfData = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(logContext));
+                    return Json(new AjaxResult
                     {
-                        statusCode = "1"
-                    },
-                     JsonHelper.SerializeObject(context2));
+                        statusCode = "1",
+                        data = wfData
+                    });
                 }
                 return Json(new AjaxResult
                 {
@@ -4795,9 +4777,9 @@ namespace FastDev.RunWeb.Controllers
                         action("OrderID", orderId);
                         action("ID", Guid.NewGuid().ToString());
                         action("CreateDate", DateTime.Now);
-                        action("CreateUserID", SysContext.CurrentUserID);
+                        action("CreateUserID", SysContext.WanJiangUserID);
                         action("ModifyDate", DateTime.Now);
-                        action("ModifyUserID", SysContext.CurrentUserID);
+                        action("ModifyUserID", SysContext.WanJiangUserID);
                         dbContext.Insert(entity);
                         num++;
                     }
@@ -4833,7 +4815,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = currentDb.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", new object[1]
                 {
@@ -4884,7 +4866,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = currentDb.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", new object[1]
                 {
@@ -4917,7 +4899,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                string currentUserID = SysContext.CurrentUserID;
+                string currentUserID = SysContext.WanJiangUserID;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = currentDb.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", new object[1]
                 {

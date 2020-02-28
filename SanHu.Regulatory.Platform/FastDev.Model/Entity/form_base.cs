@@ -54,6 +54,21 @@ public byte? NeedFine
 get;
 set;
 }
+public string FormID
+{
+get;
+set;
+}
+public string handler
+{
+get;
+set;
+}
+public string EventInfoId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

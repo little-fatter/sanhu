@@ -83,6 +83,16 @@
             自动编码
             </summary>
         </member>
+        <member name="T:FastDev.DevDB.Common.HostData">
+            <summary>
+            主机名称
+            </summary>
+        </member>
+        <member name="F:FastDev.DevDB.Common.HostData.FrameWorkSeverName">
+            <summary>
+            主框架 http名称
+            </summary>
+        </member>
         <member name="M:FastDev.DevDB.DataAccessHelper.GetModelAssembly">
             <summary>
             FastDev Model 动态生成
@@ -134,6 +144,25 @@
             通用查询参数
             </summary>
         </member>
+        <member name="T:FastDev.DevDB.SanHuWorkflowService">
+            <summary>
+            三湖项目关于工作流的实现
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.GenNewStatus(System.String,System.String)">
+            <summary>
+            创建一个新的工作流状态
+            </summary>
+            <param name="strTaskId"></param>
+            <param name="strExcutorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            创建下一个任务
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:FastDev.DevDB.ServiceBase.MainDb">
             <summary>
             core_表格所在的数据库的db
@@ -143,6 +172,14 @@
             <summary>
             临时
             </summary>
+        </member>
+        <member name="M:FastDev.DevDB.ServiceBase.WfCreate(System.Object,System.String[])">
+            <summary>
+            工作流创建
+            </summary>
+            <param name="postdata"></param>
+            <param name="exeUserIds">执行该工作流的用户</param>
+            <returns></returns>
         </member>
         <member name="M:FastDev.DevDB.ServiceBase.ValueCompare(System.String,System.Int32,System.Int32)">
             <summary>
@@ -188,6 +225,11 @@
             <param name="objData"></param>
             <param name="isUseDefault"></param>
             <returns></returns>
+        </member>
+        <member name="F:FastDev.DevDB.ServiceBase.workflowService">
+            <summary>
+            三湖工作流对象
+            </summary>
         </member>
         <member name="M:FastDev.DevDB.ServiceHelper.GetFilePath(System.String,System.String,System.String,System.Boolean)">
             <summary>
@@ -237,6 +279,26 @@
             <param name="dbName"></param>
             <returns></returns>
         </member>
+        <member name="T:FastDev.DevDB.WanJiangAuth">
+            <summary>
+            关于两个平台对接的过程种设计到的用户，角色，单位的信息同步
+            这里有些破坏平台的开放闭合规则，为了能迅速整合系统，出此下策
+            </summary>
+        </member>
+        <member name="M:FastDev.DevDB.WanJiangAuth.GetRoleUsers(System.String)">
+            <summary>
+            获取万江的用户
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.DevDB.WanJiangAuth.GetCurrentDepartmentId(System.String)">
+            <summary>
+            获取用户的部门，如果有多个也只获取一个
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.DevDB.WorkflowService.GenNewStatus(System.String,System.String)">
             <summary>
             创建一个新的工作流状态
@@ -244,6 +306,11 @@
             <param name="strTaskId"></param>
             <param name="strExcutorId"></param>
             <returns></returns>
+        </member>
+        <member name="P:FastDev.DevDB.WorkflowService.LatestWorkTaskId">
+            <summary>
+            放回最新的任务id
+            </summary>
         </member>
         <member name="M:FastDev.RunWeb.Core.UpdateHelper.GetOneItemPath(FastDev.RunWeb.Core.UpdateInfo)">
             <summary>

@@ -4,18 +4,37 @@
         <name>FastDev.RunWeb</name>
     </assembly>
     <members>
+        <member name="M:FastDev.RunWeb.DependencyConfigs.AddDependencyConfigs(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            添加系统依赖注入
+            </summary>
+            <param name="services"></param>
+            <param name="Configuration"></param>
+        </member>
         <member name="M:FastDev.RunWeb.FileConfig.AddConfigsSeivce(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             添加配置服务
             </summary>
             <param name="services"></param>
         </member>
+        <member name="T:FastDev.RunWeb.HttpClientConfigs">
+            <summary>
+            http客户端配置
+            </summary>
+        </member>
+        <member name="M:FastDev.RunWeb.HttpClientConfigs.AddConfigHttpClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            http服务注册
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
         <member name="T:FastDev.RunWeb.Controllers.AccountController">
             <summary>
             登录管理
             </summary>
         </member>
-        <member name="M:FastDev.RunWeb.Controllers.AccountController.#ctor(Microsoft.Extensions.Options.IOptionsSnapshot{FastDev.RunWeb.ServerNameConfig})">
+        <member name="M:FastDev.RunWeb.Controllers.AccountController.#ctor(Microsoft.Extensions.Options.IOptionsSnapshot{FD.Model.Configs.ServerNameConfigModel})">
             <summary>
             
             </summary>
@@ -39,6 +58,12 @@
             未授权跳转至框架未授权页面
             </summary>
             <param name="returnUrl">回跳url</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.RunWeb.Controllers.BaseController.GetUserInfo">
+            <summary>
+            获取三湖当前登录用户信息
+            </summary>
             <returns></returns>
         </member>
         <member name="M:FastDev.RunWeb.Controllers.BaseController.GetContentJson(System.String)">
@@ -129,6 +154,25 @@
             <param name="parm"></param>
             <returns></returns>
         </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebApiController.ListData(System.String,System.String,System.String)">
+            <summary>
+            获取列表数据
+            </summary>
+            <param name="model"></param>
+            <param name="filter"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebApiController.Api(System.String,System.String,System.String,System.String)">
+            <summary>
+            特殊api接口
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <param name="data"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.RunWeb.Controllers.WebController.ExportExcel(System.String,System.String)">
             <summary>
             导出模板到Excel
@@ -141,23 +185,13 @@
             <summary>
             Grid数据导出到Excel
             </summary>
-            <param name="string_7"></param>
+            <param name="columnsJSON"></param>
             <param name="listdataJSON"></param>
             <param name="totaldataJSON"></param>
-            <param name="string_8"></param>
+            <param name="headerJSON"></param>
             <param name="title"></param>
             <param name="totalCellLeft"></param>
             <returns></returns>
-        </member>
-        <member name="P:FastDev.RunWeb.ServerNameConfig.MainServiceName">
-            <summary>
-            主框架名称
-            </summary>
-        </member>
-        <member name="P:FastDev.RunWeb.ServerNameConfig.MainServiceUrl">
-            <summary>
-            主框架地址
-            </summary>
         </member>
     </members>
 </doc>

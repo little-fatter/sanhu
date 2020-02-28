@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>FastDev.RunWeb.xml</DocumentationFile>
+    <DocumentationFile>D:\web\SanHu.Regulatory.Platform\FastDev.RunWeb\FastDev.RunWeb.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,9 +15,21 @@
     <Compile Remove="wwwroot\uploads\**" />
     <Content Remove="wwwroot\uploads\**" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="5.0.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <None Remove="libwkhtmltox.dll" />
+    <None Remove="libwkhtmltox.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libwkhtmltox.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -40,7 +52,6 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.7.0" />
-    <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.5.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Component\FastDev.Model.Core\FastDev.Model.Core.csproj" />
@@ -48,6 +59,7 @@
     <ProjectReference Include="..\Component\UEditor.Core\UEditor.Core.csproj" />
     <ProjectReference Include="..\FastDev.Common\FastDev.Common.csproj" />
     <ProjectReference Include="..\FastDev.DevDB\FastDev.DevDB.csproj" />
+    <ProjectReference Include="..\FastDev.IService\FastDev.IServices.csproj" />
     <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
     <ProjectReference Include="..\FastDev.Service\FastDev.Service.csproj" />
   </ItemGroup>
@@ -55,6 +67,9 @@
     <None Update="FastDev.RunWeb.xml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="BeforeBuild.cmd" />

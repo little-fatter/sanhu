@@ -28,6 +28,18 @@
         <field name="DeptLeaderTime" dbName="DeptLeaderTime" title="单位负责人签字时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="Recorder" dbName="Recorder" title="填表人员" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="RecorderTime" dbName="RecorderTime" title="填表时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="OriginatorID" dbName="OriginatorID" title="发起人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="CompletionTime" dbName="CompletionTime" title="完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="FormName" dbName="FormName" title="表单名称" type="string" length="50" isPK="N" />
+        <field name="ContentValidity" dbName="ContentValidity" title="内容简介" type="string" length="500" isPK="N" />
+        <field name="Department" dbName="Department" title="部门" type="string" length="200" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" isPK="N" />
+        <field name="NeedNotice" dbName="NeedNotice" title="需要通知" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="NeedFine" dbName="NeedFine" title="需要罚款" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="FormID" dbName="FormID" title="表单id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

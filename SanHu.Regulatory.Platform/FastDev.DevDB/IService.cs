@@ -27,6 +27,8 @@ namespace FastDev.DevDB
 
         object Create(object postdata);
 
+        object WfCreate(object postdata,params string[] exeUserIds);
+
         object Update(object postdata);
 
         object SaveList(object postdata);

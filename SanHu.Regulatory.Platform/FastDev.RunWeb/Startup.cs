@@ -1,6 +1,6 @@
-using Autofac;
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
+using FD.Common.ActionValue;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,17 +49,6 @@ namespace FastDev.RunWeb
             Configuration = configuration;// builder.Build();
             WebEnvironment = env;
         }
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            var mysqlConnectionString = Configuration.GetConnectionString("MySQLConnection");
-            var redisConnectionString = Configuration.GetConnectionString("RedisConnection");
-            builder.RegisterModule(new DependencyRegistrationModule(mysqlConnectionString, redisConnectionString));
-            //var mongoConnection = Configuration.GetConnectionString("MongoConnection");
-            //var mongoDbName = Configuration.GetConnectionString("MongoDbName");
-            //builder.Register<IMongoClient>(c => new MongoClient(mongoConnection)).SingleInstance();
-            //builder.Register(c => c.Resolve<IMongoClient>().GetDatabase(mongoDbName)).InstancePerDependency();
-            //DDServerBaseUrl.SetValue(Configuration.GetSection("DDServer").GetSection("BaseUrl").Value);
-        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -76,6 +65,9 @@ namespace FastDev.RunWeb
             SecurityKeys securityKeys = new SecurityKeys();
             Configuration.Bind("SecurityKeys", securityKeys);
             services.AddSingleton(securityKeys);
+            AppInfo appInfo = new AppInfo();
+            Configuration.Bind("AppInfo", appInfo);
+            services.AddSingleton(appInfo);
 
             //生成RsaSecurityKey用于JWT Token签名
             var rsaKeyBytes = Convert.FromBase64String(securityKeys.RSAKey);
@@ -118,7 +110,7 @@ namespace FastDev.RunWeb
                 {
                     option.XWsseTimeout = expiresTime.XWsseTimeout;
                 });
-
+            services.AddConfigHttpClient(Configuration);
 
             services.AddControllersWithViews(options =>
             {
@@ -131,6 +123,8 @@ namespace FastDev.RunWeb
             {
                 options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                options.JsonSerializerOptions.Converters.Add(new DateTimeNullConverter());
             });
             //.AddControllersAsServices(); 
 
@@ -235,14 +229,14 @@ namespace FastDev.RunWeb
                     }
                 });
             });
+            services.AddDependencyConfigs(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //此处需要注意UsePathBase,UserSpaService,UseDefaultFiles,UseStaticFiles的顺序不能错乱
-            AppInfo appInfo = new AppInfo();
-            Configuration.GetSection("AppInfo").Bind(appInfo);
+            var appInfo = app.ApplicationServices.GetRequiredService<AppInfo>();
             var pathBase = $"/{appInfo.ServiceName.Trim()}";
             app.UsePathBase(new PathString(pathBase), true);
 

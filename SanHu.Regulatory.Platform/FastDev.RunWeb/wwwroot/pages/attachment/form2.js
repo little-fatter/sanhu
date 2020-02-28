@@ -92,8 +92,11 @@ function() {
             },
             toolbar: {
                 items: [
-                    { text: '打印报表', id: 'myprint', cls: 'ne-btn-blue' }
-                ]
+                    {
+                        text: '打印',
+                        id: 'myprint',
+                        cls: 'ne-btn-blue'
+                }]
             },
             //自定义打印按钮
             onmyprint: function () {

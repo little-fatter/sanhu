@@ -20,33 +20,29 @@ namespace FastDev.Common.ActionValue
                 {
                     var body = actionContext.HttpContext.Request.Body;
                     actionContext.HttpContext.Request.EnableBuffering();
-                    using (var reader = new BinaryReader(body, Encoding.UTF8))
+                    byte[] buffs;
+                    using (var ms = new MemoryStream())
                     {
-                        int len = 4096;
-                        byte[] buff = new byte[len];
-                        StringBuilder jsonBody = new StringBuilder();
-                        while (reader.Read(buff, 0, buff.Length) > 0)
+                        body.CopyTo(ms);
+                        buffs = ms.ToArray();
+                    }
+                    string jsonBody = Encoding.UTF8.GetString(buffs);
+                    if (jsonBody.Length != 0 && (jsonBody.Contains('{') || jsonBody.Contains('[')))
+                    {
+                        try
                         {
-                            jsonBody.Append(Encoding.UTF8.GetString(buff));
-                            buff = new byte[len];
+                            JsonData = JObject.Parse(jsonBody);
                         }
-                        if (jsonBody.Length != 0)
-                        {
-                            try
-                            {
-                                JsonData = JObject.Parse(jsonBody.ToString());
-                            }
-                            catch
-                            {
-                                JsonData = null;
-                            }
-                        }
-                        else
+                        catch
                         {
                             JsonData = null;
                         }
-                        return;
                     }
+                    else
+                    {
+                        JsonData = null;
+                    }
+                    return;
                 }
             }
             JsonData = null;

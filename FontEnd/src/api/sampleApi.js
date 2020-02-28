@@ -1,12 +1,23 @@
 import { getHttp, postHttp } from '@/utils/apiRequest'
 import apiConfig from '@/config/api.config'
+function condition (params = []) {
+  return {
+    Condition: {
+      rules: [],
+      groups: [],
+      op: 'and'
+    },
+    PageIndex: 1,
+    PageSize: 30,
+    SortName: 'ID',
+    SortOrder: 'asc'
+  }
+}
 
-export function getServiceList (parameter) {
+export function getWorkTaskList (parameter) {
   return postHttp({
-    url: apiConfig.list.serviceList,
-    data: {
-      ...parameter
-    }
+    url: apiConfig.work_task,
+    data: condition(parameter)
   })
 }
 

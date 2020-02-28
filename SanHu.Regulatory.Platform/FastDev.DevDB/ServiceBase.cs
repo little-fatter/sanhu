@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using ObEx = FastDev.Common.Extensions.ObjectExtensions;
 using Newtonsoft.Json.Linq;
+using FastDev.IServices;
 
 namespace FastDev.DevDB
 {
@@ -651,9 +652,9 @@ namespace FastDev.DevDB
         {
             return GetConfigDB(ModelName);
         }
-        private DbContext GetConfigDB(string refModelName)
+        protected DbContext GetConfigDB(string refModelName)
         {
-            if (refModelName == ModelName) return MainDb;
+            //if (refModelName == ModelName) return MainDb;
             ServiceConfig serviceConfig = GetServiceConfig(refModelName);
             if (serviceConfig != null && !string.IsNullOrEmpty(serviceConfig.model.dbName))
             {
@@ -686,6 +687,17 @@ namespace FastDev.DevDB
         }
 
         public virtual object Create(object postdata)
+        {
+            ServiceHelper.Log("【新增】" + ModelName, "");
+            return CreateUpdateData(postdata, true);
+        }
+        /// <summary>
+        /// 工作流创建
+        /// </summary>
+        /// <param name="postdata"></param>
+        /// <param name="exeUserIds">执行该工作流的用户</param>
+        /// <returns></returns>
+        public virtual object WfCreate(object postdata, params string[] exeUserIds)
         {
             ServiceHelper.Log("【新增】" + ModelName, "");
             return CreateUpdateData(postdata, true);
@@ -895,7 +907,7 @@ namespace FastDev.DevDB
             return viewData;
         }
 
-        public FilterGroup PrevFilter(FilterGroup filter,string modelName)
+        public FilterGroup PrevFilter(FilterGroup filter, string modelName)
         {
             try
             {
@@ -938,13 +950,15 @@ namespace FastDev.DevDB
             {
                 descriptor.Condition = new RightsServer(MainDb).AppendDataFilter(ModelName, descriptor.Condition);
             }
-            descriptor.Condition = PrevFilter(descriptor.Condition,ModelName);
+
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            if (serviceConfig.model.notIncludeSysFields != "Y")
+                descriptor.Condition = PrevFilter(descriptor.Condition, ModelName);
             PagedData pageData = DataAccessHelper.GetPageData(QueryDb, ModelName, descriptor);
             if (pageData == null || pageData.Records == null || pageData.Records.Count == 0)
             {
                 return pageData;
             }
-            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
             List<Field> field = serviceConfig.fields;
             List<string> lstDisable = new List<string>();
             if (EnabledRights)
@@ -964,7 +978,7 @@ namespace FastDev.DevDB
                 filterTree.filter = new RightsServer(MainDb).AppendDataFilter(filterTree.sourceModel, filterTree.filter);
                 filterTree.filter = PrevFilter(filterTree.filter, filterTree.sourceModel);
                 filterTree.filter2 = new RightsServer(MainDb).AppendDataFilter(filterTree.sourceModel2, filterTree.filter2);
-                filterTree.filter2 = PrevFilter(filterTree.filter2,filterTree.sourceModel2);
+                filterTree.filter2 = PrevFilter(filterTree.filter2, filterTree.sourceModel2);
             }
             return DataAccessHelper.GetTreeData(db, filterTree);
         }
@@ -987,13 +1001,14 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter,ModelName);
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            if (serviceConfig.model.notIncludeSysFields != "Y")
+                filter = PrevFilter(filter, ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, orderby);
             if (listData == null || listData.Count == 0)
             {
                 return new List<Dictionary<string, object>>();
             }
-            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
             List<Field> field = serviceConfig.fields;
             List<string> lstFileds = new List<string>();
             if (EnabledRights)
@@ -1013,7 +1028,9 @@ namespace FastDev.DevDB
             {
                 filter = new RightsServer(MainDb).AppendDataFilter(ModelName, filter);
             }
-            filter = PrevFilter(filter,ModelName);
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            if (serviceConfig.model.notIncludeSysFields != "Y")
+                filter = PrevFilter(filter, ModelName);
             IList listData = DataAccessHelper.GetListData(QueryDb, ModelName, filter, null, "Name");
             afterGetDataDelegate_OnAfterGetNameData?.Invoke(filter, listData);
             return listData;
@@ -1121,11 +1138,11 @@ namespace FastDev.DevDB
                         {
                             RecordStatus.Deleted,
                             DateTime.Now,
-                            SysContext.CurrentUserID,
+                            SysContext.WanJiangUserID,
                             obj
                         });
                     }
-                    DataAccessHelper.ClearModelEntityText(dbContext, modelName, ObEx.ToStr(obj));
+                    DataAccessHelper.ClearModelEntityText(modelName, ObEx.ToStr(obj));
                 }
                 filterTranslator.Group.op = "or";
                 filterTranslator.Translate();
@@ -1388,7 +1405,7 @@ namespace FastDev.DevDB
                 {
                     dbContext.Update(modelName, modelConfig.PKName, obj, (IEnumerable<string>)list5);
                 }
-                DataAccessHelper.ClearModelEntityText(dbContext, modelName, ObEx.ToStr(propertyValue));
+                DataAccessHelper.ClearModelEntityText(modelName, ObEx.ToStr(propertyValue));
             }
             if (!isUseDefault && saveDelegate_OnSavedDetail != null)
             {
@@ -1446,26 +1463,26 @@ namespace FastDev.DevDB
             {
                 isAdd = true;
             }
-            string text = isAdd ? Guid.NewGuid().ToString() : obj3.ToString();
+            string pkValue = isAdd ? Guid.NewGuid().ToString() : obj3.ToString();
             if (isAdd)
             {
                 obj = entityType.Assembly.CreateInstance(entityType.FullName);
                 if (!serviceConfig.IsGuidPk && !serviceConfig.IsAutoIncrementPk)
                 {
-                    text = ObEx.ToStr(findValue(serviceConfig.PKName));
+                    pkValue = ObEx.ToStr(findValue(serviceConfig.PKName));
                 }
-                SetValue(serviceConfig.PKName, text);
+                SetValue(serviceConfig.PKName, pkValue);
                 SetValue("CreateDate", DateTime.Now);
-                SetValue("CreateUserID", SysContext.CurrentUserID);
+                SetValue("CreateUserID", SysContext.WanJiangUserID);
             }
             else
             {
-                obj = (obj2 = db.GetHelper(entityType).FirstOrDefault("where " + serviceConfig.PKName + " = @0", text));
+                obj = (obj2 = db.GetHelper(entityType).FirstOrDefault("where " + serviceConfig.PKName + " = @0", pkValue));
                 array = func(obj2);
                 entityValues = func(obj);
             }
             SetValue("ModifyDate", DateTime.Now);
-            SetValue("ModifyUserID", SysContext.CurrentUserID);
+            SetValue("ModifyUserID", SysContext.WanJiangUserID);
             object obj4 = findValue("Status");
             if (obj4 == null)
             {
@@ -1493,6 +1510,7 @@ namespace FastDev.DevDB
                 {
                     if (isAdd)
                     {
+                        ///如果有自动编号的列
                         core_autoCode core_autoCode = source.FirstOrDefault((core_autoCode a) => a.FieldName == field.name);
                         if (core_autoCode != null)
                         {
@@ -1634,30 +1652,24 @@ namespace FastDev.DevDB
                       where !disabledFields.Contains(a.name)
                       select a).ToList();
             action(text, id);
-            if (string.IsNullOrEmpty(refField))
+            if (string.IsNullOrEmpty(refField) && serviceConfig.model.notIncludeSysFields != "Y")
             {
                 try
                 {
-                    string text2 = ObEx.ToStr(func2("CreateUserID"));
-                    string item = db.ExecuteScalar<string>("select RealName from core_user where ID = @0", new object[1]
-                    {
-                        text2
-                    });
-                    string text3 = ObEx.ToStr(func2("ModifyUserID"));
-                    string item2 = db.ExecuteScalar<string>("select RealName from core_user where ID = @0", new object[1]
-                    {
-                        text3
-                    });
+                    string cUId = ObEx.ToStr(func2("CreateUserID"));
+                    string item = WanJiangAuth.GetUserName(cUId);
+                    string mUId = ObEx.ToStr(func2("ModifyUserID"));
+                    string item2 = WanJiangAuth.GetUserName(mUId);
                     action("CreateDate", func2("CreateDate"));
                     action("CreateUser", new List<string>
                     {
-                        text2,
+                        cUId,
                         item
                     });
                     action("ModifyDate", func2("ModifyDate"));
                     action("ModifyUser", new List<string>
                     {
-                        text3,
+                        mUId,
                         item2
                     });
                     action("Status", func2("Status"));
@@ -1993,23 +2005,23 @@ namespace FastDev.DevDB
         {
             return null;
         }
-
+        /// <summary>
+        /// 三湖工作流对象
+        /// </summary>
+        protected static IWorkflowService workflowService;
         public ServiceBase()
         {
-
+            if (workflowService == null)
+            {
+                ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+                workflowService = new SanHuWorkflowService(SysContext.GetOtherDB(userServiceConfig.model.dbName));
+            }
             objCurrentModelData = null;
             objCurrentModelId = null;
             _enable_right = true;//开发环境是false,真实环境是true
             _modelConfigCache = new Dictionary<string, object>();
 
         }
-
-
-
-
-
-
-
 
     }
 }

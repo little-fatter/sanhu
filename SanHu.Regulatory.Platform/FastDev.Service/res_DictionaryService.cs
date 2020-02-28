@@ -42,13 +42,13 @@ namespace FastDev.Service
         {
             var db = this.MainDb;
 
-            var userid = SysContext.CurrentUserID;
+            var userid = SysContext.WanJiangUserID;
             var code = context.Context;
 
             var dicID = db.ExecuteScalar<string>("select ID from res_dictionary where DicCode = @0", code);
             if (string.IsNullOrEmpty(dicID)) return new List<object>();
 
-            var items = db.Fetch<Model.Entity.res_dictionaryItems>("where DicID = @0 order by SeqNo desc", dicID);
+            var items = db.Fetch<Model.Entity.res_dictionaryItems>("where DicID = @0 order by SortNo desc", dicID);
 
 
             return items;

@@ -13,7 +13,7 @@ using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
-    public class WebApiController : DevDB.ControllerBase
+    public class WebApiController : BaseController
     {
         /// <summary>
         /// 分页数据
@@ -27,39 +27,31 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public object PagedData(string id, string model, string fullJson, Dictionary<string, object> treeCondition, string key)
         {
-            try
+            QueryDescriptor descriptor = FullJsonValue.GetObject<QueryDescriptor>(fullJson);
+            IService service = ServiceHelper.GetService(model);
+            if (treeCondition != null && treeCondition.Keys.Count > 0)
             {
-                QueryDescriptor descriptor = FullJsonValue.GetObject<QueryDescriptor>(fullJson);
-                IService service = ServiceHelper.GetService(model);
-                if (treeCondition != null && treeCondition.Keys.Count > 0)
+                FilterGroup treeCondition2 = service.GetTreeCondition(treeCondition);
+                if (treeCondition2 != null)
                 {
-                    FilterGroup treeCondition2 = service.GetTreeCondition(treeCondition);
-                    if (treeCondition2 != null)
-                    {
-                        descriptor.Condition.groups.Add(treeCondition2);
-                    }
+                    descriptor.Condition.groups.Add(treeCondition2);
                 }
-                ChangeFilterGroup(model, key, descriptor.Condition);
-                object pageData = service.GetPageData(descriptor);
-                var presult = pageData as PagedData;
-                if (presult!=null)
-                {
-                    return new PageQueryResult<Dictionary<string, object>>()
-                    {
-                        PageIndex= (int)descriptor.PageIndex,
-                        PageSize=(int)descriptor.PageSize,
-                        Total = (int)presult.Total,
-                        Rows=(List<Dictionary<string, object>>)presult.Records
-                    };
-                }
-                
-                return null;
             }
-            catch (Exception ex)
+            ChangeFilterGroup(model, key, descriptor.Condition);
+            object pageData = service.GetPageData(descriptor);
+            var presult = pageData as PagedData;
+            if (presult != null)
             {
-                ServiceHelper.Log(ex);
-                return new object();
+                return new PageQueryResult<Dictionary<string, object>>()
+                {
+                    PageIndex = (int)descriptor.PageIndex,
+                    PageSize = (int)descriptor.PageSize,
+                    Total = (int)presult.Total,
+                    Rows = (List<Dictionary<string, object>>)presult.Records
+                };
             }
+
+            return null;
         }
         /// <summary>
         /// 明细
@@ -71,18 +63,10 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public object DetailData(string model, string id, string filter)
         {
-            try
-            {
-                FilterGroup filterGroup = FullJsonValue.GetObject<FilterGroup>(filter);
-                IService service = ServiceHelper.GetService(model);
-                Dictionary<string, object> detailData = service.GetDetailData(id, filterGroup);
-                return detailData;
-            }
-            catch (Exception ex)
-            {
-                ServiceHelper.Log(ex);
-                return null;
-            }
+            FilterGroup filterGroup = FullJsonValue.GetObject<FilterGroup>(filter);
+            IService service = ServiceHelper.GetService(model);
+            Dictionary<string, object> detailData = service.GetDetailData(id, filterGroup);
+            return detailData;
         }
         /// <summary>
         /// 保存数据
@@ -93,42 +77,80 @@ namespace FastDev.RunWeb.Controllers
         /// <param name="parm"></param>
         /// <returns></returns>
         [HttpPost]
-        public RestResult<object> Save(string model, string method, string fullJson, string parm)
+        public object Save(string model, string method, string fullJson, string parm)
         {
-            //IL_004f: Unknown result type (might be due to invalid IL or missing references)
-            try
+            Type entityType = DataAccessHelper.GetEntityType(model, "Form");
+            var postdata = FullJsonValue.GetObject(entityType, fullJson);
+            if (postdata == null)
             {
-                Type entityType = DataAccessHelper.GetEntityType(model, "Form");
-                var postdata = FullJsonValue.GetObject(entityType, fullJson);
-                if (postdata == null)
-                {
-                    throw new Exception("提交数据处理失败");
-                }
-                if ((model.ToLower() == "core_user" || model.ToLower() == "core_role") && IsWebLocked())
-                {
-                    throw new UserException("没有操作权限");
-                }
-                IService service = ServiceHelper.GetService(model);
-                if (parm != null)
-                {
-                    service.ServiceParm = parm;
-                }
-                bool flag = method == "create";
-                object obj = null;
-                object propertyValue = DataHelper.GetPropertyValue(postdata.GetType(), postdata, "data");
-                obj = ((!flag) ? service.Update(propertyValue) : service.Create(propertyValue));
-                return new RestResult<object>
-                {
-                    Code = 200,
-                    Message = obj.ToString(),
-                    Data = service.ServiceData
-                };
+                throw new Exception("提交数据处理失败");
             }
-            catch (Exception ex)
+            if ((model.ToLower() == "core_user" || model.ToLower() == "core_role") && IsWebLocked())
             {
-                ServiceHelper.Log(ex);
+                throw new UserException("没有操作权限");
+            }
+            IService service = ServiceHelper.GetService(model);
+            if (parm != null)
+            {
+                service.ServiceParm = parm;
+            }
+            bool flag = method == "create";
+            object obj = null;
+            object propertyValue = DataHelper.GetPropertyValue(postdata.GetType(), postdata, "data");
+            obj = ((!flag) ? service.Update(propertyValue) : service.Create(propertyValue));
+            return obj;
+        }
+        /// <summary>
+        /// 获取列表数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="filter"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public object ListData(string model, string filter, string key)
+        {
+            FilterGroup filterGroup = FullJsonValue.GetObject<FilterGroup>(filter);
+            IService service = ServiceHelper.GetService(model);
+            ChangeFilterGroup(model, key, filterGroup);
+            List<Dictionary<string, object>> listData = service.GetListData(filterGroup);
+            return listData;
+        }
+
+        /// <summary>
+        /// 特殊api接口
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <param name="data"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public object Api(string id, string model, string data, string context)
+        {
+            IService service = ServiceHelper.GetService(model);
+            if (service == null)
+            {
                 return null;
             }
+            Func<APIContext, object> aPIHandler;
+            try
+            {
+                aPIHandler = service.GetAPIHandler(id);
+                if (aPIHandler == null)
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return aPIHandler(new APIContext
+            {
+                Context = context,
+                Data = data
+            });
         }
 
         [NonAction]
@@ -181,6 +203,12 @@ namespace FastDev.RunWeb.Controllers
                 filterGroup.rules.Add(new FilterRule("ModelID", modelName));
                 filters.groups.Add(filterGroup);
             }
+        }
+
+        [HttpGet]
+        public object GetUserInfo()
+        {
+            return base.GetUserInfo();
         }
     }
 }

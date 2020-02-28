@@ -109,17 +109,17 @@ public string extField
 get;
 set;
 }
-public string createTime
+public DateTime? createTime
 {
 get;
 set;
 }
-public string finishTime
+public DateTime? finishTime
 {
 get;
 set;
 }
-public string reportTime
+public DateTime? reportTime
 {
 get;
 set;
@@ -224,7 +224,7 @@ public string auditState
 get;
 set;
 }
-public string finishLimitTime
+public DateTime? finishLimitTime
 {
 get;
 set;
@@ -274,17 +274,17 @@ public string responseRefId
 get;
 set;
 }
-public string dateRange
+public DateTime? dateRange
 {
 get;
 set;
 }
-public string startDay
+public DateTime? startDay
 {
 get;
 set;
 }
-public string endDay
+public DateTime? endDay
 {
 get;
 set;
@@ -385,6 +385,11 @@ get;
 set;
 }
 public string dorgId
+{
+get;
+set;
+}
+public string OriginalID
 {
 get;
 set;

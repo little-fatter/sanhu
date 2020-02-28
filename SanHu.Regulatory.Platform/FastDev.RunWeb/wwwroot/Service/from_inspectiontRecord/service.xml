@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="from_inspectiontRecord" title="勘验笔录" textField="Reason" moduleName="form" moduleTitle="表单" dbName="" />
+    <fields>
+        <field name="Reason" dbName="Reason" title="原因" type="string" length="500" isPK="N" />
+        <field name="Address" dbName="Address" title="地址" type="string" length="200" isPK="N" />
+        <field name="Party" dbName="Party" title="当事人" type="string" length="200" isPK="N" />
+        <field name="Inspector1" dbName="Inspector1" title="检查人1" type="string" length="50" isPK="N" />
+        <field name="Inspector2" dbName="Inspector2" title="检查人2" type="string" length="50" isPK="N" />
+        <field name="NoteTaker" dbName="NoteTaker" title="记录人" type="string" length="50" isPK="N" />
+        <field name="InspectiontType" dbName="InspectiontType" title="检查类别" type="string" length="200" isPK="N" />
+        <field name="InspectionTime" dbName="InspectionTime" title="检查时间" type="string" length="50" isPK="N" />
+        <field name="lawexecutor1" dbName="lawexecutor1" title="执法人1" type="string" length="50" isPK="N" />
+        <field name="lawexecutor2" dbName="lawexecutor2" title="执法人2" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="lawexecutor1Num" dbName="lawexecutor1Num" title="执法人1编号" type="string" length="50" isPK="N" />
+        <field name="lawexecutor2Num" dbName="lawexecutor2Num" title="执法人2编号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Company" dbName="Company" title="单位" type="string" length="50" isPK="N" />
+        <field name="Content" dbName="Content" title="内容" type="string" length="500" isPK="N" />
+        <field name="OriginatorID" dbName="OriginatorID" title="发起人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="CompletionTime" dbName="CompletionTime" title="完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="FormName" dbName="FormName" title="表单名称" type="string" length="50" isPK="N" />
+        <field name="ContentValidity" dbName="ContentValidity" title="内容简介" type="string" length="500" isPK="N" />
+        <field name="Department" dbName="Department" title="部门" type="string" length="200" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" isPK="N" />
+        <field name="NeedNotice" dbName="NeedNotice" title="需要通知" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="NeedFine" dbName="NeedFine" title="需要罚款" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="FormID" dbName="FormID" title="表单id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

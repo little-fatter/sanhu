@@ -343,22 +343,6 @@ function() {
                     type: "text"
                 },
                 {
-                    newline: false,
-                    name: "createTime",
-                    label: "创建时间",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
                     newline: true,
                     name: "finishTime",
                     label: "完成时间",
@@ -370,9 +354,9 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: false,
@@ -386,9 +370,9 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: true,
@@ -585,7 +569,7 @@ function() {
                 {
                     newline: true,
                     name: "evtTypeDisplayName",
-                    label: "事件类型显\ufffd\ufffd名称",
+                    label: "事件类型显示名称",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -722,9 +706,9 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: false,
@@ -882,9 +866,9 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: false,
@@ -898,9 +882,9 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: true,
@@ -914,9 +898,9 @@ function() {
                         integer: "int",
                         float: "float",
                         boolean: "checkbox",
-                        type: "text"
+                        type: "datepicker"
                     },
-                    type: "text"
+                    type: "datepicker"
                 },
                 {
                     newline: false,
@@ -1082,22 +1066,6 @@ function() {
                     newline: false,
                     name: "finishLimitEndTime",
                     label: "完成期限查询条件，未超期和超期的条件",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "createUser",
-                    label: "创建人",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",

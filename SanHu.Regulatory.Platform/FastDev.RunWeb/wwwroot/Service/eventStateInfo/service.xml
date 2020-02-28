@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="eventStateInfo" title="事件状态" textField="EventInfoId" moduleName="zhzx" moduleTitle="指挥中心" dbName="" />
+    <fields>
+        <field name="EventInfoId" dbName="EventInfoId" title="事件" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="State" dbName="State" title="状态" type="string" length="50" isPK="N" />
+        <field name="ImgPath" dbName="ImgPath" title="图片地址集合" type="string" length="500" isPK="N" />
+        <field name="FilePath" dbName="FilePath" title="文件地址集合" type="string" length="500" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>
