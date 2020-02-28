@@ -24,7 +24,7 @@ public string CaseStatus
 get;
 set;
 }
-public string ApplicableProcedureID
+public string ApplicableProcedure
 {
 get;
 set;
@@ -124,6 +124,12 @@ public string Status
 get;
 set;
 }
-}
+
+        public string EventInfoId
+        {
+            get;
+            set;
+        }
+    }
 
 }

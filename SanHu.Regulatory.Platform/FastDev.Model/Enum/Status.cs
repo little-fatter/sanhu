@@ -79,7 +79,12 @@ namespace FD.Model.Enum
         /// 案件任务
         /// </summary>
         [Display(Name = "案件任务")]
-        Case
+        Case,
+        /// <summary>
+        /// 现场决定处罚书任务
+        /// </summary>
+        [Display(Name = "现场处罚决定书")]
+        law_punishmentInfo
 
     }
 

@@ -109,7 +109,13 @@ public string WorkflowtaskID
 get;
 set;
 }
-public string TaskType{
+public string TaskType
+{
+get;
+set;
+}
+public string LaskTaskId
+{
 get;
 set;
 }

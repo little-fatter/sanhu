@@ -29,27 +29,27 @@ public string Illegalfacts
 get;
 set;
 }
-public string IllegalbasisID
+public string IllegalbasisIDs
 {
 get;
 set;
 }
-public string PunishmentbasisID
+public string PunishmentbasisIDs
 {
 get;
 set;
 }
-public string PunishmentdecisionID
+public string Punishmentdecision
 {
 get;
 set;
 }
-public string Isfine
+public bool Isfine
 {
 get;
 set;
 }
-public string IsConfiscationgoods
+public bool IsConfiscationgoods
 {
 get;
 set;
@@ -89,6 +89,8 @@ public string Status
 get;
 set;
 }
+
+        public string TaskId { get; set; }
 }
 
 }

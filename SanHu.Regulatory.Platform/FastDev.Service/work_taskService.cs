@@ -95,6 +95,8 @@ namespace FastDev.Service
                     return Reject;
                 case "CASE":
                     return NextStepCase;
+                case "SURVEY":
+                    return NextStepSurvey;                   
             }
             return null;
         }
@@ -167,7 +169,7 @@ namespace FastDev.Service
             var  _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
             try
             {
-                return _sHBaseService.GetLastInfo(data.EvnetInfoId,"case_Info");
+                return _sHBaseService.GetLastInfo(data.TaskId,"case_Info");
             }
             catch (Exception e)
             {
@@ -175,7 +177,19 @@ namespace FastDev.Service
             }
         }
 
-
+        private object NextStepSurvey(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
+            var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            try
+            {
+                return _sHBaseService.GetLastInfo(data.TaskId, "task_survey");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
 
     }
 

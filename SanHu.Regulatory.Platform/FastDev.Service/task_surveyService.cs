@@ -169,7 +169,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        public void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
+       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
         {
             var taskSurvey = base.Create(TaskSurvey) as task_survey;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
