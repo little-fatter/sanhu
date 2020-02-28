@@ -6,14 +6,14 @@ using System.Text;
 namespace FD.Model.Dto
 {
     /// <summary>
-    /// 询问
+    /// 勘验记录
     /// </summary>
-    public class Form_inquiryrecordFinishReq: FormReqBase
+    public class form_inquestrecordFinishReq: FormReqBase
     {
         /// <summary>
-        /// 询问信息
+        /// 勘验记录
         /// </summary>
-        public form_inquiryrecord form_Inquiryrecord { get; set; }
+        public form_inquestrecord form_Inquiryrecord { get; set; }
         /// <summary>
         /// 执法人
         /// </summary>
