@@ -163,7 +163,9 @@
 </template>
 
 <script>
+import { getDetails } from '@/api/sampleApi'
 import partyForm from './components/partyorcompany'
+
 export default {
   name: 'SceneInvestigation',
   components: {
@@ -187,11 +189,27 @@ export default {
           address: null, // 地址
           phone: null // 联系方式
         }
-      ]
+      ],
+      paramters: { rules: [
+      ],
+      op: 'or' },
+      rules: [{
+        field: 'EventID',
+        op: 'equal',
+        value: '',
+        type: 'string'
+      }, {
+        field: 'CaseID',
+        op: 'equal',
+        value: '',
+        type: 'string'
+      }],
+      id: ' '
     }
   },
   computed: {},
   watch: {},
+  mounted () { this.getDetail() },
   methods: {
     handleChange (info) {
       if (info.file.status !== 'uploading') {
@@ -202,12 +220,16 @@ export default {
       } else if (info.file.status === 'error') {
         this.$message.error(`${info.file.name} file upload failed.`)
       }
+    },
+    getDetail () {
+      getDetails(this.id).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   created () {
-
-  },
-  mounted () {
 
   }
 }

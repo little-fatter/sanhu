@@ -101,11 +101,8 @@
             任务类型:
           </div>
           <div>
-            <a-select v-model="taskStyle">
-              <a-select-option value="全部">全部</a-select-option>
-              <a-select-option value="水政">水政</a-select-option>
-              <a-select-option value="渔政">渔政</a-select-option>
-              <a-select-option value="环保">环保</a-select-option>
+            <a-select v-model="taskStyle" >
+              <a-select-option v-for="item in taskOptions" :key="item.ID" :value="item.Title">{{ item.Title }}</a-select-option>
             </a-select>
           </div>
         </div>
@@ -117,13 +114,13 @@
             <a-input placeholder="编号" v-model="taskNum"></a-input>
           </div>
         </div>
-        <div class="box">
-          <a-button> 搜索 </a-button>
+        <div class="box" @click="searchList">
+          <a-button > 搜索 </a-button>
         </div>
       </div>
     </div>
     <div class="body">
-      <div class="body-item" v-for="item in dataList" :key="item.ID">
+      <div class="body-item" v-for="item in dataList" @click="intoDetails(item.ID)" :key="item.ID">
         <div class="item-head">
           <span class="left">{{ item.Tasktype }}</span>
           <span>{{ item.Tasknumber }}</span>
@@ -169,26 +166,112 @@
 </template>
 
 <script>
-import { getWorkTaskList } from '@/api/sampleApi'
+import { getWorkTaskList, getUser, getDictionary } from '@/api/sampleApi'
 
 export default {
   data () {
     return {
       dataList: [
       ], // 任务列表
-      taskStyle: '全部', // 任务类型
-      taskNum: ' ' // 任务编号
+      taskStyle: '全部类型', // 任务类型
+      taskNum: ' ', // 任务编号
+      taskOptions: [], // 任务类型选项
+      paramters: { rules: [
+      ],
+      op: 'and' },
+      rules: [{
+        field: 'TaskStatus',
+        op: 'equal',
+        value: 1,
+        type: 'int'
+      }, {
+        field: 'Tasktype',
+        op: 'equal',
+        value: '',
+        type: 'string'
+      }, {
+        field: 'AssignUsersID',
+        op: 'equal',
+        value: '',
+        type: 'text'
+      }, {
+        field: 'Tasknumber',
+        op: 'equal',
+        value: '',
+        type: 'string'
+      }
+      ]
     }
   },
   created () {
-    // 获取任务列表
-    getWorkTaskList().then(res => {
-      this.dataList = res.Records
+    // 获取任务类型
+    getDictionary({ model: 'res_dictionary', context: 'TaskType' }).then(res => {
+      this.taskOptions = res
+      const option = { ID: 'quanbu',
+        Title: '全部类型' }
+      this.taskOptions.splice(0, 0, option)
+    }).catch((err) => {
+      console.log(err)
+    })
+    // 获取用户Id
+    getUser().then(res => {
+      if (res.UserId) {
+        this.rules[2].value = res.UserId
+      }
     }).catch((err) => {
       console.log(err)
     })
   },
+  mounted () {
+    this.getTaskList()
+  },
   methods: {
+    // 进入详情页面
+    intoDetails (id) {
+      this.$router.push({ name: 'EventInspeion', params: { ID: id } })
+    },
+    // 处理参数
+    dealParamters () {
+      if (this.taskStyle !== '全部类型') {
+        this.rules[1].value = this.taskStyle
+      } else {
+        this.rules[1].value = ''
+      }
+      this.rules[3].value = this.taskNum
+      const rule = []
+      this.rules.map(item => {
+        if (item.value !== '' & item.value !== ' ') {
+          rule.push(item)
+        }
+      })
+      this.paramters.rules = rule
+    },
+    // 获取任务列表
+    getTaskList () {
+      this.dealParamters()
+      // if (this.paramters.rules.length > 0) {
+      //   console.log(this.paramters.rules)
+      //   getWorkTaskList(this.paramters).then(res => {
+      //     this.dataList = res.Records
+      //   }).catch((err) => {
+      //     console.log(err)
+      //   })
+      // } else {
+      //   getWorkTaskList().then(res => {
+      //     this.dataList = res.Records
+      //   }).catch((err) => {
+      //     console.log(err)
+      //   })
+      // }
+      getWorkTaskList().then(res => {
+        this.dataList = res.Records
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    searchList () {
+      this.getTaskList()
+    }
   }
 }
 </script>

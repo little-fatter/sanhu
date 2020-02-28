@@ -11,7 +11,7 @@
       </div>
       <div>
         <span>期望完成时间：</span>
-        <span>2020-02-20 14：02：30</span>
+        <span>{{ data.ExpectedCompletionTime }}</span>
       </div>
     </div>
     <div class="details">
@@ -19,7 +19,7 @@
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事发地点：</a-col>
         <a-col class="colSize" :span="12">
-          <span>澄江县XX路XX号</span>
+          <span>{{ data.WorkAddress }}</span>
           <!-- <span>  |距离</span> -->
         </a-col>
       </a-row>
@@ -41,7 +41,7 @@
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事件描述：</a-col>
-        <a-col class="colSize" :span="12">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</a-col>
+        <a-col class="colSize" :span="12">{{ data.TaskContent }}</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">关联表单：</a-col>
@@ -146,13 +146,14 @@
       </a-form>
     </div>
     <div class="buttons">
-        <a-button class="button-submit" type="primary" >提交</a-button>
-        <a-button class="button-return" @click="$router.back()">返回</a-button>
+      <a-button class="button-submit" type="primary" >提交</a-button>
+      <a-button class="button-return" @click="$router.back()">返回</a-button>
     </div>
   </div>
 </template>
 
 <script>
+import { getDetails } from '@/api/sampleApi'
 
 export default {
   name: 'EventInspection',
@@ -164,10 +165,13 @@ export default {
       processModeValue: 1,
       headers: {
         authorization: 'authorization-text'
-      }
+      },
+      id: ' ',
+      data: { }
     }
   },
-  computed: {},
+  computed: {
+  },
   watch: {},
   methods: {
     handleChange (info) {
@@ -179,13 +183,21 @@ export default {
       } else if (info.file.status === 'error') {
         this.$message.error(`${info.file.name} file upload failed.`)
       }
+    },
+    getDetail () {
+      getDetails(this.id).then(res => {
+        console.log(res.data)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   created () {
 
   },
   mounted () {
-
+    this.id = this.$route.params.ID
+    this.getDetail()
   }
 }
 </script>

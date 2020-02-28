@@ -6,6 +6,7 @@ using FD.Common;
 using FD.Model.Enum;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace FastDev.Service
@@ -96,6 +97,76 @@ namespace FastDev.Service
         private work_task GetWorkTask(string taskid)
         {
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
+        }
+
+
+
+        public List<object> GetLastInfo(string EventInfoid,string type)
+        {
+            List<object> objs = new List<object>();
+            string formid = null;
+            string formtype = null;
+            switch (type)
+            {
+                case "case_Info":
+                    objs.Add(GetSurvey(EventInfoid, "task_survey"));
+                    var b = objs[0] as task_survey;
+                    if (b == null) break;
+                    formid = b.ID;
+                    formtype = "task_survey";
+                    break;
+                case "task_survey":
+                    objs.Add(GetSurvey(EventInfoid, "task_patrol"));
+                    var p = objs[0] as task_patrol;
+                    if (p == null) break;
+                    formid = p.ID;
+                    formtype = "task_patrol";
+                    break;
+            }
+            objs.Add(GetParties(formid, formtype));
+            return objs;
+        }
+
+        private object GetParties(string formid,string formType)
+        {
+            List<law_party> lawParties = new List<law_party>();
+            DataTable dt = new DataTable();
+            QueryDb.Fill(dt, "where Associatedobjecttype=@0 and AssociationobjectID=@1", formType, formid);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (var d in dt.Rows)
+                {
+                    var dr = d as DataRow;
+                    law_party lawParty = new law_party();
+                    lawParty.address = (string)dr["address"];
+                    lawParty.Contactnumber = (string)dr["Contactnumber"];
+                    lawParty.IDcard = (string)dr["IDcard"];
+                    lawParty.Name = (string)dr["Name"];
+                    lawParty.Nameoflegalperson = (string)dr["Nameoflegalperson"];
+                    lawParty.Nationality = (string)dr["Nationality"];
+                    lawParty.Occupation = (string)dr["Occupation"];
+                    lawParty.TypesofpartiesID = (string)dr["TypesofpartiesID"];
+                    lawParty.Gender = (string)dr["Gender"];
+                    lawParties.Add(lawParty);
+                }
+                return lawParties;
+            }
+            return null;   
+        }
+
+
+        private object GetSurvey(string EventInfoid,string type)
+        {
+            var task = QueryDb.FirstOrDefault<work_task>("where EventInfoId=@0 and Tasktype=@1",EventInfoid,type);
+            var form = QueryDb.FirstOrDefault<task_survey>(" where TaskId=@0 order by CreateDate desc",task.ID);
+            return form;
+        }
+
+        private object GetPatrol(string EventInfoid, string type)
+        {
+            var task = QueryDb.FirstOrDefault<work_task>("where EventInfoId=@0 and Tasktype=@1", EventInfoid, type);
+            var form = QueryDb.FirstOrDefault<task_patrol>(" where TaskId=@0 order by CreateDate desc", task.ID);
+            return form;
         }
 
 
