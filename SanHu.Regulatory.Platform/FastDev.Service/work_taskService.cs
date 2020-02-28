@@ -90,6 +90,8 @@ namespace FastDev.Service
                     return HandOver;
                 case "REJECT":
                     return Reject;
+                case "CASE":
+                    return NextStepCase;
             }
             return null;
         }
@@ -155,6 +157,23 @@ namespace FastDev.Service
             }
             return true;
         }
+
+        private object NextStepCase(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
+            var  _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            try
+            {
+                return _sHBaseService.GetLastInfo(data.EvnetInfoId,"case_Info");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+
+
     }
 
 

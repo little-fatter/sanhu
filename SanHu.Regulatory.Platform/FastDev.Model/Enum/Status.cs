@@ -75,7 +75,7 @@ namespace FD.Model.Enum
         [Display(Name = "勘察任务")]
         Survey =1,
         /// <summary>
-        /// 勘察
+        /// 案件
         /// </summary>
         [Display(Name = "案件任务")]
         Case =2
