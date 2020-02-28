@@ -41,21 +41,23 @@ namespace FastDev.Service
         {
             object rev = null;
             var data = (Model.Form.work_task)postdata;
-            if (!string.IsNullOrEmpty(data.RefTable))
+            if (data.RefTable==WF_EventWorkflowModel||data.RefTable==WF_LawCaseWorkflowModel)
             {
+                //如果是reftable 要求创建事件工作流，或者案件工作流
                 Type entityType = DataAccessHelper.GetEntityType(data.RefTable, "Form");
                 if (entityType != null)
                 {
                     var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
-                    //nextdata
-                    entityType.GetProperty("TaskId").SetValue(nextdata, "");//告诉系统是手动创建的任务
-                    entityType.GetProperty("EventInfoId").SetValue(nextdata, data.EventInfoId);//告诉系统是手动创建的任务
-                    IService svc = ServiceHelper.GetService(data.RefTable);
-                    rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
+                    if (nextdata == null) { nextdata = new Model.Form.event_info_wf(); }
+                    entityType.GetProperty("objId").SetValue(nextdata, data.EventInfoId);//告诉系统是手动创建的任务
+                    IService svc = ServiceHelper.GetService(WF_EventWorkflowModel);
+                    rev = svc.Create(nextdata);//创建事件工作流
+                    nextdata.GetType().GetProperty("ID").SetValue(nextdata,rev);//将id写入
+                    var taskId= AdvanceWorkflow(WF_EventWorkflowModel, "手动创建任务", nextdata,false, data.AssignUsers.ToArray());
                     //
                     var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
                     {
-                        rev
+                        taskId
                     });
                     //从工作流里面查询出
                     //然后更新一些关键字段
