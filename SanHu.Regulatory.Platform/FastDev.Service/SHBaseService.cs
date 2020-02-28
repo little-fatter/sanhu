@@ -82,6 +82,17 @@ namespace FastDev.Service
         }
 
         /// <summary>
+        /// 保存任务
+        /// </summary>
+        /// <param name="workTask"></param>
+        public work_task SaveWorkTask(work_task workTask)
+        {
+           return  ServiceHelper.GetService("work_task").Create(workTask) as work_task;
+        }
+
+
+
+        /// <summary>
         /// 任务状态更新
         /// </summary>
         /// <param name="taskid"></param>
