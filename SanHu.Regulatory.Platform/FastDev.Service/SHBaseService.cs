@@ -87,7 +87,7 @@ namespace FastDev.Service
         /// <param name="workTask"></param>
         public string SaveWorkTask(work_task workTask)
         {
-           return  ServiceHelper.GetService("work_taskService").Create(workTask) as string;
+            return ServiceHelper.GetService("work_task").Create(workTask).ToString();
         }
 
 
@@ -113,7 +113,7 @@ namespace FastDev.Service
 
 
 
-        public List<object> GetLastInfo(string Taskid,string type)
+        public List<object> GetLastInfo(string Taskid, string type)
         {
             if (string.IsNullOrEmpty(Taskid)) return null;
             List<object> objs = new List<object>();
@@ -136,7 +136,7 @@ namespace FastDev.Service
                     formtype = "task_patrol";
                     break;
                 case "law_punishmentInfo":
-                     objs.Add(GetPatrol(Taskid));
+                    objs.Add(GetPatrol(Taskid));
                     var c = objs[0] as case_Info;
                     if (c == null) break;
                     formid = c.ID;
@@ -148,7 +148,7 @@ namespace FastDev.Service
             return objs;
         }
 
-        private object GetParties(string formid,string formType)
+        private object GetParties(string formid, string formType)
         {
             List<law_party> lawParties = new List<law_party>();
             DataTable dt = new DataTable();
@@ -172,7 +172,7 @@ namespace FastDev.Service
                 }
                 return lawParties;
             }
-            return null;   
+            return null;
         }
 
 
@@ -188,22 +188,23 @@ namespace FastDev.Service
             return form;
         }
 
-              /// <summary>
-              /// 创建后续任务
-              /// </summary>
-              /// <param name="NextTasks"></param>
-              /// <param name="sourcetaskid"></param>
+        /// <summary>
+        /// 创建后续任务
+        /// </summary>
+        /// <param name="NextTasks"></param>
+        /// <param name="sourcetaskid"></param>
         public object CreatTasksAndCreatWorkrecor(work_task[] NextTasks, string sourcetaskid)
         {
-                if (NextTasks == null) return null;
-                if (NextTasks.Length < 1) return null;
-                foreach (var Task in NextTasks)
-                {
-                    Task.LaskTaskId = sourcetaskid;
-                    var task = SaveWorkTask(Task);
-                    CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + task, Task.TaskType, Task.TaskContent);
-                }
-                return true;       
+            if (NextTasks == null) return null;
+            if (NextTasks.Length < 1) return null;
+            foreach (var Task in NextTasks)
+            {
+                Task.LaskTaskId = sourcetaskid;
+                Task.InitiationTime = DateTime.Now;
+                var taskId = SaveWorkTask(Task);
+                CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, Task.TaskType, Task.TaskContent);
+            }
+            return true;
         }
 
 
