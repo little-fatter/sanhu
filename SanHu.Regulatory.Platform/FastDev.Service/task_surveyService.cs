@@ -169,7 +169,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        public void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
+       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
         {
             var taskSurvey = base.Create(TaskSurvey) as task_survey;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
@@ -228,17 +228,16 @@ namespace FastDev.Service
             try
             {
                 QueryDb.BeginTransaction();
-                _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);//关闭当前任务
-
-                //_sHBaseService.CreateWorkTask();
-                //创建案件任务
-                var _worktask = ServiceHelper.GetService("work_taskService");
-                work_task workTask = new work_task();
-                //TODO分配工作人员
-                workTask.AssignUsersID = "0";
-                workTask.EventInfoId = TaskSurvey.EventInfoId;
-                _worktask.Create(workTask);
-                _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId, EventStatus.toCase);//事件改为完成   
+                //创建当前表单信息
+                CreateInfo(TaskSurvey, law_Parties);
+                //关闭当前任务
+                _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);
+                //TODO分配人员
+                _sHBaseService.CreateSaveWorkTask(TaskSurvey.TaskId,TaskType.Case,"1","系统默认");
+                //事件改为完成 
+                _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId, EventStatus.toCase);
+                //转发待办
+                _sHBaseService.CreateWorkrecor("165906044420484870", "案件待办",url,"案件待办","案件待办");
             }
             catch (Exception ex)
             {

@@ -149,6 +149,67 @@ function() {
                         type: "text"
                     },
                     type: "text"
+                },
+                {
+                    name: "Partys",
+                    type: "ref_grid_edit",
+                    label: "编辑表格",
+                    editor: {
+                        grid: {
+                            height: 230,
+                            defaultRow: {},
+                            defaultRowCount: 4,
+                            columns: [{
+                                width: "100",
+                                type: "text",
+                                align: "left",
+                                editor: {
+                                    type: "text"
+                                },
+                                name: "Name",
+                                editorType: "text",
+                                display: "姓名"
+                            },
+                            {
+                                width: 100,
+                                type: "text",
+                                align: "left",
+                                display: "当事人类型"
+                            },
+                            {
+                                width: "100",
+                                type: "string",
+                                align: "left",
+                                display: "性别",
+                                name: "Gender",
+                                editorType: ""
+                            },
+                            {
+                                display: "职业",
+                                width: "100",
+                                type: "string",
+                                align: "left",
+                                editor: {
+                                    type: "text"
+                                },
+                                name: "Occupation",
+                                editorType: "text"
+                            }]
+                        },
+                        detailUrl: "/web/main/?model=task_surveyParty&viewtype=form",
+                        titleEdit: "修改： 勘察当事人",
+                        titleAdd: "新增：勘察当事人",
+                        modeType: "editgrid",
+                        one2many: true,
+                        showEdit: 0,
+                        detailWidth: "",
+                        detailHeight: ""
+                    },
+                    width: "800",
+                    hideLabel: 1,
+                    hideSpace: 1,
+                    newline: 1,
+                    readonlyInEdit: 0
                 }]
             },
             common: {

@@ -14,6 +14,21 @@
             主框架地址
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.CaseInfo">
+            <summary>
+            案件信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormSaveDto.FormBase">
             <summary>
             基础表单
@@ -34,6 +49,26 @@
             巡检表
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawPunishmentInfo">
+            <summary>
+            处罚决定书信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Attachments">
+            <summary>
+            证据信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.TaskHandOverReq">
             <summary>
             任务移交请求
@@ -52,6 +87,21 @@
         <member name="P:FD.Model.Dto.TaskHandOverReq.Url">
             <summary>
             钉钉任务跳转url
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.TaskNextStepReq">
+            <summary>
+            任务下一步
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskNextStepReq.TaskId">
+            <summary>
+            当前任务关联的事件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskNextStepReq.Url">
+            <summary>
+            待办地址
             </summary>
         </member>
         <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskId">
@@ -172,6 +222,11 @@
         <member name="F:FD.Model.Enum.TaskType.Case">
             <summary>
             案件任务
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.law_punishmentInfo">
+            <summary>
+            现场决定处罚书任务
             </summary>
         </member>
     </members>

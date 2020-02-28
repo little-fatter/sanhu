@@ -9,15 +9,15 @@ using System.Text;
 
 namespace FastDev.Service
 {
-    class case_InfoService : ServiceBase, IService
+    class law_punishmentInfoService : ServiceBase, IService
     {
-        public case_InfoService()
+        public law_punishmentInfoService()
         {
-            OnGetAPIHandler += case_InfoService_OnGetAPIHandler;
+            OnGetAPIHandler += law_punishmentInfoService_OnGetAPIHandler;
         }
 
         private SHBaseService _sHBaseService;
-        private Func<APIContext, object> case_InfoService_OnGetAPIHandler(string id)
+        private Func<APIContext, object> law_punishmentInfoService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
             switch (id.ToUpper())
@@ -29,39 +29,32 @@ namespace FastDev.Service
         }
         public object Handle(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<case_InfoFinishReq>(context.Data);
-            case_Info caseInfo = new case_Info();
+            var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
+            law_punishmentInfo lawpunishmentInfo = new law_punishmentInfo();
             List<law_party> lawParties = new List<law_party>();
-            if (!string.IsNullOrEmpty(data.CaseInfo.TaskId)) return false;
+            if (!string.IsNullOrEmpty(data.LawPunishmentInfo.TaskId)) return false;
             string url = data.Url;
-            caseInfo = data.CaseInfo;
+            lawpunishmentInfo = data.LawPunishmentInfo;
             lawParties = data.LawParties;
-            switch (data.CaseInfo.ApplicableProcedure)
-            {
-                case "简易程序":
-                    return EasyProcess(caseInfo, lawParties);
-                case "一般程序":
-                    return NormalProcess(caseInfo);
-            }
             return false;
         }
         /// <summary>
         /// 简易流程
         /// </summary>
         /// <returns></returns>
-        private object EasyProcess(case_Info caseInfo,List<law_party> law_Parties)
+        private object EasyProcess(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties)
         {
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(caseInfo, law_Parties);
+                CreateInfo(lawpunishmentInfo, law_Parties);
                 //结束当前任务
-                _sHBaseService.UpdateWorkTaskState(caseInfo.TaskId,WorkTaskStatus.Close);
+                _sHBaseService.UpdateWorkTaskState(lawpunishmentInfo.TaskId,WorkTaskStatus.Close);
                 //TODO 创建简易流程任务处罚决定书
-                _sHBaseService.CreateSaveWorkTask(caseInfo.TaskId, TaskType.law_punishmentInfo);
+                _sHBaseService.CreateSaveWorkTask(lawpunishmentInfo.TaskId, TaskType.law_punishmentInfo);
                 ////修改事件状态
-                //if(!string.IsNullOrEmpty(caseInfo.EventInfoId))
-                //_sHBaseService.UpdateEventState(caseInfo.EventInfoId,EventStatus.);            
+                //if(!string.IsNullOrEmpty(lawpunishmentInfo.EventInfoId))
+                //_sHBaseService.UpdateEventState(lawpunishmentInfo.EventInfoId,EventStatus.);            
             }
             catch (Exception)
             {
@@ -73,7 +66,7 @@ namespace FastDev.Service
         }
 
         //一般程序
-        private object NormalProcess(case_Info caseInfo)
+        private object NormalProcess(law_punishmentInfo lawpunishmentInfo)
         {
             return null;
         }
@@ -84,30 +77,29 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(case_Info caseInfo, List<law_party> law_Parties)
+        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties)
         {
-            var CaseInfoSource = base.Create(caseInfo) as case_Info;//保存原始信息
-            var CaseInfoTemp = CaseInfoSource;
-            CaseInfoTemp.PreviousformID = CaseInfoSource.ID;                                    
-            var CaseInfoNew = base.Create(CaseInfoTemp) as case_Info;//可变更的信息
+            var lawpunishmentInfoSource = base.Create(lawpunishmentInfo) as law_punishmentInfo;//保存原始信息
+            var lawpunishmentInfoTemp = lawpunishmentInfoSource;
+            lawpunishmentInfoTemp.PreviousformID = lawpunishmentInfoSource.ID;
+            var lawpunishmentInfoNew = base.Create(lawpunishmentInfoTemp) as law_punishmentInfo;//可变更的信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
                 foreach (var l in law_Parties)//原始的当事人
                 {
-                    l.Associatedobjecttype = "case_Info";
-                    l.AssociationobjectID = caseInfo.ID;
+                    l.Associatedobjecttype = "law_punishmentInfo";
+                    l.AssociationobjectID = lawpunishmentInfo.ID;
                     _Lawpartys.Create(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
                 {
-                    l.Associatedobjecttype = "case_Info";
-                    l.AssociationobjectID = CaseInfoNew.ID;
+                    l.Associatedobjecttype = "law_punishmentInfo";
+                    l.AssociationobjectID = lawpunishmentInfoNew.ID;
                     _Lawpartys.Create(l);
                 }
 
             }
         }
-
     }
 }
