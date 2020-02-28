@@ -18,7 +18,7 @@ namespace FastDev.Service
     /// <summary>
     /// 任务-巡查
     /// </summary>
-    class task_patrolService : ServiceBase, IService
+    class task_patrolService : SHBaseService, IService
     {
 
         //public override object WfCreate(object postdata, params string[] exeUserIds)
@@ -175,12 +175,11 @@ namespace FastDev.Service
                     if (data.TaskPatrol.Needtracking != null && data.TaskPatrol.Needtracking == 1)
                     {
                         //需要跟踪
-                        newWorkTask = CreateWorkTask(data.EventId, data.CaseId, TaskType.Patrol);
+                        newWorkTask = CreateWorkTask(data.TaskId, TaskType.Patrol);
+                        CreateWorkrecor(AccountId, newWorkTask.Tasktype.GetDisplayName(), data.Url, "标题", "内容");
                     }
                 }
-                //保存新任务
-                if (newWorkTask != null)
-                    ServiceHelper.GetService(newWorkTask.GetType().Name).Create(newWorkTask);
+                
 
                 QueryDb.CompleteTransaction();
             }
