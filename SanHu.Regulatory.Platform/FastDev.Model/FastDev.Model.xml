@@ -14,6 +14,21 @@
             主框架地址
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.CaseInfo">
+            <summary>
+            案件信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormSaveDto.FormBase">
             <summary>
             基础表单
@@ -52,6 +67,16 @@
         <member name="P:FD.Model.Dto.TaskHandOverReq.Url">
             <summary>
             钉钉任务跳转url
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.TaskNextStepReq">
+            <summary>
+            任务下一步
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskNextStepReq.EvnetInfoId">
+            <summary>
+            当前任务关联的事件id
             </summary>
         </member>
         <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskId">
