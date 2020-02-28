@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="event_info_wf" title="事件信息处理" textField="objId" moduleName="zhzx" moduleTitle="指挥中心" dbName="" />
+    <model name="event_info_wf" title="事件工作流" textField="objId" moduleName="zhzx" moduleTitle="指挥中心" dbName="" />
     <fields>
         <field name="objId" dbName="objId" title="主键ID" type="string" length="50" isPK="N" />
         <field name="gldwOid" dbName="gldwOid" title="管理单位" type="string" length="50" isPK="N" />
@@ -22,6 +22,9 @@
         <field name="reportPhotoDto" dbName="reportPhotoDto" title="上报照片" type="string" length="50" isPK="N" />
         <field name="finishPhotoUrl" dbName="finishPhotoUrl" title="整改照片url" type="string" length="50" isPK="N" />
         <field name="finishPhotoDto" dbName="finishPhotoDto" title="整改照片" type="string" length="50" isPK="N" />
+        <field name="Needlawenforcement" dbName="Needlawenforcement" title="需要执法" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="Needtracking" dbName="Needtracking" title="需要追踪" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="ExistCrim" dbName="ExistCrim" title="存在犯罪" type="boolean" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

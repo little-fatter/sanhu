@@ -7,7 +7,7 @@
         <field name="CoOrganizer" dbName="CoOrganizer" title="协办人员" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="WorkAddress" dbName="WorkAddress" title="工作地址" type="string" length="350" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="TaskContent" dbName="TaskContent" title="任务描述" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="AssignUsers" dbName="AssignUsersID" title="分配用户" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="AssignUsers" dbName="AssignUsersID" title="任务执行人" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
         <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="ExpectedCompletionTime" dbName="ExpectedCompletionTime" title="期望完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="TaskStatus" dbName="TaskStatus" title="任务状态" type="integer" relationModel="" relationField="" isPK="N" />

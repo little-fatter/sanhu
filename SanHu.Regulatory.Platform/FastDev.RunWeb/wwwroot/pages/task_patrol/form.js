@@ -178,7 +178,14 @@ function() {
                     editor: {},
                     newline: 1,
                     width: "",
-                    readonlyInEdit: 0
+                    readonlyInEdit: 0,
+                    validate: {
+                        required: 0,
+                        minlength: "0",
+                        maxlength: "255",
+                        regexRule: "",
+                        equalTo: ""
+                    }
                 },
                 {
                     name: "TaskId",

@@ -90,7 +90,7 @@
         <models name="task_surveyParty" title="勘察当事人" textField="Title" moduleName="task" moduleTitle="任务与表单" />
         <models name="test_t2" title="测试2" textField="Title" moduleName="task" moduleTitle="任务与表单" />
         <models name="form_all" title="全部表单" textField="Title" moduleName="form" moduleTitle="表单" />
-        <models name="event_info_wf" title="事件信息处理" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
+        <models name="event_info_wf" title="事件工作流" textField="Title" moduleName="zhzx" moduleTitle="指挥中心" />
         <models name="law_punishmentInfo" title="处罚当场决定书" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="law_party" title="当事人" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="form_confiscated_item" title="物品清单" textField="Title" moduleName="case" moduleTitle="案件" />
