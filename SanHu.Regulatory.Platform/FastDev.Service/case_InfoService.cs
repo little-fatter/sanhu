@@ -36,7 +36,7 @@ namespace FastDev.Service
             caseInfo = data.CaseInfo;
             lawParties = data.LawParties;
 
-
+            return null;
         }
         /// <summary>
         /// 简易流程
