@@ -124,26 +124,6 @@
             证据信息
             </summary>
         </member>
-        <member name="T:FD.Model.Dto.TaskHandOverReq">
-            <summary>
-            任务移交请求
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskHandOverReq.TaskId">
-            <summary>
-            当前任务id
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskHandOverReq.UserId">
-            <summary>
-            移交目标
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskHandOverReq.Url">
-            <summary>
-            钉钉任务跳转url
-            </summary>
-        </member>
         <member name="T:FD.Model.Dto.TaskNextStepReq">
             <summary>
             任务下一步
@@ -162,21 +142,6 @@
         <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskPatrol">
             <summary>
             巡检信息
-            </summary>
-        </member>
-        <member name="T:FD.Model.Dto.TaskPatrolRejectRequest">
-            <summary>
-            任务巡查拒绝请求
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskPatrolRejectRequest.TaskId">
-            <summary>
-            任务id
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskPatrolRejectRequest.Reason">
-            <summary>
-            理由
             </summary>
         </member>
         <member name="P:FD.Model.Dto.task_surveyFinishReq.TaskSurvey">
