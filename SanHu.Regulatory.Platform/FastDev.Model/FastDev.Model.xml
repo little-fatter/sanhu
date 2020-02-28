@@ -39,6 +39,11 @@
             源任务id
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.FormReqBase.EventInfoId">
+            <summary>
+            源事件id
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormReqBase.NextTasks">
             <summary>
             需要新建任务信息
@@ -64,24 +69,29 @@
             巡检表
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.form_inquestrecordFinishReq">
+            <summary>
+            勘验记录
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.form_Inquiryrecord">
+            <summary>
+            勘验记录
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.law_Staffs">
+            <summary>
+            执法人
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.law_Parties">
+            <summary>
+            当事人
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.Form_inquiryrecordFinishReq">
             <summary>
             询问
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.TaskId">
-            <summary>
-            任务id
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.EventId">
-            <summary>
-            事件id
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.CaseId">
-            <summary>
-            案件id
             </summary>
         </member>
         <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.form_Inquiryrecord">

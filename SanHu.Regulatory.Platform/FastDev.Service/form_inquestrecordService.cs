@@ -3,6 +3,7 @@ using FastDev.DevDB;
 using FD.Model.Dto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FastDev.Service
