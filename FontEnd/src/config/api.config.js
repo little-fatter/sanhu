@@ -19,20 +19,18 @@ const getHost = (moduleName, isRead = false) => {
   return host
 }
 
-// const getHost = () => {
-//   var host = ''
-//   if (appConfig.isUseGateWare) {
-//     host = appConfig.gatewayAddress
-//   } else {
-//     host = appConfig.hostConfig.host
-//   }
-//   return host
-// }
-
 /* 配置API接口应用访问地址 */
 const apiConfig = {
+  // 用户ID
+  userId: `${getHost('list')}/webapi/getuserinfo`,
+  // 字典查询
+  dictionary: `${getHost('list')}/webapi/api/items`,
   // 任务模块
-  work_task: `${getHost('list')}/pageddata?model=work_task&appid=`
+  work_task: `${getHost('list')}/web/pageddata?model=work_task&appid=`,
+  // 案件模块
+  case_info: `${getHost('list')}/web/pageddata?model=case_Info&appid=`,
+  // 详情
+  detail: `${getHost('list')}/web/detaildata/`
 }
 
 export default apiConfig

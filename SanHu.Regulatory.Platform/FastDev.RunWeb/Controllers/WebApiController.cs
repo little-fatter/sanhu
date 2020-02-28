@@ -9,6 +9,7 @@ using FD.Common.ActionValue;
 using FD.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
@@ -81,6 +82,48 @@ namespace FastDev.RunWeb.Controllers
         {
             Type entityType = DataAccessHelper.GetEntityType(model, "Form");
             var postdata = FullJsonValue.GetObject(entityType, fullJson);
+            if (postdata == null)
+            {
+                throw new Exception("提交数据处理失败");
+            }
+            if ((model.ToLower() == "core_user" || model.ToLower() == "core_role") && IsWebLocked())
+            {
+                throw new UserException("没有操作权限");
+            }
+            IService service = ServiceHelper.GetService(model);
+            if (parm != null)
+            {
+                service.ServiceParm = parm;
+            }
+            bool flag = method == "create";
+            object obj = null;
+            object propertyValue = DataHelper.GetPropertyValue(postdata.GetType(), postdata, "data");
+            obj = ((!flag) ? service.Update(propertyValue) : service.Create(propertyValue));
+            return obj;
+        }
+
+        /// <summary>
+        /// 保存数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="method"></param>
+        /// <param name="fullJson"></param>
+        /// <param name="parm"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public object EventSave(string model, string method, string fullJson, string parm)
+        {
+
+            Type entityType = DataAccessHelper.GetEntityType(model, "Form");
+
+            Type type = typeof(PostDataDescriptor<>).MakeGenericType(entityType);
+            var setting = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                DateFormatString = "yyyyMMddHHmmss"
+            };
+            var postdata=JsonConvert.DeserializeObject(fullJson, type, setting);
+
             if (postdata == null)
             {
                 throw new Exception("提交数据处理失败");
