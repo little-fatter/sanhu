@@ -233,11 +233,11 @@ namespace FastDev.Service
                 //关闭当前任务
                 _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);
                 //TODO分配人员
-                _sHBaseService.CreateWorkTask(TaskSurvey.TaskId,TaskType.Case,"1","系统默认");
+                _sHBaseService.CreateSaveWorkTask(TaskSurvey.TaskId,TaskType.Case,"1","系统默认");
                 //事件改为完成 
                 _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId, EventStatus.toCase);
                 //转发待办
-                _sHBaseService.CreateWorkrecor(0,"案件待办",url,"案件待办","案件待办");
+                _sHBaseService.CreateWorkrecor("165906044420484870", "案件待办",url,"案件待办","案件待办");
             }
             catch (Exception ex)
             {
