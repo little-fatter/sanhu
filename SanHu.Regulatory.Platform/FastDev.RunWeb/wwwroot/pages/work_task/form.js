@@ -18,7 +18,7 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "Tasktype",
+                    name: "TaskType",
                     label: "任务类型",
                     editor: {
                         many2many: "ref_select_mul",

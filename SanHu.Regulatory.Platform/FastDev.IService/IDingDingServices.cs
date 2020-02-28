@@ -17,6 +17,6 @@ namespace FastDev.IServices
         /// <summary>
         /// 新增待办
         /// </summary>
-        void  CreateWorkrecor(long userId, string title, string url, string formTitle, string fromContent);
+        void  CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent);
     }
 }

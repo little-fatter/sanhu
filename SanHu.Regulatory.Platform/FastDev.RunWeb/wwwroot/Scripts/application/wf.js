@@ -116,7 +116,7 @@
                     Waitting: tool.context.waitting,
                     SignMode: tool.context.signMode
                 }, function () {
-                    rejectingServer.close();
+                    win.close();
                     if (opts.callback) {
                         opts.callback();
                     }
@@ -128,7 +128,7 @@
             var K = [];
             var s = $('<div style="height:250px"></div>');
             var individual = $('<div class="ne-flowwin"></div>').appendTo(s);
-            var rejectingServer = $.ligerDialog.open({
+            var win = $.ligerDialog.open({
                 title: tool.getTitle(),
                 width: 500,
                 height: "auto",
@@ -154,7 +154,7 @@
                 _wait();
             });
             result.find(".btnClose").click(function () {
-                rejectingServer.close();
+                win.close();
             });
         },
         openFlowWin: function () {
@@ -196,7 +196,7 @@
                     Remark: store_scrEncounter.getData().remark,
                     ExecuteNodes: loadedAddons
                 }, function () {
-                    rejectingServer.close();
+                    win.close();
                     if (opts.callback) {
                         opts.callback();
                     }
@@ -301,7 +301,7 @@
             var children = [];
             var child = $('<div style="height:450px"></div>');
             var name = $('<div class="ne-flowwin"></div>').appendTo(child);
-            var rejectingServer = $.ligerDialog.open({
+            var win = $.ligerDialog.open({
                 title: node.getTitle(),
                 width: 500,
                 height: "auto",
@@ -356,7 +356,7 @@
                 init();
             });
             elChild.find(".btnClose").click(function () {
-                rejectingServer.close();
+                win.close();
             });
         },
         execute: function (parent, caseSub) {

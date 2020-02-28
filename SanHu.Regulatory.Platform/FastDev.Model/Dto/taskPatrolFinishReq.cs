@@ -24,5 +24,7 @@ namespace FD.Model.Dto
         /// 巡检信息
         /// </summary>
         public task_patrol TaskPatrol { get; set; }
+
+        public string Url { get; set; }
     }
 }
