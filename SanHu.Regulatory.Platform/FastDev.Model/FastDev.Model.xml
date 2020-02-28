@@ -49,6 +49,11 @@
             移交目标
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.TaskHandOverReq.Url">
+            <summary>
+            钉钉任务跳转url
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskId">
             <summary>
             任务id
