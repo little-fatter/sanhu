@@ -16,6 +16,10 @@ namespace FD.Model.Dto
         /// <summary>
         /// 移交目标
         /// </summary>
-        public string UserId { get; set; }
+        public long UserId { get; set; }
+        /// <summary>
+        /// 钉钉任务跳转url
+        /// </summary>
+        public string Url { get; set; }
     }
 }

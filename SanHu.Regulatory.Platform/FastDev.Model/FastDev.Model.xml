@@ -89,24 +89,49 @@
             勘察信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.task_surveyFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.task_surveyFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
         <member name="T:FD.Model.Enum.EventStatus">
             <summary>
             事件状态
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.EventStatus.Undistributed">
+        <member name="F:FD.Model.Enum.EventStatus.untreated">
             <summary>
-            未分配
+            待处理
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.EventStatus.Allocation">
+        <member name="F:FD.Model.Enum.EventStatus.patrol">
             <summary>
-            分配
+            事件核查中
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.EventStatus.Close">
+        <member name="F:FD.Model.Enum.EventStatus.track">
             <summary>
-            已关闭
+            跟踪整改中
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.survey">
+            <summary>
+            现场勘察中
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.finish">
+            <summary>
+            处理完成
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.toCase">
+            <summary>
+            转为案件办理
             </summary>
         </member>
         <member name="F:FD.Model.Enum.WorkTaskStatus.Close">
@@ -135,6 +160,11 @@
             </summary>
         </member>
         <member name="F:FD.Model.Enum.TaskType.Survey">
+            <summary>
+            勘察
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.Case">
             <summary>
             勘察
             </summary>

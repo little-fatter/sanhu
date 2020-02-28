@@ -11,17 +11,35 @@ namespace FD.Model.Enum
     public enum EventStatus
     {
         /// <summary>
-        /// 未分配
+        /// 待处理
         /// </summary>
-        Undistributed = 0,
+        [Display(Name = "待处理")]
+        untreated,
         /// <summary>
-        /// 分配
+        /// 事件核查中
         /// </summary>
-        Allocation = 1,
+        [Display(Name = "事件核查中")]
+        patrol,
         /// <summary>
-        /// 已关闭
+        /// 跟踪整改中
         /// </summary>
-        Close = 2
+        [Display(Name = "跟踪整改中")]
+        track,
+        /// <summary>
+        /// 现场勘察中
+        /// </summary>
+        [Display(Name = "现场勘察中")]
+        survey,
+        /// <summary>
+        /// 处理完成
+        /// </summary>
+        [Display(Name = "处理完成")]
+        finish,
+        /// <summary>
+        /// 转为案件办理
+        /// </summary>
+        [Display(Name = "转为案件办理")]
+        toCase
     }
 
     public enum WorkTaskStatus
@@ -55,7 +73,12 @@ namespace FD.Model.Enum
         /// 勘察
         /// </summary>
         [Display(Name = "勘察任务")]
-        Survey =1
+        Survey =1,
+        /// <summary>
+        /// 勘察
+        /// </summary>
+        [Display(Name = "案件任务")]
+        Case =2
     }
 
 

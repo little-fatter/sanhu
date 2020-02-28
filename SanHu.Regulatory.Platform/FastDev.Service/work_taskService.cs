@@ -1,7 +1,7 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
-using FastDev.DevDB.Workflow;
+using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Common.ActionValue;
@@ -21,7 +21,7 @@ namespace FastDev.Service
     /// <summary>
     /// 任务
     /// </summary>
-    class work_taskService : ServiceBase, IService
+    class work_taskService : SHBaseService, IService
     {
 
         public work_taskService()
@@ -37,54 +37,51 @@ namespace FastDev.Service
         /// </summary>
         /// <param name="postdata"></param>
         /// <returns></returns>
-        public override object Create(object postdata)
-        {
-            object rev = null;
-            var data = (Model.Form.work_task)postdata;
-            if (data.RefTable==WF_EventWorkflowModel||data.RefTable==WF_LawCaseWorkflowModel)
-            {
-                //如果是reftable 要求创建事件工作流，或者案件工作流
-                Type entityType = DataAccessHelper.GetEntityType(data.RefTable, "Form");
-                if (entityType != null)
-                {
-                    var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
-                    if (nextdata == null) { nextdata = new Model.Form.event_info_wf(); }
-                    entityType.GetProperty("objId").SetValue(nextdata, data.EventInfoId);//告诉系统是手动创建的任务
-                    IService svc = ServiceHelper.GetService(WF_EventWorkflowModel);
-                    rev = svc.Create(nextdata);//创建事件工作流
-                    nextdata.GetType().GetProperty("ID").SetValue(nextdata,rev);//将id写入
-                    var taskId= AdvanceWorkflow(WF_EventWorkflowModel, "手动创建任务", nextdata,false, data.AssignUsers.ToArray());
-                    //
-                    var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
-                    {
-                        taskId
-                    });
-                    //从工作流里面查询出
-                    //然后更新一些关键字段
-                    wTask.CompleteTime = data.CompleteTime;
-                    wTask.EventInfoId = data.EventInfoId;
-                    wTask.ExpectedCompletionTime = data.ExpectedCompletionTime;
-                    wTask.TaskContent = data.TaskContent;
-                    List<DevDB.Model.core_autoCode> source = new List<DevDB.Model.core_autoCode>();
-                    source = QueryDb.Fetch<DevDB.Model.core_autoCode>("where ModelName = @0", new object[1]
-                    {
-                        "work_task"
-                    });
-                    var rule = source.FirstOrDefault(a => a.FieldName == "Tasknumber");
-                    if (rule != null)
-                    {
-                        string newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
-                        wTask.Tasknumber = newAutoCode;
-                    }
-                    wTask.MainHandler = data.MainHandler;
-                    wTask.CoOrganizer = data.CoOrganizer;
-                    wTask.AssignUsersID = data.AssignUsersID;
-                    wTask.WorkAddress = data.WorkAddress;
-                    QueryDb.Update(wTask, wTask.ID);
-                }
-            }
-            return rev;
-        }
+        //public override object Create(object postdata)
+        //{
+        //    object rev = null;
+        //    var data = (Model.Form.work_task)postdata;
+        //    if (!string.IsNullOrEmpty(data.RefTable))
+        //    {
+        //        Type entityType = DataAccessHelper.GetEntityType(data.RefTable, "Form");
+        //        if (entityType != null)
+        //        {
+        //            var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
+        //            //nextdata
+        //            entityType.GetProperty("TaskId").SetValue(nextdata, "MANUALLY_CREATE_TASK_ID");//高速系统是手动创建的任务
+        //            IService svc = ServiceHelper.GetService(data.RefTable);
+        //            rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
+        //            //
+        //            var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
+        //            {
+        //                rev
+        //            });
+        //            //从工作流里面查询出
+        //            //然后更新一些关键字段
+        //            wTask.CompleteTime = data.CompleteTime;
+        //            wTask.EventInfoId = data.EventInfoId;
+        //            wTask.ExpectedCompletionTime = data.ExpectedCompletionTime;
+        //            wTask.TaskContent = data.TaskContent;
+        //            List<DevDB.Model.core_autoCode> source = new List<DevDB.Model.core_autoCode>();
+        //            source = QueryDb.Fetch<DevDB.Model.core_autoCode>("where ModelName = @0", new object[1]
+        //            {
+        //                "work_task"
+        //            });
+        //            var rule = source.FirstOrDefault(a => a.FieldName == "Tasknumber");
+        //            if (rule != null)
+        //            {
+        //                string newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
+        //                wTask.Tasknumber = newAutoCode;
+        //            }
+        //            wTask.MainHandler = data.MainHandler;
+        //            wTask.CoOrganizer = data.CoOrganizer;
+        //            wTask.AssignUsersID = data.AssignUsersID;
+        //            wTask.WorkAddress = data.WorkAddress;
+        //            QueryDb.Update(wTask, wTask.ID);
+        //        }
+        //    }
+        //    return rev;
+        //}
         private Func<APIContext, object> Work_taskService_OnGetAPIHandler(string id)
         {
             switch (id.ToUpper())
@@ -110,23 +107,22 @@ namespace FastDev.Service
                 var data = JsonHelper.DeserializeJsonToObject<TaskHandOverReq>(context.Data);
 
                 //关闭当前任务
-                var workTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID=@id", data.TaskId);
+                var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
                 workTask.TaskStatus = (int)WorkTaskStatus.Close;
-                workTask.Status = WFRecordStatus.Completed;
                 QueryDb.Update(workTask);
 
                 //复制任务给指定用户
                 workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-                workTask.AssignUsersID = data.UserId;
-                Create(workTask);
+                workTask.AssignUsersID = data.UserId.ToString();
+                base.Create(workTask);
 
                 //给指定用户发送待办
-
+                CreateWorkrecor(data.UserId, workTask.Tasktype.GetDisplayName(), data.Url, "标题", "内容");
 
                 QueryDb.CompleteTransaction();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
             }
@@ -145,7 +141,18 @@ namespace FastDev.Service
             var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
-            base.Update(workTask);
+            QueryDb.BeginTransaction();
+            try
+            {
+                base.Update(workTask);  //修改任务状态
+                base.UpdateEventState(workTask.EventInfoId, EventStatus.untreated);  //修改事件状态
+                QueryDb.CompleteTransaction();
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
             return true;
         }
     }

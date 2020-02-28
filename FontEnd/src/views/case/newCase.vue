@@ -2,45 +2,45 @@
   * {
     box-sizing: border-box;
   }
-  
+
   .margin-bottom30 {
     margin-bottom: 30px;
   }
-  
+
   .margin-bottom15 {
     margin-bottom: 15px;
   }
-  
+
   .case-box {
     background-color: #F4F3F3;
     height: 100vh;
     overflow: auto;
-    
+
     .case-top {
       padding: 26px 55px;
       background-color: #FFF;
       height: 136px;
-      
+
       h5 {
         font-size: 18px;
         color: #101010;
       }
-      
+
       .case-serch-bar {
         padding-top: 15px;
-        
+
         .maigin-top {
           margin-top: 15px;
         }
       }
     }
-    
+
     .case-body {
       margin-top: 15px;
       padding: 26px 55px;
       background-color: #FFF;
     }
-    
+
     .card-sub-style .ant-card-body > div > div > div:first-child {
       text-align: right;
     }
@@ -56,7 +56,7 @@
             <span>说明：如不需要面包屑导航或者标题提示 请直接删除  "div class='case-top'" 标签 </span>
           </a-col>
           <a-col :span="4">
-          
+
           </a-col>
         </a-row>
       </div>
@@ -245,116 +245,116 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  
-  export default {
-    name: 'NewCase',
-    data () {
-      return {
-        visible: false, // 地图弹窗默认不显示,
-        caseInfo: {
-          caseNumber: '', // 案件号
-          caseReason: '', // 案由
-          caseType: '请选择', // 案件类型
-          caseFrom: '请选择', // 案件来源
-          caseFunction: '请选择', // 案件适用程序
-          caseTime: '', // 案发时间
-          caseLocation: '请输入事发地点',
-          caseBreakLow: [ // 当事人信息组
-            {
-              belong: '个人', // 违规违法人员性质
-              name: '', // 姓名
-              sex: '男', // 性别
-              profession: '', // 职业
-              legalPerson: '', // 法人姓名
-              idNumber: '', // 身份证号
-              address: '', // 住址
-              telNumber: ''// 手机号
-            }
-          ],
-          casePartin: []// 协办人数组
-        },
-        waitingCasePartin: ['张柳', '李思', '王琴', '陈华', '黛玉']// 候选协办人
-      }
-    },
-    methods: {
-      viewMap () {
-        this.visible = true// 显示地图加载模态框
+import axios from 'axios'
+
+export default {
+  name: 'NewCase',
+  data () {
+    return {
+      visible: false, // 地图弹窗默认不显示,
+      caseInfo: {
+        caseNumber: '', // 案件号
+        caseReason: '', // 案由
+        caseType: '请选择', // 案件类型
+        caseFrom: '请选择', // 案件来源
+        caseFunction: '请选择', // 案件适用程序
+        caseTime: '', // 案发时间
+        caseLocation: '请输入事发地点',
+        caseBreakLow: [ // 当事人信息组
+          {
+            belong: '个人', // 违规违法人员性质
+            name: '', // 姓名
+            sex: '男', // 性别
+            profession: '', // 职业
+            legalPerson: '', // 法人姓名
+            idNumber: '', // 身份证号
+            address: '', // 住址
+            telNumber: ''// 手机号
+          }
+        ],
+        casePartin: []// 协办人数组
       },
-      handleCancel (e) {
-        this.visible = false// 关闭地图模态框
-      },
-      // 新增当事
-      addCaseBreakLow () {
-        this.caseInfo.caseBreakLow.push({
-          belong: '个人', // 违规违法人员性质
-          name: '', // 姓名
-          sex: '男', // 性别
-          profession: '', // 职业
-          legalPerson: '', // 法人姓名
-          idNumber: '', // 身份证号
-          address: '', // 住址
-          telNumber: ''// 手机号
-        })
-      },
-      // 删除当事人
-      delCaseBreakLow (index) {
-        if (index == 0) {
-          alert('最少有一个当事人')
-        } else {
-          this.caseInfo.caseBreakLow.splice(index, 1)
-          alert('当事人已被删除')
-        }
-      },
-      // 协办人输入
-      handleChange (value) {
-        this.caseInfo.casePartin = []
-        this.caseInfo.casePartin = value
-      },
-      // 案发时间选择
-      selectTime (value, dateString) {
-        this.caseInfo.caseTime = dateString
-      },
-      // 提交新建案件
-      pushCaseInfo () {
-        axios.post('api/addCase', {
-          caseData:this.caseInfo
-        })
-        //console.log(this.caseInfo)
-      }
-    },
-    // 生命周期钩子
-    mounted () {
-      // 生成案件编号
-      const date = new Date()
-      // 此处应该获取后台最后一个案件的编号
-      const testCaseNmuber = '20201234' // 测试的案件编号
-      if (testCaseNmuber === '') {
-        this.caseInfo.caseNumber = date.getFullYear() + '1'
-      } else {
-        const lastNumber = testCaseNmuber.slice(4)// 获取除开年份的案件编号
-        this.caseInfo.caseNumber = date.getFullYear().toString() + ((lastNumber - 0) + 1)
-      }
-      console.log('这是生成的案件号：' + this.caseInfo.caseNumber)
-      
-      // 获取协办人 数组 暂时无请求地址
+      waitingCasePartin: ['张柳', '李思', '王琴', '陈华', '黛玉']// 候选协办人
     }
+  },
+  methods: {
+    viewMap () {
+      this.visible = true// 显示地图加载模态框
+    },
+    handleCancel (e) {
+      this.visible = false// 关闭地图模态框
+    },
+    // 新增当事
+    addCaseBreakLow () {
+      this.caseInfo.caseBreakLow.push({
+        belong: '个人', // 违规违法人员性质
+        name: '', // 姓名
+        sex: '男', // 性别
+        profession: '', // 职业
+        legalPerson: '', // 法人姓名
+        idNumber: '', // 身份证号
+        address: '', // 住址
+        telNumber: ''// 手机号
+      })
+    },
+    // 删除当事人
+    delCaseBreakLow (index) {
+      if (index === 0) {
+        alert('最少有一个当事人')
+      } else {
+        this.caseInfo.caseBreakLow.splice(index, 1)
+        alert('当事人已被删除')
+      }
+    },
+    // 协办人输入
+    handleChange (value) {
+      this.caseInfo.casePartin = []
+      this.caseInfo.casePartin = value
+    },
+    // 案发时间选择
+    selectTime (value, dateString) {
+      this.caseInfo.caseTime = dateString
+    },
+    // 提交新建案件
+    pushCaseInfo () {
+      axios.post('api/addCase', {
+        caseData: this.caseInfo
+      })
+      // console.log(this.caseInfo)
+    }
+  },
+  // 生命周期钩子
+  mounted () {
+    // 生成案件编号
+    const date = new Date()
+    // 此处应该获取后台最后一个案件的编号
+    const testCaseNmuber = '20201234' // 测试的案件编号
+    if (testCaseNmuber === '') {
+      this.caseInfo.caseNumber = date.getFullYear() + '1'
+    } else {
+      const lastNumber = testCaseNmuber.slice(4)// 获取除开年份的案件编号
+      this.caseInfo.caseNumber = date.getFullYear().toString() + ((lastNumber - 0) + 1)
+    }
+    console.log('这是生成的案件号：' + this.caseInfo.caseNumber)
+
+    // 获取协办人 数组 暂时无请求地址
   }
+}
 </script>
 
 <style scoped>
   /deep/ .ant-calendar-picker {
     width: 100% !important;
   }
-  
+
   /deep/ .ant-col-20 .ant-input-group-addon {
     background-color: #1890ff;
   }
-  
+
   /deep/ .ant-col-20 .ant-btn {
     box-shadow: none;
   }
-  
+
   /deep/ .ant-col-20 .ant-btn:hover, /deep/ .ant-col-20 .ant-btn:focus {
     background-color: #1890ff;
     border-color: #1890ff;

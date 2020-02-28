@@ -22,7 +22,7 @@
         <field name="FormPreparation" dbName="FormPreparation" title="表单准备" type="string" length="1000" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CaseID" dbName="CaseID" title="案件id" type="string" length="50" isPK="N" />
         <field name="WorkflowtaskID" dbName="WorkflowtaskID" title="工作流任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="TaskType" dbName="TaskType" title="任务类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Tasktype" dbName="Tasktype" title="任务类型" type="integer" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
