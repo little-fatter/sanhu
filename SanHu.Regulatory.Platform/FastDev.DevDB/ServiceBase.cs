@@ -695,11 +695,6 @@ namespace FastDev.DevDB
             ServiceHelper.Log("【新增】" + ModelName, "");
             return CreateUpdateData(postdata, true);
         }
-        public virtual object WfCreate(string wfModelName, object postdata, params string[] exeUserIds)
-        {
-            ServiceHelper.Log("【新增】" + ModelName, "");
-            return CreateUpdateData(postdata, true);
-        }
         /// <summary>
         /// 工作流向前一步
         /// </summary>

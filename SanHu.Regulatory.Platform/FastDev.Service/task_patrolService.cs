@@ -107,7 +107,7 @@ namespace FastDev.Service
                     {
                         //需要跟踪
                         newWorkTask = CreateWorkTask(data.TaskId, TaskType.Patrol);
-                        CreateWorkrecor(AccountId, newWorkTask.Tasktype.GetDisplayName(), data.Url, "标题", "内容");
+                        CreateWorkrecor(AccountId, newWorkTask.TaskType.ToString(), data.Url, "标题", "内容");
                     }
                 }
                 
