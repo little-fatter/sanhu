@@ -27,7 +27,7 @@ namespace FastDev.DevDB
 
         object Create(object postdata);
 
-        object WfCreate(object postdata,params string[] exeUserIds);
+        object WfCreate(string wfModelName,object postdata,params string[] exeUserIds);
 
         object Update(object postdata);
 
