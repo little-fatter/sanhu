@@ -15,7 +15,7 @@ namespace FD.Model.Dto
         /// </summary>
         public string SourceTaskId { get; set; }
         /// <summary>
-        /// 事件id
+        /// 源事件id
         /// </summary>
         public string EventInfoId { get; set; }
         /// <summary>
