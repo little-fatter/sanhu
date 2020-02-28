@@ -25,17 +25,6 @@ namespace FastDev.Service
         {
             OnGetAPIHandler += Task_surveyService_OnGetAPIHandler;
         }
-        /// <summary>
-        /// 是否需要创建新任务
-        /// 1、表单类型， 2、表单
-        /// </summary>
-        /// <returns></returns>
-        private bool NeedCreateNewTask(object postdata)
-        {
-            return true;
-        }
-
-
         
         /*
         public override object WfCreate(object postdata, params string[] exeUserIds)
@@ -135,25 +124,19 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<task_surveyFinishReq>(context.Data);
-            task_survey taskSurvey = new task_survey();
-            List<work_task> workTasks = new List<work_task>();
-            List<law_party> lawParties = new List<law_party>();
-            if (!string.IsNullOrEmpty(data.TaskSurvey.TaskId)) return false;
-            if (!string.IsNullOrEmpty(data.TaskSurvey.EventInfoId)) return false;
-            taskSurvey = data.TaskSurvey;
+            if (data.TaskSurvey == null) return null;
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(taskSurvey, lawParties);
+                CreateInfo(data.TaskSurvey, data.LawParties);
                 switch (data.TaskSurvey.ProcessingDecisions)
                 {
                     case 0:
                          EndEvent(data.SourceTaskId, data.EventInfoId);
                         break;
                     default:
-                         CreatTask(data.NextTasks, data.SourceTaskId);
+                        _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                         break;
-
                 }
             }
             catch (Exception)
@@ -212,22 +195,22 @@ namespace FastDev.Service
         }
 
 
-        /// <summary>
-        /// 创建后续任务
-        /// </summary>
-        /// <returns></returns>
-        public object CreatTask(work_task[] NextTasks,string sourcetaskid)
-        {
-            if (NextTasks == null) return null;
-            if (NextTasks.Length < 1) return null;
-            foreach (var Task in NextTasks)
-            {
-                Task.LaskTaskId = sourcetaskid;
-               var task= _sHBaseService.SaveWorkTask(Task);
-                _sHBaseService.CreateWorkrecor(Task.AssignUsersID, "案件待办", Task.RemoteLinks+"?taskid="+task.ID, Task.TaskType, Task.TaskContent);
-            }
-            return true;
-        }
+        ///// <summary>
+        ///// 创建后续任务
+        ///// </summary>
+        ///// <returns></returns>
+        //public object CreatTask(work_task[] NextTasks,string sourcetaskid)
+        //{
+        //    if (NextTasks == null) return null;
+        //    if (NextTasks.Length < 1) return null;
+        //    foreach (var Task in NextTasks)
+        //    {
+        //        Task.LaskTaskId = sourcetaskid;
+        //       var task= _sHBaseService.SaveWorkTask(Task);
+        //        _sHBaseService.CreateWorkrecor(Task.AssignUsersID, "案件待办", Task.RemoteLinks+"?taskid="+task.ID, Task.TaskType, Task.TaskContent);
+        //    }
+        //    return true;
+        //}
 
 
         /*

@@ -20,46 +20,23 @@ namespace FastDev.Service
         private Func<APIContext, object> law_punishmentInfoService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            switch (id.ToUpper())
-            {
-                case "FINISH":
+            //switch (id.ToUpper())
+            //{
+            //    case "FINISH":
                     return Handle;
-            }
-            return null;
+            //}
+            //return null;
         }
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
-            law_punishmentInfo lawpunishmentInfo = new law_punishmentInfo();
-            List<law_party> lawParties = new List<law_party>();
-            if (!string.IsNullOrEmpty(data.LawPunishmentInfo.TaskId)) return false;
-            string url = data.Url;
-            lawpunishmentInfo = data.LawPunishmentInfo;
-            lawParties = data.LawParties;
-            if (lawpunishmentInfo.IsConfiscationgoods)//有没收清单
-            { 
-            
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 简易流程
-        /// </summary>
-        /// <returns></returns>
-        private object EasyProcess(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties)
-        {
+            if (data.LawPunishmentInfo == null) return false;
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(lawpunishmentInfo, law_Parties);
-                //结束当前任务
-                _sHBaseService.UpdateWorkTaskState(lawpunishmentInfo.TaskId,WorkTaskStatus.Close);
-                //TODO 创建简易流程任务处罚决定书
-                _sHBaseService.CreateSaveWorkTask(lawpunishmentInfo.TaskId, TaskType.law_punishmentInfo);
-                ////修改事件状态
-                //if(!string.IsNullOrEmpty(lawpunishmentInfo.EventInfoId))
-                //_sHBaseService.UpdateEventState(lawpunishmentInfo.EventInfoId,EventStatus.);            
+                CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
+                _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
+                _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
             }
             catch (Exception)
             {
@@ -70,40 +47,35 @@ namespace FastDev.Service
             return true;
         }
 
-        //一般程序
-        private object NormalProcess(law_punishmentInfo lawpunishmentInfo)
-        {
-            return null;
-        }
-
         /// <summary>
         /// 创建表单和当事人
         /// </summary>
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties)
+        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
         {
-            var lawpunishmentInfoSource = base.Create(lawpunishmentInfo) as law_punishmentInfo;//保存原始信息
-            var lawpunishmentInfoTemp = lawpunishmentInfoSource;
-            lawpunishmentInfoTemp.PreviousformID = lawpunishmentInfoSource.ID;
-            var lawpunishmentInfoNew = base.Create(lawpunishmentInfoTemp) as law_punishmentInfo;//可变更的信息
+            var lawpunishment_Info = base.Create(lawpunishmentInfo) as law_punishmentInfo;//保存原始信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
+            var _attachment= ServiceHelper.GetService("attachmentService");
+
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
-                foreach (var l in law_Parties)//原始的当事人
+                foreach (var l in law_Parties)
                 {
                     l.Associatedobjecttype = "law_punishmentInfo";
-                    l.AssociationobjectID = lawpunishmentInfo.ID;
+                    l.AssociationobjectID = lawpunishment_Info.ID;
                     _Lawpartys.Create(l);
                 }
-                foreach (var l in law_Parties)//创建新建的
+            }
+            if (attachments != null && attachments.Count > 0)
+            {
+                foreach (var a in attachments)
                 {
-                    l.Associatedobjecttype = "law_punishmentInfo";
-                    l.AssociationobjectID = lawpunishmentInfoNew.ID;
-                    _Lawpartys.Create(l);
+                    a.Associatedobjecttype = "law_punishmentInfo";
+                    a.AssociationobjectID = lawpunishment_Info.ID;
+                    _attachment.Create(a);           
                 }
-
             }
         }
     }

@@ -5,13 +5,12 @@ using System.Text;
 
 namespace FD.Model.Dto
 {
-   public class law_punishmentInfoFinishReq
+   public class law_punishmentInfoFinishReq:FormReqBase
     {
         /// <summary>
         /// 处罚决定书信息
         /// </summary>
         public law_punishmentInfo LawPunishmentInfo { get; set; }
-
         /// <summary>
         /// 当事人信息
         /// </summary>
@@ -20,9 +19,5 @@ namespace FD.Model.Dto
         /// 证据信息
         /// </summary>
         public List<attachment> Attachments { get; set; }
-        /// <summary>
-        /// 待办地址
-        /// </summary>
-        public string Url { get; set; }
     }
 }
