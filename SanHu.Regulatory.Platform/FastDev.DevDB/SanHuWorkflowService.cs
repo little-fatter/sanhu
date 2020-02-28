@@ -498,6 +498,7 @@ namespace FastDev.DevDB
                                     //现在这里只给节点一个表单，是要求每个执行者填写同一个表单，不灵活
                                     //lyl 02-28备注
                                     string formName = viewNode2.properties["formName"].ToString();//fomeName 对应任务类型
+                                    //eNode2.Executors
                                     foreach (List<string> executor in eNode2.Executors)
                                     {
                                         string exeUserId = executor[0];
