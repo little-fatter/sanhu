@@ -126,12 +126,13 @@ namespace FastDev.Service
         private Func<APIContext, object> Task_surveyService_OnGetAPIHandler(string id)
         {
             _sHBaseService= ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            switch (id.ToUpper())
-            {
-                case "FINISH":
-                    return Handle;
-            }
-            return null;
+            //switch (id.ToUpper())
+            //{
+            //    case "FINISH":
+            //        return Handle;
+            //}
+            //return null;
+            return Handle;
         }
 
 
@@ -141,23 +142,25 @@ namespace FastDev.Service
         {
             var data = JsonHelper.DeserializeJsonToObject<task_surveyFinishReq>(context.Data);
             task_survey taskSurvey = new task_survey();
+            List<work_task> workTasks = new List<work_task>();
             List<law_party> lawParties = new List<law_party>();
             if (!string.IsNullOrEmpty(data.TaskSurvey.TaskId)) return false;
             if (!string.IsNullOrEmpty(data.TaskSurvey.EventInfoId)) return false;
-            string url = data.Url;
             taskSurvey = data.TaskSurvey;
-            lawParties = data.LawParties;
+            CreateInfo(taskSurvey,lawParties);
             //0:不予处罚
             //1:移交其它部门
             //2:处罚程序
             switch (data.TaskSurvey.ProcessingDecisions)
             {
                 case 0:
-                     return Finish(taskSurvey,lawParties);
+                    // return EndEvent(taskSurvey);
+                    break;
                 case 1:
                     return ToEpart(taskSurvey);
                 case 2:
-                    return CreateCase(taskSurvey, lawParties, url);
+                    //  return CreateCase(taskSurvey);
+                    break;
             }
             return false;
         }
@@ -171,18 +174,38 @@ namespace FastDev.Service
         /// <returns></returns>
        private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
         {
-            var taskSurvey = base.Create(TaskSurvey) as task_survey;
+            var tasksurvey = base.Create(TaskSurvey) as case_Info;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
-                foreach (var l in law_Parties)
+                foreach (var l in law_Parties)//原始的当事人
                 {
                     l.Associatedobjecttype = "task_survey";
-                    l.AssociationobjectID = taskSurvey.ID;
+                    l.AssociationobjectID = tasksurvey.ID;
                     _Lawpartys.Create(l);
                 }
             }
         }
+        public object EndEvent(task_survey TaskSurvey, List<law_party> lawParties)
+        {
+            try
+            {
+                QueryDb.BeginTransaction();
+                CreateInfo(TaskSurvey, lawParties);
+                _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);//关闭任务
+                _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId, EventStatus.finish);//事件改为完成                         
+            }
+            catch (Exception)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
+            QueryDb.CompleteTransaction();
+            return true;
+        }
+
+
+
 
 
         /// <summary>
@@ -190,11 +213,11 @@ namespace FastDev.Service
         /// </summary>
         /// <param name="TaskSurvey"></param>
         /// <returns></returns>
-        public object Finish(task_survey TaskSurvey, List<law_party> law_Parties)
+        public object Finish(task_survey TaskSurvey,List<law_party> lawParties)
         {
             try {
                 QueryDb.BeginTransaction();
-                CreateInfo(TaskSurvey, law_Parties);
+                CreateInfo(TaskSurvey,lawParties);
                 _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);//关闭任务
                 _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId,EventStatus.finish);//事件改为完成                         
             }
@@ -223,13 +246,13 @@ namespace FastDev.Service
         /// 创建案件
         /// </summary>
         /// <returns></returns>
-        public object CreateCase(task_survey TaskSurvey, List<law_party> law_Parties,string url)
+        public object CreateCase(task_survey TaskSurvey,string url)
         {
             try
             {
                 QueryDb.BeginTransaction();
                 //创建当前表单信息
-                CreateInfo(TaskSurvey, law_Parties);
+                //CreateInfo(TaskSurvey);
                 //关闭当前任务
                 _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);
                 //TODO分配人员

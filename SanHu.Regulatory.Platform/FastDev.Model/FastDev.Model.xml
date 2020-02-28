@@ -29,6 +29,21 @@
             待办地址
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.FormReqBase">
+            <summary>
+            表单请求基础
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormReqBase.SourceTaskId">
+            <summary>
+            源任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormReqBase.NextTasks">
+            <summary>
+            需要新建任务信息
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormSaveDto.FormBase">
             <summary>
             基础表单
@@ -47,6 +62,41 @@
         <member name="F:FD.Model.Dto.FormType.PatrolRecord">
             <summary>
             巡检表
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.Form_inquiryrecordFinishReq">
+            <summary>
+            询问
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.TaskId">
+            <summary>
+            任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.EventId">
+            <summary>
+            事件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.CaseId">
+            <summary>
+            案件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.form_Inquiryrecord">
+            <summary>
+            询问信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.law_Staffs">
+            <summary>
+            执法人
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.law_Parties">
+            <summary>
+            当事人
             </summary>
         </member>
         <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawPunishmentInfo">
@@ -147,11 +197,6 @@
         <member name="P:FD.Model.Dto.task_surveyFinishReq.LawParties">
             <summary>
             当事人信息
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.task_surveyFinishReq.Url">
-            <summary>
-            待办地址
             </summary>
         </member>
         <member name="T:FD.Model.Enum.EventStatus">
