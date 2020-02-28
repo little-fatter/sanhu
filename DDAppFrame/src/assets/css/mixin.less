@@ -1,0 +1,11 @@
+@baseFontSize: 50/37.5;
+
+//返回某属性的转换成真实的rem
+.px2rem(@name, @px){
+    @{name}: @px * @baseFontSize*1px
+}
+
+// @baseFontSize: 37.5;
+// .px2rem(@name, @px){
+//     @{name}: @px / @baseFontSize
+// }

@@ -114,6 +114,11 @@ public string TaskType
 get;
 set;
 }
+public string LaskTaskId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

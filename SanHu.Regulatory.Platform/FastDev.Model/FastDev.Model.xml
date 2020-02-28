@@ -14,6 +14,36 @@
             主框架地址
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.CaseInfo">
+            <summary>
+            案件信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.case_InfoFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.FormReqBase">
+            <summary>
+            表单请求基础
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormReqBase.SourceTaskId">
+            <summary>
+            源任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormReqBase.NextTasks">
+            <summary>
+            需要新建任务信息
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormSaveDto.FormBase">
             <summary>
             基础表单
@@ -34,6 +64,61 @@
             巡检表
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.Form_inquiryrecordFinishReq">
+            <summary>
+            询问
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.TaskId">
+            <summary>
+            任务id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.EventId">
+            <summary>
+            事件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.CaseId">
+            <summary>
+            案件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.form_Inquiryrecord">
+            <summary>
+            询问信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.law_Staffs">
+            <summary>
+            执法人
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.law_Parties">
+            <summary>
+            当事人
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawPunishmentInfo">
+            <summary>
+            处罚决定书信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Attachments">
+            <summary>
+            证据信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.TaskHandOverReq">
             <summary>
             任务移交请求
@@ -47,6 +132,26 @@
         <member name="P:FD.Model.Dto.TaskHandOverReq.UserId">
             <summary>
             移交目标
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskHandOverReq.Url">
+            <summary>
+            钉钉任务跳转url
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.TaskNextStepReq">
+            <summary>
+            任务下一步
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskNextStepReq.TaskId">
+            <summary>
+            当前任务关联的事件id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.TaskNextStepReq.Url">
+            <summary>
+            待办地址
             </summary>
         </member>
         <member name="P:FD.Model.Dto.taskPatrolFinishReq.TaskId">
@@ -89,24 +194,44 @@
             勘察信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.task_surveyFinishReq.LawParties">
+            <summary>
+            当事人信息
+            </summary>
+        </member>
         <member name="T:FD.Model.Enum.EventStatus">
             <summary>
             事件状态
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.EventStatus.Undistributed">
+        <member name="F:FD.Model.Enum.EventStatus.untreated">
             <summary>
-            未分配
+            待处理
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.EventStatus.Allocation">
+        <member name="F:FD.Model.Enum.EventStatus.patrol">
             <summary>
-            分配
+            事件核查中
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.EventStatus.Close">
+        <member name="F:FD.Model.Enum.EventStatus.track">
             <summary>
-            已关闭
+            跟踪整改中
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.survey">
+            <summary>
+            现场勘察中
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.finish">
+            <summary>
+            处理完成
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.toCase">
+            <summary>
+            转为案件办理
             </summary>
         </member>
         <member name="F:FD.Model.Enum.WorkTaskStatus.Close">
@@ -137,6 +262,16 @@
         <member name="F:FD.Model.Enum.TaskType.Survey">
             <summary>
             勘察
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.Case">
+            <summary>
+            案件任务
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.law_punishmentInfo">
+            <summary>
+            现场决定处罚书任务
             </summary>
         </member>
     </members>

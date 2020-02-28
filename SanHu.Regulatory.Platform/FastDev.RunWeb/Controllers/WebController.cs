@@ -267,7 +267,7 @@ namespace FastDev.RunWeb.Controllers
 
         private Bitmap bitmap_0 = null;
 
-        private string string_1;
+        private string jpgUrl;
 
         private int int_0;
 
@@ -1551,7 +1551,7 @@ namespace FastDev.RunWeb.Controllers
             if (core_printTemplate_0 != null)
             {
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
-                string detailFieldName = method_7();
+                string detailFieldName = GetReportDetialHtml();
                 int num = 1;
                 if (string.IsNullOrEmpty(detailFieldName))
                 {
@@ -2021,12 +2021,12 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private List<string> method_4(string string_7, int? NHTadHyHOIGc31lUi0, bool bool_0)
+        private List<string> method_4(string string_7, int? currentPage, bool bool_0)
         {
             IService service = ServiceHelper.GetService(core_printTemplate_0.ModelName);
             List<string> list = new List<string>();
             List<TemplatePageInfo> list2 = method_1(string_7);
-            int num = (!NHTadHyHOIGc31lUi0.HasValue) ? 1 : NHTadHyHOIGc31lUi0.Value;
+            int num = (!currentPage.HasValue) ? 1 : currentPage.Value;
             dictionary_1["page"] = ObjectExtensions.ToStr((object)num);
             dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)list2.Count);
             for (int i = 1; i <= list2.Count; i++)
@@ -2040,7 +2040,7 @@ namespace FastDev.RunWeb.Controllers
                     TemplatePageInfo templatePageInfo = list2[i - 1];
                     string context = templatePageInfo.Context;
                     string_0 = core_printTemplate_0.TemplateBody;
-                    string detailFieldName = method_7();
+                    string detailFieldName = GetReportDetialHtml();
                     if (!string.IsNullOrEmpty(detailFieldName))
                     {
                         dictionary_0 = service.GetDetailData(context, null, false);
@@ -2165,11 +2165,11 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private string method_5(string string_7, string string_8, int int_2)
+        private string PrintJpgUrl(string contextId, string templateId, int pageIndex)
         {
             string text = base.Request.Path.ToString();
             text = text.Substring(0, text.IndexOf("web"));
-            return text + "web/printjpg?context=" + string_7 + "&templateId=" + string_8 + "&pageindex=" + int_2 + "&isjpg=N";
+            return text + "web/printjpg?context=" + contextId + "&templateId=" + templateId + "&pageindex=" + pageIndex + "&isjpg=N";
         }
         [HttpPost]
         public HttpResponseMessage PrintJPG(string context, string templateId, int pageindex, string isjpg)
@@ -2201,7 +2201,7 @@ namespace FastDev.RunWeb.Controllers
                 int_1 = Convert.ToInt32((double)core_printTemplate_0.Height.Value * 3.78);
                 foreach (TemplatePageInfo item in list)
                 {
-                    string_1 = method_5(context, templateId, item.AllPageIndex);
+                    jpgUrl = PrintJpgUrl(context, templateId, item.AllPageIndex);
                     Thread thread = new Thread(method_10);
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
@@ -2239,7 +2239,7 @@ namespace FastDev.RunWeb.Controllers
             {
                 int_0 = Convert.ToInt32((double)core_printTemplate_0.Width.Value * 3.78);
                 int_1 = Convert.ToInt32((double)core_printTemplate_0.Height.Value * 3.78);
-                string_1 = method_5(context, templateId, pageindex);
+                jpgUrl = PrintJpgUrl(context, templateId, pageindex);
                 Thread thread = new Thread(method_10);
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
@@ -2309,7 +2309,7 @@ namespace FastDev.RunWeb.Controllers
                     int_1 = Convert.ToInt32((double)coreReportTemp.Height.Value * 3.78);
                     for (int i = 0; (double)i < num2; i++)
                     {
-                        string_1 = method_6(context, templateId, i + 1);
+                        jpgUrl = method_6(context, templateId, i + 1);
                         Thread thread = new Thread(method_10);
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
@@ -2420,7 +2420,7 @@ namespace FastDev.RunWeb.Controllers
                 int_1 = Convert.ToInt32((double)coreReportTemp.Height.Value * 3.78);
                 for (int i = 1; (double)i <= num2; i++)
                 {
-                    string_1 = method_6(context, templateId, i);
+                    jpgUrl = method_6(context, templateId, i);
                     Thread thread = new Thread(method_10);
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
@@ -2457,7 +2457,7 @@ namespace FastDev.RunWeb.Controllers
             {
                 int_0 = Convert.ToInt32((double)coreReportTemp.Width.Value * 3.78);
                 int_1 = Convert.ToInt32((double)coreReportTemp.Height.Value * 3.78);
-                string_1 = method_6(context, templateId, pageindex);
+                jpgUrl = method_6(context, templateId, pageindex);
                 Thread thread = new Thread(method_10);
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
@@ -2525,7 +2525,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private string method_7()
+        private string GetReportDetialHtml()
         {
             try
             {

@@ -14,11 +14,16 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using ObEx = FastDev.Common.Extensions.ObjectExtensions;
 using Newtonsoft.Json.Linq;
+using FastDev.DevDB.Workflow;
 
 namespace FastDev.DevDB
 {
     public class ServiceBase : IService
     {
+
+        protected const string WF_EventWorkflowModel = "event_info_wf";
+        protected const string WF_LawCaseWorkflowModel = "case_law_case";
+        protected const string WF_MANUALLY_CREATE_TASK_ID = "MANUALLY_CREATE_TASK_ID";
         private DeleteDelegate deleteDelegate_OnDelete;
 
         private DeleteDelegate deleteDelegate_OnBeforeDelete;
@@ -691,16 +696,91 @@ namespace FastDev.DevDB
             return CreateUpdateData(postdata, true);
         }
         /// <summary>
-        /// 工作流创建
+        /// 工作流向前一步
         /// </summary>
+        /// <param name="wfModel"></param>
+        /// <param name="complateContent"></param>
         /// <param name="postdata"></param>
-        /// <param name="exeUserIds">执行该工作流的用户</param>
+        /// <param name="mustTaskId">对于必须taskId的工作流，需要验证taskid再进行下一步</param>
+        /// <param name="exeUserIds"></param>
         /// <returns></returns>
-        public virtual object WfCreate(object postdata, params string[] exeUserIds)
+        protected object AdvanceWorkflow(string wfModel,string complateContent, object postdata,bool mustTaskId, params string[] exeUserIds)
         {
-            ServiceHelper.Log("【新增】" + ModelName, "");
-            return CreateUpdateData(postdata, true);
+            var formDataType = postdata.GetType();
+            string taskId = formDataType.GetProperty("TaskId")?.GetValue(postdata)?.ToString();
+            if ((!mustTaskId) && string.IsNullOrEmpty(taskId))
+            {
+                taskId = "MANUALLY_CREATE_TASK_ID";
+            }
+            if (!string.IsNullOrEmpty(taskId))
+            {//如果该表单有任务id，则，检查是否完成了某任务
+                string contextId = "";
+                if (!mustTaskId)
+                {//手动创建任务，这里是开始节点  的contextId没有地方获取，是从工作流模型中取得的，其实是postdata 的ID
+                    if(wfModel==WF_EventWorkflowModel)
+                        contextId= formDataType.GetProperty("ID")?.GetValue(postdata)?.ToString();
+                    else if (wfModel == WF_LawCaseWorkflowModel)
+                    {//案件工作流
+
+                    }
+                }
+                else
+                {
+                    contextId= formDataType.GetProperty("EventInfoId")?.GetValue(postdata)?.ToString();
+                }
+                workflowService.DbContext = QueryDb;
+                Dictionary<string, object> wfContext = (Dictionary<string, object>)workflowService.GetContext(new DevDB.Workflow.WorkflowContext() { TaskID = taskId, Action = "advance", Model = wfModel, Context = contextId });
+                //wfContext[]
+                if ((wfContext.ContainsKey("Success") && Convert.ToBoolean(wfContext["Success"]) || wfContext.ContainsKey("nodes")))
+                {//如果工作流可以往下走
+                    var nodes = ((List<object>)wfContext["nodes"]);
+                    if (nodes.Count > 0)
+                    {
+                        var ExeNode = ((Dictionary<string, object>)(nodes[0]));
+                        object nodeId = ExeNode["node"].GetType().GetProperty("id").GetValue(ExeNode["node"]);
+
+                        //nodeId = node.id.ToString();
+                        if (!string.IsNullOrEmpty(nodeId.ToString()))
+                        {
+                            WorkflowContext wfExe = new WorkflowContext()
+                            {
+                                Model = wfModel,
+                                Action = "advance",
+                                Context = contextId,
+                                TaskID = taskId,
+                                Remark = complateContent,
+                                ExecuteNodes = new List<ExecuteNode>()
+                            };
+                            List<string> excutors = new List<string>();//用户id一个字符串，用户名一个字符串，用户名其实没有使用
+                            if (exeUserIds != null && exeUserIds.Length > 0)
+                            {
+                                for (int i = 0; i < exeUserIds.Length; i++)
+                                {
+                                    excutors.Add(exeUserIds[i]);            //使用哪个用户来执行 这里需要不同的情况的来处理
+                                    excutors.Add("用户名");//第二个参数 其实没有用到
+                                }
+                            }
+                            else
+                            {//默认使用当前用户来执行任务
+                                excutors.Add(SysContext.WanJiangUserID);            //使用哪个用户来执行 这里需要不同的情况的来处理
+                                excutors.Add("用户名");//第二个参数 其实没有用到
+                            }
+                            //如果由多个用户来执行，那 Executors可以是多个人，        
+                            //这里任务的下一步仍然由填表人完成，某些情况些，会由指定的人来完成，比如：？想到了再说？？？
+                            wfExe.ExecuteNodes.Add(new ExecuteNode() { Executors = new List<List<string>> { excutors }, NodeId = nodeId.ToString() });
+                            workflowService.Execute(wfExe);//工作流向下一步
+                            if (taskId == "MANUALLY_CREATE_TASK_ID")
+                            {//如果该任务是手动创建
+                                string latestWorkTaskId = workflowService.LatestWorkTaskId;
+                                return latestWorkTaskId;//返回所创建的任务Id,然后 work_task那边拿到以后，更新work_task自己的相关字段
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
+
 
         public virtual object Update(object postdata)
         {
@@ -2021,13 +2101,6 @@ namespace FastDev.DevDB
             _modelConfigCache = new Dictionary<string, object>();
 
         }
-
-
-
-
-
-
-
 
     }
 }

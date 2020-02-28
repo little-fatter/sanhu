@@ -1,6 +1,7 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
+using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Common.ActionValue;
@@ -20,7 +21,7 @@ namespace FastDev.Service
     /// <summary>
     /// 任务
     /// </summary>
-    class work_taskService : ServiceBase, IService
+    class work_taskService : SHBaseService, IService
     {
 
         public work_taskService()
@@ -40,20 +41,23 @@ namespace FastDev.Service
         {
             object rev = null;
             var data = (Model.Form.work_task)postdata;
-            if (!string.IsNullOrEmpty(data.RefTable))
+            if (data.RefTable == WF_EventWorkflowModel || data.RefTable == WF_LawCaseWorkflowModel)
             {
+                //如果是reftable 要求创建事件工作流，或者案件工作流
                 Type entityType = DataAccessHelper.GetEntityType(data.RefTable, "Form");
                 if (entityType != null)
                 {
                     var nextdata = FullJsonValue.GetObjectByType(entityType, data.FormPreparation);
-                    //nextdata
-                    entityType.GetProperty("TaskId").SetValue(nextdata, "MANUALLY_CREATE_TASK_ID");//高速系统是手动创建的任务
-                    IService svc = ServiceHelper.GetService(data.RefTable);
-                    rev = svc.WfCreate(nextdata, data.AssignUsers.ToArray());//创建了工作流
+                    if (nextdata == null) { nextdata = new Model.Form.event_info_wf(); }
+                    entityType.GetProperty("objId").SetValue(nextdata, data.EventInfoId);//告诉系统是手动创建的任务
+                    IService svc = ServiceHelper.GetService(WF_EventWorkflowModel);
+                    rev = svc.Create(nextdata);//创建事件工作流
+                    nextdata.GetType().GetProperty("ID").SetValue(nextdata, rev);//将id写入
+                    var taskId = AdvanceWorkflow(WF_EventWorkflowModel, "手动创建任务", nextdata, false, data.AssignUsers.ToArray());
                     //
-                    var  wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
+                    var wTask = QueryDb.FirstOrDefault<work_task>("where WorkflowtaskID = @0", new object[1]
                     {
-                        rev
+                        taskId
                     });
                     //从工作流里面查询出
                     //然后更新一些关键字段
@@ -89,6 +93,10 @@ namespace FastDev.Service
                     return HandOver;
                 case "REJECT":
                     return Reject;
+                case "CASE":
+                    return NextStepCase;
+                case "SURVEY":
+                    return NextStepSurvey;                   
             }
             return null;
         }
@@ -107,21 +115,21 @@ namespace FastDev.Service
 
                 //关闭当前任务
                 var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
-                workTask.TaskStatus = (int)WorkTaskStatus.Close;  
+                workTask.TaskStatus = (int)WorkTaskStatus.Close;
                 QueryDb.Update(workTask);
 
                 //复制任务给指定用户
                 workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-                workTask.AssignUsersID = data.UserId;
+                workTask.AssignUsersID = data.UserId.ToString();
                 base.Create(workTask);
 
                 //给指定用户发送待办
-
+                CreateWorkrecor(data.UserId, workTask.TaskType.ToString(), data.Url, "标题", "内容");
 
                 QueryDb.CompleteTransaction();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
             }
@@ -140,9 +148,49 @@ namespace FastDev.Service
             var workTask = QueryDb.FirstOrDefault<work_task>("where id=@id", data.TaskId);
             workTask.RejectReason = data.Reason;
             workTask.TaskStatus = (int)WorkTaskStatus.Reject;
-            base.Update(workTask);
+            QueryDb.BeginTransaction();
+            try
+            {
+                base.Update(workTask);  //修改任务状态
+                base.UpdateEventState(workTask.EventInfoId, EventStatus.untreated);  //修改事件状态
+                QueryDb.CompleteTransaction();
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
             return true;
         }
+
+        private object NextStepCase(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
+            var  _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            try
+            {
+                return _sHBaseService.GetLastInfo(data.TaskId,"case_Info");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        private object NextStepSurvey(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
+            var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            try
+            {
+                return _sHBaseService.GetLastInfo(data.TaskId, "task_survey");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
     }
 
 

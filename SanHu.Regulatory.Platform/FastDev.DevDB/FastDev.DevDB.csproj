@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Component\PetaPoco\PetaPoco.csproj" />
     <ProjectReference Include="..\FastDev.Common\FastDev.Common.csproj" />
+    <ProjectReference Include="..\FastDev.IService\FastDev.IServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

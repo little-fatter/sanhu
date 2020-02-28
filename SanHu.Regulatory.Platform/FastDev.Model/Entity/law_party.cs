@@ -49,7 +49,7 @@ public string AssociationobjectID
 get;
 set;
 }
-public string AssociatedobjecttypeID
+public string Associatedobjecttype
 {
 get;
 set;
@@ -64,7 +64,7 @@ public string Gender
 get;
 set;
 }
-public string Occupationofparties
+public string Occupation
 {
 get;
 set;

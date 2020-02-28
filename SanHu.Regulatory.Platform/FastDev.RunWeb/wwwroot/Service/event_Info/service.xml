@@ -79,6 +79,7 @@
         <field name="limitType" dbName="limitType" title="整改期限类型（1手选 2填写）" type="string" length="50" isPK="N" />
         <field name="isDangerReport" dbName="isDangerReport" title="是否是隐患事件" type="string" length="50" isPK="N" />
         <field name="dorgId" dbName="dorgId" title="主管单位" type="string" length="50" isPK="N" />
+        <field name="OriginalID" dbName="OriginalID" title="原始id" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

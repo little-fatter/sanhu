@@ -109,6 +109,21 @@ public string finishPhotoDto
 get;
 set;
 }
+public byte? Needlawenforcement
+{
+get;
+set;
+}
+public byte? Needtracking
+{
+get;
+set;
+}
+public byte? ExistCrim
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
