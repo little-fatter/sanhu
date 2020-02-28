@@ -252,7 +252,7 @@ namespace FastDev.Service
             {
                 QueryDb.BeginTransaction();
                 //创建当前表单信息
-                CreateInfo(TaskSurvey);
+                //CreateInfo(TaskSurvey);
                 //关闭当前任务
                 _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);
                 //TODO分配人员
