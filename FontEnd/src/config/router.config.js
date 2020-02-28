@@ -14,193 +14,13 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/case', // 临时定向开发页面
+    redirect: '/mission', // 临时定向开发页面
     children: [
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        redirect: '/dashboard/workplace',
-        component: RouteView,
-        meta: { title: '仪表盘', keepAlive: true },
-        children: [
-          {
-            path: 'monitor',
-            name: 'Monitor',
-            component: () => import('@/views/dashboard/Monitor'),
-            meta: { title: '监控页', keepAlive: true }
-          },
-          {
-            path: 'workplace',
-            name: 'Workplace',
-            component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '工作台', keepAlive: true }
-          }
-        ]
-      },
-      // case 案件 cll
-      {
-        path: '/case',
-        redirect: '/case/case-list',
-        component: PageView,
-        meta: { title: '案件档案管理' },
-        children: [
-          {
-            path: 'case-list',
-            name: 'caseList',
-            component: () => import('@/views/case/index'),
-            meta: { title: '案件档案管理列表', keepAlive: true }
-          },
-          {
-            path: 'case-details',
-            name: 'caseDetails',
-            component: () => import('@/views/case/caseDetails'),
-            meta: { title: '案件详情', keepAlive: true }
-          },
-          {
-            path: 'new-case',
-            name: 'newCase',
-            component: () => import('@/views/case/newCase'),
-            meta: { title: '新增案件', keepAlive: false }
-          }
-        ]
-      },
-      // forms
-      {
-        path: 'form',
-        redirect: '/form/base-form',
-        component: PageView,
-        meta: { title: '表单页' },
-        children: [
-          {
-            path: 'base-form',
-            name: 'Index',
-            component: () => import('@/views/form/index'),
-            meta: { title: '表单列表', keepAlive: true }
-          },
-          {
-            path: 'form-details',
-            name: 'FormDetails',
-            component: () => import('@/views/form/formDetails'),
-            meta: { title: '表单详情', keepAlive: false }
-          },
-          {
-            path: 'form-edit',
-            name: 'FormEdit',
-            component: () => import('@/views/form/formEdit'),
-            meta: { title: '编辑表单', keepAlive: false }
-          },
-          {
-            path: 'form-add-list',
-            name: 'FormAddList',
-            component: () => import('@/views/form/formAddList'),
-            meta: { title: '新建表单列表', keepAlive: true }
-          },
-          {
-            path: 'form-add',
-            name: 'FormAdd',
-            component: () => import('@/views/form/formAdd'),
-            meta: { title: '新建表单', keepAlive: false }
-          },
-          {
-            path: 'form-print',
-            name: 'FormPrint',
-            component: () => import('@/views/form/formPrint'),
-            meta: { title: '表单打印', keepAlive: false }
-          },
-          {
-            path: 'form-approval',
-            name: 'FormApproval',
-            component: () => import('@/views/form/formAddroval'),
-            meta: { title: '表单审批', keepAlive: false }
-          },
-          {
-            path: 'close-report',
-            name: 'CloseReport',
-            component: () => import('@/views/form/closeReport'),
-            meta: { title: '结案报告', keepAlive: false }
-          },
-          {
-            path: 'file-cover',
-            name: 'FileCover',
-            component: () => import('@/views/form/fileCover'),
-            meta: { title: '卷宗封面', keepAlive: false }
-          }
-        ]
-      },
-
-      // list
-      {
-        path: 'list',
-        name: 'list',
-        component: PageView,
-        redirect: '/list/query-list',
-        meta: { title: '列表页' },
-        children: [
-          {
-            path: 'query-list',
-            name: 'QueryListWrapper',
-            component: () => import('@/views/list/TableList'),
-            meta: { title: '查询表格', keepAlive: true }
-          },
-          {
-            path: 'tree-list',
-            name: 'TreeList',
-            component: () => import('@/views/list/TreeList'),
-            meta: { title: '树目录表格', keepAlive: true }
-          },
-          {
-            path: 'edit-table',
-            name: 'EditList',
-            component: () => import('@/views/list/TableInnerEditList'),
-            meta: { title: '内联编辑表格', keepAlive: true }
-          },
-          {
-            path: 'basic-list',
-            name: 'BasicList',
-            component: () => import('@/views/list/StandardList'),
-            meta: { title: '标准列表', keepAlive: true }
-          },
-          {
-            path: 'card',
-            name: 'CardList',
-            component: () => import('@/views/list/CardList'),
-            meta: { title: '卡片列表', keepAlive: true }
-          },
-          {
-            path: 'search',
-            name: 'SearchList',
-            component: () => import('@/views/list/search/SearchLayout'),
-            redirect: '/list/search/article',
-            meta: { title: '搜索列表', keepAlive: true },
-            children: [
-              {
-                path: 'article',
-                name: 'SearchArticles',
-                component: () => import('../views/list/TableList'),
-                meta: { title: '搜索列表（文章）' }
-              },
-              {
-                path: 'project',
-                name: 'SearchProjects',
-                component: () => import('../views/list/TableList'),
-                meta: { title: '搜索列表（项目）' }
-              },
-              {
-                path: 'application',
-                name: 'SearchApplications',
-                component: () => import('../views/list/TableList'),
-                meta: { title: '搜索列表（应用）' }
-              }
-            ]
-          }
-        ]
-      },
-      // profile
       {
         path: 'mission',
         name: 'Mission',
         component: RouteView,
-        redirect: '',
+        redirect: '/mission/dealt',
         meta: { title: '我的任务' },
         children: [
           {
@@ -210,34 +30,163 @@ export const asyncRouterMap = [
             meta: { title: '待办任务' }
           },
           {
-            path: 'donetask',
+            path: 'done-task',
             name: 'DoneTask',
             component: () => import('@/views/mymission/doneTask'),
             meta: { title: '已办任务' }
           },
           {
-            path: 'mymission',
+            path: 'my-mission',
             name: 'MyMission',
             component: () => import('@/views/mymission/myMission'),
             meta: { title: '我发起的任务' }
           },
           {
-            path: 'eventinspection',
+            path: 'event-inspection',
             name: 'EventInspeion',
             component: () => import('@/views/mymission/eventInspection'),
             meta: { title: '事件巡查' }
           },
           {
-            path: 'sceneInvestigation',
+            path: 'scene-investigation',
             name: 'SceneInvestigation',
             component: () => import('@/views/mymission/sceneInvestigation'),
             meta: { title: '现场勘查' }
           },
           {
-            path: 'messagecenter',
+            path: 'message-center',
             name: 'Messagecenter',
             component: () => import('@/views/mymission/messageCenter'),
             meta: { title: '消息中心' }
+          }
+        ]
+      },
+
+      // 文书管理
+      {
+        path: 'data-manage',
+        name: 'dataManage',
+        redirect: '/data-manage/case/case-list',
+        component: RouteView,
+        meta: { title: '文书管理', keepAlive: true },
+        children: [
+          // forms
+          {
+            path: 'form',
+            redirect: '/form/base-form',
+            component: RouteView,
+            meta: { title: '表单页' },
+            children: [
+              {
+                path: 'base-form',
+                name: 'Index',
+                component: () => import('@/views/form/index'),
+                meta: { title: '我的表单', keepAlive: true }
+              },
+              {
+                path: 'form-details',
+                name: 'FormDetails',
+                component: () => import('@/views/form/formDetails'),
+                meta: { title: '表单详情', keepAlive: false }
+              },
+              {
+                path: 'form-edit',
+                name: 'FormEdit',
+                component: () => import('@/views/form/formEdit'),
+                meta: { title: '编辑表单', keepAlive: false }
+              },
+              {
+                path: 'form-add-list',
+                name: 'FormAddList',
+                component: () => import('@/views/form/formAddList'),
+                meta: { title: '表单', keepAlive: true }
+              },
+              {
+                path: 'form-add',
+                name: 'FormAdd',
+                component: () => import('@/views/form/formAdd'),
+                meta: { title: '新建表单', keepAlive: false }
+              },
+              {
+                path: 'form-print',
+                name: 'FormPrint',
+                component: () => import('@/views/form/formPrint'),
+                meta: { title: '表单打印', keepAlive: false }
+              },
+              {
+                path: 'form-approval',
+                name: 'FormApproval',
+                component: () => import('@/views/form/formAddroval'),
+                meta: { title: '表单审批', keepAlive: false }
+              },
+              {
+                path: 'close-report',
+                name: 'CloseReport',
+                component: () => import('@/views/form/closeReport'),
+                meta: { title: '结案报告', keepAlive: false }
+              },
+              {
+                path: 'file-cover',
+                name: 'FileCover',
+                component: () => import('@/views/form/fileCover'),
+                meta: { title: '卷宗封面', keepAlive: false }
+              }
+            ]
+          },
+          // case 案件
+          {
+            path: 'case',
+            redirect: '/case/case-list',
+            component: RouteView,
+            meta: { title: '案件档案' },
+            children: [
+              {
+                path: 'case-list',
+                name: 'caseList',
+                component: () => import('@/views/case/index'),
+                meta: { title: '案件档案管理', keepAlive: true }
+              },
+              {
+                path: 'case-details',
+                name: 'caseDetails',
+                component: () => import('@/views/case/caseDetails'),
+                meta: { title: '案件详情', keepAlive: true }
+              },
+              {
+                path: 'new-case',
+                name: 'newCase',
+                component: () => import('@/views/case/newCase'),
+                meta: { title: '新增案件', keepAlive: false }
+              }
+            ]
+          }
+        ]
+      },
+      // 环境资源
+      {
+        path: 'environment',
+        name: 'Environment',
+        component: RouteView,
+        redirect: '/environment/take-water-manage',
+        meta: { titile: '环境资源' },
+        children: [
+          {
+            path: 'take-water-manage',
+            name: 'Takewatermanage',
+            meta: { title: '取水许可证管理' },
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterManage')
+          },
+          {
+            path: 'take-water-allow-list',
+            name: 'Takewaterallowlist',
+            meta: { title: '取水许可证详情' },
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterAllowList')
+          },
+          {
+            path: 'boat-manage',
+            name: 'Boatmanage',
+            meta: { title: '船只管理' },
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/boatmanage/BoatManage')
           }
         ]
       },
@@ -297,7 +246,7 @@ export const asyncRouterMap = [
       // workbench
       {
         path: 'workbench',
-        name: 'workbench',
+        name: 'Workbench',
         redirect: '/workbench/backlog',
         component: RouteView,
         meta: { title: '我的工作台' },
@@ -305,50 +254,108 @@ export const asyncRouterMap = [
           {
             path: 'backlog',
             name: 'Backlog',
+            meta: { title: '待办事项' },
             component: () => import(/* webpackChunkName: "fail" */ '@/views/workbench/Backlog')
-          }
-        ]
-      },
-      {
-        path: '/takewatermanage',
-        name: 'takewatermanage',
-        redirect: '/takewatermanage/takewatermanage',
-        component: RouteView,
-        meta: { title: '取水管理' },
-        children: [
-          {
-            path: 'takewatermanage',
-            name: 'takewatermanage',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterManage')
-          },
-          {
-            path: 'takewaterallowlist',
-            name: 'takewaterallowlist',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/takewatermanage/TakeWaterAllowList')
-          }
-        ]
-      },
-      // boatmanage
-      {
-        path: '/boatmanage',
-        name: 'boatmanage',
-        redirect: '/boatmanage/boatmanage',
-        component: RouteView,
-        meta: { title: '船只管理' },
-        children: [
-          {
-            path: 'boatmanage',
-            name: 'boatmanage',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/boatmanage/BoatManage')
           }
         ]
       }
 
+      // {
+      //   path: 'dashboard',
+      //   name: 'dashboard',
+      //   redirect: '/dashboard/workplace',
+      //   component: RouteView,
+      //   meta: { title: '仪表盘', keepAlive: true },
+      //   children: [
+      //     {
+      //       path: 'monitor',
+      //       name: 'Monitor',
+      //       component: () => import('@/views/dashboard/Monitor'),
+      //       meta: { title: '监控页', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'workplace',
+      //       name: 'Workplace',
+      //       component: () => import('@/views/dashboard/Workplace'),
+      //       meta: { title: '工作台', keepAlive: true }
+      //     }
+      //   ]
+      // },
+      // 待办事项
+
+      // // list
+      // {
+      //   path: 'list',
+      //   name: 'list',
+      //   component: RouteView,
+      //   redirect: '/list/query-list',
+      //   meta: { title: '列表页' },
+      //   children: [
+      //     {
+      //       path: 'query-list',
+      //       name: 'QueryListWrapper',
+      //       component: () => import('@/views/list/TableList'),
+      //       meta: { title: '查询表格', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'tree-list',
+      //       name: 'TreeList',
+      //       component: () => import('@/views/list/TreeList'),
+      //       meta: { title: '树目录表格', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'edit-table',
+      //       name: 'EditList',
+      //       component: () => import('@/views/list/TableInnerEditList'),
+      //       meta: { title: '内联编辑表格', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'basic-list',
+      //       name: 'BasicList',
+      //       component: () => import('@/views/list/StandardList'),
+      //       meta: { title: '标准列表', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'card',
+      //       name: 'CardList',
+      //       component: () => import('@/views/list/CardList'),
+      //       meta: { title: '卡片列表', keepAlive: true }
+      //     },
+      //     {
+      //       path: 'search',
+      //       name: 'SearchList',
+      //       component: () => import('@/views/list/search/SearchLayout'),
+      //       redirect: '/list/search/article',
+      //       meta: { title: '搜索列表', keepAlive: true },
+      //       children: [
+      //         {
+      //           path: 'article',
+      //           name: 'SearchArticles',
+      //           component: () => import('../views/list/TableList'),
+      //           meta: { title: '搜索列表（文章）' }
+      //         },
+      //         {
+      //           path: 'project',
+      //           name: 'SearchProjects',
+      //           component: () => import('../views/list/TableList'),
+      //           meta: { title: '搜索列表（项目）' }
+      //         },
+      //         {
+      //           path: 'application',
+      //           name: 'SearchApplications',
+      //           component: () => import('../views/list/TableList'),
+      //           meta: { title: '搜索列表（应用）' }
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // },
     ]
   },
   {
     path: '*', redirect: '/404'
   }
+
 ]
 
 /**

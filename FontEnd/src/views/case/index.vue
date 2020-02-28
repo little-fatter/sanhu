@@ -32,9 +32,9 @@
           justify-content: flex-start;
         }
 
-        .input-width {
+        /*.input-width {
           width: 160px !important;
-        }
+        }*/
       }
     }
 
@@ -87,26 +87,26 @@
             </a-select>
           </a-col>
           <a-col :span="4">
-            <span>办案人：</span>
-            <a-input v-model="caseLaw" placeholder="请输入办案人名称" class="input-width"/>
+            <span class="ant-col-7">办案人：</span>
+            <a-input v-model="caseLaw" placeholder="请输入办案人名称" class="ant-col-16"/>
           </a-col>
           <a-col :span="4">
-            <span>当事人：</span>
-            <a-input v-model="caseBreakLow" placeholder="请输入当事人名称" class="input-width"/>
+            <span class="ant-col-7">当事人：</span>
+            <a-input v-model="caseBreakLow" placeholder="请输入当事人名称" class="ant-col-16"/>
           </a-col>
         </a-row>
         <a-row class="maigin-top">
           <a-col :span="8">
-            <span>案发时间：</span>
-            <a-range-picker @change="onChange" style="width: 352px"/>
+            <span class="ant-col-5">案发时间：</span>
+            <a-range-picker @change="onChange" class="ant-col-16"/>
           </a-col>
           <a-col :span="6">
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;案件号：</span>
-            <a-input v-model="caseNumber" placeholder="请输入案件号" class="input-width"/>
+            <span class="ant-col-5">&nbsp;&nbsp;&nbsp;&nbsp;案件号：</span>
+            <a-input v-model="caseNumber" placeholder="请输入案件号" class=" ant-col-16"/>
           </a-col>
-          <a-col :span="5">
-            <span>处罚决定书编号：</span>
-            <a-input v-model="caseJudgementNum" placeholder="请输入编号" class="input-width"/>
+          <a-col :span="6">
+            <span class="ant-col-10">处罚决定书编号：</span>
+            <a-input v-model="caseJudgementNum" placeholder="请输入编号" class="ant-col-12"/>
           </a-col>
           <a-col :span="4">
             <a-button @click="serchBtn">搜索</a-button>

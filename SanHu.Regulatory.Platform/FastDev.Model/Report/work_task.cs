@@ -49,11 +49,6 @@ public DateTime? ExpectedCompletionTime
 get;
 set;
 }
-public int? Tasktype
-{
-get;
-set;
-}
 public int? TaskStatus
 {
 get;
@@ -111,6 +106,10 @@ set;
 }
 public string WorkflowtaskID
 {
+get;
+set;
+}
+public string TaskType{
 get;
 set;
 }

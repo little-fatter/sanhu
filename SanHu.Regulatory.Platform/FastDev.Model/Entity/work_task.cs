@@ -1,6 +1,7 @@
 namespace FastDev.Model.Entity
 {
-  using System;
+    using FD.Model.Enum;
+    using System;
  using System.Runtime.CompilerServices;
 public partial class work_task
 {
@@ -45,11 +46,6 @@ get;
 set;
 }
 public DateTime? ExpectedCompletionTime
-{
-get;
-set;
-}
-public int? Tasktype
 {
 get;
 set;
@@ -110,6 +106,11 @@ get;
 set;
 }
 public string WorkflowtaskID
+{
+get;
+set;
+}
+public string TaskType
 {
 get;
 set;

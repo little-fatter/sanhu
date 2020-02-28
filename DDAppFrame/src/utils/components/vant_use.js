@@ -1,0 +1,127 @@
+import Vue from 'vue'
+
+/**
+ * 按需加载Vant组件
+ * 注：这里基本把Vant组件都引入了,业务使用时可根据情况注释掉不需要的组件这样可减少打包体积
+ */
+import {
+  Area,
+  Button,
+  Cell,
+  CellGroup,
+  Icon,
+  Row,
+  Col,
+  Popup,
+  Checkbox,
+  CheckboxGroup,
+  DatetimePicker,
+  Field,
+  NumberKeyboard,
+  PasswordInput,
+  Picker,
+  RadioGroup,
+  Radio,
+  Search,
+  Slider,
+  Stepper,
+  Switch,
+  SwitchCell,
+  Uploader,
+  ActionSheet,
+  Dialog,
+  Loading,
+  Notify,
+  PullRefresh,
+  SwipeCell,
+  Toast,
+  Pagination,
+  Collapse,
+  CollapseItem,
+  Tabbar,
+  TabbarItem,
+  List,
+  Tab,
+  Tabs,
+  TreeSelect,
+  NavBar,
+  Panel,
+  NoticeBar,
+  Lazyload,
+  Grid,
+  GridItem,
+  Step,
+  Steps,
+  Swipe,
+  SwipeItem,
+  ImagePreview,
+  Image,
+  DropdownMenu,
+  DropdownItem,
+  Progress,
+  Circle,
+  Rate,
+  Tag,
+  Sidebar,
+  SidebarItem,
+  Sticky,
+  Divider,
+  Overlay,
+  Form,
+  Calendar
+} from 'vant'
+
+Vue.use(Calendar)
+Vue.use(Form)
+Vue.use(Button)
+Vue.use(Image)
+Vue.use(Cell).use(CellGroup)
+Vue.use(Icon)
+Vue.use(Row).use(Col)
+Vue.use(Popup)
+Vue.use(Checkbox).use(CheckboxGroup)
+Vue.use(DatetimePicker)
+Vue.use(Field)
+Vue.use(NumberKeyboard)
+Vue.use(PasswordInput)
+Vue.use(Picker)
+Vue.use(RadioGroup).use(Radio)
+Vue.use(Search)
+Vue.use(Slider)
+Vue.use(Stepper)
+Vue.use(Switch)
+Vue.use(SwitchCell)
+Vue.use(Uploader)
+Vue.use(ActionSheet)
+Vue.use(Dialog)
+Vue.use(Loading)
+Vue.use(Notify)
+Vue.use(PullRefresh)
+Vue.use(SwipeCell)
+Vue.use(Toast)
+Vue.use(Collapse).use(CollapseItem)
+Vue.use(Lazyload)
+Vue.use(List)
+Vue.use(NoticeBar)
+Vue.use(Panel)
+Vue.use(Step).use(Steps)
+Vue.use(Swipe).use(SwipeItem)
+Vue.use(NavBar)
+Vue.use(Pagination)
+Vue.use(Tab).use(Tabs)
+Vue.use(Tabbar).use(TabbarItem)
+Vue.use(TreeSelect)
+Vue.use(DropdownMenu).use(DropdownItem)
+Vue.use(Grid).use(GridItem)
+
+Vue.use(Sidebar)
+Vue.use(SidebarItem)
+Vue.use(Tag)
+Vue.use(Progress)
+Vue.use(ImagePreview)
+Vue.use(Circle)
+Vue.use(Rate)
+Vue.use(Area)
+Vue.use(Sticky)
+Vue.use(Divider)
+Vue.use(Overlay)
