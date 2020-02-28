@@ -33,7 +33,7 @@ namespace FastDev.Service
 
             return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
-        public void CreateWorkrecor(long userId, string title, string url, string formTitle, string fromContent)
+        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
         {
             OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
             {

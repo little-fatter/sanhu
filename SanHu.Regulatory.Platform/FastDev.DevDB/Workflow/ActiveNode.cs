@@ -6,7 +6,11 @@ namespace FastDev.DevDB.Workflow
 	public class ActiveNode : NodeBase
 	{
 		
-
+		/// <summary>
+		/// 1 抢占
+		/// 2 3 同时
+		/// 4   会签
+		/// </summary>
 		public string handlerType
 		{
 			get;

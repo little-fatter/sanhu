@@ -11,11 +11,15 @@ using System.Text;
 
 namespace FastDev.Service
 {
+
     /// <summary>
     /// 三湖业务基础server
     /// </summary>
-    public class SHBaseService: ServiceBase
+    public class SHBaseService : ServiceBase
     {
+        protected const string AccountId = "165906044420484870";
+        protected const string AccountName = "余盛全";
+
         /// <summary>
         /// 发送待办
         /// </summary>
@@ -24,7 +28,7 @@ namespace FastDev.Service
         /// <param name="url">跳转地址</param>
         /// <param name="formTitle">待办表单标题</param>
         /// <param name="fromContent">待办表单内容</param>
-        public void CreateWorkrecor(long userId, string title, string url, string formTitle, string fromContent)
+        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
         {
             var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
             ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
@@ -38,38 +42,50 @@ namespace FastDev.Service
         /// <returns></returns>
         public bool UpdateEventState(string eventId, EventStatus eventStatus)
         {
-           return  base.QueryDb.Execute("update event_info set evtState = @0 where objid=@1", (int)eventStatus, eventId)>0;
+            return base.QueryDb.Execute("update event_info set evtState = @0 where objid=@1", (int)eventStatus, eventId) > 0;
         }
 
         /// <summary>
         /// 创建任务
         /// </summary>
-        /// <param name="eventId">事件id</param>
-        /// <param name="caseId">案件id</param>
+        /// <param name="taskid">源任务id</param>
         /// <param name="type">任务类型</param>
         /// <param name="AssignUsersID">处理人</param>
         /// <param name="MainHandler">主办人</param>
         /// <returns></returns>
-        public void CreateWorkTask(string taskid, TaskType type, string AssignUsersID, string MainHandler)
+        public work_task CreateWorkTask(string taskid, TaskType type, string AssignUsersID = AccountId, string MainHandler = AccountName)
         {
             var lastTask = GetWorkTask(taskid);
             work_task workTask = new work_task();
             workTask.EventInfoId = lastTask.EventInfoId;
             workTask.CaseID = lastTask.CaseID;
-            workTask.Tasktype = TaskType.Survey;
+            workTask.TaskType = TaskType.Survey.ToString();
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
             workTask.AssignUsersID = AssignUsersID;
             workTask.MainHandler = MainHandler;
-            ServiceHelper.GetService("work_task").Create(workTask);
+            return workTask;
         }
 
-    /// <summary>
-    /// 任务状态更新
-    /// </summary>
-    /// <param name="taskid"></param>
-    /// <param name="workTaskStatus"></param>
-        public void UpdateWorkTaskState(string taskid,WorkTaskStatus workTaskStatus)
+        /// <summary>
+        /// 创建并保存任务
+        /// </summary>
+        /// <param name="taskid">源任务id</param>
+        /// <param name="type">任务类型</param>
+        /// <param name="AssignUsersID">处理人</param>
+        /// <param name="MainHandler">主办人</param>
+        /// <returns></returns>
+        public void CreateSaveWorkTask(string taskid, TaskType type, string AssignUsersID = AccountId, string MainHandler = AccountName)
+        {
+            ServiceHelper.GetService("work_task").Create(CreateWorkTask(taskid, type, AssignUsersID, MainHandler));
+        }
+
+        /// <summary>
+        /// 任务状态更新
+        /// </summary>
+        /// <param name="taskid"></param>
+        /// <param name="workTaskStatus"></param>
+        public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
             var taskInfo = GetWorkTask(taskid);
             taskInfo.TaskStatus = (int)workTaskStatus;
@@ -80,7 +96,7 @@ namespace FastDev.Service
 
         private work_task GetWorkTask(string taskid)
         {
-           return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
+            return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
 
 

@@ -178,12 +178,28 @@ function() {
                     editor: {},
                     newline: 1,
                     width: "",
-                    readonlyInEdit: 0
+                    readonlyInEdit: 0,
+                    validate: {
+                        required: 0,
+                        minlength: "0",
+                        maxlength: "255",
+                        regexRule: "",
+                        equalTo: ""
+                    }
                 },
                 {
                     name: "TaskId",
                     type: "text",
                     label: "TaskId",
+                    editor: {},
+                    newline: 1,
+                    width: "",
+                    readonlyInEdit: 0
+                },
+                {
+                    name: "NextHandler",
+                    type: "textarea",
+                    label: "下一步用户，逗号分割",
                     editor: {},
                     newline: 1,
                     width: "",

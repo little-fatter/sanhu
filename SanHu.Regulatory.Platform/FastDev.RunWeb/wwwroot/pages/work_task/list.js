@@ -6,9 +6,15 @@ function() {
         options: {
             list: {
                 columns: [{
-                    name: "Tasktype",
+                    name: "TaskType",
                     display: "任务类型",
-                    type: "string"
+                    type: "string",
+                    name_text: "任务类型",
+                    width: "100",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type_text: "文本型",
+                    editorType: ""
                 },
                 {
                     name: "EventInfoId",
@@ -87,7 +93,7 @@ function() {
             },
             type: "list",
             filterFields: [{
-                display: "分配用户",
+                display: "任务执行人",
                 name: "AssignUsers",
                 editor: {
                     url: "/web/namedata",
@@ -171,14 +177,6 @@ function() {
                     type: "datepicker"
                 },
                 type: "datepicker"
-            },
-            {
-                display: "任务类型",
-                name: "Tasktype",
-                editor: {
-                    type: "int"
-                },
-                type: "int"
             },
             {
                 display: "任务状态",
@@ -271,6 +269,14 @@ function() {
             {
                 display: "工作流任务Id",
                 name: "WorkflowtaskID",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "任务类型",
+                name: "TaskType",
                 editor: {
                     type: "string"
                 },
