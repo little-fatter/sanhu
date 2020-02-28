@@ -33,17 +33,10 @@ namespace FastDev.Service
             case_Info caseInfo = new case_Info();
             List<law_party> lawParties = new List<law_party>();
             if (!string.IsNullOrEmpty(data.CaseInfo.TaskId)) return false;
-            string url = data.Url;
             caseInfo = data.CaseInfo;
             lawParties = data.LawParties;
-            switch (data.CaseInfo.ApplicableProcedure)
-            {
-                case "简易程序":
-                    return EasyProcess(caseInfo, lawParties);
-                case "一般程序":
-                    return NormalProcess(caseInfo);
-            }
-            return false;
+
+
         }
         /// <summary>
         /// 简易流程

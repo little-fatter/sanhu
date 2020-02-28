@@ -188,6 +188,24 @@ namespace FastDev.Service
             return form;
         }
 
+              /// <summary>
+              /// 创建后续任务
+              /// </summary>
+              /// <param name="NextTasks"></param>
+              /// <param name="sourcetaskid"></param>
+        public object CreatTasksAndCreatWorkrecor(work_task[] NextTasks, string sourcetaskid)
+        {
+                if (NextTasks == null) return null;
+                if (NextTasks.Length < 1) return null;
+                foreach (var Task in NextTasks)
+                {
+                    Task.LaskTaskId = sourcetaskid;
+                    var task = SaveWorkTask(Task);
+                    CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + task.ID, Task.TaskType, Task.TaskContent);
+                }
+                return true;       
+        }
+
 
     }
 }
