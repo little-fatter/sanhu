@@ -17,24 +17,30 @@ namespace FastDev.RunWeb.Code
         public PrintData() { }
         public PrintData(string tempid)
         {
-            string_0 = tempid;
+            formatContent = tempid;
         }
-        public PrintData(core_printTemplate core_printTemplate_0)
+        public PrintData(core_printTemplate temp)
         {
-            this.core_printTemplate_0 = core_printTemplate_0;
+            this.printTemp = temp;
         }
         public PrintData(core_reportTemplate coreReportTemp)
         {
             this.coreReportTemp = coreReportTemp;
         }
-        public core_printTemplate core_printTemplate_0 { get; set; }
+        /// <summary>
+        /// 打印模板
+        /// </summary>
+        public core_printTemplate printTemp { get; set; }
+        /// <summary>
+        /// 报表模板
+        /// </summary>
         public core_reportTemplate coreReportTemp{ get; set; }
 
-        public Dictionary<string, object> dictionary_0 { get; set; }
+        public Dictionary<string, object> ModelDetailData { get; set; }
 
-        public Dictionary<string, object> dictionary_1 { get; set; }
+        public Dictionary<string, object> dicPageInfo { get; set; }
 
-        public string string_0 { get; set; }
+        public string formatContent { get; set; }
         public HttpServerUtility Server
         {
             get
@@ -43,39 +49,39 @@ namespace FastDev.RunWeb.Code
             }
         }
         /// <summary>
-        /// 模板设置默认值 method_2
+        /// 模板设置默认值 SetDefaultTemplateData
         /// </summary>
         public void SetDefaultTemplateData()
         {
-            if (core_printTemplate_0 != null)
+            if (printTemp != null)
             {
-                if (!core_printTemplate_0.MarginLeft.HasValue)
+                if (!printTemp.MarginLeft.HasValue)
                 {
-                    core_printTemplate_0.MarginLeft = 10m;
+                    printTemp.MarginLeft = 10m;
                 }
-                if (!core_printTemplate_0.MarginRight.HasValue)
+                if (!printTemp.MarginRight.HasValue)
                 {
-                    core_printTemplate_0.MarginRight = 10m;
+                    printTemp.MarginRight = 10m;
                 }
-                if (!core_printTemplate_0.MarginTop.HasValue)
+                if (!printTemp.MarginTop.HasValue)
                 {
-                    core_printTemplate_0.MarginTop = 10m;
+                    printTemp.MarginTop = 10m;
                 }
-                if (!core_printTemplate_0.MarginBottom.HasValue)
+                if (!printTemp.MarginBottom.HasValue)
                 {
-                    core_printTemplate_0.MarginBottom = 10m;
+                    printTemp.MarginBottom = 10m;
                 }
-                if (!core_printTemplate_0.Width.HasValue)
+                if (!printTemp.Width.HasValue)
                 {
-                    core_printTemplate_0.Width = 210m;
+                    printTemp.Width = 210m;
                 }
-                if (!core_printTemplate_0.Height.HasValue)
+                if (!printTemp.Height.HasValue)
                 {
-                    core_printTemplate_0.Height = 297m;
+                    printTemp.Height = 297m;
                 }
-                if (!core_printTemplate_0.PageSize.HasValue)
+                if (!printTemp.PageSize.HasValue)
                 {
-                    core_printTemplate_0.PageSize = 20;
+                    printTemp.PageSize = 20;
                 }
             }
             if (coreReportTemp != null)
@@ -110,17 +116,17 @@ namespace FastDev.RunWeb.Code
                 }
             }
         }
-        public List<TemplatePageInfo> method_1(string string_7)
+        public List<TemplatePageInfo> GetTemplatePages(string strContexts)
         {
             List<TemplatePageInfo> list = new List<TemplatePageInfo>();
-            if (core_printTemplate_0 != null)
+            if (printTemp != null)
             {
-                ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
+                ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printTemp.ModelName);
                 string detailFieldName = GetReportDetialHtml();
                 int num = 1;
                 if (string.IsNullOrEmpty(detailFieldName))
                 {
-                    string[] array = string_7.Split(';');
+                    string[] array = strContexts.Split(';');
                     foreach (string context in array)
                     {
                         int num2 = 1;
@@ -145,7 +151,7 @@ namespace FastDev.RunWeb.Code
                     if (field != null)
                     {
                         ServiceHelper.GetService(field.relationModel);
-                        string[] array = string_7.Split(';');
+                        string[] array = strContexts.Split(';');
                         foreach (string context in array)
                         {
                             int num2 = 1;
@@ -153,7 +159,7 @@ namespace FastDev.RunWeb.Code
                             {
                                 context
                             });
-                            double a2 = (double)num4 * 1.0 / (double)core_printTemplate_0.PageSize.Value;
+                            double a2 = (double)num4 * 1.0 / (double)printTemp.PageSize.Value;
                             int num5 = (int)Math.Ceiling(a2);
                             if (num5 == 0)
                             {
@@ -182,14 +188,14 @@ namespace FastDev.RunWeb.Code
             }
             return list;
         }
-        public List<string> method_4(string string_7, int? currentPage, bool bool_0)
+        public List<string> GetTemplatePage(string strContext, int? currentPage, bool bool_0)
         {
-            IService service = ServiceHelper.GetService(core_printTemplate_0.ModelName);
+            IService service = ServiceHelper.GetService(printTemp.ModelName);
             List<string> list = new List<string>();
-            List<TemplatePageInfo> list2 = method_1(string_7);
+            List<TemplatePageInfo> list2 = GetTemplatePages(strContext);
             int num = (!currentPage.HasValue) ? 1 : currentPage.Value;
-            dictionary_1["page"] = ObjectExtensions.ToStr((object)num);
-            dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)list2.Count);
+            dicPageInfo["page"] = ObjectExtensions.ToStr((object)num);
+            dicPageInfo["pagecount"] = ObjectExtensions.ToStr((object)list2.Count);
             for (int i = 1; i <= list2.Count; i++)
             {
                 if (i != num && !bool_0)
@@ -200,12 +206,12 @@ namespace FastDev.RunWeb.Code
                 {
                     TemplatePageInfo templatePageInfo = list2[i - 1];
                     string context = templatePageInfo.Context;
-                    string_0 = core_printTemplate_0.TemplateBody;
+                    formatContent = printTemp.TemplateBody;
                     string detailFieldName = GetReportDetialHtml();
                     if (!string.IsNullOrEmpty(detailFieldName))
                     {
-                        dictionary_0 = service.GetDetailData(context, null, false);
-                        ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
+                        ModelDetailData = service.GetDetailData(context, null, false);
+                        ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printTemp.ModelName);
                         Field field = (from a in serviceConfig.fields
                                        where a.name == detailFieldName
                                        select a).FirstOrDefault();
@@ -217,7 +223,7 @@ namespace FastDev.RunWeb.Code
                                 SortName = "CreateDate",
                                 SortOrder = "asc",
                                 PageIndex = templatePageInfo.PageIndex,
-                                PageSize = core_printTemplate_0.PageSize.Value,
+                                PageSize = printTemp.PageSize.Value,
                                 Condition = new FilterGroup
                                 {
                                     op = "and",
@@ -227,20 +233,20 @@ namespace FastDev.RunWeb.Code
                                     }
                                 }
                             }) as PagedData;
-                            dictionary_0[detailFieldName] = pagedData.Records;
-                            method_8();
-                            method_9();
-                            string text = string_0.ToString();
+                            ModelDetailData[detailFieldName] = pagedData.Records;
+                            DoWithJsonXmlContent();
+                            DoWithJsonContent();
+                            string text = formatContent;
                             text = text.Replace("{#page}", ObjectExtensions.ToStr((object)i));
                             text = text.Replace("{#pagecount}", ObjectExtensions.ToStr((object)list2.Count));
                             list.Add(text);
                             continue;
                         }
                     }
-                    dictionary_0 = service.GetDetailData(context, null);
-                    method_8();
-                    method_9();
-                    string text2 = string_0.ToString();
+                    ModelDetailData = service.GetDetailData(context, null);
+                    DoWithJsonXmlContent();
+                    DoWithJsonContent();
+                    string text2 = formatContent;
                     text2 = text2.Replace("{#page}", ObjectExtensions.ToStr((object)i));
                     text2 = text2.Replace("{#pagecount}", ObjectExtensions.ToStr((object)list2.Count));
                     list.Add(text2);
@@ -249,14 +255,14 @@ namespace FastDev.RunWeb.Code
             return list;
         }
 
-        public void method_8()
+        public void DoWithJsonXmlContent()
         {
             try
             {
                 Regex regex = new Regex("<!--START-->([\\s\\S]*?)<!--END-->");
                 Regex regex2 = new Regex("{(.*?)}");
                 List<Dictionary<string, object>> list = null;
-                MatchCollection matchCollection = regex.Matches(string_0);
+                MatchCollection matchCollection = regex.Matches(formatContent);
                 if (matchCollection.Count > 0)
                 {
                     List<string> list2 = new List<string>();
@@ -274,7 +280,7 @@ namespace FastDev.RunWeb.Code
                             return;
                         }
                         string fieldName = matchCollection2[0].Groups[1].Value;
-                        ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
+                        ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printTemp.ModelName);
                         Field field2 = serviceConfig.fields.FirstOrDefault((Field a) => a.name == fieldName);
                         if (field2 == null)
                         {
@@ -283,9 +289,9 @@ namespace FastDev.RunWeb.Code
                         ServiceConfig serviceConfig2 = ServiceHelper.GetServiceConfig(field2.relationModel);
                         List<Field> fields = serviceConfig2.fields;
                         List<Dictionary<string, object>> list3 = null;
-                        if (dictionary_0.ContainsKey(fieldName))
+                        if (ModelDetailData.ContainsKey(fieldName))
                         {
-                            list3 = (dictionary_0[fieldName] as List<Dictionary<string, object>>);
+                            list3 = (ModelDetailData[fieldName] as List<Dictionary<string, object>>);
                         }
                         if (list3 != null && list3.Any())
                         {
@@ -310,7 +316,7 @@ namespace FastDev.RunWeb.Code
                                     string text2 = "";
                                     if (field == "rownumbers")
                                     {
-                                        text2 = method_25(num + 1, string_);
+                                        text2 = DoWithSystemMark(num + 1, string_);
                                     }
                                     else if (item2.ContainsKey(field))
                                     {
@@ -331,7 +337,7 @@ namespace FastDev.RunWeb.Code
                                         }
                                         else
                                         {
-                                            text2 = method_25(item2[field], string_);
+                                            text2 = DoWithSystemMark(item2[field], string_);
                                         }
                                     }
                                     if (string.IsNullOrEmpty(text2))
@@ -344,9 +350,9 @@ namespace FastDev.RunWeb.Code
                             }
                         }
                     }
-                    string_0 = regex.Replace(string_0, stringBuilder.ToString());
+                    formatContent = regex.Replace(formatContent, stringBuilder.ToString());
                 }
-                MatchCollection matchCollection4 = regex2.Matches(string_0);
+                MatchCollection matchCollection4 = regex2.Matches(formatContent);
                 if (matchCollection4.Count > 0)
                 {
                     for (int i = matchCollection4.Count - 1; i >= 0; i--)
@@ -365,7 +371,7 @@ namespace FastDev.RunWeb.Code
                                 text2 = ServiceHelper.GetSettingValue(text3);
                                 if (!string.IsNullOrEmpty(string_))
                                 {
-                                    text2 = method_25(text2, string_);
+                                    text2 = DoWithSystemMark(text2, string_);
                                 }
                             }
                             else if (text4 == "count")
@@ -410,13 +416,13 @@ namespace FastDev.RunWeb.Code
                                 {
                                     num6 = num4;
                                 }
-                                text2 = method_25(num6, string_);
+                                text2 = DoWithSystemMark(num6, string_);
                             }
                             if (string.IsNullOrEmpty(text2))
                             {
                                 text2 = "&nbsp;";
                             }
-                            string_0 = string_0.Substring(0, match.Index) + text2 + string_0.Substring(match.Index + match.Value.Length);
+                            formatContent = formatContent.Substring(0, match.Index) + text2 + formatContent.Substring(match.Index + match.Value.Length);
                         }
                     }
                 }
@@ -425,14 +431,14 @@ namespace FastDev.RunWeb.Code
             {
             }
         }
-        public void method_9()
+        public void DoWithJsonContent()
         {
             try
             {
                 Regex regex = new Regex("{(.*?)}");
-                ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(core_printTemplate_0.ModelName);
+                ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printTemp.ModelName);
                 List<Field> fields = serviceConfig.fields;
-                MatchCollection matchCollection = regex.Matches(string_0);
+                MatchCollection matchCollection = regex.Matches(formatContent);
                 if (matchCollection.Count > 0)
                 {
                     string field;
@@ -453,23 +459,23 @@ namespace FastDev.RunWeb.Code
                                 text = ServiceHelper.GetSettingValue(field);
                                 if (!string.IsNullOrEmpty(text2))
                                 {
-                                    text = method_25(text, text2);
+                                    text = DoWithSystemMark(text, text2);
                                 }
                             }
-                            if (field.StartsWith("#") && dictionary_1.ContainsKey(field.Substring(1)))
+                            if (field.StartsWith("#") && dicPageInfo.ContainsKey(field.Substring(1)))
                             {
-                                text = dictionary_1[field.Substring(1)].ToString();
+                                text = dicPageInfo[field.Substring(1)].ToString();
                             }
-                            else if (dictionary_0.ContainsKey(field))
+                            else if (ModelDetailData.ContainsKey(field))
                             {
                                 if ((field2 != null && field2.type == "many2one") || field.ToLower() == "createuser" || field.ToLower() == "modifyuser")
                                 {
-                                    List<string> list = dictionary_0[field] as List<string>;
+                                    List<string> list = ModelDetailData[field] as List<string>;
                                     text = list[1];
                                 }
                                 else if (field2 != null && field2.type == "many2many")
                                 {
-                                    List<List<string>> list2 = dictionary_0[field] as List<List<string>>;
+                                    List<List<string>> list2 = ModelDetailData[field] as List<List<string>>;
                                     List<string> list3 = new List<string>();
                                     foreach (List<string> item in list2)
                                     {
@@ -479,7 +485,7 @@ namespace FastDev.RunWeb.Code
                                 }
                                 else
                                 {
-                                    text = method_25(dictionary_0[field], text2);
+                                    text = DoWithSystemMark(ModelDetailData[field], text2);
                                 }
                             }
                         }
@@ -490,7 +496,7 @@ namespace FastDev.RunWeb.Code
                         {
                             text = "&nbsp;";
                         }
-                        string_0 = string_0.Substring(0, match.Index) + text + string_0.Substring(match.Index + match.Value.Length);
+                        formatContent = formatContent.Substring(0, match.Index) + text + formatContent.Substring(match.Index + match.Value.Length);
                     }
                 }
             }
@@ -498,64 +504,69 @@ namespace FastDev.RunWeb.Code
             {
             }
         }
-
-        public string method_25(object object_0, string string_7)
+        /// <summary>
+        /// 讲系统标签格式化
+        /// </summary>
+        /// <param name="specialData"></param>
+        /// <param name="strWithMark"></param>
+        /// <returns></returns>
+        public string DoWithSystemMark(object specialData, string strWithMark)
         {
             string text = "";
             string text2 = "";
-            if (!string.IsNullOrEmpty(string_7))
+            if (!string.IsNullOrEmpty(strWithMark))
             {
-                if (object_0 != null && object_0.GetType() == typeof(string) && object_0.ToString().StartsWith("/Date(") && object_0.ToString().EndsWith(")/"))
+                if (specialData != null && specialData.GetType() == typeof(string) && specialData.ToString().StartsWith("/Date(") && specialData.ToString().EndsWith(")/"))
                 {
-                    string s = object_0.ToString().Substring(6, object_0.ToString().Length - 8);
-                    object_0 = new DateTime(1970, 1, 1).AddMilliseconds((double)long.Parse(s)).ToLocalTime();
+                    string s = specialData.ToString().Substring(6, specialData.ToString().Length - 8);
+                    specialData = new DateTime(1970, 1, 1).AddMilliseconds((double)long.Parse(s)).ToLocalTime();
                 }
-                if (string.Compare(string_7, "visual", true) == 0)
+                if (string.Compare(strWithMark, "visual", true) == 0)
                 {
-                    text = (string.IsNullOrEmpty(ObjectExtensions.ToStr(object_0)) ? "display:none;" : "");
+                    text = (string.IsNullOrEmpty(ObjectExtensions.ToStr(specialData)) ? "display:none;" : "");
                 }
-                else if (string.Compare(string_7, "yn", true) == 0)
+                else if (string.Compare(strWithMark, "yn", true) == 0)
                 {
-                    text = ((ObjectExtensions.ToInt(object_0) == 1) ? "是" : "否");
+                    text = ((ObjectExtensions.ToInt(specialData) == 1) ? "是" : "否");
                 }
-                else if (string.Compare(string_7, "bar", true) == 0)
+                else if (string.Compare(strWithMark, "bar", true) == 0)
                 {
-                    text = Server.UrlEncode(object_0.ToString());
+                    text = Server.UrlEncode(specialData.ToString());
                 }
-                else if (string.Compare(string_7, "qr", true) == 0)
+                else if (string.Compare(strWithMark, "qr", true) == 0)
                 {
-                    text = Server.UrlEncode(object_0.ToString());
+                    text = Server.UrlEncode(specialData.ToString());
                 }
-                else if (string.Compare(string_7, "img", true) == 0)
+                else if (string.Compare(strWithMark, "img", true) == 0)
                 {
-                    if (object_0 == null)
+                    if (specialData == null)
                     {
                         return "";
                     }
-                    string text3 = ObjectExtensions.ToStr(object_0);
+                    string text3 = ObjectExtensions.ToStr(specialData);
                     if (!text3.StartsWith("/"))
                     {
                         text3 = "/" + text3;
                     }
                     text = "<img src='" + text3 + "' />";
                 }
-                else if (string.Compare(string_7, "rmb", true) == 0)
+                else if (string.Compare(strWithMark, "rmb", true) == 0)
                 {
-                    text = RMB.Convert(DataHelper.ConvertValue<double>(object_0));
+                    text = RMB.Convert(DataHelper.ConvertValue<double>(specialData));
                 }
-                else if (string_7.Length == 2 && string_7[0] == 'C' && !string.IsNullOrEmpty(text2))
+                else if (strWithMark.Length == 2 && strWithMark[0] == 'C' && !string.IsNullOrEmpty(text2))
                 {
-                    string_7 = "N" + string_7[1];
-                    text = text2 + string.Format("{0:" + string_7 + "}", object_0);
+                    strWithMark = "N" + strWithMark[1];
+                    text = text2 + string.Format("{0:" + strWithMark + "}", specialData);
                 }
                 else
                 {
-                    text = string.Format("{0:" + string_7 + "}", object_0);
+                    text = string.Format("{0:" + strWithMark + "}", specialData);
                 }
             }
             else
             {
-                text = ObjectExtensions.ToStr(object_0);
+                text = ObjectExtensions.ToStr(specialData);
             }
             return text;
         }
@@ -567,7 +578,7 @@ namespace FastDev.RunWeb.Code
                 new Regex("<tr.{1,20}class=\"row\"([\\s\\S]*?)>([\\s\\S]*?)</tr>");
                 Regex regex2 = new Regex("data-field=\"(.*?)\"");
                 new Regex("{(.*?)}");
-                MatchCollection matchCollection = regex.Matches(string_0);
+                MatchCollection matchCollection = regex.Matches(formatContent);
                 if (matchCollection.Count == 0)
                 {
                     return null;
@@ -589,10 +600,10 @@ namespace FastDev.RunWeb.Code
         {
             var u = SysContext.GetWanJiangUser();
             DbContext currentDb = SysContext.GetCurrentDb();
-            dictionary_1["page"] = ObjectExtensions.ToStr((object)page);
-            dictionary_1["pagecount"] = ObjectExtensions.ToStr((object)pageCount);
-            dictionary_1["loginname"] = u.AccountId;
-            dictionary_1["now"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            dicPageInfo["page"] = ObjectExtensions.ToStr((object)page);
+            dicPageInfo["pagecount"] = ObjectExtensions.ToStr((object)pageCount);
+            dicPageInfo["loginname"] = u.AccountId;
+            dicPageInfo["now"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
     }
 }

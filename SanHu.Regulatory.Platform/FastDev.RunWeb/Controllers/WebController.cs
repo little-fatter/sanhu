@@ -464,7 +464,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(modelName);
-                List<Field> list = serviceConfig.fields.Where(smethod_0).ToList();
+                List<Field> list = serviceConfig.fields.Where(f=> f.type.Contains("2")).ToList();
                 List<object> list2 = new List<object>();
                 foreach (Field item in list)
                 {
@@ -527,7 +527,7 @@ namespace FastDev.RunWeb.Controllers
                 Type entityType = DataAccessHelper.GetEntityType(serviceConfig.model.name);
                 dbContext.GetHelper(entityType);
                 PropertyInfo[] properties = entityType.GetProperties();
-                properties.Select(smethod_1).ToList();
+                properties.Select(p=> p.Name).ToList();
                 DataHelper.CreateSetProperties(properties);
                 Func<object, object[]> func = DataHelper.CreateGetProperties(properties);
                 List<FastDev.DevDB.Model.core_importTemplateDetail> list = dbContext.Fetch<FastDev.DevDB.Model.core_importTemplateDetail>("where TemplateID = @0", new object[1]
@@ -822,7 +822,7 @@ namespace FastDev.RunWeb.Controllers
                             else if (!string.IsNullOrEmpty(field.fieldSelection))
                             {
                                 IList<SelectionItem> source = JsonHelper.DeserializeJsonToObject<IList<SelectionItem>>(field.fieldSelection);
-                                List<string> items = source.Select(smethod_2).ToList();
+                                List<string> items = source.Select(s=> s.text).ToList();
                                 string sheetName = field.relationModel.Replace("_", "") + field.name + "Sheet";
                                 string listFormula = field.relationModel.Replace("_", "") + field.name + "Range";
                                 try
@@ -936,7 +936,7 @@ namespace FastDev.RunWeb.Controllers
                             }
                             else if (field == null || !(field.type == "many2many"))
                             {
-                                text = (string.IsNullOrEmpty(item3.Format) ? ObjectExtensions.ToStr(item2[field.name]) :new PrintData().method_25(item2[field.name], item3.Format));
+                                text = (string.IsNullOrEmpty(item3.Format) ? ObjectExtensions.ToStr(item2[field.name]) :new PrintData().DoWithSystemMark(item2[field.name], item3.Format));
                             }
                             else
                             {
@@ -1000,7 +1000,7 @@ namespace FastDev.RunWeb.Controllers
                 ICellStyle headerCellStyle = ExcelRender.GetHeaderCellStyle(hSSFWorkbook);
                 ICellStyle cellStyle = ExcelRender.GetCellStyle(hSSFWorkbook);
                 ExcelRender.GetExampleHeaderCellStyle(hSSFWorkbook);
-                bool flag = list.Any(smethod_3);
+                bool flag = list.Any(l=> l.columns != null && l.columns.Any());
                 List<GridXlsColumn> list4 = new List<GridXlsColumn>();
                 if (flag)
                 {
@@ -1484,7 +1484,7 @@ namespace FastDev.RunWeb.Controllers
                     {
                         templateId
                     });
-                    new PrintData().SetDefaultTemplateData();
+                    printData1.SetDefaultTemplateData();
                     string input = Base64Helper.DecodingString(descriptorCode);
                     QueryDescriptor queryDescriptor = JsonHelper.DeserializeJsonToObject<QueryDescriptor>(input);
                     ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printData1.coreReportTemp.ModelName);
@@ -1497,7 +1497,7 @@ namespace FastDev.RunWeb.Controllers
                     num2 = (int)Math.Ceiling(a);
                     list_2 = (pagedData.Records as List<Dictionary<string, object>>);
                     strTemplateOut = printData1.coreReportTemp.TemplateBody;
-                    method_23(serviceConfig, printData1);
+                    FillPrintDataWithServiceConfig(serviceConfig, printData1);
                     string text = string_6.ToString();
                     if (queryDescriptor.EnabledPage)
                     {
@@ -1543,24 +1543,24 @@ namespace FastDev.RunWeb.Controllers
                 {
                     templateId
                 }));
-                if (printData.core_printTemplate_0 == null)
+                if (printData.printTemp == null)
                 {
                     throw new Exception("打印模板未定义");
                 }
-                printData.string_0= printData.core_printTemplate_0.TemplateBody;
+                printData.formatContent= printData.printTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
-                List<string> contents = printData.method_4(context, pageindex, false);
+                List<string> contents = printData.GetTemplatePage(context, pageindex, false);
                 return Json(new
                 {
                     Success = true,
                     templateParm = new
                     {
-                        marginBottom = printData.core_printTemplate_0.MarginBottom,
-                        marginTop = printData.core_printTemplate_0.MarginTop,
-                        marginLeft = printData.core_printTemplate_0.MarginLeft,
-                        marginRight = printData.core_printTemplate_0.MarginRight,
-                        width = printData.core_printTemplate_0.Width,
-                        height = printData.core_printTemplate_0.Height
+                        marginBottom = printData.printTemp.MarginBottom,
+                        marginTop = printData.printTemp.MarginTop,
+                        marginLeft = printData.printTemp.MarginLeft,
+                        marginRight = printData.printTemp.MarginRight,
+                        width = printData.printTemp.Width,
+                        height = printData.printTemp.Height
                     },
                     contents = contents
                 });
@@ -1611,7 +1611,7 @@ namespace FastDev.RunWeb.Controllers
                     List<string> list = new List<string>();
                     int num2 = 0;
                     List<string> list2 = new List<string>();
-                    if (columns.Any(smethod_5))
+                    if (columns.Any(c=> c.columns != null && c.columns.Any()))
                     {
                         List<string> list3 = new List<string>();
                         List<string> list4 = new List<string>();
@@ -1717,9 +1717,9 @@ namespace FastDev.RunWeb.Controllers
                     if (pageCount == 0)
                     {
                         strTemplateOut = printData.coreReportTemp.TemplateBody;
-                        method_23(serviceConfig_, printData);
+                        FillPrintDataWithServiceConfig(serviceConfig_, printData);
                         string text4 = string_6.ToString();
-                        foreach (KeyValuePair<string, object> item in printData.dictionary_1)
+                        foreach (KeyValuePair<string, object> item in printData.dicPageInfo)
                         {
                             strTemplateOut = strTemplateOut.Replace("{#" + item.Key + "}", ObjectExtensions.ToStr(item.Value));
                         }
@@ -1742,9 +1742,9 @@ namespace FastDev.RunWeb.Controllers
                             }
                             list_2 = list6;
                             strTemplateOut = printData.coreReportTemp.TemplateBody;
-                            method_23(serviceConfig_, printData);
+                            FillPrintDataWithServiceConfig(serviceConfig_, printData);
                             string text4 = string_6.ToString();
-                            foreach (KeyValuePair<string, object> item2 in printData.dictionary_1)
+                            foreach (KeyValuePair<string, object> item2 in printData.dicPageInfo)
                             {
                                 strTemplateOut = strTemplateOut.Replace("{#" + item2.Key + "}", ObjectExtensions.ToStr(item2.Value));
                             }
@@ -1806,14 +1806,14 @@ namespace FastDev.RunWeb.Controllers
                 {
                     model
                 }));
-                ServiceHelper.GetService(printData.core_printTemplate_0.ModelName);
-                if (printData.core_printTemplate_0 == null)
+                ServiceHelper.GetService(printData.printTemp.ModelName);
+                if (printData.printTemp == null)
                 {
                     throw new Exception("打印模板未定义");
                 }
-                printData.string_0 = printData.core_printTemplate_0.TemplateBody;
+                printData.formatContent = printData.printTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
-                List<string> data = printData.method_4(context, null, true);
+                List<string> data = printData.GetTemplatePage(context, null, true);
                 return Json(new AjaxResult
                 {
                     Success = true,
@@ -1842,20 +1842,20 @@ namespace FastDev.RunWeb.Controllers
                 {
                     templateId
                 }));
-                if (printData.core_printTemplate_0 == null)
+                if (printData.printTemp == null)
                 {
                     throw new Exception("打印模板未定义");
                 }
-                printData.string_0 = printData.core_printTemplate_0.TemplateBody;
+                printData.formatContent = printData.printTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
-                ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printData.core_printTemplate_0.ModelName);
+                ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printData.printTemp.ModelName);
 
 
-                var  list = printData.method_4(context, null, true);
-                list[0]=list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", printData.core_printTemplate_0.TemplateStyle));
+                var  list = printData.GetTemplatePage(context, null, true);
+                list[0]=list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", printData.printTemp.TemplateStyle));
 
-                byte[] array = PDFHelper.HmtlToPDF(list[0], (double)printData.core_printTemplate_0.MarginLeft.Value, (double)printData.core_printTemplate_0.MarginTop.Value,
-                    (double)printData.core_printTemplate_0.MarginRight.Value, (double)printData.core_printTemplate_0.MarginBottom.Value);
+                byte[] array = PDFHelper.HmtlToPDF(list[0], (double)printData.printTemp.MarginLeft.Value, (double)printData.printTemp.MarginTop.Value,
+                    (double)printData.printTemp.MarginRight.Value, (double)printData.printTemp.MarginBottom.Value);
 
 
                 return File(array, "application/pdf;", serviceConfig.model.title + ".pdf");
@@ -1887,14 +1887,14 @@ namespace FastDev.RunWeb.Controllers
             {
                 templateId
             }));
-            if (printData.core_printTemplate_0 == null)
+            if (printData.printTemp == null)
             {
                 throw new Exception("打印模板未定义");
             }
-            printData.string_0 = printData.core_printTemplate_0.TemplateBody;
+            printData.formatContent = printData.printTemp.TemplateBody;
             printData.SetDefaultTemplateData();
-            ServiceHelper.GetServiceConfig(printData.core_printTemplate_0.ModelName);
-            List<TemplatePageInfo> list = printData.method_1(context);
+            ServiceHelper.GetServiceConfig(printData.printTemp.ModelName);
+            List<TemplatePageInfo> list = printData.GetTemplatePages(context);
             bool flag = pageindex <= 0 && list.Count > 1;
             bool flag2 = pageindex <= 0 || isjpg == "Y";
             if (flag)
@@ -1905,12 +1905,12 @@ namespace FastDev.RunWeb.Controllers
                 {
                     Directory.CreateDirectory(path);
                 }
-                int_0 = Convert.ToInt32((double)printData.core_printTemplate_0.Width.Value * 3.78);
-                int_1 = Convert.ToInt32((double)printData.core_printTemplate_0.Height.Value * 3.78);
+                int_0 = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
+                int_1 = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
                 foreach (TemplatePageInfo item in list)
                 {
                     jpgUrl = PrintJpgUrl(context, templateId, item.AllPageIndex);
-                    Thread thread = new Thread(method_10);
+                    Thread thread = new Thread(GetJpegByWebBrowser);
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
                     while (thread.IsAlive)
@@ -1945,10 +1945,10 @@ namespace FastDev.RunWeb.Controllers
             }
             if (flag2)
             {
-                int_0 = Convert.ToInt32((double)printData.core_printTemplate_0.Width.Value * 3.78);
-                int_1 = Convert.ToInt32((double)printData.core_printTemplate_0.Height.Value * 3.78);
+                int_0 = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
+                int_1 = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
                 jpgUrl = PrintJpgUrl(context, templateId, pageindex);
-                Thread thread = new Thread(method_10);
+                Thread thread = new Thread(GetJpegByWebBrowser);
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
                 while (thread.IsAlive)
@@ -1963,11 +1963,11 @@ namespace FastDev.RunWeb.Controllers
                 response.Headers.Add("Content-Disposition", "attachment;filename=" + Server.UrlEncode("预览.jpg"));
                 return response;
             }
-            List<string> list4 = printData.method_4(context, pageindex, false);
+            List<string> list4 = printData.GetTemplatePage(context, pageindex, false);
             string text3 = System.IO.File.ReadAllText(Server.MapPath("~/Contents/template.html"));
-            double num = (double)printData.core_printTemplate_0.Width.Value * 3.78 - (double)Convert.ToInt32(printData.core_printTemplate_0.MarginLeft) * 3.78 - (double)Convert.ToInt32(printData.core_printTemplate_0.MarginRight) * 3.78;
-            double num2 = (double)printData.core_printTemplate_0.Height.Value * 3.78 - (double)Convert.ToInt32(printData.core_printTemplate_0.MarginTop) * 3.78 - (double)Convert.ToInt32(printData.core_printTemplate_0.MarginBottom) * 3.78;
-            string text4 = string.Format("background:#fff;border:none;margin-left:{0}px;margin-top:{1}px;margin-right:{2}px;margin-bottom:{3}px;width:{4}px;height:{5}px;overflow:hidden;", (double)Convert.ToInt32(printData.core_printTemplate_0.MarginLeft) * 3.78, (double)Convert.ToInt32(printData.core_printTemplate_0.MarginTop) * 3.78, (double)Convert.ToInt32(printData.core_printTemplate_0.MarginRight) * 3.78, (double)Convert.ToInt32(printData.core_printTemplate_0.MarginBottom) * 3.78, num, num2);
+            double num = (double)printData.printTemp.Width.Value * 3.78 - (double)Convert.ToInt32(printData.printTemp.MarginLeft) * 3.78 - (double)Convert.ToInt32(printData.printTemp.MarginRight) * 3.78;
+            double num2 = (double)printData.printTemp.Height.Value * 3.78 - (double)Convert.ToInt32(printData.printTemp.MarginTop) * 3.78 - (double)Convert.ToInt32(printData.printTemp.MarginBottom) * 3.78;
+            string text4 = string.Format("background:#fff;border:none;margin-left:{0}px;margin-top:{1}px;margin-right:{2}px;margin-bottom:{3}px;width:{4}px;height:{5}px;overflow:hidden;", (double)Convert.ToInt32(printData.printTemp.MarginLeft) * 3.78, (double)Convert.ToInt32(printData.printTemp.MarginTop) * 3.78, (double)Convert.ToInt32(printData.printTemp.MarginRight) * 3.78, (double)Convert.ToInt32(printData.printTemp.MarginBottom) * 3.78, num, num2);
             string newValue = "<div style='" + text4 + "'>" + list4[Convert.ToInt32(pageindex) - 1] + "</div>";
             string content = text3.Replace("#html#", newValue);
             response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -1991,7 +1991,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     throw new Exception("打印模板未定义");
                 }
-                printData.string_0 = printData.coreReportTemp.TemplateBody;
+                printData.formatContent = printData.coreReportTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printData.coreReportTemp.ModelName);
                 string a = "img";
@@ -2017,8 +2017,8 @@ namespace FastDev.RunWeb.Controllers
                     int_1 = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
                     for (int i = 0; (double)i < num2; i++)
                     {
-                        jpgUrl = method_6(context, templateId, i + 1);
-                        Thread thread = new Thread(method_10);
+                        jpgUrl = GetReportJpgPath(context, templateId, i + 1);
+                        Thread thread = new Thread(GetJpegByWebBrowser);
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         while (thread.IsAlive)
@@ -2032,7 +2032,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 else
                 {
-                    list = printData.method_4(context, null, true);
+                    list = printData.GetTemplatePage(context, null, true);
                     list.Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", printData.coreReportTemp.TemplateStyle));
                 }
                 printData.coreReportTemp.Width = Convert.ToDecimal((double)printData.coreReportTemp.Width.Value * 2.845);
@@ -2078,11 +2078,11 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private string method_6(string string_7, string string_8, int int_2)
+        private string GetReportJpgPath(string dataId, string tempId, int pageIndex)
         {
             string text = base.Request.Path.ToString();
             text = text.Substring(0, text.IndexOf("web"));
-            return text + "web/printjpg_Report?context=" + string_7 + "&templateId=" + string_8 + "&pageindex=" + int_2 + "&isjpg=N";
+            return text + "web/printjpg_Report?context=" + dataId + "&templateId=" + tempId + "&pageindex=" + pageIndex + "&isjpg=N";
         }
         [HttpPost]
         public HttpResponseMessage PrintJPG_Report(string context, string templateId, int pageindex, string isjpg, string descriptorCode)
@@ -2097,7 +2097,7 @@ namespace FastDev.RunWeb.Controllers
             {
                 throw new Exception("打印模板未定义");
             }
-            printData.string_0 = printData.coreReportTemp.TemplateBody;
+            printData.formatContent = printData.coreReportTemp.TemplateBody;
             printData.SetDefaultTemplateData();
             ServiceHelper.GetServiceConfig(printData.coreReportTemp.ModelName);
             QueryDescriptor queryDescriptor = new QueryDescriptor();
@@ -2128,8 +2128,8 @@ namespace FastDev.RunWeb.Controllers
                 int_1 = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
                 for (int i = 1; (double)i <= num2; i++)
                 {
-                    jpgUrl = method_6(context, templateId, i);
-                    Thread thread = new Thread(method_10);
+                    jpgUrl = GetReportJpgPath(context, templateId, i);
+                    Thread thread = new Thread(GetJpegByWebBrowser);
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
                     while (thread.IsAlive)
@@ -2165,8 +2165,8 @@ namespace FastDev.RunWeb.Controllers
             {
                 int_0 = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
                 int_1 = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
-                jpgUrl = method_6(context, templateId, pageindex);
-                Thread thread = new Thread(method_10);
+                jpgUrl = GetReportJpgPath(context, templateId, pageindex);
+                Thread thread = new Thread(GetJpegByWebBrowser);
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
                 while (thread.IsAlive)
@@ -2189,7 +2189,7 @@ namespace FastDev.RunWeb.Controllers
             int num5 = (int)Math.Ceiling(a);
             list_2 = (pagedData.Records as List<Dictionary<string, object>>);
             strTemplateOut = printData.coreReportTemp.TemplateBody;
-            method_23(serviceConfig, printData);
+            FillPrintDataWithServiceConfig(serviceConfig, printData);
             string text3 = string_6.ToString();
             text3 = text3.Replace("{style}", printData.coreReportTemp.TemplateStyle);
             text3 = text3.Replace("{content}", strTemplateOut);
@@ -2222,20 +2222,20 @@ namespace FastDev.RunWeb.Controllers
             {
                 templateId
             }));
-            IService service = ServiceHelper.GetService(printData.core_printTemplate_0.ModelName);
-            printData.dictionary_0 = service.GetDetailData(context, null);
-            printData.string_0 = printData.core_printTemplate_0.TemplateBody;
-            printData.method_8();
-            printData.method_9();
-            base.ViewBag.Style = printData.core_printTemplate_0.TemplateStyle;
-            base.ViewBag.Content = printData.string_0;
+            IService service = ServiceHelper.GetService(printData.printTemp.ModelName);
+            printData.ModelDetailData = service.GetDetailData(context, null);
+            printData.formatContent = printData.printTemp.TemplateBody;
+            printData.DoWithJsonXmlContent();
+            printData.DoWithJsonContent();
+            base.ViewBag.Style = printData.printTemp.TemplateStyle;
+            base.ViewBag.Content = printData.formatContent;
             return View("Print");
         }
 
 
 
         [NonAction]
-        private void method_10()
+        private void GetJpegByWebBrowser()
         {
             //using (WebBrowser webBrowser = new WebBrowser())
             //{
@@ -2258,10 +2258,10 @@ namespace FastDev.RunWeb.Controllers
         {
             MemoryStream memoryStream = new MemoryStream();
             Document document = new Document();
-            if (printData.core_printTemplate_0 != null)
+            if (printData.printTemp != null)
             {
-                iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle((float)printData.core_printTemplate_0.Width.Value, (float)printData.core_printTemplate_0.Height.Value);
-                document = new Document(pageSize, (float)printData.core_printTemplate_0.MarginLeft.Value, (float)printData.core_printTemplate_0.MarginRight.Value, (float)printData.core_printTemplate_0.MarginTop.Value, (float)printData.core_printTemplate_0.MarginBottom.Value);
+                iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle((float)printData.printTemp.Width.Value, (float)printData.printTemp.Height.Value);
+                document = new Document(pageSize, (float)printData.printTemp.MarginLeft.Value, (float)printData.printTemp.MarginRight.Value, (float)printData.printTemp.MarginTop.Value, (float)printData.printTemp.MarginBottom.Value);
             }
             else if (printData.coreReportTemp != null)
             {
@@ -2290,10 +2290,10 @@ namespace FastDev.RunWeb.Controllers
         {
             MemoryStream memoryStream = new MemoryStream();
             Document document = new Document();
-            if (printData.core_printTemplate_0 != null)
+            if (printData.printTemp != null)
             {
-                iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle((float)printData.core_printTemplate_0.Width.Value, (float)printData.core_printTemplate_0.Height.Value);
-                document = new Document(pageSize, (float)printData.core_printTemplate_0.MarginLeft.Value, (float)printData.core_printTemplate_0.MarginRight.Value, (float)printData.core_printTemplate_0.MarginTop.Value, (float)printData.core_printTemplate_0.MarginBottom.Value);
+                iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle((float)printData.printTemp.Width.Value, (float)printData.printTemp.Height.Value);
+                document = new Document(pageSize, (float)printData.printTemp.MarginLeft.Value, (float)printData.printTemp.MarginRight.Value, (float)printData.printTemp.MarginTop.Value, (float)printData.printTemp.MarginBottom.Value);
             }
             else if (printData.coreReportTemp != null)
             {
@@ -2304,7 +2304,7 @@ namespace FastDev.RunWeb.Controllers
             document.Open();
             foreach (string string_ in contents)
             {
-                method_11(instance, document, string_);
+                WriteStyle2Pdf(instance, document, string_);
                 //PdfDiv pdfDiv = new PdfDiv();
                 //pdfDiv.Height = 30f;
                 //document.Add(pdfDiv);
@@ -2324,7 +2324,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private void method_11(PdfWriter pdfWriter_0, Document document_0, string string_7)
+        private void WriteStyle2Pdf(PdfWriter pdfWriter_0, Document document_0, string string_7)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(string_7);
             using (MemoryStream memoryStream = new MemoryStream(bytes))
@@ -2345,8 +2345,8 @@ namespace FastDev.RunWeb.Controllers
                 ReportResult reportResult = new ReportResult();
                 string_2 = model;
                 serviceConfig_0 = ServiceHelper.GetServiceConfig(model);
-                list_0 = method_13(currentDb, arg);
-                list_1 = method_14(currentDb, arg);
+                list_0 = GetLegendNameValues(currentDb, arg);
+                list_1 = GetAxisNameValues(currentDb, arg);
                 foreach (NameValue item in list_1)
                 {
                     reportResult.axis.Add(item.name);
@@ -2360,19 +2360,19 @@ namespace FastDev.RunWeb.Controllers
                         List<object> list = new List<object>();
                         foreach (NameValue item3 in list_1)
                         {
-                            FilterGroup group = method_15(currentDb, arg, item2.value, item3.value);
+                            FilterGroup group = GetDateTimeLegendFilter(currentDb, arg, item2.value, item3.value);
                             FilterTranslator filterTranslator = new FilterTranslator(group);
                             filterTranslator.Translate();
-                            list.Add(method_19(currentDb, arg.valueField, arg.valueFieldType, filterTranslator.CommandText, filterTranslator.Parms.ToArray()));
+                            list.Add(GetCountValue(currentDb, arg.valueField, arg.valueFieldType, filterTranslator.CommandText, filterTranslator.Parms.ToArray()));
                         }
                         obj = list;
                     }
                     else
                     {
-                        FilterGroup group = method_15(currentDb, arg, item2.value, null);
+                        FilterGroup group = GetDateTimeLegendFilter(currentDb, arg, item2.value, null);
                         FilterTranslator filterTranslator = new FilterTranslator(group);
                         filterTranslator.Translate();
-                        obj = method_19(currentDb, arg.valueField, arg.valueFieldType, filterTranslator.CommandText, filterTranslator.Parms.ToArray());
+                        obj = GetCountValue(currentDb, arg.valueField, arg.valueFieldType, filterTranslator.CommandText, filterTranslator.Parms.ToArray());
                     }
                     reportResult.series.Add(new
                     {
@@ -2398,7 +2398,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private string method_12(DbContext dbContext_3, string tabName, string fieldName, string IdValue)
+        private string GetDBValue(DbContext dbContext_3, string tabName, string fieldName, string IdValue)
         {
             Field field = null;
             ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(tabName);
@@ -2430,7 +2430,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private List<NameValue> method_13(DbContext dbContext_3, ReportArg rArg)
+        private List<NameValue> GetLegendNameValues(DbContext dbContext_3, ReportArg rArg)
         {
             List<NameValue> list = new List<NameValue>();
             string text = string_2;
@@ -2476,7 +2476,7 @@ namespace FastDev.RunWeb.Controllers
                         item2
                     }) != 0)
                     {
-                        string name = method_12(dbContext_3, field.relationModel, text2, item2);
+                        string name = GetDBValue(dbContext_3, field.relationModel, text2, item2);
                         list.Add(new NameValue
                         {
                             name = name,
@@ -2517,7 +2517,7 @@ namespace FastDev.RunWeb.Controllers
                 "week"
             }.Contains(rArg.legendFieldType))
             {
-                List<RangeDateItem> list5 = method_18(dbContext_3, text, rArg.legendField, rArg.legendFieldType);
+                List<RangeDateItem> list5 = GetRangeDates(dbContext_3, text, rArg.legendField, rArg.legendFieldType);
                 new List<object>();
                 foreach (RangeDateItem item4 in list5)
                 {
@@ -2532,7 +2532,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private List<NameValue> method_14(DbContext dbContext_3, ReportArg reportArg_0)
+        private List<NameValue> GetAxisNameValues(DbContext dbContext_3, ReportArg reportArg_0)
         {
             List<NameValue> list = new List<NameValue>();
             if (string.IsNullOrEmpty(reportArg_0.axisField) || reportArg_0.legendType == "pie")
@@ -2559,7 +2559,7 @@ namespace FastDev.RunWeb.Controllers
                         item
                     }) != 0)
                     {
-                        string name = method_12(dbContext_3, field.relationModel, text2, item);
+                        string name = GetDBValue(dbContext_3, field.relationModel, text2, item);
                         list.Add(new NameValue
                         {
                             name = name,
@@ -2600,7 +2600,7 @@ namespace FastDev.RunWeb.Controllers
                 "week"
             }.Contains(reportArg_0.axisFieldType))
             {
-                List<RangeDateItem> list4 = method_18(dbContext_3, text, reportArg_0.axisField, reportArg_0.axisFieldType);
+                List<RangeDateItem> list4 = GetRangeDates(dbContext_3, text, reportArg_0.axisField, reportArg_0.axisFieldType);
                 new List<object>();
                 foreach (RangeDateItem item3 in list4)
                 {
@@ -2615,7 +2615,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private FilterGroup method_15(DbContext dbContext_3, ReportArg reportArg_0, object object_0, object object_1)
+        private FilterGroup GetDateTimeLegendFilter(DbContext dbContext_3, ReportArg reportArg_0, object object_0, object object_1)
         {
             FilterGroup filterGroup = new FilterGroup();
             if (new string[4]
@@ -2670,7 +2670,7 @@ namespace FastDev.RunWeb.Controllers
             }
             if (!string.IsNullOrEmpty(reportArg_0.axisField) && reportArg_0.legendType != "pie")
             {
-                FilterGroup filterGroup2 = method_16(dbContext_3, reportArg_0, object_1);
+                FilterGroup filterGroup2 = GetDateTimeAxisFilter(dbContext_3, reportArg_0, object_1);
                 foreach (FilterRule rule in filterGroup2.rules)
                 {
                     filterGroup.rules.Add(rule);
@@ -2680,7 +2680,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private FilterGroup method_16(DbContext dbContext_3, ReportArg reportArg_0, object object_0)
+        private FilterGroup GetDateTimeAxisFilter(DbContext dbContext_3, ReportArg reportArg_0, object object_0)
         {
             FilterGroup filterGroup = new FilterGroup();
             if (new string[4]
@@ -2733,7 +2733,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private RangeDateValue method_17(DbContext dbContext_3, string string_7, string string_8)
+        private RangeDateValue GetRangeDateValue(DbContext dbContext_3, string string_7, string string_8)
         {
             DateTime min = dbContext_3.ExecuteScalar<DateTime>(string.Format("select min({0}) from {1}", string_8, string_7), new object[0]);
             DateTime max = dbContext_3.ExecuteScalar<DateTime>(string.Format("select max({0}) from {1}", string_8, string_7), new object[0]);
@@ -2741,9 +2741,9 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private List<RangeDateItem> method_18(DbContext dbContext_3, string string_7, string string_8, string string_9)
+        private List<RangeDateItem> GetRangeDates(DbContext dbContext_3, string string_7, string string_8, string string_9)
         {
-            RangeDateValue rangeDateValue = method_17(dbContext_3, string_7, string_8);
+            RangeDateValue rangeDateValue = GetRangeDateValue(dbContext_3, string_7, string_8);
             DateTime t = rangeDateValue.Min;
             DateTime t2 = rangeDateValue.Max;
             List<RangeDateItem> list = new List<RangeDateItem>();
@@ -2811,7 +2811,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private object method_19(DbContext dbContext_3, string string_7, string string_8, string string_9, params object[] args)
+        private object GetCountValue(DbContext dbContext_3, string string_7, string string_8, string string_9, params object[] args)
         {
             string arg = "count(*)";
             if (!string.IsNullOrEmpty(string_7) && string_8 != "count")
@@ -3166,7 +3166,7 @@ namespace FastDev.RunWeb.Controllers
                                 keyValuePair = item;
                                 string key2 = keyValuePair.Key;
                                 keyValuePair = item;
-                                method_21(dbContext_, key, key2, ObjectExtensions.ToStr(keyValuePair.Value));
+                                AddCoreSetting(dbContext_, key, key2, ObjectExtensions.ToStr(keyValuePair.Value));
                             }
                         }
                     }
@@ -3190,18 +3190,18 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private void method_21(DbContext dbContext_3, string string_7, string string_8, string string_9)
+        private void AddCoreSetting(DbContext db, string strKey, string strName, string strValue)
         {
-            dbContext_3.Insert("core_setting", "ID", false, (object)new FastDev.DevDB.Model.core_setting
+            db.Insert("core_setting", "ID", false, (object)new FastDev.DevDB.Model.core_setting
             {
                 ID = Guid.NewGuid().ToString(),
                 CreateDate = DateTime.Now,
                 CreateUserID = SysContext.WanJiangUserID,
                 ModifyDate = DateTime.Now,
                 ModifyUserID = SysContext.WanJiangUserID,
-                SettingKey = string_7,
-                SettingName = string_8,
-                SettingValue = string_9
+                SettingKey = strKey,
+                SettingName = strName,
+                SettingValue = strValue
             });
         }
 
@@ -3275,7 +3275,7 @@ namespace FastDev.RunWeb.Controllers
                         num = list_2.Count;
                     }
                     strTemplateOut = printData.coreReportTemp.TemplateBody;
-                    method_23(serviceConfig, printData);
+                    FillPrintDataWithServiceConfig(serviceConfig, printData);
                     text = string_6.ToString();
                     strTemplateOut = strTemplateOut.Replace("{#page}/{#pagecount}", "");
                     text = text.Replace("{style}", printData.coreReportTemp.TemplateStyle);
@@ -3385,7 +3385,7 @@ namespace FastDev.RunWeb.Controllers
                                 text3 = list[1];
                                 if (!string.IsNullOrEmpty(text2))
                                 {
-                                    text3 = printData.method_25(text3, text2);
+                                    text3 = printData.DoWithSystemMark(text3, text2);
                                 }
                             }
                             else if (field2 != null && field2.type == "many2many")
@@ -3399,12 +3399,12 @@ namespace FastDev.RunWeb.Controllers
                                 text3 = string.Join(",", list3);
                                 if (!string.IsNullOrEmpty(text2))
                                 {
-                                    text3 = printData.method_25(text3, text2);
+                                    text3 = printData.DoWithSystemMark(text3, text2);
                                 }
                             }
                             else
                             {
-                                text3 = printData.method_25(item[field], text2);
+                                text3 = printData.DoWithSystemMark(item[field], text2);
                             }
                         }
                         text = text.Substring(0, match.Index) + text3 + text.Substring(match.Index + match.Value.Length);
@@ -3415,11 +3415,11 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private void method_23(ServiceConfig serviceConfig_1, PrintData printData)
+        private void FillPrintDataWithServiceConfig(ServiceConfig svrConfig, PrintData printData)
         {
             Regex regex = new Regex("<!--START-->([\\s\\S]*?)<!--END-->");
             Regex regex2 = new Regex("{(.*?)}");
-            List<Field> fields = serviceConfig_1.fields;
+            List<Field> fields = svrConfig.fields;
             MatchCollection matchCollection = regex.Matches(strTemplateOut);
             if (matchCollection.Count > 0)
             {
@@ -3449,7 +3449,7 @@ namespace FastDev.RunWeb.Controllers
                                     Field field2 = fields.FirstOrDefault((Field a) => a.name == field);
                                     if (field == "rownumbers")
                                     {
-                                        text2 = printData.method_25(num + 1, string_);
+                                        text2 = printData.DoWithSystemMark(num + 1, string_);
                                     }
                                     else if (item.ContainsKey(field))
                                     {
@@ -3470,7 +3470,7 @@ namespace FastDev.RunWeb.Controllers
                                         }
                                         else
                                         {
-                                            text2 = printData.method_25(item[field], string_);
+                                            text2 = printData.DoWithSystemMark(item[field], string_);
                                         }
                                     }
                                 }
@@ -3492,7 +3492,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 strTemplateOut = regex.Replace(strTemplateOut, stringBuilder.ToString());
             }
-            foreach (KeyValuePair<string, object> item3 in printData.dictionary_1)
+            foreach (KeyValuePair<string, object> item3 in printData.dicPageInfo)
             {
                 strTemplateOut = strTemplateOut.Replace("{#" + item3.Key + "}", ObjectExtensions.ToStr(item3.Value));
             }
@@ -3520,7 +3520,7 @@ namespace FastDev.RunWeb.Controllers
                             {
                                 if (text3 == "TotalArrears")
                                 {
-                                    string key = (serviceConfig_1.model.name == "v_arrears_month") ? "CustomerID" : "SupplierID";
+                                    string key = (svrConfig.model.name == "v_arrears_month") ? "CustomerID" : "SupplierID";
                                     decimal num3 = 0m;
                                     List<string> list4 = new List<string>();
                                     foreach (Dictionary<string, object> item4 in list_2)
@@ -3532,7 +3532,7 @@ namespace FastDev.RunWeb.Controllers
                                         }
                                         num3 += ObjectExtensions.ToDecimal(item4["Arrears"]);
                                     }
-                                    text2 = printData.method_25(num3, string_);
+                                    text2 = printData.DoWithSystemMark(num3, string_);
                                 }
                             }
                             else
@@ -3573,7 +3573,7 @@ namespace FastDev.RunWeb.Controllers
                                 {
                                     num8 = num6;
                                 }
-                                text2 = printData.method_25(num8, string_);
+                                text2 = printData.DoWithSystemMark(num8, string_);
                             }
                         }
                     }
@@ -3931,12 +3931,12 @@ namespace FastDev.RunWeb.Controllers
 
 
         [NonAction]
-        private string method_26(string string_7)
+        private string GetDevDBPath(string appId)
         {
             string arg = "";
-            if (string_7 != null)
+            if (appId != null)
             {
-                arg = ((string_7.IndexOf('D') > -1) ? (string.Format(ConfigurationManager.AppSettings["DevelopAppPath"], string_7) + "\\database.db") : ((string_7.IndexOf('R') <= -1) ? (string.Format(ConfigurationManager.AppSettings["AppPath"], string_7) + "\\database.db") : (string.Format(ConfigurationManager.AppSettings["ReleaseAppPath"], string_7) + "\\database.db")));
+                arg = ((appId.IndexOf('D') > -1) ? (string.Format(ConfigurationManager.AppSettings["DevelopAppPath"], appId) + "\\database.db") : ((appId.IndexOf('R') <= -1) ? (string.Format(ConfigurationManager.AppSettings["AppPath"], appId) + "\\database.db") : (string.Format(ConfigurationManager.AppSettings["ReleaseAppPath"], appId) + "\\database.db")));
             }
             return string.Format("data source={0}", arg);
         }
@@ -4030,7 +4030,7 @@ namespace FastDev.RunWeb.Controllers
                 Type entityType = DataAccessHelper.GetEntityType(serviceConfig.model.name);
                 dbContext.GetHelper(entityType);
                 PropertyInfo[] properties = entityType.GetProperties();
-                properties.Select(smethod_6).ToList();
+                properties.Select(p=>p.Name).ToList();
                 DataHelper.CreateSetProperties(properties);
                 Func<object, object[]> func = DataHelper.CreateGetProperties(properties);
                 List<FastDev.DevDB.Model.core_importTemplateDetail> list = dbContext.Fetch<FastDev.DevDB.Model.core_importTemplateDetail>("where TemplateID = @0", new object[1]
@@ -4299,9 +4299,9 @@ namespace FastDev.RunWeb.Controllers
             string[] directories = Directory.GetDirectories(Server.MapPath("~/UI/"), "*", SearchOption.TopDirectoryOnly);
             List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
             string[] array = directories;
-            foreach (string string_ in array)
+            foreach (string dir in array)
             {
-                list.Add(method_27(string_, modelsConfig));
+                list.Add(GetFontJs(dir, modelsConfig));
             }
             return Json(list);
         }
@@ -4378,10 +4378,10 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private Dictionary<string, object> method_27(string string_7, ModelsConfig mSetting)
+        private Dictionary<string, object> GetFontJs(string modelDir, ModelsConfig mSetting)
         {
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
-            string text = ObjectExtensions.ToStr((object)string_7);
+            string text = ObjectExtensions.ToStr((object)modelDir);
             if (text.EndsWith("\\"))
             {
                 text = text.Substring(0, text.Length - 1);
@@ -4389,20 +4389,20 @@ namespace FastDev.RunWeb.Controllers
             string model = text.Substring(text.LastIndexOf("\\") + 1);
             string text2 = (from a in mSetting.models
                             where a.name == model
-                            select a).Select(smethod_7).FirstOrDefault();
+                            select a).Select(m=> m.title).FirstOrDefault();
             dictionary["id"] = model;
             dictionary["text"] = (text2 ?? model);
             dictionary["type"] = "model";
             List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
-            string[] files = Directory.GetFiles(string_7);
+            string[] files = Directory.GetFiles(modelDir);
             string[] array = files;
-            foreach (string text3 in array)
+            foreach (string f in array)
             {
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(text3);
-                string extension = Path.GetExtension(text3);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(f);
+                string extension = Path.GetExtension(f);
                 if (!(extension != ".js") && !fileNameWithoutExtension.Contains("service_"))
                 {
-                    list.Add(method_28(text3, mSetting, model));
+                    list.Add(GetViewInfo(f, mSetting, model));
                 }
             }
             dictionary["children"] = list;
@@ -4410,10 +4410,10 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private Dictionary<string, object> method_28(string string_7, ModelsConfig modelsConfig_0, string string_8)
+        private Dictionary<string, object> GetViewInfo(string viewName, ModelsConfig modelsConfig_0, string string_8)
         {
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
-            string str = (string)(dictionary["text"] = (dictionary["id"] = Path.GetFileNameWithoutExtension(string_7)));
+            string str = (string)(dictionary["text"] = (dictionary["id"] = Path.GetFileNameWithoutExtension(viewName)));
             if (dictionary_3.ContainsKey(string_8 + "." + str))
             {
                 dictionary["text"] = dictionary_3[string_8 + "." + str];
@@ -4429,54 +4429,12 @@ namespace FastDev.RunWeb.Controllers
         }
 
 
-        [NonAction]
-        private static bool smethod_0(Field field_0)
-        {
-            return field_0.type.Contains("2");
-        }
-
-
-        [NonAction]
-        private static string smethod_1(PropertyInfo propertyInfo_0)
-        {
-            return propertyInfo_0.Name;
-        }
-
-
-        [NonAction]
-        private static string smethod_2(SelectionItem selectionItem_0)
-        {
-            return selectionItem_0.text;
-        }
-
-
-        [NonAction]
-        private static bool smethod_3(GridColumn gridColumn_0)
-        {
-            return gridColumn_0.columns != null && gridColumn_0.columns.Any();
-        }
 
 
 
 
-        [NonAction]
-        private static bool smethod_5(GridColumn gridColumn_0)
-        {
-            return gridColumn_0.columns != null && gridColumn_0.columns.Any();
-        }
 
 
-        [NonAction]
-        private static string smethod_6(PropertyInfo propertyInfo_0)
-        {
-            return propertyInfo_0.Name;
-        }
 
-
-        [NonAction]
-        private static string smethod_7(FastDev.DevDB.Model.Config.Model model_0)
-        {
-            return model_0.title;
-        }
     }
 }

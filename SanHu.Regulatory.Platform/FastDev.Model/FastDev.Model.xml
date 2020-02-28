@@ -64,6 +64,11 @@
             巡检表
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.form_confiscated_itemFinishReq.formConfiscatedItems">
+            <summary>
+            没收物品列表
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.form_inquestrecordFinishReq">
             <summary>
             勘验记录
@@ -117,11 +122,6 @@
         <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Attachments">
             <summary>
             证据信息
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Url">
-            <summary>
-            待办地址
             </summary>
         </member>
         <member name="T:FD.Model.Dto.TaskHandOverReq">
