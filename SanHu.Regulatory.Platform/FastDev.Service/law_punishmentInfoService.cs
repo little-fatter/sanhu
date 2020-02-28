@@ -36,8 +36,13 @@ namespace FastDev.Service
             string url = data.Url;
             lawpunishmentInfo = data.LawPunishmentInfo;
             lawParties = data.LawParties;
+            if (lawpunishmentInfo.IsConfiscationgoods)//有没收清单
+            { 
+            
+            }
             return false;
         }
+
         /// <summary>
         /// 简易流程
         /// </summary>
