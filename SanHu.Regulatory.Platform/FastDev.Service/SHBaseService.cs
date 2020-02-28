@@ -10,11 +10,15 @@ using System.Text;
 
 namespace FastDev.Service
 {
+
     /// <summary>
     /// 三湖业务基础server
     /// </summary>
     public class SHBaseService: ServiceBase
     {
+        protected string AccountId = "SysAdmin";
+        protected string AccountName = "超级管理员";
+
         /// <summary>
         /// 发送待办
         /// </summary>

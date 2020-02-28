@@ -117,7 +117,7 @@ namespace FastDev.Service
                 base.Create(workTask);
 
                 //给指定用户发送待办
-                CreateWorkrecor(data.UserId, workTask.Tasktype.GetDisplayName(), "url", "标题", "内容");
+                CreateWorkrecor(data.UserId, workTask.Tasktype.GetDisplayName(), data.Url, "标题", "内容");
 
                 QueryDb.CompleteTransaction();
                 return true;
@@ -144,8 +144,8 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                base.Update(workTask);
-                base.UpdateEventState(workTask.EventInfoId, EventStatus.untreated);
+                base.Update(workTask);  //修改任务状态
+                base.UpdateEventState(workTask.EventInfoId, EventStatus.untreated);  //修改事件状态
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
