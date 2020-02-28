@@ -94,6 +94,11 @@
             当事人信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.task_surveyFinishReq.Url">
+            <summary>
+            待办地址
+            </summary>
+        </member>
         <member name="T:FD.Model.Enum.EventStatus">
             <summary>
             事件状态
@@ -155,6 +160,11 @@
             </summary>
         </member>
         <member name="F:FD.Model.Enum.TaskType.Survey">
+            <summary>
+            勘察
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.Case">
             <summary>
             勘察
             </summary>

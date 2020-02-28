@@ -49,11 +49,12 @@ namespace FastDev.Service
         /// <param name="AssignUsersID">处理人</param>
         /// <param name="MainHandler">主办人</param>
         /// <returns></returns>
-        private void CreateWorkTask(work_task task, TaskType type,string AssignUsersID,string MainHandler)
+        public void CreateWorkTask(string taskid, TaskType type, string AssignUsersID, string MainHandler)
         {
+            var lastTask = GetWorkTask(taskid);
             work_task workTask = new work_task();
-            workTask.EventInfoId = task.EventInfoId;
-            workTask.CaseID = task.CaseID;
+            workTask.EventInfoId = lastTask.EventInfoId;
+            workTask.CaseID = lastTask.CaseID;
             workTask.Tasktype = TaskType.Survey;
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
@@ -61,5 +62,26 @@ namespace FastDev.Service
             workTask.MainHandler = MainHandler;
             ServiceHelper.GetService("work_task").Create(workTask);
         }
+
+    /// <summary>
+    /// 任务状态更新
+    /// </summary>
+    /// <param name="taskid"></param>
+    /// <param name="workTaskStatus"></param>
+        public void UpdateWorkTaskState(string taskid,WorkTaskStatus workTaskStatus)
+        {
+            var taskInfo = GetWorkTask(taskid);
+            taskInfo.TaskStatus = (int)workTaskStatus;
+            taskInfo.CompleteTime = DateTime.Now;
+            QueryDb.Update(taskInfo);
+        }
+
+
+        private work_task GetWorkTask(string taskid)
+        {
+           return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
+        }
+
+
     }
 }
