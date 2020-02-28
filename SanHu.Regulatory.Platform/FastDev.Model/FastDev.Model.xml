@@ -171,7 +171,7 @@
         </member>
         <member name="F:FD.Model.Enum.TaskType.Case">
             <summary>
-            勘察
+            案件任务
             </summary>
         </member>
     </members>
