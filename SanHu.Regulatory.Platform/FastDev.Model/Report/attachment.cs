@@ -44,6 +44,31 @@ public string CorrelationId
 get;
 set;
 }
+public string spaceId
+{
+get;
+set;
+}
+public string fileName
+{
+get;
+set;
+}
+public string fileSize
+{
+get;
+set;
+}
+public string fileType
+{
+get;
+set;
+}
+public string fileId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

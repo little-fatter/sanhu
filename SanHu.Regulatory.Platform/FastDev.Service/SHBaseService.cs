@@ -85,9 +85,9 @@ namespace FastDev.Service
         /// 保存任务
         /// </summary>
         /// <param name="workTask"></param>
-        public work_task SaveWorkTask(work_task workTask)
+        public string SaveWorkTask(work_task workTask)
         {
-           return  ServiceHelper.GetService("work_task").Create(workTask) as work_task;
+           return  ServiceHelper.GetService("work_taskService").Create(workTask) as string;
         }
 
 
@@ -201,7 +201,7 @@ namespace FastDev.Service
                 {
                     Task.LaskTaskId = sourcetaskid;
                     var task = SaveWorkTask(Task);
-                    CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + task.ID, Task.TaskType, Task.TaskContent);
+                    CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + task, Task.TaskType, Task.TaskContent);
                 }
                 return true;       
         }

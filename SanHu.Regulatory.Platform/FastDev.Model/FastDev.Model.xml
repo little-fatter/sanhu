@@ -24,11 +24,6 @@
             当事人信息
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.case_InfoFinishReq.Url">
-            <summary>
-            待办地址
-            </summary>
-        </member>
         <member name="T:FD.Model.Dto.FormReqBase">
             <summary>
             表单请求基础
@@ -67,6 +62,11 @@
         <member name="F:FD.Model.Dto.FormType.PatrolRecord">
             <summary>
             巡检表
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.form_confiscated_itemFinishReq.formConfiscatedItems">
+            <summary>
+            没收物品列表
             </summary>
         </member>
         <member name="T:FD.Model.Dto.form_inquestrecordFinishReq">
@@ -122,11 +122,6 @@
         <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Attachments">
             <summary>
             证据信息
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.Url">
-            <summary>
-            待办地址
             </summary>
         </member>
         <member name="T:FD.Model.Dto.TaskHandOverReq">
