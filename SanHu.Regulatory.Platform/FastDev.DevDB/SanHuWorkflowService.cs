@@ -110,7 +110,7 @@ namespace FastDev.DevDB
                 get;
                 set;
             }
-            public string Tasktype
+            public string TaskType
             {
                 get;
                 set;
@@ -1516,7 +1516,7 @@ namespace FastDev.DevDB
         private work_task CreateNewWorkTask(string workflowTaskId, string exeUserId, string formName, string localLink, string objName, string recordId, string strTitle, string evId)
         {
             work_task wTask = new work_task();
-            wTask.Tasktype = formName;
+            wTask.TaskType = formName;
             wTask.CreateDate = DateTime.Now;
             wTask.CreateUserID = SysContext.WanJiangUserID;
             wTask.ModifyDate = DateTime.Now;

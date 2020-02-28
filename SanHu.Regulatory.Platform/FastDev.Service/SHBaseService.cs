@@ -59,7 +59,7 @@ namespace FastDev.Service
             work_task workTask = new work_task();
             workTask.EventInfoId = lastTask.EventInfoId;
             workTask.CaseID = lastTask.CaseID;
-            workTask.Tasktype = TaskType.Survey;
+            workTask.TaskType = TaskType.Survey.ToString();
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
             workTask.AssignUsersID = AssignUsersID;

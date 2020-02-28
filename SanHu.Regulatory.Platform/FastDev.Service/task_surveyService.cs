@@ -230,7 +230,7 @@ namespace FastDev.Service
                 QueryDb.BeginTransaction();
                 _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);//关闭当前任务
 
-                _sHBaseService.CreateWorkTask();
+                //_sHBaseService.CreateWorkTask();
                 //创建案件任务
                 var _worktask = ServiceHelper.GetService("work_taskService");
                 work_task workTask = new work_task();

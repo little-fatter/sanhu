@@ -6,7 +6,7 @@ function() {
         options: {
             list: {
                 columns: [{
-                    name: "Tasktype",
+                    name: "TaskType",
                     display: "任务类型",
                     type: "string",
                     name_text: "任务类型",
@@ -276,11 +276,11 @@ function() {
             },
             {
                 display: "任务类型",
-                name: "Tasktype",
+                name: "TaskType",
                 editor: {
-                    type: "int"
+                    type: "string"
                 },
-                type: "int"
+                type: "string"
             },
             {
                 display: "AssignUsersID",
