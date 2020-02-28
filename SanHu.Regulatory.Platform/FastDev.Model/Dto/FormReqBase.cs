@@ -15,6 +15,10 @@ namespace FD.Model.Dto
         /// </summary>
         public string SourceTaskId { get; set; }
         /// <summary>
+        /// 事件id
+        /// </summary>
+        public string EventInfoId { get; set; }
+        /// <summary>
         /// 需要新建任务信息
         /// </summary>
         public work_task[] NextTasks { get; set; } 
