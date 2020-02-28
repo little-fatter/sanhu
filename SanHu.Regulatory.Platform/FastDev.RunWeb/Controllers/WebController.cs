@@ -105,7 +105,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
-        
+
 
         public class res_dictionaryItems
         {
@@ -207,9 +207,6 @@ namespace FastDev.RunWeb.Controllers
 
         private ServiceConfig serviceConfig_0;
 
-        private List<NameValue> list_0;
-
-        private List<NameValue> list_1;
 
         private Dictionary<string, string> dicModuleTitles;
 
@@ -224,14 +221,14 @@ namespace FastDev.RunWeb.Controllers
 
         private List<Dictionary<string, object>> kanbanSrcData;
 
-        
+
 
         private string string_6;
 
         private readonly LogManager logMan;
 
         private Dictionary<string, string> dictionary_3;
-       
+
 
         public object MimeTypes
         {
@@ -464,7 +461,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(modelName);
-                List<Field> list = serviceConfig.fields.Where(f=> f.type.Contains("2")).ToList();
+                List<Field> list = serviceConfig.fields.Where(f => f.type.Contains("2")).ToList();
                 List<object> list2 = new List<object>();
                 foreach (Field item in list)
                 {
@@ -527,7 +524,7 @@ namespace FastDev.RunWeb.Controllers
                 Type entityType = DataAccessHelper.GetEntityType(serviceConfig.model.name);
                 dbContext.GetHelper(entityType);
                 PropertyInfo[] properties = entityType.GetProperties();
-                properties.Select(p=> p.Name).ToList();
+                properties.Select(p => p.Name).ToList();
                 DataHelper.CreateSetProperties(properties);
                 Func<object, object[]> func = DataHelper.CreateGetProperties(properties);
                 List<FastDev.DevDB.Model.core_importTemplateDetail> list = dbContext.Fetch<FastDev.DevDB.Model.core_importTemplateDetail>("where TemplateID = @0", new object[1]
@@ -822,7 +819,7 @@ namespace FastDev.RunWeb.Controllers
                             else if (!string.IsNullOrEmpty(field.fieldSelection))
                             {
                                 IList<SelectionItem> source = JsonHelper.DeserializeJsonToObject<IList<SelectionItem>>(field.fieldSelection);
-                                List<string> items = source.Select(s=> s.text).ToList();
+                                List<string> items = source.Select(s => s.text).ToList();
                                 string sheetName = field.relationModel.Replace("_", "") + field.name + "Sheet";
                                 string listFormula = field.relationModel.Replace("_", "") + field.name + "Range";
                                 try
@@ -936,7 +933,7 @@ namespace FastDev.RunWeb.Controllers
                             }
                             else if (field == null || !(field.type == "many2many"))
                             {
-                                text = (string.IsNullOrEmpty(item3.Format) ? ObjectExtensions.ToStr(item2[field.name]) :new PrintData().DoWithSystemMark(item2[field.name], item3.Format));
+                                text = (string.IsNullOrEmpty(item3.Format) ? ObjectExtensions.ToStr(item2[field.name]) : new PrintData().DoWithSystemMark(item2[field.name], item3.Format));
                             }
                             else
                             {
@@ -1000,7 +997,7 @@ namespace FastDev.RunWeb.Controllers
                 ICellStyle headerCellStyle = ExcelRender.GetHeaderCellStyle(hSSFWorkbook);
                 ICellStyle cellStyle = ExcelRender.GetCellStyle(hSSFWorkbook);
                 ExcelRender.GetExampleHeaderCellStyle(hSSFWorkbook);
-                bool flag = list.Any(l=> l.columns != null && l.columns.Any());
+                bool flag = list.Any(l => l.columns != null && l.columns.Any());
                 List<GridXlsColumn> list4 = new List<GridXlsColumn>();
                 if (flag)
                 {
@@ -1547,7 +1544,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     throw new Exception("打印模板未定义");
                 }
-                printData.formatContent= printData.printTemp.TemplateBody;
+                printData.formatContent = printData.printTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
                 List<string> contents = printData.GetTemplatePage(context, pageindex, false);
                 return Json(new
@@ -1611,7 +1608,7 @@ namespace FastDev.RunWeb.Controllers
                     List<string> list = new List<string>();
                     int num2 = 0;
                     List<string> list2 = new List<string>();
-                    if (columns.Any(c=> c.columns != null && c.columns.Any()))
+                    if (columns.Any(c => c.columns != null && c.columns.Any()))
                     {
                         List<string> list3 = new List<string>();
                         List<string> list4 = new List<string>();
@@ -1802,7 +1799,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                PrintData printData=new PrintData((dbContext_1 = SysContext.GetCurrentDb()).FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ModelName = @0", new object[1]
+                PrintData printData = new PrintData((dbContext_1 = SysContext.GetCurrentDb()).FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ModelName = @0", new object[1]
                 {
                     model
                 }));
@@ -1851,8 +1848,8 @@ namespace FastDev.RunWeb.Controllers
                 ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printData.printTemp.ModelName);
 
 
-                var  list = printData.GetTemplatePage(context, null, true);
-                list[0]=list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", printData.printTemp.TemplateStyle));
+                var list = printData.GetTemplatePage(context, null, true);
+                list[0] = list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", printData.printTemp.TemplateStyle));
 
                 byte[] array = PDFHelper.HmtlToPDF(list[0], (double)printData.printTemp.MarginLeft.Value, (double)printData.printTemp.MarginTop.Value,
                     (double)printData.printTemp.MarginRight.Value, (double)printData.printTemp.MarginBottom.Value);
@@ -1905,8 +1902,8 @@ namespace FastDev.RunWeb.Controllers
                 {
                     Directory.CreateDirectory(path);
                 }
-                int_0 = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
-                int_1 = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
+                int int_0 = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
+                int int_1 = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
                 foreach (TemplatePageInfo item in list)
                 {
                     jpgUrl = PrintJpgUrl(context, templateId, item.AllPageIndex);
@@ -2044,7 +2041,7 @@ namespace FastDev.RunWeb.Controllers
                 printData.coreReportTemp.MarginLeft = 10m;
                 printData.coreReportTemp.MarginTop = 10m;
                 byte[] array = null;
-                array = ((!(a == "img")) ? ConvertHtml2PDF(list.ToArray(),printData, (!(isdownload == "Y")) ? true : false) : ConvertImages2PDF(list2,printData, (!(isdownload == "Y")) ? true : false));
+                array = ((!(a == "img")) ? ConvertHtml2PDF(list.ToArray(), printData, (!(isdownload == "Y")) ? true : false) : ConvertImages2PDF(list2, printData, (!(isdownload == "Y")) ? true : false));
                 HttpResponseMessage response = new HttpResponseMessage();
                 response.StatusCode = System.Net.HttpStatusCode.OK;
                 response.Content = new ByteArrayContent(array);
@@ -2345,8 +2342,9 @@ namespace FastDev.RunWeb.Controllers
                 ReportResult reportResult = new ReportResult();
                 string_2 = model;
                 serviceConfig_0 = ServiceHelper.GetServiceConfig(model);
-                list_0 = GetLegendNameValues(currentDb, arg);
-                list_1 = GetAxisNameValues(currentDb, arg);
+
+                List<NameValue> list_0 = GetLegendNameValues(currentDb, arg);
+                List<NameValue> list_1 = GetAxisNameValues(currentDb, arg);
                 foreach (NameValue item in list_1)
                 {
                     reportResult.axis.Add(item.name);
@@ -2615,7 +2613,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private FilterGroup GetDateTimeLegendFilter(DbContext dbContext_3, ReportArg reportArg_0, object object_0, object object_1)
+        private FilterGroup GetDateTimeLegendFilter(DbContext db, ReportArg arg, object xValue, object yValue)
         {
             FilterGroup filterGroup = new FilterGroup();
             if (new string[4]
@@ -2624,33 +2622,33 @@ namespace FastDev.RunWeb.Controllers
                 "month",
                 "day",
                 "week"
-            }.Contains(reportArg_0.legendFieldType))
+            }.Contains(arg.legendFieldType))
             {
-                RangeDateValue rangeDateValue = object_0 as RangeDateValue;
+                RangeDateValue rangeDateValue = xValue as RangeDateValue;
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = reportArg_0.legendField,
+                    field = arg.legendField,
                     value = rangeDateValue.Min,
                     op = "greaterthanorequal"
                 });
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = reportArg_0.legendField,
+                    field = arg.legendField,
                     value = rangeDateValue.Max,
                     op = "lessthanorequal"
                 });
             }
-            else if (reportArg_0.legendFieldType == "ref")
+            else if (arg.legendFieldType == "ref")
             {
                 Field field = (from a in serviceConfig_0.fields
-                               where a.name == reportArg_0.legendField
+                               where a.name == arg.legendField
                                select a).FirstOrDefault();
                 if (field.type == "many2one")
                 {
                     filterGroup.rules.Add(new FilterRule
                     {
                         field = field.dbName,
-                        value = object_0,
+                        value = xValue,
                         op = "equal"
                     });
                 }
@@ -2659,18 +2657,18 @@ namespace FastDev.RunWeb.Controllers
             {
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = reportArg_0.legendField,
-                    value = object_0,
+                    field = arg.legendField,
+                    value = xValue,
                     op = "equal"
                 });
             }
-            if (reportArg_0.dataFilter != null && (reportArg_0.dataFilter.rules.Any() || reportArg_0.dataFilter.groups.Any()))
+            if (arg.dataFilter != null && (arg.dataFilter.rules.Any() || arg.dataFilter.groups.Any()))
             {
-                filterGroup.groups.Add(reportArg_0.dataFilter);
+                filterGroup.groups.Add(arg.dataFilter);
             }
-            if (!string.IsNullOrEmpty(reportArg_0.axisField) && reportArg_0.legendType != "pie")
+            if (!string.IsNullOrEmpty(arg.axisField) && arg.legendType != "pie")
             {
-                FilterGroup filterGroup2 = GetDateTimeAxisFilter(dbContext_3, reportArg_0, object_1);
+                FilterGroup filterGroup2 = GetDateTimeAxisFilter(db, arg, yValue);
                 foreach (FilterRule rule in filterGroup2.rules)
                 {
                     filterGroup.rules.Add(rule);
@@ -2680,7 +2678,7 @@ namespace FastDev.RunWeb.Controllers
         }
 
         [NonAction]
-        private FilterGroup GetDateTimeAxisFilter(DbContext dbContext_3, ReportArg reportArg_0, object object_0)
+        private FilterGroup GetDateTimeAxisFilter(DbContext db, ReportArg arg, object dbValue)
         {
             FilterGroup filterGroup = new FilterGroup();
             if (new string[4]
@@ -2689,33 +2687,33 @@ namespace FastDev.RunWeb.Controllers
                 "month",
                 "day",
                 "week"
-            }.Contains(reportArg_0.axisFieldType))
+            }.Contains(arg.axisFieldType))
             {
-                RangeDateValue rangeDateValue = object_0 as RangeDateValue;
+                RangeDateValue rangeDateValue = dbValue as RangeDateValue;
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = reportArg_0.axisField,
+                    field = arg.axisField,
                     value = rangeDateValue.Min,
                     op = "greaterthanorequal"
                 });
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = reportArg_0.axisField,
+                    field = arg.axisField,
                     value = rangeDateValue.Max,
                     op = "lessthanorequal"
                 });
             }
-            else if (reportArg_0.axisFieldType == "ref")
+            else if (arg.axisFieldType == "ref")
             {
                 Field field = (from a in serviceConfig_0.fields
-                               where a.name == reportArg_0.axisField
+                               where a.name == arg.axisField
                                select a).FirstOrDefault();
                 if (field.type == "many2one")
                 {
                     filterGroup.rules.Add(new FilterRule
                     {
                         field = field.dbName,
-                        value = object_0,
+                        value = dbValue,
                         op = "equal"
                     });
                 }
@@ -2724,8 +2722,8 @@ namespace FastDev.RunWeb.Controllers
             {
                 filterGroup.rules.Add(new FilterRule
                 {
-                    field = reportArg_0.axisField,
-                    value = object_0,
+                    field = arg.axisField,
+                    value = dbValue,
                     op = "equal"
                 });
             }
@@ -3252,7 +3250,7 @@ namespace FastDev.RunWeb.Controllers
                 PrintData printData = new PrintData();
                 if (id != "kanban")
                 {
-                    printData.coreReportTemp= currentDb.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
+                    printData.coreReportTemp = currentDb.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                     {
                         templateId
                     });
@@ -3298,7 +3296,7 @@ namespace FastDev.RunWeb.Controllers
                         num = kanbanSrcData.Count;
                     }
                     strKanBanTemplate = template;
-                    PerpareKanban(serviceConfig,printData);
+                    PerpareKanban(serviceConfig, printData);
                     text = strTemplateOut;
                 }
                 response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -3332,7 +3330,7 @@ namespace FastDev.RunWeb.Controllers
                     byte[] buffer = ConvertHtml2PDF(new string[1]
                     {
                         text
-                    }, printData,true);
+                    }, printData, true);
 
 
                     response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -3812,8 +3810,6 @@ namespace FastDev.RunWeb.Controllers
             int_1 = 900;
             string_2 = null;
             serviceConfig_0 = null;
-            list_0 = null;
-            list_1 = null;
             dicModuleTitles = new Dictionary<string, string>();
             strTemplateOut = "";
             strKanBanTemplate = "";
@@ -4030,7 +4026,7 @@ namespace FastDev.RunWeb.Controllers
                 Type entityType = DataAccessHelper.GetEntityType(serviceConfig.model.name);
                 dbContext.GetHelper(entityType);
                 PropertyInfo[] properties = entityType.GetProperties();
-                properties.Select(p=>p.Name).ToList();
+                properties.Select(p => p.Name).ToList();
                 DataHelper.CreateSetProperties(properties);
                 Func<object, object[]> func = DataHelper.CreateGetProperties(properties);
                 List<FastDev.DevDB.Model.core_importTemplateDetail> list = dbContext.Fetch<FastDev.DevDB.Model.core_importTemplateDetail>("where TemplateID = @0", new object[1]
@@ -4389,7 +4385,7 @@ namespace FastDev.RunWeb.Controllers
             string model = text.Substring(text.LastIndexOf("\\") + 1);
             string text2 = (from a in mSetting.models
                             where a.name == model
-                            select a).Select(m=> m.title).FirstOrDefault();
+                            select a).Select(m => m.title).FirstOrDefault();
             dictionary["id"] = model;
             dictionary["text"] = (text2 ?? model);
             dictionary["type"] = "model";
