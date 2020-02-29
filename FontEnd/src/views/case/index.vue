@@ -136,6 +136,9 @@ export default {
   name: 'CaseList',
   data: function () {
     return {
+        current: 2,
+
+
       caseType: '全部', // 案件类型
       caseCourse: '全部', // 案件程序
       caseState: '全部', // 案件状态

@@ -96,7 +96,7 @@ namespace FastDev.Service
 
                 }
             }
-            return null;
+            throw new Exception();;
         }
         public override object Create(object postdata)
         {
@@ -115,37 +115,49 @@ namespace FastDev.Service
 
         private Func<APIContext, object> Task_surveyService_OnGetAPIHandler(string id)
         {
-            task_survey task = new task_survey();
-            task.CaseId = "123";
-            task.EventInfoId = "123";
-            task.EventType = "case_info";
-            task.ExistCrim = "true";
-            task.Result = "123";
-            task.TaskId= "71be0281-2ced-42a4-bc92-396791a8f197";
-            task.ProcessingDecisions = 1;
-            law_party law1 = new law_party();
-            law1.Name = "kk";
-            law1.address = "china";
-            law1.Gender = "男";
-            law1.CaseId = "122";
-            law_party law2 = new law_party();
-            law2.Name = "kk2";
-            law2.address = "china";
-            law2.Gender = "女";
-            law2.CaseId = "111";
-            List<law_party> law_Parties = new List<law_party>();
-            law_Parties.Add(law1);
-            law_Parties.Add(law2);
-            task_surveyFinishReq tq = new task_surveyFinishReq();
-            tq.TaskSurvey = task;
-            tq.LawParties = law_Parties;
-            work_task workTask = new work_task();
-            workTask.CaseID = "123";
-            workTask.LaskTaskId = "1221";
-            workTask.TaskContent = "手动创建新任务";
-            workTask.TaskType = "创建案件";
-            tq.NextTasks = new work_task[] { workTask };
-            tq.LawParties = law_Parties;
+            //law_punishmentInfo task = new law_punishmentInfo();
+            form_confiscated_item item1 = new form_confiscated_item();
+            form_confiscated_item item2 = new form_confiscated_item();
+            item1.ProductName = "测试没收1";
+            item2.ProductName = "测试没收2";
+            List<form_confiscated_item> form_Confiscated_Items = new List<form_confiscated_item>();
+            form_Confiscated_Items.Add(item1);
+            form_Confiscated_Items.Add(item2);
+            //task.EventInfoId = "1123";
+            //law_party law1 = new law_party();
+            //law1.Name = "kk";
+            //law1.address = "china";
+            //law1.Gender = "男";
+            //law1.CaseId = "122";
+            //law_party law2 = new law_party();
+            //law2.Name = "kk2";
+            //law2.address = "china";
+            //law2.Gender = "女";
+            //law2.CaseId = "111";
+            //List<law_party> law_Parties = new List<law_party>();
+            //law_Parties.Add(law1);
+            //law_Parties.Add(law2);
+            form_confiscated_itemFinishReq tq = new form_confiscated_itemFinishReq();
+            tq.formConfiscatedItems = form_Confiscated_Items;
+
+            //List<attachment> attachments = new List<attachment>();
+            //attachment a1 = new attachment();
+            //attachment a2 = new attachment();
+            //a1.fileName = "123";
+            //a2.fileName = "321";
+            //attachments.Add(a1);
+            //attachments.Add(a2);
+
+
+            //tq.LawParties = law_Parties;
+            //tq.Attachments = attachments;
+            //work_task workTask = new work_task();
+            //workTask.CaseID = "123";
+            //workTask.LaskTaskId = "1221";
+            //workTask.TaskContent = "手动创建新任务";
+            //workTask.TaskType = "创建没收物品之后的任务";
+            //tq.NextTasks = new work_task[] { workTask };
+            //tq.LawParties = law_Parties;
             var M = JsonConvert.SerializeObject(tq);
 
 
@@ -160,11 +172,13 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<task_surveyFinishReq>(context.Data);
-            if (data.TaskSurvey == null) return null;
+            if (data.TaskSurvey == null) throw new Exception();;
             QueryDb.BeginTransaction();
+            data.TaskSurvey.TaskId = data.SourceTaskId;
+            data.TaskSurvey.EventInfoId = data.EventInfoId;
             try
             {
-                CreateInfo(data.TaskSurvey, data.LawParties);
+                CreateInfo(data.TaskSurvey, data.LawParties,data.Attachments);
                 switch (data.TaskSurvey.ProcessingDecisions)
                 {
                     case 0:
@@ -178,7 +192,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -192,7 +206,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
+       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties, List<attachment> attachments)
         {
             var tasksurvey = base.Create(TaskSurvey) as string;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
@@ -202,9 +216,20 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "task_survey";
                     l.AssociationobjectID = tasksurvey;
-                    l.ID = Guid.NewGuid().ToString();
+                   l.ID = Guid.NewGuid().ToString();
                     QueryDb.Insert(l);
                    // ServiceHelper.GetService("law_partyService").Create(l);
+                }
+                if (attachments != null && attachments.Count > 0)
+                {
+                    foreach (var a in attachments)
+                    {
+                        a.Associatedobjecttype = "task_survey";
+                        a.AssociationobjectID = tasksurvey;
+                        a.ID = Guid.NewGuid().ToString();
+                        QueryDb.Insert(a);
+                        // _attachment.Create(a);           
+                    }
                 }
             }
         }
@@ -226,7 +251,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -239,8 +264,8 @@ namespace FastDev.Service
         ///// <returns></returns>
         //public object CreatTask(work_task[] NextTasks,string sourcetaskid)
         //{
-        //    if (NextTasks == null) return null;
-        //    if (NextTasks.Length < 1) return null;
+        //    if (NextTasks == null) throw new Exception();;
+        //    if (NextTasks.Length < 1) throw new Exception();;
         //    foreach (var Task in NextTasks)
         //    {
         //        Task.LaskTaskId = sourcetaskid;
@@ -269,7 +294,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -284,7 +309,7 @@ namespace FastDev.Service
         {
             //TODO 事件转交
             //TODO 写待办
-            return null;
+            throw new Exception();;
         }
 
         /// <summary>
@@ -310,7 +335,7 @@ namespace FastDev.Service
             catch (Exception ex)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;

@@ -129,6 +129,16 @@ public string CoorganizerID
 get;
 set;
 }
+public string CaseNumber
+{
+get;
+set;
+}
+public string EventInfoId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

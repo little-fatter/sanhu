@@ -9,7 +9,7 @@ public string ID
 get;
 set;
 }
-public string Associatedobjecttype
+public string CaseId
 {
 get;
 set;

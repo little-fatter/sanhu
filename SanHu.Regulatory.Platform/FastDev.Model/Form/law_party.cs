@@ -9,11 +9,6 @@ public IList<string> Typesofparties
 get;
 set;
 }
-public IList<string> Associatedobjecttype
-{
-get;
-set;
-}
 }
 
 }

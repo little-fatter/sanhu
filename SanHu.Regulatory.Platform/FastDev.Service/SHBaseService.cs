@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using WanJiang.Framework.Infrastructure.Logging;
 
 namespace FastDev.Service
 {
@@ -28,10 +29,10 @@ namespace FastDev.Service
         /// <param name="url">跳转地址</param>
         /// <param name="formTitle">待办表单标题</param>
         /// <param name="fromContent">待办表单内容</param>
-        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
+        public string CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
-            //var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
-            //ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
+            var ddService = SysContext.GetService<IDingDingServices>();
+            return ddService.CreateWorkrecor(userId, title, url, formInfo);
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace FastDev.Service
             workTask.TaskType = TaskType.Survey.ToString();
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
-            workTask.AssignUsersID = AssignUsersID;
+            workTask.AssignUsers = AssignUsersID;
             workTask.MainHandler = MainHandler;
             return workTask;
         }
@@ -90,8 +91,6 @@ namespace FastDev.Service
             return ServiceHelper.GetService("work_task").Create(workTask).ToString();
         }
 
-
-
         /// <summary>
         /// 任务状态更新
         /// </summary>
@@ -100,18 +99,16 @@ namespace FastDev.Service
         public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
             var taskInfo = GetWorkTask(taskid);
+            if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
             taskInfo.CompleteTime = DateTime.Now;
             QueryDb.Update(taskInfo);
         }
 
-
-        private work_task GetWorkTask(string taskid)
+        protected work_task GetWorkTask(string taskid)
         {
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
-
-
 
         public List<object> GetLastInfo(string Taskid, string type)
         {
@@ -199,13 +196,32 @@ namespace FastDev.Service
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
             {
-                Task.LaskTaskId = sourcetaskid;
-                Task.InitiationTime = DateTime.Now;
-                var taskId = SaveWorkTask(Task);
-                CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, Task.TaskType, Task.TaskContent);
+                Task.LaskTaskId = sourcetaskid;  //上一个任务id
+                Task.InitiationTime = DateTime.Now;  //状态
+                Task.TaskStatus = (int)WorkTaskStatus.Normal;  //状态
+                Task.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望完成时间
+                var loginClientInfo = SysContext.GetService<ClientInfo>();
+                if (loginClientInfo != null)
+                {
+                    Task.CreateUserID = loginClientInfo.UserId ?? null;  //任务创建人
+                }
+                string id = SaveWorkTask(Task);
+                Task.ID = id;
+
+                Task.LocalLinks = Task.RemoteLinks;
+                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid="+ Task.ID;
+                string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
+                var dic = new Dictionary<string, string>();
+                dic.Add("事件类型", taskTypeStr);
+                dic.Add("上报时间", Task.InitiationTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                Task.TodotaskID = CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks, dic);   //待办id
+
+                ServiceHelper.GetService("work_task").Update(Task);
             }
             return true;
         }
+
 
 
     }

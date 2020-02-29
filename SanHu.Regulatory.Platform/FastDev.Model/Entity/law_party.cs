@@ -49,11 +49,6 @@ public string AssociationobjectID
 get;
 set;
 }
-public string Associatedobjecttype
-{
-get;
-set;
-}
 public string Name
 {
 get;
@@ -75,6 +70,11 @@ get;
 set;
 }
 public string WorkUnit
+{
+get;
+set;
+}
+public string Associatedobjecttype
 {
 get;
 set;

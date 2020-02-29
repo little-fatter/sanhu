@@ -14,7 +14,22 @@ namespace FastDev.Service
         public case_InfoService()
         {
             OnGetAPIHandler += case_InfoService_OnGetAPIHandler;
+            OnAfterGetPagedData += Case_InfoService_OnAfterGetPagedData;
         }
+
+        private void Case_InfoService_OnAfterGetPagedData(object query, object data)
+        {
+            var lst = (data as PagedData).Records;
+            var db = this.QueryDb;
+            for (int i = 0; i < lst.Count; i++)
+            {
+                var item = lst[i] as Dictionary<string, object>;
+                var partys = db.Fetch<law_party>("where Associatedobjecttype=@0 and CaseId=@1", new object[] { "case_info", item["ID"].ToString() });
+                //item.Add("LawPartys",JsonHelper.DeserializeJsonToObject partys);
+            }
+        }
+
+
 
         private SHBaseService _sHBaseService;
         private Func<APIContext, object> case_InfoService_OnGetAPIHandler(string id)
@@ -30,7 +45,9 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<case_InfoFinishReq>(context.Data);    
-            if (data.CaseInfo == null) return false;
+            if (data.CaseInfo == null) throw new Exception();
+            data.CaseInfo.TaskId = data.SourceTaskId;
+            data.CaseInfo.EventInfoId = data.EventInfoId;
             QueryDb.BeginTransaction();
             try
             {
@@ -41,7 +58,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -105,13 +122,17 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoSource;
-                    _Lawpartys.Create(l);
+                    //_Lawpartys.Create(l);
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
                 {
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoNew;
-                    _Lawpartys.Create(l);
+                    // _Lawpartys.Create(l);
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
                 }
 
             }

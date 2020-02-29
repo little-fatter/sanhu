@@ -32,6 +32,8 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
+                data.form_Inquiryrecord.TaskId = data.SourceTaskId;
+                data.form_Inquiryrecord.EventInfoId = data.EventInfoId;
                 var form = ServiceHelper.GetService("form_inquiryrecord").Create(data.form_Inquiryrecord) as form_inquestrecord;
                 data.law_Staffs.ToList().ForEach(s => { s.AssociatedobjectID = form.ID; });
                 data.law_Parties.ToList().ForEach(s => { s.AssociationobjectID = form.ID; });
