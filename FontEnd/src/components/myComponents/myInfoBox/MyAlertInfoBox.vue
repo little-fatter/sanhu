@@ -208,30 +208,28 @@ export default {
       var AssignUsersID = this.taskPanel.list[selectIndex].id
       var CoOrganizer = this.taskPanel.subPeople.toString()
       var ExpectedCompletionTime = this.taskPanel.time.format('YYYY-MM-DD HH:mm:ss')
-      var url = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/webapi/api'
+      // var url = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/webapi/api'
+      var url = 'http://192.168.0.165:8030/webapi/api'
+
       var RemoteLinks = appConfig.AppHost + 'eventCheckCreate'
       var data = {
-        'EventInfoId': EventInfoId, // 源事件id
-        'NextTasks': [
-          {
-            'TaskType': '1', // 任务类型
-            'AssignUsersID': AssignUsersID, // 执行人
-            'RemoteLinks': RemoteLinks, // 钉钉url连接
-            'TaskContent': '任务描述', // 任务描述
-            'EventInfoId': EventInfoId, // 事件id
-            // 'CaseID': '', // 案件id
-            'ExpectedCompletionTime': ExpectedCompletionTime, // 期望完成时间
-            'MainHandler': MainHandler, // 主办人
-            'CoOrganizer': CoOrganizer // 协办人
-          }
-        ]
+        'TaskType': 'EventCheck', // 任务类型
+        'AssignUsers': AssignUsersID, // 执行人
+        'RemoteLinks': RemoteLinks, // 钉钉url连接
+        'TaskContent': '任务描述' + Math.random(), // 任务描述
+        'EventInfoId': EventInfoId, // 事件id
+        // 'CaseID': '', // 案件id
+        'ExpectedCompletionTime': ExpectedCompletionTime, // 期望完成时间
+        'MainHandler': MainHandler, // 主办人
+        'CoOrganizer': CoOrganizer // 协办人
       }
-      var body = {
-        id: 'create',
-        model: 'work_task',
-        data: JSON.stringify(data)
-      }
-      // var body = '{"id": "create","model": "work_task","data": "' + JSON.stringify(data) + '"}'
+
+      // var body = {
+      //   id: 'create',
+      //   model: 'work_task',
+      //   data: JSON.stringify(data)
+      // }
+      var body = '{"id": "create","model": "work_task","data": \'' + JSON.stringify(data) + '"\'}'
       console.log('body', body)
       this.dataGet.doPostDataAjaxNotSetObject(url, body)
         .then(function (res) {

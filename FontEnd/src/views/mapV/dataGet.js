@@ -31,7 +31,7 @@ export default {
         url: url,
         type: 'post',
         contentType: 'application/json',
-        data: JSON.stringify(body),
+        data: body,
         dataType: 'json',
         success: (res) => {
           resolve(res)
