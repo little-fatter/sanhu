@@ -97,8 +97,8 @@
         <a-menu mode="horizontal">
           <a-menu-item v-for="item of menuList" :key="item.key">
             <div>
-              {{item.key}}
-              ({{item.number}})
+              {{ item.key }}
+              ({{ item.number }})
             </div>
           </a-menu-item>
         </a-menu>
@@ -114,16 +114,16 @@
               </div>
               <div class="item-info">
                 <div class="item-title">
-                  {{item.name}}
+                  {{ item.name }}
                 </div>
                 <div class="item-time">
-                  接收时间：{{item.recTime}}
+                  接收时间：{{ item.recTime }}
                 </div>
-                <div class="item-owner">所属事件：{{item.owner}}</div>
+                <div class="item-owner">所属事件：{{ item.owner }}</div>
               </div>
             </div>
             <div class="item-after">
-              {{item.status}}
+              {{ item.status }}
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default {
         {
           key: '巡检',
           number: 2
-        },
+        }
       ],
       dataList: [
         {
@@ -193,5 +193,3 @@ export default {
   }
 }
 </script>
-
-
