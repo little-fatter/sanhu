@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using WanJiang.Framework.Infrastructure.Logging;
 
 namespace FastDev.Service
 {
@@ -30,7 +31,8 @@ namespace FastDev.Service
         /// <param name="fromContent">待办表单内容</param>
         public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
         {
-            var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
+            var ddService = SysContext.GetService<IDingDingServices>();
+            //var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
             ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
         }
 
@@ -57,12 +59,13 @@ namespace FastDev.Service
         {
             var lastTask = GetWorkTask(taskid);
             work_task workTask = new work_task();
+            workTask.LaskTaskId = taskid;
             workTask.EventInfoId = lastTask.EventInfoId;
             workTask.CaseID = lastTask.CaseID;
             workTask.TaskType = TaskType.Survey.ToString();
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
-            workTask.AssignUsersID = AssignUsersID;
+            workTask.AssignUsers = AssignUsersID;
             workTask.MainHandler = MainHandler;
             return workTask;
         }
@@ -81,6 +84,17 @@ namespace FastDev.Service
         }
 
         /// <summary>
+        /// 保存任务
+        /// </summary>
+        /// <param name="workTask"></param>
+        public string SaveWorkTask(work_task workTask)
+        {
+            return ServiceHelper.GetService("work_task").Create(workTask).ToString();
+        }
+
+
+
+        /// <summary>
         /// 任务状态更新
         /// </summary>
         /// <param name="taskid"></param>
@@ -88,46 +102,56 @@ namespace FastDev.Service
         public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
             var taskInfo = GetWorkTask(taskid);
+            if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
             taskInfo.CompleteTime = DateTime.Now;
             QueryDb.Update(taskInfo);
         }
 
 
-        private work_task GetWorkTask(string taskid)
+        protected work_task GetWorkTask(string taskid)
         {
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
 
 
 
-        public List<object> GetLastInfo(string EventInfoid,string type)
+        public List<object> GetLastInfo(string Taskid, string type)
         {
+            if (string.IsNullOrEmpty(Taskid)) return null;
             List<object> objs = new List<object>();
             string formid = null;
             string formtype = null;
             switch (type)
             {
                 case "case_Info":
-                    objs.Add(GetSurvey(EventInfoid, "task_survey"));
+                    objs.Add(GetSurvey(Taskid));
                     var b = objs[0] as task_survey;
                     if (b == null) break;
                     formid = b.ID;
                     formtype = "task_survey";
                     break;
                 case "task_survey":
-                    objs.Add(GetSurvey(EventInfoid, "task_patrol"));
+                    objs.Add(GetPatrol(Taskid));
                     var p = objs[0] as task_patrol;
                     if (p == null) break;
                     formid = p.ID;
                     formtype = "task_patrol";
                     break;
+                case "law_punishmentInfo":
+                    objs.Add(GetPatrol(Taskid));
+                    var c = objs[0] as case_Info;
+                    if (c == null) break;
+                    formid = c.ID;
+                    formtype = "case_Info";
+                    break;
+
             }
             objs.Add(GetParties(formid, formtype));
             return objs;
         }
 
-        private object GetParties(string formid,string formType)
+        private object GetParties(string formid, string formType)
         {
             List<law_party> lawParties = new List<law_party>();
             DataTable dt = new DataTable();
@@ -151,23 +175,53 @@ namespace FastDev.Service
                 }
                 return lawParties;
             }
-            return null;   
+            return null;
         }
 
 
-        private object GetSurvey(string EventInfoid,string type)
+        private object GetSurvey(string taskid)
         {
-            var task = QueryDb.FirstOrDefault<work_task>("where EventInfoId=@0 and Tasktype=@1",EventInfoid,type);
-            var form = QueryDb.FirstOrDefault<task_survey>(" where TaskId=@0 order by CreateDate desc",task.ID);
+            var form = QueryDb.FirstOrDefault<task_survey>(" where TaskId=@0 order PreviousformID!=null by CreateDate desc", taskid);
             return form;
         }
 
-        private object GetPatrol(string EventInfoid, string type)
+        private object GetPatrol(string taskid)
         {
-            var task = QueryDb.FirstOrDefault<work_task>("where EventInfoId=@0 and Tasktype=@1", EventInfoid, type);
-            var form = QueryDb.FirstOrDefault<task_patrol>(" where TaskId=@0 order by CreateDate desc", task.ID);
+            var form = QueryDb.FirstOrDefault<task_patrol>(" where TaskId=@0 and  order by CreateDate desc", taskid);
             return form;
         }
+
+        /// <summary>
+        /// 创建后续任务
+        /// </summary>
+        /// <param name="NextTasks"></param>
+        /// <param name="sourcetaskid"></param>
+        public object CreatTasksAndCreatWorkrecor(work_task[] NextTasks, string sourcetaskid)
+        {
+            if (NextTasks == null) return null;
+            if (NextTasks.Length < 1) return null;
+            foreach (var Task in NextTasks)
+            {
+                Task.LaskTaskId = sourcetaskid;  //上一个任务id
+                Task.InitiationTime = DateTime.Now;  //状态
+                Task.TaskStatus = (int)WorkTaskStatus.Normal;  //状态
+                Task.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望完成时间
+                var loginClientInfo = SysContext.GetService<ClientInfo>();
+                if (loginClientInfo != null)
+                {
+                    Task.CreateUserID = loginClientInfo.UserId ?? null;  //任务创建人
+                }
+
+                Task.LocalLinks = Task.RemoteLinks;
+                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=";
+                var taskId = SaveWorkTask(Task);
+
+                string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);
+                CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks + taskId, taskTypeStr, Task.TaskContent);
+            }
+            return true;
+        }
+
 
 
     }

@@ -1,11 +1,13 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.IServices;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastDev.Service
 {
@@ -25,6 +27,9 @@ namespace FastDev.Service
 
         public WeatherResponse GetWeather(APIContext aPIContext)
         {
+            //var dingdingservice = SysContext.GetService<IDingDingServices>();
+
+
             HttpClient httpClient = new HttpClient();
             var result = httpClient.GetAsync($"https://api.caiyunapp.com/v2/{_token}/121.6544,25.1552/realtime.json").Result;
             return JsonConvert.DeserializeObject<WeatherResponse>(result.Content.ReadAsStringAsync().Result);

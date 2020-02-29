@@ -58,7 +58,12 @@ export default {
       this.$router.go(-1)
     }
   },
-  created () {},
+  created () {
+    console.log('created')
+  },
+  activated () {
+    console.log('activated')
+  },
   mounted () {}
 }
 </script>

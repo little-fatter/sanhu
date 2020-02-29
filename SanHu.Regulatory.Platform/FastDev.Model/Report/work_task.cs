@@ -34,11 +34,6 @@ public string TaskContent
 get;
 set;
 }
-public string AssignUsersID
-{
-get;
-set;
-}
 public DateTime? InitiationTime
 {
 get;
@@ -109,7 +104,18 @@ public string WorkflowtaskID
 get;
 set;
 }
-public string TaskType{
+public string TaskType
+{
+get;
+set;
+}
+public string LaskTaskId
+{
+get;
+set;
+}
+public string AssignUsers
+{
 get;
 set;
 }

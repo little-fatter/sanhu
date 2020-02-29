@@ -8,7 +8,13 @@ const defaultCondition = { 'rules': [], 'groups': [], 'op': 'and' }
  */
 export const DictionaryCode = {
     // 事件类型
-    EventType: 'EventType'
+    EventType: 'EventType',
+    // 当事人类型
+    Typesofparties: 'Typesofparties',
+    // 案件类型
+    CaseType: 'CaseType',
+    // 案件来源
+    Sourceofcase: 'Sourceofcase '
 }
 
 /**
@@ -115,13 +121,26 @@ export const getDictionaryItems = (context) => {
  * @param {*} model 模块名称
  * @param {*} method 操作
  */
-export const commonSaveApi = (data, model, method = 'create') => {
+export const commonSaveApi = (data, model, method = 'create') => { <<
+        << << < HEAD
+        return postHttp({
+            url: apiConfig.regulatory.commonSaveApi,
+            data: {
+                data,
+                model,
+                method
+            }
+        })
+    } ===
+    === =
     return postHttp({
         url: apiConfig.regulatory.commonSaveApi,
         data: {
             data,
             model,
-            method
+            method,
+            id: 'FINISH'
         }
     })
-}
+} >>>
+>>> > 426037 d6125c41e6c2459a4cdb7fb47b87838527

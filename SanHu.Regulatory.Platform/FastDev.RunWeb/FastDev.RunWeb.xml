@@ -4,6 +4,29 @@
         <name>FastDev.RunWeb</name>
     </assembly>
     <members>
+        <member name="P:FastDev.RunWeb.Code.PrintData.printTemp">
+            <summary>
+            打印模板
+            </summary>
+        </member>
+        <member name="P:FastDev.RunWeb.Code.PrintData.coreReportTemp">
+            <summary>
+            报表模板
+            </summary>
+        </member>
+        <member name="M:FastDev.RunWeb.Code.PrintData.SetDefaultTemplateData">
+            <summary>
+            模板设置默认值 SetDefaultTemplateData
+            </summary>
+        </member>
+        <member name="M:FastDev.RunWeb.Code.PrintData.DoWithSystemMark(System.Object,System.String)">
+            <summary>
+            讲系统标签格式化
+            </summary>
+            <param name="specialData"></param>
+            <param name="strWithMark"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.RunWeb.DependencyConfigs.AddDependencyConfigs(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             添加系统依赖注入
@@ -145,6 +168,16 @@
             <returns></returns>
         </member>
         <member name="M:FastDev.RunWeb.Controllers.WebApiController.Save(System.String,System.String,System.String,System.String)">
+            <summary>
+            保存数据
+            </summary>
+            <param name="model"></param>
+            <param name="method"></param>
+            <param name="fullJson"></param>
+            <param name="parm"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebApiController.EventSave(System.String,System.String,System.String,System.String)">
             <summary>
             保存数据
             </summary>

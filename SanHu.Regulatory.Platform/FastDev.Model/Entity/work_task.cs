@@ -1,7 +1,6 @@
 namespace FastDev.Model.Entity
 {
-    using FD.Model.Enum;
-    using System;
+  using System;
  using System.Runtime.CompilerServices;
 public partial class work_task
 {
@@ -31,11 +30,6 @@ get;
 set;
 }
 public string TaskContent
-{
-get;
-set;
-}
-public string AssignUsersID
 {
 get;
 set;
@@ -111,6 +105,16 @@ get;
 set;
 }
 public string TaskType
+{
+get;
+set;
+}
+public string LaskTaskId
+{
+get;
+set;
+}
+public string AssignUsers
 {
 get;
 set;

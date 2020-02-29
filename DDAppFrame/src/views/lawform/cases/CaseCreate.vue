@@ -1,9 +1,9 @@
 <template>
   <div class="form_wapper">
-    <van-cell-group title="任务信息" v-if="taskId">
-      <van-cell title="任务" value="创建案件"></van-cell>
-      <van-cell title="交办时间" value="2020-02-15"></van-cell>
-      <van-cell title="期望时间" value="2020-02-15"></van-cell>
+    <van-cell-group title="任务信息" v-if="taskInfo">
+      <van-cell title="任务" :value="taskInfo.Tasktype"></van-cell>
+      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -17,12 +17,12 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectEvent" size="25" />
       </van-field>
     </van-cell-group>
-    <van-cell-group title="案件信息">
+    <van-cell-group title="案件信息" v-if="event.evtTypeDisplayName">
       <van-form @submit="onSubmit" @failed="onFailed">
         <van-cell title="案件号" value="自动生成"></van-cell>
         <van-field
-          name="ay"
-          v-model="caseInfo.ay"
+          name="CauseOfAction"
+          v-model="caseInfo.CauseOfAction"
           rows="2"
           autosize
           label="案由"
@@ -34,8 +34,8 @@
           :rules="requiredRule"
         />
         <van-field
-          name="caseType"
-          v-model="caseInfo.caseType"
+          name="CaseType"
+          v-model="caseInfo.CaseType"
           label="案件类型"
           readonly
           required
@@ -43,15 +43,29 @@
           class="dropdown-menu_noboder">
           <template slot="input">
             <van-dropdown-menu>
-              <van-dropdown-item v-model="caseInfo.caseType" :options="caseTypeoptions" @change="caseTypeSelectChange" />
+              <van-dropdown-item v-model="caseInfo.CaseType" :options="caseTypeoptions" />
+            </van-dropdown-menu>
+          </template>
+        </van-field>
+        <van-field
+          name="Sourceofcase"
+          v-model="caseInfo.Sourceofcase"
+          label="案件来源"
+          readonly
+          required
+          :rules="requiredRule"
+          class="dropdown-menu_noboder">
+          <template slot="input">
+            <van-dropdown-menu>
+              <van-dropdown-item v-model="caseInfo.Sourceofcase" :options="sourceofcaseoptions" />
             </van-dropdown-menu>
           </template>
         </van-field>
         <van-field
           readonly
           clickable
-          name="eventTime"
-          :value="event.eventTime"
+          name="IncidentTime"
+          :value="caseInfo.IncidentTime"
           label="事发时间"
           :rules="requiredRule"
           placeholder="点击选择日期"
@@ -68,8 +82,8 @@
           />
         </van-popup>
         <van-field
-          name="eventAddress"
-          v-model="event.eventAddress"
+          name="IncidentAddress"
+          v-model="caseInfo.IncidentAddress"
           label="事发地点"
           placeholder="请输入事发地点"
           required
@@ -79,7 +93,7 @@
         </van-field>
         <party-info></party-info>
         <van-field
-          v-model="caseInfo.organiser.name"
+          v-model="caseInfo.CoOrganizer"
           label="协办人"
           placeholder="请选择协办人"
           :readonly="true"
@@ -97,10 +111,11 @@
 </template>
 
 <script>
-import { formatDate } from '../../../utils/util'
+import { formatDate, isNotEmpty } from '../../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import PartyInfo from '../../../components/business/PartyInfo'
 import EventListSelect from '../../../components/business/EventListSelect'
+import { getDictionaryItems, DictionaryCode, getDetaildata } from '../../../api/regulatoryApi'
 export default {
   name: 'CaseCreate',
   components: {
@@ -117,39 +132,98 @@ export default {
     return {
       loading: false,
       showPopup: false,
-      taskId: null,
+      taskInfo: null,
       caseInfo: {
-        ay: '',
-        desc: '',
-        caseType: 1,
+        CauseOfAction: '',
+        CaseType: null,
+        Sourceofcase: null,
+        IncidentTime: null,
+        IncidentAddress: '',
+        IncidentAddressXY: '',
         organiser: {
         }
       },
       event: {},
       caseTypeoptions: [
-        { text: '非法捕捞', value: 1 }
+      ],
+      sourceofcaseoptions: [
       ],
       showCalendar: false,
       currentDate: new Date()
     }
   },
   created () {
-
+    this.init()
   },
   methods: {
+    init () {
+      const queryParam = this.$route.query
+      const taskId = queryParam.taskId
+      if (isNotEmpty(taskId)) {
+        this.loadTaskInfo()
+      }
+      this.loadCaseTypes()
+      this.loadSourceofcases()
+    },
+    loadTaskInfo (taskId) {
+      getDetaildata('work_task', taskId).then(res => {
+        this.taskInfo = res
+        this.loadEventInfo(res.EventInfoId)
+      })
+    },
+    loadEventInfo (EventInfoId) {
+      getDetaildata('event_info', EventInfoId).then((res) => {
+        if (res) {
+          this.event = res
+        }
+      })
+    },
+    loadSourceofcases () {
+      getDictionaryItems(DictionaryCode.Sourceofcase).then((items) => {
+        var sourceofcaseoptions = []
+        if (isNotEmpty(items)) {
+          items.forEach(item => {
+            sourceofcaseoptions.push({
+              text: item.Title, value: item.ItemCode
+            })
+          })
+          this.caseInfo.Sourceofcase = items[0].ItemCode
+        }
+        this.sourceofcaseoptions = sourceofcaseoptions
+      })
+    },
+    loadCaseTypes () {
+      getDictionaryItems(DictionaryCode.CaseType).then((items) => {
+        var caseTypeoptions = []
+        if (isNotEmpty(items)) {
+          items.forEach(item => {
+            caseTypeoptions.push({
+              text: item.Title, value: item.ItemCode
+            })
+          })
+          this.caseInfo.CaseType = items[0].ItemCode
+        }
+        this.caseTypeoptions = caseTypeoptions
+      })
+    },
     handleEventTimeConfirm (date) {
-      this.caseInfo.eventTime = formatDate(date, 'YYYY-MM-DD HH:mm')
+      this.caseInfo.IncidentTime = formatDate(date, 'YYYY-MM-DD HH:mm')
       this.showCalendar = false
     },
     handleShowLocation () {
       ddgetMapLocation().then(location => {
         ddMapSearch(location.latitude, location.longitude).then((res) => {
-          this.caseInfo.eventAddress = `${res.province}${res.city}${res.adName}${res.snippet}`
+          this.caseInfo.IncidentAddress = `${res.province}${res.city}${res.adName}${res.snippet}`
+          var incidentAddressXY = ''
+          if (isNotEmpty(res.latitude) && isNotEmpty(res.longitude)) {
+            incidentAddressXY = res.longitude + ',' + res.latitude
+          }
+          this.caseInfo.IncidentAddressXY = incidentAddressXY
         })
       })
     },
     caseTypeSelectChange (value) {
-      this.caseInfo.caseType = value
+      this.caseInfo.CaseType = value
     },
     handleSelecOrganiser () {
       ddcomplexPicker().then((res) => {
@@ -157,7 +231,8 @@ export default {
           name: res.users[0].name,
           id: res.users[0].emplId
         }
-        this.caseInfo.organiser = organiserTemp
+        this.caseInfo.CoOrganizer = organiserTemp.name
+        this.caseInfo.CoOrganizerId = organiserTemp.id
       })
     },
     onCloseEvent () {
@@ -168,9 +243,13 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      this.event.remark = event.remark
-      this.event.eventTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
-      this.event.eventAddress = event.address
+      this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
+      this.caseInfo.IncidentAddress = event.address
+      var incidentAddressXY = ''
+      if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+        incidentAddressXY = event.lng + ',' + event.lat
+      }
+      this.caseInfo.IncidentAddressXY = incidentAddressXY
       this.showPopup = false
     },
     onSubmit (values) {

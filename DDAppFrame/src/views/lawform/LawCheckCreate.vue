@@ -1,9 +1,9 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务类型" value="执法现场检查"></van-cell>
-      <van-cell title="交办时间" value="2020-02-15"></van-cell>
-      <van-cell title="期望时间" value="2020-02-15"></van-cell>
+      <van-cell title="任务" :value="taskInfo.Tasktype"></van-cell>
+      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -96,7 +96,8 @@
           <item-group title="附件">
             <s-upload
               ref="myupload"
-              :sync2Dingding="false"
+              :accept="accept"
+              :sync2Dingding="true"
             >
             </s-upload>
           </item-group>
@@ -176,6 +177,7 @@ import { phoneValidator, idcardValidator } from '../../utils/helper/validate.hel
 import PartyInfo from '../../components/business/PartyInfo'
 import EventListSelect from '../../components/business/EventListSelect'
 import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, getDetialdataByEventInfoId, commonSaveApi } from '../../api/regulatoryApi'
+import { AcceptImageAll } from '../../utils/helper/accept.helper'
 var timer = null
 /**
  * 执法现场核查
@@ -202,6 +204,7 @@ export default {
       { validator: idcardValidator, message: ' ' }
     ]
     return {
+      accept: AcceptImageAll,
       loading: false,
       taskInfo: null,
       event: {},
@@ -276,7 +279,7 @@ export default {
       })
     },
     loadEventCheck (EventInfoId) {
-      getDetialdataByEventInfoId('task_survey', EventInfoId).then((res) => {
+      getDetialdataByEventInfoId('task_patrol', EventInfoId).then((res) => {
         if (res) {
           this.eventCheck = res
         }
@@ -319,10 +322,13 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      getDetialdataByEventInfoId('task_survey', event.objId).then((res) => {
-        console.log('task_survey', res)
+      getDetialdataByEventInfoId('task_patrol', event.objId).then((res) => {
         if (res) {
-          this.eventCheck = res
+          this.eventCheck = {
+            ...res,
+            ProcessingDecisions: 1,
+            ExistCrim: null
+          }
         } else {
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')

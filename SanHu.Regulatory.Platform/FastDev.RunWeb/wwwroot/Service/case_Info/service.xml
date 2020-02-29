@@ -2,9 +2,9 @@
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <model name="case_Info" title="案件" textField="CaseType" moduleName="case" moduleTitle="案件" dbName="" />
     <fields>
-        <field name="CaseType" dbName="CaseType" title="案件类型" type="string" length="50" isPK="N" />
-        <field name="CaseTitle" dbName="CaseTitle" title="标题" type="string" length="50" isPK="N" />
-        <field name="CaseStatus" dbName="CaseStatus" title="案件状态" type="status" relationModel="" relationField="" isPK="N" />
+        <field name="CaseType" dbName="CaseType" title="案件类型" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="CaseTitle" dbName="CaseTitle" title="标题" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="CaseStatus" dbName="CaseStatus" title="案件状态" type="status" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="ApplicableProcedure" dbName="ApplicableProcedureID" title="适用程序" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="350" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="PenaltyDecisionNo" dbName="PenaltyDecisionNo" title="处罚决定书文号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
@@ -20,6 +20,12 @@
         <field name="Region" dbName="RegionID" title="区域" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
         <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="PreviousformID" dbName="PreviousformID" title="原始表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="IncidentAddressXY" dbName="IncidentAddressXY" title="案发地点" type="string" length="50" isPK="N" />
+        <field name="IncidentTime" dbName="IncidentTime" title="案发时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="IncidentAddress" dbName="IncidentAddress" title="案发地点地址" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Sourceofcase" dbName="Sourceofcase" title="案件来源" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CoOrganizer" dbName="CoOrganizer" title="协办人员" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CoorganizerID" dbName="CoorganizerID" title="协办人ID" type="string" length="50" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

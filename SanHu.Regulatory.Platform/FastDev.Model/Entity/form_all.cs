@@ -69,16 +69,6 @@ public string EventInfoId
 get;
 set;
 }
-public string CaseID
-{
-get;
-set;
-}
-public string TaskID
-{
-get;
-set;
-}
 public DateTime? CreateDate
 {
 get;

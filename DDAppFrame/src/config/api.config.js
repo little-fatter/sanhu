@@ -59,15 +59,14 @@ const apiConfig = {
             deleteFile: getHost('file') + '/api/Default/Delete'
         }
     },
-    /**
-     * 业务Api
-     */
-    regulatory: {
-        getPageDate: getHost('regulatory') + '/pageddata',
-        getDetaildata: getHost('regulatory') + '/detaildata',
-        commonOperateApi: getHost('regulatory') + '/api',
-        getDictionaryItems: getHost('regulatory') + '/api/items',
-        commonSaveApi: getHost('regulatory') + '/save'
+    // 文件信息模块
+    file: {
+        // 上传文件
+        uploadFile: getHost('file') + '/api/file/UploadFilesByform',
+        // 下载文件
+        downloadFile: getHost('file') + '/api/file/Get',
+        // 删除文件
+        deleteFile: getHost('file') + '/api/file/Delete'
     }
 }
 
