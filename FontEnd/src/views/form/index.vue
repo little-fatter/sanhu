@@ -98,12 +98,13 @@ div {
     </div>
     <div>
       <a-table
+        :customRow="clickRow"
         style="background-color: #ffffff"
         :columns="columns"
         :pagination="pagination"
         :rowKey="record => record.ID"
         :dataSource="data"
-        bordered>
+      >
       </a-table>
     </div>
     <a-modal
@@ -226,6 +227,22 @@ export default {
     this.getFormState()
   },
   methods: {
+    clickRow (record, index) {
+      return {
+        on: {
+          click: () => {
+            if (index === 0) {
+              console.log(record, index)
+
+              this.$router.push('/data-manage/form/form-details')
+            }
+            if (index === 1) { this.$router.push('/data-manage/form/close-person-report') }
+            if (index === 2) { this.$router.push('/data-manage/form/close-org-report') }
+            console.log(record, index)
+          }
+        }
+      }
+    },
     // 获取表单类型
     getFormType () {
       getDictionary({ model: 'res_dictionary', context: 'FormType' }).then(res => {
