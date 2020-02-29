@@ -8,7 +8,13 @@ const defaultCondition = { 'rules': [], 'groups': [], 'op': 'and' }
  */
 export const DictionaryCode = {
   // 事件类型
-  EventType: 'EventType'
+  EventType: 'EventType',
+  // 当事人类型
+  Typesofparties: 'Typesofparties',
+  // 案件类型
+  CaseType: 'CaseType',
+  // 案件来源
+  Sourceofcase: 'Sourceofcase '
 }
 
 /**
@@ -125,7 +131,8 @@ export const commonSaveApi = (data, model, method = 'create') => {
     data: {
       data,
       model,
-      method
+      method,
+      id: 'FINISH'
     }
   })
 }
