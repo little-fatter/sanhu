@@ -202,9 +202,9 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "task_survey";
                     l.AssociationobjectID = tasksurvey;
-                  //  l.ID = Guid.NewGuid().ToString();
-                   // QueryDb.Insert(l);
-                    ServiceHelper.GetService("law_partyService").Create(l);
+                   l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
+                   // ServiceHelper.GetService("law_partyService").Create(l);
                 }
             }
         }

@@ -105,13 +105,17 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoSource;
-                    _Lawpartys.Create(l);
+                    //_Lawpartys.Create(l);
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
                 {
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoNew;
-                    _Lawpartys.Create(l);
+                    // _Lawpartys.Create(l);
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
                 }
 
             }
