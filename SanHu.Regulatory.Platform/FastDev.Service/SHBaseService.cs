@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using WanJiang.Framework.Infrastructure.Logging;
 
 namespace FastDev.Service
 {
@@ -201,12 +202,22 @@ namespace FastDev.Service
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
             {
-                Task.LaskTaskId = sourcetaskid;
-                Task.InitiationTime = DateTime.Now;
+                Task.LaskTaskId = sourcetaskid;  //上一个任务id
+                Task.InitiationTime = DateTime.Now;  //状态
+                Task.TaskStatus = (int)WorkTaskStatus.Normal;  //状态
+                Task.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望完成时间
+                var loginClientInfo = SysContext.GetService<ClientInfo>();
+                if (loginClientInfo != null)
+                {
+                    Task.CreateUserID = loginClientInfo.UserId ?? null;  //任务创建人
+                }
+
+                Task.LocalLinks = Task.RemoteLinks;
+                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=";
                 var taskId = SaveWorkTask(Task);
 
                 string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);
-                CreateWorkrecor(Task.AssignUsers, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, taskTypeStr, Task.TaskContent);
+                CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks + taskId, taskTypeStr, Task.TaskContent);
             }
             return true;
         }
