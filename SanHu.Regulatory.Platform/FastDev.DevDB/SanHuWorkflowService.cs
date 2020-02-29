@@ -110,7 +110,7 @@ namespace FastDev.DevDB
                 get;
                 set;
             }
-            public int? Tasktype
+            public string TaskType
             {
                 get;
                 set;
@@ -494,6 +494,11 @@ namespace FastDev.DevDB
                                     {
                                         UpdateWFTrack(wfProject.ID, currentTask.ID, wfTask.ID, "advance");
                                     }
+                                    //我觉得优化的地方应该是 每个执行者，对应一个表单
+                                    //现在这里只给节点一个表单，是要求每个执行者填写同一个表单，不灵活
+                                    //lyl 02-28备注
+                                    string formName = viewNode2.properties["formName"].ToString();//fomeName 对应任务类型
+                                    //eNode2.Executors
                                     foreach (List<string> executor in eNode2.Executors)
                                     {
                                         string exeUserId = executor[0];
@@ -512,10 +517,8 @@ namespace FastDev.DevDB
                                             todoTitle += GetJsTemplateResult(activeNode.toDoTitleRule, JsonHelper.SerializeObject(wfModelObj));
                                         }
                                         string linkUrl = $"web/main/?model={wfModelName}&id={wfProject.Context}&viewtype=form&taskid={wfTask.ID}";
-                                        string evId = "";
-                                        if (wfModelObj != null)
-                                            evId = GetJsKeyResult("EventInfoId", JsonHelper.SerializeObject(wfModelObj));
-                                        work_task wTask = CreateNewWorkTask(wfTask.ID, exeUserId, linkUrl, wfModelName, wfExeStatus.ID, todoTitle, evId);
+                                        string evId = "";//下一步处理
+                                        work_task wTask = CreateNewWorkTask(wfTask.ID, exeUserId, formName, linkUrl, wfModelName, wfExeStatus.ID, todoTitle, evId);
                                         dbContext.Insert(wTask);
                                         _latestWorkTaskId = wfTask.ID;
                                     }
@@ -640,6 +643,9 @@ namespace FastDev.DevDB
                     core_workflowTrack wfTrackBack = CreateWorkflowTrack(wfProject.ID, core_workflowTask.ID, viewNode2.nodeType, null, null);
                     dbContext.Insert(wfTrackBack);//后退的时候添加一个跟踪节点
                     UpdateWFTrack(wfProject.ID, currentTask.ID, core_workflowTask.ID, "back");
+                    string formName = "";
+                    if (viewNode2.nodeType == WorkflowNodeType.Active)
+                        formName = viewNode2.properties["formName"].ToString();//fomeName 对应任务类型
                     foreach (List<string> executor2 in executeNode.Executors)
                     {
                         string backTitle = viewNode2.properties.ContainsKey("backToDoTitleRule") ? viewNode2.properties["backToDoTitleRule"].ToString() : "退回";
@@ -656,10 +662,8 @@ namespace FastDev.DevDB
                                 todoTitle += GetJsTemplateResult(backTitle, JsonHelper.SerializeObject(wfModelObj));
                             }
                         var linkUrl = "web/main/?model=" + wfModelName + "&id=" + wfProject.Context + "&viewtype=form&tasid=" + core_workflowTask.ID;
-                        string evId = "";
-                        if (wfModelObj != null)
-                            evId = GetJsKeyResult("EventInfoId", JsonHelper.SerializeObject(wfModelObj));
-                        work_task wTask = CreateNewWorkTask(core_workflowTask.ID, uId, linkUrl, wfModelName, core_workflowExecutorStatus2.ID, todoTitle, evId);
+                        string evId = "";//下一步处理
+                        work_task wTask = CreateNewWorkTask(core_workflowTask.ID, uId, formName, linkUrl, wfModelName, core_workflowExecutorStatus2.ID, todoTitle, evId);
                         dbContext.Insert(wTask);
                         _latestWorkTaskId = wTask.ID;
                     }
@@ -667,33 +671,31 @@ namespace FastDev.DevDB
             }
             else if (context.CurrentAction == WorkflowAction.Rejected)
             {//拒绝
-                bool flag2 = false;
+                bool IsRejectAll = false;
                 if (currentNode.nodeType == WorkflowNodeType.Active)
                 {
                     ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(currentNode);
                     if (activeNode.handlerType == "2" || activeNode.handlerType == "3")
                     {
-                        foreach (core_workflowExecutorStatus item4 in list)
+                        foreach (core_workflowExecutorStatus exeStatus in list)
                         {
-                            if (!(item4.ExecutorID == SysContext.WanJiangUserID))
+                            if (!(exeStatus.ExecutorID == SysContext.WanJiangUserID))
                             {
-                                UpdateExecutor(item4, WFRecordStatus.Canceled, "");
-
-
+                                UpdateExecutor(exeStatus, WFRecordStatus.Canceled, "");
                                 work_task workRejectedCancel = dbContext.FirstOrDefault<work_task>("where RefTable = @0 and RefRecordID = @1", new object[2]
                                 {
                                     TAB_NAME_CORE_WORKFLOWEXECUTORSTATUS,
-                                    item4.ID
+                                    exeStatus.ID
                                 });
                                 UpdateWorkTask(workRejectedCancel, WFRecordStatus.Canceled);
 
                             }
                         }
-                        flag2 = true;
+                        IsRejectAll = true;
                     }
                     if (activeNode.handlerType == "1" && list.Where(d => d.ExecutorID != SysContext.WanJiangUserID).All(w => w.Status == WFRecordStatus.Rejected))
-                    {
-                        flag2 = true;
+                    {//抢占，且 其他用户已拒绝
+                        IsRejectAll = true;
                     }
                 }
                 UpdateWFTask(currentTask, WFRecordStatus.Rejected);
@@ -706,7 +708,7 @@ namespace FastDev.DevDB
                     core_workflowExecutorStatus2.ID
                 });
                 UpdateWorkTask(wTask, WFRecordStatus.Rejected);
-                if (flag2)
+                if (IsRejectAll)
                 {
                     wfProject.ModifyDate = DateTime.Now;
                     wfProject.ModifyUserID = SysContext.WanJiangUserID;
@@ -720,6 +722,10 @@ namespace FastDev.DevDB
                         "Status"
                     });
                 }
+            }
+            else if (context.CurrentAction == WorkflowAction.Transfer)
+            {//工作流转交
+
             }
         }
 
@@ -856,14 +862,7 @@ namespace FastDev.DevDB
             dictionary["taskId"] = context.TaskID;
             if (context.CurrentAction == WorkflowAction.Advance)
             {
-                if (viewNode.nodeType == WorkflowNodeType.Active)
-                {
-                    string nodeUrlTemplate = viewNode.properties["formName"].ToString();
-                    if (!string.IsNullOrEmpty(nodeUrlTemplate) && wfModelObj != null)
-                    {
-                        dictionary["formUrl"] = GetJsTemplateResult(nodeUrlTemplate, JsonHelper.SerializeObject(wfModelObj));//根据格式模板，生成url
-                    }
-                }
+
                 if (!flag && viewNode.nodeType == WorkflowNodeType.Active)
                 {
                     ActiveNode activeNode = GetViewNodeProperties<ActiveNode>(viewNode);
@@ -1387,13 +1386,6 @@ namespace FastDev.DevDB
             scriptEngine.Execute(code);
             return scriptEngine.CallGlobalFunction<string>("getResult", new object[0]);
         }
-        private string GetJsKeyResult(string strKey, string strData)
-        {
-            ScriptEngine scriptEngine = new ScriptEngine();
-            string code = "\r\n                function getResult()\r\n                { \r\n                    return getR(\"#key#\",#data#);\r\n                    function getR(strKey, data)\r\n                    {\r\n						var v=data[strKey];\r\n						return (typeof v !== \"undefined\" && v !== null) ? v : \"\";\r\n                    }\r\n                }".Replace("#template#", strKey).Replace("#data#", strData);
-            scriptEngine.Execute(code);
-            return scriptEngine.CallGlobalFunction<string>("getResult", new object[0]);
-        }
         private IList<ViewNode> CombinNodesByTarget(ViewNode viewNode_0, ViewModel viewModel_0)
         {
             IList<ViewConnection> connections = viewModel_0.connections;
@@ -1522,9 +1514,10 @@ namespace FastDev.DevDB
         /// 创建下一个任务
         /// </summary>
         /// <returns></returns>
-        private work_task CreateNewWorkTask(string workflowTaskId, string exeUserId, string localLink, string objName, string recordId, string strTitle, string evId)
+        private work_task CreateNewWorkTask(string workflowTaskId, string exeUserId, string formName, string localLink, string objName, string recordId, string strTitle, string evId)
         {
             work_task wTask = new work_task();
+            wTask.TaskType = formName;
             wTask.CreateDate = DateTime.Now;
             wTask.CreateUserID = SysContext.WanJiangUserID;
             wTask.ModifyDate = DateTime.Now;
@@ -1532,7 +1525,8 @@ namespace FastDev.DevDB
             wTask.ID = Guid.NewGuid().ToString();
             wTask.WorkflowtaskID = workflowTaskId;
             wTask.AssignUsersID = exeUserId;
-            wTask.EventInfoId = evId;//事件Id
+            wTask.MainHandler = fwContext.ExecuteScalar<string>("select Name from user where Id=@0", new object[] { exeUserId });
+            wTask.EventInfoId = evId == null ? "" : evId;//事件Id
             wTask.ExpectedCompletionTime = DateTime.Now.AddHours(2);
             wTask.InitiationTime = DateTime.Now;
             wTask.Status = WFRecordStatus.Running;

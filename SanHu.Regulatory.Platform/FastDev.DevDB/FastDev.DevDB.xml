@@ -157,7 +157,7 @@
             <param name="strExcutorId"></param>
             <returns></returns>
         </member>
-        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:FastDev.DevDB.SanHuWorkflowService.CreateNewWorkTask(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             创建下一个任务
             </summary>
@@ -173,12 +173,15 @@
             临时
             </summary>
         </member>
-        <member name="M:FastDev.DevDB.ServiceBase.WfCreate(System.Object,System.String[])">
+        <member name="M:FastDev.DevDB.ServiceBase.AdvanceWorkflow(System.String,System.String,System.Object,System.Boolean,System.String[])">
             <summary>
-            工作流创建
+            工作流向前一步
             </summary>
+            <param name="wfModel"></param>
+            <param name="complateContent"></param>
             <param name="postdata"></param>
-            <param name="exeUserIds">执行该工作流的用户</param>
+            <param name="mustTaskId">对于必须taskId的工作流，需要验证taskid再进行下一步</param>
+            <param name="exeUserIds"></param>
             <returns></returns>
         </member>
         <member name="M:FastDev.DevDB.ServiceBase.ValueCompare(System.String,System.Int32,System.Int32)">
@@ -265,6 +268,11 @@
             是否处于开发模式
             </summary>
         </member>
+        <member name="M:FastDev.DevDB.SysContext.GetService``1">
+            <summary>
+            获取注入的服务
+            </summary>
+        </member>
         <member name="M:FastDev.DevDB.SysContext.GetProviderName(System.String)">
             <summary>
             根据简写获取providerName
@@ -310,6 +318,13 @@
         <member name="P:FastDev.DevDB.WorkflowService.LatestWorkTaskId">
             <summary>
             放回最新的任务id
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.Workflow.ActiveNode.handlerType">
+            <summary>
+            1 抢占
+            2 3 同时
+            4   会签
             </summary>
         </member>
         <member name="M:FastDev.RunWeb.Core.UpdateHelper.GetOneItemPath(FastDev.RunWeb.Core.UpdateInfo)">

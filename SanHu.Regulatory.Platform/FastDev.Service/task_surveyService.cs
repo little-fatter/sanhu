@@ -24,18 +24,8 @@ namespace FastDev.Service
         public task_surveyService()
         {
             OnGetAPIHandler += Task_surveyService_OnGetAPIHandler;
+           
         }
-        /// <summary>
-        /// 是否需要创建新任务
-        /// 1、表单类型， 2、表单
-        /// </summary>
-        /// <returns></returns>
-        private bool NeedCreateNewTask(object postdata)
-        {
-            return true;
-        }
-
-
         
         /*
         public override object WfCreate(object postdata, params string[] exeUserIds)
@@ -125,14 +115,44 @@ namespace FastDev.Service
 
         private Func<APIContext, object> Task_surveyService_OnGetAPIHandler(string id)
         {
-            _sHBaseService= ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            switch (id.ToUpper())
-            {
-                case "FINISH":
-                    return Handle;
-            }
-            return null;
+            task_survey task = new task_survey();
+            task.CaseId = "123";
+            task.EventInfoId = "123";
+            task.EventType = "case_info";
+            task.ExistCrim = "true";
+            task.Result = "123";
+            task.TaskId= "71be0281-2ced-42a4-bc92-396791a8f197";
+            task.ProcessingDecisions = 1;
+            law_party law1 = new law_party();
+            law1.Name = "kk";
+            law1.address = "china";
+            law1.Gender = "男";
+            law1.CaseId = "122";
+            law_party law2 = new law_party();
+            law2.Name = "kk2";
+            law2.address = "china";
+            law2.Gender = "女";
+            law2.CaseId = "111";
+            List<law_party> law_Parties = new List<law_party>();
+            law_Parties.Add(law1);
+            law_Parties.Add(law2);
+            task_surveyFinishReq tq = new task_surveyFinishReq();
+            tq.TaskSurvey = task;
+            tq.LawParties = law_Parties;
+            work_task workTask = new work_task();
+            workTask.CaseID = "123";
+            workTask.LaskTaskId = "1221";
+            workTask.TaskContent = "手动创建新任务";
+            workTask.TaskType = "创建案件";
+            tq.NextTasks = new work_task[] { workTask };
+            tq.LawParties = law_Parties;
+            var M = JsonConvert.SerializeObject(tq);
+
+
+            _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            return Handle;
         }
+
 
 
         private SHBaseService _sHBaseService;
@@ -140,27 +160,30 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<task_surveyFinishReq>(context.Data);
-            task_survey taskSurvey = new task_survey();
-            List<law_party> lawParties = new List<law_party>();
-            if (!string.IsNullOrEmpty(data.TaskSurvey.TaskId)) return false;
-            if (!string.IsNullOrEmpty(data.TaskSurvey.EventInfoId)) return false;
-            string url = data.Url;
-            taskSurvey = data.TaskSurvey;
-            lawParties = data.LawParties;
-            //0:不予处罚
-            //1:移交其它部门
-            //2:处罚程序
-            switch (data.TaskSurvey.ProcessingDecisions)
+            if (data.TaskSurvey == null) return null;
+            QueryDb.BeginTransaction();
+            try
             {
-                case 0:
-                     return Finish(taskSurvey,lawParties);
-                case 1:
-                    return ToEpart(taskSurvey);
-                case 2:
-                    return CreateCase(taskSurvey, lawParties, url);
+                CreateInfo(data.TaskSurvey, data.LawParties);
+                switch (data.TaskSurvey.ProcessingDecisions)
+                {
+                    case 0:
+                         EndEvent(data.SourceTaskId, data.EventInfoId);
+                        break;
+                    default:
+                        _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
+                        break;
+                }
             }
-            return false;
+            catch (Exception)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
+            QueryDb.CompleteTransaction();
+            return true;
         }
+
 
 
         /// <summary>
@@ -169,32 +192,77 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        public void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
+       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
         {
-            var taskSurvey = base.Create(TaskSurvey) as task_survey;
+            var tasksurvey = base.Create(TaskSurvey) as string;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
-                foreach (var l in law_Parties)
+                foreach (var l in law_Parties)//原始的当事人
                 {
                     l.Associatedobjecttype = "task_survey";
-                    l.AssociationobjectID = taskSurvey.ID;
-                    _Lawpartys.Create(l);
+                    l.AssociationobjectID = tasksurvey;
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
+                   // ServiceHelper.GetService("law_partyService").Create(l);
                 }
             }
         }
 
+        /// <summary>
+        /// 结束事件和任务
+        /// </summary>
+        /// <param name="TaskId"></param>
+        /// <param name="EventId"></param>
+        /// <returns></returns>
+        public object EndEvent(string TaskId,string EventId)
+        {
+            try
+            {
+                QueryDb.BeginTransaction();
+                _sHBaseService.UpdateWorkTaskState(TaskId, WorkTaskStatus.Close);//关闭任务
+                _sHBaseService.UpdateEventState(EventId, EventStatus.finish);//事件改为完成                         
+            }
+            catch (Exception)
+            {
+                QueryDb.AbortTransaction();
+                return false;
+            }
+            QueryDb.CompleteTransaction();
+            return true;
+        }
+
+
+        ///// <summary>
+        ///// 创建后续任务
+        ///// </summary>
+        ///// <returns></returns>
+        //public object CreatTask(work_task[] NextTasks,string sourcetaskid)
+        //{
+        //    if (NextTasks == null) return null;
+        //    if (NextTasks.Length < 1) return null;
+        //    foreach (var Task in NextTasks)
+        //    {
+        //        Task.LaskTaskId = sourcetaskid;
+        //       var task= _sHBaseService.SaveWorkTask(Task);
+        //        _sHBaseService.CreateWorkrecor(Task.AssignUsersID, "案件待办", Task.RemoteLinks+"?taskid="+task.ID, Task.TaskType, Task.TaskContent);
+        //    }
+        //    return true;
+        //}
+
+
+        /*
 
         /// <summary>
         /// 勘察完结
         /// </summary>
         /// <param name="TaskSurvey"></param>
         /// <returns></returns>
-        public object Finish(task_survey TaskSurvey, List<law_party> law_Parties)
+        public object Finish(task_survey TaskSurvey,List<law_party> lawParties)
         {
             try {
                 QueryDb.BeginTransaction();
-                CreateInfo(TaskSurvey, law_Parties);
+                CreateInfo(TaskSurvey,lawParties);
                 _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);//关闭任务
                 _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId,EventStatus.finish);//事件改为完成                         
             }
@@ -223,22 +291,21 @@ namespace FastDev.Service
         /// 创建案件
         /// </summary>
         /// <returns></returns>
-        public object CreateCase(task_survey TaskSurvey, List<law_party> law_Parties,string url)
+        public object CreateCase(task_survey TaskSurvey,string url)
         {
             try
             {
                 QueryDb.BeginTransaction();
-                _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);//关闭当前任务
-
-                _sHBaseService.CreateWorkTask();
-                //创建案件任务
-                var _worktask = ServiceHelper.GetService("work_taskService");
-                work_task workTask = new work_task();
-                //TODO分配工作人员
-                workTask.AssignUsersID = "0";
-                workTask.EventInfoId = TaskSurvey.EventInfoId;
-                _worktask.Create(workTask);
-                _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId, EventStatus.toCase);//事件改为完成   
+                //创建当前表单信息
+                //CreateInfo(TaskSurvey);
+                //关闭当前任务
+                _sHBaseService.UpdateWorkTaskState(TaskSurvey.TaskId, WorkTaskStatus.Close);
+                //TODO分配人员
+                _sHBaseService.CreateSaveWorkTask(TaskSurvey.TaskId,TaskType.Case,"1","系统默认");
+                //事件改为完成 
+                _sHBaseService.UpdateEventState(TaskSurvey.EventInfoId, EventStatus.toCase);
+                //转发待办
+                _sHBaseService.CreateWorkrecor("165906044420484870", "案件待办",url,"案件待办","案件待办");
             }
             catch (Exception ex)
             {
@@ -249,7 +316,7 @@ namespace FastDev.Service
             return true;
         }
 
-
+    */
     }
 
 

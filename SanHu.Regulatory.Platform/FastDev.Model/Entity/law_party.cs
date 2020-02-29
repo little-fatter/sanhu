@@ -64,12 +64,17 @@ public string Gender
 get;
 set;
 }
-public string Occupationofparties
+public string Occupation
 {
 get;
 set;
 }
 public string Nationality
+{
+get;
+set;
+}
+public string WorkUnit
 {
 get;
 set;

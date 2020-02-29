@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FD.Model.Dto
 {
-    public class task_surveyFinishReq
+    public class task_surveyFinishReq:FormReqBase
     {
         /// <summary>
         /// 勘察信息
@@ -16,9 +16,6 @@ namespace FD.Model.Dto
         /// 当事人信息
         /// </summary>
         public List<law_party> LawParties { get; set; }
-        /// <summary>
-        /// 待办地址
-        /// </summary>
-        public string Url { get; set; }
+
     }
 }

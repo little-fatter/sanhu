@@ -18,78 +18,30 @@ namespace FastDev.Service
     /// <summary>
     /// 任务-巡查
     /// </summary>
-    class task_patrolService : ServiceBase, IService
+    class task_patrolService : SHBaseService, IService
     {
 
-        //public override object WfCreate(object postdata, params string[] exeUserIds)
+       
+        public task_patrolService()
+        {
+            OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;
+        }
+
+        /// <summary>
+        /// 是否需要创建新任务
+        /// 1、表单类型， 2、表单
+        /// </summary>
+        /// <returns></returns>
+        //private bool NeedCreateNewTask(object postdata)
+        //{
+        //    return true;
+        //}
+        //public object WfCreate(string wfModel, object postdata, params string[] exeUserIds)
         //{
         //    var nId = base.Create(postdata);
-        //    ((Model.Form.task_patrol)postdata).ID = nId.ToString();
-        //    var wfId = AdvanceWorkflow(postdata, exeUserIds);
-        //    if (wfId != null) return wfId;
+        //    postdata.GetType().GetProperty("ID").SetValue(postdata, nId);
+        //    AdvanceWorkflow(wfModel, "事件巡查填表", postdata, true, exeUserIds);
         //    return nId;
-        //}
-
-        //private object AdvanceWorkflow(object postdata, params string[] exeUserIds)
-        //{
-        //    var patrolData = (Model.Form.task_patrol)postdata;
-        //    if (!string.IsNullOrEmpty(patrolData.TaskId))
-        //    {//如果该表单有任务id，则，检查是否完成了某任务
-
-        //        workflowService.DbContext = QueryDb;
-        //        Dictionary<string, object> wfContext = (Dictionary<string, object>)workflowService.GetContext(new DevDB.Workflow.WorkflowContext() { TaskID = patrolData.TaskId, Action = "advance", Model = "task_patrol", Context = patrolData.ID });
-        //        //wfContext[]
-        //        if ((wfContext.ContainsKey("Success") && Convert.ToBoolean(wfContext["Success"]) || wfContext.ContainsKey("nodes")))
-        //        {//如果工作流可以往下走
-        //            var nodes = ((List<object>)wfContext["nodes"]);
-        //            if (nodes.Count > 0)
-        //            {
-        //                var ExeNode = ((Dictionary<string, object>)(nodes[0]));
-        //                object nodeId = ExeNode["node"].GetType().GetProperty("id").GetValue(ExeNode["node"]);
-
-        //                //nodeId = node.id.ToString();
-        //                if (!string.IsNullOrEmpty(nodeId.ToString()))
-        //                {
-        //                    WorkflowContext wfExe = new WorkflowContext()
-        //                    {
-        //                        Model = "task_patrol",
-        //                        Action = "advance",
-        //                        Context = patrolData.ID,
-        //                        TaskID = patrolData.TaskId,
-        //                        Remark = "完成了事件巡查表单填写",
-        //                        ExecuteNodes = new List<ExecuteNode>()
-        //                    };
-        //                    List<string> excutors = new List<string>();//用户id一个字符串，用户名一个字符串，用户名其实没有使用
-        //                    if (exeUserIds != null && exeUserIds.Length > 0)
-        //                    {
-        //                        for (int i = 0; i < exeUserIds.Length; i++)
-        //                        {
-        //                            excutors.Add(exeUserIds[i]);            //使用哪个用户来执行 这里需要不同的情况的来处理
-        //                            excutors.Add("用户名");//第二个参数 其实没有用到
-        //                        }
-        //                    }
-        //                    else
-        //                    {//默认使用当前用户来执行任务
-        //                        excutors.Add(SysContext.WanJiangUserID);            //使用哪个用户来执行 这里需要不同的情况的来处理
-        //                        excutors.Add("用户名");//第二个参数 其实没有用到
-        //                    }
-        //                    //如果由多个用户来执行，那 Executors可以是多个人，        
-        //                    //这里任务的下一步仍然由填表人完成，某些情况些，会由指定的人来完成，比如：？想到了再说？？？
-        //                    wfExe.ExecuteNodes.Add(new ExecuteNode() { Executors = new List<List<string>> { excutors }, NodeId = nodeId.ToString() });
-        //                    workflowService.Execute(wfExe);//工作流向下一步
-        //                    if (patrolData.TaskId == "MANUALLY_CREATE_TASK_ID")
-        //                    {//如果该任务是手动创建
-        //                        string latestWorkTaskId = workflowService.LatestWorkTaskId;
-
-        //                        QueryDb.Update<Model.Form.task_patrol>("set TaskId=@0 where ID=@1", new object[] { latestWorkTaskId, patrolData.ID });
-        //                        return latestWorkTaskId;//返回所创建的任务Id,然后 work_task那边拿到以后，更新work_task自己的相关字段
-        //                    }
-        //                }
-        //            }
-
-        //        }
-        //    }
-        //    return null;
         //}
         //public override object Create(object postdata)
         //{
@@ -104,28 +56,8 @@ namespace FastDev.Service
         //    {
         //        nextexecutor.Add(SysContext.WanJiangUserID);
         //    }
-        //    return WfCreate(postdata, nextexecutor.ToArray());
+        //    return WfCreate(WF_EventWorkflowModel, postdata, nextexecutor.ToArray());
         //}
-
-        //public override object Update(object postdata)
-        //{
-        //    var rev = base.Update(postdata);
-        //    var wfId = AdvanceWorkflow(postdata);
-        //    return rev;
-        //}
-        public task_patrolService()
-        {
-            OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;
-        }
-        /// <summary>
-        /// 是否需要创建新任务
-        /// 1、表单类型， 2、表单
-        /// </summary>
-        /// <returns></returns>
-        private bool NeedCreateNewTask(object postdata)
-        {
-            return true;
-        }
 
         private Func<APIContext, object> Task_patrolService_OnGetAPIHandler(string id)
         {
@@ -136,52 +68,44 @@ namespace FastDev.Service
             }
             return null;
         }
-        public object Finish(APIContext context)
+        private object Finish(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<taskPatrolFinishReq>(context.Data);
-            if (string.IsNullOrEmpty(data.CaseId) && string.IsNullOrEmpty(data.TaskId) && string.IsNullOrEmpty(data.EventId))
-            {
-                throw new Exception("缺少关联数据(任务或事件或案件)");
-            }
+            //var data = new taskPatrolFinishReq();
+
+            //var task_patrolData = new task_patrol();
+            //task_patrolData.Result = "测试巡查结果";
+            //task_patrolData.Needtracking = 0;
+            //task_patrolData.Needlawenforcement = 1;
+            //data.TaskPatrol = task_patrolData;
+
+            //var taskData = new work_task();
+            //taskData.TaskType = "勘察";
+            //taskData.TaskContent = "任务内容描述";
+            //taskData.EventInfoId = "1";
+            //taskData.ExpectedCompletionTime = DateTime.Now.AddDays(1);
+            //taskData.MainHandler = "主办人测试";
+            //data.SourceTaskId = "2fcb8609-d233-4e77-a12b-a87d61ef9a50";
+            //data.NextTasks = new work_task[] { taskData };
+
+            //var a = JsonConvert.SerializeObject(data);
+
             //保存当前巡查表单
             //开始事务
             QueryDb.BeginTransaction();
             try
             {
-                var patrol = data.TaskPatrol;
-                patrol.CaseId = data.CaseId;
-                patrol.EventInfoId = data.EventId;
-                Create(patrol);
-
-                //当前任务信息
-                if (!string.IsNullOrEmpty(data.TaskId))
+                data.TaskPatrol.TaskId = data.SourceTaskId;
+                //保存表单信息
+                Create(data.TaskPatrol);
+                //处理事件,任务状态
+                if (data.TaskPatrol.Needlawenforcement == 0 && data.TaskPatrol.Needtracking == 0)
                 {
-                    var workTask = UpdateWorkTask(data.TaskId);
-                    data.EventId = workTask.EventInfoId;
-                    data.CaseId = workTask.CaseID;
+                    UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);
+                    UpdateEventState(data.EventInfoId, EventStatus.finish);
                 }
-
-                //执法与跟踪
-                work_task newWorkTask = null;
-                if (data.TaskPatrol.Needlawenforcement != null && data.TaskPatrol.Needlawenforcement == 1)
-                {
-                    //需要执法
-                    //生成勘察任务
-                    newWorkTask = CreateWorkTask(data.EventId, data.CaseId, TaskType.Survey);
-                }
-                else
-                {
-                    //不需要执法,需要判断是否跟踪
-                    if (data.TaskPatrol.Needtracking != null && data.TaskPatrol.Needtracking == 1)
-                    {
-                        //需要跟踪
-                        newWorkTask = CreateWorkTask(data.EventId, data.CaseId, TaskType.Patrol);
-                    }
-                }
-                //保存新任务
-                if (newWorkTask != null)
-                    ServiceHelper.GetService(newWorkTask.GetType().Name).Create(newWorkTask);
-
+                //创建下一个任务
+                CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
@@ -191,30 +115,5 @@ namespace FastDev.Service
             }
             return true;
         }
-
-        private work_task CreateWorkTask(string eventId, string caseId, TaskType type)
-        {
-            work_task workTask = new work_task();
-            workTask.EventInfoId = eventId;
-            workTask.CaseID = caseId;
-            workTask.Tasktype = TaskType.Survey;
-            workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-            workTask.TaskContent = type.GetDisplayName();
-
-            return workTask;
-        }
-        private work_task UpdateWorkTask(string taskId)
-        {
-            var taskInfo = QueryDb.FirstOrDefault<work_task>(" where id=@0", taskId);
-
-            //修改任务状态-已关闭
-            taskInfo.TaskStatus = (int)WorkTaskStatus.Close;
-            taskInfo.CompleteTime = DateTime.Now;
-            QueryDb.Update(taskInfo);
-            return taskInfo;
-        }
-
     }
-
-
 }

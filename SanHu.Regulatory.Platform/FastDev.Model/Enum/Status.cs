@@ -68,17 +68,24 @@ namespace FD.Model.Enum
         /// 巡查任务
         /// </summary>
         [Display(Name = "巡查任务")]
-        Patrol=0,
+        Patrol = 0,
+
         /// <summary>
         /// 勘察
         /// </summary>
         [Display(Name = "勘察任务")]
-        Survey =1,
+        Survey = 1,
         /// <summary>
-        /// 勘察
+        /// 案件任务
         /// </summary>
         [Display(Name = "案件任务")]
-        Case =2
+        Case,
+        /// <summary>
+        /// 现场决定处罚书任务
+        /// </summary>
+        [Display(Name = "现场处罚决定书")]
+        law_punishmentInfo
+
     }
 
 

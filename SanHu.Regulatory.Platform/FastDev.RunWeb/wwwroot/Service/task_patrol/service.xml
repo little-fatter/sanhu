@@ -17,6 +17,7 @@
         <field name="PreviousformID" dbName="PreviousformID" title="上一个表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="EventType" dbName="EventType" title="事件类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="NextHandler" dbName="NextHandler" title="下一步用户" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="DingUrl" dbName="DingUrl" title="钉钉Url" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

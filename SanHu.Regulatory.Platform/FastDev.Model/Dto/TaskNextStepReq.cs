@@ -5,20 +5,16 @@ using System.Text;
 namespace FD.Model.Dto
 {
     /// <summary>
-    /// 任务移交请求
+    /// 任务下一步
     /// </summary>
-    public class TaskHandOverReq
+    public class TaskNextStepReq
     {
         /// <summary>
-        /// 当前任务id
+        /// 当前任务关联的事件id
         /// </summary>
-        public string TaskId { get; set; }
+        public string  TaskId { get; set; }
         /// <summary>
-        /// 移交目标
-        /// </summary>
-        public long UserId { get; set; }
-        /// <summary>
-        /// 钉钉任务跳转url
+        /// 待办地址
         /// </summary>
         public string Url { get; set; }
     }

@@ -84,6 +84,11 @@ public string NextHandler
 get;
 set;
 }
+public string DingUrl
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

@@ -1,7 +1,6 @@
 namespace FastDev.Model.Entity
 {
-    using FD.Model.Enum;
-    using System;
+  using System;
  using System.Runtime.CompilerServices;
 public partial class work_task
 {
@@ -110,7 +109,12 @@ public string WorkflowtaskID
 get;
 set;
 }
-public TaskType Tasktype
+public string TaskType
+{
+get;
+set;
+}
+public string LaskTaskId
 {
 get;
 set;
