@@ -187,7 +187,7 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<task_surveyFinishReq>(context.Data);
-            if (data.TaskSurvey == null) throw new Exception();;
+            if (data.TaskSurvey == null) throw new Exception("没有主体数据");;
             QueryDb.BeginTransaction();
             data.TaskSurvey.TaskId = data.SourceTaskId;
             data.TaskSurvey.EventInfoId = data.EventInfoId;
@@ -204,10 +204,10 @@ namespace FastDev.Service
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                throw new Exception();
+                throw e;
             }
             QueryDb.CompleteTransaction();
             return true;

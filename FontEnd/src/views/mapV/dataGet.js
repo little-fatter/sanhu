@@ -24,6 +24,24 @@ export default {
       })
     })
   },
+  doPostDataAjaxNotSetObject: function (url, body) {
+    // var that = this
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        type: 'post',
+        contentType: 'application/json',
+        data: body,
+        dataType: 'json',
+        success: (res) => {
+          resolve(res)
+        },
+        error: err => {
+          reject(err)
+        }
+      })
+    })
+  },
   getAlertEventList: function () {
     // var evtStateMap = {
     //   list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
@@ -49,6 +67,7 @@ export default {
       var reportTime = element.reportTime
       var finishLimitTime = element.finishLimitTime
       list.push({
+        id: element.objId,
         title: element.targetName, // 事件对象名称
         status: status,
         timeLimit: finishLimitTime, // 当前阶段处理时限
@@ -64,6 +83,51 @@ export default {
       })
     }
     // list.push(...list)
+    return list
+  },
+  getPeopleList: function () {
+    var list = []
+    var Records = this.data.peopleList.Records
+    var depMap = {}
+    var depNames = []
+    for (let i = 0; i < Records.length; i++) {
+      const element = Records[i]
+      var depIndex = i
+      var depName = element.Department[1]
+      depNames.push(depName)
+      var depTamType = i % 2
+      var open = true
+      if (depMap[depName] === undefined) {
+        depMap[depName] = {
+          index: depIndex,
+          name: depName,
+          teamType: depTamType,
+          open: open,
+          list: []
+        }
+      }
+      var pName = element.StaffName
+      var Longitude = element.Longitude
+      var Latitude = element.Latitude
+      var ID = element.ID
+      // 模拟 人员位置
+      if (i === 0) {
+        // [102.95488289188184, 24.58046294382578]
+        Longitude = 102.95488289188184
+        Latitude = 24.58046294382578
+      } else {
+        Longitude = 102.95488289188184 + (Math.random() - 0.5) * 0.2
+        Latitude = 24.58046294382578 + (Math.random() - 0.5) * 0.2
+      }
+      depMap[depName].list.push({
+        id: ID,
+        name: pName,
+        online: element.IsOnline * 1 === 1,
+        location: [Longitude, Latitude]
+      })
+    }
+    depNames = [...new Set(depNames)]
+    list = depNames.map(x => depMap[x])
     return list
   },
   initData: function (after) {
