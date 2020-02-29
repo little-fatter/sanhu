@@ -1,26 +1,29 @@
 <template>
   <van-cell-group :title="`${title}信息`">
     <van-panel v-for="(item,index) in partys" :key="index" :title="`${title}(${index+1})`">
-      <template v-if="item.partyType==1">
+      <template v-if="item.TypesofpartiesID==defaultTypesofpartieID">
         <van-cell :title="item.title"></van-cell>
-        <van-cell title="身份证" :value="item.idCard"></van-cell>
-        <van-cell title="手机号" :value="item.phone"></van-cell>
+        <van-cell title="身份证" :value="item.IDcard"></van-cell>
+        <van-cell title="手机号" :value="item.Contactnumber"></van-cell>
         <van-cell title="现住址" :value="item.address"></van-cell>
-        <van-cell title="民族" :value="item.nation"></van-cell>
-        <van-cell title="工作单位" :value="item.company"></van-cell>
+        <van-cell title="职业" :value="item.Occupation"></van-cell>
+        <van-cell title="民族" :value="item.Nationality"></van-cell>
+        <van-cell title="工作单位" :value="item.WorkUnit"></van-cell>
       </template>
       <template v-else>
         <van-cell :title="item.name"></van-cell>
-        <van-cell title="法人姓名" :value="item.legalName"></van-cell>
-        <van-cell title="法人身份证" :value="item.idCard"></van-cell>
+        <van-cell title="法人姓名" :value="item.Nameoflegalperson"></van-cell>
+        <van-cell title="法人身份证" :value="item.IDcard"></van-cell>
         <van-cell title="地址" :value="item.address"></van-cell>
-        <van-cell title="联系电话" :value="item.tel"></van-cell>
+        <van-cell title="联系电话" :value="item.Contactnumber"></van-cell>
       </template>
     </van-panel>
   </van-cell-group>
 </template>
 
 <script>
+import { getDictionaryItems } from '../../api/regulatoryApi'
+import { isNotEmpty } from '../../utils/util'
 /**
  * 当事人查看组件
  */
@@ -46,7 +49,8 @@ export default {
   },
   data () {
     return {
-      partys: []
+      partys: [],
+      defaultTypesofpartieID: null
     }
   },
   created () {
@@ -54,16 +58,20 @@ export default {
   },
   methods: {
     init () {
-      const partys = []
-      this.initData.forEach(item => {
-        if (item.partyType === 1) {
-          var sex = item.sex === 1 ? '男' : '女'
-          var title = `${item.name} | ${sex}`
-          item.title = title
+      getDictionaryItems('Typesofparties').then(items => {
+        if (isNotEmpty(items)) {
+          this.defaultTypesofpartieID = items[0].ItemCode
+          const partys = []
+          this.initData.forEach(item => {
+            if (item.TypesofpartieID === this.defaultTypesofpartieID) {
+              var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
+              item.title = title
+            }
+            partys.push(item)
+          })
+          this.partys = partys
         }
-        partys.push(item)
       })
-      this.partys = partys
     }
 
   }

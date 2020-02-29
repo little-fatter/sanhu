@@ -114,12 +114,12 @@ export const asyncRouterMap = [
             }
           },
           {
-            path: '/caseFinalReport',
-            name: 'caseFinalReport',
-            component: () => import('@/views/lawform/cases/CaseFinalReport.vue'),
+            path: '/caseFinalReportCreate',
+            name: 'caseFinalReportCreate',
+            component: () => import('@/views/lawform/cases/CaseFinalReportCreate.vue'),
             meta: {
               title: '结案报告',
-              keepAlive: false
+              keepAlive: true
             }
           },
           {
@@ -177,24 +177,6 @@ export const asyncRouterMap = [
             }
           },
           {
-            path: '/searchForm',
-            name: 'searchForm',
-            component: () => import('@/views/details/SearcheForm.vue'),
-            meta: {
-              title: '我提交的表单',
-              keepAlive: false
-            }
-          },
-          {
-            path: '/screenForm',
-            name: 'screenForm',
-            component: () => import('@/views/details/ScreenForm.vue'),
-            meta: {
-              title: '我提交的表单',
-              keepAlive: false
-            }
-          },
-          {
             path: '/sceneInvestigationDetail',
             name: 'sceneInvestigationDetail',
             component: () => import('@/views/details/SceneInvestigationDetail.vue'),
@@ -209,7 +191,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/details/CaseDetail.vue'),
             meta: {
               title: '案件详情',
-              keepAlive: false
+              keepAlive: true
             }
           },
           {
@@ -236,7 +218,7 @@ export const asyncRouterMap = [
       {
         path: '/caseQuery',
         name: 'caseQuery',
-        redirect: '/caseDetails',
+        redirect: '/caseQuery',
         component: RouteView,
         children: [
           {

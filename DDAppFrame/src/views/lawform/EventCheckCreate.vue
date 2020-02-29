@@ -176,13 +176,12 @@
 </template>
 
 <script>
-import { isNotEmpty, formatDate, isEmpty, getQueryConditon } from '../../utils/util'
+import { isNotEmpty, formatDate, isEmpty } from '../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../service/ddJsApi.service'
 import ItemGroup from '../../components/tools/ItemGroup'
 import SUpload from '../../components/file/StandardUploadFile'
 import EventListSelect from '../../components/business/EventListSelect'
-import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, commonSaveApi, getDetialdataByfilter, getDetialdataByEventInfoId } from '../../api/regulatoryApi'
-import { getUseridForCurrentUser } from '../../service/currentUser.service'
+import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, commonSaveApi, getDetialdataByEventInfoId } from '../../api/regulatoryApi'
 var timer = null
 /**
  * 事件巡查
@@ -405,7 +404,7 @@ export default {
       var method = isNotEmpty(data.ID) ? 'update' : 'create'
       commonSaveApi(data, 'task_patrol', method).then((res) => {
         this.$toast.success('操作成功')
-        // this.goToLawForm()
+        this.goToLawForm()
       }).finally(() => {
         this.loading = false
       })

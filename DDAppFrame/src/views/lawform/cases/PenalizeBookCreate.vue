@@ -1,9 +1,9 @@
 <template>
   <div class="form_wapper">
-    <van-cell-group title="任务信息" v-if="taskId">
-      <van-cell title="任务" value="创建案件"></van-cell>
-      <van-cell title="交办时间" value="2020-02-15"></van-cell>
-      <van-cell title="期望时间" value="2020-02-15"></van-cell>
+    <van-cell-group title="任务信息" v-if="taskInfo">
+      <van-cell title="任务" :value="taskInfo.Tasktype"></van-cell>
+      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -17,15 +17,15 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
       </van-field>
     </van-cell-group>
-    <van-cell-group>
+    <van-cell-group v-if="caseInfo.CauseOfAction">
       <van-form @submit="onSubmit" @failed="onFailed">
-        <van-cell title="案件号" :value="caseInfo.code"></van-cell>
+        <van-cell title="案件号" :value="caseInfo.DocNo"></van-cell>
         <van-cell title="案件类型" :value="caseInfo.CaseType"></van-cell>
         <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
         <party-info :initData="caseInfo.dsrs" ref="partyInfo"></party-info>
         <van-field
-          name="factdesc"
-          v-model="penalizeBook.factdesc"
+          name="Illegalfacts"
+          v-model="penalizeBook.Illegalfacts"
           rows="2"
           autosize
           label="违法事实"
@@ -69,7 +69,7 @@
         </van-field>
         <penalty-decision ref="penaltyDecision"></penalty-decision>
         <van-field
-          v-model="penalizeBook.organiser.name"
+          v-model="penalizeBook.CoOrganizer"
           label="协办人"
           placeholder="请选择协办人"
           :readonly="true"
@@ -95,7 +95,8 @@ import ItemGroup from '../../../components/tools/ItemGroup'
 import SUpload from '../../../components/file/StandardUploadFile'
 import LawListSelect from '../../../components/business/LawListSelect'
 import { ddcomplexPicker } from '../../../service/ddJsApi.service'
-import { isEmpty } from '../../../utils/util'
+import { isEmpty, isNotEmpty } from '../../../utils/util'
+import { getDetaildata, getDetialdataByEventInfoId } from '../../../api/regulatoryApi'
 /**
  * 当场处罚决定书
  */
@@ -118,13 +119,12 @@ export default {
       showPopup: false,
       showLaw: false,
       selectLawType: null,
-      taskId: null,
+      taskInfo: null,
       caseInfo: {
 
       },
       penalizeBook: {
-        factdesc: '',
-        organiser: {}
+        Illegalfacts: ''
       },
       illegalbasis: {},
       punishmentbasis: {}
@@ -134,6 +134,26 @@ export default {
 
   },
   methods: {
+    init () {
+      const queryParam = this.$route.query
+      const taskId = queryParam.taskId
+      if (isNotEmpty(taskId)) {
+        this.loadTaskInfo()
+      }
+    },
+    loadTaskInfo (taskId) {
+      getDetaildata('work_task', taskId).then(res => {
+        this.taskInfo = res
+        this.loadCaseInfo(res.EventInfoId)
+      })
+    },
+    loadCaseInfo (EventInfoId) {
+      getDetialdataByEventInfoId('case_Info', EventInfoId).then((res) => {
+        if (res) {
+          this.caseInfo = res
+        }
+      })
+    },
     handleShowSelectCase () {
       this.showPopup = true
     },
@@ -168,7 +188,8 @@ export default {
           name: res.users[0].name,
           id: res.users[0].emplId
         }
-        this.penalizeBook.organiser = organiserTemp
+        this.caseInfo.CoOrganizer = organiserTemp.name
+        this.caseInfo.CoOrganizerId = organiserTemp.id
       })
     },
     onSubmit (values) {

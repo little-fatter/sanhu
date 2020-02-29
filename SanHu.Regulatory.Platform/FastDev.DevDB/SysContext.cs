@@ -161,10 +161,7 @@ namespace FastDev.DevDB
         /// </summary>
         public static T GetService<T>()
         {
-            using (var scope = MyHttpContext.ServiceProvider.CreateScope())
-            {
-                return scope.ServiceProvider.GetService<T>();
-            }
+            return MyHttpContext.Current.RequestServices.GetService<T>();
         }
     private static string GetWebRoot()
         {

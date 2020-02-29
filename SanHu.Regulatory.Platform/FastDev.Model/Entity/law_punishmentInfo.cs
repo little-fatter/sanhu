@@ -89,6 +89,16 @@ public string Status
 get;
 set;
 }
-}
+        public string MainHandler
+        {
+            get; set;
+        }
+
+        public string MainHandlerID
+        {
+            get; set;
+        }
+
+    }
 
 }

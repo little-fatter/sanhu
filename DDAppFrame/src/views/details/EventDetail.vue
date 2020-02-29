@@ -29,7 +29,7 @@
         </svg> -->
         1.3km
       </van-cell>
-      <van-cell>上报时间：{{ reportTime }}</van-cell>
+      <van-cell title="上报时间" :value="reportTime"></van-cell>
       <van-cell>上报来源：{{ reportType }}</van-cell>
       <van-cell>上报人：{{ reporterName }}</van-cell>
       <van-cell>事件类型：{{ evtTypeDisplayName }}</van-cell>
