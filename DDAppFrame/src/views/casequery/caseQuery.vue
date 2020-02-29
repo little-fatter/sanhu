@@ -123,7 +123,7 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ name: 'caseDetails', params: { caseId: msg } })
+      this.$router.push({ name: 'caseDetails', params: { id: msg } }) // 案件详情id
     },
     // 配置请求参数
     loadData (parameter) {
