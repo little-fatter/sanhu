@@ -188,8 +188,9 @@ namespace FastDev.Service
 
         private object FormData(APIContext context)
         {
+            var data = JsonHelper.DeserializeJsonToObject<FormDataReq>(context.Data);
             var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            return _sHBaseService.FormData(context.Data);
+            return _sHBaseService.FormData(data);
         }
         /// <summary>
         /// 创建任务

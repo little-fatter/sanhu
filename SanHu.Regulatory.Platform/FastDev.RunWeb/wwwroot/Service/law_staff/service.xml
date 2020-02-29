@@ -5,15 +5,15 @@
         <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" isPK="N" />
         <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" isPK="N" />
         <field name="PreviousformID" dbName="PreviousformID" title="上一个表单id" type="string" length="50" isPK="N" />
-        <field name="Associatedobjecttype" dbName="AssociatedobjecttypeID" title="关联的表单类型" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="AssociatedobjectID" dbName="AssociatedobjectID" title="关联表单Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="UserId" dbName="UserIdID" title="用户Id" type="many2one" relationModel="user" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="Username" dbName="Username" title="用户姓名" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="AssociatedobjectID" dbName="AssociatedobjectID" title="关联表单Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="UserId" dbName="UserIdID" title="用户Id" type="many2one" relationModel="user" relationField="" isPK="N" />
+        <field name="Username" dbName="Username" title="用户姓名" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联对象" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
-    <getlist base_fields="*" base_ignore_fields="" many2one="Associatedobjecttype,UserId" one2many="" many2many="" />
-    <getpageddata base_fields="*" base_ignore_fields="" many2one="Associatedobjecttype,UserId" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="UserId" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="UserId" one2many="" many2many="" />
 </freedesign>
