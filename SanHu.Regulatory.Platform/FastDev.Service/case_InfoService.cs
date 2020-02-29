@@ -69,6 +69,7 @@ namespace FastDev.Service
                     string userid = item["CreateUserID"].ToString();
                     var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
                     item["CreateUserID"] = user.Name;
+                    item.Add("Jobnumber", user.Jobnumber);
                 }
                 var partys = svc.GetListData(filterGroup) ;
 
