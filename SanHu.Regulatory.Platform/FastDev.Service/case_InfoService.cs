@@ -17,6 +17,7 @@ namespace FastDev.Service
             OnGetAPIHandler += case_InfoService_OnGetAPIHandler;
             OnAfterGetPagedData += Case_InfoService_OnAfterGetPagedData;
             OnAfterGetDetailData += Case_InfoService_GetDetail;
+            OnAfterGetListData += Case_InfoService_OnAfterListData;
         }
 
 
@@ -68,7 +69,7 @@ namespace FastDev.Service
                 {
                     string userid = item["CreateUserID"].ToString();
                     var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
-                    item["CreateUserID"] = user.Name;
+                    item.Add("CreatUser", user.Name);
                     item.Add("Jobnumber", user.Jobnumber);
                 }
                 var partys = svc.GetListData(filterGroup) ;
@@ -77,7 +78,49 @@ namespace FastDev.Service
 
             }
         }
+        private void Case_InfoService_OnAfterListData(object query, object data)
+        {
+            var lst = (data as PagedData).Records;
 
+            var db = this.QueryDb;
+            IService svc = ServiceHelper.GetService("law_party");
+
+
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+
+            for (int i = 0; i < lst.Count; i++)
+            {
+                var item = lst[i] as Dictionary<string, object>;
+
+                FilterGroup filterGroup = new FilterGroup();
+                filterGroup.rules = new List<FilterRule>();
+
+                filterGroup.rules.Add(new FilterRule
+                {
+                    field = "Associatedobjecttype",
+                    value = "case_info",
+                    op = "equal"
+                });
+                filterGroup.op = "and";
+                filterGroup.rules.Add(new FilterRule
+                {
+                    field = "CaseId",
+                    value = item["ID"].ToString(),
+                    op = "equal"
+                });
+                if (item["CreateUserID"] != null)
+                {
+                    string userid = item["CreateUserID"].ToString();
+                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
+                    item.Add("CreatUser", user.Name);
+                    item.Add("Jobnumber", user.Jobnumber);
+                }
+                var partys = svc.GetListData(filterGroup);
+
+                item.Add("LawPartys", partys);
+
+            }
+        }
 
 
         private SHBaseService _sHBaseService;
