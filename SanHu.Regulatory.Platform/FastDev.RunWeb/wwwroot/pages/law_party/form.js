@@ -87,20 +87,13 @@ function() {
                     type: "text"
                 },
                 {
-                    newline: false,
+                    newline: 0,
                     name: "Typesofparties",
                     label: "当事人类型",
-                    editor: {
-                        url: "/web/listdata",
-                        parms: {
-                            model: "res_dictionary"
-                        },
-                        valueField: "ID",
-                        textField: "Title",
-                        many2one: true,
-                        type: "ref_select"
-                    },
-                    type: "ref_select"
+                    editor: {},
+                    type: "text",
+                    width: "",
+                    readonlyInEdit: 0
                 },
                 {
                     newline: true,

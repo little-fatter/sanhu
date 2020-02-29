@@ -195,7 +195,7 @@ namespace FastDev.Service
                     lawParty.Nameoflegalperson = (string)dr["Nameoflegalperson"];
                     lawParty.Nationality = (string)dr["Nationality"];
                     lawParty.Occupation = (string)dr["Occupation"];
-                    lawParty.TypesofpartiesID = (string)dr["TypesofpartiesID"];
+                    lawParty.Typesofparties = (string)dr["TypesofpartiesID"];
                     lawParty.Gender = (string)dr["Gender"];
                     lawParties.Add(lawParty);
                 }
