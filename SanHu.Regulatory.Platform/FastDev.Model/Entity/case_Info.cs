@@ -139,6 +139,11 @@ public string EventInfoId
 get;
 set;
 }
+public string CaseDescription
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

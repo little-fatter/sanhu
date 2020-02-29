@@ -135,7 +135,7 @@ padding:40px;
         </div>
       </div>
       <div class="boxContent">
-        <component :is="formStyleName"></component>
+        <component :is="formStyleName" :id="formId"></component>
       </div>
       <div class="formFooter">
         <div class="footSteps">
@@ -261,8 +261,9 @@ export default {
   },
   data () {
     return {
-      formStyleName: 'detailPunish', // 引用的组件名
-      approvalList: ['负责人1', '负责人2', '负责人3']
+      formStyleName: 'detailEnforce', // 引用的组件名
+      approvalList: ['负责人1', '负责人2', '负责人3'],
+      formId: 'af5f950b-79a6-45de-829d-4f7e4838cbe2'// 详情id
     }
   },
   methods: {

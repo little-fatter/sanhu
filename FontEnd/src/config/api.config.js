@@ -26,11 +26,13 @@ const apiConfig = {
   // 字典查询
   dictionary: `${getHost('list')}/webapi/api/items`,
   // 任务模块
-  work_task: `${getHost('list')}/web/pageddata?model=work_task&appid=`,
+  work_task: `${getHost('list')}/webapi/pageddata?model=work_task&appid=`,
   // 案件模块
-  case_info: `${getHost('list')}/web/pageddata?model=case_Info&appid=`,
+  case_info: `${getHost('list')}/webapi/pageddata?model=case_Info&appid=`,
   // 详情
-  detail: `${getHost('list')}/web/detaildata/`
+  detail: `${getHost('list')}/webapi/detaildata/`,
+  // 表单模块
+  form_all: `${getHost('list')}/webapi/pageddata?model=form_all&appid=`
 }
 
 export default apiConfig

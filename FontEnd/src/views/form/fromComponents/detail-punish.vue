@@ -16,19 +16,19 @@
       label="违法事实及证据"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>违法事实及证据</div>
+      <div>{{ detailData.Illegalfacts }}</div>
     </a-form-item>
     <a-form-item
       label="违法依据"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>违法依据</div>
+      <div></div>
     </a-form-item>
     <a-form-item
       label="处理结果"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>处理结果</div>
+      <div>{{ Punishmentdecision }}</div>
     </a-form-item>
     <a-form-item
       label="被执行人签字"
@@ -36,7 +36,7 @@
       :wrapperCol="{span:10}"
       :required="false"
     >
-      <div>被执行人签字</div>
+      <div>{{ detailData.PartySign }}</div>
     </a-form-item>
     <a-form-item
       label="附件"
@@ -50,13 +50,33 @@
 </template>
 
 <script>
+import { getLawPunish } from '@/api/sampleApi'
+
 export default {
   name: 'DetailPunish',
-  data () {
-    return {
+  props: {
+    id: {
+      type: String,
+      default: null
     }
   },
+  data () {
+    return {
+      detailData: {}
+    }
+  },
+  mounted () {
+    this.getLawPunish()
+  },
   methods: {
+    getLawPunish () {
+      getLawPunish(this.id).then(res => {
+        this.detailData = res
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

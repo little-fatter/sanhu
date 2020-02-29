@@ -16,6 +16,9 @@ namespace FastDev.Service
             OnGetAPIHandler += law_punishmentInfoService_OnGetAPIHandler;
         }
 
+ 
+
+
         private SHBaseService _sHBaseService;
         private Func<APIContext, object> law_punishmentInfoService_OnGetAPIHandler(string id)
         {
