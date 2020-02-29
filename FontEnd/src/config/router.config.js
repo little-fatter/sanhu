@@ -120,10 +120,16 @@ export const asyncRouterMap = [
                 meta: { title: '表单审批', keepAlive: false }
               },
               {
-                path: 'close-report',
-                name: 'CloseReport',
-                component: () => import('@/views/form/closeReport'),
-                meta: { title: '结案报告', keepAlive: false }
+                path: 'close-person-report',
+                name: 'ClosePersonReport',
+                component: () => import('@/views/form/closePersonReport'),
+                meta: { title: '结案报告(个人)', keepAlive: false }
+              },
+              {
+                path: 'close-org-report',
+                name: 'CloseOrgReport',
+                component: () => import('@/views/form/closeOrgReport'),
+                meta: { title: '结案报告（单位）', keepAlive: false }
               },
               {
                 path: 'file-cover',
@@ -190,7 +196,22 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // 一张图
+      {
+        path: 'map',
+        name: 'Map',
+        component: RouteView,
+        redirect: '/map/index',
+        meta: { titile: '一张图' },
+        children: [
+          {
+            path: 'index',
+            name: 'Index',
+            meta: { title: '一张图' },
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/mapV/mapV')
+          }
+        ]
+      },
       // result
       {
         path: 'result',

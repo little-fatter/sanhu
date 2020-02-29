@@ -16,59 +16,66 @@ function() {
                     type: "string"
                 },
                 {
-                    width: "150",
-                    display: "关联对象的Id",
-                    name: "AssociationobjectID",
-                    name_text: "关联对象的Id",
-                    align: "left",
-                    align_textfield: "左对齐",
-                    type: "string",
-                    type_text: "文本型",
-                    editorType: ""
-                },
-                {
                     name: "thumbnail",
                     display: "缩略图地址",
                     type: "string"
                 },
                 {
-                    width: "150",
-                    display: "fileCode",
-                    name: "fileCode",
-                    name_text: "fileCode",
-                    align: "left",
-                    align_textfield: "左对齐",
-                    type: "string",
-                    type_text: "文本型",
-                    editorType: ""
-                },
-                {
                     name: "Remark",
                     display: "备注",
+                    type: "string"
+                },
+                {
+                    name: "Associatedobjecttype",
+                    display: "关联表单的类型",
+                    type: "string"
+                },
+                {
+                    name: "AssociationobjectID",
+                    display: "关联对象的Id",
+                    type: "string"
+                },
+                {
+                    name: "CorrelationId",
+                    display: "关联Id",
+                    type: "string"
+                },
+                {
+                    name: "spaceId",
+                    display: "空间",
+                    type: "string"
+                },
+                {
+                    name: "fileName",
+                    display: "文件名",
+                    type: "string"
+                },
+                {
+                    name: "fileSize",
+                    display: "文件大小",
+                    type: "string"
+                },
+                {
+                    name: "fileType",
+                    display: "文件类型",
+                    type: "string"
+                },
+                {
+                    name: "fileId",
+                    display: "文件id",
+                    type: "string"
+                },
+                {
+                    name: "fileCode",
+                    display: "fileCode",
                     type: "string"
                 }]
             },
             common: {
                 formShowType: "tab",
                 formShowPosition: "top",
-                dialogWidth: "700",
-                dialogHeight: "500",
-                showList: 0,
-                showCalendar: 0,
-                showReport: 0,
-                showKanban: 0,
-                hideToolbar: 0,
-                hideViewSwitch: 0,
-                viewNameList: "",
-                viewNameCalendar: "",
-                viewNameReport: "",
-                viewNameKanban: "",
-                searchInputShowType: "",
-                buttonsShowType: "",
-                searchBoxShowType: "",
-                searchAdShowType: "",
-                formViewName: "",
-                openParm: ""
+                dialogWidth: 700,
+                dialogHeight: 500
             },
             type: "list",
             filterFields: [{
@@ -176,28 +183,7 @@ function() {
                 type: "string"
             }],
             link: {},
-            addins: {
-                items: [{
-                    name: "增加数据导出按钮",
-                    title: "增加数据导出按钮(增加数据导出按钮)",
-                    value: {
-                        title: "增加数据导出按钮",
-                        value: {
-                            buttonText: "导出Excel"
-                        }
-                    }
-                },
-                {
-                    name: "增加数据打印按钮",
-                    title: "增加数据打印按钮(增加数据打印按钮)",
-                    value: {
-                        title: "增加数据打印按钮",
-                        value: {
-                            buttonText: "打印数据"
-                        }
-                    }
-                }]
-            }
+            addins: {}
         },
         dataset: 'web/dataset?model=attachment&viewname=list'
     };

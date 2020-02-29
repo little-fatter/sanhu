@@ -9,6 +9,9 @@ using FastDev.Model.Entity;
 
 namespace FastDev.Service
 {
+    /// <summary>
+    /// 询问笔录
+    /// </summary>
     public class Form_inquiryrecordService : SHBaseService, IService
     {
         public Form_inquiryrecordService()

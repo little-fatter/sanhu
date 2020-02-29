@@ -120,7 +120,7 @@
       </div>
     </div>
     <div class="body">
-      <div class="body-item" v-for="item in dataList" @click="intoDetails(item.ID)" :key="item.ID">
+      <div class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID)" :key="item.ID">
         <div class="item-head">
           <span class="left">{{ item.Tasktype }}</span>
           <span>{{ item.Tasknumber }}</span>
@@ -132,7 +132,7 @@
           <div class="middle">
             <div class="middle-head">
               <span class="left">事件类型：</span>
-              <span>{{ item.Tstyle }}</span>
+              <span>{{ item.EventTypeName }}</span>
             </div>
             <div class="middle-body">
               <span class="left">上传时间：</span>
@@ -161,6 +161,17 @@
           </div>
         </div>
       </div>
+      <div>
+        <a-pagination
+          showSizeChanger
+          :pageSize.sync="PageSize"
+          :pageSizeOptions="pageSizeOptions"
+          @showSizeChange="onShowSizeChange"
+          @change="onChange"
+          :total="totalCount"
+          v-model="PageIndex"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -171,6 +182,10 @@ import { getWorkTaskList, getUser, getDictionary } from '@/api/sampleApi'
 export default {
   data () {
     return {
+      totalCount: null,
+      PageIndex: 1,
+      PageSize: 5,
+      pageSizeOptions: ['5', '10', '15', '20'],
       dataList: [
       ], // 任务列表
       taskStyle: '全部类型', // 任务类型
@@ -227,8 +242,9 @@ export default {
   },
   methods: {
     // 进入详情页面
-    intoDetails (id) {
-      this.$router.push({ name: 'EventInspeion', params: { ID: id } })
+    intoDetails (eventId, id) {
+      // this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } })
+      this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } })
     },
     // 处理参数
     dealParamters () {
@@ -251,25 +267,38 @@ export default {
       this.dealParamters()
       // if (this.paramters.rules.length > 0) {
       //   console.log(this.paramters.rules)
-      //   getWorkTaskList(this.paramters).then(res => {
-      //     this.dataList = res.Records
+      //   getWorkTaskList(this.paramters, this.PageIndex, this.PageSize).then(res => {
+      //     this.dataList = res.Rows
+      //     this.totalCount = res.Total
       //   }).catch((err) => {
       //     console.log(err)
       //   })
       // } else {
-      //   getWorkTaskList().then(res => {
-      //     this.dataList = res.Records
+      //   getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
+      //     this.dataList = res.Rows
+      //     this.totalCount = res.Total
       //   }).catch((err) => {
       //     console.log(err)
       //   })
       // }
-      getWorkTaskList().then(res => {
-        this.dataList = res.Records
+      getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
+        this.dataList = res.Rows
+        this.totalCount = res.Total
       }).catch((err) => {
         console.log(err)
       })
     },
     searchList () {
+      this.getTaskList()
+    },
+    onShowSizeChange (current, pageSize) {
+      this.PageIndex = current
+      this.PageSize = pageSize
+      this.getTaskList()
+    },
+    onChange (current) {
+      this.PageIndex = current
+      console.log(current)
       this.getTaskList()
     }
   }

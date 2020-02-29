@@ -7,11 +7,11 @@
       </div>
       <div>
         <span>交办时间：</span>
-        <span>2020-02-20 14：02：30</span>
+        <span>{{ missionData.createTime }}</span>
       </div>
       <div>
         <span>期望完成时间：</span>
-        <span>{{ data.ExpectedCompletionTime }}</span>
+        <span>{{ missionData.ExpectedCompletionTime }}</span>
       </div>
     </div>
     <div class="details">
@@ -19,13 +19,13 @@
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事发地点：</a-col>
         <a-col class="colSize" :span="12">
-          <span>{{ data.WorkAddress }}</span>
-          <!-- <span>  |距离</span> -->
+          <span>{{ data.address }}</span>
+          <span>坐标{{ data.lng }},{{ data.lat }}</span>
         </a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报时间：</a-col>
-        <a-col class="colSize" :span="12">2020-02-20 12：22：22</a-col>
+        <a-col class="colSize" :span="12">{{ data.reportTime }}</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报来源：</a-col>
@@ -33,24 +33,24 @@
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报人：</a-col>
-        <a-col class="colSize" :span="12">王五（133xxxxxxxx）</a-col>
+        <a-col class="colSize" :span="12">{{ data.reporterName }}（{{ data.wxUserId }}）</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事件类型：</a-col>
-        <a-col class="colSize" :span="12">非法捕捞</a-col>
+        <a-col class="colSize" :span="12">{{ data.evtTypeDisplayName }}</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事件描述：</a-col>
-        <a-col class="colSize" :span="12">{{ data.TaskContent }}</a-col>
+        <a-col class="colSize" :span="12">{{ data.remark }}</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">关联表单：</a-col>
         <a-col class="colSize" :span="12">
-          <div>关联的表单</div>
+          <div>关联的表单主键{{ data.responseRefId }}</div>
         </a-col>
       </a-row>
     </div>
-    <div>
+    <!-- <div>
       <a-form
         :form="form"
       >
@@ -144,16 +144,16 @@
           </a-radio-group>
         </a-form-item>
       </a-form>
-    </div>
+    </div> -->
     <div class="buttons">
-      <a-button class="button-submit" type="primary" >提交</a-button>
+      <!-- <a-button class="button-submit" type="primary" >提交</a-button> -->
       <a-button class="button-return" @click="$router.back()">返回</a-button>
     </div>
   </div>
 </template>
 
 <script>
-import { getDetails } from '@/api/sampleApi'
+import { getRelateForm, getEventDetails, getTaskDetails } from '@/api/sampleApi'
 
 export default {
   name: 'EventInspection',
@@ -166,8 +166,10 @@ export default {
       headers: {
         authorization: 'authorization-text'
       },
-      id: ' ',
-      data: { }
+      eventId: ' ', // 事件id
+      Id: '', // 任务id
+      data: { }, // 事件信息
+      missionData: {} // 任务信息
     }
   },
   computed: {
@@ -185,8 +187,34 @@ export default {
       }
     },
     getDetail () {
-      getDetails(this.id).then(res => {
-        console.log(res.data)
+      getEventDetails(this.eventId).then(res => {
+        this.data = res
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getRelateForm () {
+      const params = {
+        rules: [
+          {
+            field: 'EventInfoId',
+            op: 'equal',
+            value: this.missionData.EventInfoId,
+            type: 'string'
+          }
+        ]
+      }
+      getRelateForm(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getMissionDetail () {
+      getTaskDetails(this.Id).then(res => {
+        this.missionData = res
+        this.getRelateForm()
       }).catch(err => {
         console.log(err)
       })
@@ -196,8 +224,10 @@ export default {
 
   },
   mounted () {
-    this.id = this.$route.params.ID
+    this.eventId = this.$route.params.eventId
+    this.Id = this.$route.params.id
     this.getDetail()
+    this.getMissionDetail()
   }
 }
 </script>
