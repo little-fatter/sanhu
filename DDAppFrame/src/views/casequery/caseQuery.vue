@@ -139,7 +139,7 @@ export default {
           },
           {
             field: 'ApplicableProcedureID', // 案件适用程序
-            op: 'like',
+            op: 'equal',
             value: this.serchFlow,
             type: 'select'
           },

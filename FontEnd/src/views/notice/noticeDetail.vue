@@ -55,6 +55,7 @@
 
 <script>
 import axios from 'axios'
+import getNoticeDetails from '@/api/sampleApi'
 
 export default {
   data () {
@@ -107,11 +108,7 @@ export default {
   },
   mounted () {
     this.id = this.$route.query.id
-    axios.post('http://192.168.0.125:8030/webapi/detaildata',
-      { model: 'cms_article',
-        id: this.id
-      }
-    ).then((ret) => {
+    getNoticeDetails(this.id).then((ret) => {
       if (ret.statusCode) {
         this.article = ret.data
       }
