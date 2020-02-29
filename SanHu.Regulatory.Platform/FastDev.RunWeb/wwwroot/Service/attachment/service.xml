@@ -9,6 +9,11 @@
         <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联表单的类型" type="string" length="50" isPK="N" />
         <field name="AssociationobjectID" dbName="AssociationobjectID" title="关联对象的Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CorrelationId" dbName="CorrelationId" title="关联Id" type="string" length="50" isPK="N" />
+        <field name="spaceId" dbName="spaceId" title="空间" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="fileName" dbName="fileName" title="文件名" type="string" length="255" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="fileSize" dbName="fileSize" title="文件大小" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="fileType" dbName="fileType" title="文件类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="fileId" dbName="fileId" title="文件id" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

@@ -99,6 +99,36 @@ public string PreviousformID
 get;
 set;
 }
+public string IncidentAddressXY
+{
+get;
+set;
+}
+public DateTime? IncidentTime
+{
+get;
+set;
+}
+public string IncidentAddress
+{
+get;
+set;
+}
+public string Sourceofcase
+{
+get;
+set;
+}
+public string CoOrganizer
+{
+get;
+set;
+}
+public string CoorganizerID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

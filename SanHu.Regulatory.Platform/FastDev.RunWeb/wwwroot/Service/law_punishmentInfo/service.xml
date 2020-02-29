@@ -13,8 +13,8 @@
         <field name="IsConfiscationgoods" dbName="IsConfiscationgoods" title="是否没收物品" type="string" length="50" isPK="N" />
         <field name="Amountofpenalty" dbName="Amountofpenalty" title="罚款金额" type="string" length="50" isPK="N" />
         <field name="Paymentmethod" dbName="PaymentmethodID" title="缴纳方式" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="  Assistants" dbName="  Assistants" title="协办人" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name=" AssistantsId" dbName=" AssistantsId" title="协办人Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CoOrganizer" dbName="CoOrganizer" title="协办人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CoorganizerID" dbName="CoorganizerID" title="协办人ID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
