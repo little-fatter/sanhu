@@ -196,13 +196,18 @@ namespace FastDev.Service
             //data.TaskType = "巡查";
             //data.TaskContent = "任务内容描述";
             //data.EventInfoId = "1";
-            //data.ExpectedCompletionTime = DateTime.Now.AddDays(1);
+            data.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望时间增加一天
             //data.MainHandler = "主办人测试";
             //var a = JsonConvert.SerializeObject(data);
 
             //data.AssignUsersID = "";
             //data.CreateUserID = SysContext.GetService<ClientInfo>().UserId;
-            var a = SysContext.GetService<ClientInfo>(); 
+
+            var loginClientInfo = SysContext.GetService<ClientInfo>(); 
+            if(loginClientInfo != null)
+            {
+                data.CreateUserID = loginClientInfo.UserId;
+            }
 
             QueryDb.BeginTransaction();
             try
