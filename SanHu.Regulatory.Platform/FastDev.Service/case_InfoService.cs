@@ -21,11 +21,27 @@ namespace FastDev.Service
         {
             var lst = (data as PagedData).Records;
             var db = this.QueryDb;
+            IService svc = ServiceHelper.GetService("law_party");
             for (int i = 0; i < lst.Count; i++)
             {
                 var item = lst[i] as Dictionary<string, object>;
-                var partys = db.Fetch<law_party>("where Associatedobjecttype=@0 and CaseId=@1", new object[] { "case_info", item["ID"].ToString() });
-                //item.Add("LawPartys",JsonHelper.DeserializeJsonToObject partys);
+                FilterGroup filterGroup = new FilterGroup();
+                filterGroup.rules = new List<FilterRule>();
+                filterGroup.rules.Add(new FilterRule
+                {
+                    field = "Associatedobjecttype",
+                    value = "case_info",
+                    op = "equal"
+                });
+                filterGroup.op = "and";
+                filterGroup.rules.Add(new FilterRule
+                {
+                    field = "CaseId",
+                    value = item["ID"].ToString(),
+                    op = "equal"
+                });
+                var partys = svc.GetListData(filterGroup) ;
+                item.Add("LawPartys", partys);
             }
         }
 
