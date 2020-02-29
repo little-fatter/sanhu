@@ -3,10 +3,10 @@
     <van-cell-group>
       <van-cell title="案件号" :value="penalizeBook.caseInfo.DocNo"></van-cell>
       <van-cell title="案件类型" :value="penalizeBook.caseInfo.CaseType"></van-cell>
-      <van-cell title="案由" :value="penalizeBook.caseInfo.penalizeBook"></van-cell>
+      <van-cell title="案由" :value="penalizeBook.caseInfo.CauseOfAction"></van-cell>
       <party-info-view :initData="penalizeBook.dsrs"></party-info-view>
       <van-field
-        v-model="penalizeBook.factdesc"
+        v-model="penalizeBook.Illegalfacts"
         rows="2"
         autosize
         label="违法事实"
@@ -38,7 +38,7 @@
         readonly
       />
       <penalty-decision-view :initData="penalizeBook.decisions"></penalty-decision-view>
-      <van-cell title="协办人" :value="penalizeBook.organiser.name"></van-cell>
+      <van-cell title="协办人" :value="penalizeBook.CoOrganizer"></van-cell>
       <div class="operate-area">
         <div class="person_item">
           <span style="margin-right:20px">主办人:</span>  <van-button type="default" size="small" @click="handleShowSignature('mainSignature')" >手签</van-button>
@@ -125,9 +125,6 @@ export default {
   },
   created () {
     this.init()
-  },
-  beforeRouteLeave (to, from, next) {
-    to.meta.keepAlive = true
   },
   methods: {
     init () {

@@ -132,7 +132,7 @@ const menus = [
         children: [
           {
             menuId: '1-6-1',
-            menuUrl: '/caseFinalReport',
+            menuUrl: '/caseFinalReportCreate',
             menuIcon: './img/forms/form10.png',
             menuName: '结案报告',
             menuLevel: 2,

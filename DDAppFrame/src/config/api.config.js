@@ -56,7 +56,7 @@ const apiConfig = {
       // 下载文件
       downloadFile: getHost('file') + '/api/file/Get',
       // 删除文件
-      deleteFile: getHost('file') + '/api/Default/Delete'
+      deleteFile: getHost('file') + '/api/file/Delete'
     }
   },
   /**

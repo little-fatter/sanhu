@@ -333,17 +333,24 @@ export default {
       })
     },
     removeItemForUploadResult (fileCode) {
-      const serveFile = this.uploadResult.find(item => item.FileCode === fileCode)
+      const serveFile = this.uploadResult.find(item => item.fileCode === fileCode)
       if (serveFile) {
         const index = this.uploadResult.indexOf(serveFile)
         this.uploadResult.splice(index, 1)
       }
     },
     removeItemForPrevieImgs (fileCode) {
-      const serveFile = this.previewImgs.find(item => item.FileCode === fileCode)
+      const serveFile = this.previewImgs.find(item => item.fileCode === fileCode)
       if (serveFile) {
         const index = this.previewImgs.indexOf(serveFile)
         this.previewImgs.splice(index, 1)
+      }
+    },
+    removeItemForCommonFiles (fileCode) {
+      const serveFile = this.commonFiles.find(item => item.fileCode === fileCode)
+      if (serveFile) {
+        const index = this.commonFiles.indexOf(serveFile)
+        this.commonFiles.splice(index, 1)
       }
     },
     addPrevieImgs (serveFile) {
