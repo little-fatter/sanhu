@@ -30,8 +30,8 @@ namespace FastDev.Service
         /// <param name="fromContent">待办表单内容</param>
         public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
         {
-            var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
-            ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
+            //var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
+            //ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
         }
 
         /// <summary>
@@ -85,9 +85,9 @@ namespace FastDev.Service
         /// 保存任务
         /// </summary>
         /// <param name="workTask"></param>
-        public work_task SaveWorkTask(work_task workTask)
+        public string SaveWorkTask(work_task workTask)
         {
-            return ServiceHelper.GetService("work_task").Create(workTask) as work_task;
+            return ServiceHelper.GetService("work_task").Create(workTask).ToString();
         }
 
 
@@ -201,8 +201,8 @@ namespace FastDev.Service
             {
                 Task.LaskTaskId = sourcetaskid;
                 Task.InitiationTime = DateTime.Now;
-                var task = SaveWorkTask(Task);
-                CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + task.ID, Task.TaskType, Task.TaskContent);
+                var taskId = SaveWorkTask(Task);
+                CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, Task.TaskType, Task.TaskContent);
             }
             return true;
         }

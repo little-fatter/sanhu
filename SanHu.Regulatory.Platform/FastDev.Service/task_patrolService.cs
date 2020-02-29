@@ -32,32 +32,32 @@ namespace FastDev.Service
         /// 1、表单类型， 2、表单
         /// </summary>
         /// <returns></returns>
-        private bool NeedCreateNewTask(object postdata)
-        {
-            return true;
-        }
-        public object WfCreate(string wfModel, object postdata, params string[] exeUserIds)
-        {
-            var nId = base.Create(postdata);
-            postdata.GetType().GetProperty("ID").SetValue(postdata, nId);
-            AdvanceWorkflow(wfModel, "事件巡查填表", postdata, true, exeUserIds);
-            return nId;
-        }
-        public override object Create(object postdata)
-        {
-            var data = ((Model.Form.task_patrol)postdata);
-            List<string> nextexecutor = new List<string>();
-            if (!string.IsNullOrEmpty(data.NextHandler))//如果系统带有下一步执行人
-            {
-                string[] nh = data.NextHandler.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                nextexecutor.AddRange(nh);
-            }
-            else
-            {
-                nextexecutor.Add(SysContext.WanJiangUserID);
-            }
-            return WfCreate(WF_EventWorkflowModel, postdata, nextexecutor.ToArray());
-        }
+        //private bool NeedCreateNewTask(object postdata)
+        //{
+        //    return true;
+        //}
+        //public object WfCreate(string wfModel, object postdata, params string[] exeUserIds)
+        //{
+        //    var nId = base.Create(postdata);
+        //    postdata.GetType().GetProperty("ID").SetValue(postdata, nId);
+        //    AdvanceWorkflow(wfModel, "事件巡查填表", postdata, true, exeUserIds);
+        //    return nId;
+        //}
+        //public override object Create(object postdata)
+        //{
+        //    var data = ((Model.Form.task_patrol)postdata);
+        //    List<string> nextexecutor = new List<string>();
+        //    if (!string.IsNullOrEmpty(data.NextHandler))//如果系统带有下一步执行人
+        //    {
+        //        string[] nh = data.NextHandler.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        //        nextexecutor.AddRange(nh);
+        //    }
+        //    else
+        //    {
+        //        nextexecutor.Add(SysContext.WanJiangUserID);
+        //    }
+        //    return WfCreate(WF_EventWorkflowModel, postdata, nextexecutor.ToArray());
+        //}
 
         private Func<APIContext, object> Task_patrolService_OnGetAPIHandler(string id)
         {
@@ -71,12 +71,31 @@ namespace FastDev.Service
         private object Finish(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<taskPatrolFinishReq>(context.Data);
-           
+            //var data = new taskPatrolFinishReq();
+
+            //var task_patrolData = new task_patrol();
+            //task_patrolData.Result = "测试巡查结果";
+            //task_patrolData.Needtracking = 0;
+            //task_patrolData.Needlawenforcement = 1;
+            //data.TaskPatrol = task_patrolData;
+
+            //var taskData = new work_task();
+            //taskData.TaskType = "勘察";
+            //taskData.TaskContent = "任务内容描述";
+            //taskData.EventInfoId = "1";
+            //taskData.ExpectedCompletionTime = DateTime.Now.AddDays(1);
+            //taskData.MainHandler = "主办人测试";
+            //data.SourceTaskId = "2fcb8609-d233-4e77-a12b-a87d61ef9a50";
+            //data.NextTasks = new work_task[] { taskData };
+
+            //var a = JsonConvert.SerializeObject(data);
+
             //保存当前巡查表单
             //开始事务
             QueryDb.BeginTransaction();
             try
             {
+                data.TaskPatrol.TaskId = data.SourceTaskId;
                 //保存表单信息
                 Create(data.TaskPatrol);
                 //处理事件,任务状态

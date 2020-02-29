@@ -71,6 +71,11 @@
   <ItemGroup>
     <Folder Include="Model\" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="TopSdk">
+      <HintPath>..\libs\TopSdk.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="BeforeBuild.cmd" />
   </Target>

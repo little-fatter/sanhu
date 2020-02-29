@@ -93,23 +93,24 @@ namespace FastDev.Service
         /// <returns></returns>
         private void CreateInfo(case_Info caseInfo, List<law_party> law_Parties)
         {
-            var CaseInfoSource = base.Create(caseInfo) as case_Info;//保存原始信息
-            var CaseInfoTemp = CaseInfoSource;
-            CaseInfoTemp.PreviousformID = CaseInfoSource.ID;                                    
-            var CaseInfoNew = base.Create(CaseInfoTemp) as case_Info;//可变更的信息
+            var CaseInfoSource = base.Create(caseInfo) as string;//保存原始信息
+            var CaseInfoTemp = caseInfo;
+            CaseInfoTemp.ID = CaseInfoSource;
+            CaseInfoTemp.PreviousformID = CaseInfoSource;                                    
+            var CaseInfoNew = base.Create(CaseInfoTemp) as string;//可变更的信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
                 foreach (var l in law_Parties)//原始的当事人
                 {
                     l.Associatedobjecttype = "case_Info";
-                    l.AssociationobjectID = caseInfo.ID;
+                    l.AssociationobjectID = CaseInfoSource;
                     _Lawpartys.Create(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
                 {
                     l.Associatedobjecttype = "case_Info";
-                    l.AssociationobjectID = CaseInfoNew.ID;
+                    l.AssociationobjectID = CaseInfoNew;
                     _Lawpartys.Create(l);
                 }
 

@@ -164,21 +164,6 @@
             巡检信息
             </summary>
         </member>
-        <member name="T:FD.Model.Dto.TaskPatrolRejectRequest">
-            <summary>
-            任务巡查拒绝请求
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskPatrolRejectRequest.TaskId">
-            <summary>
-            任务id
-            </summary>
-        </member>
-        <member name="P:FD.Model.Dto.TaskPatrolRejectRequest.Reason">
-            <summary>
-            理由
-            </summary>
-        </member>
         <member name="P:FD.Model.Dto.task_surveyFinishReq.TaskSurvey">
             <summary>
             勘察信息

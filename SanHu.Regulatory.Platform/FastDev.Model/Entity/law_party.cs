@@ -74,6 +74,11 @@ public string Nationality
 get;
 set;
 }
+public string WorkUnit
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

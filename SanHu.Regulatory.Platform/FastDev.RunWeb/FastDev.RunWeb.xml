@@ -154,6 +154,16 @@
             <param name="parm"></param>
             <returns></returns>
         </member>
+        <member name="M:FastDev.RunWeb.Controllers.WebApiController.EventSave(System.String,System.String,System.String,System.String)">
+            <summary>
+            保存数据
+            </summary>
+            <param name="model"></param>
+            <param name="method"></param>
+            <param name="fullJson"></param>
+            <param name="parm"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.RunWeb.Controllers.WebApiController.ListData(System.String,System.String,System.String)">
             <summary>
             获取列表数据

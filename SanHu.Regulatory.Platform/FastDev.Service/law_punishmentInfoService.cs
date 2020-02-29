@@ -55,7 +55,7 @@ namespace FastDev.Service
         /// <returns></returns>
         private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
         {
-            var lawpunishment_Info = base.Create(lawpunishmentInfo) as law_punishmentInfo;//保存原始信息
+            var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             var _attachment= ServiceHelper.GetService("attachmentService");
 
@@ -64,7 +64,7 @@ namespace FastDev.Service
                 foreach (var l in law_Parties)
                 {
                     l.Associatedobjecttype = "law_punishmentInfo";
-                    l.AssociationobjectID = lawpunishment_Info.ID;
+                    l.AssociationobjectID = lawpunishment_Info;
                     _Lawpartys.Create(l);
                 }
             }
@@ -73,7 +73,7 @@ namespace FastDev.Service
                 foreach (var a in attachments)
                 {
                     a.Associatedobjecttype = "law_punishmentInfo";
-                    a.AssociationobjectID = lawpunishment_Info.ID;
+                    a.AssociationobjectID = lawpunishment_Info;
                     _attachment.Create(a);           
                 }
             }

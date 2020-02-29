@@ -24,6 +24,7 @@ namespace FastDev.Service
         public task_surveyService()
         {
             OnGetAPIHandler += Task_surveyService_OnGetAPIHandler;
+           
         }
         
         /*
@@ -114,9 +115,44 @@ namespace FastDev.Service
 
         private Func<APIContext, object> Task_surveyService_OnGetAPIHandler(string id)
         {
-            _sHBaseService= ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            task_survey task = new task_survey();
+            task.CaseId = "123";
+            task.EventInfoId = "123";
+            task.EventType = "case_info";
+            task.ExistCrim = "true";
+            task.Result = "123";
+            task.TaskId= "71be0281-2ced-42a4-bc92-396791a8f197";
+            task.ProcessingDecisions = 1;
+            law_party law1 = new law_party();
+            law1.Name = "kk";
+            law1.address = "china";
+            law1.Gender = "男";
+            law1.CaseId = "122";
+            law_party law2 = new law_party();
+            law2.Name = "kk2";
+            law2.address = "china";
+            law2.Gender = "女";
+            law2.CaseId = "111";
+            List<law_party> law_Parties = new List<law_party>();
+            law_Parties.Add(law1);
+            law_Parties.Add(law2);
+            task_surveyFinishReq tq = new task_surveyFinishReq();
+            tq.TaskSurvey = task;
+            tq.LawParties = law_Parties;
+            work_task workTask = new work_task();
+            workTask.CaseID = "123";
+            workTask.LaskTaskId = "1221";
+            workTask.TaskContent = "手动创建新任务";
+            workTask.TaskType = "创建案件";
+            tq.NextTasks = new work_task[] { workTask };
+            tq.LawParties = law_Parties;
+            var M = JsonConvert.SerializeObject(tq);
+
+
+            _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
             return Handle;
         }
+
 
 
         private SHBaseService _sHBaseService;
@@ -158,15 +194,17 @@ namespace FastDev.Service
         /// <returns></returns>
        private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
         {
-            var tasksurvey = base.Create(TaskSurvey) as case_Info;
+            var tasksurvey = base.Create(TaskSurvey) as string;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
                 foreach (var l in law_Parties)//原始的当事人
                 {
                     l.Associatedobjecttype = "task_survey";
-                    l.AssociationobjectID = tasksurvey.ID;
-                    _Lawpartys.Create(l);
+                    l.AssociationobjectID = tasksurvey;
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
+                   // ServiceHelper.GetService("law_partyService").Create(l);
                 }
             }
         }
