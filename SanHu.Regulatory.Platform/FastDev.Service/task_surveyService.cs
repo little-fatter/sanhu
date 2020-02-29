@@ -115,14 +115,9 @@ namespace FastDev.Service
 
         private Func<APIContext, object> Task_surveyService_OnGetAPIHandler(string id)
         {
-            task_survey task = new task_survey();
-            task.CaseId = "123";
-            task.EventInfoId = "123";
-            task.EventType = "case_info";
-            task.ExistCrim = "true";
-            task.Result = "123";
-            task.TaskId= "71be0281-2ced-42a4-bc92-396791a8f197";
-            task.ProcessingDecisions = 1;
+            case_Info task = new case_Info();
+            task.CaseTitle = "123";
+            task.CauseOfAction = "测试案件";
             law_party law1 = new law_party();
             law1.Name = "kk";
             law1.address = "china";
@@ -136,14 +131,14 @@ namespace FastDev.Service
             List<law_party> law_Parties = new List<law_party>();
             law_Parties.Add(law1);
             law_Parties.Add(law2);
-            task_surveyFinishReq tq = new task_surveyFinishReq();
-            tq.TaskSurvey = task;
+            case_InfoFinishReq tq = new case_InfoFinishReq();
+            tq.CaseInfo = task;
             tq.LawParties = law_Parties;
             work_task workTask = new work_task();
             workTask.CaseID = "123";
             workTask.LaskTaskId = "1221";
             workTask.TaskContent = "手动创建新任务";
-            workTask.TaskType = "创建案件";
+            workTask.TaskType = "创建现场处罚决定";
             tq.NextTasks = new work_task[] { workTask };
             tq.LawParties = law_Parties;
             var M = JsonConvert.SerializeObject(tq);

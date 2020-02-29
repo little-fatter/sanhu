@@ -101,6 +101,7 @@ namespace FastDev.Service
         public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
             var taskInfo = GetWorkTask(taskid);
+            if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
             taskInfo.CompleteTime = DateTime.Now;
             QueryDb.Update(taskInfo);
