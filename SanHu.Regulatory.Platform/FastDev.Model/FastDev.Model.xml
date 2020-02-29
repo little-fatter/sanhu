@@ -144,6 +144,11 @@
             巡检信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.taskPatrolFinishReq.Attachments">
+            <summary>
+            证据信息
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.TaskRejectReq.Reason">
             <summary>
             理由
