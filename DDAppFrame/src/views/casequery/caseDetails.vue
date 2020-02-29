@@ -129,13 +129,13 @@ export default {
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {
-        this.lawPartyInfoL = res
-        console.log('当事人', res)
+        this.lawPartyInfoL = res.Rows
+        console.log('当事人', res.Rows)
       })
       // 请求案件 关联事件
       getDetialdataByEventInfoId('event_info', this.caseId.EventInfoId).then((res) => {
         this.eventInfo = res
-        console.log('事件信息', res.Rows)
+        console.log('事件信息', res)
       })
     }
   },
