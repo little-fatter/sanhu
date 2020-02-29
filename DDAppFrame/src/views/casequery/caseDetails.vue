@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="case-title">
-      <h4>{{ caseInfo.caseNumber }}</h4>
-      <van-tag type="success">{{ caseInfo.caseState }}</van-tag>
+      <h4>{{ caseInfo.CaseNumber }}</h4>
+      <van-tag type="success">{{ caseInfo.CaseStatus }}</van-tag>
     </div>
     <van-cell-group>
       <van-cell :title="caseInfo.caseTitle" title-class="title-cell title-cell-div" />
-      <van-cell title="案件类型" :value="caseInfo.caseType" value-class="con-style" title-class="title-cell" />
-      <van-cell title="适用程序" :value="caseInfo.caseFlow" value-class="con-style" title-class="title-cell" />
+      <van-cell title="案件类型" :value="caseInfo.CauseOfAction" value-class="con-style" title-class="title-cell" />
+      <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
       <van-cell title="当事人" :value="caseInfo.caseBreakLow" :label="caseInfo.caseBreakLowId" value-class="con-style" title-class="title-cell" />
-      <van-cell title="案发时间" :value="caseInfo.caseTime" value-class="con-style" title-class="title-cell" />
-      <van-cell title="案发地点" :value="caseInfo.caseLocation" value-class="con-style" title-class="title-cell">
+      <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
+      <van-cell title="案发地点" :value="caseInfo.IncidentAddress" value-class="con-style" title-class="title-cell">
         <van-button
           class="locationBtn"
           slot="right-icon"
@@ -19,15 +19,15 @@
           type="info"
           @click="viewMap"/>
       </van-cell>
-      <van-cell title="处罚决定文书号" :value="caseInfo.caseJudgementNum" value-class="con-style" title-class="title-cell" />
-      <van-cell title="处罚种类" :value="caseInfo.caseJudgmentType" value-class="con-style" title-class="title-cell" />
-      <van-cell title="执行情况" :value="caseInfo.caseJudgementState" value-class="con-style" title-class="title-cell" />
-      <van-cell title="立案日期" :value="caseInfo.caseCreateTime" value-class="con-style" title-class="title-cell" />
-      <van-cell title="结案日期" :value="caseInfo.caseFinishTime" value-class="con-style" title-class="title-cell" />
-      <van-cell title="办案人员" :value="caseInfo.caseLaw" value-class="con-style" title-class="title-cell" />
-      <van-cell title="归档人员" :value="caseInfo.caseFileSavePeople" value-class="con-style" title-class="title-cell" />
-      <van-cell title="归档号" :value="caseInfo.caseFileSaveNum" value-class="con-style" title-class="title-cell" />
-      <van-cell title="保存期限" :value="caseInfo.caseSaveTime" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚决定文书号" :value="caseInfo.PenaltyDecisionNo" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚种类" v-if="caseInfo.PenaltyType" :value="caseInfo.PenaltyType[1]" value-class="con-style" title-class="title-cell" />
+      <!-- <van-cell title="执行情况" :value="caseInfo.caseJudgementState" value-class="con-style" title-class="title-cell" /> -->
+      <van-cell title="立案日期" :value="caseInfo.CaseRegisterDay" value-class="con-style" title-class="title-cell" />
+      <van-cell title="结案日期" :value="caseInfo.CaseCloseDay" value-class="con-style" title-class="title-cell" />
+      <van-cell title="办案人员" :value="caseInfo.Investigators" value-class="con-style" title-class="title-cell" />
+      <van-cell title="归档人员" :value="caseInfo.DocPeople" value-class="con-style" title-class="title-cell" />
+      <van-cell title="归档号" :value="caseInfo.DocNo" value-class="con-style" title-class="title-cell" />
+      <van-cell title="保存期限" :value="caseInfo.DocRetentionTimes" value-class="con-style" title-class="title-cell" />
     </van-cell-group>
     <!--        地图加载-->
     <van-dialog v-model="show" title="地图地址查看">
@@ -62,39 +62,22 @@
 </template>
 
 <script>
+import { getQueryConditon } from '../../utils/util' // 以及搜索规则
+import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
 export default {
   name: 'CaseDetails',
   data () {
     return {
+      caseId: '', // 案件ID
       show: false,
       caseInfo: {
-        caseId: '35M4o8IG6OA0G0PJ',
-        caseTitle: '违法使用泡沫制品简易浮动设施载人入湖', // 案由
-        caseType: '水政',
-        caseBreakLow: '张三', // 违法人员
-        caseBreakLowId: '123456789874858747', // 违法人员 身份证
-        caseLaw: '李明', // 执法人员
-        caseNumber: '案〔2020〕1234号', // 案件编号
-        caseFlow: '一般流程',
-        caseState: '处理中',
-        caseTime: '2020-02-19 12:10:30',
-        caseLocation: '澄江县XX路10号',
-        caseJudgementNum: '玉抚管罚决字〔2020〕4006号',
-        caseJudgmentType: '罚款',
-        caseJudgementState: '已执行',
-        caseCreateTime: '2020-02-20 12:25:30',
-        caseFinishTime: '2020-02-20 12:30:15',
-        caseFileSavePeople: '赵华',
-        caseFileSaveNum: 123456,
-        caseSaveTime: '10年'
+
+      },
+      lawPartyInfoL: {
+
       },
       eventInfo: {
-        location: '澄江县XX路10号',
-        happenTime: '2020-02-19 12:10:30',
-        eventFrom: '网上举报',
-        updatePeople: '张三 13569874158',
-        eventType: '非法捕捞',
-        eventDesc: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+
       }
     }
   },
@@ -107,11 +90,46 @@ export default {
     },
     caseFiles () {
       this.$router.push({ name: 'caseFlies', params: { caseId: '4d77125c-7352-4a5d-827c-c524cdac07ff' } })
+    },
+    // 数据请求
+    getCaseInfo () {
+      const conditon = {
+        rules: [
+          {
+            field: 'CaseID',
+            op: 'equal',
+            value: this.caseId,
+            type: 'string'
+          },
+          {
+            field: 'Associatedobjecttype',
+            op: 'equal',
+            value: 'case_Info',
+            type: 'string'
+          }
+        ]
+      }
+      // 请求案件详情
+      getDetaildata('case_Info', this.caseId).then((res) => {
+        this.caseInfo = res
+        console.log('案件详情', res)
+      })
+      // 请求当事人
+      getPageDate('law_party', 1, 100, conditon).then((res) => {
+        // this.caseInfo = res
+        console.log('当事人', res)
+      })
+      // 请求案件 关联事件
+      getDetialdataByEventInfoId('event_info', this.caseId.EventInfoId).then((res) => {
+        // this.lawPartyInfoL = res
+        console.log('事件信息', res, '123')
+      })
     }
   },
   mounted () {
-    // 接收路由传参
-    console.log(this.$route.params.info)
+    // 接收路由案件ID传参
+    this.caseId = this.$route.params.caseId
+    this.getCaseInfo()
   }
 }
 </script>
