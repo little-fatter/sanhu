@@ -133,7 +133,7 @@ namespace FastDev.Service
         {
             var filter = new FilterGroup();
             filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
-            return ServiceHelper.GetService("attachment").GetListData(new FilterGroup());
+            return ServiceHelper.GetService("attachment").GetListData(filter);
         }
 
         private object GetParties(string formid, string formType)
