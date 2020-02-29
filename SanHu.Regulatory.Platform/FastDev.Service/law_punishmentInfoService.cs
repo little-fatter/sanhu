@@ -16,6 +16,9 @@ namespace FastDev.Service
             OnGetAPIHandler += law_punishmentInfoService_OnGetAPIHandler;
         }
 
+ 
+
+
         private SHBaseService _sHBaseService;
         private Func<APIContext, object> law_punishmentInfoService_OnGetAPIHandler(string id)
         {
@@ -30,7 +33,7 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
-            if (data.LawPunishmentInfo == null) throw new Exception();
+            if (data.LawPunishmentInfo == null) throw new Exception("没有主体数据");
             QueryDb.BeginTransaction();
             data.LawPunishmentInfo.EventInfoId = data.EventInfoId;
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
@@ -40,10 +43,10 @@ namespace FastDev.Service
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                throw new Exception();
+                throw new Exception(e.Message);
             }
             QueryDb.CompleteTransaction();
             return true;

@@ -31,6 +31,8 @@ var publicAppConfig = {
   },
   /** 配置cookie或者session过期后跳转的登录页面 */
   loginUrl: '',
+  /** App根据域名 */
+  AppHost: 'http://192.168.1.115:8080/sh#/',
   /**
   * 请求超时的毫秒数
   */

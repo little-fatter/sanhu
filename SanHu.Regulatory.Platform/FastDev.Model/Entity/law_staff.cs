@@ -24,11 +24,6 @@ public string PreviousformID
 get;
 set;
 }
-public string AssociatedobjecttypeID
-{
-get;
-set;
-}
 public string AssociatedobjectID
 {
 get;
@@ -40,6 +35,11 @@ get;
 set;
 }
 public string Username
+{
+get;
+set;
+}
+public string Associatedobjecttype
 {
 get;
 set;

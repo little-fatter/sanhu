@@ -6,8 +6,6 @@
         <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="PreviousformID" dbName="PreviousformID" title="上一个表单id" type="string" length="50" isPK="N" />
         <field name="Illegalfacts" dbName="Illegalfacts" title="违法事实" type="string" length="50" isPK="N" />
-        <field name="IllegalbasisID" dbName="IllegalbasisID" title="违法依据Id" type="string" length="50" isPK="N" />
-        <field name="PunishmentbasisID" dbName="PunishmentbasisID" title="处罚依据id" type="string" length="50" isPK="N" />
         <field name="Punishmentdecision" dbName="PunishmentdecisionID" title="处罚决定" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Isfine" dbName="Isfine" title="是否罚款" type="string" length="50" isPK="N" />
         <field name="IsConfiscationgoods" dbName="IsConfiscationgoods" title="是否没收物品" type="string" length="50" isPK="N" />
@@ -19,6 +17,9 @@
         <field name="PartySign" dbName="PartySign" title="当事人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
         <field name="MainHanderSign" dbName="MainHanderSign" title="主办人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
         <field name="TaskId" dbName="TaskId" title="任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="IllegalbasisIDs" dbName="IllegalbasisIDs" title="违法依据" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PunishmentbasisIDs" dbName="PunishmentbasisIDs" title="处罚依据" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PunishmentTitle" dbName="PunishmentTitle" title="处罚决定书文号" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

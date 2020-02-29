@@ -1,75 +1,75 @@
-namespace FastDev.Model.Entity
+namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class attachment
+public partial class case_cover
 {
 public string ID
 {
 get;
 set;
 }
-public string attach_type
+public string TaskId
 {
 get;
 set;
 }
-public string url
+public string CaseId
 {
 get;
 set;
 }
-public string thumbnail
+public string LawPartyIds
 {
 get;
 set;
 }
-public string Remark
+public string CaseTitle
 {
 get;
 set;
 }
-public string Associatedobjecttype
+public string CauseOfAction
 {
 get;
 set;
 }
-public string AssociationobjectID
+public string PunishmentTitle
 {
 get;
 set;
 }
-public string CorrelationId
+public DateTime? CaseRegisterDay
 {
 get;
 set;
 }
-public string spaceId
+public string MainHandler
 {
 get;
 set;
 }
-public string fileName
+public string CoOrganizer
 {
 get;
 set;
 }
-public string fileSize
+public string Filinger
 {
 get;
 set;
 }
-public string fileType
+public string FilingId
 {
 get;
 set;
 }
-public string fileId
+public string SaveYear
 {
 get;
 set;
 }
-public string fileCode
+public string EventInfoId
 {
 get;
 set;

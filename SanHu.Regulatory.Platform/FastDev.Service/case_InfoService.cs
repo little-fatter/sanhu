@@ -61,20 +61,27 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<case_InfoFinishReq>(context.Data);    
-            if (data.CaseInfo == null) throw new Exception();
+            if (data.CaseInfo == null) throw new Exception("没有主体数据");
             data.CaseInfo.TaskId = data.SourceTaskId;
             data.CaseInfo.EventInfoId = data.EventInfoId;
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(data.CaseInfo, data.LawParties);
+                string caseid= CreateInfo(data.CaseInfo, data.LawParties);
+                if (data.NextTasks!=null||data.NextTasks.Length > 0)
+                {
+                    foreach (var t in data.NextTasks)
+                    {
+                        t.CaseID = caseid;
+                    }
+                }
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                throw new Exception();
+                throw e;
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -124,7 +131,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(case_Info caseInfo, List<law_party> law_Parties)
+        private string  CreateInfo(case_Info caseInfo, List<law_party> law_Parties)
         {
             var CaseInfoSource = base.Create(caseInfo) as string;//保存原始信息
             var CaseInfoTemp = caseInfo;
@@ -152,6 +159,7 @@ namespace FastDev.Service
                 }
 
             }
+            return CaseInfoNew;
         }
 
     }

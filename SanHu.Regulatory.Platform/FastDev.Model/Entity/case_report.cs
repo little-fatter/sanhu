@@ -2,74 +2,49 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class attachment
+public partial class case_report
 {
 public string ID
 {
 get;
 set;
 }
-public string attach_type
+public string TaskId
 {
 get;
 set;
 }
-public string url
+public string CaseId
 {
 get;
 set;
 }
-public string thumbnail
+public string LawPartyIds
 {
 get;
 set;
 }
-public string Remark
+public string CaseDetail
 {
 get;
 set;
 }
-public string Associatedobjecttype
+public string PunishmentId
 {
 get;
 set;
 }
-public string AssociationobjectID
+public string ExecuteState
 {
 get;
 set;
 }
-public string CorrelationId
+public string Url
 {
 get;
 set;
 }
-public string spaceId
-{
-get;
-set;
-}
-public string fileName
-{
-get;
-set;
-}
-public string fileSize
-{
-get;
-set;
-}
-public string fileType
-{
-get;
-set;
-}
-public string fileId
-{
-get;
-set;
-}
-public string fileCode
+public string EventInfoId
 {
 get;
 set;
