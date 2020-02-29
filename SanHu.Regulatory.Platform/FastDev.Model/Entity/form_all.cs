@@ -69,6 +69,11 @@ public string EventInfoId
 get;
 set;
 }
+public string FormType
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
