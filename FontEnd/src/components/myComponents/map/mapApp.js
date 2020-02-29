@@ -596,12 +596,15 @@ export default {
     var lyrs = this.layers
     for (let i = 0; i < lyrs.length; i++) {
       var lyr = lyrs[i]
-      if (lyr.constructor.name === 'VectorLayer') {
-        var features = lyr.getSource().getFeatures()
-        for (let j = 0; j < features.length; j++) {
-          if (feature === features[j]) {
-            return lyr
-          }
+      console.log('lyr', lyr, lyr.constructor.name)
+      if (!lyr.getSource().getFeatures) {
+        continue
+      }
+      var features = lyr.getSource().getFeatures()
+      for (let j = 0; j < features.length; j++) {
+        console.log('feature', feature.ol_uid, features[j].ol_uid)
+        if (feature.ol_uid === features[j].ol_uid) {
+          return lyr
         }
       }
     }
@@ -646,6 +649,7 @@ export default {
   openRegionlayer: function (feature) {
     console.log('openRegionlayer', feature)
     var pLayer = this.findLayerByFeature(feature)
+    console.log('pLayer', pLayer)
     var pLayerName = pLayer.get('name')
     var regionLayer = this.findLayer('regionLayer')
     var source = regionLayer.getSource()
