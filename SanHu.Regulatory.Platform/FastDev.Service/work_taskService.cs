@@ -188,7 +188,7 @@ namespace FastDev.Service
             data.RemoteLinks = "https://www.baidu.com";  //待办跳转地址
 
             //var data = new work_task();
-            //data.TaskType = "任务类型";
+            //data.TaskType = "巡查";
             //data.TaskContent = "任务内容描述";
             //data.EventInfoId = "1";
             //data.ExpectedCompletionTime = DateTime.Now.AddDays(1);

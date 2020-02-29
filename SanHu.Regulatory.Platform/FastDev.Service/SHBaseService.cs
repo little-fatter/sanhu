@@ -30,8 +30,8 @@ namespace FastDev.Service
         /// <param name="fromContent">待办表单内容</param>
         public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
         {
-            var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
-            ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
+            //var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
+            //ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
         }
 
         /// <summary>
