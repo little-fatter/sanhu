@@ -8,103 +8,167 @@ function() {
             form: {
                 fields: [{
                     newline: true,
-                    name: "CaseId",
-                    label: "案件id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "IDcard",
-                    label: "身份证号码",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "address",
-                    label: "地址",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "Contactnumber",
-                    label: "联系电话",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "Nameoflegalperson",
-                    label: "法人名称",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "Typesofparties",
-                    label: "当事人类型",
+                    name: "lawParty",
+                    label: "当事人",
                     editor: {
                         url: "/web/listdata",
                         parms: {
-                            model: "res_dictionary"
+                            model: "law_party"
                         },
                         valueField: "ID",
-                        textField: "Title",
+                        textField: "CaseId",
                         many2one: true,
                         type: "ref_select"
                     },
                     type: "ref_select"
                 },
                 {
+                    newline: false,
+                    name: "ProductName",
+                    label: "品名",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
                     newline: true,
-                    name: "EventId",
+                    name: "Enterprise",
+                    label: "企业",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "Specifications",
+                    label: "规格",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "DateOfManufacture",
+                    label: "生产日期",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "Number",
+                    label: "数量",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "UnitPrice",
+                    label: "单价",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "Packing",
+                    label: "包装",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "Remarks",
+                    label: "备注",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "handler",
+                    label: "处理人",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "EventInfoId",
                     label: "事件id",
                     editor: {
                         many2many: "ref_select_mul",
@@ -120,72 +184,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "AssociationobjectID",
-                    label: "关联对象id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "Name",
-                    label: "当事人名称",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "Gender",
-                    label: "当事人性别",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "Nationality",
-                    label: "当事人民族",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "WorkUnit",
-                    label: "工作单位",
+                    name: "CaseId",
+                    label: "案件Id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -201,7 +201,7 @@ function() {
                 {
                     newline: true,
                     name: "Associatedobjecttype",
-                    label: "关联对象",
+                    label: "关联表单类型",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -216,8 +216,24 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "Occupation",
-                    label: "当事人职业",
+                    name: "AssociationobjectID",
+                    label: "关联的id",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "TaskId",
+                    label: "任务Id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -237,11 +253,11 @@ function() {
             link: {},
             addins: {}
         },
-        dataset: 'web/dataset?model=law_party&viewname=form'
+        dataset: 'web/dataset?model=form_confiscated_item&viewname=form'
     };
     exports.options.model = {
-        name: 'law_party',
-        title: '当事人'
+        name: 'form_confiscated_item',
+        title: '物品清单'
     };
 
     exports.service = function service(page) {
