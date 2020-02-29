@@ -65,7 +65,9 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "law_punishmentInfo";
                     l.AssociationobjectID = lawpunishment_Info;
-                    _Lawpartys.Create(l);
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
+                    //_Lawpartys.Create(l);
                 }
             }
             if (attachments != null && attachments.Count > 0)
@@ -74,7 +76,9 @@ namespace FastDev.Service
                 {
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
-                    _attachment.Create(a);           
+                    a.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(a);
+                   // _attachment.Create(a);           
                 }
             }
         }
