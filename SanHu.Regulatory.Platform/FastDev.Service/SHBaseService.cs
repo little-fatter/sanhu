@@ -3,6 +3,7 @@ using FastDev.DevDB;
 using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
+using FD.Model.Dto;
 using FD.Model.Enum;
 using Newtonsoft.Json;
 using System;
@@ -93,36 +94,14 @@ namespace FastDev.Service
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
 
-        public object FormData(string Taskid)
+        public object FormData(FormDataReq data)
         {
-            if (string.IsNullOrEmpty(Taskid)) return null;
-            var task = GetWorkTask(Taskid);
-            IService service = null;
-            var type = (TaskType)Enum.Parse(typeof(TaskType), task.TaskType);
-            switch (type)
-            {
-                case TaskType.EventCheck:
-                    service = ServiceHelper.GetService("task_patrol");
-                    break;
-                case TaskType.OnSpot:
-                    service = ServiceHelper.GetService("task_survey");
-                    break;
-                case TaskType.CaseInfo:
-                    service = ServiceHelper.GetService("case_info");
-                    break;
-                case TaskType.Punishment:  //处罚决定书
-                    service = ServiceHelper.GetService("law_punishmentInfo");
-                    break;
-                    //case TaskType.questionRecord:  //询问笔录
-                    //    service = ServiceHelper.GetService("form_inquiryrecord");
-                    //    break;
-                    //case TaskType.inquestRecord:  //勘验笔录
-                    //    service = ServiceHelper.GetService("form_inquestrecord");
-                    //    break;
-            }
+            if (data == null || data.EventInfoId == null || data.Model == null) return null;
+            IService service = ServiceHelper.GetService(data.Model);
+
             var filter = new FilterGroup();
-            filter.rules.Add(new FilterRule("TaskId", Taskid, "equal"));
-            if (type == TaskType.CaseInfo)
+            filter.rules.Add(new FilterRule("EventInfoId", data.EventInfoId, "equal"));
+            if (data.Model == "case_info")
             {
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
             }

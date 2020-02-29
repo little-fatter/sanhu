@@ -25,7 +25,7 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<case_coverFinishReq>(context.Data);    
-            if (data.CaseCover == null) throw new Exception();
+            if (data.CaseCover == null) throw new Exception("没有主体数据");
             data.CaseCover.TaskId = data.SourceTaskId;
             data.CaseCover.EventInfoId = data.EventInfoId;
             QueryDb.BeginTransaction();
@@ -35,10 +35,10 @@ namespace FastDev.Service
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                throw new Exception();
+                throw e;
             }
             QueryDb.CompleteTransaction();
             return true;
