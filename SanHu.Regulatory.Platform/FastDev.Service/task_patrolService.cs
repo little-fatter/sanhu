@@ -127,7 +127,7 @@ namespace FastDev.Service
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw e;
             }
             return true;
         }

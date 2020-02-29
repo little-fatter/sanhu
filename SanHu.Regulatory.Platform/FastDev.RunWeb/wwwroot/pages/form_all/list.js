@@ -64,16 +64,6 @@ function() {
                     name: "EventInfoId",
                     display: "事件id",
                     type: "string"
-                },
-                {
-                    name: "CaseID",
-                    display: "案件id",
-                    type: "string"
-                },
-                {
-                    name: "TaskID",
-                    display: "任务id",
-                    type: "string"
                 }]
             },
             common: {
@@ -190,22 +180,6 @@ function() {
             {
                 display: "事件id",
                 name: "EventInfoId",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "案件id",
-                name: "CaseID",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "任务id",
-                name: "TaskID",
                 editor: {
                     type: "string"
                 },
