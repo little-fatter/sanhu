@@ -19,29 +19,29 @@
     <div class="case-panel-roll">
       <!-- list组件-->
       <SList :dataCallback="loadData" ref="mylist">
-        <van-panel v-for="(item, index) in caseList" :key="index+'@'" class="case-panel" @click="goCaseDetails(item.caseId)">
+        <van-panel v-for="(item, index) in caseList" :key="index+'@'" class="case-panel" @click="goCaseDetails(item.ID)">
           <div slot="header">
             <!--使用插槽取消面板头部-->
           </div>
           <div>
-            <h4 class="case-title">{{ item.caseTitle }}</h4>
+            <h4 class="case-title">{{ item.CauseOfAction }}</h4>
             <div class="default-info">
               <span>当事人</span>
               <div>
-                <span v-for="msg in item.caseBreakLow" :key="msg+'@'">{{ msg }} </span>
+                <span v-for="(msg,i) in item.LawPartys" :key="i+'@'">{{ msg.Name }} </span>
               </div>
             </div>
             <div class="default-info">
               <span>办案人</span>
               <div>
-                <span>{{ item.caseLaw }} </span>
+                <span>{{ item.Investigators }} </span>
               </div>
             </div>
             <div class="case-tag">
-              <van-tag plain>{{ item.caseNumber }}</van-tag>
-              <van-tag plain>{{ item.caseFlow }}</van-tag>
-              <van-tag plain>{{ item.caseState }}</van-tag>
-              <span>{{ item.caseTime }}</span>
+              <van-tag plain>{{ item.CaseNumber }}</van-tag>
+              <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>
+              <van-tag plain>{{ item.CaseStatus }}</van-tag>
+              <span>{{ item.ModifyDate }}</span>
               <!--                            <van-tag plain>2020/02/11 12:00更新</van-tag>-->
             </div>
           </div>
@@ -59,8 +59,8 @@
 
 <script>
 import SList from '../../components/list/SList'
-import { isNotEmpty, getQueryConditon } from '../../utils/util'
-import { getPageDate } from '../../api/regulatoryApi'
+import { isNotEmpty, getQueryConditon } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
+import { getPageDate } from '../../api/regulatoryApi' // 引入封装的请求
 
 export default {
   name: 'CaseQuery',
@@ -70,7 +70,6 @@ export default {
   data () {
     return {
       serchText: '', // 搜索内容
-      list: [],
       // 搜索条件
       serchType: 0,
       serchTypeOptions: [
@@ -98,35 +97,15 @@ export default {
         { text: '星云湖', value: '星云湖' },
         { text: '杞麓湖', value: '杞麓湖' }
       ],
-      caseList: [
-        {
-          caseId: 'LpSLt1iTtFKUBjD7',
-          caseTitle: '违法使用泡沫制品简易浮动设施载人入湖', // 案由
-          caseBreakLow: ['张三', '李思', '王麻子'], // 违法人员
-          caseLaw: '王五', // 执法人员
-          caseNumber: '案〔2020〕3206号', // 案件编号
-          caseFlow: '简易流程',
-          caseState: '已结案',
-          caseTime: '2020-02-25 15:20:30'
-        },
-        {
-          caseId: '35M4o8IG6OA0G0PJ',
-          caseTitle: '这是案由', // 案由
-          caseBreakLow: ['网二', '哈哈'], // 违法人员
-          caseLaw: '李明', // 执法人员
-          caseNumber: '案〔2020〕1234号', // 案件编号
-          caseFlow: '一般流程',
-          caseState: '处理中',
-          caseTime: '2020-02-19 12:10:30'
-        }
-      ]
+      // 案件列表数组  里面放的是对象
+      caseList: []
     }
   },
   methods: {
     // 搜索事件
     onSearch () {
       // console.log(this.serchText)
-      this.list = []
+      this.caseList = []// 重新搜索将 搜索结果清空
       this.$refs.mylist.refresh()
     },
     // 筛选
@@ -144,13 +123,13 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ name: 'caseDetails', params: { info: msg } })
+      this.$router.push({ name: 'caseDetails', params: { caseId: msg } })
     },
     // 配置请求参数
     loadData (parameter) {
       var rules = []
       if (isNotEmpty(this.serchText)) {
-        console.log(1111)
+        console.log('进了if判断')
         rules = [
           {
             field: 'CaseType', // 案件类型
@@ -183,17 +162,18 @@ export default {
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
           res.Rows.forEach(item => {
-            this.list.push(item)
+            this.caseList.push(item)
           })
         }
-        // console.log(res)
+        console.log(this.caseList)
         return res
       })
     }
   },
   // 生命周期函数
   mounted () {
-
+    // 进入案件列表即刻加载数据
+    this.onSearch()
   }
 
 }
