@@ -36,6 +36,17 @@ namespace FastDev.Service
         }
 
         /// <summary>
+        /// 撤回待办
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="recordId"></param>
+        public void WorkrecordUpdate(string userId,string recordId)
+        {
+            var ddService = SysContext.GetService<IDingDingServices>();
+            ddService.WorkrecordUpdate(userId, recordId);
+        }
+
+        /// <summary>
         /// 修改事件状态
         /// </summary>
         /// <param name="eventId"></param>
@@ -102,6 +113,12 @@ namespace FastDev.Service
             if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
             taskInfo.CompleteTime = DateTime.Now;
+
+            if(workTaskStatus == WorkTaskStatus.Normal)
+            {
+                WorkrecordUpdate(taskInfo.AssignUsers, taskInfo.TodotaskID);
+            }
+
             QueryDb.Update(taskInfo);
         }
 
@@ -112,37 +129,52 @@ namespace FastDev.Service
 
         public List<object> GetLastInfo(string Taskid, string type)
         {
-            if (string.IsNullOrEmpty(Taskid)) return null;
-            List<object> objs = new List<object>();
-            string formid = null;
-            string formtype = null;
-            switch (type)
-            {
-                case "case_Info":
-                    objs.Add(GetSurvey(Taskid));
-                    var b = objs[0] as task_survey;
-                    if (b == null) break;
-                    formid = b.ID;
-                    formtype = "task_survey";
-                    break;
-                case "task_survey":
-                    objs.Add(GetPatrol(Taskid));
-                    var p = objs[0] as task_patrol;
-                    if (p == null) break;
-                    formid = p.ID;
-                    formtype = "task_patrol";
-                    break;
-                case "law_punishmentInfo":
-                    objs.Add(GetPatrol(Taskid));
-                    var c = objs[0] as case_Info;
-                    if (c == null) break;
-                    formid = c.ID;
-                    formtype = "case_Info";
-                    break;
+            //if (string.IsNullOrEmpty(Taskid)) return null;
+            //var task= GetWorkTask(Taskid);
 
-            }
-            objs.Add(GetParties(formid, formtype));
-            return objs;
+            //switch (task.TaskType)
+            //{
+            //    case "EventCheck":
+            ////        ServiceHelper.GetService("task_patrol").GetListData("select * form ")
+            ////        objs.Add(GetSurvey(Taskid));
+            ////        var b = objs[0] as task_survey;
+            ////        if (b == null) break;
+            ////        formid = b.ID;
+            ////        formtype = "task_survey";
+            ////        break;
+            ////    case "OnSpot":
+            ////        objs.Add(GetPatrol(Taskid));
+            ////        var p = objs[0] as task_patrol;
+            ////        if (p == null) break;
+            ////        formid = p.ID;
+            ////        formtype = "task_patrol";
+            ////        break;
+            ////    case "law_punishmentinfo":
+            ////        objs.Add(GetPatrol(Taskid));
+            ////        var c = objs[0] as case_Info;
+            ////        if (c == null) break;
+            ////        formid = c.ID;
+            ////        formtype = "case_Info";
+            ////        break;
+            ////    case "CaseInfo":
+            ////        objs.Add(GetPatrol(Taskid));
+            ////        var c = objs[0] as case_Info;
+            ////        if (c == null) break;
+            ////        formid = c.ID;
+            ////        formtype = "case_Info";
+            ////        break;
+            ////    case "Punishment":
+            ////        objs.Add(GetPatrol(Taskid));
+            ////        var c = objs[0] as case_Info;
+            ////        if (c == null) break;
+            ////        formid = c.ID;
+            ////        formtype = "case_Info";
+            ////        break;
+
+            ////}
+            ////objs.Add(GetParties(formid, formtype));
+            ////return objs;
+            return null;
         }
 
         private object GetParties(string formid, string formType)
