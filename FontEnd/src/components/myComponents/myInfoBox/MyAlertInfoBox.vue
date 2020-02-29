@@ -49,7 +49,7 @@
         </template>
       </div>
       <a-modal
-        title="拨打电话"
+        title="任务派发"
         centered
         v-model="taskPanel.show"
         :footer="null"
@@ -73,12 +73,12 @@
           </div>
           <div class="task-panel-lyr">
             <a-select
-              defaultValue="a1"
+              defaultValue=""
               style="width: 100%"
               v-model="taskPanel.mainPerson"
             >
-              <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-                {{ (i + 9).toString(36) + i }}
+              <a-select-option v-for="p in taskPanel.list" :key="p.name">
+                {{ p.name }}
               </a-select-option>
             </a-select>
           </div>
@@ -92,11 +92,9 @@
               placeholder="选择协办人"
               v-model="taskPanel.subPeople"
             >
-              <a-select-option
-                v-for="i in 25"
-                :key="(i + 9).toString(36) + i"
-              >{{ (i + 9).toString(36) + i }}</a-select-option
-              >
+              <a-select-option v-for="p in taskPanel.list" :key="p.name">
+                {{ p.name }}
+              </a-select-option>
             </a-select>
             <div class="task-panel-lyr" style="text-align: center;">
               <a-button type="primary" style="width: 220px" @click="onClickHandOut">任务派发</a-button>
@@ -109,6 +107,8 @@
 </template>
 <script>
 import moment from 'moment'
+import appConfig from '@/config/app.config'
+
 var evtStateMap = {
   list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
   map: {
@@ -131,6 +131,10 @@ var evtStateMap = {
 export default {
   name: 'MyAlertInfoBox',
   props: {
+    dataGet: {
+      type: Object,
+      default: undefined
+    }
   },
   data: function () {
     return {
@@ -163,6 +167,7 @@ export default {
       ],
       evtStateMap: evtStateMap,
       taskPanel: {
+        list: [],
         show: false,
         time: moment(),
         mainPerson: '',
@@ -176,6 +181,7 @@ export default {
     },
     open: function (info) {
       if (info) {
+        this.info.id = info.id || '-'
         this.info.name = info.name || '-'
         this.info.status = info.status === undefined ? -1 : info.status
         this.info.des = info.des || '-'
@@ -187,10 +193,50 @@ export default {
     },
     openTaskPanel: function () {
       this.taskPanel.show = true
+      if (this.dataGet) {
+        this.taskPanel.list.length = 0
+        var list = this.dataGet.data.peopleList.Records.map(x => ({ id: x.ID, name: x.StaffName }))
+        this.taskPanel.list.push(...list)
+      }
     },
     onClickHandOut: function () {
       this.taskPanel.show = false
-      console.log(this.taskPanel)
+      // console.log(this.taskPanel)
+      var EventInfoId = this.info.id
+      var MainHandler = this.taskPanel.mainPerson
+      var selectIndex = this.taskPanel.list.findIndex(x => x.name === MainHandler)
+      var AssignUsersID = this.taskPanel.list[selectIndex].id
+      var CoOrganizer = this.taskPanel.subPeople.toString()
+      var ExpectedCompletionTime = this.taskPanel.time.format('YYYY-MM-DD HH:mm:ss')
+      var url = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/webapi/api'
+      var RemoteLinks = appConfig.AppHost + 'eventCheckCreate'
+      var data = {
+        'EventInfoId': EventInfoId, // 源事件id
+        'NextTasks': [
+          {
+            'TaskType': '1', // 任务类型
+            'AssignUsersID': AssignUsersID, // 执行人
+            'RemoteLinks': RemoteLinks, // 钉钉url连接
+            'TaskContent': '任务描述', // 任务描述
+            'EventInfoId': EventInfoId, // 事件id
+            // 'CaseID': '', // 案件id
+            'ExpectedCompletionTime': ExpectedCompletionTime, // 期望完成时间
+            'MainHandler': MainHandler, // 主办人
+            'CoOrganizer': CoOrganizer // 协办人
+          }
+        ]
+      }
+      var body = {
+        id: 'create',
+        model: 'work_task',
+        data: JSON.stringify(data)
+      }
+      // var body = '{"id": "create","model": "work_task","data": "' + JSON.stringify(data) + '"}'
+      console.log('body', body)
+      this.dataGet.doPostDataAjaxNotSetObject(url, body)
+        .then(function (res) {
+          console.log(res)
+        })
     }
   }
 }
