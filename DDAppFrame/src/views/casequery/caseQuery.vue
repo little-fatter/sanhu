@@ -129,7 +129,6 @@ export default {
     loadData (parameter) {
       var rules = []
       if (isNotEmpty(this.serchText)) {
-        console.log('进了if判断')
         rules = [
           {
             field: 'CaseType', // 案件类型
@@ -157,7 +156,6 @@ export default {
           }
         ]
       }
-      console.log('如果打印出来则没进入if判断')
       var conditon = getQueryConditon(rules, 'and')
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
