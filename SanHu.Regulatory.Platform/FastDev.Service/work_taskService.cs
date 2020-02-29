@@ -126,10 +126,8 @@ namespace FastDev.Service
                     return HandOver;
                 case "REJECT":
                     return Reject;
-                case "CASE":
-                    return NextStepCase;
-                case "SURVEY":
-                    return NextStepSurvey;
+                case "FORMDATA":
+                    return FormData;
                 case "CREATE":
                     return CreateTask;
             }
@@ -188,44 +186,10 @@ namespace FastDev.Service
         }
 
 
-        private object GetInfo(APIContext context)
+        private object FormData(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<FormReqBase>(context.Data);
-            
             var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            
-            return _sHBaseService.GetLastInfo(data.SourceTaskId, "case_Info");
-        }
-
-
-
-        private object NextStepCase(APIContext context)
-        {
-            var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
-
-            var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            try
-            {
-                return _sHBaseService.GetLastInfo(data.TaskId, "case_Info");
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        private object NextStepSurvey(APIContext context)
-        {
-            var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
-            var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            try
-            {
-                return _sHBaseService.GetLastInfo(data.TaskId, "task_survey");
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            return _sHBaseService.FormData(context.Data);
         }
         /// <summary>
         /// 创建任务

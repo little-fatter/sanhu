@@ -64,6 +64,11 @@ function() {
                     name: "EventInfoId",
                     display: "事件id",
                     type: "string"
+                },
+                {
+                    name: "FormType",
+                    display: "表单类型",
+                    type: "string"
                 }]
             },
             common: {
@@ -180,6 +185,14 @@ function() {
             {
                 display: "事件id",
                 name: "EventInfoId",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "表单类型",
+                name: "FormType",
                 editor: {
                     type: "string"
                 },

@@ -7,6 +7,7 @@ using FD.Model.Enum;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using WanJiang.Framework.Infrastructure.Logging;
 
@@ -40,7 +41,7 @@ namespace FastDev.Service
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="recordId"></param>
-        public void WorkrecordUpdate(string userId,string recordId)
+        public void WorkrecordUpdate(string userId, string recordId)
         {
             var ddService = SysContext.GetService<IDingDingServices>();
             ddService.WorkrecordUpdate(userId, recordId);
@@ -55,42 +56,6 @@ namespace FastDev.Service
         public bool UpdateEventState(string eventId, EventStatus eventStatus)
         {
             return base.QueryDb.Execute("update event_info set evtState = @0 where objid=@1", (int)eventStatus, eventId) > 0;
-        }
-
-        /// <summary>
-        /// 创建任务
-        /// </summary>
-        /// <param name="taskid">源任务id</param>
-        /// <param name="type">任务类型</param>
-        /// <param name="AssignUsersID">处理人</param>
-        /// <param name="MainHandler">主办人</param>
-        /// <returns></returns>
-        public work_task CreateWorkTask(string taskid, TaskType type, string AssignUsersID = AccountId, string MainHandler = AccountName)
-        {
-            var lastTask = GetWorkTask(taskid);
-            work_task workTask = new work_task();
-            workTask.LaskTaskId = taskid;
-            workTask.EventInfoId = lastTask.EventInfoId;
-            workTask.CaseID = lastTask.CaseID;
-            workTask.TaskType = TaskType.Survey.ToString();
-            workTask.TaskStatus = (int)WorkTaskStatus.Normal;
-            workTask.TaskContent = type.GetDisplayName();
-            workTask.AssignUsers = AssignUsersID;
-            workTask.MainHandler = MainHandler;
-            return workTask;
-        }
-
-        /// <summary>
-        /// 创建并保存任务
-        /// </summary>
-        /// <param name="taskid">源任务id</param>
-        /// <param name="type">任务类型</param>
-        /// <param name="AssignUsersID">处理人</param>
-        /// <param name="MainHandler">主办人</param>
-        /// <returns></returns>
-        public void CreateSaveWorkTask(string taskid, TaskType type, string AssignUsersID = AccountId, string MainHandler = AccountName)
-        {
-            ServiceHelper.GetService("work_task").Create(CreateWorkTask(taskid, type, AssignUsersID, MainHandler));
         }
 
         /// <summary>
@@ -114,7 +79,7 @@ namespace FastDev.Service
             taskInfo.TaskStatus = (int)workTaskStatus;
             taskInfo.CompleteTime = DateTime.Now;
 
-            if(workTaskStatus == WorkTaskStatus.Normal)
+            if (workTaskStatus == WorkTaskStatus.Normal)
             {
                 WorkrecordUpdate(taskInfo.AssignUsers, taskInfo.TodotaskID);
             }
@@ -127,54 +92,69 @@ namespace FastDev.Service
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
 
-        public List<object> GetLastInfo(string Taskid, string type)
+        public object FormData(string Taskid)
         {
-            //if (string.IsNullOrEmpty(Taskid)) return null;
-            //var task= GetWorkTask(Taskid);
-
-            //switch (task.TaskType)
-            //{
-            //    case "EventCheck":
-            ////        ServiceHelper.GetService("task_patrol").GetListData("select * form ")
-            ////        objs.Add(GetSurvey(Taskid));
-            ////        var b = objs[0] as task_survey;
-            ////        if (b == null) break;
-            ////        formid = b.ID;
-            ////        formtype = "task_survey";
-            ////        break;
-            ////    case "OnSpot":
-            ////        objs.Add(GetPatrol(Taskid));
-            ////        var p = objs[0] as task_patrol;
-            ////        if (p == null) break;
-            ////        formid = p.ID;
-            ////        formtype = "task_patrol";
-            ////        break;
-            ////    case "law_punishmentinfo":
-            ////        objs.Add(GetPatrol(Taskid));
-            ////        var c = objs[0] as case_Info;
-            ////        if (c == null) break;
-            ////        formid = c.ID;
-            ////        formtype = "case_Info";
-            ////        break;
-            ////    case "CaseInfo":
-            ////        objs.Add(GetPatrol(Taskid));
-            ////        var c = objs[0] as case_Info;
-            ////        if (c == null) break;
-            ////        formid = c.ID;
-            ////        formtype = "case_Info";
-            ////        break;
-            ////    case "Punishment":
-            ////        objs.Add(GetPatrol(Taskid));
-            ////        var c = objs[0] as case_Info;
-            ////        if (c == null) break;
-            ////        formid = c.ID;
-            ////        formtype = "case_Info";
-            ////        break;
-
-            ////}
-            ////objs.Add(GetParties(formid, formtype));
-            ////return objs;
-            return null;
+            if (string.IsNullOrEmpty(Taskid)) return null;
+            var task = GetWorkTask(Taskid);
+            IService service = null;
+            var type = (TaskType)Enum.Parse(typeof(TaskType), task.TaskType);
+            switch (type)
+            {
+                case TaskType.EventCheck:
+                    service = ServiceHelper.GetService("task_patrol");
+                    break;
+                case TaskType.OnSpot:
+                    service = ServiceHelper.GetService("task_survey");
+                    break;
+                case TaskType.CaseInfo:
+                    service = ServiceHelper.GetService("case_info");
+                    break;
+                case TaskType.Punishment:  //处罚决定书
+                    service = ServiceHelper.GetService("law_punishmentInfo");
+                    break;
+                    //case TaskType.questionRecord:  //询问笔录
+                    //    service = ServiceHelper.GetService("form_inquiryrecord");
+                    //    break;
+                    //case TaskType.inquestRecord:  //勘验笔录
+                    //    service = ServiceHelper.GetService("form_inquestrecord");
+                    //    break;
+            }
+            var filter = new FilterGroup();
+            filter.rules.Add(new FilterRule("TaskId", Taskid, "equal"));
+            if (type == TaskType.CaseInfo)
+            {
+                filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
+            }
+            var obj = service.GetListData(filter).FirstOrDefault();  //查询主表单
+            if (obj == null) throw new Exception("未取得关联数据");
+            string formId = obj["ID"].ToString();  //得到id
+            return new
+            {
+                MainForm = obj,
+                Party = Getlaw_partyByFormId(formId),  //当事人
+                LawStaff = Getlaw_staffByFormId(formId),  //执法人员
+                Attachment = GetattachmentByFormId(formId),  //附件
+            };
+        }
+        ///
+        private object Getlaw_partyByFormId(string formId)
+        {
+            var filter = new FilterGroup();
+            filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
+            return ServiceHelper.GetService("law_party").GetListData(filter);
+        }
+        private object Getlaw_staffByFormId(string formId)
+        {
+            var filter = new FilterGroup();
+            filter.rules.Add(new FilterRule("AssociatedobjectID", formId, "equal"));
+            return ServiceHelper.GetService("law_staff").GetListData(filter);
+        }
+        private object GetattachmentByFormId(string formId)
+        {
+            var filter = new FilterGroup();
+            filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
+            var a = ServiceHelper.GetService("attachment").GetListData(filter); ;
+            return a;
         }
 
         private object GetParties(string formid, string formType)
@@ -241,7 +221,7 @@ namespace FastDev.Service
                 Task.ID = id;
 
                 Task.LocalLinks = Task.RemoteLinks;
-                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid="+ Task.ID;
+                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
                 string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
                 var dic = new Dictionary<string, string>();
                 dic.Add("事件类型", taskTypeStr);
