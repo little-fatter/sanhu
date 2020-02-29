@@ -2,49 +2,74 @@ namespace FastDev.Model.Entity
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class work_matter
+public partial class case_cover
 {
 public string ID
 {
 get;
 set;
 }
-public string ContactName
+public string TaskId
 {
 get;
 set;
 }
-public string ContactPhone
+public string CaseId
 {
 get;
 set;
 }
-public string ContactAddress
+public string LawPartyIds
 {
 get;
 set;
 }
-public string Latitude
+public string CaseTitle
 {
 get;
 set;
 }
-public string Longitude
+public string CauseOfAction
 {
 get;
 set;
 }
-public string MatterAddress
+public string PunishmentTitle
 {
 get;
 set;
 }
-public string Remarks
+public DateTime? CaseRegisterDay
 {
 get;
 set;
 }
-public string MatterTypeID
+public string MainHandler
+{
+get;
+set;
+}
+public string CoOrganizer
+{
+get;
+set;
+}
+public string Filinger
+{
+get;
+set;
+}
+public string FilingId
+{
+get;
+set;
+}
+public string SaveYear
+{
+get;
+set;
+}
+public string EventInfoId
 {
 get;
 set;

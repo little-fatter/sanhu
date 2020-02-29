@@ -8,8 +8,8 @@ function() {
             form: {
                 fields: [{
                     newline: true,
-                    name: "attach_type",
-                    label: "附件类型",
+                    name: "TaskId",
+                    label: "任务id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -24,8 +24,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "url",
-                    label: "附件地址",
+                    name: "EventId",
+                    label: "事件id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -40,8 +40,8 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "thumbnail",
-                    label: "缩略图地址",
+                    name: "CaseId",
+                    label: "案件id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -56,8 +56,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "Remark",
-                    label: "备注",
+                    name: "LawPartyIds",
+                    label: "当事人id",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -72,8 +72,8 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "Associatedobjecttype",
-                    label: "关联表单的类型",
+                    name: "CaseDetail",
+                    label: "案件详情及调查经过",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -88,8 +88,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "AssociationobjectID",
-                    label: "关联对象的Id",
+                    name: "PunishmentId",
+                    label: "处罚结果",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -104,8 +104,8 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "CorrelationId",
-                    label: "关联Id",
+                    name: "ExecuteState",
+                    label: "执行情况",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -120,88 +120,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "spaceId",
-                    label: "空间",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "fileName",
-                    label: "文件名",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "fileSize",
-                    label: "文件大小",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "fileType",
-                    label: "文件类型",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: false,
-                    name: "fileId",
-                    label: "文件id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                },
-                {
-                    newline: true,
-                    name: "fileCode",
-                    label: "fileCode",
+                    name: "Url",
+                    label: "案件详情连接",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -217,20 +137,14 @@ function() {
             },
             common: {
                 saveCallbackType: "toClose"
-            },
-            link: {},
-            addins: {}
+            }
         },
-        dataset: 'web/dataset?model=attachment&viewname=form'
+        dataset: 'web/dataset?model=case_report&viewname=form'
     };
     exports.options.model = {
-        name: 'attachment',
-        title: '附件'
+        name: 'case_report',
+        title: '结案报告'
     };
-
-    exports.service = function service(page) {
-
-};
 
     return exports;
 });

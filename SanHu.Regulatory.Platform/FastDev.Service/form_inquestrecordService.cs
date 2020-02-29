@@ -9,6 +9,9 @@ using System.Text;
 
 namespace FastDev.Service
 {
+    /// <summary>
+    /// 勘验笔录
+    /// </summary>
     public class Form_inquestrecordService : SHBaseService, IService
     {
         public Form_inquestrecordService()
@@ -32,9 +35,9 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                data.form_Inquiryrecord.TaskId = data.SourceTaskId;
-                data.form_Inquiryrecord.EventInfoId = data.EventInfoId;
-                var form = ServiceHelper.GetService("form_inquiryrecord").Create(data.form_Inquiryrecord) as form_inquestrecord;
+                data.form_inquestrecord.TaskId = data.SourceTaskId;
+                data.form_inquestrecord.EventInfoId = data.EventInfoId;
+                var form = ServiceHelper.GetService("form_inquestrecord").Create(data.form_inquestrecord) as form_inquestrecord;
                 data.law_Staffs.ToList().ForEach(s => { s.AssociatedobjectID = form.ID; });
                 data.law_Parties.ToList().ForEach(s => { s.AssociationobjectID = form.ID; });
                 ServiceHelper.GetService("law_staff").SaveList(data.law_Staffs);

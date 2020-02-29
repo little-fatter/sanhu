@@ -13,7 +13,7 @@ namespace FD.Model.Dto
         /// <summary>
         /// 勘验记录
         /// </summary>
-        public form_inquestrecord form_Inquiryrecord { get; set; }
+        public form_inquestrecord form_inquestrecord { get; set; }
         /// <summary>
         /// 执法人
         /// </summary>

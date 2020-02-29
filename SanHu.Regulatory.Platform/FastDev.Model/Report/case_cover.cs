@@ -2,9 +2,14 @@ namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class law_party
+public partial class case_cover
 {
 public string ID
+{
+get;
+set;
+}
+public string TaskId
 {
 get;
 set;
@@ -14,67 +19,57 @@ public string CaseId
 get;
 set;
 }
-public string IDcard
+public string LawPartyIds
 {
 get;
 set;
 }
-public string address
+public string CaseTitle
 {
 get;
 set;
 }
-public string Contactnumber
+public string CauseOfAction
 {
 get;
 set;
 }
-public string Nameoflegalperson
+public string PunishmentTitle
 {
 get;
 set;
 }
-public string EventId
+public DateTime? CaseRegisterDay
 {
 get;
 set;
 }
-public string AssociationobjectID
+public string MainHandler
 {
 get;
 set;
 }
-public string Name
+public string CoOrganizer
 {
 get;
 set;
 }
-public string Gender
+public string Filinger
 {
 get;
 set;
 }
-public string Nationality
+public string FilingId
 {
 get;
 set;
 }
-public string WorkUnit
+public string SaveYear
 {
 get;
 set;
 }
-public string Associatedobjecttype
-{
-get;
-set;
-}
-public string Occupation
-{
-get;
-set;
-}
-public string Typesofparties
+public string EventInfoId
 {
 get;
 set;

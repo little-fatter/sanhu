@@ -29,16 +29,6 @@ public string Illegalfacts
 get;
 set;
 }
-public string IllegalbasisID
-{
-get;
-set;
-}
-public string PunishmentbasisID
-{
-get;
-set;
-}
 public string PunishmentdecisionID
 {
 get;
@@ -90,6 +80,21 @@ get;
 set;
 }
 public string TaskId
+{
+get;
+set;
+}
+public string IllegalbasisIDs
+{
+get;
+set;
+}
+public string PunishmentbasisIDs
+{
+get;
+set;
+}
+public string PunishmentTitle
 {
 get;
 set;

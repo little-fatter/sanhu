@@ -4,51 +4,77 @@
       label="巡查时间"
       :labelCol="{span:11}"
       :wrapperCol="{span:10}">
-      <div>时间</div>
+      <div>{{ detailData.PatrolTimeBegin }}至{{ detailData.PatrolTimeEnd }}</div>
     </a-form-item>
     <a-form-item
       label="巡查路线"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>某地至某地</div>
+      <div>{{ detailData.PatrolAddressBegin }}至{{ detailData.PatrolAddressEnd }}</div>
     </a-form-item>
     <a-form-item
       label="发现问题"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>问题描述</div>
+      <div>{{ detailData.Situation }}</div>
     </a-form-item>
     <a-form-item
       label="初步处理意见"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>意见描述</div>
+      <div>{{ detailData.HandlingOpinions }}</div>
+    </a-form-item>
+    <a-form-item
+      label="初步处理结果"
+      :labelCol="{lg: {span:11}}"
+      :wrapperCol="{span:10}">
+      <div>{{ detailData.Result }}</div>
     </a-form-item>
     <a-form-item
       label="巡查人员签名"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}">
-      <div>签名图片</div>
+      <div>{{ detailData.PatrolPerson }}</div>
     </a-form-item>
-    <a-form-item
+    <!-- <a-form-item
       label="附件"
       :labelCol="{lg: {span:11}}"
       :wrapperCol="{span:10}"
       :required="false"
     >
       <div>附件</div>
-    </a-form-item>
+    </a-form-item> -->
   </a-form>
 </template>
 
 <script>
+import { getFromPatrolRecord } from '@/api/sampleApi'
 export default {
   name: 'DetailEnforce',
-  data () {
-    return {
+  props: {
+    id: {
+      type: String,
+      default: null
     }
   },
+  data () {
+    return {
+      detailData: {}
+    }
+  },
+  mounted () {
+    this.getFromPatrolRecord()
+  },
   methods: {
+    getFromPatrolRecord () {
+      getFromPatrolRecord(this.id).then(res => {
+        this.detailData = res
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+
   }
 }
 </script>
