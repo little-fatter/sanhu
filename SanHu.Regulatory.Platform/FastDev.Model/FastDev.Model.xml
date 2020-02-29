@@ -74,7 +74,7 @@
             勘验记录
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.form_Inquiryrecord">
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.form_inquestrecord">
             <summary>
             勘验记录
             </summary>
@@ -224,24 +224,49 @@
             已移交
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.TaskType.Patrol">
+        <member name="F:FD.Model.Enum.TaskType.DailyPatrol">
             <summary>
-            巡查任务
+            日常巡查     
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.TaskType.Survey">
+        <member name="F:FD.Model.Enum.TaskType.EventCheck">
             <summary>
-            勘察
+            事件核查    
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.TaskType.Case">
+        <member name="F:FD.Model.Enum.TaskType.OnSpot">
             <summary>
-            案件任务
+            现场勘察       
             </summary>
         </member>
-        <member name="F:FD.Model.Enum.TaskType.law_punishmentInfo">
+        <member name="F:FD.Model.Enum.TaskType.CaseInfo">
             <summary>
-            现场决定处罚书任务
+            案件
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.Punishment">
+            <summary>
+            现场处罚决定书   
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.confiscated">
+            <summary>
+            没收物品
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.questionRecord">
+            <summary>
+            询问笔录
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.inquestRecord">
+            <summary>
+            勘验笔录
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.TaskType.finalReport">
+            <summary>
+            结案报告
             </summary>
         </member>
     </members>
