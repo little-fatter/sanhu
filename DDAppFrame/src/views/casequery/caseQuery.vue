@@ -18,7 +18,7 @@
     </form>
     <div class="case-panel-roll">
       <!-- list组件-->
-      <SList :dataCallback="loadData">
+      <SList :dataCallback="loadData" ref="mylist">
         <van-panel v-for="(item, index) in caseList" :key="index+'@'" class="case-panel" @click="goCaseDetails(item.caseId)">
           <div slot="header">
             <!--使用插槽取消面板头部-->
@@ -70,6 +70,7 @@ export default {
   data () {
     return {
       serchText: '', // 搜索内容
+      list: [],
       // 搜索条件
       serchType: 0,
       serchTypeOptions: [
@@ -124,7 +125,9 @@ export default {
   methods: {
     // 搜索事件
     onSearch () {
-      console.log(this.serchText)
+      // console.log(this.serchText)
+      this.list = []
+      this.$refs.mylist.refresh()
     },
     // 筛选
     serchTypeText () {
@@ -143,43 +146,54 @@ export default {
     goCaseDetails (msg) {
       this.$router.push({ name: 'caseDetails', params: { info: msg } })
     },
+    // 配置请求参数
     loadData (parameter) {
       var rules = []
       if (isNotEmpty(this.serchText)) {
+        console.log(1111)
         rules = [
           {
-            field: 'CauseOfAction',
-            op: 'like',
-            value: this.serchText,
+            field: 'CaseType', // 案件类型
+            op: 'equal',
+            value: this.serchType,
             type: 'string'
           },
           {
-            field: 'CaseType',
+            field: 'ApplicableProcedureID', // 案件适用程序
             op: 'like',
-            value: this.serchText,
+            value: this.serchFlow,
+            type: 'select'
+          },
+          {
+            field: 'CaseStatus', // 案件状态
+            op: 'equal',
+            value: this.serchState,
             type: 'string'
           },
           {
-            field: 'CaseTitle',
-            op: 'like',
-            value: this.serchText,
+            field: 'CaseTitle', // 区域
+            op: 'equal',
+            value: this.serchRegion,
             type: 'string'
           }
         ]
       }
-      var conditon = getQueryConditon(rules, 'or')
+      console.log('如果打印出来则没进入if判断')
+      var conditon = getQueryConditon(rules, 'and')
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.list.push(item)
           })
         }
+        // console.log(res)
         return res
       })
     }
   },
   // 生命周期函数
   mounted () {
+
   }
 
 }

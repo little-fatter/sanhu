@@ -7,8 +7,8 @@ const defaultCondition = { 'rules': [], 'groups': [], 'op': 'and' }
  * 字典表类型编号
  */
 export const DictionaryCode = {
-  // 事件类型
-  EventType: 'EventType'
+    // 事件类型
+    EventType: 'EventType'
 }
 
 /**
@@ -19,17 +19,15 @@ export const DictionaryCode = {
  * @param {*} Condition 查询条件
  */
 export const getPageDate = (model, PageIndex, PageSize, Condition = defaultCondition) => {
-  var url = `${apiConfig.regulatory.getPageDate}?model=${model}&appid=`
-  return postHttp(
-    {
-      url: url,
-      data: {
-        Condition,
-        PageIndex,
-        PageSize
-      }
-    }
-  )
+    var url = `${apiConfig.regulatory.getPageDate}?model=${model}&appid=`
+    return postHttp({
+        url: url,
+        data: {
+            Condition,
+            PageIndex,
+            PageSize
+        }
+    })
 }
 
 /**
@@ -38,13 +36,13 @@ export const getPageDate = (model, PageIndex, PageSize, Condition = defaultCondi
  * @param {*} id id
  */
 export const getDetaildata = (model, id) => {
-  return postHttp({
-    url: apiConfig.regulatory.getDetaildata,
-    data: {
-      model,
-      id
-    }
-  })
+    return postHttp({
+        url: apiConfig.regulatory.getDetaildata,
+        data: {
+            model,
+            id
+        }
+    })
 }
 
 /**
@@ -53,13 +51,13 @@ export const getDetaildata = (model, id) => {
  * @param {*} Condition 查询条件
  */
 export const getDetialdataByfilter = (model, Condition = defaultCondition) => {
-  return postHttp({
-    url: apiConfig.regulatory.getDetaildata,
-    data: {
-      model,
-      filter: Condition
-    }
-  })
+    return postHttp({
+        url: apiConfig.regulatory.getDetaildata,
+        data: {
+            model,
+            filter: Condition
+        }
+    })
 }
 
 /**
@@ -68,16 +66,14 @@ export const getDetialdataByfilter = (model, Condition = defaultCondition) => {
  * @param {*} eventInfoId 事件ID
  */
 export const getDetialdataByEventInfoId = (model, eventInfoId) => {
-  var rules = [
-    {
-      field: 'EventInfoId',
-      op: 'equal',
-      value: eventInfoId,
-      type: 'string'
-    }
-  ]
-  var conditon = getQueryConditon(rules)
-  return getDetialdataByfilter(model, conditon)
+    var rules = [{
+        field: 'EventInfoId',
+        op: 'equal',
+        value: eventInfoId,
+        type: 'string'
+    }]
+    var conditon = getQueryConditon(rules)
+    return getDetialdataByfilter(model, conditon)
 }
 
 /**
@@ -88,15 +84,15 @@ export const getDetialdataByEventInfoId = (model, eventInfoId) => {
  * @param {*} context
  */
 export const commonOperateApi = (id, model, data, context = '') => {
-  return postHttp({
-    url: apiConfig.regulatory.commonOperateApi,
-    data: {
-      id,
-      model,
-      data,
-      context
-    }
-  })
+    return postHttp({
+        url: apiConfig.regulatory.commonOperateApi,
+        data: {
+            id,
+            model,
+            data,
+            context
+        }
+    })
 }
 
 /**
@@ -104,13 +100,13 @@ export const commonOperateApi = (id, model, data, context = '') => {
  * @param {*} context
  */
 export const getDictionaryItems = (context) => {
-  return postHttp({
-    url: apiConfig.regulatory.getDictionaryItems,
-    data: {
-      model: 'res_dictionary',
-      context
-    }
-  })
+    return postHttp({
+        url: apiConfig.regulatory.getDictionaryItems,
+        data: {
+            model: 'res_dictionary',
+            context
+        }
+    })
 }
 
 /**
@@ -120,12 +116,12 @@ export const getDictionaryItems = (context) => {
  * @param {*} method 操作
  */
 export const commonSaveApi = (data, model, method = 'create') => {
-  return postHttp({
-    url: apiConfig.regulatory.commonSaveApi,
-    data: {
-      data,
-      model,
-      method
-    }
-  })
+    return postHttp({
+        url: apiConfig.regulatory.commonSaveApi,
+        data: {
+            data,
+            model,
+            method
+        }
+    })
 }

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { getDetaildata } from '../../api/regulatoryApi'
 export default {
   name: 'CaseFlies',
   data () {
@@ -21,7 +22,10 @@ export default {
   },
   mounted () {
     // 接收路由传参
-    console.log(this.$route.params.caseId)
+    // console.log(this.$route.params.caseId)
+    return getDetaildata('case_filing_report', this.$route.params.caseId).then((res) => {
+      console.log(res)
+    })
   }
 }
 </script>

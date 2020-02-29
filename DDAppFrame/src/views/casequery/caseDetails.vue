@@ -5,28 +5,29 @@
       <van-tag type="success">{{ caseInfo.caseState }}</van-tag>
     </div>
     <van-cell-group>
-      <van-field v-model="caseInfo.caseTitle" readonly/>
-      <van-field label="案件类型" v-model="caseInfo.caseType" readonly/>
-      <van-field label="适用程序" v-model="caseInfo.caseFlow" readonly/>
-      <van-field
-        readonly
-        label="当事人"
-        v-model="caseInfo.caseBreakLow"
-        error-message="123456789635874158"
-      />
-      <van-field label="事发时间" v-model="caseInfo.caseTime" readonly/>
-      <van-field label="案发地点" v-model="caseInfo.caseLocation" readonly>
-        <van-button slot="button" icon="location" size="small" type="info" @click="viewMap"/>
-      </van-field>
-      <van-field label="处罚决定文书号" v-model="caseInfo.caseJudgementNum" readonly/>
-      <van-field label="处罚种类" v-model="caseInfo.caseJudgmentType" readonly/>
-      <van-field label="执行情况" v-model="caseInfo.caseJudgementState" readonly/>
-      <van-field label="立案日期" v-model="caseInfo.caseCreateTime" readonly/>
-      <van-field label="结案日期" v-model="caseInfo.caseFinishTime" readonly/>
-      <van-field label="办案人员" v-model="caseInfo.caseLaw" readonly/>
-      <van-field label="归档人员" v-model="caseInfo.caseFileSavePeople" readonly/>
-      <van-field label="归档号" v-model="caseInfo.caseFileSaveNum" readonly/>
-      <van-field label="保存期限" v-model="caseInfo.caseSaveTime" readonly/>
+      <van-cell :title="caseInfo.caseTitle" title-class="title-cell title-cell-div" />
+      <van-cell title="案件类型" :value="caseInfo.caseType" value-class="con-style" title-class="title-cell" />
+      <van-cell title="适用程序" :value="caseInfo.caseFlow" value-class="con-style" title-class="title-cell" />
+      <van-cell title="当事人" :value="caseInfo.caseBreakLow" :label="caseInfo.caseBreakLowId" value-class="con-style" title-class="title-cell" />
+      <van-cell title="案发时间" :value="caseInfo.caseTime" value-class="con-style" title-class="title-cell" />
+      <van-cell title="案发地点" :value="caseInfo.caseLocation" value-class="con-style" title-class="title-cell">
+        <van-button
+          class="locationBtn"
+          slot="right-icon"
+          icon="location"
+          size="small"
+          type="info"
+          @click="viewMap"/>
+      </van-cell>
+      <van-cell title="处罚决定文书号" :value="caseInfo.caseJudgementNum" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚种类" :value="caseInfo.caseJudgmentType" value-class="con-style" title-class="title-cell" />
+      <van-cell title="执行情况" :value="caseInfo.caseJudgementState" value-class="con-style" title-class="title-cell" />
+      <van-cell title="立案日期" :value="caseInfo.caseCreateTime" value-class="con-style" title-class="title-cell" />
+      <van-cell title="结案日期" :value="caseInfo.caseFinishTime" value-class="con-style" title-class="title-cell" />
+      <van-cell title="办案人员" :value="caseInfo.caseLaw" value-class="con-style" title-class="title-cell" />
+      <van-cell title="归档人员" :value="caseInfo.caseFileSavePeople" value-class="con-style" title-class="title-cell" />
+      <van-cell title="归档号" :value="caseInfo.caseFileSaveNum" value-class="con-style" title-class="title-cell" />
+      <van-cell title="保存期限" :value="caseInfo.caseSaveTime" value-class="con-style" title-class="title-cell" />
     </van-cell-group>
     <!--        地图加载-->
     <van-dialog v-model="show" title="地图地址查看">
@@ -39,21 +40,20 @@
       </div>
       <div>
         <van-cell-group>
-          <van-field label="事发地点" v-model="eventInfo.location" readonly>
-            <van-button slot="button" icon="location" size="small" type="info" @click="viewMap"/>
-          </van-field>
-          <van-field label="上报时间" v-model="eventInfo.happenTime" readonly/>
-          <van-field label="上报来源" v-model="eventInfo.eventFrom" readonly/>
-          <van-field label="上报人" v-model="eventInfo.updatePeople" readonly/>
-          <van-field label="事件类型" v-model="eventInfo.eventType" readonly/>
-          <van-field
-            v-model="eventInfo.eventDesc"
-            readonly
-            rows="2"
-            autosize
-            label="事件描述"
-            type="textarea"
-          />
+          <van-cell title="事发地点" :value="eventInfo.location" value-class="con-style" title-class="title-cell">
+            <van-button
+              class="locationBtn"
+              slot="right-icon"
+              icon="location"
+              size="small"
+              type="info"
+              @click="viewMap"/>
+          </van-cell>
+          <van-cell title="上报时间" :value="eventInfo.happenTime" value-class="con-style" title-class="title-cell" />
+          <van-cell title="上报来源" :value="eventInfo.eventFrom" value-class="con-style" title-class="title-cell" />
+          <van-cell title="上报人" :value="eventInfo.updatePeople" value-class="con-style" title-class="title-cell" />
+          <van-cell title="事件类型" :value="eventInfo.eventType" value-class="con-style" title-class="title-cell" />
+          <van-cell title="事件描述" :value="eventInfo.eventDesc" value-class="con-style" title-class="title-cell" />
         </van-cell-group>
       </div>
     </van-panel>
@@ -72,6 +72,7 @@ export default {
         caseTitle: '违法使用泡沫制品简易浮动设施载人入湖', // 案由
         caseType: '水政',
         caseBreakLow: '张三', // 违法人员
+        caseBreakLowId: '123456789874858747', // 违法人员 身份证
         caseLaw: '李明', // 执法人员
         caseNumber: '案〔2020〕1234号', // 案件编号
         caseFlow: '一般流程',
@@ -105,7 +106,7 @@ export default {
       console.log(`到事件详情`)
     },
     caseFiles () {
-      this.$router.push({ name: 'caseFlies', params: { caseId: this.caseInfo.caseId } })
+      this.$router.push({ name: 'caseFlies', params: { caseId: '4d77125c-7352-4a5d-827c-c524cdac07ff' } })
     }
   },
   mounted () {
@@ -138,5 +139,26 @@ export default {
 
     /deep/ .van-field__error-message {
         color: #323232;
+    }
+    .title-cell{
+      width: 2.4rem;
+      flex: unset;
+    }
+    .title-cell-div{
+      width: 100%;
+    }
+    .con-style{
+      flex: 1;
+      text-align: left;
+    }
+    .locationBtn{
+      background-color: transparent;
+      border: none;
+    }
+    .locationBtn > i{
+      color: #1989fa;
+    }
+    .van-cell__label{
+      margin-left: 2.4rem;
     }
 </style>
