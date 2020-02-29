@@ -401,3 +401,34 @@ export const getQueryConditon = (rules = [], op = 'and') => {
 
   return conditon
 }
+
+/**
+ * 获取待办地址
+ * @param {*} routePath
+ */
+export const getTaskUrl = (routePath) => {
+  var webUrl = getMainUrl()
+  return `${webUrl}#/${routePath}`
+}
+
+/**
+ * 获取下一步任务信息
+ * @param {*} taskType
+ * @param {*} assignUsersID
+ * @param {*} routePath
+ * @param {*} taskContent
+ * @param {*} eventInfoId
+ * @param {*} caseID
+ */
+export const getNextTask = (taskType, assignUsersID, routePath, taskContent, eventInfoId, caseID) => {
+  var task = {
+    TaskType: taskType,
+    AssignUsers: assignUsersID,
+    RemoteLinks: getTaskUrl(routePath),
+    TaskContent: taskContent,
+    EventInfoId: eventInfoId,
+    CaseID: caseID
+  }
+
+  return task
+}

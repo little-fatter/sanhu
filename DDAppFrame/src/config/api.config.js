@@ -68,6 +68,7 @@ const apiConfig = {
     commonOperateApi: getHost('regulatory') + '/api',
     getDictionaryItems: getHost('regulatory') + '/api/items',
     commonSaveApi: getHost('regulatory') + '/save'
+
   }
 }
 
