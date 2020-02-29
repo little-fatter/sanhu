@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using WanJiang.Framework.Infrastructure.Logging;
 
 namespace FastDev.Service
 {
@@ -28,11 +29,10 @@ namespace FastDev.Service
         /// <param name="url">跳转地址</param>
         /// <param name="formTitle">待办表单标题</param>
         /// <param name="fromContent">待办表单内容</param>
-        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
+        public void CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
             var ddService = SysContext.GetService<IDingDingServices>();
-            //var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
-            ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
+            ddService.CreateWorkrecor(userId, title, url, formInfo);
         }
 
         /// <summary>
@@ -201,10 +201,27 @@ namespace FastDev.Service
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
             {
-                Task.LaskTaskId = sourcetaskid;
-                Task.InitiationTime = DateTime.Now;
+                Task.LaskTaskId = sourcetaskid;  //上一个任务id
+                Task.InitiationTime = DateTime.Now;  //状态
+                Task.TaskStatus = (int)WorkTaskStatus.Normal;  //状态
+                Task.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望完成时间
+                var loginClientInfo = SysContext.GetService<ClientInfo>();
+                if (loginClientInfo != null)
+                {
+                    Task.CreateUserID = loginClientInfo.UserId ?? null;  //任务创建人
+                }
+
+                Task.LocalLinks = Task.RemoteLinks;
+                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=";
                 var taskId = SaveWorkTask(Task);
-                CreateWorkrecor(Task.AssignUsers, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, Task.TaskType, Task.TaskContent);
+
+                string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);
+
+                var dic = new Dictionary<string, string>();
+                dic.Add("事件类型", taskTypeStr);
+                dic.Add("上报时间", Task.InitiationTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks + taskId, dic);
             }
             return true;
         }

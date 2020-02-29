@@ -14,7 +14,22 @@ namespace FastDev.Service
         public case_InfoService()
         {
             OnGetAPIHandler += case_InfoService_OnGetAPIHandler;
+            OnAfterGetPagedData += Case_InfoService_OnAfterGetPagedData;
         }
+
+        private void Case_InfoService_OnAfterGetPagedData(object query, object data)
+        {
+            var lst = (data as PagedData).Records;
+            var db = this.QueryDb;
+            for (int i = 0; i < lst.Count; i++)
+            {
+                var item = lst[i] as Dictionary<string, object>;
+                var partys = db.Fetch<law_party>("where Associatedobjecttype=@0 and CaseId=@1", new object[] { "case_info", item["ID"].ToString() });
+                //item.Add("LawPartys",JsonHelper.DeserializeJsonToObject partys);
+            }
+        }
+
+
 
         private SHBaseService _sHBaseService;
         private Func<APIContext, object> case_InfoService_OnGetAPIHandler(string id)

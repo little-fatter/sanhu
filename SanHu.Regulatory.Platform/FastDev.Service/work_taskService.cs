@@ -28,7 +28,22 @@ namespace FastDev.Service
         public work_taskService()
         {
             OnGetAPIHandler += Work_taskService_OnGetAPIHandler;
+            OnAfterGetDetailData += Work_taskService_OnAfterGetDetailData;
         }
+
+        private void Work_taskService_OnAfterGetDetailData(object query, object data)
+        {
+            var o = data as Dictionary<string, object>;
+            string taskType = o["TaskType"].ToString();
+            var db = this.QueryDb;
+            var items = db.FirstOrDefault<Model.Entity.res_dictionaryItems>("where DicID in (select ID from res_dictionary where DicCode = @0) and ItemCode=@1", "TaskType",taskType);
+            if (items != null)
+            {
+                o["TaskTypeInfo"] = new List<string>() {items.ItemCode,items.Title };
+            }
+        }
+
+
         ///// <summary>
         ///// work_task一般是自动创建
         ///// 手动创建的话，需要创建其他工作流的表单,这里专门处理一下手动创建work_task的情况
@@ -190,35 +205,16 @@ namespace FastDev.Service
         private object CreateTask(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<work_task>(context.Data);
-            data.RemoteLinks = "https://www.baidu.com";  //待办跳转地址
-
-            //var data = new work_task();
-            //data.TaskType = "巡查";
-            //data.TaskContent = "任务内容描述";
-            //data.EventInfoId = "1";
-            data.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望时间增加一天
-            //data.MainHandler = "主办人测试";
-            //var a = JsonConvert.SerializeObject(data);
-
-            //data.AssignUsersID = "";
-            //data.CreateUserID = SysContext.GetService<ClientInfo>().UserId;
-
-            var loginClientInfo = SysContext.GetService<ClientInfo>(); 
-            if(loginClientInfo != null)
-            {
-                data.CreateUserID = loginClientInfo.UserId;
-            }
-
             QueryDb.BeginTransaction();
             try
             {
                 CreatTasksAndCreatWorkrecor(new work_task[] { data }, "");
                 QueryDb.CompleteTransaction();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                return false; ;
+                throw e;
             }
             return true;
         }

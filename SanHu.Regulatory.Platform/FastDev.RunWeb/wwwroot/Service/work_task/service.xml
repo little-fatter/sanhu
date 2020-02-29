@@ -24,11 +24,12 @@
         <field name="TaskType" dbName="TaskType" title="任务类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="LaskTaskId" dbName="LaskTaskId" title="引发本次任务的任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="AssignUsers" dbName="AssignUsers" title="任务执行人" type="string" length="50" isPK="N" />
+        <field name="TaskTypeInfo" dbName="TaskTypeInfoID" title="任务类型描述" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
-    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
-    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="TaskTypeInfo" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="TaskTypeInfo" one2many="" many2many="" />
 </freedesign>

@@ -12,6 +12,7 @@
         <field name="Endtime" dbName="Endtime" title="结束时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="Companions" dbName="Companions" title="陪同人" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="Inspectionrecord" dbName="Inspectionrecord" title="勘验记录" type="string" length="200" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
