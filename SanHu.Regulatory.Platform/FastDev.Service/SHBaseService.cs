@@ -4,6 +4,7 @@ using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
 using FD.Model.Enum;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -153,8 +154,7 @@ namespace FastDev.Service
         {
             var filter = new FilterGroup();
             filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
-            var a = ServiceHelper.GetService("attachment").GetListData(filter); ;
-            return a;
+            return ServiceHelper.GetService("attachment").GetListData(new FilterGroup());
         }
 
         private object GetParties(string formid, string formType)

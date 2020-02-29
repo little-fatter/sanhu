@@ -56,8 +56,8 @@ function() {
                 },
                 {
                     newline: false,
-                    name: "CorrelationID",
-                    label: "关联id",
+                    name: "Remark",
+                    label: "备注",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -72,8 +72,136 @@ function() {
                 },
                 {
                     newline: true,
-                    name: "Remark",
-                    label: "备注",
+                    name: "Associatedobjecttype",
+                    label: "关联表单的类型",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "AssociationobjectID",
+                    label: "关联对象的Id",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "CorrelationId",
+                    label: "关联Id",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "spaceId",
+                    label: "空间",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "fileName",
+                    label: "文件名",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "fileSize",
+                    label: "文件大小",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "fileType",
+                    label: "文件类型",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: false,
+                    name: "fileId",
+                    label: "文件id",
+                    editor: {
+                        many2many: "ref_select_mul",
+                        many2one: "ref_select",
+                        one2many: "ref_grid_edit",
+                        datetime: "datepicker",
+                        integer: "int",
+                        float: "float",
+                        boolean: "checkbox",
+                        type: "text"
+                    },
+                    type: "text"
+                },
+                {
+                    newline: true,
+                    name: "fileCode",
+                    label: "fileCode",
                     editor: {
                         many2many: "ref_select_mul",
                         many2one: "ref_select",
@@ -91,18 +219,7 @@ function() {
                 saveCallbackType: "toClose"
             },
             link: {},
-            addins: {
-                items: [{
-                    name: "增加数据打印按钮",
-                    title: "增加数据打印按钮(增加数据打印按钮)",
-                    value: {
-                        title: "增加数据打印按钮",
-                        value: {
-                            buttonText: "打印数据"
-                        }
-                    }
-                }]
-            }
+            addins: {}
         },
         dataset: 'web/dataset?model=attachment&viewname=form'
     };
