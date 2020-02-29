@@ -36,6 +36,17 @@ namespace FastDev.Service
         }
 
         /// <summary>
+        /// 撤回待办
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="recordId"></param>
+        public void WorkrecordUpdate(string userId,string recordId)
+        {
+            var ddService = SysContext.GetService<IDingDingServices>();
+            ddService.WorkrecordUpdate(userId, recordId);
+        }
+
+        /// <summary>
         /// 修改事件状态
         /// </summary>
         /// <param name="eventId"></param>
@@ -102,6 +113,12 @@ namespace FastDev.Service
             if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
             taskInfo.CompleteTime = DateTime.Now;
+
+            if(workTaskStatus == WorkTaskStatus.Normal)
+            {
+                WorkrecordUpdate(taskInfo.AssignUsers, taskInfo.TodotaskID);
+            }
+
             QueryDb.Update(taskInfo);
         }
 

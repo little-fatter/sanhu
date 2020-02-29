@@ -33,6 +33,18 @@ namespace FastDev.Service
 
             return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
+        public async Task<bool> WorkrecordUpdate(string userId, string record_id)
+        {
+            var oapiWorkrecordAddRequest = new OapiWorkrecordUpdateRequest() { };
+            var url = "framework/api/dingding/WorkrecordUpdateAsync?" + GetAgentIDString();
+
+            var result= await PostFrameWork<OapiWorkrecordUpdateResponse>(url, oapiWorkrecordAddRequest);
+            if (result.Errcode==0)
+            {
+                return result.Result;
+            }
+            return false;
+        }
         public string CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
             OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
