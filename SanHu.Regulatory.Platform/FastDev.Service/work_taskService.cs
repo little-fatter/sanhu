@@ -28,7 +28,22 @@ namespace FastDev.Service
         public work_taskService()
         {
             OnGetAPIHandler += Work_taskService_OnGetAPIHandler;
+            OnAfterGetDetailData += Work_taskService_OnAfterGetDetailData;
         }
+
+        private void Work_taskService_OnAfterGetDetailData(object query, object data)
+        {
+            var o = data as Dictionary<string, object>;
+            string taskType = o["TaskType"].ToString();
+            var db = this.QueryDb;
+            var items = db.FirstOrDefault<Model.Entity.res_dictionaryItems>("where DicID in (select ID from res_dictionary where DicCode = @0) and ItemCode=@1", "TaskType",taskType);
+            if (items != null)
+            {
+                o["TaskTypeInfo"] = new List<string>() {items.ItemCode,items.Title };
+            }
+        }
+
+
         ///// <summary>
         ///// work_task一般是自动创建
         ///// 手动创建的话，需要创建其他工作流的表单,这里专门处理一下手动创建work_task的情况

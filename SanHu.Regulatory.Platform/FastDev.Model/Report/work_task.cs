@@ -119,6 +119,11 @@ public string AssignUsers
 get;
 set;
 }
+public string TaskTypeInfoID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
