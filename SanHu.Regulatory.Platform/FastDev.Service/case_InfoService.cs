@@ -24,14 +24,14 @@ namespace FastDev.Service
 
         private void Case_InfoService_GetDetail(object query, object data)
         {
-            var caseinfo = data as Dictionary<string, object>;
-            var userid = caseinfo["CreateUser"] as List<string>;
-            if (userid != null)
-            {
-                ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
-                var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid[0] }");
-                caseinfo.Add("Jobnumber",user.Jobnumber);
-            }
+            //var caseinfo = data as Dictionary<string, object>;
+            //var userid = caseinfo["CreateUser"] as List<string>;
+            //if (userid != null)
+            //{
+            //    ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            //    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid[0] }");
+            //    caseinfo.Add("Jobnumber",user.Jobnumber);
+            //}
         }
 
 
