@@ -1,7 +1,7 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务" :value="taskInfo.Tasktype"></van-cell>
+      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
       <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
       <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
@@ -91,7 +91,7 @@
         >
           <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
         </van-field>
-        <party-info></party-info>
+        <party-info ref="party"></party-info>
         <van-field
           v-model="caseInfo.CoOrganizer"
           label="协办人"
@@ -111,11 +111,13 @@
 </template>
 
 <script>
-import { formatDate, isNotEmpty } from '../../../utils/util'
+import { formatDate, isNotEmpty, getNextTask } from '../../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import PartyInfo from '../../../components/business/PartyInfo'
 import EventListSelect from '../../../components/business/EventListSelect'
-import { getDictionaryItems, DictionaryCode, getDetaildata } from '../../../api/regulatoryApi'
+import { getDictionaryItems, DictionaryCode, getDetaildata, commonOperateApi, TaskTypeDic } from '../../../api/regulatoryApi'
+import { getCurrentUserInfo } from '../../../service/currentUser.service'
+var timer = null
 export default {
   name: 'CaseCreate',
   components: {
@@ -140,8 +142,8 @@ export default {
         IncidentTime: null,
         IncidentAddress: '',
         IncidentAddressXY: '',
-        organiser: {
-        }
+        CoOrganizer: '',
+        CoOrganizerId: ''
       },
       event: {},
       caseTypeoptions: [
@@ -155,12 +157,17 @@ export default {
   created () {
     this.init()
   },
+  beforeDestroy () {
+    if (isNotEmpty(timer)) {
+      clearTimeout(timer)
+    }
+  },
   methods: {
     init () {
       const queryParam = this.$route.query
-      const taskId = queryParam.taskId
+      const taskId = queryParam.taskid
       if (isNotEmpty(taskId)) {
-        this.loadTaskInfo()
+        this.loadTaskInfo(taskId)
       }
       this.loadCaseTypes()
       this.loadSourceofcases()
@@ -179,7 +186,7 @@ export default {
       })
     },
     loadSourceofcases () {
-      getDictionaryItems(DictionaryCode.Sourceofcase).then((items) => {
+      getDictionaryItems(DictionaryCode.CaseSourceType).then((items) => {
         var sourceofcaseoptions = []
         if (isNotEmpty(items)) {
           items.forEach(item => {
@@ -231,6 +238,7 @@ export default {
           name: res.users[0].name,
           id: res.users[0].emplId
         }
+        console.log('organiserTemp', organiserTemp)
         this.caseInfo.CoOrganizer = organiserTemp.name
         this.caseInfo.CoOrganizerId = organiserTemp.id
       })
@@ -252,11 +260,41 @@ export default {
       this.caseInfo.IncidentAddressXY = incidentAddressXY
       this.showPopup = false
     },
+    save (data) {
+      this.loading = true
+      commonOperateApi('FINISH', 'case_Info', data).then((res) => {
+        this.$toast.success('操作成功')
+        this.goToLawForm()
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     onSubmit (values) {
       console.log('submit', values)
+      var caseInfo = {
+        ...this.caseInfo,
+        IncidentAddressXY: this.caseInfo.IncidentAddressXY
+      }
+      var data = {
+        SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
+        EventInfoId: this.event.objId,
+        caseInfo,
+        NextTasks: []
+      }
+      var userInfo = getCurrentUserInfo()
+      var nextTask = null
+      nextTask = getNextTask(TaskTypeDic.Punishment, userInfo.userid, 'penalizeBookCreate', '当场处罚决定书', this.event.objId)
+      data.NextTasks.push(nextTask)
+      data.LawParties = this.$refs.party.getResult()
+      this.save(data)
     },
     onFailed (errorInfo) {
       console.log('failed', errorInfo)
+    },
+    goToLawForm () {
+      timer = setTimeout(() => {
+        this.$router.push({ name: 'layforms' })
+      }, 1000)
     }
   }
 }
