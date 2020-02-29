@@ -30,8 +30,10 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
-            if (data.LawPunishmentInfo == null) return false;
+            if (data.LawPunishmentInfo == null) throw new Exception();
             QueryDb.BeginTransaction();
+            data.LawPunishmentInfo.EventInfoId = data.EventInfoId;
+            data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
@@ -41,7 +43,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;

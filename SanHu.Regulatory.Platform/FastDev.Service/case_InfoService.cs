@@ -30,7 +30,9 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<case_InfoFinishReq>(context.Data);    
-            if (data.CaseInfo == null) return false;
+            if (data.CaseInfo == null) throw new Exception();
+            data.CaseInfo.TaskId = data.SourceTaskId;
+            data.CaseInfo.EventInfoId = data.EventInfoId;
             QueryDb.BeginTransaction();
             try
             {
@@ -41,7 +43,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
