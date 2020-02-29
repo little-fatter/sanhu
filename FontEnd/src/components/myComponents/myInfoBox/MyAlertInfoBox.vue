@@ -204,8 +204,8 @@ export default {
       // console.log(this.taskPanel)
       var EventInfoId = this.info.id
       var MainHandler = this.taskPanel.mainPerson
-      var selectIndex = this.taskPanel.list.findIndex(x => x.name === MainHandler)
-      var AssignUsersID = this.taskPanel.list[selectIndex].id
+      // var selectIndex = this.taskPanel.list.findIndex(x => x.name === MainHandler)
+      // var AssignUsersID = this.taskPanel.list[selectIndex].id
       var CoOrganizer = this.taskPanel.subPeople.toString()
       var ExpectedCompletionTime = this.taskPanel.time.format('YYYY-MM-DD HH:mm:ss')
       // var url = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/webapi/api'
@@ -214,7 +214,7 @@ export default {
       var RemoteLinks = appConfig.AppHost + 'eventCheckCreate'
       var data = {
         'TaskType': 'EventCheck', // 任务类型
-        'AssignUsers': AssignUsersID, // 执行人
+        'AssignUsers': '165906044420484870', // 执行人
         'RemoteLinks': RemoteLinks, // 钉钉url连接
         'TaskContent': '任务描述' + Math.random(), // 任务描述
         'EventInfoId': EventInfoId, // 事件id
@@ -229,12 +229,13 @@ export default {
       //   model: 'work_task',
       //   data: JSON.stringify(data)
       // }
-      var body = '{"id": "create","model": "work_task","data": \'' + JSON.stringify(data) + '"\'}'
+      var body = '{"id": "create","model": "work_task","data":\'' + JSON.stringify(data) + '\'}'
       console.log('body', body)
       this.dataGet.doPostDataAjaxNotSetObject(url, body)
         .then(function (res) {
           console.log(res)
         })
+      this.taskPanel.show = false
     }
   }
 }
