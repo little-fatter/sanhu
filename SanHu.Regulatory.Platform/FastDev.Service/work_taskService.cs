@@ -190,18 +190,8 @@ namespace FastDev.Service
         private object CreateTask(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<work_task>(context.Data);
-            data.RemoteLinks = "https://www.baidu.com";  //待办跳转地址
-
-            //var data = new work_task();
-            //data.TaskType = "巡查";
-            //data.TaskContent = "任务内容描述";
-            //data.EventInfoId = "1";
-            data.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望时间增加一天
-            //data.MainHandler = "主办人测试";
-            //var a = JsonConvert.SerializeObject(data);
-
-            //data.AssignUsersID = "";
-            //data.CreateUserID = SysContext.GetService<ClientInfo>().UserId;
+            data.TaskStatus =(int)WorkTaskStatus.Normal;
+            data.ExpectedCompletionTime = DateTime.Now.AddDays(1);  
 
             var loginClientInfo = SysContext.GetService<ClientInfo>(); 
             if(loginClientInfo != null)

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using WanJiang.Framework.Infrastructure.Logging;
 
 namespace FastDev.Service
 {
@@ -201,8 +202,16 @@ namespace FastDev.Service
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
             {
-                Task.LaskTaskId = sourcetaskid;
-                Task.InitiationTime = DateTime.Now;
+                Task.LaskTaskId = sourcetaskid;  //上一个任务id
+                Task.InitiationTime = DateTime.Now;  //状态
+                Task.TaskStatus = (int)WorkTaskStatus.Normal;  //状态
+                Task.ExpectedCompletionTime = DateTime.Now.AddDays(1);  //期望完成时间
+                var loginClientInfo = SysContext.GetService<ClientInfo>();
+                if (loginClientInfo != null)
+                {
+                    Task.CreateUserID = loginClientInfo.UserId;  //任务创建人
+                }
+
                 Task.LocalLinks = Task.RemoteLinks;
                 Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=";
                 var taskId = SaveWorkTask(Task);
