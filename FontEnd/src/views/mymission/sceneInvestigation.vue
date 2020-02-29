@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import { getEventDetails, getTaskDetails } from '@/api/sampleApi'
+import { getRelateForm, getEventDetails, getTaskDetails } from '@/api/sampleApi'
 import partyForm from './components/partyorcompany'
 
 export default {
@@ -236,9 +236,27 @@ export default {
         console.log(err)
       })
     },
+    getRelateForm () {
+      const params = {
+        rules: [
+          {
+            field: 'EventInfoId',
+            op: 'equal',
+            value: this.missionData.EventInfoId,
+            type: 'string'
+          }
+        ]
+      }
+      getRelateForm(params).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     getMissionDetail () {
       getTaskDetails(this.Id).then(res => {
         this.missionData = res
+        this.getRelateForm()
         console.log(res)
       }).catch(err => {
         console.log(err)
