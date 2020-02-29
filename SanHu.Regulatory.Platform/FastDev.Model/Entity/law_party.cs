@@ -34,22 +34,12 @@ public string Nameoflegalperson
 get;
 set;
 }
-public string TypesofpartiesID
-{
-get;
-set;
-}
 public string EventId
 {
 get;
 set;
 }
 public string AssociationobjectID
-{
-get;
-set;
-}
-public string Associatedobjecttype
 {
 get;
 set;
@@ -64,12 +54,27 @@ public string Gender
 get;
 set;
 }
+public string Nationality
+{
+get;
+set;
+}
+public string WorkUnit
+{
+get;
+set;
+}
+public string Associatedobjecttype
+{
+get;
+set;
+}
 public string Occupation
 {
 get;
 set;
 }
-public string Nationality
+public string Typesofparties
 {
 get;
 set;

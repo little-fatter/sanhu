@@ -13,10 +13,16 @@ namespace FastDev.IServices
         /// 新增待办
         /// </summary>
         Task<OapiWorkrecordAddResponse> WorkrecordAdd(OapiWorkrecordAddRequest oapiWorkrecordAddRequest);
+        /// <summary>
+        /// 更新取消待办
+        /// </summary>
+        /// <param name="oapiWorkrecordAddRequest"></param>
+        /// <returns></returns>
+        Task<bool> WorkrecordUpdate(string userId, string record_id);
 
         /// <summary>
         /// 新增待办
         /// </summary>
-        void  CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent);
+        string CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo);
     }
 }

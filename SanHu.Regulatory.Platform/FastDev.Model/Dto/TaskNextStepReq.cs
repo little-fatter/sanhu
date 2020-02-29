@@ -12,6 +12,10 @@ namespace FD.Model.Dto
         /// <summary>
         /// 当前任务关联的事件id
         /// </summary>
-        public string  EvnetInfoId { get; set; }
+        public string  TaskId { get; set; }
+        /// <summary>
+        /// 待办地址
+        /// </summary>
+        public string Url { get; set; }
     }
 }

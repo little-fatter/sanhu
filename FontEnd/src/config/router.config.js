@@ -196,7 +196,22 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // 一张图
+      {
+        path: 'map',
+        name: 'Map',
+        component: RouteView,
+        redirect: '/map/index',
+        meta: { titile: '一张图' },
+        children: [
+          {
+            path: 'index',
+            name: 'Index',
+            meta: { title: '一张图' },
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/mapV/mapV')
+          }
+        ]
+      },
       // result
       {
         path: 'result',

@@ -1,9 +1,9 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务类型" value="执法现场检查"></van-cell>
-      <van-cell title="交办时间" value="2020-02-15"></van-cell>
-      <van-cell title="期望时间" value="2020-02-15"></van-cell>
+      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
+      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -78,7 +78,7 @@
           >
             <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
           </van-field>
-          <party-info></party-info>
+          <party-info ref="party"></party-info>
           <van-field
             name="Result"
             v-model="eventCheck.Result"
@@ -96,7 +96,8 @@
           <item-group title="附件">
             <s-upload
               ref="myupload"
-              :sync2Dingding="false"
+              :accept="accept"
+              :sync2Dingding="true"
             >
             </s-upload>
           </item-group>
@@ -168,14 +169,16 @@
 </template>
 
 <script>
-import { isNotEmpty, formatDate, isEmpty } from '../../utils/util'
+import { isNotEmpty, formatDate, isEmpty, getNextTask } from '../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../service/ddJsApi.service'
 import ItemGroup from '../../components/tools/ItemGroup'
 import SUpload from '../../components/file/StandardUploadFile'
 import { phoneValidator, idcardValidator } from '../../utils/helper/validate.helper'
 import PartyInfo from '../../components/business/PartyInfo'
 import EventListSelect from '../../components/business/EventListSelect'
-import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, getDetialdataByEventInfoId, commonSaveApi } from '../../api/regulatoryApi'
+import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, getDetialdataByEventInfoId, commonSaveApi, TaskTypeDic } from '../../api/regulatoryApi'
+import { AcceptImageAll } from '../../utils/helper/accept.helper'
+import { getCurrentUserInfo } from '../../service/currentUser.service'
 var timer = null
 /**
  * 执法现场核查
@@ -202,6 +205,7 @@ export default {
       { validator: idcardValidator, message: ' ' }
     ]
     return {
+      accept: AcceptImageAll,
       loading: false,
       taskInfo: null,
       event: {},
@@ -241,9 +245,9 @@ export default {
   methods: {
     init () {
       const queryParam = this.$route.query
-      const taskId = queryParam.taskId
+      const taskId = queryParam.taskid
       if (isNotEmpty(taskId)) {
-        this.loadTaskInfo()
+        this.loadTaskInfo(taskId)
       }
       this.loadEventTypes()
     },
@@ -265,20 +269,32 @@ export default {
       getDetaildata('work_task', taskId).then(res => {
         this.taskInfo = res
         this.loadEventInfo(res.EventInfoId)
-        this.loadEventCheck(res.EventInfoId)
       })
     },
     loadEventInfo (EventInfoId) {
       getDetaildata('event_info', EventInfoId).then((res) => {
         if (res) {
           this.event = res
+          this.loadEventCheck(EventInfoId, this.event)
         }
       })
     },
-    loadEventCheck (EventInfoId) {
-      getDetialdataByEventInfoId('task_survey', EventInfoId).then((res) => {
+    loadEventCheck (EventInfoId, event) {
+      getDetialdataByEventInfoId('task_patrol', EventInfoId).then((res) => {
         if (res) {
-          this.eventCheck = res
+          this.eventCheck = {
+            ...this.eventCheck,
+            ...res
+          }
+        } else {
+          this.eventCheck.EventDescribe = event.remark
+          this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
+          this.eventCheck.IncidentAddress = event.address
+          var incidentAddressXY = ''
+          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+            incidentAddressXY = event.lng + ',' + event.lat
+          }
+          this.eventCheck.IncidentAddressXY = incidentAddressXY
         }
       })
     },
@@ -319,10 +335,13 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      getDetialdataByEventInfoId('task_survey', event.objId).then((res) => {
-        console.log('task_survey', res)
+      getDetialdataByEventInfoId('task_patrol', event.objId).then((res) => {
         if (res) {
-          this.eventCheck = res
+          this.eventCheck = {
+            ...res,
+            ProcessingDecisions: 1,
+            ExistCrim: null
+          }
         } else {
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
@@ -344,7 +363,8 @@ export default {
           done(false)
         } else {
           var data = {
-            TaskId: this.taskInfo.ID,
+            SourceTaskId: this.taskInfo.ID,
+            EventInfoId: this.event.objId,
             Reason: this.rejectReason
           }
           this.loading = true
@@ -365,17 +385,34 @@ export default {
     },
     onSubmit (values) {
       console.log('submit', values)
-      var data = {
-        EventInfoId: this.event.objId,
-        ID: this.eventCheck.ID,
+      var TaskSurvey = {
         ...values,
         IncidentAddressXY: this.eventCheck.IncidentAddressXY
       }
+      var data = {
+        SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
+        EventInfoId: this.event.objId,
+        TaskSurvey,
+        NextTasks: []
+      }
+      var userInfo = getCurrentUserInfo()
+      var nextTask = null
+      var attachments = this.$refs.myupload.getUploadResult()
+      if (attachments && attachments.length > 0) {
+        data.Attachments = attachments
+      }
+      data.LawParties = this.$refs.party.getResult()
+      if (this.eventCheck.ProcessingDecisions === 3) {
+        nextTask = getNextTask(TaskTypeDic.OnSpot, userInfo.userid, 'caseCreate', '案件创建', this.event.objId)
+        data.NextTasks.push(nextTask)
+      }
+      this.save(data)
+    },
+    save (data) {
       this.loading = true
-      var method = isNotEmpty(data.ID) ? 'update' : 'create'
-      commonSaveApi(data, 'task_survey', method).then((res) => {
+      commonOperateApi('FINISH', 'task_survey', data).then((res) => {
         this.$toast.success('操作成功')
-        // this.goToLawForm()
+        this.goToLawForm()
       }).finally(() => {
         this.loading = false
       })
@@ -390,9 +427,13 @@ export default {
         //   id: res.users[0].emplId
         // }
         var user = res.users[0]
+        var nextTask = getNextTask(TaskTypeDic.EventCheck, user.emplId, 'eventCheckCreate', '事件核查', this.event.objId)
         var data = {
-          TaskId: this.taskInfo.ID,
-          UserId: user.emplId
+          SourceTaskId: this.taskInfo.ID,
+          EventInfoId: this.event.objId,
+          NextTasks: [
+            nextTask
+          ]
         }
         this.loading = true
         commonOperateApi('HANDOVER', 'work_task', data).then((res) => {

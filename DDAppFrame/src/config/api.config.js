@@ -60,7 +60,7 @@ const apiConfig = {
     }
   },
   /**
-   * 业务Api
+   * 业务API
    */
   regulatory: {
     getPageDate: getHost('regulatory') + '/pageddata',

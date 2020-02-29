@@ -2,26 +2,27 @@
   <van-cell-group :title="`${title}信息`">
     <van-panel v-for="(item,index) in partys" :key="index" :title="`${title}(${index+1})`">
       <van-field>
-        <van-radio-group v-model="item.partyType" direction="horizontal" slot="input">
-          <van-radio :name="1">个人</van-radio>
-          <van-radio :name="2">单位</van-radio>
+        <van-radio-group v-model="item.TypesofpartiesID" direction="horizontal" slot="input">
+          <!-- <van-radio :name="1">个人</van-radio>
+          <van-radio :name="2">单位</van-radio> -->
+          <van-radio v-for="(typeItem,mindex) in typesofparties" :key="mindex" :name="typeItem.value">{{ typeItem.text }}</van-radio>
         </van-radio-group>
       </van-field>
-      <template v-if="item.partyType==1">
+      <template v-if="item.TypesofpartiesID==defaultTypesofpartieID">
         <van-field
-          v-model="item.name"
+          v-model="item.Name"
           placeholder="请输入姓名"
           required
           :rules="requiredRule"
         />
         <van-field>
-          <van-radio-group v-model="item.sex" direction="horizontal" slot="input">
-            <van-radio :name="1">男</van-radio>
-            <van-radio :name="2">女</van-radio>
+          <van-radio-group v-model="item.Gender" direction="horizontal" slot="input">
+            <van-radio :name="'男'">男</van-radio>
+            <van-radio :name="'女'">女</van-radio>
           </van-radio-group>
         </van-field>
         <van-field
-          v-model="item.idCard"
+          v-model="item.IDcard"
           placeholder="请输入身份证"
           required
           :rules="idCardRules"
@@ -38,35 +39,39 @@
           :rules="requiredRule"
         />
         <van-field
-          v-model="item.phone"
+          v-model="item.Contactnumber"
           placeholder="请输入手机"
           required
           :rules="phoneRules"
         />
         <van-field
-          v-model="item.nation"
+          v-model="item.Occupation"
+          placeholder="请输入职业"
+        />
+        <van-field
+          v-model="item.Nationality"
           placeholder="请输入民族"
         />
         <van-field
-          v-model="item.company"
+          v-model="item.WorkUnit"
           placeholder="请输入工作单位"
         />
       </template>
       <template v-else>
         <van-field
-          v-model="item.name"
+          v-model="item.Name"
           placeholder="请输入名称"
           required
           :rules="requiredRule"
         />
         <van-field
-          v-model="item.legalName"
+          v-model="item.Nameoflegalperson"
           placeholder="请输入法人姓名"
           required
           :rules="requiredRule"
         />
         <van-field
-          v-model="item.idCard"
+          v-model="item.IDcard"
           placeholder="请输入法人身份证"
           required
           :rules="idCardRules"
@@ -83,7 +88,7 @@
           :rules="requiredRule"
         />
         <van-field
-          v-model="item.tel"
+          v-model="item.Contactnumber"
           placeholder="请输入联系电话"
           required
           :rules="requiredRule"
@@ -115,6 +120,8 @@
 <script>
 import { phoneValidator, idcardValidator } from '../../utils/helper/validate.helper'
 import ItemGroup from '../../components/tools/ItemGroup'
+import { getDictionaryItems } from '../../api/regulatoryApi'
+import { isNotEmpty } from '../../utils/util'
 
 /**
  * 当事人信息组件（单位个人）
@@ -152,7 +159,9 @@ export default {
       // { validator: idcardValidator, message: '身份证号格式错误' }
     ]
     return {
-      partys: []
+      partys: [],
+      typesofparties: [],
+      defaultTypesofpartieID: null
     }
   },
   created () {
@@ -161,17 +170,31 @@ export default {
   watch: {
     initData (val) {
       if (val && val.length >= 1) {
-        const partys = []
-        this.initData.forEach(item => {
-          partys.push(item)
-        })
-        this.partys = partys
+        this.loadTypesofparties(val)
       }
     }
   },
   methods: {
     init () {
-      if (this.initData.length === 0) {
+      this.loadTypesofparties(this.initData)
+    },
+    loadTypesofparties (initData) {
+      getDictionaryItems('Typesofparties').then(items => {
+        var typesofparties = []
+        if (isNotEmpty(items)) {
+          items.forEach(item => {
+            typesofparties.push({
+              text: item.Title, value: item.ItemCode
+            })
+            this.defaultTypesofpartieID = items[0].ItemCode
+          })
+        }
+        this.typesofparties = typesofparties
+        this.initParty(initData)
+      })
+    },
+    initParty (initData) {
+      if (initData.length === 0) {
         this.addparty()
       } else {
         const partys = []
@@ -186,21 +209,18 @@ export default {
       party.partyType = value
     },
     addparty () {
-    //   var index = this.partys.length + 1
       var party = {
-        partyType: 1,
-        name: '',
-        sex: 1,
-        profession: '',
-        idCard: '',
+        TypesofpartiesID: this.defaultTypesofpartieID,
+        Name: '',
+        Gender: '男',
+        Occupation: '',
+        IDcard: '',
         address: '',
-        phone: '',
-        legalName: '',
-        tel: '',
-        company: '',
-        nation: ''
+        Contactnumber: '',
+        Nameoflegalperson: '',
+        Nationality: '',
+        WorkUnit: ''
       }
-      //   party.title = '当事人(' + index + ')'
       this.partys.push(party)
     },
     removeParty (index) {

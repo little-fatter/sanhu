@@ -69,12 +69,7 @@ public string EventInfoId
 get;
 set;
 }
-public string CaseID
-{
-get;
-set;
-}
-public string TaskID
+public string FormType
 {
 get;
 set;

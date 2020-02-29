@@ -19,8 +19,8 @@ namespace FastDev.Service
         {
             switch (id.ToUpper())
             {
-                case "GET":
-                    return GetList;
+                //case "GET":
+                    //return GetList;
             }
             return null;
         }

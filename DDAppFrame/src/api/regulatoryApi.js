@@ -3,12 +3,25 @@ import apiConfig from '@/config/api.config'
 import { getQueryConditon } from '../utils/util'
 const defaultCondition = { 'rules': [], 'groups': [], 'op': 'and' }
 
+/** 任务类型 */
+export const TaskTypeDic = {
+  // 事件巡查
+  EventCheck: 'EventCheck',
+  // 现场勘查
+  OnSpot: 'OnSpot'
+}
 /**
  * 字典表类型编号
  */
 export const DictionaryCode = {
   // 事件类型
-  EventType: 'EventType'
+  EventType: 'EventType',
+  // 当事人类型
+  Typesofparties: 'Typesofparties',
+  // 案件类型
+  CaseType: 'CaseType',
+  // 案件来源
+  Sourceofcase: 'Sourceofcase '
 }
 
 /**
@@ -20,16 +33,14 @@ export const DictionaryCode = {
  */
 export const getPageDate = (model, PageIndex, PageSize, Condition = defaultCondition) => {
   var url = `${apiConfig.regulatory.getPageDate}?model=${model}&appid=`
-  return postHttp(
-    {
-      url: url,
-      data: {
-        Condition,
-        PageIndex,
-        PageSize
-      }
+  return postHttp({
+    url: url,
+    data: {
+      Condition,
+      PageIndex,
+      PageSize
     }
-  )
+  })
 }
 
 /**
@@ -68,14 +79,12 @@ export const getDetialdataByfilter = (model, Condition = defaultCondition) => {
  * @param {*} eventInfoId 事件ID
  */
 export const getDetialdataByEventInfoId = (model, eventInfoId) => {
-  var rules = [
-    {
-      field: 'EventInfoId',
-      op: 'equal',
-      value: eventInfoId,
-      type: 'string'
-    }
-  ]
+  var rules = [{
+    field: 'EventInfoId',
+    op: 'equal',
+    value: eventInfoId,
+    type: 'string'
+  }]
   var conditon = getQueryConditon(rules)
   return getDetialdataByfilter(model, conditon)
 }
@@ -88,12 +97,13 @@ export const getDetialdataByEventInfoId = (model, eventInfoId) => {
  * @param {*} context
  */
 export const commonOperateApi = (id, model, data, context = '') => {
+  var dataStr = JSON.stringify(data)
   return postHttp({
     url: apiConfig.regulatory.commonOperateApi,
     data: {
       id,
       model,
-      data,
+      data: dataStr,
       context
     }
   })

@@ -57,7 +57,6 @@
         <models name="perm_fishery" title="渔业许可" textField="Title" moduleName="perm" moduleTitle="许可" />
         <models name="perm_activity" title="活动许可" textField="Title" />
         <models name="perm_free_captive_animals" title="放生许可" textField="Title" moduleName="perm" moduleTitle="许可" />
-        <models name="work_matter" title="事件" textField="Title" moduleName="work" moduleTitle="工作" />
         <models name="user" title="frameworkuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="case_filing_report" title="立案报告" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="case_Info" title="案件" textField="Title" moduleName="case" moduleTitle="案件" />
@@ -98,5 +97,8 @@
         <models name="form_inquestrecord" title="勘验记录" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="law_staff" title="执法检查人员" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="test_pdf" title="测试pdf" textField="Title" moduleName="res" moduleTitle="基础资料" />
+        <models name="cms_article" title="文章" textField="Title" moduleName="cms" moduleTitle="cms" />
+        <models name="case_report" title="结案报告" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="case_cover" title="卷宗封面" textField="Title" moduleName="case" moduleTitle="案件" />
     </models>
 </freedesign>

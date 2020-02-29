@@ -65,24 +65,49 @@ namespace FD.Model.Enum
     public enum TaskType
     {
         /// <summary>
-        /// 巡查任务
+        /// 日常巡查     
         /// </summary>
-        [Display(Name = "巡查任务")]
-        Patrol = 0,
-
+        [Display(Name = "日常巡查")]
+        DailyPatrol,
         /// <summary>
-        /// 勘察
+        /// 事件核查    
         /// </summary>
-        [Display(Name = "勘察任务")]
-        Survey = 1,
+        [Display(Name = "事件核查")]
+        EventCheck,
         /// <summary>
-        /// 案件任务
+        /// 现场勘察       
         /// </summary>
-        [Display(Name = "案件任务")]
-        Case
-
+        [Display(Name = "现场勘察")]
+        OnSpot,
+        /// <summary>
+        /// 案件
+        /// </summary>
+        [Display(Name = "案件")]
+        CaseInfo,
+        /// <summary>
+        /// 现场处罚决定书   
+        /// </summary>
+        [Display(Name = "现场处罚决定书")]
+        Punishment,
+        /// <summary>
+        /// 没收物品
+        /// </summary>
+        [Display(Name = "没收物品")]
+        confiscated,
+        /// <summary>
+        /// 询问笔录
+        /// </summary>
+        [Display(Name = "询问笔录")]
+        questionRecord,
+        /// <summary>
+        /// 勘验笔录
+        /// </summary>
+        [Display(Name = "勘验笔录")]
+        inquestRecord,
+        /// <summary>
+        /// 结案报告
+        /// </summary>
+        [Display(Name = "结案报告")]
+        finalReport
     }
-
-
-
 }

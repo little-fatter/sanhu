@@ -1,5 +1,6 @@
 using FastDev.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,7 @@ namespace FastDev.DevDB
                 }
             }
         }
+
         public static string FastDevUserID
         {
             get
@@ -154,8 +156,14 @@ namespace FastDev.DevDB
                 return GetWebRoot();
             }
         }
-
-        private static string GetWebRoot()
+        /// <summary>
+        /// 获取注入的服务
+        /// </summary>
+        public static T GetService<T>()
+        {
+            return MyHttpContext.Current.RequestServices.GetService<T>();
+        }
+    private static string GetWebRoot()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(new HttpServerUtility(MyHttpContext.Current).MapPath("~/"));
             return directoryInfo.Parent.FullName + "\\";

@@ -1,4 +1,3 @@
-
 var publicAppConfig = {
   /**
      * 是否使用环境变量来区分Api的host地址
@@ -9,8 +8,8 @@ var publicAppConfig = {
      */
   isUseGateWare: false,
   /**
-    * 网关地址
-    */
+     * 网关地址
+     */
   gatewayAddress: '',
 
   /** 不启用网关时配置模块host地址 */
@@ -28,7 +27,7 @@ var publicAppConfig = {
   /** 后台应用的toolid，如果只对应一个后台应用可以配置在这里，否则请配置为链接参数  */
   toolId: 'SHJG',
   /** 是否强制刷新Token,是则每次都调用免登接口 */
-  isForceRefreshToken: true,
+  isForceRefreshToken: false,
   /** token的缓存过期时间(秒) */
   expiresTimeForTokenCache: 600,
   /** 是否使用本地菜单 */
@@ -45,12 +44,12 @@ var publicAppConfig = {
     'device.geolocation.get'
   ],
   /**
-    * 请求超时的毫秒数
-    */
+     * 请求超时的毫秒数
+     */
   httpClientTimeout: 20000,
   /**
-   * signalr服务端地址
-   */
+     * signalr服务端地址
+     */
   signalrServerUrl: 'http://192.168.0.200:63192/IMHub'
 }
 
