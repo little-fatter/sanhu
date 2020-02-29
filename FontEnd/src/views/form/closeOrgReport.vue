@@ -38,7 +38,7 @@
 </style>
 <template>
   <div class="wrapper">
-    <div class="title">结案报告</div>
+    <div class="title">结案报告（单位）</div>
     <div class="content">
       <div class="box">
         <a-row class="row">

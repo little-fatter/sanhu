@@ -204,6 +204,7 @@ namespace FastDev.Service
             try
             {
                 CreatTasksAndCreatWorkrecor(new work_task[] { data }, "");
+                UpdateEventState(data.EventInfoId, EventStatus.patrol);
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)

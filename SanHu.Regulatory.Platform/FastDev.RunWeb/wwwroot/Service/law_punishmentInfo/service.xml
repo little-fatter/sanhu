@@ -2,24 +2,24 @@
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <model name="law_punishmentInfo" title="处罚当场决定书" textField="EventInfoId" moduleName="case" moduleTitle="案件" dbName="" />
     <fields>
-        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="PreviousformID" dbName="PreviousformID" title="上一个表单id" type="string" length="50" isPK="N" />
         <field name="Illegalfacts" dbName="Illegalfacts" title="违法事实" type="string" length="50" isPK="N" />
-        <field name="Punishmentdecision" dbName="PunishmentdecisionID" title="处罚决定" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Punishmentdecision" dbName="PunishmentdecisionID" title="处罚决定" type="many2one" relationModel="res_dictionary" relationField="" isPK="N" />
         <field name="Isfine" dbName="Isfine" title="是否罚款" type="string" length="50" isPK="N" />
         <field name="IsConfiscationgoods" dbName="IsConfiscationgoods" title="是否没收物品" type="string" length="50" isPK="N" />
         <field name="Amountofpenalty" dbName="Amountofpenalty" title="罚款金额" type="string" length="50" isPK="N" />
-        <field name="Paymentmethod" dbName="PaymentmethodID" title="缴纳方式" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="CoOrganizer" dbName="CoOrganizer" title="协办人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="CoorganizerID" dbName="CoorganizerID" title="协办人ID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Paymentmethod" dbName="PaymentmethodID" title="缴纳方式" type="many2one" relationModel="res_dictionary" relationField="" isPK="N" />
+        <field name="CoOrganizer" dbName="CoOrganizer" title="协办人" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CoorganizerID" dbName="CoorganizerID" title="协办人ID" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="CoOrganizerSign" dbName="CoOrganizerSign" title="协办人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
         <field name="PartySign" dbName="PartySign" title="当事人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
         <field name="MainHanderSign" dbName="MainHanderSign" title="主办人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
-        <field name="TaskId" dbName="TaskId" title="任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="IllegalbasisIDs" dbName="IllegalbasisIDs" title="违法依据" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="PunishmentbasisIDs" dbName="PunishmentbasisIDs" title="处罚依据" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="PunishmentTitle" dbName="PunishmentTitle" title="处罚决定书文号" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="IllegalbasisIDs" dbName="IllegalbasisIDs" title="违法依据" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="PunishmentbasisIDs" dbName="PunishmentbasisIDs" title="处罚依据" type="string" length="200" relationModel="" relationField="" isPK="N" />
+        <field name="PunishmentTitle" dbName="PunishmentTitle" title="处罚决定书文号" type="string" length="200" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

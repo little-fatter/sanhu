@@ -49,7 +49,7 @@
 
 <script>
 import Avatar from 'ant-design-vue/es/avatar'
-
+import appConfig from '@/config/app.config'
 export default {
   name: 'MyPageHeader',
   props: {
@@ -64,11 +64,11 @@ export default {
   data: () => {
     return {
       imgs: [
-        '/img/yzt-renyuanceng/gengduo.png',
-        '/img/yzt-renyuanceng/circle_blue.png',
-        '/img/yzt-renyuanceng/tianqicanshu.png',
-        '/img/yzt-renyuanceng/xiaoxi.png',
-        '/img/yzt-renyuanceng/user.png'
+        appConfig.StaticWebContext + '/img/yzt-renyuanceng/gengduo.png',
+        appConfig.StaticWebContext + '/img/yzt-renyuanceng/circle_blue.png',
+        appConfig.StaticWebContext + '/img/yzt-renyuanceng/tianqicanshu.png',
+        appConfig.StaticWebContext + '/img/yzt-renyuanceng/xiaoxi.png',
+        appConfig.StaticWebContext + '/img/yzt-renyuanceng/user.png'
       ],
       lakes: [
         {

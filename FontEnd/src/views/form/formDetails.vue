@@ -117,9 +117,9 @@ padding:40px;
 </style>
 <template>
   <div class="FDetails">
-    <div class="formTitle">
+    <!-- <div class="formTitle">
       这是记录表名称
-    </div>
+    </div> -->
     <div class="formContentBox">
       <div class="boxTitle">
         <div class="circleTitle">

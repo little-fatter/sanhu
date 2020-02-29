@@ -33,6 +33,7 @@ namespace FastDev.Service
                 base.Create(postdata);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
+                eventInfo.evtState = ((int)FD.Model.Enum.EventStatus.untreated).ToString();
                 base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }

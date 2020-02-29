@@ -123,13 +123,12 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ name: 'caseDetails', params: { caseId: msg } })
+      this.$router.push({ name: 'caseDetails', params: { id: msg } }) // 案件详情id
     },
     // 配置请求参数
     loadData (parameter) {
       var rules = []
       if (isNotEmpty(this.serchText)) {
-        console.log('进了if判断')
         rules = [
           {
             field: 'CaseType', // 案件类型
@@ -139,7 +138,7 @@ export default {
           },
           {
             field: 'ApplicableProcedureID', // 案件适用程序
-            op: 'like',
+            op: 'equal',
             value: this.serchFlow,
             type: 'select'
           },
@@ -157,7 +156,6 @@ export default {
           }
         ]
       }
-      console.log('如果打印出来则没进入if判断')
       var conditon = getQueryConditon(rules, 'and')
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
