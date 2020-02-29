@@ -22,8 +22,9 @@ export default {
   },
   mounted () {
     // 接收路由传参
-    // console.log(this.$route.params.caseId)
-    return getDetaildata('case_filing_report', this.$route.params.caseId).then((res) => {
+
+    console.log(this.$route.params.caseId)
+    return getDetaildata('getDetialdataByEventInfoId', this.$route.params.caseId).then((res) => {
       console.log(res)
     })
   }

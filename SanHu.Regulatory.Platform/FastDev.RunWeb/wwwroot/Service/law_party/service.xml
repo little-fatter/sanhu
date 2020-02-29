@@ -7,15 +7,15 @@
         <field name="address" dbName="address" title="地址" type="string" length="50" isPK="N" />
         <field name="Contactnumber" dbName="Contactnumber" title="联系电话" type="string" length="50" isPK="N" />
         <field name="Nameoflegalperson" dbName="Nameoflegalperson" title="法人名称" type="string" length="50" isPK="N" />
-        <field name="EventId" dbName="EventId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventId" dbName="EventId" title="事件id" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="AssociationobjectID" dbName="AssociationobjectID" title="关联对象id" type="string" length="50" isPK="N" />
-        <field name="Name" dbName="Name" title="当事人名称" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="Name" dbName="Name" title="当事人名称" type="string" length="50" isPK="N" />
         <field name="Gender" dbName="Gender" title="当事人性别" type="string" length="50" isPK="N" />
         <field name="Nationality" dbName="Nationality" title="当事人民族" type="string" length="50" isPK="N" />
-        <field name="WorkUnit" dbName="WorkUnit" title="工作单位" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联对象" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="Occupation" dbName="Occupation" title="当事人职业" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="Typesofparties" dbName="Typesofparties" title="当事人类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="WorkUnit" dbName="WorkUnit" title="工作单位" type="string" length="100" relationModel="" relationField="" isPK="N" />
+        <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联对象" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Occupation" dbName="Occupation" title="当事人职业" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Typesofparties" dbName="Typesofparties" title="当事人类型" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
