@@ -4,6 +4,7 @@ using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -63,6 +64,15 @@ namespace FastDev.Service
             descriptor.Condition = filterOut;
             ServiceConfig serviceConfig = GetServiceConfig(ModelName);
             PagedData pageData = DataAccessHelper.GetPageData(QueryDb, ModelName, descriptor);
+
+            var pageDatas = pageData.Records;
+            List<IDictionary<string, object>> revData = new List<IDictionary<string, object>>();
+            foreach (var d in pageDatas)
+            {
+                var data = JsonHelper.ToDictionary(JObject.Parse(JsonHelper.SerializeObject(d)));
+                revData.Add(data);
+            }
+            pageData.Records = revData;
             return pageData;
         }
 
