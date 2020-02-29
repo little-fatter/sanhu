@@ -159,7 +159,7 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(data.TaskSurvey, data.LawParties);
+                CreateInfo(data.TaskSurvey, data.LawParties,data.Attachments);
                 switch (data.TaskSurvey.ProcessingDecisions)
                 {
                     case 0:
@@ -187,7 +187,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties)
+       private void CreateInfo(task_survey TaskSurvey, List<law_party> law_Parties, List<attachment> attachments)
         {
             var tasksurvey = base.Create(TaskSurvey) as string;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
@@ -200,6 +200,17 @@ namespace FastDev.Service
                    l.ID = Guid.NewGuid().ToString();
                     QueryDb.Insert(l);
                    // ServiceHelper.GetService("law_partyService").Create(l);
+                }
+                if (attachments != null && attachments.Count > 0)
+                {
+                    foreach (var a in attachments)
+                    {
+                        a.Associatedobjecttype = "task_survey";
+                        a.AssociationobjectID = tasksurvey;
+                        a.ID = Guid.NewGuid().ToString();
+                        QueryDb.Insert(a);
+                        // _attachment.Create(a);           
+                    }
                 }
             }
         }

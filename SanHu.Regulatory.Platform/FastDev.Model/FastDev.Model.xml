@@ -159,6 +159,11 @@
             当事人信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.task_surveyFinishReq.Attachments">
+            <summary>
+            证据信息
+            </summary>
+        </member>
         <member name="T:FD.Model.Enum.EventStatus">
             <summary>
             事件状态
