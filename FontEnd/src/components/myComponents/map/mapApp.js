@@ -485,7 +485,7 @@ export default {
     for (let i = 0; i < peopleList.length; i++) {
       const p = peopleList[i]
       var fea = new Feature({
-        geometry: new Point(p.location),
+        geometry: new Point(fromLonLat(p.location)),
         name: p.name
       })
       fea.setProperties(p)
@@ -617,6 +617,9 @@ export default {
     var source = pathLayer.getSource()
     source.clear()
     var location = feature.getProperties().location
+    if (pLayerName === 'peopleLayer') {
+      location = fromLonLat(location)
+    }
     // 模拟轨迹路线
 
     var _beforePathPoints = paths[pLayerName].beforePathPoints

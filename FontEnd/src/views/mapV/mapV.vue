@@ -40,6 +40,7 @@
     />
     <my-alert-info-box
       class="my-alert-info-box"
+      :dataGet="getDataGetObject()"
       ref="myAlertInfoBox"
     />
     <my-equipment-info-box
@@ -97,6 +98,9 @@ export default {
     }
   },
   methods: {
+    getDataGetObject: function () {
+      return dataGet
+    },
     getFullSize: function () {
       var w = document.body.clientWidth < this.size.width ? document.body.clientWidth + 17 : document.body.clientWidth
       var h = document.body.clientHeight < this.size.height ? document.body.clientHeight + 17 : document.body.clientHeight
@@ -122,6 +126,7 @@ export default {
       if (fea) {
         var properties = fea.getProperties()
         this.$refs.peopleInfoBox.open({
+          id: properties.id,
           name: properties.name,
           dep: properties.dep,
           region: properties.region,
@@ -137,6 +142,7 @@ export default {
       if (fea) {
         var properties = fea.getProperties()
         this.$refs.myAlertInfoBox.open({
+          id: properties.id,
           name: properties.title,
           status: properties.status, // 处理状态
           des: properties.remark, // 事件描述
@@ -204,6 +210,7 @@ export default {
   mounted: function () {
     document.body.style.overflowY = 'hidden'
     var that = this
+    document['mapv'] = that
     window.addEventListener('resize', function () {
       that.size = that.getFullSize()
       // var mapSize = {
@@ -215,6 +222,8 @@ export default {
     dataGet.initData(() => {
       var $personList = this.$refs.personList
       var mapApp = this.$refs.map1.getMapApp()
+      $personList.updatePersonList(dataGet.getPeopleList())
+
       mapApp.updatePeopleLayer($personList.getPersonList())
       mapApp.updateEquipmentLayer($personList.getEquipmentList())
 
