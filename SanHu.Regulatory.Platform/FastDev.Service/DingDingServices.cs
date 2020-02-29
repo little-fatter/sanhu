@@ -33,7 +33,7 @@ namespace FastDev.Service
 
             return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
-        public void CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
+        public string CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
             OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
             {
@@ -54,8 +54,8 @@ namespace FastDev.Service
             }
             oapiWorkrecordAddRequest.FormItemList_ = formItemList_;
 
-
-            WorkrecordAdd(oapiWorkrecordAddRequest);
+            //返回待办id
+            return WorkrecordAdd(oapiWorkrecordAddRequest).Result.RecordId;
         }
 
         /// <summary>

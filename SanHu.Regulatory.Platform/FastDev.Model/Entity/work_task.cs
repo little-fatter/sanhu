@@ -124,6 +124,11 @@ public string TaskTypeInfoID
 get;
 set;
 }
+public string TodotaskID
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
