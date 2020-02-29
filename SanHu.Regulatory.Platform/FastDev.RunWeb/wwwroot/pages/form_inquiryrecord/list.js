@@ -6,24 +6,29 @@ function() {
         options: {
             list: {
                 columns: [{
-                    name: "IDcard",
-                    display: "身份证号码",
+                    name: "Recorder",
+                    display: "记录人员",
                     type: "string"
                 },
                 {
-                    name: "address",
-                    display: "地址",
+                    name: "Starttime",
+                    display: "开始时间",
+                    type: "datetime"
+                },
+                {
+                    name: "Endtime",
+                    display: "结束时间",
+                    type: "datetime"
+                },
+                {
+                    name: "Inquiryrecord",
+                    display: "询问记录",
                     type: "string"
                 },
                 {
-                    name: "Contactnumber",
-                    display: "联系电话",
-                    type: "string"
-                },
-                {
-                    name: "Name",
-                    display: "当事人名称",
-                    type: "string"
+                    name: "Objectofinquiry",
+                    display: "询问对象",
+                    type: "ref"
                 }]
             },
             common: {
@@ -34,8 +39,8 @@ function() {
             },
             type: "list",
             filterFields: [{
-                display: "当事人类型",
-                name: "Typesofparties",
+                display: "询问对象",
+                name: "Objectofinquiry",
                 editor: {
                     url: "/web/namedata",
                     parms: {
@@ -64,7 +69,7 @@ function() {
                 type: "ref_popupselect_mul"
             },
             {
-                display: "案件id",
+                display: "案件Id",
                 name: "CaseId",
                 editor: {
                     type: "string"
@@ -72,104 +77,96 @@ function() {
                 type: "string"
             },
             {
-                display: "身份证号码",
-                name: "IDcard",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "地址",
-                name: "address",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "联系电话",
-                name: "Contactnumber",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "法人名称",
-                name: "Nameoflegalperson",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
                 display: "事件id",
-                name: "EventId",
+                name: "EventInfoId",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "关联对象id",
-                name: "AssociationobjectID",
+                display: "上一个表单id",
+                name: "PreviousformID",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "当事人名称",
-                name: "Name",
+                display: "记录人员",
+                name: "Recorder",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "当事人性别",
-                name: "Gender",
+                display: "开始时间",
+                name: "Starttime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
+            },
+            {
+                display: "结束时间",
+                name: "Endtime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
+            },
+            {
+                display: "是否看清执法证件",
+                name: "Isseeclearly",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "当事人民族",
-                name: "Nationality",
+                display: "是否明白权责义务",
+                name: "Isunderstand",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "工作单位",
-                name: "WorkUnit",
+                display: "询问记录",
+                name: "Inquiryrecord",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "关联对象",
-                name: "Associatedobjecttype",
+                display: "询问地点",
+                name: "Enquiryplace",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "当事人职业",
-                name: "Occupation",
+                display: "案件由来",
+                name: "Originofcase",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "TypesofpartiesID",
-                name: "TypesofpartiesID",
+                display: "任务id",
+                name: "TaskId",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "ObjectofinquiryID",
+                name: "ObjectofinquiryID",
                 editor: {
                     type: "text"
                 },
@@ -178,11 +175,11 @@ function() {
             link: {},
             addins: {}
         },
-        dataset: 'web/dataset?model=law_party&viewname=list'
+        dataset: 'web/dataset?model=form_inquiryrecord&viewname=list'
     };
     exports.options.model = {
-        name: 'law_party',
-        title: '当事人'
+        name: 'form_inquiryrecord',
+        title: '询问记录'
     };
 
     exports.service = function service(page) {

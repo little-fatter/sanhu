@@ -6,23 +6,28 @@ function() {
         options: {
             list: {
                 columns: [{
-                    name: "IDcard",
-                    display: "身份证号码",
+                    name: "ProductName",
+                    display: "品名",
                     type: "string"
                 },
                 {
-                    name: "address",
-                    display: "地址",
+                    name: "lawParty",
+                    display: "当事人",
+                    type: "ref"
+                },
+                {
+                    name: "handler",
+                    display: "处理人",
                     type: "string"
                 },
                 {
-                    name: "Contactnumber",
-                    display: "联系电话",
+                    name: "Packing",
+                    display: "包装",
                     type: "string"
                 },
                 {
-                    name: "Name",
-                    display: "当事人名称",
+                    name: "UnitPrice",
+                    display: "单价",
                     type: "string"
                 }]
             },
@@ -34,28 +39,28 @@ function() {
             },
             type: "list",
             filterFields: [{
-                display: "当事人类型",
-                name: "Typesofparties",
+                display: "当事人",
+                name: "lawParty",
                 editor: {
                     url: "/web/namedata",
                     parms: {
-                        model: "res_dictionary"
+                        model: "law_party"
                     },
                     detailEnabled: true,
                     detailUrl: "/web/detaildata",
                     detailParms: {
-                        model: "res_dictionary"
+                        model: "law_party"
                     },
                     valueField: "ID",
                     sourceFilter: null,
-                    textField: "Title",
+                    textField: "CaseId",
                     css: "combobox-selector",
                     popupselect_ismul: true,
                     popupselect_type: "popupselect",
-                    popupselect_url: "/web/main/?model=res_dictionary&viewtype=list",
+                    popupselect_url: "/web/main/?model=law_party&viewtype=list",
                     popupselect_width: "1000",
                     popupselect_height: "700",
-                    popupselect_title: "选择： 字典",
+                    popupselect_title: "选择： 当事人",
                     many2one: false,
                     one2many: false,
                     many2many: true,
@@ -64,40 +69,72 @@ function() {
                 type: "ref_popupselect_mul"
             },
             {
-                display: "案件id",
-                name: "CaseId",
+                display: "品名",
+                name: "ProductName",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "身份证号码",
-                name: "IDcard",
+                display: "企业",
+                name: "Enterprise",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "地址",
-                name: "address",
+                display: "规格",
+                name: "Specifications",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "联系电话",
-                name: "Contactnumber",
+                display: "生产日期",
+                name: "DateOfManufacture",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "法人名称",
-                name: "Nameoflegalperson",
+                display: "数量",
+                name: "Number",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "单价",
+                name: "UnitPrice",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "包装",
+                name: "Packing",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "备注",
+                name: "Remarks",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "处理人",
+                name: "handler",
                 editor: {
                     type: "string"
                 },
@@ -105,54 +142,22 @@ function() {
             },
             {
                 display: "事件id",
-                name: "EventId",
+                name: "EventInfoId",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "关联对象id",
-                name: "AssociationobjectID",
+                display: "案件Id",
+                name: "CaseId",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "当事人名称",
-                name: "Name",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "当事人性别",
-                name: "Gender",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "当事人民族",
-                name: "Nationality",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "工作单位",
-                name: "WorkUnit",
-                editor: {
-                    type: "string"
-                },
-                type: "string"
-            },
-            {
-                display: "关联对象",
+                display: "关联表单类型",
                 name: "Associatedobjecttype",
                 editor: {
                     type: "string"
@@ -160,16 +165,24 @@ function() {
                 type: "string"
             },
             {
-                display: "当事人职业",
-                name: "Occupation",
+                display: "关联的id",
+                name: "AssociationobjectID",
                 editor: {
                     type: "string"
                 },
                 type: "string"
             },
             {
-                display: "TypesofpartiesID",
-                name: "TypesofpartiesID",
+                display: "任务Id",
+                name: "TaskId",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "lawPartyID",
+                name: "lawPartyID",
                 editor: {
                     type: "text"
                 },
@@ -178,11 +191,11 @@ function() {
             link: {},
             addins: {}
         },
-        dataset: 'web/dataset?model=law_party&viewname=list'
+        dataset: 'web/dataset?model=form_confiscated_item&viewname=list'
     };
     exports.options.model = {
-        name: 'law_party',
-        title: '当事人'
+        name: 'form_confiscated_item',
+        title: '物品清单'
     };
 
     exports.service = function service(page) {
