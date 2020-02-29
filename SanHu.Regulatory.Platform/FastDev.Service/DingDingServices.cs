@@ -33,23 +33,28 @@ namespace FastDev.Service
 
             return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
-        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
+        public void CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
             OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
             {
                 Userid = userId.ToString(),//user的accountID
                 CreateTime = DateTime.Now.GetTimeStampM(),
                 Title = title,//待办事项的标题
-                Url = url,//"https://oa.dingtalk.com",//待办事项的跳转链接
-                FormItemList_ = new List<OapiWorkrecordAddRequest.FormItemVoDomain>()
-                {
-                    new OapiWorkrecordAddRequest.FormItemVoDomain
-                    {
-                        Title=formTitle,
-                        Content=fromContent
-                    },
-                }
+                Url = url,//"https://oa.dingtalk.com",//待办事项的跳转链接   
             };
+
+            var formItemList_ = new List<OapiWorkrecordAddRequest.FormItemVoDomain>();
+            foreach (var item in formInfo)
+            {
+                formItemList_.Add(new OapiWorkrecordAddRequest.FormItemVoDomain()
+                {
+                    Title = item.Key,
+                    Content = item.Value
+                }); ;
+            }
+            oapiWorkrecordAddRequest.FormItemList_ = formItemList_;
+
+
             WorkrecordAdd(oapiWorkrecordAddRequest);
         }
 

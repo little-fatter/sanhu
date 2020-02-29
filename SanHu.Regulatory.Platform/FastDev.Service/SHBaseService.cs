@@ -29,11 +29,10 @@ namespace FastDev.Service
         /// <param name="url">跳转地址</param>
         /// <param name="formTitle">待办表单标题</param>
         /// <param name="fromContent">待办表单内容</param>
-        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
+        public void CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
             var ddService = SysContext.GetService<IDingDingServices>();
-            //var ddService = HttpContext.ServiceProvider.GetService(typeof(IDingDingServices)) as IDingDingServices;
-            ddService.CreateWorkrecor(userId, title, url, formTitle, fromContent);
+            ddService.CreateWorkrecor(userId, title, url, formInfo);
         }
 
         /// <summary>
@@ -217,7 +216,12 @@ namespace FastDev.Service
                 var taskId = SaveWorkTask(Task);
 
                 string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);
-                CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks + taskId, taskTypeStr, Task.TaskContent);
+
+                var dic = new Dictionary<string, string>();
+                dic.Add("事件类型", taskTypeStr);
+                dic.Add("上报时间", Task.InitiationTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks + taskId, dic);
             }
             return true;
         }
