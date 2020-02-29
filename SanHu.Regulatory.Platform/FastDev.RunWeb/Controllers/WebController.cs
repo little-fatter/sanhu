@@ -199,9 +199,9 @@ namespace FastDev.RunWeb.Controllers
 
         private string jpgUrl;
 
-        private int int_0;
+        private int printWidth;
 
-        private int int_1;
+        private int printHeight;
 
         private string string_2;
 
@@ -1902,8 +1902,8 @@ namespace FastDev.RunWeb.Controllers
                 {
                     Directory.CreateDirectory(path);
                 }
-                int int_0 = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
-                int int_1 = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
+                printWidth = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
+                printHeight = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
                 foreach (TemplatePageInfo item in list)
                 {
                     jpgUrl = PrintJpgUrl(context, templateId, item.AllPageIndex);
@@ -1942,8 +1942,8 @@ namespace FastDev.RunWeb.Controllers
             }
             if (flag2)
             {
-                int_0 = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
-                int_1 = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
+                printWidth = Convert.ToInt32((double)printData.printTemp.Width.Value * 3.78);
+                printHeight = Convert.ToInt32((double)printData.printTemp.Height.Value * 3.78);
                 jpgUrl = PrintJpgUrl(context, templateId, pageindex);
                 Thread thread = new Thread(GetJpegByWebBrowser);
                 thread.SetApartmentState(ApartmentState.STA);
@@ -2010,8 +2010,8 @@ namespace FastDev.RunWeb.Controllers
                     filterTranslator.Translate();
                     int num = dbContext.ExecuteScalar<int>(string.Format("select count(*) from {0} where {1}", printData.coreReportTemp.ModelName, filterTranslator.CommandText, filterTranslator.Parms), new object[0]);
                     double num2 = Math.Ceiling((double)num * 1.0 / (double)printData.coreReportTemp.PageSize.Value);
-                    int_0 = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
-                    int_1 = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
+                    printWidth = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
+                    printHeight = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
                     for (int i = 0; (double)i < num2; i++)
                     {
                         jpgUrl = GetReportJpgPath(context, templateId, i + 1);
@@ -2121,8 +2121,8 @@ namespace FastDev.RunWeb.Controllers
                 {
                     Directory.CreateDirectory(path);
                 }
-                int_0 = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
-                int_1 = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
+                printWidth = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
+                printHeight = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
                 for (int i = 1; (double)i <= num2; i++)
                 {
                     jpgUrl = GetReportJpgPath(context, templateId, i);
@@ -2160,8 +2160,8 @@ namespace FastDev.RunWeb.Controllers
             }
             if (flag2)
             {
-                int_0 = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
-                int_1 = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
+                printWidth = Convert.ToInt32((double)printData.coreReportTemp.Width.Value * 3.78);
+                printHeight = Convert.ToInt32((double)printData.coreReportTemp.Height.Value * 3.78);
                 jpgUrl = GetReportJpgPath(context, templateId, pageindex);
                 Thread thread = new Thread(GetJpegByWebBrowser);
                 thread.SetApartmentState(ApartmentState.STA);
@@ -3806,8 +3806,8 @@ namespace FastDev.RunWeb.Controllers
 
             dbContext_0 = null;
 
-            int_0 = 760;
-            int_1 = 900;
+            printWidth = 760;
+            printHeight = 900;
             string_2 = null;
             serviceConfig_0 = null;
             dicModuleTitles = new Dictionary<string, string>();

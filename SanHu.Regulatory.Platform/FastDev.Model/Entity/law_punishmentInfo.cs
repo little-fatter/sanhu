@@ -29,27 +29,27 @@ public string Illegalfacts
 get;
 set;
 }
-public string IllegalbasisIDs
+public string IllegalbasisID
 {
 get;
 set;
 }
-public string PunishmentbasisIDs
+public string PunishmentbasisID
 {
 get;
 set;
 }
-public string Punishmentdecision
+public string PunishmentdecisionID
 {
 get;
 set;
 }
-public bool Isfine
+public string Isfine
 {
 get;
 set;
 }
-public bool IsConfiscationgoods
+public string IsConfiscationgoods
 {
 get;
 set;
@@ -60,6 +60,31 @@ get;
 set;
 }
 public string PaymentmethodID
+{
+get;
+set;
+}
+public string CoOrganizer
+{
+get;
+set;
+}
+public string CoorganizerID
+{
+get;
+set;
+}
+public string CoOrganizerSign
+{
+get;
+set;
+}
+public string PartySign
+{
+get;
+set;
+}
+public string MainHanderSign
 {
 get;
 set;
@@ -89,8 +114,6 @@ public string Status
 get;
 set;
 }
-
-        public string TaskId { get; set; }
 }
 
 }

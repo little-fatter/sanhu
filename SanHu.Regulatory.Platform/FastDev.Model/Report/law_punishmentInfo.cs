@@ -64,6 +64,31 @@ public string PaymentmethodID
 get;
 set;
 }
+public string CoOrganizer
+{
+get;
+set;
+}
+public string CoorganizerID
+{
+get;
+set;
+}
+public string CoOrganizerSign
+{
+get;
+set;
+}
+public string PartySign
+{
+get;
+set;
+}
+public string MainHanderSign
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
