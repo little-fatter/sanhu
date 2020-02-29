@@ -24,9 +24,9 @@ export default {
     // 接收路由传参
 
     console.log(this.$route.params.caseId)
-    return getDetaildata('getDetialdataByEventInfoId', this.$route.params.caseId).then((res) => {
-      console.log(res)
-    })
+    // return getDetaildata('getDetialdataByEventInfoId', this.$route.params.caseId).then((res) => {
+    //   console.log(res)
+    // })
   }
 }
 </script>
