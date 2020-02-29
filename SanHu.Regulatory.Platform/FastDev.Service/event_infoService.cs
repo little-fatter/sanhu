@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace FastDev.Service
                 base.Create(postdata);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
-                base.Create(postdata);
+                base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }
             catch(Exception e)
@@ -41,7 +42,29 @@ namespace FastDev.Service
             }
             return true;
         }
+        public override object GetPageData(QueryDescriptor descriptor)
+        {
+            DbContext db = QueryDb;
+            var filter = descriptor.Condition;
+            if (filter == null) filter = new FilterGroup();
 
+            FilterGroup filterNew = new FilterGroup();
+            filterNew.rules = new List<FilterRule>
+                {
+                    new FilterRule("OriginalID", null, "isnotnull")
+                };
+            FilterGroup filterOut = new FilterGroup();
+            filterOut.op = "and";
+            filterOut.groups = new List<FilterGroup>
+                {
+                    filter,
+                    filterNew
+                };
+            descriptor.Condition = filterOut;
+            ServiceConfig serviceConfig = GetServiceConfig(ModelName);
+            PagedData pageData = DataAccessHelper.GetPageData(QueryDb, ModelName, descriptor);
+            return pageData;
+        }
 
     }
 }
