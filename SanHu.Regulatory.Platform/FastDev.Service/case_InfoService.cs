@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using FD.Model.Dto;
 using FD.Model.Enum;
@@ -15,18 +16,41 @@ namespace FastDev.Service
         {
             OnGetAPIHandler += case_InfoService_OnGetAPIHandler;
             OnAfterGetPagedData += Case_InfoService_OnAfterGetPagedData;
+            OnAfterGetDetailData += Case_InfoService_GetDetail;
         }
+
+
+
+        private void Case_InfoService_GetDetail(object query, object data)
+        {
+            var caseinfo = data as Dictionary<string, object>;
+            var userid = caseinfo["CreateUser"] as List<string>;
+            if (userid != null)
+            {
+                ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+                var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid[0] }");
+                caseinfo.Add("Jobnumber",user.Jobnumber);
+            }
+        }
+
 
         private void Case_InfoService_OnAfterGetPagedData(object query, object data)
         {
             var lst = (data as PagedData).Records;
+
             var db = this.QueryDb;
             IService svc = ServiceHelper.GetService("law_party");
+
+
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+
             for (int i = 0; i < lst.Count; i++)
             {
                 var item = lst[i] as Dictionary<string, object>;
+                
                 FilterGroup filterGroup = new FilterGroup();
                 filterGroup.rules = new List<FilterRule>();
+         
                 filterGroup.rules.Add(new FilterRule
                 {
                     field = "Associatedobjecttype",
@@ -40,8 +64,16 @@ namespace FastDev.Service
                     value = item["ID"].ToString(),
                     op = "equal"
                 });
+                if (item["CreateUserID"] != null)
+                {
+                    string userid = item["CreateUserID"].ToString();
+                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
+                    item["CreateUserID"] = user.Name;
+                }
                 var partys = svc.GetListData(filterGroup) ;
+
                 item.Add("LawPartys", partys);
+
             }
         }
 
