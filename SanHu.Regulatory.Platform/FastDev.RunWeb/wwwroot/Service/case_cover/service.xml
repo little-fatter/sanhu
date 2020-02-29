@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="case_cover" title="卷宗封面" textField="TaskId" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件id" type="string" length="50" isPK="N" />
+        <field name="LawPartyIds" dbName="LawPartyIds" title="当事人id" type="string" length="200" isPK="N" />
+        <field name="CaseTitle" dbName="CaseTitle" title="案件号" type="string" length="200" isPK="N" />
+        <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="PunishmentTitle" dbName="PunishmentTitle" title="处罚决定书文号" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseRegisterDay" dbName="CaseRegisterDay" title="立案时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="&#x9; CaseCloseDay" dbName="&#x9; CaseCloseDay" title="结案时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="MainHandler" dbName="MainHandler" title="主办人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CoOrganizer" dbName="CoOrganizer" title="协办人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Filinger" dbName="Filinger" title="归档人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="FilingId" dbName="FilingId" title="归档人Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="SaveYear" dbName="SaveYear" title="保存期限" type="string" length="50" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

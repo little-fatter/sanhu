@@ -24,9 +24,24 @@ namespace FastDev.Service
         public task_surveyService()
         {
             OnGetAPIHandler += Task_surveyService_OnGetAPIHandler;
-           
+            OnAfterGetDetailData += task_surveyService_OnAfterGetDetailData;
+
+
         }
-        
+
+
+        private void task_surveyService_OnAfterGetDetailData(object query, object data)
+        {
+            var o = data as Dictionary<string, object>;
+            string taskType = o["ProcessingDecisions"].ToString();
+            if (taskType == "1")
+                o["ProcessingDecisions"] ="不予处罚";
+            if (taskType == "2")
+                o["ProcessingDecisions"] = "移送其他部门";
+            if (taskType == "3")
+                o["ProcessingDecisions"] = "处罚程序";
+        }
+
         /*
         public override object WfCreate(object postdata, params string[] exeUserIds)
         {

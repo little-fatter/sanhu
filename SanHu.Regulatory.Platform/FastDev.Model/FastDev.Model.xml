@@ -24,6 +24,11 @@
             当事人信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.case_reportFinishReq.CaseReport">
+            <summary>
+            结案报告
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.FormReqBase">
             <summary>
             表单请求基础
