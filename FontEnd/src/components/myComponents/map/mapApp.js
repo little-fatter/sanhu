@@ -19,12 +19,14 @@ import Select from 'ol/interaction/Select'
 import { buffer as extentBuffer, getHeight as getExtentHeight } from 'ol/extent'
 import { point, lineString, polygon, buffer, toWgs84, toMercator, randomPoint, bbox, booleanPointInPolygon } from '@turf/turf'
 // import $ from 'jquery'
+import appConfig from '@/config/app.config'
 
 import styleTable from './styleTable'
 
 import M_HM_FXH from './data/M_HM_FXH.json'
 import M_HM_XYH from './data/M_HM_XYH.json'
 import M_HM_QLH from './data/M_HM_QLH.json'
+
 const lakeJsons = [M_HM_FXH, M_HM_XYH, M_HM_QLH]
 
 proj4.defs('EPSG:4490', '+proj=longlat +ellps=GRS80 +no_defs')
@@ -42,8 +44,7 @@ register(proj4)
 //   matrixIds[z] = z
 // }
 
-// const WMS_URL = 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_blue'
-const WMS_URL = 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_white'
+const WMS_URL = appConfig.MapOption.WMS_URL
 var timer = {
   runId: 0,
   pathBeforeFeature: undefined,

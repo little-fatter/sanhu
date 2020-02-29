@@ -108,6 +108,7 @@
   </a-layout>
 </template>
 <script>
+import appConfig from '@/config/app.config';
 export default {
   name: 'MyPersonList',
   props: {
@@ -275,9 +276,9 @@ export default {
         }
       ],
       imgs: {
-        shexiangtou: '/img/yzt-renyuanceng/shexiangtou.png',
-        huatong: '/img/yzt-renyuanceng/huatong.png',
-        dianhua: '/img/yzt-renyuanceng/dianhua.png'
+        shexiangtou: appConfig.StaticWebContext + '/img/yzt-renyuanceng/shexiangtou.png',
+        huatong: appConfig.StaticWebContext + '/img/yzt-renyuanceng/huatong.png',
+        dianhua: appConfig.StaticWebContext + '/img/yzt-renyuanceng/dianhua.png'
       }
     }
   },

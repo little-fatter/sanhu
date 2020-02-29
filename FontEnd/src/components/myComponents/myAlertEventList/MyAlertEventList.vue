@@ -17,7 +17,7 @@
               <a-list-item class="item-lyr">
                 <a-avatar class="left item-avatar" shape="square" :size="20" :src="getSrc(item.status)"></a-avatar>
                 <div class="left item-title">{{ item.title }}</div>
-                <div class="left item-countdown">{{ item.countdown }}</div>
+                <div class="left item-countdown" v-show="countdownShow">{{ item.countdown }}</div>
                 <div class="clear"></div>
               </a-list-item>
               <a-list-item class="item-lyr">
@@ -31,7 +31,7 @@
               </a-list-item>
               <a-list-item class="item-lyr">
                 <div class="item-time-info left"> {{ item.uploadTime }} </div>
-                <div class="left ai-link"><a >AI摄像头识别</a></div>
+                <div class="left ai-link" v-show="countdownShow"><a >AI摄像头识别</a></div>
                 <div class="clear"></div>
               </a-list-item>
             </a-list>
@@ -45,6 +45,7 @@
 
 <script>
 import moment from 'moment'
+import appConfig from '@/config/app.config';
 
 const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 var evtStateMap = {
@@ -81,6 +82,7 @@ export default {
   },
   data: function () {
     return {
+      countdownShow: false,
       title: '告警事件',
       list: [
         // {
@@ -99,19 +101,19 @@ export default {
       ],
       statusTable: [
         {
-          src: '/img/yzt-renyuanceng/zhuyi.png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi.png',
           title: '一级'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(1).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(1).png',
           title: '二级'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(2).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(2).png',
           title: '三级'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(3).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(3).png',
           title: '任务失败'
         }
       ],

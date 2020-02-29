@@ -140,7 +140,7 @@
 </template>
 <script>
 import moment from 'moment'
-
+import appConfig from '@/config/app.config'
 export default {
   name: 'MyEquipmentInfoBox',
   props: {
@@ -156,19 +156,19 @@ export default {
       },
       statusTable: [
         {
-          src: '/img/yzt-renyuanceng/zhuyi.png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi.png',
           title: '任务待接受'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(1).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(1).png',
           title: '任务已接受'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(2).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(2).png',
           title: '任务已完成'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(3).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(3).png',
           title: '任务失败'
         }
       ],
