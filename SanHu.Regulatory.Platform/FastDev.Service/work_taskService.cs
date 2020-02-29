@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using WanJiang.Framework.Infrastructure.Logging;
 
 namespace FastDev.Service
 {
@@ -134,11 +135,15 @@ namespace FastDev.Service
         /// <returns></returns>
         private object Reject(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<FormReqBase>(context.Data);
+            var data = JsonHelper.DeserializeJsonToObject<TaskRejectReq>(context.Data);
             QueryDb.BeginTransaction();
             try
             {
-                UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.HandOver);
+                var taskInfo = GetWorkTask(data.SourceTaskId);
+                taskInfo.TaskStatus = (int)WorkTaskStatus.HandOver;
+                taskInfo.RejectReason = data.Reason;
+                QueryDb.Update(taskInfo);
+
                 UpdateEventState(data.EventInfoId, EventStatus.untreated);
                 QueryDb.CompleteTransaction();
             }
@@ -195,7 +200,9 @@ namespace FastDev.Service
             //data.MainHandler = "主办人测试";
             //var a = JsonConvert.SerializeObject(data);
 
-
+            //data.AssignUsersID = "";
+            //data.CreateUserID = SysContext.GetService<ClientInfo>().UserId;
+            var a = SysContext.GetService<ClientInfo>(); 
 
             QueryDb.BeginTransaction();
             try

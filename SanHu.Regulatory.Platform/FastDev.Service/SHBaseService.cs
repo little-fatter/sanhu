@@ -107,7 +107,7 @@ namespace FastDev.Service
         }
 
 
-        private work_task GetWorkTask(string taskid)
+        protected work_task GetWorkTask(string taskid)
         {
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
