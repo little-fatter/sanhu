@@ -45,7 +45,7 @@
 
 <script>
 import moment from 'moment'
-import appConfig from '@/config/app.config';
+import appConfig from '@/config/app.config'
 
 const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 var evtStateMap = {
