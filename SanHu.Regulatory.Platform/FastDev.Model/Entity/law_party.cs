@@ -49,11 +49,6 @@ public string AssociationobjectID
 get;
 set;
 }
-public string Associatedobjecttype
-{
-get;
-set;
-}
 public string Name
 {
 get;
@@ -64,7 +59,7 @@ public string Gender
 get;
 set;
 }
-public string Occupation
+public string Occupationofparties
 {
 get;
 set;
@@ -75,6 +70,11 @@ get;
 set;
 }
 public string WorkUnit
+{
+get;
+set;
+}
+public string Associatedobjecttype
 {
 get;
 set;
