@@ -209,7 +209,7 @@ namespace FastDev.Service
                 var loginClientInfo = SysContext.GetService<ClientInfo>();
                 if (loginClientInfo != null)
                 {
-                    Task.CreateUserID = loginClientInfo.UserId;  //任务创建人
+                    Task.CreateUserID = loginClientInfo.UserId ?? null;  //任务创建人
                 }
 
                 Task.LocalLinks = Task.RemoteLinks;

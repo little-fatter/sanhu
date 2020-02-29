@@ -190,22 +190,13 @@ namespace FastDev.Service
         private object CreateTask(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<work_task>(context.Data);
-            data.TaskStatus =(int)WorkTaskStatus.Normal;
-            data.ExpectedCompletionTime = DateTime.Now.AddDays(1);  
-
-            var loginClientInfo = SysContext.GetService<ClientInfo>(); 
-            if(loginClientInfo != null)
-            {
-                data.CreateUserID = loginClientInfo.UserId;
-            }
-
             QueryDb.BeginTransaction();
             try
             {
                 CreatTasksAndCreatWorkrecor(new work_task[] { data }, "");
                 QueryDb.CompleteTransaction();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
                 throw e;
