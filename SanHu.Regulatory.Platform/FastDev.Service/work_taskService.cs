@@ -187,9 +187,22 @@ namespace FastDev.Service
             return true;
         }
 
+
+        private object GetInfo(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<FormReqBase>(context.Data);
+            
+            var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
+            
+            return _sHBaseService.GetLastInfo(data.SourceTaskId, "case_Info");
+        }
+
+
+
         private object NextStepCase(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<TaskNextStepReq>(context.Data);
+
             var _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
             try
             {
