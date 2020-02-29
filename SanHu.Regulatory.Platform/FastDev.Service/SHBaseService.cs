@@ -203,10 +203,12 @@ namespace FastDev.Service
             {
                 Task.LaskTaskId = sourcetaskid;
                 Task.InitiationTime = DateTime.Now;
+                Task.LocalLinks = Task.RemoteLinks;
+                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=";
                 var taskId = SaveWorkTask(Task);
 
                 string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);
-                CreateWorkrecor(Task.AssignUsers, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, taskTypeStr, Task.TaskContent);
+                CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks + taskId, taskTypeStr, Task.TaskContent);
             }
             return true;
         }
