@@ -33,24 +33,41 @@ namespace FastDev.Service
 
             return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
-        public void CreateWorkrecor(string userId, string title, string url, string formTitle, string fromContent)
+        public async Task<bool> WorkrecordUpdate(string userId, string record_id)
+        {
+            var oapiWorkrecordAddRequest = new OapiWorkrecordUpdateRequest() { };
+            var url = "framework/api/dingding/WorkrecordUpdateAsync?" + GetAgentIDString();
+
+            var result= await PostFrameWork<OapiWorkrecordUpdateResponse>(url, oapiWorkrecordAddRequest);
+            if (result.Errcode==0)
+            {
+                return result.Result;
+            }
+            return false;
+        }
+        public string CreateWorkrecor(string userId, string title, string url, Dictionary<string, string> formInfo)
         {
             OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
             {
                 Userid = userId.ToString(),//user的accountID
-                CreateTime = DateTime.Now.GetTimeStamp(),
+                CreateTime = DateTime.Now.GetTimeStampM(),
                 Title = title,//待办事项的标题
-                Url = url,//"https://oa.dingtalk.com",//待办事项的跳转链接
-                FormItemList_ = new List<OapiWorkrecordAddRequest.FormItemVoDomain>()
-                {
-                    new OapiWorkrecordAddRequest.FormItemVoDomain
-                    {
-                        Title=formTitle,
-                        Content=fromContent
-                    },
-                }
+                Url = url,//"https://oa.dingtalk.com",//待办事项的跳转链接   
             };
-            WorkrecordAdd(oapiWorkrecordAddRequest);
+
+            var formItemList_ = new List<OapiWorkrecordAddRequest.FormItemVoDomain>();
+            foreach (var item in formInfo)
+            {
+                formItemList_.Add(new OapiWorkrecordAddRequest.FormItemVoDomain()
+                {
+                    Title = item.Key,
+                    Content = item.Value
+                }); ;
+            }
+            oapiWorkrecordAddRequest.FormItemList_ = formItemList_;
+
+            //返回待办id
+            return WorkrecordAdd(oapiWorkrecordAddRequest).Result.RecordId;
         }
 
         /// <summary>

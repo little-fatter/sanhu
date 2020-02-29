@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <model name="law_party" title="当事人" textField="Associatedobjecttype" moduleName="case" moduleTitle="案件" dbName="" />
+    <model name="law_party" title="当事人" textField="CaseId" moduleName="case" moduleTitle="案件" dbName="" />
     <fields>
         <field name="CaseId" dbName="CaseId" title="案件id" type="string" length="50" isPK="N" />
         <field name="IDcard" dbName="IDcard" title="身份证号码" type="string" length="50" isPK="N" />
@@ -10,17 +10,17 @@
         <field name="Typesofparties" dbName="TypesofpartiesID" title="当事人类型" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
         <field name="EventId" dbName="EventId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="AssociationobjectID" dbName="AssociationobjectID" title="关联对象id" type="string" length="50" isPK="N" />
-        <field name="Associatedobjecttype" dbName="AssociatedobjecttypeID" title="关联对象(表单)类型" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Name" dbName="Name" title="当事人名称" type="string" length="50" enabledSearch="Y" isPK="N" />
         <field name="Gender" dbName="Gender" title="当事人性别" type="string" length="50" isPK="N" />
         <field name="Occupationofparties" dbName="Occupationofparties" title="当事人职业" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Nationality" dbName="Nationality" title="当事人民族" type="string" length="50" isPK="N" />
         <field name="WorkUnit" dbName="WorkUnit" title="工作单位" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="Associatedobjecttype" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
-    <getlist base_fields="*" base_ignore_fields="" many2one="Typesofparties,Associatedobjecttype" one2many="" many2many="" />
-    <getpageddata base_fields="*" base_ignore_fields="" many2one="Typesofparties,Associatedobjecttype" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="Typesofparties" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="Typesofparties" one2many="" many2many="" />
 </freedesign>

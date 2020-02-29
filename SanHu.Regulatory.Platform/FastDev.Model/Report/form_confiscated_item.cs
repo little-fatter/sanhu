@@ -79,6 +79,11 @@ public string AssociationobjectID
 get;
 set;
 }
+public string TaskId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

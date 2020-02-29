@@ -56,11 +56,11 @@ const apiConfig = {
       // 下载文件
       downloadFile: getHost('file') + '/api/file/Get',
       // 删除文件
-      deleteFile: getHost('file') + '/api/file/Delete'
+      deleteFile: getHost('file') + '/api/Default/Delete'
     }
   },
   /**
-   * 业务Api
+   * 业务API
    */
   regulatory: {
     getPageDate: getHost('regulatory') + '/pageddata',
@@ -68,7 +68,6 @@ const apiConfig = {
     commonOperateApi: getHost('regulatory') + '/api',
     getDictionaryItems: getHost('regulatory') + '/api/items',
     commonSaveApi: getHost('regulatory') + '/save'
-
   }
 }
 

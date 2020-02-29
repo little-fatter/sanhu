@@ -14,6 +14,11 @@ namespace FastDev.Service
 {
     class form_confiscated_itemService : ServiceBase, IService
     {
+
+        public form_confiscated_itemService()
+        {
+            OnGetAPIHandler += form_confiscated_itemService_OnGetAPIHandler;
+        }
         private Func<APIContext, object> form_confiscated_itemService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
@@ -30,7 +35,7 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(data.formConfiscatedItems);
+                CreateInfo(data.formConfiscatedItems, data.SourceTaskId, data.EventInfoId);
                
                         EndEvent(data.SourceTaskId, data.EventInfoId);
                     
@@ -40,7 +45,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -63,7 +68,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -76,12 +81,17 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(List<form_confiscated_item> lists)
+        private void CreateInfo(List<form_confiscated_item> lists,string taskid,string eventid)
         {
             if (lists.Count < 1) return;
+
             foreach (var l in lists)
             {
-                base.Create(lists);
+                form_confiscated_item item = new form_confiscated_item();
+                item = l;
+                item.EventInfoId = eventid;
+                item.TaskId = taskid;
+                base.Create(item);
             }
             return;
         }

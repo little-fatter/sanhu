@@ -14,6 +14,7 @@
         <field name="Objectofinquiry" dbName="ObjectofinquiryID" title="询问对象" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Enquiryplace" dbName="Enquiryplace" title="询问地点" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Originofcase" dbName="Originofcase" title="案件由来" type="string" length="200" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

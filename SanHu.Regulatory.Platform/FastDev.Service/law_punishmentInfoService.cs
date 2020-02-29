@@ -30,8 +30,10 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
-            if (data.LawPunishmentInfo == null) return false;
+            if (data.LawPunishmentInfo == null) throw new Exception();
             QueryDb.BeginTransaction();
+            data.LawPunishmentInfo.EventInfoId = data.EventInfoId;
+            data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
@@ -41,7 +43,7 @@ namespace FastDev.Service
             catch (Exception)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw new Exception();
             }
             QueryDb.CompleteTransaction();
             return true;
@@ -65,7 +67,9 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "law_punishmentInfo";
                     l.AssociationobjectID = lawpunishment_Info;
-                    _Lawpartys.Create(l);
+                    l.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(l);
+                    //_Lawpartys.Create(l);
                 }
             }
             if (attachments != null && attachments.Count > 0)
@@ -74,7 +78,9 @@ namespace FastDev.Service
                 {
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
-                    _attachment.Create(a);           
+                    a.ID = Guid.NewGuid().ToString();
+                    QueryDb.Insert(a);
+                   // _attachment.Create(a);           
                 }
             }
         }

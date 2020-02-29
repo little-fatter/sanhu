@@ -15,6 +15,10 @@
         <field name="Paymentmethod" dbName="PaymentmethodID" title="缴纳方式" type="many2one" relationModel="res_dictionary" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CoOrganizer" dbName="CoOrganizer" title="协办人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CoorganizerID" dbName="CoorganizerID" title="协办人ID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CoOrganizerSign" dbName="CoOrganizerSign" title="协办人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="PartySign" dbName="PartySign" title="当事人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="MainHanderSign" dbName="MainHanderSign" title="主办人签字" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

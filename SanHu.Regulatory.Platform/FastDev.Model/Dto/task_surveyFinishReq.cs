@@ -16,6 +16,10 @@ namespace FD.Model.Dto
         /// 当事人信息
         /// </summary>
         public List<law_party> LawParties { get; set; }
+        /// <summary>
+        /// 证据信息
+        /// </summary>
+        public List<attachment> Attachments { get; set; }
 
     }
 }

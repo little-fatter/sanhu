@@ -148,23 +148,9 @@ function() {
                 {
                     newline: 1,
                     name: "AssignUsers",
-                    label: "分配用户",
-                    editor: {
-                        url: "/web/namedata",
-                        parms: {
-                            model: "user"
-                        },
-                        detailEnabled: true,
-                        detailUrl: "/web/detaildata",
-                        detailParms: {
-                            model: "user"
-                        },
-                        valueField: "ID",
-                        sourceFilter: null,
-                        textField: "Name",
-                        many2one: true
-                    },
-                    type: "ref_select",
+                    label: "任务执行人",
+                    editor: {},
+                    type: "text",
                     width: "",
                     readonlyInEdit: 0
                 },

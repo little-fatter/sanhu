@@ -21,7 +21,7 @@ namespace FastDev.Service
     class task_patrolService : SHBaseService, IService
     {
 
-       
+
         public task_patrolService()
         {
             OnGetAPIHandler += Task_patrolService_OnGetAPIHandler;
@@ -95,9 +95,25 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                data.TaskPatrol.TaskId = data.SourceTaskId;
                 //保存表单信息
-                Create(data.TaskPatrol);
+                data.TaskPatrol.EventInfoId = data.EventInfoId;
+                data.TaskPatrol.TaskId = data.SourceTaskId;
+                var formId = Create(data.TaskPatrol);
+                var attachments = data.Attachments;
+                //保存附件
+                var _attachment = ServiceHelper.GetService("attachmentService");
+                if (attachments != null && attachments.Count > 0)
+                {
+                    foreach (var a in attachments)
+                    {
+                        a.Associatedobjecttype = "task_patrol";
+                        a.AssociationobjectID = formId.ToString();
+                        a.ID = Guid.NewGuid().ToString();
+                        QueryDb.Insert(a);
+                        // _attachment.Create(a);           
+                    }
+                }
+
                 //处理事件,任务状态
                 if (data.TaskPatrol.Needlawenforcement == 0 && data.TaskPatrol.Needtracking == 0)
                 {
@@ -111,7 +127,7 @@ namespace FastDev.Service
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                return false;
+                throw e;
             }
             return true;
         }
