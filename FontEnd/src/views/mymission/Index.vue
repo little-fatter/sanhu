@@ -230,6 +230,7 @@ export default {
     })
     // 获取用户Id
     getUser().then(res => {
+      console.log(res)
       if (res.UserId) {
         this.rules[2].value = res.UserId
       }
