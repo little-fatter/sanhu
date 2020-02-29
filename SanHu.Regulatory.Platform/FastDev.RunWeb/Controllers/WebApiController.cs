@@ -52,7 +52,7 @@ namespace FastDev.RunWeb.Controllers
                     PageIndex = (int)descriptor.PageIndex,
                     PageSize = (int)descriptor.PageSize,
                     Total = (int)presult.Total,
-                    Rows = (List<Dictionary<string, object>>)presult.Records
+                    Rows = presult.Records.Count>0?(List<Dictionary<string, object>>)presult.Records:new List<Dictionary<string, object>>()
                 };
             }
 

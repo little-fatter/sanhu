@@ -29,6 +29,23 @@ namespace FastDev.Service
         {
             OnGetAPIHandler += Work_taskService_OnGetAPIHandler;
             OnAfterGetDetailData += Work_taskService_OnAfterGetDetailData;
+            OnAfterGetPagedData += Work_taskService_OnAfterGetPagedData;
+        }
+
+        private void Work_taskService_OnAfterGetPagedData(object query, object data)
+        {
+            var lst = (data as PagedData).Records;
+            var db = this.QueryDb;
+            for (int i = 0; i < lst.Count; i++)
+            {
+                var item = (Dictionary<string, object>)lst[i];
+                string evType = "";
+                if (item["EventInfoId"] != null && !string.IsNullOrEmpty(item["EventInfoId"].ToString()))
+                {
+                    evType = db.ExecuteScalar<string>("select evtTypeIds from event_info where objId=@0", new object[] { item["EventInfoId"] });
+                }
+                item.Add("EventTypeName", evType);
+            }
         }
 
         private void Work_taskService_OnAfterGetDetailData(object query, object data)
@@ -36,10 +53,10 @@ namespace FastDev.Service
             var o = data as Dictionary<string, object>;
             string taskType = o["TaskType"].ToString();
             var db = this.QueryDb;
-            var items = db.FirstOrDefault<Model.Entity.res_dictionaryItems>("where DicID in (select ID from res_dictionary where DicCode = @0) and ItemCode=@1", "TaskType",taskType);
+            var items = db.FirstOrDefault<Model.Entity.res_dictionaryItems>("where DicID in (select ID from res_dictionary where DicCode = @0) and ItemCode=@1", "TaskType", taskType);
             if (items != null)
             {
-                o["TaskTypeInfo"] = new List<string>() {items.ItemCode,items.Title };
+                o["TaskTypeInfo"] = new List<string>() { items.ItemCode, items.Title };
             }
         }
 
