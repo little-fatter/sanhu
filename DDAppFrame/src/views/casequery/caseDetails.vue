@@ -8,7 +8,20 @@
       <van-cell :title="caseInfo.caseTitle" title-class="title-cell title-cell-div" />
       <van-cell title="案件类型" :value="caseInfo.CauseOfAction" value-class="con-style" title-class="title-cell" />
       <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
-      <van-cell title="当事人" :value="caseInfo.caseBreakLow" :label="caseInfo.caseBreakLowId" value-class="con-style" title-class="title-cell" />
+
+      <!-- <van-cell title="当事人" :value="caseInfo.caseBreakLow" :label="caseInfo.caseBreakLowId" value-class="con-style" title-class="title-cell" /> -->
+
+      <template>
+        <van-cell
+          title="当事人"
+          v-for="item in lawPartyInfoL"
+          :key="item.ID+'@'"
+          :value="item.Name"
+          :label="caseInfo.IDcard"
+          value-class="con-style"
+          title-class="title-cell" />
+      </template>
+
       <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发地点" :value="caseInfo.IncidentAddress" value-class="con-style" title-class="title-cell">
         <van-button
@@ -40,7 +53,7 @@
       </div>
       <div>
         <van-cell-group>
-          <van-cell title="事发地点" :value="eventInfo.location" value-class="con-style" title-class="title-cell">
+          <van-cell title="事发地点" :value="eventInfo.address" value-class="con-style" title-class="title-cell">
             <van-button
               class="locationBtn"
               slot="right-icon"
@@ -49,11 +62,11 @@
               type="info"
               @click="viewMap"/>
           </van-cell>
-          <van-cell title="上报时间" :value="eventInfo.happenTime" value-class="con-style" title-class="title-cell" />
+          <van-cell title="上报时间" :value="eventInfo.reportTime" value-class="con-style" title-class="title-cell" />
           <van-cell title="上报来源" :value="eventInfo.eventFrom" value-class="con-style" title-class="title-cell" />
-          <van-cell title="上报人" :value="eventInfo.updatePeople" value-class="con-style" title-class="title-cell" />
-          <van-cell title="事件类型" :value="eventInfo.eventType" value-class="con-style" title-class="title-cell" />
-          <van-cell title="事件描述" :value="eventInfo.eventDesc" value-class="con-style" title-class="title-cell" />
+          <van-cell title="上报人" :value="eventInfo.reporterName" value-class="con-style" title-class="title-cell" />
+          <van-cell title="事件类型" :value="eventInfo.evtTypeDisplayName" value-class="con-style" title-class="title-cell" />
+          <van-cell title="事件描述" :value="eventInfo.remark" value-class="con-style" title-class="title-cell" />
         </van-cell-group>
       </div>
     </van-panel>
@@ -116,13 +129,13 @@ export default {
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {
-        // this.caseInfo = res
+        this.lawPartyInfoL = res
         console.log('当事人', res)
       })
       // 请求案件 关联事件
       getDetialdataByEventInfoId('event_info', this.caseId.EventInfoId).then((res) => {
-        // this.lawPartyInfoL = res
-        console.log('事件信息', res, '123')
+        this.eventInfo = res
+        console.log('事件信息', res.Rows)
       })
     }
   },
