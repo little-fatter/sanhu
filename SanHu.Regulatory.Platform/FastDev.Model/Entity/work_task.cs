@@ -34,11 +34,6 @@ public string TaskContent
 get;
 set;
 }
-public string AssignUsersID
-{
-get;
-set;
-}
 public DateTime? InitiationTime
 {
 get;
@@ -115,6 +110,11 @@ get;
 set;
 }
 public string LaskTaskId
+{
+get;
+set;
+}
+public string AssignUsers
 {
 get;
 set;

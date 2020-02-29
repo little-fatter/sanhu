@@ -64,7 +64,7 @@ namespace FastDev.Service
             workTask.TaskType = TaskType.Survey.ToString();
             workTask.TaskStatus = (int)WorkTaskStatus.Normal;
             workTask.TaskContent = type.GetDisplayName();
-            workTask.AssignUsersID = AssignUsersID;
+            workTask.AssignUsers = AssignUsersID;
             workTask.MainHandler = MainHandler;
             return workTask;
         }
@@ -204,7 +204,7 @@ namespace FastDev.Service
                 Task.LaskTaskId = sourcetaskid;
                 Task.InitiationTime = DateTime.Now;
                 var taskId = SaveWorkTask(Task);
-                CreateWorkrecor(Task.AssignUsersID, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, Task.TaskType, Task.TaskContent);
+                CreateWorkrecor(Task.AssignUsers, Task.TaskContent, Task.RemoteLinks + "?taskid=" + taskId, Task.TaskType, Task.TaskContent);
             }
             return true;
         }

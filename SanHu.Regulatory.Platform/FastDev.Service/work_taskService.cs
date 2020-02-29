@@ -223,6 +223,12 @@ namespace FastDev.Service
             return true;
         }
 
+        public override object GetPageData(QueryDescriptor descriptor)
+        {
+            var data = base.GetPageData(descriptor);
+            return data;
+        }
+
     }
 
 
