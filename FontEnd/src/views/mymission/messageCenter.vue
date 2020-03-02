@@ -111,6 +111,7 @@
         v-if="tabValue === 'msg'"
         :rowSelection="{selectedRowKeys: msgSelectedRowKeys, onChange: onSelectChange}"
         :columns="msgColumns"
+        :hideDefaultSelections="true"
         :dataSource="msgData">
         <span slot="action" slot-scope="record">
           <span style="width: 28px;display:inline-block">
@@ -266,7 +267,7 @@ export default {
         },
         {
           title: 'mars',
-          key: '赵六',
+          key: '赵六1',
           content: '赵六内容',
           type: '事件告警',
           date: '2020-02-26 23:12:22',
@@ -504,18 +505,28 @@ export default {
     },
     handleAllReaded () {
       this[`${this.tabValue}SelectedRowKeys`].forEach(key => {
-        this[`${this.tabValue}Data`].forEach(item => {
+        for (const item of this[`${this.tabValue}Data`]) {
           if (key === item.key) {
             item.readed = true
+            return
           }
-        })
+        }
       })
     },
+
     onDelete (key) {
       const data = [...this[`${this.tabValue}Data`]]
       this[`${this.tabValue}Data`] = data.filter(item => item.key !== key)
     },
-    handleAllDelete () {},
+    handleAllDelete () {
+      this[`${this.tabValue}SelectedRowKeys`].forEach(key => {
+        for (const index in this[`${this.tabValue}Data`]) {
+          if (key === this[`${this.tabValue}Data`][index].key) {
+            this[`${this.tabValue}Data`].splice(index, 1)
+          }
+        }
+      })
+    },
     onSelectChange (selectedRowKeys) {
       this[`${this.tabValue}SelectedRowKeys`] = selectedRowKeys
     }

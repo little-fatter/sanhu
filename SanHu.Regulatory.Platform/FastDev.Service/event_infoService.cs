@@ -4,6 +4,7 @@ using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -32,6 +33,7 @@ namespace FastDev.Service
                 base.Create(postdata);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
+                eventInfo.evtState = ((int)FD.Model.Enum.EventStatus.untreated).ToString();
                 base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }
@@ -63,6 +65,15 @@ namespace FastDev.Service
             descriptor.Condition = filterOut;
             ServiceConfig serviceConfig = GetServiceConfig(ModelName);
             PagedData pageData = DataAccessHelper.GetPageData(QueryDb, ModelName, descriptor);
+
+            var pageDatas = pageData.Records;
+            List<IDictionary<string, object>> revData = new List<IDictionary<string, object>>();
+            foreach (var d in pageDatas)
+            {
+                var data = JsonHelper.ToDictionary(JObject.Parse(JsonHelper.SerializeObject(d)));
+                revData.Add(data);
+            }
+            pageData.Records = revData;
             return pageData;
         }
 

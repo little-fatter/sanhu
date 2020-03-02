@@ -108,3 +108,11 @@ export function getUser (parameter) {
     }
   })
 }
+
+// 通告详情
+export function getNoticeDetails (parameter) {
+  return postHttp({
+    url: apiConfig.detail,
+    data: { model: 'cms_article', id: parameter }
+  })
+}

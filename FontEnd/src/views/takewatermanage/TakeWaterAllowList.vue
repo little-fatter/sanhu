@@ -82,8 +82,8 @@
     <div class="header">
       <div class="listHeader">
         <span class="listStatus">
-          <span>{{this.$route.query.number}}</span>
-          <span class="status">{{this.$route.query.status}}</span>
+          <span>{{ this.$route.query.number }}</span>
+          <span class="status">{{ this.$route.query.status }}</span>
         </span>
         <span class="eventButton">
           <span class="print">
@@ -124,12 +124,12 @@
         </span>
         <div class="userInfos">
           <div class="left">
-            <div>取水户:{{this.$route.query.name}}</div>
-            <div>法定代表人:{{this.$route.query.linkman}}</div>
+            <div>取水户:{{ this.$route.query.name }}</div>
+            <div>法定代表人:{{ this.$route.query.linkman }}</div>
           </div>
           <div class="right">
-            <div>地址:{{this.$route.query.address}}</div>
-            <div>手机号:{{this.$route.query.tel}}</div>
+            <div>地址:{{ this.$route.query.address }}</div>
+            <div>手机号:{{ this.$route.query.tel }}</div>
           </div>
         </div>
       </div>
@@ -140,8 +140,8 @@
         </span>
         <div class="areaInfos">
           <div class="left">
-            <div>取水口:{{this.$route.query.address}}</div>
-            <div>所属湖:{{this.$route.query.lakes}}</div>
+            <div>取水口:{{ this.$route.query.address }}</div>
+            <div>所属湖:{{ this.$route.query.lakes }}</div>
             <div>计量设备:</div>
             <div>取水方式:</div>
             <div>水源类型:</div>
@@ -159,9 +159,9 @@
         <div class="renewalRecords">
           <div>
             <span>1</span>
-            <span>{{this.$route.query.extendDate}}</span>
+            <span>{{ this.$route.query.extendDate }}</span>
             <span>生效</span>
-            <span>有效期{{this.$route.query.extendDate}}——{{this.$route.query.usefulDate}}</span>
+            <span>有效期{{ this.$route.query.extendDate }}——{{ this.$route.query.usefulDate }}</span>
             <hr />
           </div>
           <div>

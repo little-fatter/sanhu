@@ -59,6 +59,11 @@ public string Remark
 get;
 set;
 }
+        public string Jobnumber
+        {
+            set;
+            get;
+        }
 }
 
 }

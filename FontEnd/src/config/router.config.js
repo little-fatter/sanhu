@@ -165,6 +165,18 @@ export const asyncRouterMap = [
                 meta: { title: '新增案件', keepAlive: false }
               }
             ]
+          },
+          // 通告
+          {
+            path: 'notice',
+            component: RouteView,
+            children: [
+              {
+                path: 'notice-detail',
+                name: 'noticeDetail',
+                component: () => import('@/views/notice/noticeDetail')
+              }
+            ]
           }
         ]
       },

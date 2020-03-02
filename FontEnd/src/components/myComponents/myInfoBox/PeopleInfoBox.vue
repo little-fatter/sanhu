@@ -44,6 +44,7 @@
   </a-layout>
 </template>
 <script>
+import appConfig from '@/config/app.config'
 export default {
   name: 'PeopleInfoBox',
   props: {
@@ -69,13 +70,13 @@ export default {
         dep: '-',
         region: '-',
         phone: '-',
-        avatar: '/img/yzt-renyuanceng/user.png',
+        avatar: appConfig.StaticWebContext + '/img/yzt-renyuanceng/user.png',
         online: true
       },
       imgs: {
-        shexiangtou: '/img/yzt-renyuanceng/shexiangtou(20).png',
-        huatong: '/img/yzt-renyuanceng/huatong(20).png',
-        dianhua: '/img/yzt-renyuanceng/dianhua(20).png'
+        shexiangtou: appConfig.StaticWebContext + '/img/yzt-renyuanceng/shexiangtou(20).png',
+        huatong: appConfig.StaticWebContext + '/img/yzt-renyuanceng/huatong(20).png',
+        dianhua: appConfig.StaticWebContext + '/img/yzt-renyuanceng/dianhua(20).png'
       }
     }
   },
