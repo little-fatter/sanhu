@@ -40,8 +40,8 @@
               <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>
               <!-- <van-tag plain>{{ item.CaseStatus }}</van-tag> -->
               <van-tag plain>{{ item.CaseStatus?`简易程序`:`已创建` }}</van-tag>
-              <span>{{ item.ModifyDate }}</span>
-              <!--                            <van-tag plain>2020/02/11 12:00更新</van-tag>-->
+              <span>{{ item.ModifyDate }}更新</span>
+              <!-- <van-tag plain>2020/02/11 12:00更新</van-tag> -->
             </div>
           </div>
         </van-panel>
