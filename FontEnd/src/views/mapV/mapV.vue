@@ -73,6 +73,7 @@ import MyVoiceChat from '@/components/myComponents/myChat/MyVoiceChat.vue'
 import MyPhoneChat from '@/components/myComponents/myChat/MyPhoneChat.vue'
 
 import dataGet from './dataGet'
+import appConfig from '../../config/app.config'
 
 export default {
   name: 'MapV',
@@ -131,7 +132,7 @@ export default {
           dep: properties.dep,
           region: properties.region,
           phone: properties.phone,
-          avatar: '/img/yzt-renyuanceng/user.png',
+          avatar: appConfig.StaticWebContext + '/img/yzt-renyuanceng/user.png',
           online: true
         })
       } else {

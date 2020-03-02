@@ -123,19 +123,19 @@ padding:40px;
     <div class="formContentBox">
       <div class="boxTitle">
         <div class="circleTitle">
-          提交人
+          {{ detailData.CreateUser[1].slice(0,3) }}
         </div>
         <div>
           <div class="titleDes">
-            提交人姓名
+            {{ detailData.CreateUser[1] }}
           </div>
           <div>
-            文件状态
+            {{ detailData.FormState }}
           </div>
         </div>
       </div>
       <div class="boxContent">
-        <component :is="formStyleName" :id="formId"></component>
+        <component :is="formStyleName" :detailData="detailData"></component>
       </div>
       <div class="formFooter">
         <div class="footSteps">
@@ -144,7 +144,7 @@ padding:40px;
               <div class="itemBox">
                 <div class="circleTitleBox">
                   <div class="circleTitle">
-                    提交人
+                    {{ detailData.CreateUser[1].slice(0,3) }}
                   </div>
                   <div class="circleImg">
                     <img src="../../assets/icons/true.svg" alt="">
@@ -152,14 +152,14 @@ padding:40px;
                 </div>
                 <div>
                   <div class="titleDes">
-                    文件状态
+                    {{ detailData.FormState }}
                   </div>
                   <div>
-                    提交人
+                    {{ detailData.CreateUser[1] }}
                   </div>
                 </div>
               </div>
-              <div>time</div>
+              <div>{{ detailData.CreateDate }}</div>
             </div>
           </div>
           <div class="stepsItemBox forLine">
@@ -238,10 +238,10 @@ padding:40px;
               <div>time</div>
             </div>
           </div>
-          <div>
+          <!-- <div>
             <div></div>
             <div>time</div>
-          </div>
+          </div> -->
         </div>
         <div class="returnBox">
           <div @click="$router.back()">返回</div>
@@ -253,6 +253,7 @@ padding:40px;
 
 <script>
 import detailEnforce from './fromComponents/detail-enforce'
+import { getFromPatrolRecord } from '@/api/sampleApi'
 import detailPunish from './fromComponents/detail-punish'
 export default {
   name: 'FormDetails',
@@ -263,10 +264,22 @@ export default {
     return {
       formStyleName: 'detailEnforce', // 引用的组件名
       approvalList: ['负责人1', '负责人2', '负责人3'],
-      formId: 'af5f950b-79a6-45de-829d-4f7e4838cbe2'// 详情id
+      formId: 'af5f950b-79a6-45de-829d-4f7e4838cbe2', // 详情id
+      detailData: {}
     }
   },
+  mounted () {
+    this.getFromPatrolRecord()
+  },
   methods: {
+    getFromPatrolRecord () {
+      getFromPatrolRecord(this.formId).then(res => {
+        this.detailData = res
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

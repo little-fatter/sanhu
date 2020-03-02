@@ -22,6 +22,8 @@
   </a-modal>
 </template>
 <script>
+import appConfig from '@/config/app.config';
+
 export default {
   name: 'MyVoiceChat',
   props: {
@@ -32,7 +34,7 @@ export default {
       show: false,
       info: {
         name: '-',
-        avatar: '/img/yzt-renyuanceng/user.png',
+        avatar: appConfig.StaticWebContext + '/img/yzt-renyuanceng/user.png',
         phone: '-------------------'
       }
     }
@@ -44,7 +46,7 @@ export default {
     open: function (info) {
       if (info) {
         this.info.name = info.name || '-'
-        // this.info.avatar = info.avatar || '/img/yzt-renyuanceng/user.png'
+        // this.info.avatar = info.avatar || appConfig.StaticWebContext + '/img/yzt-renyuanceng/user.png'
         this.info.phone = info.phone || '-------------------'
       }
       this.show = true

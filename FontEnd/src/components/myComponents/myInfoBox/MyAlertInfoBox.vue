@@ -149,19 +149,19 @@ export default {
       },
       statusTable: [
         {
-          src: '/img/yzt-renyuanceng/zhuyi.png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi.png',
           title: '任务待接受'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(1).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(1).png',
           title: '任务已接受'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(2).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(2).png',
           title: '任务已完成'
         },
         {
-          src: '/img/yzt-renyuanceng/zhuyi(3).png',
+          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(3).png',
           title: '任务失败'
         }
       ],
@@ -209,7 +209,8 @@ export default {
       var CoOrganizer = this.taskPanel.subPeople.toString()
       var ExpectedCompletionTime = this.taskPanel.time.format('YYYY-MM-DD HH:mm:ss')
       // var url = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/webapi/api'
-      var url = 'http://192.168.0.165:8030/webapi/api'
+      // var url = 'http://192.168.0.165:8030/webapi/api'
+      var url = appConfig.ApiWebContext + '/webapi/api'
 
       var RemoteLinks = appConfig.AppHost + 'eventCheckCreate'
       var data = {

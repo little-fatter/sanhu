@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import appConfig from '@/config/app.config'
 export default {
   data: {
     peopleList: {},
@@ -131,9 +132,9 @@ export default {
     return list
   },
   initData: function (after) {
-    var urlDep = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata?model=organization'
-    var urlPeople = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata?model=loc_field_staff'
-    var urlEvent = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata?model=event_info'
+    var urlDep = appConfig.ApiWebContext + '/web/pageddata?model=organization'
+    var urlPeople = appConfig.ApiWebContext + '/web/pageddata?model=loc_field_staff'
+    var urlEvent = appConfig.ApiWebContext + '/web/pageddata?model=event_info'
 
     var bodyPeople = { 'Condition': { 'rules': [], 'groups': [], 'op': 'and' }, 'PageIndex': 1, 'PageSize': 30, 'SortName': 'ID', 'SortOrder': 'asc' }
 

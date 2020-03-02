@@ -1,7 +1,8 @@
 import { Style, Icon, Fill, Stroke, Circle } from 'ol/style'
+import appConfig from '@/config/app.config'
 
 export default {
-  selectIson: '/img/yzt-shijian/select.png',
+  selectIson: appConfig.StaticWebContext + '/img/yzt-shijian/select.png',
   layerShow: {
     peopleLayer: {
       active: true,
@@ -63,10 +64,10 @@ export default {
     // }
   },
   peopleIcons: [
-    '/img/yzt-renyuanceng/renyuan1.png', // 执法人员
-    '/img/yzt-renyuanceng/renyuan2.png', // 巡检人员
-    '/img/yzt-renyuanceng/renyuan1s.png', // 选择状态执法人员
-    '/img/yzt-renyuanceng/renyuan2s.png' // 选择状态巡检人员
+    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan1.png', // 执法人员
+    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan2.png', // 巡检人员
+    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyaun1s.png', // 选择状态执法人员
+    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan2s.png' // 选择状态巡检人员
   ],
   evtStateMap: {
     list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
@@ -88,24 +89,24 @@ export default {
     }
   },
   alertEventIcons: [
-    '/img/yzt-shijian/dingwei(1).png', // 任务未接受
-    '/img/yzt-shijian/dingwei(3).png', // 任务已接受
-    '/img/yzt-shijian/dingwei.png', // 任务已完成
-    '/img/yzt-shijian/dingwei(2).png', // 任务失败
-    '/img/yzt-shijian/dingwei_w.png' // 任务失败
+    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(1).png', // 任务未接受
+    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(3).png', // 任务已接受
+    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei.png', // 任务已完成
+    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(2).png', // 任务失败
+    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei_w.png' // 任务失败
   ],
   equipmentIcons: [
-    '/img/yzt-shebei/sxt.png', // 摄像头
-    '/img/yzt-shebei/wrj1.png', // 起飞无人机
-    '/img/yzt-shebei/wrj2.png', // 待飞无人机
-    '/img/yzt-shebei/sxt_s.png', // 选中状态
-    '/img/yzt-shebei/wrj1_s.png', //
-    '/img/yzt-shebei/wrj2_s.png' //
+    appConfig.StaticWebContext + '/img/yzt-shebei/sxt.png', // 摄像头
+    appConfig.StaticWebContext + '/img/yzt-shebei/wrj1.png', // 起飞无人机
+    appConfig.StaticWebContext + '/img/yzt-shebei/wrj2.png', // 待飞无人机
+    appConfig.StaticWebContext + '/img/yzt-shebei/sxt_s.png', // 选中状态
+    appConfig.StaticWebContext + '/img/yzt-shebei/wrj1_s.png', //
+    appConfig.StaticWebContext + '/img/yzt-shebei/wrj2_s.png' //
   ],
   equipmentTypes: [
     '摄像头', '无人机'
   ],
-  shipIcons: ['/img/yzt-ship/fish-ship.png', '/img/yzt-ship/ship.png'],
+  shipIcons: [appConfig.StaticWebContext + '/img/yzt-ship/fish-ship.png', appConfig.StaticWebContext + '/img/yzt-ship/ship.png'],
   lakeStyle: function () {
     return new Style({
       fill: new Fill({
