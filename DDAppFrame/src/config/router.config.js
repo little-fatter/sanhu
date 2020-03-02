@@ -185,15 +185,6 @@ export const asyncRouterMap = [{
       }
     },
     {
-      path: '/CaseDetail',
-      name: 'CaseDetail',
-      component: () => import ('@/views/details/CaseDetail.vue'),
-      meta: {
-        title: '案件详情',
-        keepAlive: true
-      }
-    },
-    {
       path: '/RecordOfInquest',
       name: 'RecordOfInquest',
       component: () => import ('@/views/details/RecordOfInquest.vue'),
