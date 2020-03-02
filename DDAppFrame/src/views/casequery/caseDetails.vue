@@ -21,13 +21,13 @@
 
       <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发地点" :value="caseInfo.IncidentAddress" value-class="con-style" title-class="title-cell">
-        <van-button
+        <!-- <van-button
           class="locationBtn"
           slot="right-icon"
           icon="location"
           size="small"
           type="info"
-          @click="viewMap"/>
+          @click="viewMap"/> -->
       </van-cell>
       <van-cell title="处罚决定文书号" :value="caseInfo.PenaltyDecisionNo" value-class="con-style" title-class="title-cell" />
       <van-cell title="处罚种类" v-if="caseInfo.PenaltyType" :value="caseInfo.PenaltyType[1]" value-class="con-style" title-class="title-cell" />
@@ -46,18 +46,18 @@
     <van-panel class="margintop">
       <div slot="header" class="case-title" @click="goDetails">
         <h4>事件信息</h4>
-        <van-icon name="arrow"/>
+        <!-- <van-icon name="arrow"/> -->
       </div>
       <div>
         <van-cell-group>
           <van-cell title="事发地点" :value="eventInfo.address" value-class="con-style" title-class="title-cell">
-            <van-button
+            <!-- <van-button
               class="locationBtn"
               slot="right-icon"
               icon="location"
               size="small"
               type="info"
-              @click="viewMap"/>
+              @click="viewMap"/> -->
           </van-cell>
           <van-cell title="上报时间" :value="eventInfo.reportTime" value-class="con-style" title-class="title-cell" />
           <!-- <van-cell title="上报来源" :value="eventInfo.eventFrom" value-class="con-style" title-class="title-cell" /> -->
@@ -99,7 +99,8 @@ export default {
       console.log(`到事件详情`)
     },
     caseFiles () {
-      this.$router.push({ name: 'caseFlies', params: { caseId: '4d77125c-7352-4a5d-827c-c524cdac07ff' } })
+      // 传递 案件id
+      this.$router.push({ name: 'caseFlies', query: { caseId: this.caseId } })
     },
     // 数据请求
     getCaseInfo () {
