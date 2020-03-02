@@ -211,7 +211,6 @@ namespace FastDev.Service
         {
             var CaseInfoSource = base.Create(caseInfo) as string;//保存原始信息
             var CaseInfoTemp = caseInfo;
-            CaseInfoTemp.ID = CaseInfoSource;
             CaseInfoTemp.PreviousformID = CaseInfoSource;                                    
             var CaseInfoNew = base.Create(CaseInfoTemp) as string;//可变更的信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
@@ -221,7 +220,6 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoSource;
-                    //_Lawpartys.Create(l);
                     l.ID = Guid.NewGuid().ToString();
                     QueryDb.Insert(l);
                 }
@@ -229,7 +227,6 @@ namespace FastDev.Service
                 {
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoNew;
-                    // _Lawpartys.Create(l);
                     l.ID = Guid.NewGuid().ToString();
                     QueryDb.Insert(l);
                 }
