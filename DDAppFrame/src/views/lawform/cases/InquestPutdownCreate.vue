@@ -238,10 +238,7 @@ export default {
         res.users.forEach(item => {
           lawPersions.push(item.name)
         })
-        console.log('lawPersions', lawPersions)
-        console.log('lawPersions', lawPersions.join())
         that.lawPersionNames = lawPersions.join()
-        console.log('that.model.lawPersions', that.lawPersionNames)
       })
     },
     handleSelecRecordPersions () {

@@ -1,21 +1,19 @@
 <template>
   <div>
-    <form action="/">
-      <van-search
-        v-model="serchText"
-        show-action
-        placeholder="请输入搜索关键词"
-        class="serch-bar"
-      >
-        <div slot="action" @click="onSearch">搜索</div>
-      </van-search>
-      <van-dropdown-menu class="filtrate-bar">
-        <van-dropdown-item v-model="serchType" :options="serchTypeOptions" @change="serchTypeText"></van-dropdown-item>
-        <van-dropdown-item v-model="serchFlow" :options="serchFlowOptions" @change="serchFlowText"></van-dropdown-item>
-        <van-dropdown-item v-model="serchState" :options="serchStateOptions" @change="serchStateText"></van-dropdown-item>
-        <van-dropdown-item v-model="serchRegion" :options="serchRegionOptions" @change="serchRegionText"></van-dropdown-item>
-      </van-dropdown-menu>
-    </form>
+    <van-search
+      v-model="serchText"
+      show-action
+      placeholder="请输入搜索关键词"
+      class="serch-bar"
+    >
+      <div slot="action" @click="onSearch">搜索</div>
+    </van-search>
+    <van-dropdown-menu class="filtrate-bar">
+      <van-dropdown-item v-model="serchType" :options="serchTypeOptions" @change="serchTypeText"></van-dropdown-item>
+      <van-dropdown-item v-model="serchFlow" :options="serchFlowOptions" @change="serchFlowText"></van-dropdown-item>
+      <van-dropdown-item v-model="serchState" :options="serchStateOptions" @change="serchStateText"></van-dropdown-item>
+      <van-dropdown-item v-model="serchRegion" :options="serchRegionOptions" @change="serchRegionText"></van-dropdown-item>
+    </van-dropdown-menu>
     <div class="case-panel-roll">
       <!-- list组件-->
       <SList :dataCallback="loadData" ref="mylist">

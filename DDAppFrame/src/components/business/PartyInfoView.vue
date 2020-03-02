@@ -47,6 +47,21 @@ export default {
       default: '当事人'
     }
   },
+  watch: {
+    initData (val, oldVal) {
+      const partys = []
+      val.forEach(item => {
+        if (item.TypesofpartiesID === this.defaultTypesofpartieID) {
+          var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
+          item.title = title
+        } else {
+          item.title = item.Name
+        }
+        partys.push(item)
+      })
+      this.partys = partys
+    }
+  },
   data () {
     return {
       partys: [],
@@ -63,9 +78,11 @@ export default {
           this.defaultTypesofpartieID = items[0].ItemCode
           const partys = []
           this.initData.forEach(item => {
-            if (item.TypesofpartieID === this.defaultTypesofpartieID) {
+            if (item.TypesofpartiesID === this.defaultTypesofpartieID) {
               var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
               item.title = title
+            } else {
+              item.title = item.Name
             }
             partys.push(item)
           })

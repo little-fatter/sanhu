@@ -1,7 +1,7 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务" :value="taskInfo.Tasktype"></van-cell>
+      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
       <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
       <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
@@ -22,7 +22,7 @@
         <van-cell title="案件号" :value="caseInfo.DocNo"></van-cell>
         <van-cell title="案件类型" :value="caseInfo.CaseType"></van-cell>
         <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
-        <party-info :initData="caseInfo.dsrs" ref="partyInfo"></party-info>
+        <party-info :initData="LawParties" ref="party"></party-info>
         <van-field
           name="Illegalfacts"
           v-model="penalizeBook.Illegalfacts"
@@ -39,7 +39,9 @@
         <item-group title="证据附件">
           <s-upload
             ref="myupload"
-            :sync2Dingding="false"
+            :accept="accept"
+            :sync2Dingding="true"
+            :initResult="penalizeBook.Attachment"
           >
           </s-upload>
         </item-group>
@@ -96,7 +98,8 @@ import SUpload from '../../../components/file/StandardUploadFile'
 import LawListSelect from '../../../components/business/LawListSelect'
 import { ddcomplexPicker } from '../../../service/ddJsApi.service'
 import { isEmpty, isNotEmpty } from '../../../utils/util'
-import { getDetaildata, getDetialdataByEventInfoId } from '../../../api/regulatoryApi'
+import { getDetaildata, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
+import { AcceptImageAll } from '../../../utils/helper/accept.helper'
 /**
  * 当场处罚决定书
  */
@@ -115,42 +118,55 @@ export default {
       { required: true, message: ' ' }
     ]
     return {
+      accept: AcceptImageAll,
       loading: false,
       showPopup: false,
       showLaw: false,
       selectLawType: null,
       taskInfo: null,
       caseInfo: {
-
       },
       penalizeBook: {
-        Illegalfacts: ''
+        Illegalfacts: '',
+        CoOrganizer: '',
+        CoOrganizerId: ''
       },
+      LawParties: [],
+      Attachment: [],
       illegalbasis: {},
       punishmentbasis: {}
     }
   },
   created () {
-
+    this.init()
   },
   methods: {
     init () {
       const queryParam = this.$route.query
-      const taskId = queryParam.taskId
+      const taskId = queryParam.taskid
       if (isNotEmpty(taskId)) {
-        this.loadTaskInfo()
+        this.loadTaskInfo(taskId)
       }
     },
     loadTaskInfo (taskId) {
       getDetaildata('work_task', taskId).then(res => {
         this.taskInfo = res
-        this.loadCaseInfo(res.EventInfoId)
+        this.loadCaseInfo(res.CaseID)
+        // this.loadEventCheck(res.EventInfoId)
       })
     },
-    loadCaseInfo (EventInfoId) {
-      getDetialdataByEventInfoId('case_Info', EventInfoId).then((res) => {
+    loadCaseInfo (CaseID) {
+      getDetaildata('case_Info', CaseID).then((res) => {
         if (res) {
           this.caseInfo = res
+        }
+      })
+    },
+    loadEventCheck (EventInfoId) {
+      getFormsDetailByEventInfoId(EventInfoId, 'task_survey').then((res) => {
+        if (res) {
+          this.LawParties = res.Party
+          this.Attachment = res.Attachment
         }
       })
     },
@@ -161,8 +177,8 @@ export default {
       this.showPopup = false
     },
     onCaseConfirm (caseInfo) {
-      console.log('caseInfo', caseInfo)
       this.caseInfo = caseInfo
+      // this.loadEventCheck(caseInfo.EventInfoId)
       this.showPopup = false
     },
     handleShowSelectLaw (selectLawType) {
@@ -188,25 +204,25 @@ export default {
           name: res.users[0].name,
           id: res.users[0].emplId
         }
-        this.caseInfo.CoOrganizer = organiserTemp.name
-        this.caseInfo.CoOrganizerId = organiserTemp.id
+        this.penalizeBook.CoOrganizer = organiserTemp.name
+        this.penalizeBook.CoOrganizerId = organiserTemp.id
       })
     },
     onSubmit (values) {
       console.log('submit', values)
-      if (isEmpty(this.caseInfo.code)) {
+      if (isEmpty(this.caseInfo.CauseOfAction)) {
         this.$toast('请选择案件')
         return
       }
-      const dsrs = this.$refs.partyInfo.getResult()
+      const LawParties = this.$refs.party.getResult()
       const decisions = this.$refs.penaltyDecision.getResult()
+      var attachments = this.$refs.myupload.getUploadResult()
       var forms = {
+        taskInfo: this.taskInfo,
+        ...this.penalizeBook,
         ...values,
         caseInfo: {
           ...this.caseInfo
-        },
-        organiser: {
-          ...this.penalizeBook.organiser
         },
         illegalbasis: {
           ...this.illegalbasis
@@ -214,8 +230,9 @@ export default {
         punishmentbasis: {
           ...this.punishmentbasis
         },
-        dsrs: dsrs,
-        decisions: decisions
+        LawParties: LawParties,
+        decisions: decisions,
+        attachments: attachments
       }
       this.$router.push({ name: 'penalizeBookPreview', params: { forms: forms } })
     },

@@ -14,19 +14,7 @@ namespace FastDev.RunWeb.Code
 {
     public class PrintData
     {
-        public PrintData() { }
-        public PrintData(string tempid)
-        {
-            formatContent = tempid;
-        }
-        public PrintData(core_printTemplate temp)
-        {
-            this.printTemp = temp;
-        }
-        public PrintData(core_reportTemplate coreReportTemp)
-        {
-            this.coreReportTemp = coreReportTemp;
-        }
+
         /// <summary>
         /// 打印模板
         /// </summary>
@@ -34,11 +22,29 @@ namespace FastDev.RunWeb.Code
         /// <summary>
         /// 报表模板
         /// </summary>
-        public core_reportTemplate coreReportTemp{ get; set; }
+        public core_reportTemplate coreReportTemp { get; set; }
 
         public Dictionary<string, object> ModelDetailData { get; set; }
 
         public Dictionary<string, object> dicPageInfo { get; set; }
+        public PrintData() {
+            dicPageInfo = new Dictionary<string, object>();
+        }
+        public PrintData(string tempid)
+        {
+            formatContent = tempid;
+            dicPageInfo = new Dictionary<string, object>();
+        }
+        public PrintData(core_printTemplate temp)
+        {
+            this.printTemp = temp;
+            dicPageInfo = new Dictionary<string, object>();
+        }
+        public PrintData(core_reportTemplate coreReportTemp)
+        {
+            this.coreReportTemp = coreReportTemp;
+            dicPageInfo = new Dictionary<string, object>();
+        }
 
         public string formatContent { get; set; }
         public HttpServerUtility Server
