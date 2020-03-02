@@ -4,7 +4,7 @@
       <van-cell title="案件号" :value="penalizeBook.caseInfo.DocNo"></van-cell>
       <van-cell title="案件类型" :value="penalizeBook.caseInfo.CaseType"></van-cell>
       <van-cell title="案由" :value="penalizeBook.caseInfo.CauseOfAction"></van-cell>
-      <party-info-view :initData="penalizeBook.dsrs"></party-info-view>
+      <party-info-view :initData="penalizeBook.LawParties"></party-info-view>
       <van-field
         v-model="penalizeBook.Illegalfacts"
         rows="2"
@@ -18,6 +18,7 @@
           ref="myupload"
           :sync2Dingding="false"
           :isOnlyView="true"
+          :initResult="penalizeBook.attachments"
         >
         </s-upload>
       </item-group>
@@ -49,7 +50,7 @@
           <van-icon name="success" color="green" v-show="organiserSignature" style="margin-left:20px"></van-icon>
         </div>
         <div class="single-save">
-          <van-button type="info" :loading="loading" size="large" class="single-save">保存</van-button>
+          <van-button type="info" :loading="loading" size="large" class="single-save" @click="onSubmit">保存</van-button>
         </div>
       </div>
 
@@ -64,40 +65,10 @@ import ItemGroup from '../../../components/tools/ItemGroup'
 import SUpload from '../../../components/file/StandardUploadFile'
 import PartyInfoView from '../../../components/business/PartyInfoView'
 import PenaltyDecisionView from '../../../components/business/PenaltyDecisionView'
-// const dsrArray = [
-//   {
-//     partyType: 1,
-//     name: '李某',
-//     sex: 1,
-//     profession: '',
-//     idCard: '22222222222',
-//     address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-//     phone: '18982332222',
-//     legalName: '',
-//     tel: ''
-//   },
-//   {
-//     partyType: 2,
-//     name: 'XXXXX公司',
-//     sex: '',
-//     profession: '',
-//     idCard: '22222222222',
-//     address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-//     phone: '18982332222',
-//     legalName: '张某',
-//     tel: '18982332222'
-//   }
-// ]
-// const decisionArray = [
-//   {
-//     decisionType: 1,
-//     amount: 20,
-//     payment: 1
-//   },
-//   {
-//     decisionType: 2
-//   }
-// ]
+import { commonOperateApi, TaskTypeDic } from '../../../api/regulatoryApi'
+import { isNotEmpty, getNextTask } from '../../../utils/util'
+import { getCurrentUserInfo } from '../../../service/currentUser.service'
+var timer = null
 /**
  * 当场处罚决定书预览
  */
@@ -126,10 +97,14 @@ export default {
   created () {
     this.init()
   },
+  beforeDestroy () {
+    if (isNotEmpty(timer)) {
+      clearTimeout(timer)
+    }
+  },
   methods: {
     init () {
       var forms = this.$route.params.forms
-      console.log('forms', forms)
       this.penalizeBook = forms
     },
     handleShowSignature (signatureType) {
@@ -148,6 +123,68 @@ export default {
         this.organiserSignature = signature
       }
       this.showPopup = false
+    },
+    onSubmit () {
+      // if (isEmpty(this.mainSignature)) {
+      //   this.$toast('请主办人签字')
+      //   return
+      // }
+      // if (isEmpty(this.organiserSignature) && isNotEmpty(this.penalizeBook.CoOrganizer)) {
+      //   this.$toast('协办人签字')
+      //   return
+      // }
+      var fine = this.penalizeBook.decisions.find(item => item.decisionType === 1)
+      var decision = {}
+      if (fine) {
+        decision.Isfine = true
+        decision.Amountofpenalty = fine.amount
+        decision.Paymentmethod = fine.payment === 1 ? '当场缴费' : '银行缴款'
+      }
+      var inventory = this.penalizeBook.decisions.find(item => item.decisionType === 2)
+      if (inventory) {
+        decision.IsConfiscationgoods = true
+      }
+      var lawpunishmentInfo = {
+        CaseID: this.penalizeBook.caseInfo.ID,
+        EventInfoId: this.penalizeBook.caseInfo.EventInfoId,
+        Illegalfacts: this.penalizeBook.Illegalfacts,
+        IllegalbasisIDs: this.penalizeBook.illegalbasis.title,
+        PunishmentbasisIDs: this.penalizeBook.punishmentbasis.title,
+        CoOrganizer: this.penalizeBook.CoOrganizer,
+        CoorganizerID: this.penalizeBook.CoOrganizerId,
+        ...decision
+        // MainHanderSign: this.mainSignature,
+        // CoOrganizerSign: this.organiserSignature
+      }
+      var data = {
+        SourceTaskId: isNotEmpty(this.penalizeBook.taskInfo) ? this.penalizeBook.taskInfo.ID : null,
+        EventInfoId: this.penalizeBook.caseInfo.EventInfoId,
+        lawpunishmentInfo,
+        NextTasks: []
+      }
+      var attachments = this.penalizeBook.attachments
+      if (attachments && attachments.length > 0) {
+        data.Attachments = attachments
+      }
+      data.LawParties = this.penalizeBook.LawParties
+      var userInfo = getCurrentUserInfo()
+      var nextTask = getNextTask(TaskTypeDic.finalReport, userInfo.userid, 'caseFinalReportCreate', '结案报告', this.penalizeBook.caseInfo.EventInfoId, this.penalizeBook.caseInfo.ID)
+      data.NextTasks.push(nextTask)
+      this.save(data)
+    },
+    save (data) {
+      this.loading = true
+      commonOperateApi('FINISH', 'law_punishmentInfo', data).then((res) => {
+        this.$toast.success('操作成功')
+        this.goToLawForm()
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    goToLawForm () {
+      timer = setTimeout(() => {
+        this.$router.push({ name: 'layforms' })
+      }, 1000)
     }
   }
 }
