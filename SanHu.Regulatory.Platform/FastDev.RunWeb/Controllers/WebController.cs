@@ -203,7 +203,7 @@ namespace FastDev.RunWeb.Controllers
 
         private int printHeight;
 
-        private string string_2;
+        private string reportModelName;
 
         private ServiceConfig serviceConfig_0;
 
@@ -223,11 +223,11 @@ namespace FastDev.RunWeb.Controllers
 
 
 
-        private string string_6;
+        private string styleTemplate;
 
         private readonly LogManager logMan;
 
-        private Dictionary<string, string> dictionary_3;
+        private Dictionary<string, string> dicBigTree;
 
 
         public object MimeTypes
@@ -1475,27 +1475,27 @@ namespace FastDev.RunWeb.Controllers
                 DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
                 if (isReport == "Y")
                 {
-                    PrintData printData1 = new PrintData();
+                    PrintData print = new PrintData();
                     int num = (!pageindex.HasValue) ? 1 : pageindex.Value;
-                    printData1.coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
+                    print.coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                     {
                         templateId
                     });
-                    printData1.SetDefaultTemplateData();
+                    print.SetDefaultTemplateData();
                     string input = Base64Helper.DecodingString(descriptorCode);
                     QueryDescriptor queryDescriptor = JsonHelper.DeserializeJsonToObject<QueryDescriptor>(input);
-                    ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printData1.coreReportTemp.ModelName);
-                    IService service = ServiceHelper.GetService(printData1.coreReportTemp.ModelName);
+                    ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(print.coreReportTemp.ModelName);
+                    IService service = ServiceHelper.GetService(print.coreReportTemp.ModelName);
                     int num2 = 1;
                     queryDescriptor.PageIndex = num;
                     PagedData pagedData = service.GetPageData(queryDescriptor) as PagedData;
                     long total = pagedData.Total;
-                    double a = (double)total * 1.0 / (double)printData1.coreReportTemp.PageSize.Value;
+                    double a = (double)total * 1.0 / (double)print.coreReportTemp.PageSize.Value;
                     num2 = (int)Math.Ceiling(a);
                     list_2 = (pagedData.Records as List<Dictionary<string, object>>);
-                    strTemplateOut = printData1.coreReportTemp.TemplateBody;
-                    FillPrintDataWithServiceConfig(serviceConfig, printData1);
-                    string text = string_6.ToString();
+                    strTemplateOut = print.coreReportTemp.TemplateBody;
+                    FillPrintDataWithServiceConfig(serviceConfig, print);
+                    string text = styleTemplate.ToString();
                     if (queryDescriptor.EnabledPage)
                     {
                         strTemplateOut = strTemplateOut.Replace("{#page}", ObjectExtensions.ToStr((object)queryDescriptor.PageIndex));
@@ -1506,7 +1506,7 @@ namespace FastDev.RunWeb.Controllers
                         strTemplateOut = strTemplateOut.Replace("{#page}", "1");
                         strTemplateOut = strTemplateOut.Replace("{#pagecount}", ObjectExtensions.ToStr((object)num2));
                     }
-                    text = text.Replace("{style}", printData1.coreReportTemp.TemplateStyle);
+                    text = text.Replace("{style}", print.coreReportTemp.TemplateStyle);
                     text = text.Replace("{content}", strTemplateOut);
                     string[] array;
                     if (!queryDescriptor.EnabledPage)
@@ -1526,12 +1526,12 @@ namespace FastDev.RunWeb.Controllers
                         Success = true,
                         templateParm = new
                         {
-                            marginBottom = printData1.coreReportTemp.MarginBottom,
-                            marginTop = printData1.coreReportTemp.MarginTop,
-                            marginLeft = printData1.coreReportTemp.MarginLeft,
-                            marginRight = printData1.coreReportTemp.MarginRight,
-                            width = printData1.coreReportTemp.Width,
-                            height = printData1.coreReportTemp.Height
+                            marginBottom = print.coreReportTemp.MarginBottom,
+                            marginTop = print.coreReportTemp.MarginTop,
+                            marginLeft = print.coreReportTemp.MarginLeft,
+                            marginRight = print.coreReportTemp.MarginRight,
+                            width = print.coreReportTemp.Width,
+                            height = print.coreReportTemp.Height
                         },
                         contents = array
                     });
@@ -1546,6 +1546,7 @@ namespace FastDev.RunWeb.Controllers
                 }
                 printData.formatContent = printData.printTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
+                printData.FillUserInfo(pageindex.Value, 1);
                 List<string> contents = printData.GetTemplatePage(context, pageindex, false);
                 return Json(new
                 {
@@ -1715,7 +1716,7 @@ namespace FastDev.RunWeb.Controllers
                     {
                         strTemplateOut = printData.coreReportTemp.TemplateBody;
                         FillPrintDataWithServiceConfig(serviceConfig_, printData);
-                        string text4 = string_6.ToString();
+                        string text4 = styleTemplate.ToString();
                         foreach (KeyValuePair<string, object> item in printData.dicPageInfo)
                         {
                             strTemplateOut = strTemplateOut.Replace("{#" + item.Key + "}", ObjectExtensions.ToStr(item.Value));
@@ -1740,7 +1741,7 @@ namespace FastDev.RunWeb.Controllers
                             list_2 = list6;
                             strTemplateOut = printData.coreReportTemp.TemplateBody;
                             FillPrintDataWithServiceConfig(serviceConfig_, printData);
-                            string text4 = string_6.ToString();
+                            string text4 = styleTemplate.ToString();
                             foreach (KeyValuePair<string, object> item2 in printData.dicPageInfo)
                             {
                                 strTemplateOut = strTemplateOut.Replace("{#" + item2.Key + "}", ObjectExtensions.ToStr(item2.Value));
@@ -2187,7 +2188,7 @@ namespace FastDev.RunWeb.Controllers
             list_2 = (pagedData.Records as List<Dictionary<string, object>>);
             strTemplateOut = printData.coreReportTemp.TemplateBody;
             FillPrintDataWithServiceConfig(serviceConfig, printData);
-            string text3 = string_6.ToString();
+            string text3 = styleTemplate.ToString();
             text3 = text3.Replace("{style}", printData.coreReportTemp.TemplateStyle);
             text3 = text3.Replace("{content}", strTemplateOut);
             string text4 = System.IO.File.ReadAllText(Server.MapPath("~/Contents/template.html"));
@@ -2340,7 +2341,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 ReportResult reportResult = new ReportResult();
-                string_2 = model;
+                reportModelName = model;
                 serviceConfig_0 = ServiceHelper.GetServiceConfig(model);
 
                 List<NameValue> list_0 = GetLegendNameValues(currentDb, arg);
@@ -2431,7 +2432,7 @@ namespace FastDev.RunWeb.Controllers
         private List<NameValue> GetLegendNameValues(DbContext dbContext_3, ReportArg rArg)
         {
             List<NameValue> list = new List<NameValue>();
-            string text = string_2;
+            string mName = reportModelName;
 
             if (rArg.legendFieldType == "text")
             {
@@ -2442,7 +2443,7 @@ namespace FastDev.RunWeb.Controllers
                 {
                     throw new Exception("【" + rArg.legendField + "】字段未定义");
                 }
-                List<string> list2 = dbContext_3.Fetch<string>(string.Format("select distinct {0} from {1}", rArg.legendField, text), new object[0]);
+                List<string> list2 = dbContext_3.Fetch<string>(string.Format("select distinct {0} from {1}", rArg.legendField, mName), new object[0]);
                 foreach (string item in list2)
                 {
                     list.Add(new NameValue
@@ -2469,7 +2470,7 @@ namespace FastDev.RunWeb.Controllers
                 List<string> list3 = dbContext_3.Fetch<string>(string.Format("select ID from {0}", field.relationModel), new object[0]);
                 foreach (string item2 in list3)
                 {
-                    if (!(field.type == "many2one") || !rArg.legendIncludeDataOnly.HasValue || rArg.legendIncludeDataOnly.Value != 1 || dbContext_3.ExecuteScalar<int>(string.Format("select count(*) from {0} where {1} = @0", text, rArg.legendField + "ID"), new object[1]
+                    if (!(field.type == "many2one") || !rArg.legendIncludeDataOnly.HasValue || rArg.legendIncludeDataOnly.Value != 1 || dbContext_3.ExecuteScalar<int>(string.Format("select count(*) from {0} where {1} = @0", mName, rArg.legendField + "ID"), new object[1]
                     {
                         item2
                     }) != 0)
@@ -2515,7 +2516,7 @@ namespace FastDev.RunWeb.Controllers
                 "week"
             }.Contains(rArg.legendFieldType))
             {
-                List<RangeDateItem> list5 = GetRangeDates(dbContext_3, text, rArg.legendField, rArg.legendFieldType);
+                List<RangeDateItem> list5 = GetRangeDates(dbContext_3, mName, rArg.legendField, rArg.legendFieldType);
                 new List<object>();
                 foreach (RangeDateItem item4 in list5)
                 {
@@ -2537,7 +2538,7 @@ namespace FastDev.RunWeb.Controllers
             {
                 return list;
             }
-            string text = string_2;
+            string text = reportModelName;
 
             if (reportArg_0.axisFieldType == "ref")
             {
@@ -2816,7 +2817,7 @@ namespace FastDev.RunWeb.Controllers
             {
                 arg = string.Format("{0}({1})", string_8, string_7);
             }
-            string text = string.Format("select {0} from {1} where {2}", arg, string_2, string_9 ?? "1=1");
+            string text = string.Format("select {0} from {1} where {2}", arg, reportModelName, string_9 ?? "1=1");
             return dbContext_3.ExecuteScalar<double?>(text, args);
         }
 
@@ -3274,7 +3275,7 @@ namespace FastDev.RunWeb.Controllers
                     }
                     strTemplateOut = printData.coreReportTemp.TemplateBody;
                     FillPrintDataWithServiceConfig(serviceConfig, printData);
-                    text = string_6.ToString();
+                    text = styleTemplate.ToString();
                     strTemplateOut = strTemplateOut.Replace("{#page}/{#pagecount}", "");
                     text = text.Replace("{style}", printData.coreReportTemp.TemplateStyle);
                     text = text.Replace("{content}", strTemplateOut);
@@ -3808,7 +3809,7 @@ namespace FastDev.RunWeb.Controllers
 
             printWidth = 760;
             printHeight = 900;
-            string_2 = null;
+            reportModelName = null;
             serviceConfig_0 = null;
             dicModuleTitles = new Dictionary<string, string>();
             strTemplateOut = "";
@@ -3816,9 +3817,9 @@ namespace FastDev.RunWeb.Controllers
             dbContextMain = null;
             list_2 = null;
             kanbanSrcData = null;
-            string_6 = " \r\n             <style type=\"text/css\">\r\n                     {style}\r\n             </style> \r\n             {content}";
+            styleTemplate = " \r\n             <style type=\"text/css\">\r\n                     {style}\r\n             </style> \r\n             {content}";
             logMan = new LogManager();
-            dictionary_3 = new Dictionary<string, string>
+            dicBigTree = new Dictionary<string, string>
             {
                 {
                     "ligerui.tree_bigdata",
@@ -4410,9 +4411,9 @@ namespace FastDev.RunWeb.Controllers
         {
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             string str = (string)(dictionary["text"] = (dictionary["id"] = Path.GetFileNameWithoutExtension(viewName)));
-            if (dictionary_3.ContainsKey(string_8 + "." + str))
+            if (dicBigTree.ContainsKey(string_8 + "." + str))
             {
-                dictionary["text"] = dictionary_3[string_8 + "." + str];
+                dictionary["text"] = dicBigTree[string_8 + "." + str];
             }
             dictionary["type"] = "view";
             dictionary["model"] = string_8;
