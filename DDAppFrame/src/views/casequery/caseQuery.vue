@@ -38,9 +38,10 @@
             <div class="case-tag">
               <van-tag plain>{{ item.CaseNumber }}</van-tag>
               <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>
-              <van-tag plain>{{ item.CaseStatus }}</van-tag>
-              <span>{{ item.ModifyDate }}</span>
-              <!--                            <van-tag plain>2020/02/11 12:00更新</van-tag>-->
+              <!-- <van-tag plain>{{ item.CaseStatus }}</van-tag> -->
+              <van-tag plain>{{ item.CaseStatus?`简易程序`:`已创建` }}</van-tag>
+              <span>{{ item.ModifyDate }}更新</span>
+              <!-- <van-tag plain>2020/02/11 12:00更新</van-tag> -->
             </div>
           </div>
         </van-panel>
@@ -121,7 +122,7 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ name: 'caseDetails', params: { id: msg } }) // 案件详情id
+      this.$router.push({ name: 'caseDetails', query: { id: msg } }) // 案件详情id
     },
     // 配置请求参数
     loadData (parameter) {
@@ -161,7 +162,7 @@ export default {
             this.caseList.push(item)
           })
         }
-        console.log(this.caseList)
+        // console.log(this.caseList)
         return res
       })
     }

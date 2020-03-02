@@ -72,7 +72,8 @@
 </template>
 
 <script>
-import { getQueryConditon } from '../../utils/util' // 以及搜索规则
+// import { getQueryConditon } from '../../utils/util' // 以及搜索规则
+import { isNotEmpty } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
 export default {
   name: 'CaseDetails',
@@ -112,7 +113,7 @@ export default {
             value: this.caseId,
             type: 'string'
           },
-          {
+          {// 关联查询
             field: 'Associatedobjecttype',
             op: 'equal',
             value: 'case_Info',
@@ -123,29 +124,23 @@ export default {
       // 请求案件详情
       getDetaildata('case_Info', this.caseId).then((res) => {
         this.caseInfo = res
-        console.log('案件详情', res)
+        console.log('案件详情', this.caseInfo)
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {
         this.lawPartyInfoL = res.Rows
-        console.log('当事人', res.Rows)
+        // console.log('当事人', this.lawPartyInfoL)
       })
       // 请求案件 关联事件
-      getDetialdataByEventInfoId('event_info', this.caseId.EventInfoId).then((res) => {
+      getDetialdataByEventInfoId('event_info', this.caseInfo.EventInfoId).then((res) => {
         this.eventInfo = res
-        console.log('事件信息', res)
+        // console.log('事件信息', res)
       })
     }
   },
   mounted () {
     // 接收路由案件ID传参
-    const parA = this.$route.params.id
-    const parB = this.$route.query.id
-    if (parA === '') {
-      this.caseId = parB
-    } else {
-      this.caseId = parA
-    }
+    this.caseId = this.$route.query.id
     // 执行数据请求
     this.getCaseInfo()
   }
