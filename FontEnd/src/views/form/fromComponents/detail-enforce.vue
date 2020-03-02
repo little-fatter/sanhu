@@ -48,32 +48,32 @@
 </template>
 
 <script>
-import { getFromPatrolRecord } from '@/api/sampleApi'
+// import { getFromPatrolRecord } from '@/api/sampleApi'
 export default {
   name: 'DetailEnforce',
   props: {
-    id: {
-      type: String,
+    detailData: {
+      type: Object,
       default: null
     }
   },
   data () {
     return {
-      detailData: {}
+      // detailData: {}
     }
   },
-  mounted () {
-    this.getFromPatrolRecord()
-  },
+  // mounted () {
+  //   this.getFromPatrolRecord()
+  // },
   methods: {
-    getFromPatrolRecord () {
-      getFromPatrolRecord(this.id).then(res => {
-        this.detailData = res
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-    }
+    // getFromPatrolRecord () {
+    //   getFromPatrolRecord(this.id).then(res => {
+    //     this.detailData = res
+    //     console.log(res)
+    //   }).catch(err => {
+    //     console.log(err)
+    //   })
+    // }
 
   }
 }

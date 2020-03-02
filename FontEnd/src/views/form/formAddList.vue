@@ -50,17 +50,17 @@
       <div class="space">
         <span>表单类型:</span>
         <a-select v-model="formStyle" style="width: 120px" @change="handleChange">
-          <a-select-option value="1">无</a-select-option>
-          <a-select-option value="2">审批表单</a-select-option>
-          <a-select-option value="3">非审批表单</a-select-option>
+          <a-select-option value="无">无</a-select-option>
+          <a-select-option value="审批表单">审批表单</a-select-option>
+          <a-select-option value="非审批表单">非审批表单</a-select-option>
         </a-select>
       </div>
       <div class="space">
         <span>表单名称:</span>
         <a-select v-model="formStyle" style="width: 120px" @change="handleChange">
-          <a-select-option value="1">无</a-select-option>
-          <a-select-option value="2">审批表单</a-select-option>
-          <a-select-option value="3">非审批表单</a-select-option>
+          <a-select-option value="无">无</a-select-option>
+          <a-select-option value="审批表单">审批表单</a-select-option>
+          <a-select-option value="非审批表单">非审批表单</a-select-option>
         </a-select>
       </div>
       <div>
@@ -413,7 +413,7 @@ export default {
   name: 'FormAddList',
   data () {
     return {
-      formStyle: 1
+      formStyle: '无'
     }
   },
   methods: {
