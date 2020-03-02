@@ -105,7 +105,7 @@ namespace FastDev.Service
             {
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
             }
-            var obj = service.GetListData(filter).FirstOrDefault();  //查询主表单
+            var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
             return new
