@@ -25,15 +25,15 @@ const menus = [
             menuName: '事件巡查',
             menuLevel: 2,
             parentId: '1-1'
-          },
-          {
-            menuId: '1-1-2',
-            menuUrl: '/todo',
-            menuIcon: './img/forms/form2.png',
-            menuName: '巡查记录表',
-            menuLevel: 2,
-            parentId: '1-1'
           }
+          // {
+          //   menuId: '1-1-2',
+          //   menuUrl: '/todo',
+          //   menuIcon: './img/forms/form2.png',
+          //   menuName: '巡查记录表',
+          //   menuLevel: 2,
+          //   parentId: '1-1'
+          // }
         ]
       },
       {
