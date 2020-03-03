@@ -60,32 +60,29 @@ export default {
       })
     },
     // 去该案件表单详情
-    goFromDetails (ID, FormType) {
-      // if (FormType === 'from_inspectiontrecord') {
-      //   this.$router.push({ path: '', query: { ID } })
-      // } else {
-      //   console.log(`去表单详情`, ID, FormType)
-      // }
-      if (FormType === 'form_patrolrecord') {
-        this.$router.push({ path: '/recordOfInquestDetail', query: { id: ID } })
-      } else if (FormType === 'task_patrol') {
-        this.$router.push({ path: '/eventDetail', query: { id: ID } })
-      } else if (FormType === 'task_survey') {
-        this.$router.push({ path: '/sceneInvestigationDetail', query: { id: ID }
-        })
-      } else if (FormType === 'from_inspectiontRecord') {
-        this.$router.push({ path: '/recordOfInquestDetail', query: { id: ID }
-        })
-      } else if (FormType === 'form_confiscated_item') {
-        this.$router.push({ path: '/itemDetails', query: { id: ID }
-        })
-      } else if (FormType === 'case_Info') {
-        this.$router.push({ path: '/createCaseDetails', query: { id: ID }
-        })
-      } else if (FormType === 'law_punishmentInfo') {
-        this.$router.push({ path: '/PenalizeBookDetial', query: { id: ID }
-        })
+    goFromDetails (id, FormType) {
+      if (FormType === 'from_inspectiontrecord') {
+        this.$router.push({ path: 'recordOfInquestDetail', query: { id } })
+      } else {
+        console.log(`没有匹配成功`, id, FormType)
       }
+
+    //   if (FormType === 'form_patrolrecord') {
+    //     this.$router.push({ path: '/recordOfInquestDetail', query: { id: ID } })
+    //   } else if (FormType === 'task_patrol') {
+    //     this.$router.push({ path: '/eventDetail', query: { id: ID } })
+    //   } else if (FormType === 'task_survey') {
+    //     this.$router.push({ path: '/sceneInvestigationDetail', query: { id: ID } })
+    //   } else if (FormType === 'from_inspectiontRecord') {
+    //     console.log(`进入了这个跳转`)
+    //     this.$router.push({ path: '/recordOfInquestDetail', query: { id: ID } })
+    //   } else if (FormType === 'form_confiscated_item') {
+    //     this.$router.push({ path: '/itemDetails', query: { id: ID } })
+    //   } else if (FormType === 'case_Info') {
+    //     this.$router.push({ path: '/createCaseDetails', query: { id: ID } })
+    //   } else if (FormType === 'law_punishmentInfo') {
+    //     this.$router.push({ path: '/PenalizeBookDetial', query: { id: ID } })
+    //   }
     }
 
   },
