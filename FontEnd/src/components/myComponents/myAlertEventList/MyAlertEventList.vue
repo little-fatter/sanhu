@@ -11,7 +11,7 @@
         :style="getListStyle"
       >
         <a-list :dataSource="list" style="padding:0">
-          <a-list-item slot="renderItem" slot-scope="item" class="item">
+          <a-list-item slot="renderItem" slot-scope="item" class="item" @click="onItemClick(item)">
             <hr class="line"/>
             <a-list :bordered="false" style="padding:0">
               <a-list-item class="item-lyr">
@@ -70,7 +70,12 @@ var evtStateMap = {
 export default {
   name: 'MyAlertEventList',
   components: { },
-  props: {},
+  props: {
+    aftetItemClick: {
+      type: Function,
+      default: undefined
+    }
+  },
   computed: {
     getListStyle: function () {
       return {
@@ -179,6 +184,9 @@ export default {
         }
       }
       return countList
+    },
+    onItemClick: function (item) {
+      this.aftetItemClick && this.aftetItemClick(item)
     }
   },
   mounted: function () {
@@ -200,6 +208,7 @@ export default {
   height: 44px;
   line-height: 44px;
   padding-left: 32px;
+  border-radius: 5px;
 }
 .left{
     float: left;
