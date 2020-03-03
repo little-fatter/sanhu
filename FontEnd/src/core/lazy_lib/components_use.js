@@ -44,9 +44,10 @@ import {
   Skeleton,
   Popconfirm,
   message,
-  notification
+  notification,
+  Pagination
 } from 'ant-design-vue'
-
+Vue.use(Pagination)
 Vue.use(LocaleProvider)
 Vue.use(Layout)
 Vue.use(Input)

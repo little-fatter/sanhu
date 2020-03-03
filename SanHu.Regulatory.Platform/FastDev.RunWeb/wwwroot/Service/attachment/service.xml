@@ -14,6 +14,7 @@
         <field name="fileSize" dbName="fileSize" title="文件大小" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="fileType" dbName="fileType" title="文件类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="fileId" dbName="fileId" title="文件id" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="fileCode" dbName="fileCode" title="fileCode" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

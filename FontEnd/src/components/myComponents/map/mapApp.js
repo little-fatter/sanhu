@@ -19,12 +19,14 @@ import Select from 'ol/interaction/Select'
 import { buffer as extentBuffer, getHeight as getExtentHeight } from 'ol/extent'
 import { point, lineString, polygon, buffer, toWgs84, toMercator, randomPoint, bbox, booleanPointInPolygon } from '@turf/turf'
 // import $ from 'jquery'
+import appConfig from '@/config/app.config'
 
 import styleTable from './styleTable'
 
 import M_HM_FXH from './data/M_HM_FXH.json'
 import M_HM_XYH from './data/M_HM_XYH.json'
 import M_HM_QLH from './data/M_HM_QLH.json'
+
 const lakeJsons = [M_HM_FXH, M_HM_XYH, M_HM_QLH]
 
 proj4.defs('EPSG:4490', '+proj=longlat +ellps=GRS80 +no_defs')
@@ -42,8 +44,7 @@ register(proj4)
 //   matrixIds[z] = z
 // }
 
-// const WMS_URL = 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_blue'
-const WMS_URL = 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_white'
+const WMS_URL = appConfig.MapOption.WMS_URL
 var timer = {
   runId: 0,
   pathBeforeFeature: undefined,
@@ -485,7 +486,7 @@ export default {
     for (let i = 0; i < peopleList.length; i++) {
       const p = peopleList[i]
       var fea = new Feature({
-        geometry: new Point(p.location),
+        geometry: new Point(fromLonLat(p.location)),
         name: p.name
       })
       fea.setProperties(p)
@@ -595,12 +596,15 @@ export default {
     var lyrs = this.layers
     for (let i = 0; i < lyrs.length; i++) {
       var lyr = lyrs[i]
-      if (lyr.constructor.name === 'VectorLayer') {
-        var features = lyr.getSource().getFeatures()
-        for (let j = 0; j < features.length; j++) {
-          if (feature === features[j]) {
-            return lyr
-          }
+      console.log('lyr', lyr, lyr.constructor.name)
+      if (!lyr.getSource().getFeatures) {
+        continue
+      }
+      var features = lyr.getSource().getFeatures()
+      for (let j = 0; j < features.length; j++) {
+        console.log('feature', feature.ol_uid, features[j].ol_uid)
+        if (feature.ol_uid === features[j].ol_uid) {
+          return lyr
         }
       }
     }
@@ -617,6 +621,9 @@ export default {
     var source = pathLayer.getSource()
     source.clear()
     var location = feature.getProperties().location
+    if (pLayerName === 'peopleLayer') {
+      location = fromLonLat(location)
+    }
     // 模拟轨迹路线
 
     var _beforePathPoints = paths[pLayerName].beforePathPoints
@@ -642,6 +649,7 @@ export default {
   openRegionlayer: function (feature) {
     console.log('openRegionlayer', feature)
     var pLayer = this.findLayerByFeature(feature)
+    console.log('pLayer', pLayer)
     var pLayerName = pLayer.get('name')
     var regionLayer = this.findLayer('regionLayer')
     var source = regionLayer.getSource()

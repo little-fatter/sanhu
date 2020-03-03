@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import appConfig from '@/config/app.config'
 export default {
   data: {
     peopleList: {},
@@ -17,6 +18,24 @@ export default {
         success: (res) => {
           that.data[dataKey] = res
           resolve()
+        },
+        error: err => {
+          reject(err)
+        }
+      })
+    })
+  },
+  doPostDataAjaxNotSetObject: function (url, body) {
+    // var that = this
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        type: 'post',
+        contentType: 'application/json',
+        data: body,
+        dataType: 'json',
+        success: (res) => {
+          resolve(res)
         },
         error: err => {
           reject(err)
@@ -49,6 +68,7 @@ export default {
       var reportTime = element.reportTime
       var finishLimitTime = element.finishLimitTime
       list.push({
+        id: element.objId,
         title: element.targetName, // 事件对象名称
         status: status,
         timeLimit: finishLimitTime, // 当前阶段处理时限
@@ -66,10 +86,55 @@ export default {
     // list.push(...list)
     return list
   },
+  getPeopleList: function () {
+    var list = []
+    var Records = this.data.peopleList.Records
+    var depMap = {}
+    var depNames = []
+    for (let i = 0; i < Records.length; i++) {
+      const element = Records[i]
+      var depIndex = i
+      var depName = element.Department[1]
+      depNames.push(depName)
+      var depTamType = i % 2
+      var open = true
+      if (depMap[depName] === undefined) {
+        depMap[depName] = {
+          index: depIndex,
+          name: depName,
+          teamType: depTamType,
+          open: open,
+          list: []
+        }
+      }
+      var pName = element.StaffName
+      var Longitude = element.Longitude
+      var Latitude = element.Latitude
+      var ID = element.ID
+      // 模拟 人员位置
+      if (i === 0) {
+        // [102.95488289188184, 24.58046294382578]
+        Longitude = 102.95488289188184
+        Latitude = 24.58046294382578
+      } else {
+        Longitude = 102.95488289188184 + (Math.random() - 0.5) * 0.2
+        Latitude = 24.58046294382578 + (Math.random() - 0.5) * 0.2
+      }
+      depMap[depName].list.push({
+        id: ID,
+        name: pName,
+        online: element.IsOnline * 1 === 1,
+        location: [Longitude, Latitude]
+      })
+    }
+    depNames = [...new Set(depNames)]
+    list = depNames.map(x => depMap[x])
+    return list
+  },
   initData: function (after) {
-    var urlDep = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata?model=organization'
-    var urlPeople = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata?model=loc_field_staff'
-    var urlEvent = 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/pageddata?model=event_info'
+    var urlDep = appConfig.ApiWebContext + '/web/pageddata?model=organization'
+    var urlPeople = appConfig.ApiWebContext + '/web/pageddata?model=loc_field_staff'
+    var urlEvent = appConfig.ApiWebContext + '/web/pageddata?model=event_info'
 
     var bodyPeople = { 'Condition': { 'rules': [], 'groups': [], 'op': 'and' }, 'PageIndex': 1, 'PageSize': 30, 'SortName': 'ID', 'SortOrder': 'asc' }
 

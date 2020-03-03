@@ -28,6 +28,7 @@
         <field name="FormID" dbName="FormID" title="表单id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

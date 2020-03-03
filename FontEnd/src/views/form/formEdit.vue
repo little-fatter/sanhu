@@ -43,10 +43,10 @@
 <template>
   <div class="FEdits">
     <div class="formTitle">
-         <span @click="$router.back()">
-           <
-         </span>
-         这是记录表名称
+      <span @click="$router.back()">
+        <
+      </span>
+      这是记录表名称
     </div>
     <div class="formContent">
       <div class="title">

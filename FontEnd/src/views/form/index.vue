@@ -85,28 +85,26 @@ div {
     <div class="formStatus">
       <div>
         <span>表单状态：</span>
-        <a-select v-model="formState" style="width: 120px" @change="formStateChange">
-          <a-select-option value="待审批">待审批</a-select-option>
-          <a-select-option value="已审批">已审批</a-select-option>
-          <a-select-option value="已提交">已提交</a-select-option>
+        <a-select v-model="formState" style="min-width: 120px" @change="formStateChange">
+          <a-select-option v-for="item in formStateOptions" :key="item.ID" :value="item.Title">{{ item.Title }}</a-select-option>
         </a-select>
       </div>
       <div>
         <span>表单类型：</span>
-        <a-select v-model="formTypes" style="width: 120px" @change="formTypesChange">
-          <a-select-option value="类型1">类型1</a-select-option>
-          <a-select-option value="类型2">类型2</a-select-option>
+        <a-select v-model="formTypes" style="min-width: 120px" @change="formTypesChange">
+          <a-select-option v-for="item in formTypeOptions" :key="item.ID" :value="item.Title">{{ item.Title }}</a-select-option>
         </a-select>
       </div>
     </div>
     <div>
       <a-table
+        :customRow="clickRow"
         style="background-color: #ffffff"
         :columns="columns"
         :pagination="pagination"
-        :rowKey="record => record.InitiationTime"
-        :dataSource="formData"
-        bordered>
+        :rowKey="record => record.ID"
+        :dataSource="data"
+      >
       </a-table>
     </div>
     <a-modal
@@ -163,69 +161,110 @@ div {
 </template>
 
 <script>
+import { getFormList, getDictionary } from '@/api/sampleApi'
+
 export default {
   name: 'Index',
   data () {
     return {
       visible: false,
       clickIndex: 1,
-      formState: '待审批',
-      formTypes: '类型1',
+      formState: '全部状态',
+      formTypes: '全部类型',
+      formStateOptions: [],
+      formTypeOptions: [],
       formName: '',
       columns: [{
         title: '',
-        dataIndex: 'InitiationTime',
+        dataIndex: '',
         className: 'backColorType',
         align: 'center'
       }, {
         title: '表单编号',
-        dataIndex: 'finishTime',
+        dataIndex: 'FormID',
         className: 'backColorType',
         align: 'center'
       }, {
         title: '表单标题',
-        dataIndex: 'formName',
+        dataIndex: 'FormName',
         className: 'backColorType',
         align: 'center'
       }, {
         title: '表单摘要',
-        dataIndex: 'contentValidity',
+        dataIndex: 'ContentValidity',
         className: 'backColorType',
         align: 'center'
       }, {
         title: '发起时间',
-        dataIndex: 'department',
+        dataIndex: 'InitiationTime',
         className: 'backColorType',
         align: 'center'
       }, {
         title: '完成时间',
-        dataIndex: 'formStates',
+        dataIndex: 'CompletionTime',
         className: 'backColorType',
         align: 'center'
       }, {
         title: '状态',
-        dataIndex: 'applicant',
+        dataIndex: 'FormState',
         className: 'backColorType',
         align: 'center'
-      }],
-      formData: [{
-        InitiationTime: 'xxxx年yy月zz日',
-        finishTime: 'xxxx年yy月zz日',
-        formName: 'jack',
-        contentValidity: 'New York No. 1 Lake Park',
-        department: '技术部',
-        formStates: '已提交',
-        applicant: 'abbc'
       }],
       pagination: {
         defaultPageSize: 5,
         showTotal: total => `共 ${total} 条数据`,
         showSizeChanger: true,
         pageSizeOptions: ['5', '10', '15', '20']
-      }
+      },
+      data: []
     }
   },
+  mounted () {
+    this.getFormList()
+  },
+  created () {
+    this.getFormType()
+    this.getFormState()
+  },
   methods: {
+    clickRow (record, index) {
+      return {
+        on: {
+          click: () => {
+            if (index === 0) {
+              console.log(record, index)
+
+              this.$router.push('/data-manage/form/form-details')
+            }
+            if (index === 1) { this.$router.push('/data-manage/form/close-person-report') }
+            if (index === 2) { this.$router.push('/data-manage/form/close-org-report') }
+            console.log(record, index)
+          }
+        }
+      }
+    },
+    // 获取表单类型
+    getFormType () {
+      getDictionary({ model: 'res_dictionary', context: 'FormType' }).then(res => {
+        this.formTypeOptions = res
+        const option = { ID: 'quanbu',
+          Title: '全部类型' }
+        this.formTypeOptions.splice(0, 0, option)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取表单状态
+    getFormState () {
+      getDictionary({ model: 'res_dictionary', context: 'FormState' }).then(res => {
+        this.formStateOptions = res
+        const option = { ID: 'quanbu',
+          Title: '全部状态' }
+        this.formStateOptions.splice(0, 0, option)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     onChange (date, dateString) {
       console.log(date, dateString)
     },
@@ -243,6 +282,13 @@ export default {
     },
     editForm () {
       this.$router.push({ path: '/form/form-edit' })
+    },
+    getFormList () {
+      getFormList().then(res => {
+        this.data = res.Rows
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }

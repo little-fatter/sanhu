@@ -2,49 +2,49 @@ namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class work_matter
+public partial class case_report
 {
 public string ID
 {
 get;
 set;
 }
-public string ContactName
+public string TaskId
 {
 get;
 set;
 }
-public string ContactPhone
+public string CaseId
 {
 get;
 set;
 }
-public string ContactAddress
+public string LawPartyIds
 {
 get;
 set;
 }
-public string Latitude
+public string CaseDetail
 {
 get;
 set;
 }
-public string Longitude
+public string PunishmentId
 {
 get;
 set;
 }
-public string MatterAddress
+public string ExecuteState
 {
 get;
 set;
 }
-public string Remarks
+public string Url
 {
 get;
 set;
 }
-public string MatterTypeID
+public string EventInfoId
 {
 get;
 set;

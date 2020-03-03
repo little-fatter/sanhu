@@ -31,6 +31,24 @@ var publicAppConfig = {
   },
   /** 配置cookie或者session过期后跳转的登录页面 */
   loginUrl: '',
+  /** App根据域名 */
+  AppHost: 'http://192.168.1.115:8080/sh#/',
+  /**
+   * API跟目录
+   */
+  // ApiWebContext: '/regulatory',
+  ApiWebContext: 'http://zhsh.8e9bcb.grapps.cn/regulatory',
+  /**
+   * 静态文件根目录
+   */
+  StaticWebContext: 'http://zhsh.8e9bcb.grapps.cn/webregulatory',
+  // StaticWebContext: '',
+  /**
+   * 地图相关
+   */
+  MapOption: {
+    WMS_URL: 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_white'
+  },
   /**
   * 请求超时的毫秒数
   */

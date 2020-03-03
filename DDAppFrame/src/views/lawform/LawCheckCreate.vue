@@ -15,7 +15,7 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectEvent" size="25" />
       </van-field>
     </van-cell-group>
-    <template v-if="event.evtTypeDisplayName">
+    <template>
       <van-cell-group title="事件信息">
         <van-cell title="事发地点">
           <div>
@@ -176,7 +176,7 @@ import SUpload from '../../components/file/StandardUploadFile'
 import { phoneValidator, idcardValidator } from '../../utils/helper/validate.helper'
 import PartyInfo from '../../components/business/PartyInfo'
 import EventListSelect from '../../components/business/EventListSelect'
-import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, getDetialdataByEventInfoId, commonSaveApi, TaskTypeDic } from '../../api/regulatoryApi'
+import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, getDetialdataByEventInfoId, commonSaveApi, TaskTypeDic, getFormsDetailByEventInfoId } from '../../api/regulatoryApi'
 import { AcceptImageAll } from '../../utils/helper/accept.helper'
 import { getCurrentUserInfo } from '../../service/currentUser.service'
 var timer = null
@@ -217,7 +217,8 @@ export default {
         IncidentAddressXY: '',
         Result: '',
         ProcessingDecisions: 1,
-        ExistCrim: null
+        ExistCrim: null,
+        Attachment: []
       },
       eventTypeption: [
       ],
@@ -280,11 +281,12 @@ export default {
       })
     },
     loadEventCheck (EventInfoId, event) {
-      getDetialdataByEventInfoId('task_patrol', EventInfoId).then((res) => {
+      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then((res) => {
         if (res) {
           this.eventCheck = {
             ...this.eventCheck,
-            ...res
+            ...res.MainForm,
+            Attachment: res.Attachment
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
@@ -403,7 +405,7 @@ export default {
       }
       data.LawParties = this.$refs.party.getResult()
       if (this.eventCheck.ProcessingDecisions === 3) {
-        nextTask = getNextTask(TaskTypeDic.OnSpot, userInfo.userid, 'caseCreate', '案件创建', this.event.objId)
+        nextTask = getNextTask(TaskTypeDic.CaseInfo, userInfo.userid, 'caseCreate', '案件创建', this.event.objId)
         data.NextTasks.push(nextTask)
       }
       this.save(data)
@@ -427,7 +429,7 @@ export default {
         //   id: res.users[0].emplId
         // }
         var user = res.users[0]
-        var nextTask = getNextTask(TaskTypeDic.EventCheck, user.emplId, 'eventCheckCreate', '事件核查', this.event.objId)
+        var nextTask = getNextTask(TaskTypeDic.OnSpot, user.emplId, 'lawCheckCreate', '现场勘查', this.event.objId)
         var data = {
           SourceTaskId: this.taskInfo.ID,
           EventInfoId: this.event.objId,
@@ -443,12 +445,12 @@ export default {
           this.loading = false
         })
       })
+    },
+    goToLawForm () {
+      timer = setTimeout(() => {
+        this.$router.push({ name: 'layforms' })
+      }, 1000)
     }
-  },
-  goToLawForm () {
-    timer = setTimeout(() => {
-      this.$router.push({ name: 'layforms' })
-    }, 1000)
   }
 }
 </script>

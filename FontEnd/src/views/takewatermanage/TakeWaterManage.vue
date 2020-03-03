@@ -58,7 +58,7 @@
           v-for="item in manageChoose"
           :key="item.num"
           @click="changeNum(item.num)"
-        >{{item.name}}</span>
+        >{{ item.name }}</span>
       </div>
       <div class="search">
         <span>
@@ -117,12 +117,12 @@
           :rowKey="record => record.id"
           :customRow="click"
         >
-          <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
+          <a slot="name" slot-scope="text" href="javascript:;">{{ text }}</a>
           <span slot="customTitle">许可证编号</span>
         </a-table>
         <span v-show="tableNum===0">杞麓湖取水许可证列表</span>
         <a-table
-           v-show="tableNum===0"
+          v-show="tableNum===0"
           :pagination="pagination"
           :columns="allowList"
           :dataSource="dataQllakes"
@@ -141,7 +141,7 @@
           :columns="userList"
           :dataSource="datauser"
         >
-          <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
+          <a slot="name" slot-scope="text" href="javascript:;">{{ text }}</a>
           <template slot="operation" slot-scope="text, record">
             <a-popconfirm
               v-if="datauser.length"
@@ -164,7 +164,7 @@
           :columns="areaList"
           :dataSource="dataarea"
         >
-          <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
+          <a slot="name" slot-scope="text" href="javascript:;">{{ text }}</a>
           <span slot="customTitle">取水口名称</span>
         </a-table>
       </div>
@@ -179,7 +179,7 @@
           :columns="configList"
           :dataSource="dataconfig"
         >
-          <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
+          <a slot="name" slot-scope="text" href="javascript:;">{{ text }}</a>
           <span slot="customTitle">设备编号</span>
         </a-table>
       </div>

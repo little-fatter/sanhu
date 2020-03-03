@@ -90,6 +90,7 @@ module.exports = {
       // 必须使用/easymock开头的接口才使用该代理
       '/api': {
         target: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
+        // target: 'http://192.168.0.155:8030/',
         ws: false,
         changeOrigin: true,
         // 真实接口是/api开头的，使用pathRewrite将/gateway替换为/api

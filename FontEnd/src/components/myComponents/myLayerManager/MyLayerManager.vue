@@ -17,7 +17,7 @@
 
 <script>
 import Avatar from 'ant-design-vue/es/avatar'
-
+import appConfig from '@/config/app.config'
 export default {
   name: 'MyLayerManager',
   props: {
@@ -39,8 +39,8 @@ export default {
         {
           title: '人员',
           layerName: 'peopleLayer',
-          img: '/img/yzt-renyuanceng/renshu1.png',
-          aimg: '/img/yzt-renyuanceng/renshu.png',
+          img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/renshu1.png',
+          aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/renshu.png',
           active: true,
           subs: [
             {
@@ -58,8 +58,8 @@ export default {
         {
           title: '设备',
           layerName: 'equipmentLayer',
-          img: '/img/yzt-renyuanceng/xuexijiankong.png',
-          aimg: '/img/yzt-renyuanceng/xuexijiankong1.png',
+          img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/xuexijiankong.png',
+          aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/xuexijiankong1.png',
           active: true,
           subs: [
             {
@@ -77,16 +77,16 @@ export default {
         {
           title: '事件',
           layerName: 'alertEventLayer',
-          img: '/img/yzt-renyuanceng/daiban.png',
-          aimg: '/img/yzt-renyuanceng/daiban1.png',
+          img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/daiban.png',
+          aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/daiban1.png',
           active: true,
           subs: []
         },
         {
           title: '船只',
           layerName: 'shipLayer',
-          img: '/img/yzt-renyuanceng/chuan.png',
-          aimg: '/img/yzt-renyuanceng/chuan1.png',
+          img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/chuan.png',
+          aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/chuan1.png',
           active: true,
           subs: [
             {
@@ -104,16 +104,16 @@ export default {
         {
           title: '人流',
           layerName: 'heatLayer',
-          img: '/img/yzt-renyuanceng/bingzhuangtu-tianchong.png',
-          aimg: '/img/yzt-renyuanceng/bingzhuangtu-tianchong1.png',
+          img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/bingzhuangtu-tianchong.png',
+          aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/bingzhuangtu-tianchong1.png',
           active: true,
           subs: []
         },
         {
           title: '建筑',
           layerName: '',
-          img: '/img/yzt-renyuanceng/jianzhuwu.png',
-          aimg: '/img/yzt-renyuanceng/jianzhuwu1.png',
+          img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu.png',
+          aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu1.png',
           active: false,
           subs: []
         }

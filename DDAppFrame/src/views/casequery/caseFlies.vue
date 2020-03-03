@@ -1,31 +1,25 @@
 <template>
   <div>
-    <van-cell-group v-for="item in caseFileList" :key="item.fileName+'@'">
-      <van-cell :title="item.fileName" icon="label-o" :value="item.fileTime"/>
-    </van-cell-group>
-    <van-divider class="tip">到底了</van-divider>
+    <!--案件文件 列表组件-->
+    <CaseFileList :caseId="caseId"></CaseFileList>
   </div>
 </template>
 
 <script>
-import { getDetaildata } from '../../api/regulatoryApi'
+import CaseFileList from '../../components/caseFormList/caseFormList' // 案件文件 列表组件
 export default {
   name: 'CaseFlies',
+  components: {
+    CaseFileList
+  },
   data () {
     return {
-      caseFileList: [
-        { fileName: '巡查记录表', fileTime: '2020-2-29 13:52:36' },
-        { fileName: '案件受理记录', fileTime: '2020-2-20 14:32:26' },
-        { fileName: '涉嫌犯罪案件移送书勘验（检查）', fileTime: '2020-2-18 10:22:10' }
-      ]
+      caseId: '' // 案件ID
     }
   },
   mounted () {
     // 接收路由传参
-    // console.log(this.$route.params.caseId)
-    return getDetaildata('case_filing_report', this.$route.params.caseId).then((res) => {
-      console.log(res)
-    })
+    this.caseId = this.$route.query.caseId
   }
 }
 </script>

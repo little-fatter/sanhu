@@ -24,9 +24,24 @@ namespace FastDev.Service
         public task_surveyService()
         {
             OnGetAPIHandler += Task_surveyService_OnGetAPIHandler;
-           
+            OnAfterGetDetailData += task_surveyService_OnAfterGetDetailData;
+
+
         }
-        
+
+
+        private void task_surveyService_OnAfterGetDetailData(object query, object data)
+        {
+            var o = data as Dictionary<string, object>;
+            string taskType = o["ProcessingDecisions"].ToString();
+            if (taskType == "1")
+                o["ProcessingDecisions"] ="不予处罚";
+            if (taskType == "2")
+                o["ProcessingDecisions"] = "移送其他部门";
+            if (taskType == "3")
+                o["ProcessingDecisions"] = "处罚程序";
+        }
+
         /*
         public override object WfCreate(object postdata, params string[] exeUserIds)
         {
@@ -172,7 +187,7 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<task_surveyFinishReq>(context.Data);
-            if (data.TaskSurvey == null) throw new Exception();;
+            if (data.TaskSurvey == null) throw new Exception("没有主体数据");;
             QueryDb.BeginTransaction();
             data.TaskSurvey.TaskId = data.SourceTaskId;
             data.TaskSurvey.EventInfoId = data.EventInfoId;
@@ -189,10 +204,10 @@ namespace FastDev.Service
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                throw new Exception();
+                throw e;
             }
             QueryDb.CompleteTransaction();
             return true;

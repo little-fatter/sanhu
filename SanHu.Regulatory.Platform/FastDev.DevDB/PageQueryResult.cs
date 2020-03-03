@@ -20,6 +20,6 @@ namespace FD.Core
         /// </summary>
         public int PageIndex { get; set; }
         public int Total { get; set; }
-        public IEnumerable<T> Rows { get; set; }
+        public object Rows { get; set; }
     }
 }

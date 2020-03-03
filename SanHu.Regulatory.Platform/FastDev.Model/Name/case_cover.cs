@@ -2,14 +2,14 @@ namespace FastDev.Model.Name
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class work_matter
+public partial class case_cover
 {
 public string ID
 {
 get;
 set;
 }
-public string ContactName
+public string TaskId
 {
 get;
 set;

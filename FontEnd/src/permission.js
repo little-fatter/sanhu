@@ -2,15 +2,15 @@ import router from './router'
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import appConfig from './config/app.config'
+// import appConfig from './config/app.config'
 import getCurrentUser from './config/currentUser'
-import { isNotEmpty } from './utils/util'
+// import { isNotEmpty } from './utils/util'
 
 NProgress.configure({ showSpinner: false })
 
 console.log('currentUser', getCurrentUser())
 
-const whiteList = ['login']
+// const whiteList = ['login']
 
 /** 路由进入事件 */
 // router.beforeEach((to, from, next) => {

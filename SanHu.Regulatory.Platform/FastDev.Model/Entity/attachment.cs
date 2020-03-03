@@ -35,11 +35,41 @@ get;
 set;
 }
 public string AssociationobjectID
-{         
+{
 get;
 set;
 }
 public string CorrelationId
+{
+get;
+set;
+}
+public string spaceId
+{
+get;
+set;
+}
+public string fileName
+{
+get;
+set;
+}
+public string fileSize
+{
+get;
+set;
+}
+public string fileType
+{
+get;
+set;
+}
+public string fileId
+{
+get;
+set;
+}
+public string fileCode
 {
 get;
 set;
@@ -69,27 +99,6 @@ public string Status
 get;
 set;
 }
-public string fileName
-        {
-            get;set;
-        }
-
-        public string fileSize
-        {
-            get; set;
-        }
-        public string fileType
-        {
-            get; set;
-        }
-        public string fileId
-        {
-            get; set;
-        }
-        public string fileCode
-        {
-            get; set;
-        }
-    }
+}
 
 }

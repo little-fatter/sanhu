@@ -27,6 +27,8 @@
         <field name="CoOrganizer" dbName="CoOrganizer" title="协办人员" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="CoorganizerID" dbName="CoorganizerID" title="协办人ID" type="string" length="50" isPK="N" />
         <field name="CaseNumber" dbName="CaseNumber" title="案件编号" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseDescription" dbName="CaseDescription" title="案件执行情况" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

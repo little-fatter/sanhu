@@ -108,6 +108,7 @@
   </a-layout>
 </template>
 <script>
+import appConfig from '@/config/app.config';
 export default {
   name: 'MyPersonList',
   props: {
@@ -134,92 +135,92 @@ export default {
           name: '人员列表',
           onlyShowOnline: false,
           subs: [
-            {
-              index: 0,
-              name: '执法一大队',
-              teamType: 0,
-              open: true,
-              list: [
-                {
-                  name: '王圣峰',
-                  online: true,
-                  location: [11456131.160076441, 2816040.92138897]
-                },
-                {
-                  name: '张华清',
-                  online: true,
-                  location: [11455048.535624135, 2806258.636159215]
-                },
-                {
-                  name: '王峰',
-                  online: true,
-                  location: [11455048.535624135, 2806258.636159215]
-                },
-                {
-                  name: '黄庆令',
-                  online: true,
-                  location: [11445807.562620534, 2801232.1654877993]
-                },
-                {
-                  name: '黄名全',
-                  online: true,
-                  location: [11449016.770818437, 2805910.649728117]
-                },
-                {
-                  name: '张丽',
-                  online: true,
-                  location: [11448784.779864373, 2825900.536936747]
-                },
-                {
-                  name: '边瑾',
-                  online: true,
-                  location: [11454523.08450299, 2830881.3995001386]
-                }
-              ]
-            },
-            {
-              index: 1,
-              name: '巡检二大队',
-              teamType: 1,
-              open: true,
-              list: [
-                {
-                  name: '张三',
-                  online: true,
-                  location: [11459394.894538362, 2829412.123457725]
-                },
-                {
-                  name: '李四',
-                  online: true,
-                  location: [11456726.99856661, 2830494.7479100297]
-                },
-                {
-                  name: '王五',
-                  online: true,
-                  location: [11460925.63979379, 2824160.604781257]
-                },
-                {
-                  name: '刘备',
-                  online: true,
-                  location: [11458698.921676166, 2816923.2770972075]
-                },
-                {
-                  name: '关羽',
-                  online: true,
-                  location: [11455799.03475035, 2814139.385648424]
-                },
-                {
-                  name: '张飞',
-                  online: true,
-                  location: [11450463.242806846, 2814990.019146663]
-                },
-                {
-                  name: '赵云',
-                  online: true,
-                  location: [11454561.749662, 2810620.8561784327]
-                }
-              ]
-            }
+            // {
+            //   index: 0,
+            //   name: '执法一大队',
+            //   teamType: 0,
+            //   open: true,
+            //   list: [
+            //     {
+            //       name: '王圣峰',
+            //       online: true,
+            //       location: [11456131.160076441, 2816040.92138897]
+            //     },
+            //     {
+            //       name: '张华清',
+            //       online: true,
+            //       location: [11455048.535624135, 2806258.636159215]
+            //     },
+            //     {
+            //       name: '王峰',
+            //       online: true,
+            //       location: [11455048.535624135, 2806258.636159215]
+            //     },
+            //     {
+            //       name: '黄庆令',
+            //       online: true,
+            //       location: [11445807.562620534, 2801232.1654877993]
+            //     },
+            //     {
+            //       name: '黄名全',
+            //       online: true,
+            //       location: [11449016.770818437, 2805910.649728117]
+            //     },
+            //     {
+            //       name: '张丽',
+            //       online: true,
+            //       location: [11448784.779864373, 2825900.536936747]
+            //     },
+            //     {
+            //       name: '边瑾',
+            //       online: true,
+            //       location: [11454523.08450299, 2830881.3995001386]
+            //     }
+            //   ]
+            // },
+            // {
+            //   index: 1,
+            //   name: '巡检二大队',
+            //   teamType: 1,
+            //   open: true,
+            //   list: [
+            //     {
+            //       name: '张三',
+            //       online: true,
+            //       location: [11459394.894538362, 2829412.123457725]
+            //     },
+            //     {
+            //       name: '李四',
+            //       online: true,
+            //       location: [11456726.99856661, 2830494.7479100297]
+            //     },
+            //     {
+            //       name: '王五',
+            //       online: true,
+            //       location: [11460925.63979379, 2824160.604781257]
+            //     },
+            //     {
+            //       name: '刘备',
+            //       online: true,
+            //       location: [11458698.921676166, 2816923.2770972075]
+            //     },
+            //     {
+            //       name: '关羽',
+            //       online: true,
+            //       location: [11455799.03475035, 2814139.385648424]
+            //     },
+            //     {
+            //       name: '张飞',
+            //       online: true,
+            //       location: [11450463.242806846, 2814990.019146663]
+            //     },
+            //     {
+            //       name: '赵云',
+            //       online: true,
+            //       location: [11454561.749662, 2810620.8561784327]
+            //     }
+            //   ]
+            // }
           ]
         },
         {
@@ -275,9 +276,9 @@ export default {
         }
       ],
       imgs: {
-        shexiangtou: '/img/yzt-renyuanceng/shexiangtou.png',
-        huatong: '/img/yzt-renyuanceng/huatong.png',
-        dianhua: '/img/yzt-renyuanceng/dianhua.png'
+        shexiangtou: appConfig.StaticWebContext + '/img/yzt-renyuanceng/shexiangtou.png',
+        huatong: appConfig.StaticWebContext + '/img/yzt-renyuanceng/huatong.png',
+        dianhua: appConfig.StaticWebContext + '/img/yzt-renyuanceng/dianhua.png'
       }
     }
   },
@@ -316,6 +317,10 @@ export default {
         }
       }
       return ps
+    },
+    updatePersonList: function (list) {
+      this.tabs[0].subs.length = 0
+      this.tabs[0].subs = [...list]
     },
     /**
      * 获取设备列表
@@ -431,9 +436,10 @@ export default {
 }
 .sub-title{
     margin-left: 20px;
+    min-width: 200px;
 }
 .sub-drop{
-    margin-left: 224px;
+    margin-left: 104px;
 }
 .sub-list-div{
     /* margin: 0; */
