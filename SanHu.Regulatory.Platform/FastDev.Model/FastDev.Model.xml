@@ -34,6 +34,26 @@
             结案报告
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.FormDataReq.Model">
+            <summary>
+            主表模块
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormDataReq.EventInfoId">
+            <summary>
+            事件id(有则判断)
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormDataReq.FormId">
+            <summary>
+            主表id(有则判断)
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.FormDataReq.FilterModels">
+            <summary>
+            需要的数据(执法人,当事人,附件),不传默认三个都有
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.FormReqBase">
             <summary>
             表单请求基础

@@ -29,8 +29,6 @@ export default {
   },
   data () {
     return {
-      // 案件id
-      id: this.caseId,
       // 演示数据
       caseFileList: [
         { fileName: '巡查记录表', fileTime: '2020-2-29 13:52:36' },
@@ -47,9 +45,9 @@ export default {
       if (isNotEmpty(this.caseId)) {
         rules = [
           {
-            field: 'caseId', // 案件类型
+            field: 'EventInfoId', // 案件ID
             op: 'equal',
-            value: this.caseId,
+            value: '9F552A1B34E5479C99907B80ABE133FC', // this.caseId,
             type: 'string'
           }
         ]
