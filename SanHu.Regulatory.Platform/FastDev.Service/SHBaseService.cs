@@ -94,29 +94,63 @@ namespace FastDev.Service
             return QueryDb.FirstOrDefault<work_task>(" where id=@0", taskid);
         }
 
+
         public object FormData(FormDataReq data)
         {
-            if (data == null || data.EventInfoId == null || data.Model == null) return null;
             IService service = ServiceHelper.GetService(data.Model);
 
+            //根据事件id或者id查询数据
             var filter = new FilterGroup();
-            filter.rules.Add(new FilterRule("EventInfoId", data.EventInfoId, "equal"));
+            if (!string.IsNullOrEmpty(data.FormId))
+            {
+                filter.rules.Add(new FilterRule("ID", data.FormId, "equal"));
+            }
+            if (!string.IsNullOrEmpty(data.EventInfoId))
+            {
+                filter.rules.Add(new FilterRule("EventInfoId", data.EventInfoId, "equal"));
+            }
+
+            //案件特殊判断
             if (data.Model == "case_info")
             {
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
             }
+            //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
-            return new
-            {
-                MainForm = obj,
-                Party = Getlaw_partyByFormId(formId),  //当事人
-                LawStaff = Getlaw_staffByFormId(formId),  //执法人员
-                Attachment = GetattachmentByFormId(formId),  //附件
-            };
+
+            //构建其他需要查询的数据
+            var dicData = BuildData(data, formId);
+            dicData.Add("MainForm", obj);
+
+            return dicData;
         }
-        ///
+        private Dictionary<string, object> BuildData(FormDataReq data, string formId)
+        {
+            var dic = new Dictionary<string, object>();
+            if (data.FilterModels == null || data.FilterModels.Count() < 1)
+            {
+                dic.Add("law_party", Getlaw_partyByFormId(formId));
+                dic.Add("law_staff", Getlaw_staffByFormId(formId));
+                dic.Add("attachment", GetattachmentByFormId(formId));
+                return dic;
+            }
+
+            if (data.FilterModels.Contains("law_party"))
+            {
+                dic.Add("law_party", Getlaw_partyByFormId(formId));
+            }
+            if (data.FilterModels.Contains("law_staff"))
+            {
+                dic.Add("law_staff", Getlaw_staffByFormId(formId));
+            }
+            if (data.FilterModels.Contains("attachment"))
+            {
+                dic.Add("attachment", GetattachmentByFormId(formId));
+            }
+            return dic;
+        }
         private object Getlaw_partyByFormId(string formId)
         {
             var filter = new FilterGroup();
