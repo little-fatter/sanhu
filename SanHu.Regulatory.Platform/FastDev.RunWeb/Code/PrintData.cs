@@ -14,19 +14,7 @@ namespace FastDev.RunWeb.Code
 {
     public class PrintData
     {
-        public PrintData() { }
-        public PrintData(string tempid)
-        {
-            formatContent = tempid;
-        }
-        public PrintData(core_printTemplate temp)
-        {
-            this.printTemp = temp;
-        }
-        public PrintData(core_reportTemplate coreReportTemp)
-        {
-            this.coreReportTemp = coreReportTemp;
-        }
+
         /// <summary>
         /// 打印模板
         /// </summary>
@@ -34,13 +22,32 @@ namespace FastDev.RunWeb.Code
         /// <summary>
         /// 报表模板
         /// </summary>
-        public core_reportTemplate coreReportTemp{ get; set; }
+        public core_reportTemplate coreReportTemp { get; set; }
 
         public Dictionary<string, object> ModelDetailData { get; set; }
 
         public Dictionary<string, object> dicPageInfo { get; set; }
+        public PrintData() {
+            dicPageInfo = new Dictionary<string, object>();
+        }
+        public PrintData(string tempid)
+        {
+            formatContent = tempid;
+            dicPageInfo = new Dictionary<string, object>();
+        }
+        public PrintData(core_printTemplate temp)
+        {
+            this.printTemp = temp;
+            dicPageInfo = new Dictionary<string, object>();
+        }
+        public PrintData(core_reportTemplate coreReportTemp)
+        {
+            this.coreReportTemp = coreReportTemp;
+            dicPageInfo = new Dictionary<string, object>();
+        }
 
         public string formatContent { get; set; }
+
         public HttpServerUtility Server
         {
             get
@@ -605,5 +612,181 @@ namespace FastDev.RunWeb.Code
             dicPageInfo["loginname"] = u.AccountId;
             dicPageInfo["now"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
+
+        public string FillPrintDataWithServiceConfig(ServiceConfig svrConfig, PrintData printData, List<Dictionary<string, object>> dicPrintRecord, string strTemplateOut)
+        {
+            Regex regex = new Regex("<!--START-->([\\s\\S]*?)<!--END-->");
+            Regex regex2 = new Regex("{(.*?)}");
+            List<Field> fields = svrConfig.fields;
+            MatchCollection matchCollection = regex.Matches(strTemplateOut);
+            if (matchCollection.Count > 0)
+            {
+                string value = matchCollection[0].Value;
+                StringBuilder stringBuilder = new StringBuilder();
+                if (dicPrintRecord != null && dicPrintRecord.Any())
+                {
+                    MatchCollection matchCollection2 = regex2.Matches(value);
+                    int num = -1;
+                    foreach (Dictionary<string, object> item in dicPrintRecord)
+                    {
+                        try
+                        {
+                            num++;
+                            string text = value.ToString();
+                            string field;
+                            for (int num2 = matchCollection2.Count - 1; num2 >= 0; num2--)
+                            {
+                                Match match = matchCollection2[num2];
+                                string text2 = "";
+                                try
+                                {
+                                    string value2 = match.Groups[1].Value;
+                                    field = (value2.Contains(":") ? value2.Substring(0, value2.IndexOf(':')) : value2);
+                                    field = (field.Contains(",") ? field.Split(',')[1] : field);
+                                    string string_ = value2.Contains(":") ? value2.Substring(value2.IndexOf(':') + 1) : "";
+                                    Field field2 = fields.FirstOrDefault((Field a) => a.name == field);
+                                    if (field == "rownumbers")
+                                    {
+                                        text2 = printData.DoWithSystemMark(num + 1, string_);
+                                    }
+                                    else if (item.ContainsKey(field))
+                                    {
+                                        if ((field2 != null && field2.type == "many2one") || field.ToLower() == "createuser" || field.ToLower() == "modifyuser")
+                                        {
+                                            List<string> list = item[field] as List<string>;
+                                            text2 = list[1];
+                                        }
+                                        else if (field2 != null && field2.type == "many2many")
+                                        {
+                                            List<List<string>> list2 = item[field] as List<List<string>>;
+                                            List<string> list3 = new List<string>();
+                                            foreach (List<string> item2 in list2)
+                                            {
+                                                list3.Add(item2[1]);
+                                            }
+                                            text2 = string.Join(",", list3);
+                                        }
+                                        else
+                                        {
+                                            text2 = printData.DoWithSystemMark(item[field], string_);
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+                                }
+                                if (string.IsNullOrEmpty(text2))
+                                {
+                                    text2 = "&nbsp;";
+                                }
+                                text = text.Substring(0, match.Index) + text2 + text.Substring(match.Index + match.Value.Length);
+                            }
+                            stringBuilder.Append(text);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+                strTemplateOut = regex.Replace(strTemplateOut, stringBuilder.ToString());
+            }
+            foreach (KeyValuePair<string, object> item3 in printData.dicPageInfo)
+            {
+                strTemplateOut = strTemplateOut.Replace("{#" + item3.Key + "}", ObjectExtensions.ToStr(item3.Value));
+            }
+            MatchCollection matchCollection3 = regex2.Matches(strTemplateOut);
+            if (matchCollection3.Count > 0)
+            {
+                for (int num2 = matchCollection3.Count - 1; num2 >= 0; num2--)
+                {
+                    Match match = matchCollection3[num2];
+                    string text2 = "";
+                    try
+                    {
+                        string value2 = match.Groups[1].Value;
+                        string text3 = value2.Contains(":") ? value2.Substring(0, value2.IndexOf(':')) : value2;
+                        text3 = (text3.Contains(",") ? text3.Split(',')[1] : text3);
+                        string string_ = value2.Contains(":") ? value2.Substring(value2.IndexOf(':') + 1) : "";
+                        string text4 = value2.Contains(",") ? value2.Split(',')[0] : "";
+                        if (!string.IsNullOrEmpty(text4))
+                        {
+                            if (text4 == "count")
+                            {
+                                text2 = ObjectExtensions.ToStr((object)dicPrintRecord.Count);
+                            }
+                            else if (text4 == "custom")
+                            {
+                                if (text3 == "TotalArrears")
+                                {
+                                    string key = (svrConfig.model.name == "v_arrears_month") ? "CustomerID" : "SupplierID";
+                                    decimal num3 = 0m;
+                                    List<string> list4 = new List<string>();
+                                    foreach (Dictionary<string, object> item4 in dicPrintRecord)
+                                    {
+                                        if (!list4.Contains(item4[key].ToString()))
+                                        {
+                                            num3 = ObjectExtensions.ToDecimal(item4["TotalArrears"]) - ObjectExtensions.ToDecimal(item4["Arrears"]) + num3;
+                                            list4.Add(item4[key].ToString());
+                                        }
+                                        num3 += ObjectExtensions.ToDecimal(item4["Arrears"]);
+                                    }
+                                    text2 = printData.DoWithSystemMark(num3, string_);
+                                }
+                            }
+                            else
+                            {
+                                double num4 = 0.0;
+                                double num5 = 0.0;
+                                double num6 = 0.0;
+                                foreach (Dictionary<string, object> item5 in dicPrintRecord)
+                                {
+                                    if (item5.ContainsKey(text3))
+                                    {
+                                        double num7 = DataHelper.ConvertValue<double>(item5[text3]);
+                                        if (num7 > num5)
+                                        {
+                                            num5 = num7;
+                                        }
+                                        if (num7 < num6)
+                                        {
+                                            num6 = num7;
+                                        }
+                                        num4 += num7;
+                                    }
+                                }
+                                double num8 = 0.0;
+                                if (text4 == "sum")
+                                {
+                                    num8 = num4;
+                                }
+                                else if (text4 == "avg")
+                                {
+                                    num8 = num4 / (double)dicPrintRecord.Count;
+                                }
+                                else if (text4 == "max")
+                                {
+                                    num8 = num5;
+                                }
+                                else if (text4 == "min")
+                                {
+                                    num8 = num6;
+                                }
+                                text2 = printData.DoWithSystemMark(num8, string_);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    if (string.IsNullOrEmpty(text2))
+                    {
+                        text2 = "&nbsp;";
+                    }
+                    strTemplateOut = strTemplateOut.Substring(0, match.Index) + text2 + strTemplateOut.Substring(match.Index + match.Value.Length);
+                }
+            }
+            return strTemplateOut;
+        }
+
     }
 }

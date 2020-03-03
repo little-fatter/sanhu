@@ -50,9 +50,25 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(case_cover caserport)
+        private void CreateInfo(case_cover casecover)
         {
-            var CaseInfoSource = base.Create(caserport) as string;
+            var CaseInfoSource = base.Create(casecover) as string;
+            ///更新案件信息
+
+            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(casecover.TaskId, null);
+            if (tasknow != null)
+            {
+                var caseid = (string)tasknow["CaseID"];
+                if (string.IsNullOrEmpty(caseid))
+                {
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                    if (caseinfo != null)
+                    { 
+                    caseinfo.CaseStatus= "已归档";
+                        QueryDb.Update(caseinfo);
+                    }
+                }
+            }
         }
 
     }

@@ -1,21 +1,19 @@
 <template>
   <div>
-    <form action="/">
-      <van-search
-        v-model="serchText"
-        show-action
-        placeholder="请输入搜索关键词"
-        class="serch-bar"
-      >
-        <div slot="action" @click="onSearch">搜索</div>
-      </van-search>
-      <van-dropdown-menu class="filtrate-bar">
-        <van-dropdown-item v-model="serchType" :options="serchTypeOptions" @change="serchTypeText"></van-dropdown-item>
-        <van-dropdown-item v-model="serchFlow" :options="serchFlowOptions" @change="serchFlowText"></van-dropdown-item>
-        <van-dropdown-item v-model="serchState" :options="serchStateOptions" @change="serchStateText"></van-dropdown-item>
-        <van-dropdown-item v-model="serchRegion" :options="serchRegionOptions" @change="serchRegionText"></van-dropdown-item>
-      </van-dropdown-menu>
-    </form>
+    <van-search
+      v-model="serchText"
+      show-action
+      placeholder="请输入搜索关键词"
+      class="serch-bar"
+    >
+      <div slot="action" @click="onSearch">搜索</div>
+    </van-search>
+    <van-dropdown-menu class="filtrate-bar">
+      <van-dropdown-item v-model="serchType" :options="serchTypeOptions" @change="serchTypeText"></van-dropdown-item>
+      <van-dropdown-item v-model="serchFlow" :options="serchFlowOptions" @change="serchFlowText"></van-dropdown-item>
+      <van-dropdown-item v-model="serchState" :options="serchStateOptions" @change="serchStateText"></van-dropdown-item>
+      <van-dropdown-item v-model="serchRegion" :options="serchRegionOptions" @change="serchRegionText"></van-dropdown-item>
+    </van-dropdown-menu>
     <div class="case-panel-roll">
       <!-- list组件-->
       <SList :dataCallback="loadData" ref="mylist">
@@ -40,9 +38,10 @@
             <div class="case-tag">
               <van-tag plain>{{ item.CaseNumber }}</van-tag>
               <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>
-              <van-tag plain>{{ item.CaseStatus }}</van-tag>
-              <span>{{ item.ModifyDate }}</span>
-              <!--                            <van-tag plain>2020/02/11 12:00更新</van-tag>-->
+              <!-- <van-tag plain>{{ item.CaseStatus }}</van-tag> -->
+              <van-tag plain>{{ item.CaseStatus?`简易程序`:`已创建` }}</van-tag>
+              <span>{{ item.ModifyDate }}更新</span>
+              <!-- <van-tag plain>2020/02/11 12:00更新</van-tag> -->
             </div>
           </div>
         </van-panel>
@@ -123,7 +122,7 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ name: 'caseDetails', params: { id: msg } }) // 案件详情id
+      this.$router.push({ path: 'caseDetails', query: { id: msg } }) // 案件详情id
     },
     // 配置请求参数
     loadData (parameter) {
@@ -133,25 +132,25 @@ export default {
           {
             field: 'CaseType', // 案件类型
             op: 'equal',
-            value: this.serchType,
+            value: this.serchText,
             type: 'string'
           },
           {
             field: 'ApplicableProcedureID', // 案件适用程序
             op: 'equal',
-            value: this.serchFlow,
+            value: this.serchText,
             type: 'select'
           },
           {
             field: 'CaseStatus', // 案件状态
             op: 'equal',
-            value: this.serchState,
+            value: this.serchText,
             type: 'string'
           },
           {
             field: 'CaseTitle', // 区域
             op: 'equal',
-            value: this.serchRegion,
+            value: this.serchText,
             type: 'string'
           }
         ]
@@ -163,7 +162,7 @@ export default {
             this.caseList.push(item)
           })
         }
-        console.log(this.caseList)
+        // console.log(this.caseList)
         return res
       })
     }

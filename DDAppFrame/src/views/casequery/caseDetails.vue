@@ -21,13 +21,13 @@
 
       <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发地点" :value="caseInfo.IncidentAddress" value-class="con-style" title-class="title-cell">
-        <van-button
+        <!-- <van-button
           class="locationBtn"
           slot="right-icon"
           icon="location"
           size="small"
           type="info"
-          @click="viewMap"/>
+          @click="viewMap"/> -->
       </van-cell>
       <van-cell title="处罚决定文书号" :value="caseInfo.PenaltyDecisionNo" value-class="con-style" title-class="title-cell" />
       <van-cell title="处罚种类" v-if="caseInfo.PenaltyType" :value="caseInfo.PenaltyType[1]" value-class="con-style" title-class="title-cell" />
@@ -46,18 +46,18 @@
     <van-panel class="margintop">
       <div slot="header" class="case-title" @click="goDetails">
         <h4>事件信息</h4>
-        <van-icon name="arrow"/>
+        <!-- <van-icon name="arrow"/> -->
       </div>
       <div>
         <van-cell-group>
           <van-cell title="事发地点" :value="eventInfo.address" value-class="con-style" title-class="title-cell">
-            <van-button
+            <!-- <van-button
               class="locationBtn"
               slot="right-icon"
               icon="location"
               size="small"
               type="info"
-              @click="viewMap"/>
+              @click="viewMap"/> -->
           </van-cell>
           <van-cell title="上报时间" :value="eventInfo.reportTime" value-class="con-style" title-class="title-cell" />
           <!-- <van-cell title="上报来源" :value="eventInfo.eventFrom" value-class="con-style" title-class="title-cell" /> -->
@@ -72,7 +72,8 @@
 </template>
 
 <script>
-import { getQueryConditon } from '../../utils/util' // 以及搜索规则
+// import { getQueryConditon } from '../../utils/util' // 以及搜索规则
+import { isNotEmpty } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
 export default {
   name: 'CaseDetails',
@@ -99,7 +100,8 @@ export default {
       console.log(`到事件详情`)
     },
     caseFiles () {
-      this.$router.push({ name: 'caseFlies', params: { caseId: '4d77125c-7352-4a5d-827c-c524cdac07ff' } })
+      // 传递 案件id
+      this.$router.push({ path: 'caseFlies', query: { caseId: this.caseId } })
     },
     // 数据请求
     getCaseInfo () {
@@ -111,10 +113,10 @@ export default {
             value: this.caseId,
             type: 'string'
           },
-          {
+          {// 关联查询
             field: 'Associatedobjecttype',
             op: 'equal',
-            value: 'case_Info',
+            value: 'case_Info', // 模块名
             type: 'string'
           }
         ]
@@ -122,29 +124,23 @@ export default {
       // 请求案件详情
       getDetaildata('case_Info', this.caseId).then((res) => {
         this.caseInfo = res
-        console.log('案件详情', res)
+        // console.log('案件详情', this.caseInfo)
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {
         this.lawPartyInfoL = res.Rows
-        console.log('当事人', res.Rows)
+        // console.log('当事人', this.lawPartyInfoL)
       })
       // 请求案件 关联事件
-      getDetialdataByEventInfoId('event_info', this.caseId.EventInfoId).then((res) => {
+      getDetialdataByEventInfoId('event_info', this.caseInfo.EventInfoId).then((res) => {
         this.eventInfo = res
-        console.log('事件信息', res)
+        // console.log('事件信息', res)
       })
     }
   },
   mounted () {
     // 接收路由案件ID传参
-    const parA = this.$route.params.id
-    const parB = this.$route.query.id
-    if (parA === '') {
-      this.caseId = parB
-    } else {
-      this.caseId = parA
-    }
+    this.caseId = this.$route.query.id
     // 执行数据请求
     this.getCaseInfo()
   }

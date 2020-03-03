@@ -86,6 +86,24 @@ namespace FastDev.Service
                    // _attachment.Create(a);           
                 }
             }
+            ///更新案件信息
+
+            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(lawpunishmentInfo.TaskId,null);
+            if (tasknow!=null)
+            {
+                var caseid = (string)tasknow["CaseID"];
+                if (string.IsNullOrEmpty(caseid))
+                {
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                    if (caseinfo != null)
+                    {
+                        caseinfo.CaseStatus = "已做出处罚决定";
+                        QueryDb.Update(caseinfo);
+                    }
+                }
+            }
+
+
         }
     }
 }
