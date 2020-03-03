@@ -2,8 +2,8 @@
 <template>
   <div class="">
     <Slist :dataCallback="loadData" ref="mylist">
-      <van-cell-group v-for="item in caseFileList" :key="item.fileName+'@'">
-        <van-cell :title="item.fileName?item.fileName:'后台没有给FromName'" icon="label-o" :value="item.CompletionTime" @click="goFromDetails(item.ID,item.FormType)"/>
+      <van-cell-group v-for="item in caseFileList" :key="item.ID+'@'">
+        <van-cell :title="item.FormName?item.FormName:'后台没有给FromName'" icon="label-o" :value="item.CompletionTime" @click="goFromDetails(item.ID,item.FormType)"/>
       </van-cell-group>
     </Slist>
 
