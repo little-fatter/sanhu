@@ -263,6 +263,21 @@
             </summary>
             <returns>只需要生成几个复杂的，关键性的函数的文档</returns>
         </member>
+        <member name="P:FastDev.DevDB.SysContext.FrameworkAccessToken">
+            <summary>
+            主框架授权码
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.SysContext.AuthTime">
+            <summary>
+            主框架授权时间
+            </summary>
+        </member>
+        <member name="P:FastDev.DevDB.SysContext.IsAuthOutTime">
+            <summary>
+            主框架授权时间时间是否超时
+            </summary>
+        </member>
         <member name="P:FastDev.DevDB.SysContext.IsDev">
             <summary>
             是否处于开发模式
