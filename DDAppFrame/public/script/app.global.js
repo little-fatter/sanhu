@@ -17,7 +17,7 @@ var publicAppConfig = {
     appHost: {
       admin: 'http://182.150.28.58:27016/framework',
       file: 'http://182.150.28.58:27012/filesystem',
-      regulatory: 'http://192.168.0.155:8030/webapi'
+      regulatory: 'http://192.168.0.125:8030//webapi'
     }
   },
   /** 企业ID */
