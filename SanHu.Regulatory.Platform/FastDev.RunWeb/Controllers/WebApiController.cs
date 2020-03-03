@@ -9,7 +9,6 @@ using FastDev.DevDB.Model.Config;
 using FD.Common.ActionValue;
 using FD.Common.Helpers;
 using FD.Core;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,7 +16,6 @@ using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
-    [Authorize]
     public class WebApiController : BaseController
     {
         private core_printTemplate core_printTemplate_0;

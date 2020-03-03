@@ -1,9 +1,7 @@
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
 using FD.Common.ActionValue;
-using FD.Model.Configs;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +22,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using UEditor.Core;
 using WanJiang.Framework.Web.Core;
 using WanJiang.Framework.Web.Core.Authentication;
@@ -80,38 +77,38 @@ namespace FastDev.RunWeb
             var rsaSecurityKey = new RsaSecurityKey(rsaParams);
             services.AddSingleton(rsaSecurityKey);
 
-            services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
                 {
-                    option.Authority = jwtParameterConfig.Issuer;
-                    option.RequireHttpsMetadata = false;
-                    option.Audience = jwtParameterConfig.Audience;
+                    //option.Cookie.Expiration = TimeSpan.FromDays(14);
+                    option.Cookie.Path = "/";
+                    option.ExpireTimeSpan = TimeSpan.FromDays(14);
+                    option.Cookie.SameSite = SameSiteMode.Lax;
+                    option.SlidingExpiration = true;
+                    option.LoginPath = "/Account/Login";
+                    option.LogoutPath = "/Account/Logout";
+                    option.AccessDeniedPath = "/Account/AccessDenied";
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
+                {
                     option.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = JwtClaimTypes.Name,
                         RoleClaimType = JwtClaimTypes.Role,
+
+                        ValidIssuer = jwtParameterConfig.Issuer,
+                        ValidAudience = jwtParameterConfig.Audience,
+                        IssuerSigningKey = rsaSecurityKey
                     };
                     option.Events = new JwtBearerEvents
                     {
-                        OnMessageReceived = context =>
-                        {
-                            if (context.Request.Headers.TryGetValue("Authorization", out var tokenInfo))
-                            {
-                                context.Token = tokenInfo[0].Split(" ")[1];
-                            }
-                            else if (context.Request.Cookies.TryGetValue(jwtParameterConfig.CookieName, out var token))
-                            {
-                                context.Token = token;
-                            }
-                            return Task.CompletedTask;
-                        },
                         OnTokenValidated = context =>
-                            new TokenValidatedInvoker().Invoke(context),
+                            new TokenValidatedInvoker(expiresTime.SessionTimeout).Invoke(context),
                     };
+                })
+                .AddAppKey(AppKeyDefaults.AuthenticationScheme, option =>
+                {
+                    option.XWsseTimeout = expiresTime.XWsseTimeout;
                 });
             services.AddConfigHttpClient(Configuration);
 
@@ -172,8 +169,8 @@ namespace FastDev.RunWeb
                 options.Cookie.HttpOnly = true;
             });
             services.AddCors();
-            //services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-            //services.AddTransient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>();
+            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddTransient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>();
             //配置数据保护共享的机器秘钥
             services.AddDataProtection(configure =>
             {
@@ -259,7 +256,7 @@ namespace FastDev.RunWeb
             });
             var mainServiceName = $"/{Configuration["MainServiceName"].Trim()}";
             app.UseGlobalExceptionHandler(mainServiceName);
-            //app.UserSpaService(new PathString("/api"));
+            app.UserSpaService(new PathString("/api"));
             app.UseDefaultFiles();
             app.UseStaticFiles();
             //绕过SameSite Cookie的设置，如果不使用此语句，会导致部分版本的360浏览器无法登陆
@@ -285,8 +282,7 @@ namespace FastDev.RunWeb
 
             app.UseRouting();
 
-            //app.UseMultipleAuthentication();
-            app.UseAuthentication();
+            app.UseMultipleAuthentication();
             app.UseAuthorization();
             //app.UseMvc(routes =>
             //{

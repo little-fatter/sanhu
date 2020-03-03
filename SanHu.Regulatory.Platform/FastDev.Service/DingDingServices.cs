@@ -36,7 +36,7 @@ namespace FastDev.Service
         public async Task<bool> WorkrecordUpdate(string userId, string record_id)
         {
             var oapiWorkrecordAddRequest = new OapiWorkrecordUpdateRequest() { };
-            var url = "framework/api/dingding/WorkrecordUpdate?" + GetAgentIDString();
+            var url = "framework/api/dingding/WorkrecordUpdateAsync?" + GetAgentIDString();
 
             var result= await PostFrameWork<OapiWorkrecordUpdateResponse>(url, oapiWorkrecordAddRequest);
             if (result.Errcode==0)
