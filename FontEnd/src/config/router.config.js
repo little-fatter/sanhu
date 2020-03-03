@@ -73,7 +73,7 @@ export const asyncRouterMap = [
           // forms
           {
             path: 'form',
-            redirect: '/form/base-form',
+            redirect: '/data-manage/form/base-form',
             component: RouteView,
             meta: { title: '表单页' },
             children: [
@@ -142,7 +142,7 @@ export const asyncRouterMap = [
           // case 案件
           {
             path: 'case',
-            redirect: '/case/case-list',
+            redirect: '/data-manage/case/case-list',
             component: RouteView,
             meta: { title: '案件档案' },
             children: [
@@ -170,7 +170,7 @@ export const asyncRouterMap = [
           {
             path: 'notice',
             component: RouteView,
-            redirect: '/notice/notice-detail',
+            redirect: '/data-manage/notice/notice-detail',
             children: [
               {
                 path: 'notice-detail',
