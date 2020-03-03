@@ -53,6 +53,23 @@ namespace FastDev.Service
         private void CreateInfo(case_report caserport)
         {
             var CaseInfoSource = base.Create(caserport) as string;
+            ///更新案件信息
+
+            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(caserport.TaskId, null);
+            if (tasknow != null)
+            {
+                var caseid = (string)tasknow["CaseID"];
+                if (string.IsNullOrEmpty(caseid))
+                {
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                    if (caseinfo != null)
+                    {
+                        caseinfo.CaseStatus = "已结案";
+                        QueryDb.Update(caseinfo);
+                    }
+                }
+            }
+
         }
 
     }

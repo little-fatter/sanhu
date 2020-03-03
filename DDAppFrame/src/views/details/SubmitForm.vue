@@ -22,7 +22,7 @@
         </van-col>
       </van-row>
     </van-cell-group>
-    <van-cell title="测试页面" @click="go"></van-cell>
+    <!-- <van-cell title="测试页面" @click="go"></van-cell> -->
     <!-- 表格列表组件 -->
     <Slist :dataCallback="loadData" ref="mylist">
       <van-cell>
