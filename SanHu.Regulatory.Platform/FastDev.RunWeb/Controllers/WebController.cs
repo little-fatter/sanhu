@@ -182,15 +182,11 @@ namespace FastDev.RunWeb.Controllers
 
         #endregion
 
-        private DbContext dbContext_0;
-
-
-        private DbContext dbContext_1;
         public HttpServerUtility Server
         {
             get
             {
-                return new HttpServerUtility();
+                return new HttpServerUtility(HttpContext);
             }
         }
 
@@ -203,24 +199,9 @@ namespace FastDev.RunWeb.Controllers
 
         private int printHeight;
 
-        private string reportModelName;
-
-        private ServiceConfig serviceConfig_0;
 
 
         private Dictionary<string, string> dicModuleTitles;
-
-        private string strTemplateOut;
-
-        private string strKanBanTemplate;
-
-
-        private DbContext dbContextMain;
-
-        private List<Dictionary<string, object>> list_2;
-
-        private List<Dictionary<string, object>> kanbanSrcData;
-
 
 
         private string styleTemplate;
@@ -505,8 +486,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                dbContext_0 = SysContext.GetCurrentDb();
-                DbContext dbContext = dbContext_0;
+                DbContext dbContext = SysContext.GetCurrentDb();
                 FastDev.DevDB.Model.core_importTemplate core_importTemplate = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_importTemplate>("where ID = @0", new object[1]
                 {
                     templateId
@@ -718,8 +698,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                dbContext_0 = SysContext.GetCurrentDb();
-                DbContext dbContext = dbContext_0;
+                DbContext dbContext = SysContext.GetCurrentDb();
                 FastDev.DevDB.Model.core_importTemplate core_importTemplate = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_importTemplate>("where ID = @0", new object[1]
                 {
                     templateId
@@ -862,8 +841,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                dbContext_0 = SysContext.GetCurrentDb();
-                DbContext dbContext = dbContext_0;
+                DbContext dbContext = SysContext.GetCurrentDb();
                 FastDev.DevDB.Model.core_exportTemplate core_exportTemplate = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_exportTemplate>("where ID = @0", new object[1]
                 {
                     templateId
@@ -1472,29 +1450,30 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
+                string strTemplateOut = string.Empty;
+                DbContext dbContext = SysContext.GetCurrentDb();
                 if (isReport == "Y")
                 {
-                    PrintData print = new PrintData();
+                    PrintData printReport = new PrintData();
                     int num = (!pageindex.HasValue) ? 1 : pageindex.Value;
-                    print.coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
+                    printReport.coreReportTemp = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                     {
                         templateId
                     });
-                    print.SetDefaultTemplateData();
+                    printReport.SetDefaultTemplateData();
                     string input = Base64Helper.DecodingString(descriptorCode);
                     QueryDescriptor queryDescriptor = JsonHelper.DeserializeJsonToObject<QueryDescriptor>(input);
-                    ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(print.coreReportTemp.ModelName);
-                    IService service = ServiceHelper.GetService(print.coreReportTemp.ModelName);
+                    ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(printReport.coreReportTemp.ModelName);
+                    IService service = ServiceHelper.GetService(printReport.coreReportTemp.ModelName);
                     int num2 = 1;
                     queryDescriptor.PageIndex = num;
                     PagedData pagedData = service.GetPageData(queryDescriptor) as PagedData;
                     long total = pagedData.Total;
-                    double a = (double)total * 1.0 / (double)print.coreReportTemp.PageSize.Value;
+                    double a = (double)total * 1.0 / (double)printReport.coreReportTemp.PageSize.Value;
                     num2 = (int)Math.Ceiling(a);
-                    list_2 = (pagedData.Records as List<Dictionary<string, object>>);
-                    strTemplateOut = print.coreReportTemp.TemplateBody;
-                    FillPrintDataWithServiceConfig(serviceConfig, print);
+                    List<Dictionary<string, object>> dicPrintRecord = (pagedData.Records as List<Dictionary<string, object>>);
+                    strTemplateOut = printReport.coreReportTemp.TemplateBody;
+                    strTemplateOut= printReport.FillPrintDataWithServiceConfig(serviceConfig, printReport, dicPrintRecord, strTemplateOut);
                     string text = styleTemplate.ToString();
                     if (queryDescriptor.EnabledPage)
                     {
@@ -1506,7 +1485,7 @@ namespace FastDev.RunWeb.Controllers
                         strTemplateOut = strTemplateOut.Replace("{#page}", "1");
                         strTemplateOut = strTemplateOut.Replace("{#pagecount}", ObjectExtensions.ToStr((object)num2));
                     }
-                    text = text.Replace("{style}", print.coreReportTemp.TemplateStyle);
+                    text = text.Replace("{style}", printReport.coreReportTemp.TemplateStyle);
                     text = text.Replace("{content}", strTemplateOut);
                     string[] array;
                     if (!queryDescriptor.EnabledPage)
@@ -1526,12 +1505,12 @@ namespace FastDev.RunWeb.Controllers
                         Success = true,
                         templateParm = new
                         {
-                            marginBottom = print.coreReportTemp.MarginBottom,
-                            marginTop = print.coreReportTemp.MarginTop,
-                            marginLeft = print.coreReportTemp.MarginLeft,
-                            marginRight = print.coreReportTemp.MarginRight,
-                            width = print.coreReportTemp.Width,
-                            height = print.coreReportTemp.Height
+                            marginBottom = printReport.coreReportTemp.MarginBottom,
+                            marginTop = printReport.coreReportTemp.MarginTop,
+                            marginLeft = printReport.coreReportTemp.MarginLeft,
+                            marginRight = printReport.coreReportTemp.MarginRight,
+                            width = printReport.coreReportTemp.Width,
+                            height = printReport.coreReportTemp.Height
                         },
                         contents = array
                     });
@@ -1546,7 +1525,6 @@ namespace FastDev.RunWeb.Controllers
                 }
                 printData.formatContent = printData.printTemp.TemplateBody;
                 printData.SetDefaultTemplateData();
-                printData.FillUserInfo(pageindex.Value, 1);
                 List<string> contents = printData.GetTemplatePage(context, pageindex, false);
                 return Json(new
                 {
@@ -1560,7 +1538,7 @@ namespace FastDev.RunWeb.Controllers
                         width = printData.printTemp.Width,
                         height = printData.printTemp.Height
                     },
-                    contents = contents
+                    contents
                 });
             }
             catch (Exception ex)
@@ -1580,6 +1558,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
+                string strTemplateOut = string.Empty;
                 PrintModel p = JsonHelper.DeserializeJsonToObject<PrintModel>(fullJson);
                 List<GridColumn> columns = p.columns;
                 List<Dictionary<string, object>> listdata = p.listdata;
@@ -1589,7 +1568,6 @@ namespace FastDev.RunWeb.Controllers
                 Dictionary<string, object> detaildata = p.detaildata;
 
                 DbContext currentDb = SysContext.GetCurrentDb();
-                dbContext_1 = currentDb;
                 ServiceConfig serviceConfig = new ServiceConfig();
                 serviceConfig.fields = new List<Field>();
                 ServiceConfig serviceConfig_ = serviceConfig;
@@ -1715,7 +1693,7 @@ namespace FastDev.RunWeb.Controllers
                     if (pageCount == 0)
                     {
                         strTemplateOut = printData.coreReportTemp.TemplateBody;
-                        FillPrintDataWithServiceConfig(serviceConfig_, printData);
+                        strTemplateOut= printData.FillPrintDataWithServiceConfig(serviceConfig_, printData, new List<Dictionary<string, object>>(), strTemplateOut);
                         string text4 = styleTemplate.ToString();
                         foreach (KeyValuePair<string, object> item in printData.dicPageInfo)
                         {
@@ -1733,14 +1711,13 @@ namespace FastDev.RunWeb.Controllers
                         for (int j = 1; j <= pageCount; j++)
                         {
                             printData.FillUserInfo(j, pageCount);
-                            List<Dictionary<string, object>> list6 = new List<Dictionary<string, object>>();
+                            List<Dictionary<string, object>> dicPrintRecord = new List<Dictionary<string, object>>();
                             for (int i = pageSize.Value * (j - 1); i < j * pageSize.Value && i < listdata.Count(); i++)
                             {
-                                list6.Add(listdata[i]);
+                                dicPrintRecord.Add(listdata[i]);
                             }
-                            list_2 = list6;
                             strTemplateOut = printData.coreReportTemp.TemplateBody;
-                            FillPrintDataWithServiceConfig(serviceConfig_, printData);
+                            strTemplateOut= printData.FillPrintDataWithServiceConfig(serviceConfig_, printData, dicPrintRecord, strTemplateOut);
                             string text4 = styleTemplate.ToString();
                             foreach (KeyValuePair<string, object> item2 in printData.dicPageInfo)
                             {
@@ -1800,7 +1777,8 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                PrintData printData = new PrintData((dbContext_1 = SysContext.GetCurrentDb()).FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ModelName = @0", new object[1]
+                DbContext dbContext = SysContext.GetCurrentDb();
+                PrintData printData = new PrintData(dbContext.FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ModelName = @0", new object[1]
                 {
                     model
                 }));
@@ -1836,7 +1814,7 @@ namespace FastDev.RunWeb.Controllers
             HttpResponseMessage response = new HttpResponseMessage();
             try
             {
-                PrintData printData = new PrintData((dbContext_1 = SysContext.GetCurrentDb()).FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
+                PrintData printData = new PrintData(SysContext.GetCurrentDb().FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
                 {
                     templateId
                 }));
@@ -1881,7 +1859,7 @@ namespace FastDev.RunWeb.Controllers
         public HttpResponseMessage PrintJPG(string context, string templateId, int pageindex, string isjpg)
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            PrintData printData = new PrintData((dbContext_1 = SysContext.GetCurrentDb()).FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
+            PrintData printData = new PrintData((SysContext.GetCurrentDb()).FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
             {
                 templateId
             }));
@@ -1980,7 +1958,7 @@ namespace FastDev.RunWeb.Controllers
         {
             try
             {
-                DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
+                DbContext dbContext = SysContext.GetCurrentDb();
                 PrintData printData = new PrintData(dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
                 {
                     templateId
@@ -2085,8 +2063,9 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public HttpResponseMessage PrintJPG_Report(string context, string templateId, int pageindex, string isjpg, string descriptorCode)
         {
+            string strTemplateOut = string.Empty;
             HttpResponseMessage response = new HttpResponseMessage();
-            DbContext dbContext = dbContext_1 = SysContext.GetCurrentDb();
+            DbContext dbContext = SysContext.GetCurrentDb();
             PrintData printData = new PrintData(dbContext.FirstOrDefault<FastDev.DevDB.Model.core_reportTemplate>("where ID = @0", new object[1]
             {
                 templateId
@@ -2185,9 +2164,9 @@ namespace FastDev.RunWeb.Controllers
             num = (int)pagedData.Total;
             double a = (double)num * 1.0 / (double)printData.coreReportTemp.PageSize.Value;
             int num5 = (int)Math.Ceiling(a);
-            list_2 = (pagedData.Records as List<Dictionary<string, object>>);
+            var dicPrintRecord = (pagedData.Records as List<Dictionary<string, object>>);
             strTemplateOut = printData.coreReportTemp.TemplateBody;
-            FillPrintDataWithServiceConfig(serviceConfig, printData);
+            strTemplateOut= printData.FillPrintDataWithServiceConfig(serviceConfig, printData, dicPrintRecord,strTemplateOut);
             string text3 = styleTemplate.ToString();
             text3 = text3.Replace("{style}", printData.coreReportTemp.TemplateStyle);
             text3 = text3.Replace("{content}", strTemplateOut);
@@ -2215,8 +2194,8 @@ namespace FastDev.RunWeb.Controllers
         [VaildateUser]
         public ActionResult PrintPreview(string context, string templateId)
         {
-            dbContext_1 = SysContext.GetCurrentDb();
-            PrintData printData = new PrintData(dbContext_1.FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
+            var dbContext = SysContext.GetCurrentDb();
+            PrintData printData = new PrintData(dbContext.FirstOrDefault<FastDev.DevDB.Model.core_printTemplate>("where ID = @0", new object[1]
             {
                 templateId
             }));
@@ -2229,7 +2208,6 @@ namespace FastDev.RunWeb.Controllers
             base.ViewBag.Content = printData.formatContent;
             return View("Print");
         }
-
 
 
         [NonAction]
@@ -2337,48 +2315,9 @@ namespace FastDev.RunWeb.Controllers
         [HttpPost]
         public ActionResult ReportData(string model, ReportArg arg)
         {
-            DbContext currentDb = SysContext.GetCurrentDb();
             try
             {
-                ReportResult reportResult = new ReportResult();
-                reportModelName = model;
-                serviceConfig_0 = ServiceHelper.GetServiceConfig(model);
-
-                List<NameValue> list_0 = GetLegendNameValues(currentDb, arg);
-                List<NameValue> list_1 = GetAxisNameValues(currentDb, arg);
-                foreach (NameValue item in list_1)
-                {
-                    reportResult.axis.Add(item.name);
-                }
-                foreach (NameValue item2 in list_0)
-                {
-                    reportResult.legend.Add(item2.name);
-                    object obj = null;
-                    if (!string.IsNullOrEmpty(arg.axisField) && arg.legendType != "pie")
-                    {
-                        List<object> list = new List<object>();
-                        foreach (NameValue item3 in list_1)
-                        {
-                            FilterGroup group = GetDateTimeLegendFilter(currentDb, arg, item2.value, item3.value);
-                            FilterTranslator filterTranslator = new FilterTranslator(group);
-                            filterTranslator.Translate();
-                            list.Add(GetCountValue(currentDb, arg.valueField, arg.valueFieldType, filterTranslator.CommandText, filterTranslator.Parms.ToArray()));
-                        }
-                        obj = list;
-                    }
-                    else
-                    {
-                        FilterGroup group = GetDateTimeLegendFilter(currentDb, arg, item2.value, null);
-                        FilterTranslator filterTranslator = new FilterTranslator(group);
-                        filterTranslator.Translate();
-                        obj = GetCountValue(currentDb, arg.valueField, arg.valueFieldType, filterTranslator.CommandText, filterTranslator.Parms.ToArray());
-                    }
-                    reportResult.series.Add(new
-                    {
-                        name = item2.name,
-                        value = obj
-                    });
-                }
+                var reportResult = new ReportPrintData().GetReportResult(model, arg);
                 return Json(new AjaxResult
                 {
                     data = reportResult,
@@ -2396,445 +2335,7 @@ namespace FastDev.RunWeb.Controllers
             }
         }
 
-        [NonAction]
-        private string GetDBValue(DbContext dbContext_3, string tabName, string fieldName, string IdValue)
-        {
-            Field field = null;
-            ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(tabName);
-            if (serviceConfig != null)
-            {
-                field = (from a in serviceConfig.fields
-                         where a.name == fieldName
-                         select a).FirstOrDefault();
-            }
-            if (field != null && field.type.Contains("2"))
-            {
-                if (!(field.type == "many2one"))
-                {
-                    throw new Exception("不支持字段[" + field.name + "]的类型" + field.type);
-                }
-                string text = dbContext_3.ExecuteScalar<string>(string.Format("select {0} from {1} where ID = @0", field.dbName, tabName), new object[1]
-                {
-                    IdValue
-                });
-                return dbContext_3.ExecuteScalar<string>(string.Format("select {0} from {1} where ID = @0", serviceConfig.model.textField, serviceConfig.model.name), new object[1]
-                {
-                    text
-                });
-            }
-            return dbContext_3.ExecuteScalar<string>(string.Format("select {0} from {1} where ID = @0", fieldName, tabName), new object[1]
-            {
-                IdValue
-            });
-        }
-
-        [NonAction]
-        private List<NameValue> GetLegendNameValues(DbContext dbContext_3, ReportArg rArg)
-        {
-            List<NameValue> list = new List<NameValue>();
-            string mName = reportModelName;
-
-            if (rArg.legendFieldType == "text")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == rArg.legendField
-                               select a).FirstOrDefault();
-                if (field == null)
-                {
-                    throw new Exception("【" + rArg.legendField + "】字段未定义");
-                }
-                List<string> list2 = dbContext_3.Fetch<string>(string.Format("select distinct {0} from {1}", rArg.legendField, mName), new object[0]);
-                foreach (string item in list2)
-                {
-                    list.Add(new NameValue
-                    {
-                        name = item,
-                        value = item
-                    });
-                }
-            }
-            else if (rArg.legendFieldType == "ref")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == rArg.legendField
-                               select a).FirstOrDefault();
-                if (string.IsNullOrEmpty(field.relationModel))
-                {
-                    throw new Exception("【" + field.title + "】不是关联类型字段");
-                }
-                string text2 = rArg.legendFieldRefTextField;
-                if (string.IsNullOrEmpty(text2))
-                {
-                    text2 = DataAccessHelper.GetModeTextField(field.relationModel);
-                }
-                List<string> list3 = dbContext_3.Fetch<string>(string.Format("select ID from {0}", field.relationModel), new object[0]);
-                foreach (string item2 in list3)
-                {
-                    if (!(field.type == "many2one") || !rArg.legendIncludeDataOnly.HasValue || rArg.legendIncludeDataOnly.Value != 1 || dbContext_3.ExecuteScalar<int>(string.Format("select count(*) from {0} where {1} = @0", mName, rArg.legendField + "ID"), new object[1]
-                    {
-                        item2
-                    }) != 0)
-                    {
-                        string name = GetDBValue(dbContext_3, field.relationModel, text2, item2);
-                        list.Add(new NameValue
-                        {
-                            name = name,
-                            value = item2
-                        });
-                    }
-                }
-            }
-            else if (rArg.legendFieldType == "selection")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == rArg.legendField
-                               select a).FirstOrDefault();
-                if (string.IsNullOrEmpty(field.fieldSelection))
-                {
-                    return list;
-                }
-                List<SelectionItem> list4 = JsonHelper.DeserializeJsonToList<SelectionItem>(field.fieldSelection);
-                if (list4 == null || !list4.Any())
-                {
-                    return list;
-                }
-                new List<object>();
-                foreach (SelectionItem item3 in list4)
-                {
-                    list.Add(new NameValue
-                    {
-                        name = item3.text,
-                        value = item3.id
-                    });
-                }
-            }
-            else if (new string[4]
-            {
-                "year",
-                "month",
-                "day",
-                "week"
-            }.Contains(rArg.legendFieldType))
-            {
-                List<RangeDateItem> list5 = GetRangeDates(dbContext_3, mName, rArg.legendField, rArg.legendFieldType);
-                new List<object>();
-                foreach (RangeDateItem item4 in list5)
-                {
-                    list.Add(new NameValue
-                    {
-                        name = item4.name,
-                        value = item4.value
-                    });
-                }
-            }
-            return list;
-        }
-
-        [NonAction]
-        private List<NameValue> GetAxisNameValues(DbContext dbContext_3, ReportArg reportArg_0)
-        {
-            List<NameValue> list = new List<NameValue>();
-            if (string.IsNullOrEmpty(reportArg_0.axisField) || reportArg_0.legendType == "pie")
-            {
-                return list;
-            }
-            string text = reportModelName;
-
-            if (reportArg_0.axisFieldType == "ref")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == reportArg_0.axisField
-                               select a).FirstOrDefault();
-                string text2 = reportArg_0.axisFieldRefTextField;
-                if (string.IsNullOrEmpty(text2))
-                {
-                    text2 = DataAccessHelper.GetModeTextField(field.relationModel);
-                }
-                List<string> list2 = dbContext_3.Fetch<string>(string.Format("select ID from {0}", field.relationModel), new object[0]);
-                foreach (string item in list2)
-                {
-                    if (!(field.type == "many2one") || !reportArg_0.axisIncludeDataOnly.HasValue || reportArg_0.axisIncludeDataOnly.Value != 1 || dbContext_3.ExecuteScalar<int>(string.Format("select count(*) from {0} where {1} = @0", text, reportArg_0.axisField + "ID"), new object[1]
-                    {
-                        item
-                    }) != 0)
-                    {
-                        string name = GetDBValue(dbContext_3, field.relationModel, text2, item);
-                        list.Add(new NameValue
-                        {
-                            name = name,
-                            value = item
-                        });
-                    }
-                }
-            }
-            else if (reportArg_0.axisFieldType == "selection")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == reportArg_0.axisField
-                               select a).FirstOrDefault();
-                if (string.IsNullOrEmpty(field.fieldSelection))
-                {
-                    return list;
-                }
-                List<SelectionItem> list3 = JsonHelper.DeserializeJsonToList<SelectionItem>(field.fieldSelection);
-                if (list3 == null || !list3.Any())
-                {
-                    return list;
-                }
-                new List<object>();
-                foreach (SelectionItem item2 in list3)
-                {
-                    list.Add(new NameValue
-                    {
-                        name = item2.text,
-                        value = item2.id
-                    });
-                }
-            }
-            else if (new string[4]
-            {
-                "year",
-                "month",
-                "day",
-                "week"
-            }.Contains(reportArg_0.axisFieldType))
-            {
-                List<RangeDateItem> list4 = GetRangeDates(dbContext_3, text, reportArg_0.axisField, reportArg_0.axisFieldType);
-                new List<object>();
-                foreach (RangeDateItem item3 in list4)
-                {
-                    list.Add(new NameValue
-                    {
-                        name = item3.name,
-                        value = item3.value
-                    });
-                }
-            }
-            return list;
-        }
-
-        [NonAction]
-        private FilterGroup GetDateTimeLegendFilter(DbContext db, ReportArg arg, object xValue, object yValue)
-        {
-            FilterGroup filterGroup = new FilterGroup();
-            if (new string[4]
-            {
-                "year",
-                "month",
-                "day",
-                "week"
-            }.Contains(arg.legendFieldType))
-            {
-                RangeDateValue rangeDateValue = xValue as RangeDateValue;
-                filterGroup.rules.Add(new FilterRule
-                {
-                    field = arg.legendField,
-                    value = rangeDateValue.Min,
-                    op = "greaterthanorequal"
-                });
-                filterGroup.rules.Add(new FilterRule
-                {
-                    field = arg.legendField,
-                    value = rangeDateValue.Max,
-                    op = "lessthanorequal"
-                });
-            }
-            else if (arg.legendFieldType == "ref")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == arg.legendField
-                               select a).FirstOrDefault();
-                if (field.type == "many2one")
-                {
-                    filterGroup.rules.Add(new FilterRule
-                    {
-                        field = field.dbName,
-                        value = xValue,
-                        op = "equal"
-                    });
-                }
-            }
-            else
-            {
-                filterGroup.rules.Add(new FilterRule
-                {
-                    field = arg.legendField,
-                    value = xValue,
-                    op = "equal"
-                });
-            }
-            if (arg.dataFilter != null && (arg.dataFilter.rules.Any() || arg.dataFilter.groups.Any()))
-            {
-                filterGroup.groups.Add(arg.dataFilter);
-            }
-            if (!string.IsNullOrEmpty(arg.axisField) && arg.legendType != "pie")
-            {
-                FilterGroup filterGroup2 = GetDateTimeAxisFilter(db, arg, yValue);
-                foreach (FilterRule rule in filterGroup2.rules)
-                {
-                    filterGroup.rules.Add(rule);
-                }
-            }
-            return filterGroup;
-        }
-
-        [NonAction]
-        private FilterGroup GetDateTimeAxisFilter(DbContext db, ReportArg arg, object dbValue)
-        {
-            FilterGroup filterGroup = new FilterGroup();
-            if (new string[4]
-            {
-                "year",
-                "month",
-                "day",
-                "week"
-            }.Contains(arg.axisFieldType))
-            {
-                RangeDateValue rangeDateValue = dbValue as RangeDateValue;
-                filterGroup.rules.Add(new FilterRule
-                {
-                    field = arg.axisField,
-                    value = rangeDateValue.Min,
-                    op = "greaterthanorequal"
-                });
-                filterGroup.rules.Add(new FilterRule
-                {
-                    field = arg.axisField,
-                    value = rangeDateValue.Max,
-                    op = "lessthanorequal"
-                });
-            }
-            else if (arg.axisFieldType == "ref")
-            {
-                Field field = (from a in serviceConfig_0.fields
-                               where a.name == arg.axisField
-                               select a).FirstOrDefault();
-                if (field.type == "many2one")
-                {
-                    filterGroup.rules.Add(new FilterRule
-                    {
-                        field = field.dbName,
-                        value = dbValue,
-                        op = "equal"
-                    });
-                }
-            }
-            else
-            {
-                filterGroup.rules.Add(new FilterRule
-                {
-                    field = arg.axisField,
-                    value = dbValue,
-                    op = "equal"
-                });
-            }
-            return filterGroup;
-        }
-
-        [NonAction]
-        private RangeDateValue GetRangeDateValue(DbContext dbContext_3, string string_7, string string_8)
-        {
-            DateTime min = dbContext_3.ExecuteScalar<DateTime>(string.Format("select min({0}) from {1}", string_8, string_7), new object[0]);
-            DateTime max = dbContext_3.ExecuteScalar<DateTime>(string.Format("select max({0}) from {1}", string_8, string_7), new object[0]);
-            return new RangeDateValue(min, max);
-        }
-
-        [NonAction]
-        private List<RangeDateItem> GetRangeDates(DbContext dbContext_3, string string_7, string string_8, string string_9)
-        {
-            RangeDateValue rangeDateValue = GetRangeDateValue(dbContext_3, string_7, string_8);
-            DateTime t = rangeDateValue.Min;
-            DateTime t2 = rangeDateValue.Max;
-            List<RangeDateItem> list = new List<RangeDateItem>();
-            if (string_9 == "year")
-            {
-                t = new DateTime(t.Year, 1, 1, 0, 0, 0);
-                t2 = new DateTime(t2.Year, 1, 1, 0, 0, 0).AddYears(1).AddSeconds(-1.0);
-                DateTime dateTime = new DateTime(t.Year, 1, 1, 0, 0, 0);
-                while (dateTime >= t && dateTime <= t2)
-                {
-                    list.Add(new RangeDateItem
-                    {
-                        name = dateTime.ToString("yyyy"),
-                        value = new RangeDateValue(dateTime, dateTime.AddYears(1).AddSeconds(-1.0))
-                    });
-                    dateTime = dateTime.AddYears(1);
-                }
-            }
-            if (string_9 == "month")
-            {
-                t = new DateTime(t.Year, t.Month, 1, 0, 0, 0);
-                t2 = new DateTime(t2.Year, t2.Month, 1, 0, 0, 0).AddMonths(1).AddSeconds(-1.0);
-                DateTime dateTime = new DateTime(t.Year, t.Month, 1, 0, 0, 0);
-                while (dateTime >= t && dateTime <= t2)
-                {
-                    list.Add(new RangeDateItem
-                    {
-                        name = dateTime.ToString("yyyy-MM"),
-                        value = new RangeDateValue(dateTime, dateTime.AddMonths(1).AddSeconds(-1.0))
-                    });
-                    dateTime = dateTime.AddMonths(1);
-                }
-            }
-            if (string_9 == "day")
-            {
-                t = new DateTime(t.Year, t.Month, t.Day, 0, 0, 0);
-                t2 = new DateTime(t2.Year, t2.Month, t2.Day, 0, 0, 0).AddDays(1.0).AddSeconds(-1.0);
-                DateTime dateTime = new DateTime(t.Year, t.Month, t.Day, 0, 0, 0);
-                while (dateTime >= t && dateTime <= t2)
-                {
-                    list.Add(new RangeDateItem
-                    {
-                        name = dateTime.ToString("yyyy-MM-dd"),
-                        value = new RangeDateValue(dateTime, dateTime.AddDays(1.0).AddSeconds(-1.0))
-                    });
-                    dateTime = dateTime.AddDays(1.0);
-                }
-            }
-            if (string_9 == "week")
-            {
-                t = new DateTime(t.Year, t.Month, t.Day, 0, 0, 0).AddDays((double)(-1 * (int)t.DayOfWeek));
-                t2 = new DateTime(t2.Year, t2.Month, t2.Day, 0, 0, 0).AddDays((double)(6 - t2.DayOfWeek));
-                DateTime dateTime = new DateTime(t.Year, t.Month, t.Day, 0, 0, 0);
-                while (dateTime >= t && dateTime <= t2)
-                {
-                    list.Add(new RangeDateItem
-                    {
-                        name = dateTime.ToString("yyyy-MM-dd") + "至" + dateTime.AddDays(7.0).AddSeconds(-1.0).ToString("yyyy-MM-dd"),
-                        value = new RangeDateValue(dateTime, dateTime.AddDays(7.0).AddSeconds(-1.0))
-                    });
-                    dateTime = dateTime.AddDays(7.0);
-                }
-            }
-            return list;
-        }
-
-        [NonAction]
-        private object GetCountValue(DbContext dbContext_3, string string_7, string string_8, string string_9, params object[] args)
-        {
-            string arg = "count(*)";
-            if (!string.IsNullOrEmpty(string_7) && string_8 != "count")
-            {
-                arg = string.Format("{0}({1})", string_8, string_7);
-            }
-            string text = string.Format("select {0} from {1} where {2}", arg, reportModelName, string_9 ?? "1=1");
-            return dbContext_3.ExecuteScalar<double?>(text, args);
-        }
-
-        [NonAction]
-        private string GetModuleTitle(DbContext db, string moduleId)
-        {
-            if (dicModuleTitles.ContainsKey(moduleId))
-            {
-                return dicModuleTitles[moduleId];
-            }
-            dicModuleTitles[moduleId] = db.ExecuteScalar<string>("select ModuleTitle from Core_Module where ID = @0", new object[1]
-            {
-                moduleId
-            });
-            return dicModuleTitles[moduleId];
-        }
-
+       
         [VaildateUser]
         [HttpPost]
         public ActionResult Rights(string id, string roleId, string userId, string loginName, string fullJson)
@@ -3231,9 +2732,9 @@ namespace FastDev.RunWeb.Controllers
             HttpResponseMessage response = new HttpResponseMessage();
             try
             {
+                string strTemplateOut = string.Empty;
                 DbContext currentDb = SysContext.GetCurrentDb();
                 string text = "";
-                dbContextMain = currentDb;
                 if (!string.IsNullOrEmpty(filterCode))
                 {
                     string input = Base64Helper.DecodingString(filterCode);
@@ -3262,19 +2763,20 @@ namespace FastDev.RunWeb.Controllers
                     {
                         throw new Exception("报表模板未定义");
                     }
+                    List<Dictionary<string, object>> dicPrintRecord;
                     if (queryDescriptor.EnabledPage)
                     {
                         PagedData pagedData = string.IsNullOrEmpty(dbViewName) ? (service.GetPageData(queryDescriptor) as PagedData) : DataAccessHelper.GetCommonPageData(currentDb, dbViewName, queryDescriptor);
                         num = pagedData.Total;
-                        list_2 = (pagedData.Records as List<Dictionary<string, object>>);
+                        dicPrintRecord = (pagedData.Records as List<Dictionary<string, object>>);
                     }
                     else
                     {
-                        list_2 = (string.IsNullOrEmpty(dbViewName) ? service.GetListData(filterGroup) : (DataAccessHelper.GetCommonListData(currentDb, dbViewName, filterGroup, null) as List<Dictionary<string, object>>));
-                        num = list_2.Count;
+                        dicPrintRecord = (string.IsNullOrEmpty(dbViewName) ? service.GetListData(filterGroup) : (DataAccessHelper.GetCommonListData(currentDb, dbViewName, filterGroup, null) as List<Dictionary<string, object>>));
+                        num = dicPrintRecord.Count;
                     }
                     strTemplateOut = printData.coreReportTemp.TemplateBody;
-                    FillPrintDataWithServiceConfig(serviceConfig, printData);
+                    strTemplateOut= printData.FillPrintDataWithServiceConfig(serviceConfig, printData, dicPrintRecord, strTemplateOut);
                     text = styleTemplate.ToString();
                     strTemplateOut = strTemplateOut.Replace("{#page}/{#pagecount}", "");
                     text = text.Replace("{style}", printData.coreReportTemp.TemplateStyle);
@@ -3285,19 +2787,19 @@ namespace FastDev.RunWeb.Controllers
                     ServiceConfig serviceConfig = ServiceHelper.GetServiceConfig(model);
                     IService service = ServiceHelper.GetService(model);
                     text2 = serviceConfig.model.title;
+                    List<Dictionary<string, object>> dicKanbanRecord;
                     if (queryDescriptor.EnabledPage)
                     {
                         PagedData pagedData = service.GetPageData(queryDescriptor) as PagedData;
                         num = pagedData.Total;
-                        kanbanSrcData = (pagedData.Records as List<Dictionary<string, object>>);
+                        dicKanbanRecord = (pagedData.Records as List<Dictionary<string, object>>);
                     }
                     else
                     {
-                        kanbanSrcData = service.GetListData(filterGroup);
-                        num = kanbanSrcData.Count;
+                        dicKanbanRecord = service.GetListData(filterGroup);
+                        num = dicKanbanRecord.Count;
                     }
-                    strKanBanTemplate = template;
-                    PerpareKanban(serviceConfig, printData);
+                    strTemplateOut = ReportPrintData.PerpareKanban(serviceConfig, printData, dicKanbanRecord, template, strTemplateOut);
                     text = strTemplateOut;
                 }
                 response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -3355,240 +2857,7 @@ namespace FastDev.RunWeb.Controllers
                 return response;
             }
         }
-
-        [NonAction]
-        private void PerpareKanban(ServiceConfig sConfig, PrintData printData)
-        {
-            Regex regex = new Regex("{(.*?)}");
-            List<Field> fields = sConfig.fields;
-            MatchCollection matchCollection = regex.Matches(strKanBanTemplate);
-            if (matchCollection.Count > 0 && kanbanSrcData != null && kanbanSrcData.Any())
-            {
-                foreach (Dictionary<string, object> item in kanbanSrcData)
-                {
-                    string text = strKanBanTemplate.ToString();
-                    for (int num = matchCollection.Count - 1; num >= 0; num--)
-                    {
-                        Match match = matchCollection[num];
-                        string value = match.Groups[1].Value;
-                        string field = value.Contains(":") ? value.Substring(0, value.IndexOf(':')) : value;
-                        field = (field.Contains(",") ? field.Split(',')[1] : field);
-                        string text2 = value.Contains(":") ? value.Substring(value.IndexOf(':') + 1) : "";
-                        Field field2 = fields.FirstOrDefault((Field a) => a.name == field);
-                        string text3 = "";
-                        if (item.ContainsKey(field))
-                        {
-                            if ((field2 != null && field2.type == "many2one") || field.ToLower() == "createuser" || field.ToLower() == "modifyuser")
-                            {
-                                List<string> list = item[field] as List<string>;
-                                text3 = list[1];
-                                if (!string.IsNullOrEmpty(text2))
-                                {
-                                    text3 = printData.DoWithSystemMark(text3, text2);
-                                }
-                            }
-                            else if (field2 != null && field2.type == "many2many")
-                            {
-                                List<List<string>> list2 = item[field] as List<List<string>>;
-                                List<string> list3 = new List<string>();
-                                foreach (List<string> item2 in list2)
-                                {
-                                    list3.Add(item2[1]);
-                                }
-                                text3 = string.Join(",", list3);
-                                if (!string.IsNullOrEmpty(text2))
-                                {
-                                    text3 = printData.DoWithSystemMark(text3, text2);
-                                }
-                            }
-                            else
-                            {
-                                text3 = printData.DoWithSystemMark(item[field], text2);
-                            }
-                        }
-                        text = text.Substring(0, match.Index) + text3 + text.Substring(match.Index + match.Value.Length);
-                    }
-                    strTemplateOut += text;
-                }
-            }
-        }
-
-        [NonAction]
-        private void FillPrintDataWithServiceConfig(ServiceConfig svrConfig, PrintData printData)
-        {
-            Regex regex = new Regex("<!--START-->([\\s\\S]*?)<!--END-->");
-            Regex regex2 = new Regex("{(.*?)}");
-            List<Field> fields = svrConfig.fields;
-            MatchCollection matchCollection = regex.Matches(strTemplateOut);
-            if (matchCollection.Count > 0)
-            {
-                string value = matchCollection[0].Value;
-                StringBuilder stringBuilder = new StringBuilder();
-                if (list_2 != null && list_2.Any())
-                {
-                    MatchCollection matchCollection2 = regex2.Matches(value);
-                    int num = -1;
-                    foreach (Dictionary<string, object> item in list_2)
-                    {
-                        try
-                        {
-                            num++;
-                            string text = value.ToString();
-                            string field;
-                            for (int num2 = matchCollection2.Count - 1; num2 >= 0; num2--)
-                            {
-                                Match match = matchCollection2[num2];
-                                string text2 = "";
-                                try
-                                {
-                                    string value2 = match.Groups[1].Value;
-                                    field = (value2.Contains(":") ? value2.Substring(0, value2.IndexOf(':')) : value2);
-                                    field = (field.Contains(",") ? field.Split(',')[1] : field);
-                                    string string_ = value2.Contains(":") ? value2.Substring(value2.IndexOf(':') + 1) : "";
-                                    Field field2 = fields.FirstOrDefault((Field a) => a.name == field);
-                                    if (field == "rownumbers")
-                                    {
-                                        text2 = printData.DoWithSystemMark(num + 1, string_);
-                                    }
-                                    else if (item.ContainsKey(field))
-                                    {
-                                        if ((field2 != null && field2.type == "many2one") || field.ToLower() == "createuser" || field.ToLower() == "modifyuser")
-                                        {
-                                            List<string> list = item[field] as List<string>;
-                                            text2 = list[1];
-                                        }
-                                        else if (field2 != null && field2.type == "many2many")
-                                        {
-                                            List<List<string>> list2 = item[field] as List<List<string>>;
-                                            List<string> list3 = new List<string>();
-                                            foreach (List<string> item2 in list2)
-                                            {
-                                                list3.Add(item2[1]);
-                                            }
-                                            text2 = string.Join(",", list3);
-                                        }
-                                        else
-                                        {
-                                            text2 = printData.DoWithSystemMark(item[field], string_);
-                                        }
-                                    }
-                                }
-                                catch
-                                {
-                                }
-                                if (string.IsNullOrEmpty(text2))
-                                {
-                                    text2 = "&nbsp;";
-                                }
-                                text = text.Substring(0, match.Index) + text2 + text.Substring(match.Index + match.Value.Length);
-                            }
-                            stringBuilder.Append(text);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                }
-                strTemplateOut = regex.Replace(strTemplateOut, stringBuilder.ToString());
-            }
-            foreach (KeyValuePair<string, object> item3 in printData.dicPageInfo)
-            {
-                strTemplateOut = strTemplateOut.Replace("{#" + item3.Key + "}", ObjectExtensions.ToStr(item3.Value));
-            }
-            MatchCollection matchCollection3 = regex2.Matches(strTemplateOut);
-            if (matchCollection3.Count > 0)
-            {
-                for (int num2 = matchCollection3.Count - 1; num2 >= 0; num2--)
-                {
-                    Match match = matchCollection3[num2];
-                    string text2 = "";
-                    try
-                    {
-                        string value2 = match.Groups[1].Value;
-                        string text3 = value2.Contains(":") ? value2.Substring(0, value2.IndexOf(':')) : value2;
-                        text3 = (text3.Contains(",") ? text3.Split(',')[1] : text3);
-                        string string_ = value2.Contains(":") ? value2.Substring(value2.IndexOf(':') + 1) : "";
-                        string text4 = value2.Contains(",") ? value2.Split(',')[0] : "";
-                        if (!string.IsNullOrEmpty(text4))
-                        {
-                            if (text4 == "count")
-                            {
-                                text2 = ObjectExtensions.ToStr((object)list_2.Count);
-                            }
-                            else if (text4 == "custom")
-                            {
-                                if (text3 == "TotalArrears")
-                                {
-                                    string key = (svrConfig.model.name == "v_arrears_month") ? "CustomerID" : "SupplierID";
-                                    decimal num3 = 0m;
-                                    List<string> list4 = new List<string>();
-                                    foreach (Dictionary<string, object> item4 in list_2)
-                                    {
-                                        if (!list4.Contains(item4[key].ToString()))
-                                        {
-                                            num3 = ObjectExtensions.ToDecimal(item4["TotalArrears"]) - ObjectExtensions.ToDecimal(item4["Arrears"]) + num3;
-                                            list4.Add(item4[key].ToString());
-                                        }
-                                        num3 += ObjectExtensions.ToDecimal(item4["Arrears"]);
-                                    }
-                                    text2 = printData.DoWithSystemMark(num3, string_);
-                                }
-                            }
-                            else
-                            {
-                                double num4 = 0.0;
-                                double num5 = 0.0;
-                                double num6 = 0.0;
-                                foreach (Dictionary<string, object> item5 in list_2)
-                                {
-                                    if (item5.ContainsKey(text3))
-                                    {
-                                        double num7 = DataHelper.ConvertValue<double>(item5[text3]);
-                                        if (num7 > num5)
-                                        {
-                                            num5 = num7;
-                                        }
-                                        if (num7 < num6)
-                                        {
-                                            num6 = num7;
-                                        }
-                                        num4 += num7;
-                                    }
-                                }
-                                double num8 = 0.0;
-                                if (text4 == "sum")
-                                {
-                                    num8 = num4;
-                                }
-                                else if (text4 == "avg")
-                                {
-                                    num8 = num4 / (double)list_2.Count;
-                                }
-                                else if (text4 == "max")
-                                {
-                                    num8 = num5;
-                                }
-                                else if (text4 == "min")
-                                {
-                                    num8 = num6;
-                                }
-                                text2 = printData.DoWithSystemMark(num8, string_);
-                            }
-                        }
-                    }
-                    catch
-                    {
-                    }
-                    if (string.IsNullOrEmpty(text2))
-                    {
-                        text2 = "&nbsp;";
-                    }
-                    strTemplateOut = strTemplateOut.Substring(0, match.Index) + text2 + strTemplateOut.Substring(match.Index + match.Value.Length);
-                }
-            }
-        }
-
-        [VaildateUser]
+   [VaildateUser]
         [HttpPost]
         public ActionResult user_menus(string appId)
         {
@@ -3802,21 +3071,10 @@ namespace FastDev.RunWeb.Controllers
 
         public WebController()
         {
-            //IL_00bd: Unknown result type (might be due to invalid IL or missing references)
-            //IL_00c7: Expected O, but got Unknown
-
-            dbContext_0 = null;
 
             printWidth = 760;
             printHeight = 900;
-            reportModelName = null;
-            serviceConfig_0 = null;
             dicModuleTitles = new Dictionary<string, string>();
-            strTemplateOut = "";
-            strKanBanTemplate = "";
-            dbContextMain = null;
-            list_2 = null;
-            kanbanSrcData = null;
             styleTemplate = " \r\n             <style type=\"text/css\">\r\n                     {style}\r\n             </style> \r\n             {content}";
             logMan = new LogManager();
             dicBigTree = new Dictionary<string, string>
@@ -4009,8 +3267,7 @@ namespace FastDev.RunWeb.Controllers
             try
             {
                 file = (file ?? base.Request.Form.Files[0]);
-                dbContext_0 = SysContext.GetCurrentDb();
-                DbContext dbContext = dbContext_0;
+                DbContext dbContext = SysContext.GetCurrentDb(); 
                 FastDev.DevDB.Model.core_importTemplate core_importTemplate = dbContext.FirstOrDefault<FastDev.DevDB.Model.core_importTemplate>("where ID = @0", new object[1]
                 {
                     templateId
