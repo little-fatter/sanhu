@@ -19,7 +19,7 @@ namespace FD.Model.Dto
         /// </summary>
         public string FormId { get; set; }
         /// <summary>
-        /// 需要的数据(执法人,当事人,附件),不传默认三个都有
+        /// 需要的数据模块(执法人,当事人,附件),不传默认三个都有
         /// </summary>
         public string[] FilterModels { get; set; }
     }

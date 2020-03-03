@@ -101,7 +101,7 @@ export default {
     },
     caseFiles () {
       // 传递 案件id
-      this.$router.push({ name: 'caseFlies', query: { caseId: this.caseId } })
+      this.$router.push({ path: 'caseFlies', query: { caseId: this.caseId } })
     },
     // 数据请求
     getCaseInfo () {
@@ -116,7 +116,7 @@ export default {
           {// 关联查询
             field: 'Associatedobjecttype',
             op: 'equal',
-            value: 'case_Info',
+            value: 'case_Info', // 模块名
             type: 'string'
           }
         ]
@@ -124,7 +124,7 @@ export default {
       // 请求案件详情
       getDetaildata('case_Info', this.caseId).then((res) => {
         this.caseInfo = res
-        console.log('案件详情', this.caseInfo)
+        // console.log('案件详情', this.caseInfo)
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {

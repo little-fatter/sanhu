@@ -93,10 +93,13 @@ namespace FastDev.Service
             {
                 var caseid = (string)tasknow["CaseID"];
                 if (string.IsNullOrEmpty(caseid))
-                { 
-                    var caseinfo= ServiceHelper.GetService("case_Info").GetDetailData(caseid, null);
-                    caseinfo["CaseStatus"] = "已做出处罚决定";
-                    ServiceHelper.GetService("case_Info").Update(caseinfo);
+                {
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                    if (caseinfo != null)
+                    {
+                        caseinfo.CaseStatus = "已做出处罚决定";
+                        QueryDb.Update(caseinfo);
+                    }
                 }
             }
 

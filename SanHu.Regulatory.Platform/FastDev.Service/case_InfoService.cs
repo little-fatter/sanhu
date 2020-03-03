@@ -231,16 +231,19 @@ namespace FastDev.Service
                     QueryDb.Insert(l);
                 }
 
-            }
-            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(caseInfo.TaskId, null);
+            }   
+            //将Caseid更新到本次任务上
+            var tasknow = QueryDb.FirstOrDefault<work_task>("where Id=@0", caseInfo.TaskId);
             if (tasknow != null)
             {
-                tasknow["CaseID"] = CaseInfoNew;
-                ServiceHelper.GetService("work_task").Update(tasknow);
+                tasknow.CaseID= CaseInfoNew;
+                QueryDb.Update(tasknow);
             }
             return CaseInfoNew;
 
         }
 
+
+     
     }
 }

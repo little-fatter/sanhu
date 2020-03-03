@@ -12,48 +12,65 @@
       :afterShipFeatureClick="afterShipFeatureClick"
     />
     <my-layer-manager
-      class="layerManager"
+      class="layerManager border-radius box-shadow-style"
       :afterItemClick="afterLayerItemClick"
       :afterLayerItemSubChange="afterLayerItemSubChange"
       ref="myLayerManager"
     />
     <my-events-count
-      class="my-events-count"
+      class="my-events-count border-radius box-shadow-style"
       ref="myEventsCount"
     />
     <my-alert-event-list
-      class="my-alert-event-list"
-      ref="myAlertEventList"/>
+      class="my-alert-event-list border-radius box-shadow-style"
+      :aftetItemClick="afterAlertListItemClick"
+      ref="myAlertEventList"
+    />
     <my-person-list
-      class="my-person-list"
+      class="my-person-list border-radius box-shadow-style"
       ref="personList"
+      :afterPeopleListItemClick="afterPeopleListItemClick"
+      :afterEquipmentListItemClick="afterEquipmentListItemClick"
       :afterClickOpenVideo="openVideo"
       :afterClickOpenVoice="openVoice"
       :afterClickOpenPhone="openPhone"
     />
     <people-info-box
-      class="my-people-info-box"
+      class="my-people-info-box border-radius box-shadow-style"
       ref="peopleInfoBox"
       :afterClickOpenVideo="openVideo"
       :afterClickOpenVoice="openVoice"
       :afterClickOpenPhone="openPhone"
+      :afterClose="clearSelection"
     />
     <my-alert-info-box
-      class="my-alert-info-box"
+      class="my-alert-info-box border-radius box-shadow-style"
       :dataGet="getDataGetObject()"
       ref="myAlertInfoBox"
+      :afterClose="clearSelection"
     />
     <my-equipment-info-box
-      class="my-equipment-info-box"
+      class="my-equipment-info-box border-radius box-shadow-style"
       ref="myEquipmentInfoBox"
+      :afterClose="clearSelection"
     />
     <my-ship-info-box
-      class="my-ship-info-box"
+      class="my-ship-info-box border-radius box-shadow-style"
       ref="myShipInfoBox"
+      :afterClose="clearSelection"
     />
-    <my-video-chat ref="myVideoChat"/>
-    <my-voice-chat ref="myVoiceChat"/>
-    <my-phone-chat ref="myPhoneChat"/>
+    <my-video-chat
+      class=" border-radius box-shadow-style"
+      ref="myVideoChat"
+    />
+    <my-voice-chat
+      class=" border-radius box-shadow-style"
+      ref="myVoiceChat"
+    />
+    <my-phone-chat
+      class=" border-radius box-shadow-style"
+      ref="myPhoneChat"
+    />
   </div>
 </template>
 
@@ -74,7 +91,7 @@ import MyPhoneChat from '@/components/myComponents/myChat/MyPhoneChat.vue'
 
 import dataGet from './dataGet'
 import appConfig from '../../config/app.config'
-
+var ZOOM_TO_POINT_RADIUS = appConfig.MapOption.ZOOM_TO_POINT_RADIUS
 export default {
   name: 'MapV',
   components: { Map, MyPageHeader, myLayerManager, myEventsCount, myAlertEventList, myPersonList, PeopleInfoBox, MyVideoChat, MyVoiceChat, MyPhoneChat, MyAlertInfoBox, MyEquipmentInfoBox, MyShipInfoBox },
@@ -202,6 +219,37 @@ export default {
     },
     openPhone: function (info) {
       this.$refs.myPhoneChat.open(info)
+    },
+    /**
+     * 清空地图中的选中要素
+     */
+    clearSelection: function () {
+      var mapApp = this.$refs.map1.getMapApp()
+      mapApp.clearSelection()
+    },
+    afterAlertListItemClick: function (item) {
+      var mapApp = this.$refs.map1.getMapApp()
+      mapApp.clearSelection()
+      var feature = mapApp.findFeatureByLayerNameAndFeatureId('alertEventLayer', item['id'])
+      feature && mapApp.selectFeature('alertEventLayerSelectClick', feature)
+      mapApp.zoomToPoint(feature.getGeometry().getCoordinates(), ZOOM_TO_POINT_RADIUS)
+    },
+    afterPeopleListItemClick: function (item) {
+      var mapApp = this.$refs.map1.getMapApp()
+      mapApp.clearSelection()
+      var feature = mapApp.findFeatureByLayerNameAndFeatureId('peopleLayer', item['id'])
+      feature && mapApp.selectFeature('peopleLayerSelectClick', feature)
+    },
+    afterEquipmentListItemClick: function (item) {
+      var mapApp = this.$refs.map1.getMapApp()
+      mapApp.clearSelection()
+      var feature = mapApp.findFeatureByLayerNameAndFeatureId('equipmentLayer', item['id'])
+      feature && mapApp.selectFeature('equipmentLayerSelectClick', feature)
+    },
+    afterShipListItemClick: function (item) {
+      var mapApp = this.$refs.map1.getMapApp()
+      var feature = mapApp.findFeatureByLayerNameAndFeatureId('shipLayer', item['id'])
+      feature && mapApp.selectFeature('shipLayerSelectClick', feature)
     }
   },
   created: function () {
@@ -322,5 +370,11 @@ export default {
   background-color: white;
   width: 530px;
   border-radius: 2px;
+}
+.box-shadow-style{
+  box-shadow: #00000021 0px 5px 30px;
+}
+.border-radius{
+  border-radius: 5px;
 }
 </style>

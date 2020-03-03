@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import PartyInfoView from "../../components/business/PartyInfoView";
+import PartyInfoView from '../../components/business/PartyInfoView'
 import {
   getDetaildata,
   commonOperateApi,
@@ -26,56 +26,59 @@ import {
   commonSaveApi,
   getDetialdataByfilter,
   getDetialdataByEventInfoId
-} from "../../api/regulatoryApi";
+} from '../../api/regulatoryApi'
 export default {
-  name: "RecordOfInquestDetail",
+  name: 'RecordOfInquestDetail',
   components: {
     PartyInfoView
   },
   props: {},
-  data() {
+  data () {
     return {
       partyInfo: [],
       loadData: {},
-      lawexecutorAndInspector: ""
-    };
+      lawexecutorAndInspector: ''
+    }
   },
   watch: {},
   computed: {},
   methods: {
-    returnSubmitForm() {
-      this.$router.go(-1);
+    returnSubmitForm () {
+      this.$router.go(-1)
     },
     // 获取数据
-    init() {
-      const id = this.$route.query.item;
-      getDetaildata("from_inspectiontRecord", id).then(res => {
-        this.loadData = res;
-        console.log(this.loadData);
-        this.lawexecutorAndInspector = `${res.Inspector1}、${res.Inspector2}、${res.lawexecutor1}、${res.lawexecutor2}`;
-      });
-      getDetaildata("law_party", id).then(res => {
-         var law_party={
-          partyType:res.partyType,
-          idCard:res.IDcard,
-          phone:res.Contactnumber,
-          address:res.address,
-          nation:res.Nationality,
-          company:res.WorkUnit,
-          name:res.Name,
-          legalName:res.Nameoflegalperson,
-        };
-        this.partyInfo.push(law_party);
+    init () {
+      const id = this.$route.query.item
+      getDetaildata('from_inspectiontRecord', id).then(res => {
+        this.loadData = res
+        console.log(this.loadData)
+        this.lawexecutorAndInspector = `${res.Inspector1}、${res.Inspector2}、${res.lawexecutor1}、${res.lawexecutor2}`
+      })
+      getDetaildata('law_party', id).then(res => {
+        var law_party = {
+          partyType: res.partyType,
+          idCard: res.IDcard,
+          phone: res.Contactnumber,
+          address: res.address,
+          nation: res.Nationality,
+          company: res.WorkUnit,
+          name: res.Name,
+          legalName: res.Nameoflegalperson
+        }
+        this.partyInfo.push(law_party)
         // console.log(this.initData);
-      });
-      console.log(id);
+      })
+      console.log(id)
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  mounted() {}
-};
+  mounted () {
+    // 接收路由传参
+    console.log(this.$route.query.id, '这是案件文卷传过来的表单ID值')
+  }
+}
 </script>
 <style lang="less">
 .van-field__control {

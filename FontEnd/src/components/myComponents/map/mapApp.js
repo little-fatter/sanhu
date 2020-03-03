@@ -1,6 +1,8 @@
 import Map from 'ol/Map'
 import View from 'ol/View'
+// import MapBrowserEvent from 'ol/MapBrowserEvent'
 import TileLayer from 'ol/layer/Tile'
+import OSM from 'ol/source/OSM'
 // import WMTS from 'ol/source/WMTS'
 // import WMTSTileGrid from 'ol/tilegrid/WMTS'
 import TileWMS from 'ol/source/TileWMS'
@@ -26,6 +28,7 @@ import styleTable from './styleTable'
 import M_HM_FXH from './data/M_HM_FXH.json'
 import M_HM_XYH from './data/M_HM_XYH.json'
 import M_HM_QLH from './data/M_HM_QLH.json'
+import { isEmpty } from '@/utils/util'
 
 const lakeJsons = [M_HM_FXH, M_HM_XYH, M_HM_QLH]
 
@@ -219,6 +222,7 @@ export default {
   map: {},
   view: {},
   layers: [],
+  selects: {},
   option: {},
   init: function (option) {
     this.option = option
@@ -281,6 +285,12 @@ export default {
     //   name: 'base'
     // })
     // 底图
+    var osm = new TileLayer({
+      source: new OSM(),
+      name: 'baseLayer',
+      zIndex: 0
+    })
+    this.layers.push(osm)
     var baseLayer = new TileLayer({
       source: new TileWMS({
         url: WMS_URL,
@@ -288,6 +298,7 @@ export default {
           LAYERS: '0'
         }
       }),
+      zIndex: 1,
       name: 'baseLayer'
     })
     this.layers.push(baseLayer)
@@ -302,6 +313,7 @@ export default {
         })
       }),
       style: (f) => styleTable.lakeStyle(f),
+      zIndex: 2,
       name: 'lakeLayer'
     })
     this.layers.push(lakeLayer)
@@ -309,6 +321,7 @@ export default {
     var redLineLayer = new VectorLayer({
       source: new VectorSource(),
       // style: (f) => styleTable.lakeStyle(f),
+      zIndex: 3,
       name: 'redLineLayer'
     })
     this.layers.push(redLineLayer)
@@ -316,6 +329,7 @@ export default {
     var heatLayer = new Heatmap({
       source: new VectorSource(),
       // style: (f) => styleTable.lakeStyle(f),
+      zIndex: 4,
       name: 'heatLayer'
     })
     this.layers.push(heatLayer)
@@ -323,6 +337,7 @@ export default {
     var regionLayer = new VectorLayer({
       source: new VectorSource(),
       style: (f) => styleTable.regionLayerStyle(f),
+      zIndex: 5,
       name: 'regionLayer'
     })
     this.layers.push(regionLayer)
@@ -330,6 +345,7 @@ export default {
     var pathLayer = new VectorLayer({
       source: new VectorSource(),
       style: (f) => styleTable.pathLayerStyle(f),
+      zIndex: 6,
       name: 'pathLayer'
     })
     this.layers.push(pathLayer)
@@ -337,6 +353,7 @@ export default {
     var peopleLayer = new VectorLayer({
       source: new VectorSource(),
       name: 'peopleLayer',
+      zIndex: 7,
       style: (f) => styleTable.peopleLayerStyle(f)
     })
     this.layers.push(peopleLayer)
@@ -344,6 +361,7 @@ export default {
     var alertEventLayer = new VectorLayer({
       source: new VectorSource(),
       style: (f) => styleTable.alertEventStyle(f),
+      zIndex: 8,
       name: 'alertEventLayer'
     })
     this.layers.push(alertEventLayer)
@@ -351,6 +369,7 @@ export default {
     var equipmentLayer = new VectorLayer({
       source: new VectorSource(),
       style: (f) => styleTable.equipmentStyle(f),
+      zIndex: 9,
       name: 'equipmentLayer'
     })
     this.layers.push(equipmentLayer)
@@ -358,6 +377,7 @@ export default {
     var shipLayer = new VectorLayer({
       source: new VectorSource(),
       style: (f) => styleTable.shipStyle(f),
+      zIndex: 10,
       name: 'shipLayer'
     })
     this.layers.push(shipLayer)
@@ -383,6 +403,7 @@ export default {
         that.onPeopleFeatureClick(featureSelected)
       }
     })
+    this.selects['peopleLayerSelectClick'] = peopleLayerSelectClick
     // 事件图层的select 事件
     var alertEventLayerSelectClick = new Select({
       condition: click,
@@ -398,6 +419,7 @@ export default {
         that.onAlertFeatureClick(featureSelected)
       }
     })
+    this.selects['alertEventLayerSelectClick'] = alertEventLayerSelectClick
     // 设备图层的select 事件
     var equipmentLayerSelectClick = new Select({
       condition: click,
@@ -420,6 +442,7 @@ export default {
         that.onEquipmentFeatureClick(featureSelected)
       }
     })
+    this.selects['equipmentLayerSelectClick'] = equipmentLayerSelectClick
     // 船只图层的select 事件
     var shipLayerSelectClick = new Select({
       condition: click,
@@ -439,6 +462,7 @@ export default {
         that.onShipFeatureClick(featureSelected)
       }
     })
+    this.selects['shipLayerSelectClick'] = shipLayerSelectClick
   },
   refreshMap: function () {
     this.map.redrawText()
@@ -478,6 +502,19 @@ export default {
   zoomToExtent: function (extent) {
     var ex = extentBuffer(extent, getExtentHeight(extent) * 0.1)
     this.view.fit(ex, { duration: 1000 })
+  },
+  /**
+   * 缩放至点的半径范围
+   * @param {*} p EPSG:3857,点坐标
+   * @param {*} r 半径，单位千米
+   */
+  zoomToPoint: function (p, r) {
+    var tpoint = point(p)
+    tpoint = toWgs84(tpoint)
+    var tbuffered = buffer(tpoint, r, { units: 'kilometers' })
+    tbuffered = toMercator(tbuffered)
+    var extent = bbox(tbuffered)
+    this.zoomToExtent(extent)
   },
   updatePeopleLayer: function (peopleList) {
     var layer = this.findLayer('peopleLayer')
@@ -596,16 +633,31 @@ export default {
     var lyrs = this.layers
     for (let i = 0; i < lyrs.length; i++) {
       var lyr = lyrs[i]
-      console.log('lyr', lyr, lyr.constructor.name)
+      // console.log('lyr', lyr, lyr.constructor.name)
       if (!lyr.getSource().getFeatures) {
         continue
       }
       var features = lyr.getSource().getFeatures()
       for (let j = 0; j < features.length; j++) {
-        console.log('feature', feature.ol_uid, features[j].ol_uid)
+        // console.log('feature', feature.ol_uid, features[j].ol_uid)
         if (feature.ol_uid === features[j].ol_uid) {
           return lyr
         }
+      }
+    }
+    return undefined
+  },
+  findFeatureByLayerNameAndFeatureId: function (layerName, id) {
+    if (isEmpty(id)) return undefined
+
+    var layer = this.findLayer(layerName)
+    if (!layer) return undefined
+    var features = layer.getSource().getFeatures()
+    for (let i = 0; i < features.length; i++) {
+      const element = features[i]
+      var properties = element.getProperties()
+      if (properties['id'] === id) {
+        return element
       }
     }
     return undefined
@@ -716,5 +768,24 @@ export default {
   },
   setCenter: function (lonlat) {
     this.view.setCenter(fromLonLat(lonlat))
+  },
+  clearSelection: function () {
+    for (var k in this.selects) {
+      const element = this.selects[k]
+      element.getFeatures && element.getFeatures().clear()
+    }
+    var pathLayer = this.findLayer('pathLayer')
+    pathLayer && pathLayer.getSource && pathLayer.getSource().clear()
+    var regionLayer = this.findLayer('regionLayer')
+    regionLayer && regionLayer.getSource && regionLayer.getSource().clear()
+  },
+  selectFeature: function (selectIntercationName, feature) {
+    var select = this.selects[selectIntercationName]
+    select.getFeatures().push(feature)
+    select && select.dispatchEvent({
+      type: 'select',
+      selected: [feature],
+      deselected: []
+    })
   }
 }
