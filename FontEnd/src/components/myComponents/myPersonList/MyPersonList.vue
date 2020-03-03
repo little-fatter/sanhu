@@ -108,7 +108,7 @@
   </a-layout>
 </template>
 <script>
-import appConfig from '@/config/app.config';
+import appConfig from '@/config/app.config'
 export default {
   name: 'MyPersonList',
   props: {
