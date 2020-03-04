@@ -250,6 +250,22 @@ export const asyncRouterMap = [{
     }
     ]
   },
+  // 综合监管地图
+  {
+    path: '/map',
+    name: 'map',
+    redirect: '/map',
+    component: RouteView,
+    children: [{
+      path: '/map',
+      name: 'map',
+      component: () => import ('@/views/map/Map4App.vue'),
+      meta: {
+        title: '综合监管地图',
+        keepAlive: false
+      }
+    }]
+  },
   {
     path: '*',
     redirect: '/404'
