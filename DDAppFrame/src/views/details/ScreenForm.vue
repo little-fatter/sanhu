@@ -15,35 +15,34 @@
 
 <script>
 export default {
-  name: "ScreenForm",
+  name: 'ScreenForm',
   components: {},
   props: {},
-  data() {
+  data () {
     return {
-      searchKeyWords: "",
-      statusButtonData: ["全部", "审批中", "已撤销", "审批完成", "已完成"],
+      searchKeyWords: '',
+      statusButtonData: ['全部', '审批中', '已撤销', '审批完成', '已完成'],
       typeButtonData: [
-        "全部",
-        "行政执法巡查记录表",
-        "当场行政处罚决定书",
-        "立案报告"
+        '全部',
+        '行政执法巡查记录表',
+        '当场行政处罚决定书',
+        '立案报告'
       ]
-    };
+    }
   },
   watch: {},
   computed: {},
   methods: {
-    screenForm(index,item) {
-      let btns=document.querySelectorAll("button");
-      btns[index].className="activeStyle"
-      this.searchKeyWords=item;
-      console.log(index,item);
-      
+    screenForm (index, item) {
+      const btns = document.querySelectorAll('button')
+      btns[index].className = 'activeStyle'
+      this.searchKeyWords = item
+      console.log(index, item)
     }
   },
-  created() {},
-  mounted() {}
-};
+  created () {},
+  mounted () {}
+}
 </script>
 <style lang="less">
 .van-icon-stop::before {

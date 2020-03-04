@@ -100,7 +100,7 @@ export const getDetialdataByEventInfoId = (model, eventInfoId) => {
  * @param {*} eventInfoid
  * @param {*} model
  */
-export const getFormsDetailByEventInfoId = (eventInfoid, model) => {
+export const getFormsDetailByEventInfoId = (eventInfoid = null, model, formId = null, filterModels = null) => {
   return postHttp({
     url: apiConfig.regulatory.commonOperateApi,
     data: {
@@ -108,7 +108,9 @@ export const getFormsDetailByEventInfoId = (eventInfoid, model) => {
       model: 'work_task',
       data: {
         eventInfoid,
-        model
+        model,
+        formId,
+        filterModels
       }
     }
   })

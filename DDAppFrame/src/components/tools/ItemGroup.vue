@@ -44,8 +44,9 @@ export default {
         padding-top: 5px;
         padding-right: 0px;
         padding-bottom: 0px;
-        background-color: #F1F2F7;
-        color: #4e4e54;
+        background-color: #fafafa;
+        border: 1px solid #ebedf0;
+        color: #969799;
     }
 
     .itemGroup_content
