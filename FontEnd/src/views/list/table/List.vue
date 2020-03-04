@@ -118,10 +118,7 @@
 <script>
 import moment from 'moment'
 import STable from '@/components/table/'
-<<<<<<< HEAD
-=======
 // import { getServiceList } from '@/api/sampleApi'
->>>>>>> d26ce5217904a829c14489a3ffd469b9279a814b
 
 export default {
   name: 'TableList',
@@ -177,8 +174,6 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-<<<<<<< HEAD
-=======
         console.log('loadData.parameter', parameter)
         // var allParameter = {
         //   ...parameter,
@@ -190,7 +185,6 @@ export default {
         //   }).catch((error) => {
         //     throw error
         //   })
->>>>>>> d26ce5217904a829c14489a3ffd469b9279a814b
       },
       selectedRowKeys: [],
       selectedRows: [],

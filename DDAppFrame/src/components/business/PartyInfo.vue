@@ -2,13 +2,13 @@
   <van-cell-group :title="`${title}信息`">
     <van-panel v-for="(item,index) in partys" :key="index" :title="`${title}(${index+1})`">
       <van-field>
-        <van-radio-group v-model="item.TypesofpartiesID" direction="horizontal" slot="input">
+        <van-radio-group v-model="item.Typesofparties" direction="horizontal" slot="input">
           <!-- <van-radio :name="1">个人</van-radio>
           <van-radio :name="2">单位</van-radio> -->
           <van-radio v-for="(typeItem,mindex) in typesofparties" :key="mindex" :name="typeItem.value">{{ typeItem.text }}</van-radio>
         </van-radio-group>
       </van-field>
-      <template v-if="item.TypesofpartiesID==defaultTypesofpartieID">
+      <template v-if="item.Typesofparties==defaultTypesofpartieID">
         <van-field
           v-model="item.Name"
           placeholder="请输入姓名"
@@ -210,7 +210,7 @@ export default {
     },
     addparty () {
       var party = {
-        TypesofpartiesID: this.defaultTypesofpartieID,
+        Typesofparties: this.defaultTypesofpartieID,
         Name: '',
         Gender: '男',
         Occupation: '',

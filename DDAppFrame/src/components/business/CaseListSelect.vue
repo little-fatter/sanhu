@@ -42,8 +42,8 @@
             <van-cell title="办案人" :value="item.Investigators"></van-cell>
             <div slot="footer" class="footer-wapper">
               <div class="footer_left">
-                <div class="item">{{ item.DocNo }}</div>
-                <div class="item">{{ item.CaseStatus }}</div>
+                <div class="item"><van-tag plain type="primary" v-show="item.DocNo">{{ item.DocNo }}</van-tag></div>
+                <div class="item"><van-tag plain type="success" v-show="item.CaseStatus">{{ item.CaseStatus }}</van-tag></div>
               </div>
               <div class="footer_right">
                 <div class="item">{{ item.CreateDate }}</div>
@@ -168,6 +168,11 @@ export default {
        }
     }
 
+     .list-item
+    {
+       border-bottom: 20px solid #fafafa;
+    }
+
     .list-item_title
     {
         height: 30px;
@@ -204,8 +209,8 @@ export default {
            display: inline-block;
           //  border: 1px solid #BBBBBB;
            padding: 2px;
-           color: #4D6282;
-           margin-right: 10px;
+          //  color: #4D6282;
+           margin-right: 20px;
          }
       }
 

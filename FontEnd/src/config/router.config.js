@@ -1,4 +1,4 @@
-import { RouteView, BlankLayout, PageView } from '@/components/layouts'
+import { RouteView, BlankLayout } from '@/components/layouts'
 
 /**
  *  配置路由信息
@@ -73,7 +73,7 @@ export const asyncRouterMap = [
           // forms
           {
             path: 'form',
-            redirect: '/form/base-form',
+            redirect: '/data-manage/form/base-form',
             component: RouteView,
             meta: { title: '表单页' },
             children: [
@@ -142,7 +142,7 @@ export const asyncRouterMap = [
           // case 案件
           {
             path: 'case',
-            redirect: '/case/case-list',
+            redirect: '/data-manage/case/case-list',
             component: RouteView,
             meta: { title: '案件档案' },
             children: [
@@ -170,6 +170,7 @@ export const asyncRouterMap = [
           {
             path: 'notice',
             component: RouteView,
+            redirect: '/data-manage/notice/notice-detail',
             children: [
               {
                 path: 'notice-detail',
@@ -228,7 +229,7 @@ export const asyncRouterMap = [
       {
         path: 'result',
         name: 'result',
-        component: PageView,
+        component: RouteView,
         redirect: '/result/success',
         meta: { title: '结果页' },
         children: [

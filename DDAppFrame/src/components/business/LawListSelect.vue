@@ -43,19 +43,21 @@
       <div>
         <s-list
           :dataCallback="loadData"
+          :totalKey="totalRows"
           ref="mylist">
           <van-panel class="list-item" v-for="(item,index) in list" :key="index">
             <div class="list-item_title" slot="header">
               <div class="list-item_title_left">
-                {{ item.title }}
+                {{ item.lawRuleName }}
               </div>
               <div class="list-item_title_right">
                 <a @click="onPopupConfirm(item)">选择</a>
               </div>
             </div>
-            <van-cell v-for="(child,mIndex) in item.items" :key="mIndex" :title="child.content">
+            <!-- <van-cell v-for="(child,mIndex) in item.items" :key="mIndex" :title="child.content">
 
-            </van-cell>
+            </van-cell> -->
+            <van-cell :value="lawRuleContent"></van-cell>
           </van-panel>
         </s-list>
       </div>
@@ -68,6 +70,7 @@
  * 法规选择组件
  */
 import SList from '../../components/list/SList.vue'
+import { getLawRulePage } from '../../api/sfdxApi'
 const lawData = [{
   objId: 1,
   title: '第十二条 抚仙湖一级保护区内禁止下列行为',
@@ -138,12 +141,13 @@ export default {
       this.showModel = this.showPopup
     },
     loadData (parameter) {
-      return new Promise((resolve) => {
-        var result = {}
-        this.list = lawData
-        console.log('list', this.list)
-        result.Total = lawData.length
-        return resolve(result)
+      return getLawRulePage(parameter.pageIndex, parameter.pageSize, this.queryParam.Keyword).then(res => {
+        if (res.list) {
+          res.list.forEach(item => {
+            this.list.push(item)
+          })
+        }
+        return res
       })
     },
     onSearch () {

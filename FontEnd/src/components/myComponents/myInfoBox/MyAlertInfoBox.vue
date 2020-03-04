@@ -134,6 +134,10 @@ export default {
     dataGet: {
       type: Object,
       default: undefined
+    },
+    afterClose: {
+      type: Function,
+      default: undefined
     }
   },
   data: function () {
@@ -178,6 +182,7 @@ export default {
   methods: {
     close: function () {
       this.show = false
+      this.afterClose && this.afterClose()
     },
     open: function (info) {
       if (info) {
@@ -247,6 +252,7 @@ export default {
   height: 44px;
   line-height: 44px;
   padding-left: 20px;
+  border-radius: 5px;border-radius: 5px;
 }
 .left{
   float: left;

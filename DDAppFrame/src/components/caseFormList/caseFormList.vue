@@ -2,9 +2,8 @@
 <template>
   <div class="">
     <Slist :dataCallback="loadData" ref="mylist">
-      <h2>{{ caseId }}</h2>
-      <van-cell-group v-for="item in caseFileList" :key="item.fileName+'@'">
-        <van-cell :title="item.fileName" icon="label-o" :value="item.fileTime"/>
+      <van-cell-group v-for="item in caseFileList" :key="item.ID+'@'">
+        <van-cell :title="item.FormName?item.FormName:'后台没有给FromName'" icon="label-o" :value="item.CompletionTime" @click="goFromDetails(item.ID,item.FormType)"/>
       </van-cell-group>
     </Slist>
 
@@ -30,11 +29,7 @@ export default {
   data () {
     return {
       // 演示数据
-      caseFileList: [
-        { fileName: '巡查记录表', fileTime: '2020-2-29 13:52:36' },
-        { fileName: '案件受理记录', fileTime: '2020-2-20 14:32:26' },
-        { fileName: '涉嫌犯罪案件移送书勘验（检查）', fileTime: '2020-2-18 10:22:10' }
-      ]
+      caseFileList: []
     }
   },
 
@@ -45,24 +40,51 @@ export default {
       if (isNotEmpty(this.caseId)) {
         rules = [
           {
-            field: 'EventInfoId', // 案件ID
+            field: 'CaseId', // 写案件ID
             op: 'equal',
-            value: '9F552A1B34E5479C99907B80ABE133FC', // this.caseId,
+            value: this.caseId, // 写案件ID
             type: 'string'
           }
         ]
       }
       var conditon = getQueryConditon(rules, 'and')
+      // 请求
       return getPageDate('form_all', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
-        //   res.Rows.forEach(item => {
-        //     this.caseList.push(item)
-        //   })
-          console.log(res.Rows)
+          res.Rows.forEach(item => {
+            this.caseFileList.push(item)
+          })
         }
+        console.log(this.caseFileList)
         return res
       })
+    },
+    // 去该案件表单详情
+    goFromDetails (id, FormType) {
+      if (FormType === 'from_inspectiontrecord') {
+        this.$router.push({ path: 'recordOfInquestDetail', query: { id } })
+      } else {
+        console.log(`没有匹配成功`, id, FormType)
+      }
+
+    //   if (FormType === 'form_patrolrecord') {
+    //     this.$router.push({ path: '/recordOfInquestDetail', query: { id: ID } })
+    //   } else if (FormType === 'task_patrol') {
+    //     this.$router.push({ path: '/eventDetail', query: { id: ID } })
+    //   } else if (FormType === 'task_survey') {
+    //     this.$router.push({ path: '/sceneInvestigationDetail', query: { id: ID } })
+    //   } else if (FormType === 'from_inspectiontRecord') {
+    //     console.log(`进入了这个跳转`)
+    //     this.$router.push({ path: '/recordOfInquestDetail', query: { id: ID } })
+    //   } else if (FormType === 'form_confiscated_item') {
+    //     this.$router.push({ path: '/itemDetails', query: { id: ID } })
+    //   } else if (FormType === 'case_Info') {
+    //     this.$router.push({ path: '/createCaseDetails', query: { id: ID } })
+    //   } else if (FormType === 'law_punishmentInfo') {
+    //     this.$router.push({ path: '/PenalizeBookDetial', query: { id: ID } })
+    //   }
     }
+
   },
   mounted () {
 

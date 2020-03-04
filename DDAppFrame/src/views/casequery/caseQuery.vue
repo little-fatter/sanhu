@@ -122,7 +122,7 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ name: 'caseDetails', query: { id: msg } }) // 案件详情id
+      this.$router.push({ path: 'caseDetails', query: { id: msg } }) // 案件详情id
     },
     // 配置请求参数
     loadData (parameter) {
@@ -132,25 +132,25 @@ export default {
           {
             field: 'CaseType', // 案件类型
             op: 'equal',
-            value: this.serchType,
+            value: this.serchText,
             type: 'string'
           },
           {
             field: 'ApplicableProcedureID', // 案件适用程序
             op: 'equal',
-            value: this.serchFlow,
+            value: this.serchText,
             type: 'select'
           },
           {
             field: 'CaseStatus', // 案件状态
             op: 'equal',
-            value: this.serchState,
+            value: this.serchText,
             type: 'string'
           },
           {
             field: 'CaseTitle', // 区域
             op: 'equal',
-            value: this.serchRegion,
+            value: this.serchText,
             type: 'string'
           }
         ]
