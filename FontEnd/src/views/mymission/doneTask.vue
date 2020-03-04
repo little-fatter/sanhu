@@ -2,7 +2,9 @@
 .wrapper {
     background: #eeeeee;padding:30px;color:#101010;
     .head {
+        margin-right: 1%;
         background: #ffffff;padding:20px;margin-bottom:30px;
+        box-shadow:0px 1px 6px rgba(0,0,0,0.1);border-radius:8px;
         .missionStyle {
             display: flex;
             .currentName {
@@ -31,64 +33,52 @@
                 .box-left {
                     margin-right: 10px;
                 }
+                .input {
+                  min-width: 240px;
+                }
+            }
+            .search-button {
+              position: absolute;
+              right:40px;
             }
 
         }
     }
     .body {
+      display: flex;flex-wrap: wrap;
         .body-item{
-            margin-bottom:20px;background:#ffffff;padding:20px;
-            .item-head {
-                .left {
-                    margin-right:90px;
-                }
+            border-radius: 8px;
+            width: 24%;
+            margin-right: 1%;
+            background: rgba(255,255,255,1);
+            box-shadow: 0px 1px 6px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            .item-type {
+              display: flex;justify-content: space-between;
             }
-            .item-body {
-                display:flex;margin: 20px 0;
-                .left {
-                    margin-right:50px;width:70px;height:70px;
-                }
-                .middle{
-                    margin-right:200px;
-                    .middle-head {
-                        margin-bottom:10px;
-                        .left {
-                            margin-right:20px;
-                        }
-                    }
-                    .middle-body {
-                        .left {
-                            margin-right:20px;
-                        }
-                    }
-                }
-                .right {
-                    flex:3;
-                    .first {
-                        margin-bottom:10px;
-                        .left {
-                        margin-right:20px;
-                    }
-                    }
-                    .second {
-                        .left {
-                        margin-right:20px;
-                    }
-                    }
-
-                }
+            .item-box {
+              margin-top:18px;font-size:14px;color:#7F87AE;
+              .title {
+                font-size: 16px;color:#64697C;font-weight: 400;
+              }
+              .color {
+                color:#FF8405
+              }
+              .left-span {
+                margin-right: 14px;
+              }
             }
-            .item-footer {
-                display:flex;justify-content:space-between;
-                .space {
-                    margin-right:20px;
-                }
+            .item-bottom {
+              color:#AEBBC3;
+              margin-top:34px;
             }
         }
     }
+    .footer {
+      text-align: center
+    }
 }
 </style>
-
 <template>
   <div class="wrapper">
     <div class="head">
@@ -101,8 +91,8 @@
             任务类型:
           </div>
           <div>
-            <a-select v-model="taskStyle" >
-              <a-select-option v-for="item in taskOptions" :key="item.ID" :value="item.Title">{{ item.Title }}</a-select-option>
+            <a-select class="input" v-model="taskStyle" >
+              <a-select-option v-for="item in taskOptions" :key="item.ID" :value="item.ItemCode">{{ item.Title }}</a-select-option>
             </a-select>
           </div>
         </div>
@@ -111,66 +101,55 @@
             任务编号:
           </div>
           <div>
-            <a-input placeholder="编号" v-model="taskNum"></a-input>
+            <a-input class="input" placeholder="编号" v-model="taskNum"></a-input>
           </div>
         </div>
-        <div class="box" @click="searchList">
-          <a-button > 搜索 </a-button>
+        <div class="box search-button" >
+          <a-button class="box-left" type="primary" @click="searchList"> 搜索 </a-button>
+          <a-button @click="reset"> 重置 </a-button>
         </div>
       </div>
     </div>
+
     <div class="body">
-      <div class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID)" :key="item.ID">
-        <div class="item-head">
-          <span class="left">{{ item.Tasktype }}</span>
+      <a-card :loading="loading" class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID, item.Tasktype)" :key="item.ID">
+        <div>
+          <img style="width:100%;height:100%" src="../../assets/icons/defPicture.svg" alt="加载失败">
+        </div>
+        <div class="item-type item-box" v-if="item.TaskContent || item.Tasknumber">
+          <span class="title">{{ item.TaskContent }}</span>
           <span>{{ item.Tasknumber }}</span>
         </div>
-        <div class="item-body">
-          <div class="left">
-            任务图片
-          </div>
-          <div class="middle">
-            <div class="middle-head">
-              <span class="left">事件类型：</span>
-              <span>{{ item.Tstyle }}</span>
-            </div>
-            <div class="middle-body">
-              <span class="left">上传时间：</span>
-              <span>{{ item.InitiationTime }}</span>
-            </div>
-          </div>
-          <div class="right">
-            <div class="first">
-              <span class="left">主办人：</span>
-              <span>{{ item.MainHandler }}</span>
-            </div>
-            <div class="second">
-              <span class="left">协办人：</span>
-              <span>{{ item.CoOrganizer }}</span>
-            </div>
-          </div>
+        <div class="item-box">
+          <span class="left-span">事件类型：</span>
+          <span class="color">{{ item.EventTypeName }}</span>
         </div>
-        <div class="item-footer">
-          <div>
-            <span class="space">期望完成时间：</span>
-            <span>{{ item.ExpectedCompletionTime }}</span>
-          </div>
-          <div>
-            <span class="space">{{ item.CompleteTime }}</span>
-            <span>来自 指挥中心</span>
-          </div>
+        <div class="item-box">
+          <span class="left-span">协办人：</span>
+          <span v-if="item.CoOrganizer" >{{ item.CoOrganizer }}</span>
+          <span v-else >无协办人</span>
         </div>
-      </div>
-      <div>
-        <a-pagination
-          showSizeChanger
-          :pageSize.sync="PageSize"
-          @showSizeChange="onShowSizeChange"
-          @change="onChange"
-          :total="totalCount"
-          v-model="PageIndex"
-        />
-      </div>
+        <div class="item-box">
+          <span class="left-span">上传时间：</span>
+          <span>{{ item.InitiationTime }}</span>
+        </div>
+        <div class="item-box">
+          <span class="left-span">期望完成时间：</span>
+          <span>{{ item.ExpectedCompletionTime }}</span>
+        </div>
+        <div class="item-box item-bottom">
+          <span class="left-span">{{ item.CompleteTime }}</span>
+          <span>来自 指挥中心</span>
+        </div>
+      </a-card>
+    </div>
+    <div class="footer" v-show="totalCount > 0">
+      <a-pagination
+        :pageSize.sync="PageSize"
+        @change="onChange"
+        :total="totalCount"
+        v-model="PageIndex"
+      />
     </div>
   </div>
 </template>
@@ -178,17 +157,19 @@
 <script>
 
 import { getWorkTaskList, getUser, getDictionary } from '@/api/sampleApi'
+import { isNotEmpty } from '@/utils/util'
 
 export default {
   data () {
     return {
-      totalCount: 100,
+      loading: false,
+      totalCount: 0,
       PageIndex: 1,
-      PageSize: 10,
+      PageSize: 8,
       dataList: [
       ], // 任务列表
-      taskStyle: '全部类型', // 任务类型
-      taskNum: ' ', // 任务编号
+      taskStyle: 'quanbu', // 任务类型
+      taskNum: '', // 任务编号
       taskOptions: [], // 任务类型选项
       paramters: { rules: [
       ],
@@ -210,7 +191,7 @@ export default {
         type: 'text'
       }, {
         field: 'Tasknumber',
-        op: 'equal',
+        op: 'like',
         value: '',
         type: 'string'
       }
@@ -222,6 +203,7 @@ export default {
     getDictionary({ model: 'res_dictionary', context: 'TaskType' }).then(res => {
       this.taskOptions = res
       const option = { ID: 'quanbu',
+        ItemCode: 'quanbu',
         Title: '全部类型' }
       this.taskOptions.splice(0, 0, option)
     }).catch((err) => {
@@ -240,14 +222,23 @@ export default {
     this.getTaskList()
   },
   methods: {
+    // 重置选项
+    reset () {
+      this.taskStyle = 'quanbu'
+      this.taskNum = ''
+    },
     // 进入详情页面
-    intoDetails (eventId, id) {
+    intoDetails (eventId, id, Tasktype) {
+      if (Tasktype) {
+        if (Tasktype === '事件巡查') { this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } }) } else { this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } }) }
+        return
+      }
       // this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } })
       this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } })
     },
     // 处理参数
     dealParamters () {
-      if (this.taskStyle !== '全部类型') {
+      if (this.taskStyle !== 'quanbu') {
         this.rules[1].value = this.taskStyle
       } else {
         this.rules[1].value = ''
@@ -255,7 +246,7 @@ export default {
       this.rules[3].value = this.taskNum
       const rule = []
       this.rules.map(item => {
-        if (item.value !== '' & item.value !== ' ') {
+        if (isNotEmpty(item.value) && item.value !== ' ') {
           rule.push(item)
         }
       })
@@ -263,41 +254,40 @@ export default {
     },
     // 获取任务列表
     getTaskList () {
+      this.loading = true
       this.dealParamters()
-      // if (this.paramters.rules.length > 0) {
-      //   console.log(this.paramters.rules)
-      //   getWorkTaskList(this.paramters, this.PageIndex, this.PageSize).then(res => {
-      //     this.dataList = res.Rows
-      //     this.totalCount = res.Total
-      //   }).catch((err) => {
-      //     console.log(err)
-      //   })
-      // } else {
-      //   getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
-      //     this.dataList = res.Rows
-      //     this.totalCount = res.Total
-      //   }).catch((err) => {
-      //     console.log(err)
-      //   })
-      // }
-      getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
-        this.dataList = res.Rows
-        this.totalCount = res.Total
-      }).catch((err) => {
-        console.log(err)
-      })
+      if (this.paramters.rules.length > 0) {
+        getWorkTaskList(this.paramters, this.PageIndex, this.PageSize).then(res => {
+          this.dataList = res.Rows
+          this.loading = false
+          this.totalCount = res.Total
+        }).catch((err) => {
+          this.loading = false
+          console.log(err)
+        })
+      } else {
+        getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
+          this.dataList = res.Rows
+          this.loading = false
+          this.totalCount = res.Total
+        }).catch((err) => {
+          this.loading = false
+          console.log(err)
+        })
+      }
+      // getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
+      //   this.dataList = res.Rows
+      //   this.totalCount = res.Total
+      // }).catch((err) => {
+      //   console.log(err)
+      // })
     },
     searchList () {
-      this.getTaskList()
-    },
-    onShowSizeChange (current, pageSize) {
-      this.PageIndex = current
-      this.PageSize = pageSize
+      this.PageIndex = 1
       this.getTaskList()
     },
     onChange (current) {
       this.PageIndex = current
-      console.log(current)
       this.getTaskList()
     }
   }

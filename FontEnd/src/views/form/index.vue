@@ -231,14 +231,20 @@ export default {
       return {
         on: {
           click: () => {
-            if (index === 0) {
-              console.log(record, index)
-
-              this.$router.push('/data-manage/form/form-details')
+            console.log(record.FormType)
+            if (record.FormType === 'from_patrolrecord') {
+              this.$router.push({ path: '/data-manage/form/form-details', query: { id: 'record.FormID' } })
+            } else if (record.FormType === 'from_APRPerson') {
+              this.$router.push({ path: '/data-manage/form/close-person-report', query: { id: 'record.FormID' } })
+            } else if (record.FormType === 'from_APROrg') {
+              this.$router.push({ path: '/data-manage/form/close-org-report', query: { id: 'record.FormID' } })
+            } else {
+              if (index === 0) {
+                this.$router.push('/data-manage/form/form-details')
+              }
+              if (index === 1) { this.$router.push('/data-manage/form/close-person-report') }
+              if (index === 2) { this.$router.push('/data-manage/form/close-org-report') }
             }
-            if (index === 1) { this.$router.push('/data-manage/form/close-person-report') }
-            if (index === 2) { this.$router.push('/data-manage/form/close-org-report') }
-            console.log(record, index)
           }
         }
       }

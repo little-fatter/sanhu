@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import getNoticeDetails from '@/api/sampleApi'
 
 export default {

@@ -402,6 +402,12 @@ export const constantRouterMap = [
     component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login'),
     meta: { title: '登录页面' }
   },
+  // {
+  //   path: '/home',
+  //   name: 'home',
+  //   component: () => import(/* webpackChunkName: "user" */ '@/views/Home'),
+  //   meta: { title: '首页' }
+  // },
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),

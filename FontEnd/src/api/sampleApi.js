@@ -4,7 +4,7 @@ function condition (params = [], pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
-      groups: [params.length > 0 ? params : ''],
+      groups: [params.rules && params.rules.length > 0 ? params : ''],
       op: 'and'
     },
     PageIndex: pageiIndex,
@@ -114,5 +114,16 @@ export function getNoticeDetails (parameter) {
   return postHttp({
     url: apiConfig.detail,
     data: { model: 'cms_article', id: parameter }
+  })
+}
+var filter = {
+  ModelName: 'core_printTemplate',
+  Name: 'pdf打印'
+}
+// 打印预览
+export function printPreview (parameter) {
+  return postHttp({
+    url: apiConfig.print,
+    data: { model: 'core_printTemplate', filter: filter }
   })
 }
