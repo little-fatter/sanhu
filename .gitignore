@@ -256,3 +256,4 @@ paket-files/
 __pycache__/
 *.pyc
 /文档
+/nginx-1.16.1
