@@ -10,6 +10,7 @@
   padding: 20px;
 
   .center-header {
+    padding-left: 13px;
 
     /deep/ .ant-radio-button-wrapper {
       background: #f0f2f5;
@@ -48,6 +49,14 @@
   }
 
   .center-body {
+
+    /deep/ tr:nth-child(1) th:nth-child(1) div  {
+      position: relative;
+      .ant-table-selection {
+        top: -52px;
+        z-index: 100;
+      }
+    }
     /deep/ .record-not-read {
       td:nth-child(2) {
         color: #000;
@@ -71,27 +80,19 @@
 <template>
   <div class="center-wrapper">
     <div class="center-header">
-      <a-radio-group @change="onChange" v-model="tabValue">
-        <a-radio-button value="msg">
+      <a-radio-group v-model="tabValue">
+        <a-radio-button style="margin-left:10px" value="msg">
           <a-badge :count="msgCount">
-            对话消息
+            消息
           </a-badge>
         </a-radio-button>
-        <!-- <a-radio-button value="task">
-          <a-badge :count="taskCount">
-            任务通知
-          </a-badge>
-        </a-radio-button>
-        <a-radio-button value="warn">
-          <a-badge :count="warnCount">
-            告警消息
-          </a-badge>
-        </a-radio-button> -->
       </a-radio-group>
       <div class="handle-wrapper">
         <div class="handle-before">
-          <a-checkbox @change="allSelectHandle">
-            全选
+          <a-checkbox>
+            <span style="margin: 30px">
+              全选
+            </span>
           </a-checkbox>
           <div class="btns-group">
             <a-button @click="handleAllReaded">标为已读</a-button>
@@ -107,7 +108,7 @@
     <div class="center-body">
       <a-table
         :rowClassName="handleRowClass"
-        :pagination="{pageSize: 5}"
+        :pagination="{pageSize: this.maxShowMsg}"
         v-if="tabValue === 'msg'"
         :rowSelection="{selectedRowKeys: msgSelectedRowKeys, onChange: onSelectChange}"
         :columns="msgColumns"
@@ -128,43 +129,6 @@
           </a>
         </span>
       </a-table>
-      <!-- <a-table
-        :pagination="{pageSize: 5}"
-        v-if="tabValue === 'task'"
-        :rowSelection="{selectedRowKeys: taskSelectedRowKeys, onChange: onSelectChange}"
-        :columns="taskColumns"
-        :dataSource="taskData">
-        <span slot="action" slot-scope="record">
-          <span style="width: 28px;display:inline-block">
-            <a href="javascript:;" v-if="!record.readed" @click="handleReaded(record)">已读</a>
-          </span>
-          <a-divider type="vertical" />
-          <a-popconfirm
-            title="Sure to delete?"
-            @confirm="onDelete(record.key)">
-            <a href="javascript:;">删除</a>
-          </a-popconfirm>
-          <a-divider type="vertical" />
-          <a href="javascript:;">查看</a>
-          </a>
-        </span>
-      </a-table>
-      <a-table :pagination="{pageSize: 5}" v-if="tabValue === 'warn'" :rowSelection="{selectedRowKeys: warnSelectedRowKeys, onChange: onSelectChange}" :columns="warnColumns" :dataSource="warnData">
-        <span slot="action" slot-scope="record">
-          <span style="width: 28px;display:inline-block">
-            <a href="javascript:;" v-if="!record.readed" @click="handleReaded(record)">已读</a>
-          </span>
-          <a-divider type="vertical" />
-          <a-popconfirm
-            title="Sure to delete?"
-            @confirm="onDelete(record.key)">
-            <a href="javascript:;">删除</a>
-          </a-popconfirm>
-          <a-divider type="vertical" />
-          <a href="javascript:;">查看</a>
-          </a>
-        </span>
-      </a-table> -->
     </div>
   </div>
 </template>
@@ -175,9 +139,7 @@ export default {
   data () {
     return {
       tabValue: 'msg',
-      // msgCount: '5',
-      // taskCount: '10',
-      // warnCount: '2',
+      maxShowMsg: 5,
       searchValue: '',
       msgColumns: [
         {
@@ -196,12 +158,7 @@ export default {
         }, {
           title: '通知时间',
           dataIndex: 'date',
-          key: 'date',
-          sorter: (a, b) => {
-            const timeA = new Date(a.date.replace(/-/g, '/'))
-            const timeB = new Date(b.date.replace(/-/g, '/'))
-            return timeA - timeB
-          }
+          key: 'date'
         }, {
           title: '操作',
           key: 'action',
@@ -338,151 +295,19 @@ export default {
           readed: true
         }
       ],
-      taskColumns: [
-        {
-          title: '任务标题',
-          dataIndex: 'title',
-          key: 'title'
-        }, {
-          title: '任务内容',
-          dataIndex: 'message',
-          key: 'message'
-        }, {
-          title: '交办时间',
-          dataIndex: 'date',
-          key: 'date'
-        }, {
-          title: '交办时限',
-          dataIndex: 'deadline',
-          key: 'deadline'
-        },
-        {
-          title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
-      taskData: [
-        {
-          title: '任务标题1',
-          key: '任务标题1',
-          message: '任务标题1内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '任务标题2',
-          key: '任务标题2',
-          message: '任务标题2内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '任务标题3',
-          key: '任务标题3',
-          message: '任务标题2内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: '任务标题4',
-          key: '任务标题4',
-          message: '任务标题4内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: true
-        }
-      ],
-      warnColumns: [
-        {
-          title: '告警标题',
-          dataIndex: 'title',
-          key: 'title'
-        }, {
-          title: '告警来源',
-          dataIndex: 'source',
-          key: 'source'
-        },
-        {
-          title: '告警内容',
-          dataIndex: 'message',
-          key: 'message'
-        },
-        {
-          title: '告警时间',
-          dataIndex: 'date',
-          key: 'date'
-        },
-        {
-          title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
-      warnData: [
-        {
-          title: '告警标题一',
-          key: '告警标题一',
-          source: '来源1',
-          message: '内容1',
-          date: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '告警标题2',
-          key: '告警标题2',
-          source: '来源2',
-          message: '内容2',
-          date: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '告警标题3',
-          key: '告警标题3',
-          source: '来源3',
-          message: '内容3',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: '告警标题4',
-          key: '告警标题4',
-          source: '来源4',
-          message: '内容4',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        }
-      ],
-      msgSelectedRowKeys: [],
-      taskSelectedRowKeys: [],
-      warnSelectedRowKeys: []
+      msgSelectedRowKeys: []
     }
   },
   computed: {
+    dataSource () {
+      return `${this.tabValue}Data`
+    },
+    selectRows () {
+      return `${this.tabValue}SelectedRowKeys`
+    },
     msgCount () {
       let count = 0
       this.msgData.forEach((item) => {
-        if (!item.readed) {
-          count++
-        }
-      })
-      return count
-    },
-    taskCount () {
-      let count = 0
-      this.taskData.forEach((item) => {
-        if (!item.readed) {
-          count++
-        }
-      })
-      return count
-    },
-    warnCount () {
-      let count = 0
-      this.warnData.forEach((item) => {
         if (!item.readed) {
           count++
         }
@@ -494,18 +319,12 @@ export default {
     handleRowClass (record) {
       return !record.readed ? 'record-not-read' : 'record-readed'
     },
-    onChange (e) {
-      console.log(`checked = ${e.target.value}`)
-    },
-    allSelectHandle (e) {
-      console.log('check', e.target.checked)
-    },
     handleReaded (record) {
       record.readed = true
     },
     handleAllReaded () {
-      this[`${this.tabValue}SelectedRowKeys`].forEach(key => {
-        for (const item of this[`${this.tabValue}Data`]) {
+      this[`${this.selectRows}`].forEach(key => {
+        for (const item of this[`${this.dataSource}`]) {
           if (key === item.key) {
             item.readed = true
             return
@@ -515,22 +334,22 @@ export default {
     },
 
     onDelete (key) {
-      const data = [...this[`${this.tabValue}Data`]]
-      this[`${this.tabValue}Data`] = data.filter(item => item.key !== key)
+      const data = [...this[`${this.dataSource}`]]
+      this[`${this.dataSource}`] = data.filter(item => item.key !== key)
     },
     handleAllDelete () {
-      this[`${this.tabValue}SelectedRowKeys`].forEach(key => {
-        for (const index in this[`${this.tabValue}Data`]) {
-          if (key === this[`${this.tabValue}Data`][index].key) {
-            this[`${this.tabValue}Data`].splice(index, 1)
+      this[`${this.selectRows}`].forEach(key => {
+        for (const index in this[`${this.dataSource}`]) {
+          if (key === this[`${this.dataSource}`][index].key) {
+            this[`${this.dataSource}`].splice(index, 1)
+            return
           }
         }
       })
     },
     onSelectChange (selectedRowKeys) {
-      this[`${this.tabValue}SelectedRowKeys`] = selectedRowKeys
+      this[`${this.selectRows}`] = selectedRowKeys
     }
-
   }
 }
 </script>

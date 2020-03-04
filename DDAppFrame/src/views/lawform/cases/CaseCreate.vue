@@ -88,10 +88,13 @@
           placeholder="请输入事发地点"
           required
           :rules="requiredRule"
+          rows="2"
+          autosize
+          type="textarea"
         >
           <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
         </van-field>
-        <party-info ref="party"></party-info>
+        <party-info ref="party" :initData="caseInfo.LawParties"></party-info>
         <van-field
           v-model="caseInfo.CoOrganizer"
           label="协办人"
@@ -115,7 +118,7 @@ import { formatDate, isNotEmpty, getNextTask } from '../../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import PartyInfo from '../../../components/business/PartyInfo'
 import EventListSelect from '../../../components/business/EventListSelect'
-import { getDictionaryItems, DictionaryCode, getDetaildata, commonOperateApi, TaskTypeDic } from '../../../api/regulatoryApi'
+import { getDictionaryItems, DictionaryCode, getDetaildata, commonOperateApi, TaskTypeDic, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 import { getCurrentUserInfo } from '../../../service/currentUser.service'
 var timer = null
 export default {
@@ -143,7 +146,8 @@ export default {
         IncidentAddress: '',
         IncidentAddressXY: '',
         CoOrganizer: '',
-        CoOrganizerId: ''
+        CoOrganizerId: '',
+        LawParties: []
       },
       event: {},
       caseTypeoptions: [
@@ -251,14 +255,27 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
-      this.caseInfo.IncidentAddress = event.address
-      var incidentAddressXY = ''
-      if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
-        incidentAddressXY = event.lng + ',' + event.lat
-      }
-      this.caseInfo.IncidentAddressXY = incidentAddressXY
-      this.showPopup = false
+      getFormsDetailByEventInfoId(event.objId, 'task_survey').then((res) => {
+        if (res) {
+          this.caseInfo = {
+            ...this.caseInfo,
+            ...res.MainForm,
+            LawParties: res.law_party
+          }
+        } else {
+          this.event = event
+          this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
+          this.caseInfo.IncidentAddress = event.address
+          var incidentAddressXY = ''
+          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+            incidentAddressXY = event.lng + ',' + event.lat
+          }
+          this.caseInfo.IncidentAddressXY = incidentAddressXY
+          this.showPopup = false
+        }
+      }).finally(() => {
+        this.showPopup = false
+      })
     },
     save (data) {
       this.loading = true

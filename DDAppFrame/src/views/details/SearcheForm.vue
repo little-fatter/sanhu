@@ -2,7 +2,7 @@
   <div class="search">
     <div class="searchBox">
       <div class="search-area">
-        <van-search v-model="queryParam.Keyword" placeholder="请输入搜索关键词" show-action shape="round">
+        <van-search v-model="Keyword" placeholder="请输入搜索关键词" show-action shape="round">
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
       </div>
@@ -26,49 +26,49 @@
 
 <script>
 export default {
-  name: '',
+  name: "SearcheForm",
   components: {},
   props: {},
-  data () {
+  data() {
     return {
-      queryParam: {
-        Keyword: ''
-      },
+      // Keyword: "",
+      list: [],
       searchShow: false,
       historyList: [
-        '非法捕捞',
-        '排放污水',
-        '非法捕捞',
-        '排放污水',
-        '非法捕捞',
-        '排放污水',
-        '非法捕捞',
-        '排放污水'
+        "非法捕捞",
+        "排放污水",
+        "非法捕捞",
+        "排放污水",
+        "非法捕捞",
+        "排放污水",
+        "非法捕捞",
+        "排放污水"
       ],
-      formListData: '',
+      formListData: "",
       showFlag: true // 历史记录显示隐藏标杆
-    }
+    };
   },
   watch: {},
   computed: {
-    // 显示隐藏切换
-    show () {
-      return this.formListData === ''
-    }
+    // // 显示隐藏切换
+    // show() {
+    //   return this.formListData === "";
+    // }
   },
   methods: {
     // 搜索
-    onSearch () {
-      this.$emit('show', this.searchShow)
+    onSearch() {
+      this.$emit("show", this.searchShow);
+      this.$emit("getSearchKeyword", this.keyword);
     },
     // 关闭历史记录
-    closeHistory () {
-      this.showFlag = !this.showFlag
+    closeHistory() {
+      this.showFlag = !this.showFlag;
     }
   },
-  created () {},
-  mounted () {}
-}
+  created() {},
+  mounted() {}
+};
 </script>
 <style lang="less">
 .search {

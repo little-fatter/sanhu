@@ -3,11 +3,11 @@
     <van-cell-group>
       <van-cell title="状态" icon="stop" />
       <div class="contentBox status">
-        <button :key="index" @click="statusChecked" v-for="(item,index) in statusButtonData">{{ item }}</button>
+        <button :key="index" @click="screenForm(index,item)" v-for="(item,index) in statusButtonData">{{ item }}</button>
       </div>
       <van-cell title="类型" icon="stop" />
       <div class="contentBox type">
-        <button :key="index" @click="typeChecked" v-for="(item,index) in typeButtonData">{{ item }}</button>
+        <button :key="index" @click="screenForm(index,item)" v-for="(item,index) in typeButtonData">{{ item }}</button>
       </div>
     </van-cell-group>
   </div>
@@ -15,11 +15,12 @@
 
 <script>
 export default {
-  name: '',
+  name: 'ScreenForm',
   components: {},
   props: {},
   data () {
     return {
+      searchKeyWords: '',
       statusButtonData: ['全部', '审批中', '已撤销', '审批完成', '已完成'],
       typeButtonData: [
         '全部',
@@ -27,17 +28,16 @@ export default {
         '当场行政处罚决定书',
         '立案报告'
       ]
-
     }
   },
   watch: {},
   computed: {},
   methods: {
-    statusChecked () {
-      console.log(this)
-    },
-    typeChecked () {
-      console.log(this)
+    screenForm (index, item) {
+      const btns = document.querySelectorAll('button')
+      btns[index].className = 'activeStyle'
+      this.searchKeyWords = item
+      console.log(index, item)
     }
   },
   created () {},
@@ -75,7 +75,11 @@ export default {
     background-color: #9dcfdf !important;
   }
   .type button:first-child {
-    background-color: #9dc69d!important;
+    background-color: #9dc69d !important;
   }
+}
+.activeStyle{
+  color: #0973ec;
+  background-color: #bbb;
 }
 </style>
