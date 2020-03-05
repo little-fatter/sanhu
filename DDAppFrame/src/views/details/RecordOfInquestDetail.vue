@@ -48,26 +48,27 @@ export default {
     },
     // 获取数据
     init () {
-      const id = this.$route.query.item
-      getDetaildata('from_inspectiontRecord', id).then(res => {
-        this.loadData = res
-        console.log(this.loadData)
-        this.lawexecutorAndInspector = `${res.Inspector1}、${res.Inspector2}、${res.lawexecutor1}、${res.lawexecutor2}`
-      })
-      getDetaildata('law_party', id).then(res => {
-        var law_party = {
-          partyType: res.partyType,
-          idCard: res.IDcard,
-          phone: res.Contactnumber,
-          address: res.address,
-          nation: res.Nationality,
-          company: res.WorkUnit,
-          name: res.Name,
-          legalName: res.Nameoflegalperson
-        }
-        this.partyInfo.push(law_party)
-        // console.log(this.initData);
-      })
+      const id = this.$route.query.id;
+      
+      // getDetaildata('from_inspectiontRecord', id).then(res => {
+      //   this.loadData = res
+      //   console.log(this.loadData)
+      //   this.lawexecutorAndInspector = `${res.Inspector1}、${res.Inspector2}、${res.lawexecutor1}、${res.lawexecutor2}`
+      // })
+      // getDetaildata('law_party', id).then(res => {
+      //   var law_party = {
+      //     partyType: res.partyType,
+      //     idCard: res.IDcard,
+      //     phone: res.Contactnumber,
+      //     address: res.address,
+      //     nation: res.Nationality,
+      //     company: res.WorkUnit,
+      //     name: res.Name,
+      //     legalName: res.Nameoflegalperson
+      //   }
+      //   this.partyInfo.push(law_party)
+      //   // console.log(this.initData);
+      // })
       console.log(id)
     }
   },
@@ -76,7 +77,6 @@ export default {
   },
   mounted () {
     // 接收路由传参
-    console.log(this.$route.query.id, '这是案件文卷传过来的表单ID值')
   }
 }
 </script>

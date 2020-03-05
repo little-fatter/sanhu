@@ -127,21 +127,23 @@ export default {
       console.log(this.partys)
     },
     // 获取页面数据
-    init () {
-      const id = this.$route.params.item.ID
-      const EventInfoId = this.$route.params.item.EventInfoId
-      getDetaildata('case_Info', id).then(res => {
-        this.loadData = res
-        console.log(this.loadData)
-      })
-      getDetaildata('law_punishmentInfo', id).then(res => {
-        this.punishmentInfo.push(res)
-        console.log(this.punishmentInfo)
-      })
-      getDetialdataByEventInfoId('law_party', EventInfoId).then(res => {
-        this.partyInfo.push(res)
-        console.log(this.partyInfo)
-      })
+    init() {
+     const queryParam = this.$route.query
+      const id = queryParam.id
+      console.log(id);
+      
+      // getDetaildata("case_Info", id).then(res => {
+      //   this.loadData = res;
+      //   console.log(this.loadData);
+      // });
+      // getDetaildata("law_punishmentInfo", id).then(res => {
+      //   this.punishmentInfo.push(res) ;
+      //   console.log(this.punishmentInfo);
+      // });
+      // getDetialdataByEventInfoId("law_party", EventInfoId).then(res => {
+      //   this.partyInfo.push(res);
+      //   console.log(this.partyInfo);
+      // });
     }
   },
   created () {
