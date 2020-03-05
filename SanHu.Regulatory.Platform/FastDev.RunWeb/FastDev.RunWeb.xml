@@ -27,6 +27,19 @@
             <param name="strWithMark"></param>
             <returns></returns>
         </member>
+        <member name="T:FastDev.RunWeb.Code.ReportPrintData">
+            <summary>
+            关于报表
+            </summary>
+        </member>
+        <member name="M:FastDev.RunWeb.Code.ReportPrintData.GetReportResult(System.String,FastDev.DevDB.Model.ReportArg)">
+            <summary>
+            获取报表相关参数
+            </summary>
+            <param name="model"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastDev.RunWeb.DependencyConfigs.AddDependencyConfigs(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             添加系统依赖注入
