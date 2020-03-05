@@ -295,7 +295,6 @@ namespace FastDev.DevDB
 
         public static DbContext GetUpdateDb()
         {
-
             string text = GetAppsPath();
             if (!text.EndsWith("\\"))
             {
