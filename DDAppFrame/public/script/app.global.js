@@ -20,6 +20,9 @@ var publicAppConfig = {
       regulatory: 'http://192.168.0.125:8030/webapi',
       // 四方德信接口
       sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
+    },
+    mapConfig: {
+      regulatory: 'http://zhsh.8e9bcb.grapps.cn/regulatory'
     }
   },
   /** 企业ID */

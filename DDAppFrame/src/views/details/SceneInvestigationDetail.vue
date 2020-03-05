@@ -5,45 +5,32 @@
       <van-cell title="期望完成时间：" :value="loadData.expectedCompletionTime"></van-cell>
       <van-cell title="协办人：" :value="loadData.person"></van-cell>-->
       <van-cell is-link style="background-color:#DFDDDD;">事件信息</van-cell>
-      <van-cell title="事发地点：" :value="loadData.IncidentAddress"></van-cell>
-      <van-cell title="上报时间：" :value="loadData.reportTime"></van-cell>
-      <van-cell title="上报来源：" :value="loadData.reportType"></van-cell>
-      <van-cell title="上报人：" :value="loadData.reporterName"></van-cell>
-      <van-cell title="事件类型：" :value="loadData.evtTypeDisplayName"></van-cell>
-      <van-cell title="事件描述：">
-        <p style="text-align:left;">{{remark}}</p>
-      </van-cell>
-      <van-cell title="上报来源：" :value="loadData.reportType"></van-cell>
-      <van-cell title="事件类型" :value="loadData.evtTypeDisplayName" />
-      <van-cell title="事发时间" :value="loadData.eventCheck.IncidentTime|dayjs" />
+      <van-cell title="事发地点：" :value="eventInfo.address"></van-cell>
+      <van-cell title="上报时间：" :value="eventInfo.reportTime"></van-cell>
+      <van-cell title="上报来源：" :value="eventInfo.ReportSource"></van-cell>
+      <van-cell title="上报人：" :value="eventInfo.reporterName"></van-cell>
+      <van-cell title="事件类型：" :value="eventInfo.evtTypeDisplayName"></van-cell>
+      <van-cell title="事件描述" :value="eventInfo.remark"></van-cell>
+      <!-- <van-cell title="上报来源：" :value="loadData.reportType"></van-cell>  -->
+      <van-cell title="事件类型" :value="loadData.EventType" />
+      <van-cell title="事发时间" :value="loadData.IncidentTime" />
       <van-cell title="事发地点" :value="loadData.IncidentAddress"></van-cell>
       <van-cell-group>
         <PartyInfoView :initData="surveyParty"></PartyInfoView>
       </van-cell-group>
       <van-cell>
-        图片：
-        <van-image fit="contain" :src="loadData.finishPhotoUrl" />
-        <!-- <SUpload
-          ref="myupload"
-          :accept="access"
-          :sync2Dingding="false"
-          :isOnlyView="true"
-          style="margin-left:80px;margin-bottom:5px;"
-        ></SUpload>-->
-      </van-cell>
-      <van-cell>
         附件：
-        <!-- <SUpload
+        <SUpload
           style="margin-left:80px;margin-bottom:5px;"
           ref="myupload"
           :accept="access"
           :sync2Dingding="false"
           :isOnlyView="true"
-        ></SUpload>-->
+        ></SUpload>
       </van-cell>
       <van-cell :value="loadData.Result" title="处理结论"></van-cell>
       <van-cell :value="loadData.ProcessingDecisions" title="处理决定" />
-      <van-cell :value="loadData.ExistCrim" title="是否涉嫌犯罪" />
+      <van-cell :value="loadData.ExistCrim === 0 ? '否' : '是'" title="是否涉嫌犯罪" />
       <van-cell>
         <van-button type="info" @click="returnSubmitForm" native-type="submit" size="large">返回</van-button>
       </van-cell>
@@ -61,7 +48,8 @@ import {
   DictionaryCode,
   commonSaveApi,
   getDetialdataByfilter,
-  getDetialdataByEventInfoId
+  getDetialdataByEventInfoId,
+  getPageDate
 } from "../../api/regulatoryApi";
 
 export default {
@@ -74,6 +62,7 @@ export default {
   data() {
     return {
       loadData: {},
+      eventInfo: {},
       surveyParty: [],
       access: "",
       deliveryTime: "2020-02-28",
@@ -125,25 +114,24 @@ export default {
     },
     // 获取数据
     init() {
-      const id = this.$route.params.item.ID;
+      const queryParam = this.$route.query;
+      const id = '0bacbe07-d3ab-485b-b4a0-eeec82e621ab'//queryParam.id; 
       getDetaildata("task_survey", id).then(res => {
         this.loadData = res;
-        console.log(this.loadData);
-      });
-      getDetaildata("task_surveyParty", id).then(res => {
-        var law_party={
-          partyType:res.partyType,
-          idCard:res.IDcard,
-          phone:res.Contactnumber,
-          address:res.address,
-          nation:res.Nationality,
-          company:res.WorkUnit,
-          name:res.Name,
-          legalName:res.Nameoflegalperson,
-        };
-        this.surveyParty.push(law_party);
-        console.log(this.surveyParty);
-      });
+        console.log(res);
+      }),
+        // 请求事件信息详情
+        getDetialdataByEventInfoId(
+          "event_info",
+          this.loadData.EventInfoId
+        ).then(res => {
+          this.eventInfo = res;
+        });
+      // 勘查当事人
+      // getPageDate("task_surveyParty", 1, 100, conditon).then(res => {
+      //   // this.surveyParty.push(law_party);
+      //   console.log(res);
+      // });
     }
   },
   created() {
