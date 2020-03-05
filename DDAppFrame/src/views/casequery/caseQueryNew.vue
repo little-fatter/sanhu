@@ -133,6 +133,7 @@ export default {
   },
   data () {
     return {
+      tips: { type: 'primary', message: '未找到符合条件的信息!' },
       caseList: [], // 案件列表信息
       searchText: '', // 搜索框文字
       searchType: '0',
@@ -254,22 +255,24 @@ export default {
   box-sizing: border-box;
 }
 .case-panel-roll {
-  background-color: #e2e2e2 !important;
+  /* background-color: #e2e2e2 !important; */
+  background-color: #fff !important;
   display: table;
   width: 100%;
   min-height: 90vh;
 }
 .panel_one {
   border-radius: 0.3rem;
-  background-color: #fff;
+  background-color: #f9f9f9;
   width: calc(100% - 0.52rem);
   margin-left: 0.26rem;
   margin-right: 0.56rem;
-  margin-top: 0.26rem;
+  margin-top: 0.3rem;
   overflow: hidden;
   padding: 0 0.26rem 0.26rem 0.26rem;
 }
 .panel_one .van-cell {
+     background-color: #f9f9f9;
   padding: 0.32rem 0px !important;
 }
 .panel_one .van-cell:not(:last-child)::after {
