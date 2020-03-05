@@ -59,6 +59,10 @@ export default {
     afterClickOpenPhone: {
       type: Function,
       default: undefined
+    },
+    afterClose: {
+      type: Function,
+      default: undefined
     }
   },
   data: function () {
@@ -83,6 +87,7 @@ export default {
   methods: {
     close: function () {
       this.show = false
+      this.afterClose && this.afterClose()
     },
     open: function (info) {
       if (info) {
@@ -125,7 +130,7 @@ export default {
   background-color: white;
   height: 44px;
   line-height: 44px;
-  padding-left: 20px;
+  padding-left: 20px;border-radius: 5px;
 }
 .left{
   float: left;

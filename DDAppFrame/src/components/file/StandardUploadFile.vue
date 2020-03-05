@@ -56,7 +56,7 @@
  * 标准文件上传组件
  * 上传成功后发起uploadSuccess事件
  */
-import { uploadFile, downloadFile, deleteFile } from '../../api/fileApi'
+import { uploadFile, downloadFile } from '../../api/fileApi'
 import { isNotEmpty } from '../../utils/util'
 import { setTimeout, clearTimeout } from 'timers'
 import { ddprocessinstanceCspaceInfo, ddgetCode } from '../../service/ddJsApi.service'
@@ -156,6 +156,7 @@ export default {
   },
   created () {
     if (this.initResult.length > 0) {
+      this.uploadResult = []
       this.uploadResult = [
         ...this.initResult
       ]
@@ -170,7 +171,7 @@ export default {
         if (this.isImg(file.fileName)) {
           this.addPrevieImgs(file)
         } else {
-          this.commonFiles.push(item)
+          this.commonFiles.push(file)
         }
       })
     }
@@ -187,16 +188,24 @@ export default {
   },
   watch: {
     initResult (newVal, oldVal) {
+      this.uploadResult = []
       if (newVal.length !== oldVal.length) {
         if (newVal.length > 0) {
           this.uploadResult = [
             ...newVal
           ]
           this.uploadResult.forEach(item => {
-            if (this.isImg(item.FileName)) {
-              this.addPrevieImgs(item)
+            var fileCode = item.fileCode || item.FileCode
+            var fileName = item.fileName || item.FileName
+            const file = {
+              ...item,
+              fileCode,
+              fileName
+            }
+            if (this.isImg(file.fileName)) {
+              this.addPrevieImgs(file)
             } else {
-              this.commonFiles.push(item)
+              this.commonFiles.push(file)
             }
           })
         }
@@ -309,28 +318,32 @@ export default {
     afterRead (file, detail) {
     },
     removeFile (fileCode) {
-      if (this.isOnlyView) {
-        return
-      }
-      this.$dialog.confirm({
-        message: '您确认要删除该附件吗'
-      }).then(() => {
-        this.$toast.loading({
-          mask: true,
-          message: '正在删除，请稍等...'
-        })
-        deleteFile(fileCode).then((res) => {
-          this.removeItemForUploadResult(fileCode)
-          this.removeItemForPrevieImgs(fileCode)
-          this.$toast.success('删除成功')
-        }).catch(() => {
+      // if (this.isOnlyView) {
+      //   return
+      // }
+      // this.$dialog.confirm({
+      //   message: '您确认要删除该附件吗'
+      // }).then(() => {
+      //   this.$toast.loading({
+      //     mask: true,
+      //     message: '正在删除，请稍等...'
+      //   })
+      //   deleteFile(fileCode).then((res) => {
+      //     this.removeItemForUploadResult(fileCode)
+      //     this.removeItemForPrevieImgs(fileCode)
+      //     this.$toast.success('删除成功')
+      //   }).catch(() => {
 
-        }).finally(() => {
+      //   }).finally(() => {
 
-        })
-      }).catch(() => {
+      //   })
+      // }).catch(() => {
 
-      })
+      // })
+      this.removeItemForUploadResult(fileCode)
+      this.removeItemForPrevieImgs(fileCode)
+      this.removeItemForCommonFiles(fileCode)
+      this.$toast.success('删除成功')
     },
     removeItemForUploadResult (fileCode) {
       const serveFile = this.uploadResult.find(item => item.fileCode === fileCode)

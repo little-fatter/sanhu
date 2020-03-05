@@ -16,7 +16,7 @@ export const asyncRouterMap = [{
   children: [{
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import ('@/views/dashboard/Workplace.vue'),
+    component: () => import('@/views/dashboard/Workplace.vue'),
     meta: {
       title: '工作台',
       pageTitle: '智慧三湖',
@@ -27,7 +27,7 @@ export const asyncRouterMap = [{
     path: '/todo',
     name: 'todo',
     query: { dd_orientation: 'landscape' },
-    component: () => import ('@/views/todo/TodoList.vue'),
+    component: () => import('@/views/todo/TodoList.vue'),
     meta: {
       title: '待办事项',
       keepAlive: false
@@ -41,7 +41,7 @@ export const asyncRouterMap = [{
     children: [{
       path: '/layforms',
       name: 'layforms',
-      component: () => import ('@/views/lawform/LawformList.vue'),
+      component: () => import('@/views/lawform/LawformList.vue'),
       meta: {
         title: '执法表单',
         keepAlive: false
@@ -50,7 +50,7 @@ export const asyncRouterMap = [{
     {
       path: '/eventCheckCreate',
       name: 'eventCheckCreate',
-      component: () => import ('@/views/lawform/EventCheckCreate.vue'),
+      component: () => import('@/views/lawform/EventCheckCreate.vue'),
       meta: {
         title: '事件巡查',
         keepAlive: false
@@ -59,7 +59,7 @@ export const asyncRouterMap = [{
     {
       path: '/lawCheckCreate',
       name: 'lawCheckCreate',
-      component: () => import ('@/views/lawform/LawCheckCreate.vue'),
+      component: () => import('@/views/lawform/LawCheckCreate.vue'),
       meta: {
         title: '现场勘查',
         keepAlive: false
@@ -68,7 +68,7 @@ export const asyncRouterMap = [{
     {
       path: '/caseCreate',
       name: 'caseCreate',
-      component: () => import ('@/views/lawform/cases/CaseCreate.vue'),
+      component: () => import('@/views/lawform/cases/CaseCreate.vue'),
       meta: {
         title: '创建案件',
         keepAlive: false
@@ -77,7 +77,7 @@ export const asyncRouterMap = [{
     {
       path: '/penalizeBookCreate',
       name: 'penalizeBookCreate',
-      component: () => import ('@/views/lawform/cases/PenalizeBookCreate.vue'),
+      component: () => import('@/views/lawform/cases/PenalizeBookCreate.vue'),
       meta: {
         title: '当场处罚决定书',
         keepAlive: false
@@ -86,7 +86,7 @@ export const asyncRouterMap = [{
     {
       path: '/penalizeBookPreview',
       name: 'penalizeBookPreview',
-      component: () => import ('@/views/lawform/cases/PenalizeBookPreview.vue'),
+      component: () => import('@/views/lawform/cases/PenalizeBookPreview.vue'),
       meta: {
         title: '预览处罚决定书',
         keepAlive: false
@@ -95,7 +95,7 @@ export const asyncRouterMap = [{
     {
       path: '/inventoryCreate',
       name: 'inventoryCreate',
-      component: () => import ('@/views/lawform/cases/InventoryCreate.vue'),
+      component: () => import('@/views/lawform/cases/InventoryCreate.vue'),
       meta: {
         title: '物品清单',
         keepAlive: false
@@ -104,7 +104,7 @@ export const asyncRouterMap = [{
     {
       path: '/inventoryView',
       name: 'inventoryView',
-      component: () => import ('@/views/lawform/cases/InventoryView.vue'),
+      component: () => import('@/views/lawform/cases/InventoryView.vue'),
       meta: {
         title: '物品清单明细',
         keepAlive: false
@@ -113,7 +113,7 @@ export const asyncRouterMap = [{
     {
       path: '/caseFinalReportCreate',
       name: 'caseFinalReportCreate',
-      component: () => import ('@/views/lawform/cases/CaseFinalReportCreate.vue'),
+      component: () => import('@/views/lawform/cases/CaseFinalReportCreate.vue'),
       meta: {
         title: '结案报告',
         keepAlive: true
@@ -122,7 +122,7 @@ export const asyncRouterMap = [{
     {
       path: '/inquestPutdownCreate',
       name: 'inquestPutdownCreate',
-      component: () => import ('@/views/lawform/cases/InquestPutdownCreate.vue'),
+      component: () => import('@/views/lawform/cases/InquestPutdownCreate.vue'),
       meta: {
         title: '勘验(检查)笔录',
         keepAlive: false
@@ -131,7 +131,7 @@ export const asyncRouterMap = [{
     {
       path: '/askPutdownCreate',
       name: 'askPutdownCreate',
-      component: () => import ('@/views/lawform/cases/AskPutdownCreate.vue'),
+      component: () => import('@/views/lawform/cases/AskPutdownCreate.vue'),
       meta: {
         title: '询问笔录',
         keepAlive: false
@@ -140,7 +140,7 @@ export const asyncRouterMap = [{
     {
       path: '/askPutdownPreview',
       name: 'askPutdownPreview',
-      component: () => import ('@/views/lawform/cases/AskPutdownPreview.vue'),
+      component: () => import('@/views/lawform/cases/AskPutdownPreview.vue'),
       meta: {
         title: '询问笔录明细',
         keepAlive: false
@@ -157,8 +157,7 @@ export const asyncRouterMap = [{
     children: [{
       path: '/eventDetail',
       name: 'eventDetail',
-      component: () =>
-                                import ('@/views/details/EventDetail.vue'),
+      component: () => import('@/views/details/EventDetail.vue'),
       meta: {
         title: '事件核查详情',
         keepAlive: false
@@ -167,8 +166,7 @@ export const asyncRouterMap = [{
     {
       path: '/submitForm',
       name: 'submitForm',
-      component: () =>
-                                import ('@/views/details/SubmitForm.vue'),
+      component: () => import('@/views/details/SubmitForm.vue'),
       meta: {
         title: '我提交的表单',
         keepAlive: false
@@ -177,29 +175,45 @@ export const asyncRouterMap = [{
     {
       path: '/sceneInvestigationDetail',
       name: 'sceneInvestigationDetail',
-      component: () =>
-                                import ('@/views/details/SceneInvestigationDetail.vue'),
+      component: () => import('@/views/details/SceneInvestigationDetail.vue'),
       meta: {
-        title: '现场勘察',
+        title: '现场勘察详情',
         keepAlive: false
       }
     },
     {
-      path: '/RecordOfInquest',
-      name: 'RecordOfInquest',
-      component: () => import ('@/views/details/RecordOfInquest.vue'),
+      path: '/recordOfInquestDetail',
+      name: 'recordOfInquestDetail',
+      component: () => import('@/views/details/RecordOfInquestDetail.vue'),
       meta: {
         title: '勘验(检查)笔录',
         keepAlive: false
       }
     },
     {
-      path: '/ClosingReport',
-      name: 'ClosingReport',
-      component: () =>
-                                import ('@/views/details/ClosingReport.vue'),
+      path: '/closingReportDetail',
+      name: 'closingReportDetail',
+      component: () => import('@/views/details/ClosingReportDetail.vue'),
       meta: {
         title: '结案报告',
+        keepAlive: false
+      }
+    },
+    {
+      path: '/itemDetails',
+      name: 'itemDetails',
+      component: () => import('@/views/details/ItemDetails.vue'),
+      meta: {
+        title: '没收物品详情',
+        keepAlive: false
+      }
+    },
+    {
+      path: '/createCaseDetails',
+      name: 'createCaseDetails',
+      component: () => import('@/views/details/CreateCaseDetails.vue'),
+      meta: {
+        title: '创建案件详情',
         keepAlive: false
       }
     },
@@ -207,7 +221,7 @@ export const asyncRouterMap = [{
       path: '/PenalizeBookDetial',
       name: 'PenalizeBookDetial',
       component: () =>
-                                import ('@/views/details/PenalizeBookDetial.vue'),
+        import('@/views/details/PenalizeBookDetial.vue'),
       meta: {
         title: '当场处罚决定书明细',
         keepAlive: true
@@ -224,7 +238,7 @@ export const asyncRouterMap = [{
     children: [{
       path: '/caseQuery',
       name: 'caseQuery',
-      component: () => import ('@/views/casequery/caseQuery.vue'),
+      component: () => import('@/views/casequery/caseQuery.vue'),
       meta: {
         title: '案件查询',
         keepAlive: false
@@ -233,7 +247,7 @@ export const asyncRouterMap = [{
     {
       path: '/caseDetails',
       name: 'caseDetails',
-      component: () => import ('@/views/casequery/caseDetails.vue'),
+      component: () => import('@/views/casequery/caseDetails.vue'),
       meta: {
         title: '案件详情',
         keepAlive: true
@@ -242,13 +256,29 @@ export const asyncRouterMap = [{
     {
       path: '/caseFlies',
       name: 'caseFlies',
-      component: () => import ('@/views/casequery/caseFlies.vue'),
+      component: () => import('@/views/casequery/caseFlies.vue'),
       meta: {
         title: '案卷文件',
         keepAlive: false
       }
     }
     ]
+  },
+  // 综合监管地图
+  {
+    path: '/map',
+    name: 'map',
+    redirect: '/map',
+    component: RouteView,
+    children: [{
+      path: '/map',
+      name: 'map',
+      component: () => import ('@/views/map/Map4App.vue'),
+      meta: {
+        title: '综合监管地图',
+        keepAlive: false
+      }
+    }]
   },
   {
     path: '*',
@@ -258,9 +288,9 @@ export const asyncRouterMap = [{
 }]
 
 /**
-             * 基础路由
-             * @type { *[] }
-             */
+ * 基础路由
+* @type { *[] }
+*/
 export const constantRouterMap = [{
   path: '/404',
   name: '404',
@@ -271,7 +301,7 @@ export const constantRouterMap = [{
     path: '/404/index',
     name: '404index',
     component: () =>
-                        import (/* webpackChunkName: "fail" */ '@/views/exception/NotFind'),
+      import(/* webpackChunkName: "fail" */ '@/views/exception/NotFind'),
     meta: { title: '404页面' }
   }]
 }]

@@ -144,6 +144,10 @@ import appConfig from '@/config/app.config'
 export default {
   name: 'MyEquipmentInfoBox',
   props: {
+    afterClose: {
+      type: Function,
+      default: undefined
+    }
   },
   data: function () {
     return {
@@ -230,6 +234,7 @@ export default {
   methods: {
     close: function () {
       this.show = false
+      this.afterClose && this.afterClose()
     },
     open: function (info) {
       if (info) {
@@ -271,7 +276,7 @@ export default {
   background-color: white;
   height: 44px;
   line-height: 44px;
-  padding-left: 32px;
+  padding-left: 32px;border-radius: 5px;
 }
 .left{
   float: left;

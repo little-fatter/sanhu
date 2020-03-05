@@ -9,7 +9,7 @@
           </van-col>
         </van-row>
       </van-cell>
-      <van-cell>违法使用泡沫制品简易浮动设施载人入湖</van-cell>
+      <van-cell title="违法使用泡沫制品简易浮动设施载人入湖" value=""></van-cell>
       <van-cell>案件类型：XXXXXX</van-cell>
       <van-cell>适用程序：一般程序</van-cell>
       <van-cell>
@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  name: '',
+  name: 'CaseDetail',
   components: {},
   props: {},
   data () {
@@ -58,12 +58,7 @@ export default {
       this.$router.go(-1)
     }
   },
-  created () {
-    console.log('created')
-  },
-  activated () {
-    console.log('activated')
-  },
+  created () {},
   mounted () {}
 }
 </script>
