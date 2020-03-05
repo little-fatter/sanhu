@@ -151,7 +151,56 @@ export default {
       searchRegion: '0',
       searchRegionOptions: [
         { text: '区域', value: '0' } //
-      ]
+      ],
+      // 查询规则
+      rules: [
+        {
+          field: 'CauseOfAction', // 案由
+          op: 'like',
+          value: this.serchText,
+          type: 'string'
+        }, {
+          field: 'CaseTitle', // 案件标题
+          op: 'like',
+          value: this.serchText,
+          type: 'string'
+        }, {
+          field: 'Investigators', // 办案人员
+          op: 'like',
+          value: this.serchText,
+          type: 'string'
+        }
+      ],
+      // 交叉查询规则
+      groups: [
+        {
+          rules: [
+            {
+              field: 'CaseType', // 案件类型
+              op: 'equal',
+              value: this.serchType,
+              type: 'string'
+            }, {
+              field: 'ApplicableProcedureID', //
+              value: this.serchFlow,
+              op: 'equal',
+              type: 'select'
+            }, {
+              field: 'CaseStatus', // 案件状态
+              op: 'equal',
+              value: this.serchState,
+              type: 'string'
+            }, {
+              field: 'RegionID', // 地区区域
+              op: 'equal',
+              value: this.serchRegion,
+              type: 'select'
+            }
+          ],
+          op: 'and'
+        }
+      ],
+      newGroups: []
     }
   },
   methods: {
