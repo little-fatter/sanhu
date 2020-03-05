@@ -17,12 +17,12 @@
     <link href="~/Scripts/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
     <link href="~/Scripts/ligerUI/skins/ne/css/all.css" rel="stylesheet" type="text/css" />   
     <link href="~/Scripts/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />   
-    <link href="~/Contents/application/ne.css" rel="stylesheet" type="text/css" />     
+    <link href="~/Contents/application/pbc.css" rel="stylesheet" type="text/css" />     
     <script src="~/Scripts/jquery/jquery-1.8.3.js"></script>
     <script src="~/Scripts/ligerUI/js/ligerui.all.js" type="text/javascript"></script> 
     <script src="~/Scripts/application/ligerui.expand.js"></script>      
-    <script src="~/Scripts/application/ne.js" type="text/javascript"></script>
-    <script src="~/Scripts/application/ne.web.js?11"></script>
+    <script src="~/Scripts/application/pbc.js" type="text/javascript"></script>
+    <script src="~/Scripts/application/pbc.web.js?11"></script>
     <script src="~/Scripts/layer/layer.js"></script>
     <script src="~/Scripts/lopod/LodopFuncs.js"></script>
     <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
@@ -169,15 +169,16 @@
              
             winResize();
 
-            ne.ajax({
-                url: ne.toUrl('/web/GetTemplateConents'),
+            pbc.ajax({
+                url: pbc.toUrl('/web/GetTemplateConents'),
                 data: $.extend({
                     pageindex:1
                 },openParm),
                 success: function (r)
-                {
+                {   
+                    debugger;
                     if (!r.Success) {
-                        ne.showError(r.message);
+                        pbc.showError(r.message);
                         return;
                     }
                     updateParm(r.templateParm);
@@ -253,8 +254,8 @@
             }
             else
             {
-                ne.ajax({
-                    url: ne.toUrl('/web/GetTemplateConents'),
+                pbc.ajax({
+                    url: pbc.toUrl('/web/GetTemplateConents'),
                     data: $.extend({
                         pageindex: currentIndex +1
                     }, openParm),
@@ -289,8 +290,8 @@
             }
             else
             {
-                ne.ajax({
-                    url: ne.toUrl('/web/GetTemplateConents'),
+                pbc.ajax({
+                    url: pbc.toUrl('/web/GetTemplateConents'),
                     data: $.extend({
                         pageindex: currentIndex + 1
                     },openParm),
@@ -504,7 +505,7 @@
             var action = openParm.isReport == "Y" ? "printpdf_report" : "printpdf";
 
 
-            opennew(ne.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=N&rnd=" + (new Date).getTime()), {
+            opennew(pbc.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=N&rnd=" + (new Date).getTime()), {
                 descriptorCode: openParm.descriptorCode
             });
         }
@@ -518,7 +519,7 @@
             var isReport = openParm.isReport;
             var action = openParm.isReport == "Y" ? "printpdf_report" : "printpdf";
 
-            opennew(ne.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=Y&rnd=" + (new Date).getTime()), {
+            opennew(pbc.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId + "&isdownload=Y&rnd=" + (new Date).getTime()), {
                 descriptorCode: openParm.descriptorCode
             });
             $("#out_menus").hide();
@@ -532,7 +533,7 @@
             var isReport = openParm.isReport;
             var action = openParm.isReport == "Y" ? "printjpg_report" : "printjpg";
  
-            opennew(ne.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId +  "&pageindex=0&rnd=" + (new Date).getTime()), {
+            opennew(pbc.toUrl("/web/" + action + "/?context=" + context + "&templateId=" + templateId +  "&pageindex=0&rnd=" + (new Date).getTime()), {
                 descriptorCode: openParm.descriptorCode
             });
             $("#out_menus").hide();
