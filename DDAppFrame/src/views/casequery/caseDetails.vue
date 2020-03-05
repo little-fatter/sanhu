@@ -72,8 +72,6 @@
 </template>
 
 <script>
-// import { getQueryConditon } from '../../utils/util' // 以及搜索规则
-import { isNotEmpty } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
 export default {
   name: 'CaseDetails',

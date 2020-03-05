@@ -272,9 +272,9 @@ export const asyncRouterMap = [{
 }]
 
 /**
-             * 基础路由
-             * @type { *[] }
-             */
+ * 基础路由
+* @type { *[] }
+*/
 export const constantRouterMap = [{
   path: '/404',
   name: '404',
