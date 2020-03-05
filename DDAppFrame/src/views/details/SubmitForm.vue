@@ -135,161 +135,161 @@
 </template>
 
 <script>
-import SearcheForm from "@/views/details/SearcheForm.vue";
-import ScreenForm from "@/views/details/ScreenForm.vue";
-import Slist from "@/components/list/SList.vue";
-import { isNotEmpty, getQueryConditon } from "../../utils/util";
-import { getPageDate } from "../../api/regulatoryApi";
+import SearcheForm from '@/views/details/SearcheForm.vue'
+import ScreenForm from '@/views/details/ScreenForm.vue'
+import Slist from '@/components/list/SList.vue'
+import { isNotEmpty, getQueryConditon } from '../../utils/util'
+import { getPageDate } from '../../api/regulatoryApi'
 export default {
-  name: "SubmitForm",
+  name: 'SubmitForm',
   components: {
     SearcheForm,
     ScreenForm,
     Slist
   },
   props: {},
-  data() {
+  data () {
     return {
       searchShow: false,
       screenShow: false,
-      searchKeyWords: "",
+      searchKeyWords: '',
       listData: [],
       // 历史记录
       historyList: [
-        "非法捕捞",
-        "排放污水",
-        "非法捕捞",
-        "排放污水",
-        "非法捕捞",
-        "排放污水",
-        "非法捕捞",
-        "排放污水"
+        '非法捕捞',
+        '排放污水',
+        '非法捕捞',
+        '排放污水',
+        '非法捕捞',
+        '排放污水',
+        '非法捕捞',
+        '排放污水'
       ],
       showFlag: true, // 历史记录显示隐藏标杆
-      statusButtonData: ["全部", "审批中", "已撤销", "审批完成", "已完成"],
+      statusButtonData: ['全部', '审批中', '已撤销', '审批完成', '已完成'],
       typeButtonData: [
-        "全部",
-        "行政执法巡查记录表",
-        "当场行政处罚决定书",
-        "立案报告"
+        '全部',
+        '行政执法巡查记录表',
+        '当场行政处罚决定书',
+        '立案报告'
       ]
-    };
+    }
   },
   watch: {},
   computed: {},
   methods: {
     // 搜索弹窗显示隐藏
-    searchePage() {
-      this.searchShow = !this.searchShow;
+    searchePage () {
+      this.searchShow = !this.searchShow
     },
     // 筛选弹窗显示隐藏
-    screenPage() {
-      this.screenShow = !this.screenShow;
+    screenPage () {
+      this.screenShow = !this.screenShow
     },
     //
-    show(value) {
-      this.searchShow = value;
+    show (value) {
+      this.searchShow = value
     },
     // 搜索关键字
-    onSearch() {
-      this.listData = []; // 重新搜索将 搜索结果清空
-      this.$refs.mylist.refresh();
+    onSearch () {
+      this.listData = [] // 重新搜索将 搜索结果清空
+      this.$refs.mylist.refresh()
       // 关闭弹窗
-      this.searchShow = !this.searchShow;
+      this.searchShow = !this.searchShow
     },
     // 筛选
-    screenForm(index, item) {
-      const btns = document.querySelectorAll("button");
+    screenForm (index, item) {
+      const btns = document.querySelectorAll('button')
       btns.forEach(item => {
-        item.className = "";
-      });
-      btns[index].className = "activeStyle";
-      this.searchKeyWords = item;
-      this.screenShow = !this.screenShow;
-      this.listData = []; // 重新搜索将 搜索结果清空
-      this.$refs.mylist.refresh();
+        item.className = ''
+      })
+      btns[index].className = 'activeStyle'
+      this.searchKeyWords = item
+      this.screenShow = !this.screenShow
+      this.listData = [] // 重新搜索将 搜索结果清空
+      this.$refs.mylist.refresh()
     },
     // 去详情
-    goTodetail(item) {
+    goTodetail (item) {
       // 事件巡查
-      if (item.FormType === "form_patrolrecord") {
+      if (item.FormType === 'form_patrolrecord') {
         this.$router.push({
-          path: "/eventDetail",
+          path: '/eventDetail',
           query: { id: item.FormID }
-        });
-      } else if (item.FormType === "task_survey") {
+        })
+      } else if (item.FormType === 'task_survey') {
         this.$router.push({
-          path: "/sceneInvestigationDetail",
+          path: '/sceneInvestigationDetail',
           query: { id: item.FormID }
-        });
-      } else if (item.FormType === "case_Info") {
+        })
+      } else if (item.FormType === 'case_Info') {
         this.$router.push({
-          path: "/caseDetail",
+          path: '/caseDetail',
           query: { id: item.FormID }
-        });
-      } else if (item.FormType === "law_punishmentInfo") {
+        })
+      } else if (item.FormType === 'law_punishmentInfo') {
         this.$router.push({
-          path: "/PenalizeBookDetial",
+          path: '/PenalizeBookDetial',
           query: { id: item.FormID }
-        });
-      } else if (item.FormType === "case_report") {
+        })
+      } else if (item.FormType === 'case_report') {
         this.$router.push({
-          path: "/closingReportDetail",
+          path: '/closingReportDetail',
           query: { id: item.FormID }
-        });
+        })
       }
     },
     // 关闭历史记录
-    closeHistory() {
-      this.showFlag = !this.showFlag;
+    closeHistory () {
+      this.showFlag = !this.showFlag
     },
     // 获取列表信息
-    loadData(parameter) {
-      var rules = [];
+    loadData (parameter) {
+      var rules = []
       if (isNotEmpty(this.searchKeyWords)) {
         rules = [
           {
-            field: "FormType",
-            op: "like",
+            field: 'FormType',
+            op: 'like',
             value: this.searchKeyWords,
-            type: "string"
+            type: 'string'
           },
           {
-            field: "FormState",
-            op: "like",
+            field: 'FormState',
+            op: 'like',
             value: this.searchKeyWords,
-            type: "string"
+            type: 'string'
           },
           {
-            field: "FormName",
-            op: "like",
+            field: 'FormName',
+            op: 'like',
             value: this.searchKeyWords,
-            type: "string"
+            type: 'string'
           }
-        ];
+        ]
       }
-      var conditon = getQueryConditon(rules, "or");
-      return getPageDate("formwith_eventcase", 1, 30, conditon).then(res => {
+      var conditon = getQueryConditon(rules, 'or')
+      return getPageDate('formwith_eventcase', 1, 30, conditon).then(res => {
         if (res.Rows) {
           res.Rows.forEach(item => {
-            this.listData.push(item);
-          });
+            this.listData.push(item)
+          })
         }
-        console.log(this.listData);
-        return res;
-      });
+        console.log(this.listData)
+        return res
+      })
     },
     // 模拟详情页
-    go() {
+    go () {
       this.$router.push({
-        path: "/sceneInvestigationDetail",
+        path: '/sceneInvestigationDetail',
         query: { id: 123 }
-      });
+      })
     }
   },
-  created() {},
-  mounted() {}
-};
+  created () {},
+  mounted () {}
+}
 </script>
 <style lang="less">
 .center {

@@ -17,8 +17,8 @@
       <!-- list组件-->
       <s-list :dataCallback="loadData" ref="mylist">
         <van-panel
-          v-for="(item, index) in caseList"
-          :key="index+'@'"
+          v-for="item in caseList"
+          :key="item.ID"
           class="case-panel"
           @click="goCaseDetails(item.ID)"
         >
@@ -133,7 +133,7 @@ export default {
               type: 'string'
             }, {
               field: 'RegionID', // 地区区域
-              op: 'like',
+              op: 'equal',
               value: this.serchRegion,
               type: 'select'
             }
@@ -201,58 +201,50 @@ export default {
         })
       })
     },
-    // 请求页面数据
     loadData (parameter) {
-      // 第一次请求 筛选规则为空
-      if (!isNotEmpty(this.serchText)) {
-        this.rules = []
-      } else if (isNotEmpty(this.serchText)) {
-        // 如果搜索框有值
-        this.rules = [
-          {
-            field: 'CauseOfAction', // 案由
-            op: 'like',
-            value: this.serchText,
-            type: 'string'
-          }, {
-            field: 'CaseTitle', // 案件标题
-            op: 'like',
-            value: this.serchText,
-            type: 'string'
-          }, {
-            field: 'Investigators', // 办案人员
-            op: 'like',
-            value: this.serchText,
-            type: 'string'
-          }
-        ]
+      this.dealParameter()
+      const newGroups = this.groups[0].rules.filter(item => {
+        return item.value !== '' && item.value !== undefined && item.value !== '0'
+      })
+      var groups = []
+      groups = [ {
+        rules: newGroups,
+        op: 'or'
+      }]
+      var conditonNew
+      if (newGroups.length > 0 && isNotEmpty(this.serchText)) {
+        conditonNew = getQueryConditonMore(this.rules, 'or', groups)
+      } else if (newGroups.length > 0 && !isNotEmpty(this.serchText)) {
+        conditonNew = getQueryConditonMore([], 'or', groups)
+      } else if (newGroups.length === 0 && isNotEmpty(this.serchText)) {
+        conditonNew = getQueryConditon(this.rules, 'or')
+      } else {
+        conditonNew = getQueryConditon(this.rules, 'or')
       }
-      const conditon = getQueryConditon(this.rules, 'or')
-      return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then(res => {
+      return getPageDate('case_Info', 1, 10, conditonNew).then(res => {
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.caseList.push(item)
           })
         }
+        console.log(this.caseList)
         return res
       })
     },
     // 请求页面数据
     loadDataMore () {
       this.dealParameter()
-      console.log(this.dealParameter)
-
       const newGroups = this.groups[0].rules.filter(item => {
         return item.value !== '' && item.value !== undefined && item.value !== '0'
       })
       var groups = []
       groups = [ {
-        rules: newGroups, // 错误处 多打了个 []
+        rules: newGroups,
         op: 'and'
       }]
 
       if (newGroups.length > 0 && isNotEmpty(this.serchText)) {
-        var conditonNew = getQueryConditonMore(this.rules, 'or', groups)
+        var conditonNew = getQueryConditonMore(this.rules, 'and', groups)
         return getPageDate('case_Info', 1, 10, conditonNew).then(res => {
           if (res.Rows) {
             // res.Rows.forEach(item => {
@@ -264,7 +256,7 @@ export default {
           return res
         })
       } else if (newGroups.length > 0 && !isNotEmpty(this.serchText)) {
-        const conditonNew = getQueryConditonMore([], 'or', groups)
+        const conditonNew = getQueryConditonMore([], 'and', groups)
         return getPageDate('case_Info', 1, 10, conditonNew).then(res => {
           if (res.Rows) {
             // res.Rows.forEach(item => {
@@ -277,7 +269,7 @@ export default {
           return res
         })
       } else if (newGroups.length === 0 && isNotEmpty(this.serchText)) {
-        const conditon = getQueryConditon(this.rules, 'or')
+        const conditon = getQueryConditon(this.rules, 'and')
         return getPageDate('case_Info', 1, 10, conditon).then(res => {
           if (res.Rows) {
             // res.Rows.forEach(item => {
@@ -289,7 +281,7 @@ export default {
           return res
         })
       } else {
-        this.$notify(this.tips)
+        // conditonNew = getQueryConditon(this.rules, 'or')
       }
     },
     // 跳转到案件详情
@@ -300,7 +292,7 @@ export default {
   // 生命周期函数
   mounted () {
     // 进入案件列表即刻加载数据
-    this.onSearch()
+    // this.onSearch()
     // 加载搜索菜单
     this.getSerchMenu()
   }
