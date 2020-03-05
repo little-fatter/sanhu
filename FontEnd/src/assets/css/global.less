@@ -137,3 +137,42 @@
     text-align: center;
     cursor: pointer;
 }
+
+
+// 表格样式修改
+.ant-table {
+    overflow: hidden;
+    border-radius: 8px;
+    border:1px solid #dcdee2;
+    /deep/ tr > th {
+        background:#f8f8f9;
+    }
+}
+
+.ant-table-thead {
+    border-bottom: 1px solid #dcdee2;
+    font-family: 'Microsoft YaHei';
+    font-size: 14px;
+    color: #222328;
+}
+
+.ant-table-tbody {
+    font-size: 14px;
+    font-family: 'Microsoft YaHei';
+    color: #AEBBC3;
+}
+
+.ant-table-tbody > tr:last-child > td {
+    border:none;
+}
+
+.ant-table-pagination.ant-pagination {
+    float: none;
+    margin: 30px auto 10px auto;
+    text-align: center;
+}
+
+// 表单已读行样式
+.row-readed {
+    color: #7F87AE;
+}
