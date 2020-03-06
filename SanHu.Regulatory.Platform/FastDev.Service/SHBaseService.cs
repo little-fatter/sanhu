@@ -221,6 +221,7 @@ namespace FastDev.Service
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
             {
+                //保存任务
                 Task.LaskTaskId = sourcetaskid;  //上一个任务id
                 Task.InitiationTime = DateTime.Now;  //状态
                 Task.TaskStatus = (int)WorkTaskStatus.Normal;  //状态
@@ -233,6 +234,7 @@ namespace FastDev.Service
                 string id = SaveWorkTask(Task);
                 Task.ID = id;
 
+                //发送待办
                 Task.LocalLinks = Task.RemoteLinks;
                 Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
                 string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
@@ -242,7 +244,11 @@ namespace FastDev.Service
                 dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                 Task.TodotaskID = CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks, dic);   //待办id
 
-                ServiceHelper.GetService("work_task").Update(Task);
+                //记录待办id
+                ServiceHelper.GetService("work_task").Update(Task);  //修改关联的
+
+                //修改关联事件状态已分配任务
+                UpdateEventState(Task.EventInfoId, EventStatus.dispose);
             }
             return true;
         }
