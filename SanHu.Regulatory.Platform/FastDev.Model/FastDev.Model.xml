@@ -9,7 +9,7 @@
             主框架名称
             </summary>
         </member>
-        <member name="P:FD.Model.Configs.ServerNameConfigModel.MainServiceBaseUrl">
+        <member name="P:FD.Model.Configs.ServerNameConfigModel.MainServiceUrl">
             <summary>
             主框架地址
             </summary>

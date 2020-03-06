@@ -1,14 +1,9 @@
-﻿using FastDev.Common;
-using FastDev.DevDB;
-using FastDev.DevDB.Common;
-using FastDev.IServices;
-using IdentityModel.Client;
+﻿using FastDev.DevDB.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using WanJiang.Framework.Web.Core.Authentication;
 using WanJiang.Framework.Web.Core.Configuration;
@@ -33,16 +28,12 @@ namespace FastDev.RunWeb
             services.AddHttpClient(HostData.FrameWorkSeverName, x =>
             {
                 x.BaseAddress = new Uri(configuration.GetSection("MainServiceBaseUrl").Value);
-
-                if (SysContext.IsAuthOutTime)
+                var headers = AppKeyAuthenticationHelper.GenerateHeader(appInfo.AppKey, appInfo.AppSecret);
+                foreach (var header in headers)
                 {
-                    var auth= HttpContext.Current.RequestServices.GetService<IAuthorizationServices>();
-                    if (!auth.ToAuthor().Result)
-                    { 
-                        throw new Exception("主框架授权失败！");
-                    }
+                    x.DefaultRequestHeaders.Add(header.Key, header.Value);
                 }
-                x.SetBearerToken(SysContext.FrameworkAccessToken);
+                x.DefaultRequestHeaders.Add(FrameworkClaimTypes.ToolId,"SHJG");
             });
         }
     }

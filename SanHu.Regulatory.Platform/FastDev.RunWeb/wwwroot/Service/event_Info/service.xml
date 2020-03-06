@@ -80,6 +80,10 @@
         <field name="isDangerReport" dbName="isDangerReport" title="是否是隐患事件" type="string" length="50" isPK="N" />
         <field name="dorgId" dbName="dorgId" title="主管单位" type="string" length="50" isPK="N" />
         <field name="OriginalID" dbName="OriginalID" title="原始id" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="ReportSource" dbName="ReportSource" title="上报来源" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="evtTypeName" dbName="evtTypeName" title="事件类型名称" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="evtFileUrl" dbName="evtFileUrl" title="事件照片url" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="posFileUrl" dbName="posFileUrl" title="位置照片url" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
