@@ -231,9 +231,9 @@ export const asyncRouterMap = [{
   },
   // 案件查询
   {
-    path: '/caseQueryNew',
+    path: '/caseQuery',
     name: 'caseQueryNew',
-    redirect: '/caseQueryNew',
+    redirect: '/caseQuery',
     component: RouteView,
     children: [{
       path: '/caseQuery',
@@ -244,15 +244,16 @@ export const asyncRouterMap = [{
         keepAlive: false
       }
     },
-    {
-      path: '/caseQueryNew',
-      name: 'caseQueryNew',
-      component: () => import('@/views/casequery/caseQueryNew.vue'),
-      meta: {
-        title: '案件查询',
-        keepAlive: false
-      }
-    },
+    // 备份测试不要删除
+    // {
+    //   path: '/caseQueryNew',
+    //   name: 'caseQueryNew',
+    //   component: () => import('@/views/casequery/caseQueryNew.vue'),
+    //   meta: {
+    //     title: '案件查询',
+    //     keepAlive: false
+    //   }
+    // },
     {
       path: '/caseDetails',
       name: 'caseDetails',
