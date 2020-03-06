@@ -8,7 +8,7 @@
       v-if="isNeedPageFooter"
     >
     </page-footer>
-    <footer class="footer"></footer>
+    <!-- <footer class="footer"></footer> -->
   </div>
 </template>
 

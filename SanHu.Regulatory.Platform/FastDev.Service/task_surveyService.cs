@@ -130,30 +130,39 @@ namespace FastDev.Service
 
         private Func<APIContext, object> Task_surveyService_OnGetAPIHandler(string id)
         {
-            //law_punishmentInfo task = new law_punishmentInfo();
-            form_confiscated_item item1 = new form_confiscated_item();
-            form_confiscated_item item2 = new form_confiscated_item();
-            item1.ProductName = "测试没收1";
-            item2.ProductName = "测试没收2";
-            List<form_confiscated_item> form_Confiscated_Items = new List<form_confiscated_item>();
-            form_Confiscated_Items.Add(item1);
-            form_Confiscated_Items.Add(item2);
+            ////law_punishmentInfo task = new law_punishmentInfo();
+            //form_confiscated_item item1 = new form_confiscated_item();
+            //form_confiscated_item item2 = new form_confiscated_item();
+            //item1.ProductName = "测试没收1";
+            //item2.ProductName = "测试没收2";
+            //List<form_confiscated_item> form_Confiscated_Items = new List<form_confiscated_item>();
+            //form_Confiscated_Items.Add(item1);
+            //form_Confiscated_Items.Add(item2);
             //task.EventInfoId = "1123";
-            //law_party law1 = new law_party();
-            //law1.Name = "kk";
-            //law1.address = "china";
-            //law1.Gender = "男";
-            //law1.CaseId = "122";
-            //law_party law2 = new law_party();
-            //law2.Name = "kk2";
-            //law2.address = "china";
-            //law2.Gender = "女";
-            //law2.CaseId = "111";
-            //List<law_party> law_Parties = new List<law_party>();
-            //law_Parties.Add(law1);
-            //law_Parties.Add(law2);
-            form_confiscated_itemFinishReq tq = new form_confiscated_itemFinishReq();
-            tq.formConfiscatedItems = form_Confiscated_Items;
+            task_survey task_Survey = new task_survey();
+            task_Survey.CaseId = "123";
+            task_Survey.EventInfoId = "测试";
+            law_party law1 = new law_party();
+            law1.Name = "kk";
+            law1.address = "china";
+            law1.Gender = "男";
+            law1.CaseId = "122";
+            law1.Typesofparties = "个人";
+            law_party law2 = new law_party();
+            law2.Name = "kk2";
+            law2.address = "china";
+            law2.Gender = "女";
+            law2.CaseId = "111";
+            law2.Typesofparties = "单位";
+            List<law_party> law_Parties = new List<law_party>();
+            law_Parties.Add(law1);
+            law_Parties.Add(law2);
+            //form_confiscated_itemFinishReq tq = new form_confiscated_itemFinishReq();
+            //tq.formConfiscatedItems = form_Confiscated_Items;
+
+            task_surveyFinishReq task_SurveyFinishReq = new task_surveyFinishReq();
+            task_SurveyFinishReq.LawParties = law_Parties;
+            task_SurveyFinishReq.TaskSurvey = task_Survey;
 
             //List<attachment> attachments = new List<attachment>();
             //attachment a1 = new attachment();
@@ -173,7 +182,7 @@ namespace FastDev.Service
             //workTask.TaskType = "创建没收物品之后的任务";
             //tq.NextTasks = new work_task[] { workTask };
             //tq.LawParties = law_Parties;
-            var M = JsonConvert.SerializeObject(tq);
+            var M = JsonConvert.SerializeObject(task_SurveyFinishReq);
 
 
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;

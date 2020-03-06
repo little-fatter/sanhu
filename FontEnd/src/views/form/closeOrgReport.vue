@@ -113,6 +113,7 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.query.id) { this.id = this.$route.query.id }
     this.getFormReport()
   },
   methods: {
