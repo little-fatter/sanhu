@@ -59,6 +59,28 @@ function() {
                     name: "FormNumber",
                     display: "表格编号",
                     type: "string"
+                },
+                {
+                    width: "150",
+                    display: "发起人",
+                    name: "OriginatorID",
+                    name_text: "发起人",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "string",
+                    type_text: "文本型",
+                    editorType: ""
+                },
+                {
+                    width: "150",
+                    display: "发起时间",
+                    name: "Initiationtime",
+                    name_text: "发起时间",
+                    align: "left",
+                    align_textfield: "左对齐",
+                    type: "string",
+                    type_text: "文本型",
+                    editorType: ""
                 }]
             },
             common: {
@@ -151,6 +173,110 @@ function() {
             {
                 display: "表格编号",
                 name: "FormNumber",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "发起人",
+                name: "OriginatorID",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "发起时间",
+                name: "Initiationtime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
+            },
+            {
+                display: "完成时间",
+                name: "CompletionTime",
+                editor: {
+                    type: "datepicker"
+                },
+                type: "datepicker"
+            },
+            {
+                display: "表单名称",
+                name: "FormName",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "内容简介",
+                name: "ContentValidity",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "部门",
+                name: "Department",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "表单状态",
+                name: "FormState",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "需要通知",
+                name: "NeedNotice",
+                editor: {
+                    type: "checkbox"
+                },
+                type: "checkbox"
+            },
+            {
+                display: "需要罚款",
+                name: "NeedFine",
+                editor: {
+                    type: "checkbox"
+                },
+                type: "checkbox"
+            },
+            {
+                display: "表单id",
+                name: "FormID",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "处理人",
+                name: "handler",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "事件id",
+                name: "EventInfoId",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "案件id",
+                name: "CaseId",
                 editor: {
                     type: "string"
                 },
