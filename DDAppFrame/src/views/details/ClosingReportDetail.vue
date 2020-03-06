@@ -43,7 +43,7 @@
               p-id="5584"
             />
           </svg>
-          {{loadData.contentForm}}
+          {{ loadData.contentForm }}
         </span>
       </van-cell>
       <van-cell title="执行情况" :value="loadData.CaseDescription"></van-cell>
@@ -56,46 +56,46 @@
 </template>
 
 <script>
-import PenaltyDecisionView from "../../components/business/PenaltyDecisionView.vue";
-import PartyInfoView from "../../components/business/PartyInfoView";
+import PenaltyDecisionView from '../../components/business/PenaltyDecisionView.vue'
+import PartyInfoView from '../../components/business/PartyInfoView'
 import {
   getPageDate,
   getDetialdataByEventInfoId,
   getDetaildata,
   getDetialdataByfilter
-} from "../../api/regulatoryApi";
+} from '../../api/regulatoryApi'
 export default {
-  name: "ClosingReportDetail",
+  name: 'ClosingReportDetail',
   components: {
     PenaltyDecisionView,
     PartyInfoView
   },
   props: {},
-  data() {
+  data () {
     return {
       loadData: {},
-      CaseDetail: "",
-      title: "当事人",
+      CaseDetail: '',
+      title: '当事人',
       partyInfo: [],
       // 当事人数据
       HandlePartys: [
         {
           partyType: 1,
-          Name: "张三",
+          Name: '张三',
           Gender: 2,
-          Nationality: "汉族",
+          Nationality: '汉族',
           IDcard: 12345646513135,
-          job: "前端开发人员",
+          job: '前端开发人员',
           Contactnumber: 163465131,
-          address: "四川成都"
+          address: '四川成都'
         },
         {
           partyType: 2,
-          Name: "成都市建投集团",
-          Nameoflegalperson: "张亚楠",
+          Name: '成都市建投集团',
+          Nameoflegalperson: '张亚楠',
           IDcard: 12345646513135,
           Contactnumber: 163465131,
-          address: "四川成都"
+          address: '四川成都'
         }
       ],
       partys: [], // 处理后的数据
@@ -104,52 +104,54 @@ export default {
         { decisionType: 1, amount: 20, paymentDesc: 1 },
         { decisionType: 2, amount: 20, paymentDesc: 2 }
       ],
-      punishmentInfo:[]
-    };
+      punishmentInfo: []
+    }
   },
   watch: {},
   computed: {},
   methods: {
-    returnSubmitForm() {
-      this.$router.go(-1);
+    returnSubmitForm () {
+      this.$router.go(-1)
     },
-    initData() {
-      const partys = [];
+    initData () {
+      const partys = []
       this.partyInfo.forEach(item => {
         if (item.partyType === 1) {
-          var Gender = item.Gender === 1 ? "男" : "女";
-          var title = `${item.Name} | ${Gender}`;
-          item.title = title;
+          var Gender = item.Gender === 1 ? '男' : '女'
+          var title = `${item.Name} | ${Gender}`
+          item.title = title
         }
-        partys.push(item);
-      });
-      this.partys = partys;
-      console.log(this.partys);
+        partys.push(item)
+      })
+      this.partys = partys
+      console.log(this.partys)
     },
     // 获取页面数据
     init() {
-      const id = this.$route.params.item.ID;
-      const EventInfoId = this.$route.params.item.EventInfoId;
-      getDetaildata("case_Info", id).then(res => {
-        this.loadData = res;
-        console.log(this.loadData);
-      });
-      getDetaildata("law_punishmentInfo", id).then(res => {
-        this.punishmentInfo.push(res) ;
-        console.log(this.punishmentInfo);
-      });
-      getDetialdataByEventInfoId("law_party", EventInfoId).then(res => {
-        this.partyInfo.push(res);
-        console.log(this.partyInfo);
-      });
+     const queryParam = this.$route.query
+      const id = queryParam.id
+      console.log(id);
+      
+      // getDetaildata("case_Info", id).then(res => {
+      //   this.loadData = res;
+      //   console.log(this.loadData);
+      // });
+      // getDetaildata("law_punishmentInfo", id).then(res => {
+      //   this.punishmentInfo.push(res) ;
+      //   console.log(this.punishmentInfo);
+      // });
+      // getDetialdataByEventInfoId("law_party", EventInfoId).then(res => {
+      //   this.partyInfo.push(res);
+      //   console.log(this.partyInfo);
+      // });
     }
   },
-  created() {
-    this.initData();
-    this.init();
+  created () {
+    this.initData()
+    this.init()
   },
-  mounted() {}
-};
+  mounted () {}
+}
 </script>
 <style lang="less" scoped>
 </style>

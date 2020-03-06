@@ -1,13 +1,6 @@
 <style scoped lang='less'>
 .formContent {
  background-color:#EEEEEE;
- .return {
-     color :#101010;
-     font-weight: 700;
-     font-family: SourceHanSansSC-bold;
-     margin-bottom: 20px;margin-top:50px;
-     font-weight: bold;
- }
  .tags{
     padding-bottom: 20px;padding-top:20px;background-color: #ffffff;margin-top:30px;
     .button {
@@ -18,24 +11,15 @@
         margin-right:20px;
     }
  }
- .searchLine {
-     color:#101010;
-     margin-bottom: 20px;
- }
- .searchItem {
-     .submitTime {
-        margin-bottom: 20px;
-    }
- }
- .formStatus {
-display:flex;margin-bottom: 20px;background-color: #ffffff;padding-bottom: 20px;padding-left: 30px;
-div {
-  margin-right:40px;
-}
- }
  .searchItemBox {
         display:flex;justify-content: space-around;background-color: #ffffff;
-    padding-bottom: 20px;
+    padding-bottom: 20px;align-items: flex-start;
+    .secondLine {
+      margin-top:20px;
+      .select {
+        min-width: 316px!important;
+      }
+    }
         .formNameBox {
             display: flex;align-items: center;
             .itemName {
@@ -52,7 +36,9 @@ div {
             }
         }
     }
-
+    .table {
+      background-color:#ffffff;padding: 20px;
+    }
 }
 </style>
 <template>
@@ -67,47 +53,54 @@ div {
     </div>
     <div class="searchItemBox">
       <div>
-        <span>发起时间：</span>
-        <a-range-picker @change="onChange" />
+        <div>
+          <span>发起时间：</span>
+          <a-range-picker @change="onInitiationChange" />
+        </div>
+        <div class="secondLine">
+          <span>表单状态：</span>
+          <a-select class="select" v-model="formState">
+            <a-select-option v-for="item in formStateOptions" :key="item.ID" :value="item.ItemCode">{{ item.Title }}</a-select-option>
+          </a-select>
+        </div>
       </div>
       <div>
-        <span>完成时间：</span>
-        <a-range-picker @change="onChange" />
+        <div>
+          <span>完成时间：</span>
+          <a-range-picker @change="onEndChange" />
+        </div>
+        <div class="secondLine">
+          <span>表单类型：</span>
+          <a-select class="select" v-model="formTypes" style="min-width: 120px">
+            <a-select-option v-for="item in formTypeOptions" :key="item.ID" :value="item.ItemCode">{{ item.Title }}</a-select-option>
+          </a-select>
+        </div>
       </div>
       <div class="formNameBox">
         <div class="itemName">表单名称：</div>
         <a-input class="itemInput" v-model="formName" placeholder="请输入表单名称、申请人名字、审批意见"/>
       </div>
       <div class="searchButtonItem">
-        <a-button class="search" type="primary">搜索</a-button>
+        <a-button class="search" type="primary" @click="onSearch">搜索</a-button>
       </div>
     </div>
-    <div class="formStatus">
-      <div>
-        <span>表单状态：</span>
-        <a-select v-model="formState" style="min-width: 120px" @change="formStateChange">
-          <a-select-option v-for="item in formStateOptions" :key="item.ID" :value="item.Title">{{ item.Title }}</a-select-option>
-        </a-select>
-      </div>
-      <div>
-        <span>表单类型：</span>
-        <a-select v-model="formTypes" style="min-width: 120px" @change="formTypesChange">
-          <a-select-option v-for="item in formTypeOptions" :key="item.ID" :value="item.Title">{{ item.Title }}</a-select-option>
-        </a-select>
-      </div>
-    </div>
-    <div>
-      <a-table
-        :customRow="clickRow"
-        style="background-color: #ffffff"
+    <div class="table">
+      <s-table
+        ref="table"
+        size="default"
         :columns="columns"
-        :pagination="pagination"
-        :rowKey="record => record.ID"
-        :dataSource="data"
+        :dataCallback="loadData"
       >
-      </a-table>
+        <template slot="action" slot-scope="text, record">
+          <div class="editable-row-operations">
+            <span>
+              <a @click="() => gotoDetail(record)">查看</a>
+            </span>
+          </div>
+        </template>
+      </s-table>
     </div>
-    <a-modal
+    <!-- <a-modal
       v-model="visible"
     >
       <template slot="header">
@@ -156,98 +149,96 @@ div {
           <a-input placeholder="Basic usage"/>
         </a-form-item>
       </a-form>
-    </a-modal>
+    </a-modal> -->
   </div>
 </template>
 
 <script>
-import { getFormList, getDictionary } from '@/api/sampleApi'
+import { getPageData, getDictionary } from '@/api/sampleApi'
+import STable from '@/components/table/'
+import { isNotEmpty } from '@/utils/util'
 
 export default {
   name: 'Index',
+  components: {
+    STable
+  },
   data () {
     return {
       visible: false,
       clickIndex: 1,
-      formState: '全部状态',
-      formTypes: '全部类型',
       formStateOptions: [],
       formTypeOptions: [],
-      formName: '',
-      columns: [{
-        title: '',
-        dataIndex: '',
-        className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '表单编号',
-        dataIndex: 'FormID',
-        className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '表单标题',
-        dataIndex: 'FormName',
-        className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '表单摘要',
-        dataIndex: 'ContentValidity',
-        className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '发起时间',
-        dataIndex: 'InitiationTime',
-        className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '完成时间',
-        dataIndex: 'CompletionTime',
-        className: 'backColorType',
-        align: 'center'
-      }, {
-        title: '状态',
-        dataIndex: 'FormState',
-        className: 'backColorType',
-        align: 'center'
-      }],
-      pagination: {
-        defaultPageSize: 5,
-        showTotal: total => `共 ${total} 条数据`,
-        showSizeChanger: true,
-        pageSizeOptions: ['5', '10', '15', '20']
-      },
+      formState: '', // 表单状态
+      formTypes: '', // 表单类型
+      BInitiationTime: '', // 开始发起时间
+      DInitiationTime: '', // 结束发起时间
+      BENDTime: '', // 开始完成时间
+      EENDTime: '', // 结束完成时间
+      formName: '', // 输入框内容
+      queryParam: {}, // 查询参数
+      columns: [
+      //   {
+      //   title: '',
+      //   dataIndex: '',
+      //   className: 'backColorType',
+      //   align: 'center'
+      // },
+        {
+          title: '表单编号',
+          dataIndex: 'FormNumber',
+          className: 'backColorType',
+          align: 'center'
+        }, {
+          title: '表单标题',
+          dataIndex: 'FormName',
+          className: 'backColorType',
+          align: 'center'
+        }, {
+          title: '表单摘要',
+          dataIndex: 'ContentValidity',
+          className: 'backColorType',
+          align: 'center'
+        }, {
+          title: '发起时间',
+          dataIndex: 'InitiationTime',
+          className: 'backColorType',
+          align: 'center'
+        }, {
+          title: '完成时间',
+          dataIndex: 'CompletionTime',
+          className: 'backColorType',
+          align: 'center'
+        }, {
+          title: '状态',
+          dataIndex: 'FormState',
+          className: 'backColorType',
+          align: 'center'
+        }, {
+          title: '操作',
+          dataIndex: 'action',
+          width: '120px',
+          scopedSlots: { customRender: 'action' }
+        }],
       data: []
     }
   },
   mounted () {
-    this.getFormList()
   },
   created () {
     this.getFormType()
     this.getFormState()
   },
   methods: {
-    clickRow (record, index) {
-      return {
-        on: {
-          click: () => {
-            if (index === 0) {
-              console.log(record, index)
-
-              this.$router.push('/data-manage/form/form-details')
-            }
-            if (index === 1) { this.$router.push('/data-manage/form/close-person-report') }
-            if (index === 2) { this.$router.push('/data-manage/form/close-org-report') }
-            console.log(record, index)
-          }
-        }
-      }
+    onSearch () {
+      this.$refs.table.refresh()
     },
     // 获取表单类型
     getFormType () {
       getDictionary({ model: 'res_dictionary', context: 'FormType' }).then(res => {
         this.formTypeOptions = res
-        const option = { ID: 'quanbu',
+        const option = { ID: 'allType',
+          ItemCode: '',
           Title: '全部类型' }
         this.formTypeOptions.splice(0, 0, option)
       }).catch((err) => {
@@ -258,34 +249,134 @@ export default {
     getFormState () {
       getDictionary({ model: 'res_dictionary', context: 'FormState' }).then(res => {
         this.formStateOptions = res
-        const option = { ID: 'quanbu',
+        const option = { ID: 'allState',
+          ItemCode: '',
           Title: '全部状态' }
         this.formStateOptions.splice(0, 0, option)
       }).catch((err) => {
         console.log(err)
       })
     },
-    onChange (date, dateString) {
-      console.log(date, dateString)
+    onInitiationChange (date, dateString) {
+      this.BInitiationTime = dateString[0]
+      this.EInitiationTime = dateString[1]
     },
-    formStateChange (value) {
-      console.log(`selected ${value}`)
+    onEndChange (date, dateString) {
+      this.BEndTime = dateString[0]
+      this.EEndTime = dateString[1]
     },
-    formTypesChange (value) {
-      console.log(`selected ${value}`)
+    gotoDetail (record) {
+      if (record.FormType === 'from_patrolrecord') {
+        this.$router.push({ path: '/data-manage/form/form-details', query: { id: 'record.FormID' } })
+      } else if (record.FormType === 'from_APRPerson') {
+        this.$router.push({ path: '/data-manage/form/close-person-report', query: { id: 'record.FormID' } })
+      } else if (record.FormType === 'from_APROrg') {
+        this.$router.push({ path: '/data-manage/form/close-org-report', query: { id: 'record.FormID' } })
+      } else {
+        this.$router.push({ path: '/data-manage/form/close-person-report', query: { id: null } })
+      }
     },
-    gotoDetail () {
-      this.$router.push('/form/form-details')
+    // 处理参数
+    dealParameter () {
+      var rules =
+      [
+        {
+          field: 'InitiationTime',
+          op: 'greater',
+          value: '',
+          type: 'datepicker'
+        },
+        {
+          field: 'InitiationTime',
+          op: 'less',
+          value: '',
+          type: 'datepicker'
+        },
+        {
+          field: 'CompletionTime',
+          op: 'greater',
+          value: '',
+          type: 'datepicker'
+        },
+        {
+          field: 'CompletionTime',
+          op: 'less',
+          value: '',
+          type: 'datepicker'
+        },
+        {
+          field: 'FormState',
+          op: 'equal',
+          value: '',
+          type: 'string'
+        },
+        {
+          field: 'FormType',
+          op: 'equal',
+          value: '',
+          type: 'string'
+        }
+      ]
+      var groups =
+      [
+        {
+          rules: [{
+            field: 'FormName', // 表单名称
+            op: 'like',
+            value: '',
+            type: 'string'
+          }, {
+            field: 'CaseNumber',
+            op: 'like',
+            value: '',
+            type: 'string'
+          }, {
+            field: 'CauseOfAction',
+            op: 'like',
+            value: 'this.formName',
+            type: 'string'
+          }
+          // {
+          //   field: 'FormNumber',
+          //   op: 'like',
+          //   value: '',
+          //   type: 'string'
+          // }
+          ],
+          op: 'or' }
+      ]
+      var paramArr = [this.BInitiationTime, this.EInitiationTime, this.BEndTime, this.EEndTime, this.formState, this.formTypes]
+      rules.map((item, index) => {
+        item.value = paramArr[index]
+      })
+      var newRules = rules.filter(item => {
+        return isNotEmpty(item.value)
+      })
+      var paramters = { groups: [], op: 'and', rules: [] }
+      if (isNotEmpty(this.formName)) {
+        groups[0].rules.map(item => {
+          item.value = this.formName
+        })
+        paramters.groups = groups
+        if (newRules.length > 0) {
+          paramters.rules = newRules
+        } else {
+          paramters.rules = []
+        }
+      } else {
+        paramters.groups = []
+        if (newRules.length > 0) {
+          paramters.rules = newRules
+        } else {
+          paramters.rules = []
+        }
+      }
+      return paramters
     },
-    sendNotice () {
-      this.visible = true
-    },
-    editForm () {
-      this.$router.push({ path: '/form/form-edit' })
-    },
-    getFormList () {
-      getFormList().then(res => {
-        this.data = res.Rows
+    loadData (parameter) {
+      var queryParam = this.dealParameter()
+      return getPageData(queryParam, parameter.pageIndex, parameter.pageSize, 'formwith_eventcase').then(res => {
+        return res
       }).catch(err => {
         console.log(err)
       })

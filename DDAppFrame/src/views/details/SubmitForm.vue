@@ -4,7 +4,7 @@
       <van-row>
         <van-col span="12">
           <!-- 搜索部分 -->
-          <van-popup v-model="searchShow" position="top" :style="{ height: '40%' }">
+          <van-popup v-model="searchShow" position="top" :style="{ height: '30%' }">
             <div class="search">
               <div class="searchBox">
                 <div class="search-area">
@@ -43,7 +43,7 @@
             closeable
             close-icon-position="top-right"
             position="top"
-            :style="{ height: '50%' }"
+            :style="{ height: '30%' }"
           >
             <div class="screenForm">
               <van-cell-group>
@@ -74,16 +74,60 @@
     <van-cell title="去详情页" @click="go"></van-cell>
     <!-- 表格列表组件 -->
     <Slist :dataCallback="loadData" ref="mylist">
-      <van-panel v-for="(item, index) in listData" :key="index+'@'" @click="goTodetail(item)">
-        <!-- <div slot="header">
-        </div>-->
-        <div style="margin：0 30px;">
-          <van-cell :title="item.FormName" :value="item.InitiationTime"></van-cell>
-          <van-cell title="申请部门：" :value="item.Department"></van-cell>
-          <van-cell title="申请人：" :value="item.OriginatorID"></van-cell>
-          <van-cell title="事件编号：" :value="item.EventInfoId"></van-cell>
-          <van-cell title="事件类型：" :value="item.InitiationTime"></van-cell>
-          <van-tag plain style="margin:20px 15px;">{{ item.FormState }}</van-tag>
+      <van-panel
+        v-for="(item, index) in listData"
+        class="case-panel"
+        :key="index+'@'"
+        @click="goTodetail(item)"
+      >
+        <div slot="header"></div>
+        <div>
+          <h4 class="case-title">{{ item.FormName }}</h4>
+          <div class="default-info">
+            <span>申请部门：</span>
+            <div>
+              <span>{{ item.Department }}</span>
+            </div>
+          </div>
+          <div class="default-info">
+            <span>申请人：</span>
+            <div>
+              <span>{{ item.OriginatorID }}</span>
+            </div>
+          </div>
+          <template v-if="item.FormType === 'form_patrolrecord'">
+            <div class="default-info">
+              <span>事件编号：</span>
+              <div>
+                <span>{{ item.evtCode }}</span>
+              </div>
+            </div>
+            <div class="default-info">
+              <span>事件类型:</span>
+              <div>
+                <span>{{ item.evtTypeId }}</span>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="default-info">
+              <span>案件号：</span>
+              <div>
+                <span>{{ item.CaseNumber }}</span>
+              </div>
+            </div>
+            <div class="default-info">
+              <span>案由：</span>
+              <div>
+                <span>{{ item.CaseType }}</span>
+              </div>
+            </div>
+          </template>
+
+          <div class="case-tag">
+            <van-tag plain v-show="item.FormState">{{ item.FormState }}</van-tag>
+            <van-tag plain v-show="item.CompletionTime">{{ item.CompletionTime }}</van-tag>
+          </div>
         </div>
       </van-panel>
     </Slist>
@@ -167,40 +211,31 @@ export default {
     },
     // 去详情
     goTodetail (item) {
+      // 事件巡查
       if (item.FormType === 'form_patrolrecord') {
         this.$router.push({
-          path: '/recordOfInquestDetail',
-          query: { id: item.id }
-        })
-      } else if (item.FormType === 'task_patrol') {
-        this.$router.push({
           path: '/eventDetail',
-          query: { id: item.id }
+          query: { id: item.FormID }
         })
       } else if (item.FormType === 'task_survey') {
         this.$router.push({
           path: '/sceneInvestigationDetail',
-          query: { id: item.id }
-        })
-      } else if (item.FormType === 'from_inspectiontRecord') {
-        this.$router.push({
-          path: '/recordOfInquestDetail',
-          query: { id: item.id }
-        })
-      } else if (item.FormType === 'form_confiscated_item') {
-        this.$router.push({
-          path: '/itemDetails',
-          query: { id: item.id }
+          query: { id: item.FormID }
         })
       } else if (item.FormType === 'case_Info') {
         this.$router.push({
-          path: '/createCaseDetails',
-          query: { id: item.id }
+          path: '/caseDetail',
+          query: { id: item.FormID }
         })
       } else if (item.FormType === 'law_punishmentInfo') {
         this.$router.push({
           path: '/PenalizeBookDetial',
-          query: { id: item.id }
+          query: { id: item.FormID }
+        })
+      } else if (item.FormType === 'case_report') {
+        this.$router.push({
+          path: '/closingReportDetail',
+          query: { id: item.FormID }
         })
       }
     },
@@ -215,45 +250,39 @@ export default {
         rules = [
           {
             field: 'FormType',
-            op: 'equal',
+            op: 'like',
             value: this.searchKeyWords,
             type: 'string'
           },
           {
             field: 'FormState',
-            op: 'equal',
+            op: 'like',
             value: this.searchKeyWords,
             type: 'string'
           },
           {
             field: 'FormName',
-            op: 'equal',
+            op: 'like',
             value: this.searchKeyWords,
             type: 'string'
           }
         ]
       }
       var conditon = getQueryConditon(rules, 'or')
-      return getPageDate(
-        'form_all',
-        parameter.pageIndex,
-        parameter.pageSize,
-        conditon
-      ).then(res => {
+      return getPageDate('formwith_eventcase', 1, 30, conditon).then(res => {
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.listData.push(item)
           })
         }
         console.log(this.listData)
-
         return res
       })
     },
     // 模拟详情页
     go () {
       this.$router.push({
-        path: '/eventDetail',
+        path: '/sceneInvestigationDetail',
         query: { id: 123 }
       })
     }
@@ -266,13 +295,34 @@ export default {
 .center {
   padding: 20px 35%;
 }
-.careBox {
-  border: 1px solid #bbb;
-  padding: 12px;
-  margin-bottom: 12px;
-  .careTop {
+.case-panel {
+  padding: 0.32rem;
+  color: #101010;
+  margin-top: 0.32rem;
+  .case-title {
+    margin: 5px 0 10px;
+    color: 16px;
+  }
+
+  .default-info {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    margin-bottom: 0.15rem;
+  }
+  .default-info > div {
+    flex: 1;
+    padding-left: 0.32rem;
+    color: #666;
+  }
+  .case-tag {
     display: flex;
     justify-content: space-between;
+    padding: 0 2px;
+  }
+  .case-tag > span {
+    font-size: 0.26rem;
+    color: #969696;
   }
 }
 .van-popup__close-icon {

@@ -46,7 +46,10 @@
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">关联表单：</a-col>
         <a-col class="colSize" :span="12">
-          <div>关联的表单主键{{ data.responseRefId }}</div>
+          <div v-if="formAll && formAll.length > 0">
+            <div v-for="item in formAll" :key="item">{{ item.Title }}</div>
+          </div>
+          <div v-else>无</div>
         </a-col>
       </a-row>
     </div>
@@ -153,7 +156,7 @@
 </template>
 
 <script>
-import { getRelateForm, getEventDetails, getTaskDetails } from '@/api/sampleApi'
+import { getRelateForm, getDetails } from '@/api/sampleApi'
 
 export default {
   name: 'EventInspection',
@@ -169,7 +172,8 @@ export default {
       eventId: ' ', // 事件id
       Id: '', // 任务id
       data: { }, // 事件信息
-      missionData: {} // 任务信息
+      missionData: {}, // 任务信息
+      formAll: [] // 关联的表单
     }
   },
   computed: {
@@ -186,14 +190,15 @@ export default {
         this.$message.error(`${info.file.name} file upload failed.`)
       }
     },
+    // 获取事件信息详情
     getDetail () {
-      getEventDetails(this.eventId).then(res => {
+      getDetails('event_info', this.eventId).then(res => {
         this.data = res
-        console.log(res)
       }).catch(err => {
         console.log(err)
       })
     },
+    // 获取关联表单
     getRelateForm () {
       const params = {
         rules: [
@@ -206,13 +211,15 @@ export default {
         ]
       }
       getRelateForm(params).then(res => {
+        this.formAll = res
         console.log(res)
       }).catch(err => {
         console.log(err)
       })
     },
+    // 获取任务详情
     getMissionDetail () {
-      getTaskDetails(this.Id).then(res => {
+      getDetails('work_task', this.Id).then(res => {
         this.missionData = res
         this.getRelateForm()
       }).catch(err => {

@@ -15,7 +15,7 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectEvent" size="25" />
       </van-field>
     </van-cell-group>
-    <template>
+    <template v-if="event.evtTypeDisplayName">
       <van-cell-group title="事件信息">
         <van-cell title="事发地点">
           <div>
@@ -75,6 +75,9 @@
             placeholder="请输入事发地点"
             required
             :rules="requiredRule"
+            rows="2"
+            autosize
+            type="textarea"
           >
             <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
           </van-field>
@@ -176,7 +179,7 @@ import SUpload from '../../components/file/StandardUploadFile'
 import { phoneValidator, idcardValidator } from '../../utils/helper/validate.helper'
 import PartyInfo from '../../components/business/PartyInfo'
 import EventListSelect from '../../components/business/EventListSelect'
-import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, getDetialdataByEventInfoId, commonSaveApi, TaskTypeDic, getFormsDetailByEventInfoId } from '../../api/regulatoryApi'
+import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, TaskTypeDic, getFormsDetailByEventInfoId } from '../../api/regulatoryApi'
 import { AcceptImageAll } from '../../utils/helper/accept.helper'
 import { getCurrentUserInfo } from '../../service/currentUser.service'
 var timer = null
@@ -286,7 +289,7 @@ export default {
           this.eventCheck = {
             ...this.eventCheck,
             ...res.MainForm,
-            Attachment: res.Attachment
+            Attachment: res.attachment
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
@@ -337,12 +340,12 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      getDetialdataByEventInfoId('task_patrol', event.objId).then((res) => {
+      getFormsDetailByEventInfoId(event.objId, 'task_patrol').then((res) => {
         if (res) {
           this.eventCheck = {
-            ...res,
-            ProcessingDecisions: 1,
-            ExistCrim: null
+            ...this.eventCheck,
+            ...res.MainForm,
+            Attachment: res.attachment
           }
         } else {
           this.eventCheck.EventDescribe = event.remark

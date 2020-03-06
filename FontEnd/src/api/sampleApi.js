@@ -4,7 +4,7 @@ function condition (params = [], pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
-      groups: [params.length > 0 ? params : ''],
+      groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
       op: 'and'
     },
     PageIndex: pageiIndex,
@@ -13,76 +13,36 @@ function condition (params = [], pageiIndex = 1, pageSize = 10) {
     SortOrder: 'asc'
   }
 }
-// 案件
-export function getcaseinfo (parameter, PageIndex, PageSize) {
-  return postHttp({
-    url: apiConfig.case_info,
-    data: condition(parameter, PageIndex, PageSize)
-  })
-}
 // 任务列表
-export function getWorkTaskList (parameter, PageIndex, PageSize) {
+// export function getWorkTaskList (parameter, PageIndex, PageSize) {
+//   return postHttp({
+//     url: apiConfig.work_task,
+//     data: condition(parameter, PageIndex, PageSize)
+//   })
+// }
+// 列表
+export function getPageData (parameter, PageIndex, PageSize, model) {
   return postHttp({
-    url: apiConfig.work_task,
+    url: `${apiConfig.pageData}?model=${model}&appid=`,
     data: condition(parameter, PageIndex, PageSize)
   })
 }
-
-// 表单列表
-export function getFormList (parameter, PageIndex, PageSize) {
-  return postHttp({
-    url: apiConfig.form_all,
-    data: condition(parameter, PageIndex, PageSize)
-  })
-}
-
-// 任务详情
-export function getTaskDetails (parameter) {
+// 详情
+export function getDetails (model, parameter) {
   return postHttp({
     url: apiConfig.detail,
-    data: { model: 'work_task', id: parameter }
+    data: { model, id: parameter }
   })
 }
-
-// 结案报告（个人）
-export function getFormAPRPerson (parameter) {
-  return postHttp({
-    url: apiConfig.detail,
-    data: { model: 'from_APRPerson', id: parameter }
+// 当前用户
+export function getUser (parameter) {
+  return getHttp({
+    url: apiConfig.userId,
+    params: {
+      ...parameter
+    }
   })
 }
-// 巡检记录表
-export function getFromPatrolRecord (parameter) {
-  return postHttp({
-    url: apiConfig.detail,
-    data: { model: 'form_patrolRecord', id: parameter }
-  })
-}
-
-// 当场处罚决定书
-export function getLawPunish (parameter) {
-  return postHttp({
-    url: apiConfig.detail,
-    data: { model: 'law_punishmentInfo', id: parameter }
-  })
-}
-
-// 结案报告（单位）
-export function getFromAPROrg (parameter) {
-  return postHttp({
-    url: apiConfig.detail,
-    data: { model: 'from_APROrg', id: parameter }
-  })
-}
-
-// 事件详情
-export function getEventDetails (parameter) {
-  return postHttp({
-    url: apiConfig.detail,
-    data: { model: 'event_info', id: parameter }
-  })
-}
-
 // 关联表单
 export function getRelateForm (parameter) {
   return postHttp({
@@ -98,21 +58,30 @@ export function getDictionary (parameter) {
     data: parameter
   })
 }
-
-// 当前用户
-export function getUser (parameter) {
-  return getHttp({
-    url: apiConfig.userId,
-    params: {
-      ...parameter
-    }
+// 打印预览
+var filter = {
+  ModelName: 'core_printTemplate',
+  Name: 'pdf打印'
+}
+export function printPreview (parameter) {
+  return postHttp({
+    url: apiConfig.print,
+    data: { model: 'core_printTemplate', filter: filter }
   })
 }
-
-// 通告详情
-export function getNoticeDetails (parameter) {
+// 根据表单ID或者事件ID获取表单所有详情
+export function getFormDetail (model, eventInfoid = null, formId = null, filterModels = null) {
   return postHttp({
-    url: apiConfig.detail,
-    data: { model: 'cms_article', id: parameter }
+    url: apiConfig.commonOperateApi,
+    data: {
+      id: 'FORMDATA',
+      model: 'work_task',
+      data: {
+        model,
+        eventInfoid,
+        formId,
+        filterModels
+      }
+    }
   })
 }

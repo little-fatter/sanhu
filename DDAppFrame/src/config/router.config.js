@@ -232,7 +232,7 @@ export const asyncRouterMap = [{
   // 案件查询
   {
     path: '/caseQuery',
-    name: 'caseQuery',
+    name: 'caseQueryNew',
     redirect: '/caseQuery',
     component: RouteView,
     children: [{
@@ -244,6 +244,16 @@ export const asyncRouterMap = [{
         keepAlive: false
       }
     },
+    // 备份测试不要删除
+    // {
+    //   path: '/caseQueryNew',
+    //   name: 'caseQueryNew',
+    //   component: () => import('@/views/casequery/caseQueryNew.vue'),
+    //   meta: {
+    //     title: '案件查询',
+    //     keepAlive: false
+    //   }
+    // },
     {
       path: '/caseDetails',
       name: 'caseDetails',
@@ -264,6 +274,22 @@ export const asyncRouterMap = [{
     }
     ]
   },
+  // 综合监管地图
+  {
+    path: '/map',
+    name: 'map',
+    redirect: '/map',
+    component: RouteView,
+    children: [{
+      path: '/map',
+      name: 'map',
+      component: () => import ('@/views/map/Map4App.vue'),
+      meta: {
+        title: '综合监管地图',
+        keepAlive: false
+      }
+    }]
+  },
   {
     path: '*',
     redirect: '/404'
@@ -272,9 +298,9 @@ export const asyncRouterMap = [{
 }]
 
 /**
-             * 基础路由
-             * @type { *[] }
-             */
+ * 基础路由
+* @type { *[] }
+*/
 export const constantRouterMap = [{
   path: '/404',
   name: '404',
