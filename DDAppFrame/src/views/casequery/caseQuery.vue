@@ -192,19 +192,19 @@ export default {
     },
     // 条件搜索
     searchTypeEvn () {
-      console.log(this.searchType)
+      // console.log(this.searchType)
       this.loadDataMore()
     },
     searchFlowEvn () {
-      console.log(this.searchFlow)
+      // console.log(this.searchFlow)
       this.loadDataMore()
     },
     searchStateEvn () {
-      console.log(this.searchState)
+      // console.log(this.searchState)
       this.loadDataMore()
     },
     searchRegionEvn () {
-      console.log(this.searchRegion)
+      // console.log(this.searchRegion)
       this.loadDataMore()
     },
     // 初次请求
@@ -237,6 +237,8 @@ export default {
             this.caseList.push(item)
           })
         }
+        console.log(res.Rows)
+
         return res
       })
     },
@@ -251,7 +253,7 @@ export default {
         rules: newGroups,
         op: 'and'
       }]
-      console.log(newGroups.length, '新的规则数组长度')
+      // console.log(newGroups.length, '新的规则数组长度')
 
       if (newGroups.length > 0 && isNotEmpty(this.serchText)) {
         var conditonNew = getQueryConditonMore(this.rules, 'and', groups)

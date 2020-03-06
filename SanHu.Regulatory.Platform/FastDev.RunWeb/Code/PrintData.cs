@@ -136,14 +136,13 @@ namespace FastDev.RunWeb.Code
                     string[] array = contextIds.Split(';');
                     foreach (string context in array)
                     {
-                        List<TemplatePageInfo> list2 = list;
                         TemplatePageInfo templatePageInfo = new TemplatePageInfo
                         {
                             Context = context,
                             PageIndex = 1,
                             AllPageIndex = num++
                         };
-                        list2.Add(templatePageInfo);
+                        list.Add(templatePageInfo);
                     }
                 }
                 else
