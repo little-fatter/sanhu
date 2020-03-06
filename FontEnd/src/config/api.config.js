@@ -25,16 +25,13 @@ const apiConfig = {
   userId: `${getHost('list')}/webapi/getuserinfo`,
   // 字典查询
   dictionary: `${getHost('list')}/webapi/api/items`,
-  // 任务模块
-  work_task: `${getHost('list')}/webapi/pageddata?model=work_task&appid=`,
-  // 案件模块
-  case_info: `${getHost('list')}/webapi/pageddata?model=case_Info&appid=`,
   // 详情
   detail: `${getHost('list')}/webapi/detaildata/`,
-  // 表单模块
-  form_all: `${getHost('list')}/webapi/pageddata?model=formwith_eventcase&appid=`,
+  // 列表
+  pageData: `${getHost('list')}/webapi/pageddata`,
   // 打印
-  print: `${getHost('list')}/webapi/listdata/`
+  print: `${getHost('list')}/webapi/listdata/`,
+  commonOperateApi: `${getHost('list')}/webapi/api`
 }
 
 export default apiConfig

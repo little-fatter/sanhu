@@ -3,15 +3,15 @@
     <div class="headLine">
       <div>
         <span>交办时间：</span>
-        <span>{{ missionData.createTime }}</span>
+        <span>{{ missionData.createTime || '2020-02-28 20:00:45' }}</span>
       </div>
       <div>
         <span>期望完成时间：</span>
-        <span>{{ missionData.ExpectedCompletionTime }}</span>
+        <span>{{ missionData.ExpectedCompletionTime || '2020-03-01 23:46:47' }}</span>
       </div>
       <div>
         <span>协办人：</span>
-        <span>{{ missionData.CoOrganizer }}</span>
+        <span>{{ missionData.CoOrganizer || '马艳' }}</span>
       </div>
     </div>
     <div class="details">
@@ -20,7 +20,7 @@
         <a-col class="colSize colLine" :span="5">事发地点：</a-col>
         <a-col class="colSize" :span="12">
           <span>{{ data.address }}</span>
-          <span>坐标{{ data.lng }},{{ data.lat }}</span>
+          <!-- <span>坐标{{ data.lng }},{{ data.lat }}</span> -->
         </a-col>
       </a-row>
       <a-row class="row">
@@ -33,7 +33,7 @@
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报人：</a-col>
-        <a-col class="colSize" :span="12">{{ data.reporterName }}（{{ data.wxUserId }}）</a-col>
+        <a-col class="colSize" :span="12">{{ data.reporterName || '周围' }}（{{ data.wxUserId || '13685462132' }}）</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事件类型：</a-col>
@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import { getRelateForm, getEventDetails, getTaskDetails } from '@/api/sampleApi'
+import { getRelateForm, getDetails } from '@/api/sampleApi'
 import partyForm from './components/partyorcompany'
 
 export default {
@@ -234,7 +234,7 @@ export default {
       }
     },
     getDetail () {
-      getEventDetails(this.eventId).then(res => {
+      getDetails('event_info', this.eventId).then(res => {
         this.data = res
       }).catch(err => {
         console.log(err)
@@ -259,7 +259,7 @@ export default {
       })
     },
     getMissionDetail () {
-      getTaskDetails(this.Id).then(res => {
+      getDetails('work_task', this.Id).then(res => {
         this.missionData = res
         this.getRelateForm()
         console.log(res)
