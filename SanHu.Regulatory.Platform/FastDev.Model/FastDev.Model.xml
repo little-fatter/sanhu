@@ -234,6 +234,11 @@
             转为案件办理
             </summary>
         </member>
+        <member name="F:FD.Model.Enum.EventStatus.dispose">
+            <summary>
+            处理中
+            </summary>
+        </member>
         <member name="F:FD.Model.Enum.WorkTaskStatus.Close">
             <summary>
             关闭

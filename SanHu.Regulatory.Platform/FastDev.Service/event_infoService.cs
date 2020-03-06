@@ -101,21 +101,45 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             List<object> retList = new List<object>();
-            retList.Add(new { TypeName = "钉钉", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='DD_REPORT'") });
-            retList.Add(new { TypeName = "微信", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='WX_REPORT'") });
-            retList.Add(new { TypeName = "AI告警", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='AI_REPORT'") });
-            retList.Add(new { TypeName = "APP", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='APP_REPORT'") });
-            retList.Add(new { TypeName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='OTHER'") });
+
+            QueryDb.BeginTransaction();
+            try
+            {
+                retList.Add(new { TypeName = "钉钉", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='DD_REPORT'") });
+                retList.Add(new { TypeName = "微信", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='WX_REPORT'") });
+                retList.Add(new { TypeName = "AI告警", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='AI_REPORT'") });
+                retList.Add(new { TypeName = "APP", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='APP_REPORT'") });
+                retList.Add(new { TypeName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='OTHER'") });
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                throw e;
+            }
+            QueryDb.CompleteTransaction();
+            
             return retList;
         }
 
         object HandleState(APIContext context)
         {
             List<object> retList = new List<object>();
-            retList.Add(new { StateName = "待受理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='unAccept'") });
-            retList.Add(new { StateName = "处理中", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='doing'") });
-            retList.Add(new { StateName = "已处理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='done'") });
-            retList.Add(new { StateName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState!='unAccept' and evtState!='doing' and evtState!='done' ") });
+
+            QueryDb.BeginTransaction();
+            try
+            {
+                retList.Add(new { StateName = "待受理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='unAccept'") });
+                retList.Add(new { StateName = "处理中", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='doing'") });
+                retList.Add(new { StateName = "已处理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='done'") });
+                retList.Add(new { StateName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState!='unAccept' and evtState!='doing' and evtState!='done' ") });
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                throw e;
+            }
+            QueryDb.CompleteTransaction();
+            
             return retList;
         }
 
