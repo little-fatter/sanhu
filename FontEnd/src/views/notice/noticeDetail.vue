@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { getNoticeDetails } from '@/api/sampleApi'
+import getNoticeDetails from '@/api/sampleApi'
 
 export default {
   data () {
