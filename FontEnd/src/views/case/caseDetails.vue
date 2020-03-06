@@ -18,15 +18,18 @@
 
       h5 {
         font-size: 18px;
-        color: #101010;
+        color: #222;
+        font-weight: bold;
       }
 
       .case-serch-bar {
-        padding-top: 15px;
 
         .maigin-top {
           margin-top: 15px;
         }
+      }
+      .tagFone{
+        // font-size: 16px;
       }
     }
 
@@ -59,8 +62,8 @@
                 justify-content: flex-start;
                 height: 35px;
                 line-height: 35px;
-                font-size: 14px;
-                color: #010101;
+                font-size: 16px;
+                color: #7F87AE;
 
                 p {
                   width: 400px;
@@ -80,10 +83,10 @@
 
             //第二个tabs 第一排按钮
             .btn-group {
-              border-bottom: solid 1px rgba(187, 187, 187, 0.64);
+             // border-bottom: solid 1px rgba(187, 187, 187, 0.64);
 
               .ant-btn {
-                margin-right: 15px;
+                margin-right:20px;
               }
             }
 
@@ -110,15 +113,17 @@
 <template>
   <div class="case-box">
     <div class="case-top">
-      <h5>案件列表/案件详情</h5>
+      <h5>案件详情</h5>
       <div class="case-serch-bar">
         <a-row>
           <a-col :span="3">
-            <span>{{ caseFile.caseNumber }}</span>
+            <span>
+              <a-tag color="#2db7f5" class="tagFone">{{ caseFile.caseNumber }}</a-tag>
+            </span>
           </a-col>
           <a-col :span="4">
             <span>案件状态：</span>
-            <span>{{ caseFile.caseState }}</span>
+            <span> <a-tag color="#87d068" class="tagFone">{{ caseFile.caseState }}</a-tag></span>
           </a-col>
         </a-row>
       </div>
@@ -204,12 +209,14 @@
           </a-card>
           <!--          事件信息-->
           <a-card title="事件信息" :bordered="false" class="tabsCard" style="margin-top: 20px">
-            <a href="#" slot="extra">事件详情&gt;</a>
+            <!-- <a href="#" slot="extra">事件详情&gt;</a> -->
             <ul>
               <li>
                 <p>
                   <span>事发地点：</span>
-                  <span>澄江县XX路10号  <img @click="viewMap" class="map-icon" src="../../assets/icons/wan_map.png"/></span>
+                  <span>澄江县XX路10号
+                    <!-- <img @click="viewMap" class="map-icon" src="../../assets/icons/wan_map.png"/> -->
+                  </span>
                 </p>
                 <p>
                   <span>上报时间：</span>
@@ -274,6 +281,8 @@ export default {
   name: 'CaseDetails',
   data () {
     return {
+      caseId: '', // 案件ID
+      EventInfoId: '', // 事件ID
       tabBarGutterNum: 0, // tabs 选项卡之间的间距
       pagination: false, // 不展示翻页
       visible: false, // 地图弹窗 默认不显示
@@ -364,7 +373,8 @@ export default {
   },
   mounted () {
     // 接收路由传参
-    console.log(this.$route.params.caseNmu)
+    this.caseId = this.$route.params.caseId
+    this.EventInfoId = this.$route.params.EventInfoId
   }
 }
 </script>

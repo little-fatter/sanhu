@@ -139,7 +139,7 @@ export const asyncRouterMap = [
               }
             ]
           },
-          // case 案件
+          // case 案件列表 案件查询
           {
             path: 'case',
             redirect: '/data-manage/case/case-list',
@@ -156,7 +156,7 @@ export const asyncRouterMap = [
                 path: 'case-details',
                 name: 'caseDetails',
                 component: () => import('@/views/case/caseDetails'),
-                meta: { title: '案件详情', keepAlive: true }
+                meta: { title: '案件详情', keepAlive: false }
               },
               {
                 path: 'new-case',

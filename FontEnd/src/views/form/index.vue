@@ -374,11 +374,7 @@ export default {
     },
     loadData (parameter) {
       var queryParam = this.dealParameter()
-      var allParameter = {
-        ...queryParam,
-        ...parameter
-      }
-      return getFormList(allParameter).then(res => {
+      return getFormList(queryParam, parameter.pageIndex, parameter.pageSize).then(res => {
         return res
       }).catch(err => {
         console.log(err)
