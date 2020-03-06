@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import { getFormList, getDictionary } from '@/api/sampleApi'
+import { getPageData, getDictionary } from '@/api/sampleApi'
 import STable from '@/components/table/'
 import { isNotEmpty } from '@/utils/util'
 
@@ -273,7 +273,7 @@ export default {
       } else if (record.FormType === 'from_APROrg') {
         this.$router.push({ path: '/data-manage/form/close-org-report', query: { id: 'record.FormID' } })
       } else {
-        this.$router.push({ path: '/data-manage/form/form-details', query: { id: 'record.FormID' } })
+        this.$router.push({ path: '/data-manage/form/close-person-report', query: { id: null } })
       }
     },
     // 处理参数
@@ -335,12 +335,13 @@ export default {
             op: 'like',
             value: 'this.formName',
             type: 'string'
-          }, {
-            field: 'FormNumber',
-            op: 'like',
-            value: '',
-            type: 'string'
           }
+          // {
+          //   field: 'FormNumber',
+          //   op: 'like',
+          //   value: '',
+          //   type: 'string'
+          // }
           ],
           op: 'or' }
       ]
@@ -374,7 +375,7 @@ export default {
     },
     loadData (parameter) {
       var queryParam = this.dealParameter()
-      return getFormList(queryParam, parameter.pageIndex, parameter.pageSize).then(res => {
+      return getPageData(queryParam, parameter.pageIndex, parameter.pageSize, 'formwith_eventcase').then(res => {
         return res
       }).catch(err => {
         console.log(err)
