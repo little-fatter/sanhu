@@ -66,6 +66,11 @@ function() {
                     type: "string"
                 },
                 {
+                    name: "CaseId",
+                    display: "案件id",
+                    type: "string"
+                },
+                {
                     name: "FormType",
                     display: "表单类型",
                     type: "string"
@@ -193,6 +198,14 @@ function() {
             {
                 display: "表单类型",
                 name: "FormType",
+                editor: {
+                    type: "string"
+                },
+                type: "string"
+            },
+            {
+                display: "案件id",
+                name: "CaseId",
                 editor: {
                     type: "string"
                 },

@@ -32,7 +32,7 @@ const apiConfig = {
   // 详情
   detail: `${getHost('list')}/webapi/detaildata/`,
   // 表单模块
-  form_all: `${getHost('list')}/webapi/pageddata?model=form_all&appid=`,
+  form_all: `${getHost('list')}/webapi/pageddata?model=formwith_eventcase&appid=`,
   // 打印
   print: `${getHost('list')}/webapi/listdata/`
 }

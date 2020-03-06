@@ -35,10 +35,14 @@
             </div>
             <div class="sub-list-div" v-show="item.open" slot="extra">
               <a-list :bordered="false" :dataSource="item.list">
-                <a-list-item slot="renderItem" slot-scope="p" class="no-border sub-list-item">
+                <a-list-item
+                  slot="renderItem"
+                  slot-scope="p"
+                  class="no-border sub-list-item"
+                >
                   <div slot="extra">
-                    <div class="left font-14 person-name">{{ p.name }}</div>
-                    <div class="left font-14 person-online">{{ p.online?'在线':'离线' }}</div>
+                    <div class="left font-14 person-name" @click="onClickPerson(p)">{{ p.name }}</div>
+                    <div class="left font-14 person-online" :style="p.online?{}:{color: 'rgba(161, 166, 186, 1)'}">{{ p.online?'在线':'离线' }}</div>
 
                     <a-button-group class="person-operation">
                       <a-avatar
@@ -89,12 +93,12 @@
               <a-list :bordered="false" :dataSource="item.list">
                 <a-list-item slot="renderItem" slot-scope="p" class="no-border sub-list-item">
                   <div slot="extra">
-                    <div class="left font-14 equipment-name">{{ p.name }}</div>
+                    <div class="left font-14 equipment-name" @click="onClickEquipment(p)">{{ p.name }}</div>
                     <template v-if="index == 0">
-                      <div class="left font-14 equipment-online">{{ p.online?'在线':'离线' }}</div>
+                      <div class="left font-14 equipment-online" :style="p.online?{}:{color: 'rgba(161, 166, 186, 1)'}">{{ p.online?'在线':'离线' }}</div>
                     </template>
                     <template v-if="index == 1">
-                      <div class="left font-14 equipment-online">{{ p.online?'飞行中':'待飞' }}</div>
+                      <div class="left font-14 equipment-online" :style="p.online?{}:{color: 'rgba(161, 166, 186, 1)'}">{{ p.online?'飞行中':'待飞' }}</div>
                     </template>
                     <div class="clear"></div>
                   </div>
@@ -112,6 +116,14 @@ import appConfig from '@/config/app.config'
 export default {
   name: 'MyPersonList',
   props: {
+    afterPeopleListItemClick: {
+      type: Function,
+      default: undefined
+    },
+    afterEquipmentListItemClick: {
+      type: Function,
+      default: undefined
+    },
     afterClickOpenVideo: {
       type: Function,
       default: undefined
@@ -234,16 +246,19 @@ export default {
               open: true,
               list: [
                 {
+                  id: 0,
                   name: '摄像头xxx',
                   online: true,
                   location: [11451694.011647668, 2831054.013192837]
                 },
                 {
+                  id: 1,
                   name: '摄像头xxx',
                   online: true,
                   location: [11458112.428043475, 2830667.3616027283]
                 },
                 {
+                  id: 2,
                   name: '摄像头xxx',
                   online: true,
                   location: [11454980.550163593, 2811528.107892338]
@@ -256,16 +271,19 @@ export default {
               open: true,
               list: [
                 {
+                  id: 3,
                   name: '无人机xxx',
                   online: true,
                   location: [11454129.916665353, 2820498.424782865]
                 },
                 {
+                  id: 4,
                   name: '无人机xxx',
                   online: false,
                   location: [11448591.454069318, 2811285.1068306305]
                 },
                 {
+                  id: 5,
                   name: '无人机xxx',
                   online: true,
                   location: [11451539.351011623, 2806230.981107847]
@@ -305,6 +323,7 @@ export default {
         for (let j = 0; j < sub.list.length; j++) {
           var p = sub.list[j]
           ps.push({
+            id: p.id,
             team: i,
             name: p.name,
             online: p.online,
@@ -332,6 +351,7 @@ export default {
         for (let j = 0; j < sub.list.length; j++) {
           var p = sub.list[j]
           ps.push({
+            id: p.id,
             typeIndex: i,
             name: p.name,
             online: p.online,
@@ -369,10 +389,16 @@ export default {
         return x.name === name
       })
       return list[index]
+    },
+    onClickPerson: function (item) {
+      this.afterPeopleListItemClick && this.afterPeopleListItemClick(item)
+    },
+    onClickEquipment: function (item) {
+      this.afterEquipmentListItemClick && this.afterEquipmentListItemClick(item)
     }
   },
   mounted: function () {
-    document['personList'] = this
+    // document['personList'] = this
   }
 }
 </script>
@@ -381,7 +407,7 @@ export default {
   background-color: white;
   height: 44px;
   line-height: 44px;
-  padding-left: 32px;
+  padding-left: 32px;border-radius: 5px;
 }
 .left{
     float: left;

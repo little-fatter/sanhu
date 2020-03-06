@@ -90,6 +90,9 @@
             placeholder="请输入事发地点"
             required
             :rules="requiredRule"
+            rows="2"
+            autosize
+            type="textarea"
           >
             <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
           </van-field>
@@ -108,10 +111,11 @@
             :rules="requiredRule"
             :border="false"
           />
-          <item-group title="附件">
+          <item-group title="证据附件">
             <s-upload
               ref="myupload"
               :accept="accept"
+              :initResult="eventCheck.Attachment"
               :sync2Dingding="true"
             >
             </s-upload>
@@ -178,12 +182,12 @@
 </template>
 
 <script>
-import { isNotEmpty, formatDate, isEmpty, getTaskUrl, getNextTask } from '../../utils/util'
+import { isNotEmpty, formatDate, isEmpty, getNextTask } from '../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../service/ddJsApi.service'
 import ItemGroup from '../../components/tools/ItemGroup'
 import SUpload from '../../components/file/StandardUploadFile'
 import EventListSelect from '../../components/business/EventListSelect'
-import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, commonSaveApi, getDetialdataByEventInfoId, TaskTypeDic } from '../../api/regulatoryApi'
+import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, TaskTypeDic, getFormsDetailByEventInfoId } from '../../api/regulatoryApi'
 import { getCurrentUserInfo } from '../../service/currentUser.service'
 import { getWorkrecordPageListbyCurrent } from '../../api/ddApi'
 import { AcceptImageAll } from '../../utils/helper/accept.helper'
@@ -216,7 +220,8 @@ export default {
         IncidentAddressXY: '',
         Result: '',
         Needlawenforcement: 0,
-        Needtracking: 0
+        Needtracking: 0,
+        Attachment: []
       },
       rejectReason: '',
       eventTypeption: [],
@@ -273,11 +278,12 @@ export default {
       })
     },
     loadEventCheck (EventInfoId, event) {
-      getDetialdataByEventInfoId('task_patrol', EventInfoId).then((res) => {
+      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then((res) => {
         if (res) {
           this.eventCheck = {
             ...this.eventCheck,
-            ...res
+            ...res.MainForm,
+            Attachment: res.attachment
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
@@ -352,12 +358,14 @@ export default {
       this.showPopup = true
     },
     onEventConfirm (event) {
-      console.log('event', event)
       this.event = event
-      getDetialdataByEventInfoId('task_patrol', event.objId).then((res) => {
-        console.log('task_patrol', res)
+      getFormsDetailByEventInfoId(event.objId, 'task_patrol').then((res) => {
         if (res) {
-          this.eventCheck = res
+          this.eventCheck = {
+            ...this.eventCheck,
+            ...res.MainForm,
+            Attachment: res.attachment
+          }
         } else {
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
@@ -371,6 +379,15 @@ export default {
       }).finally(() => {
         this.showPopup = false
       })
+      // this.eventCheck.EventDescribe = event.remark
+      // this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
+      // this.eventCheck.IncidentAddress = event.address
+      // var incidentAddressXY = ''
+      // if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+      //   incidentAddressXY = event.lng + ',' + event.lat
+      // }
+      // this.eventCheck.IncidentAddressXY = incidentAddressXY
+      // this.showPopup = false
     },
     handleRejectDialogBeforeClose (action, done) {
       if (action === 'confirm') {
@@ -435,7 +452,7 @@ export default {
       this.loading = true
       commonOperateApi('FINISH', 'task_patrol', data).then((res) => {
         this.$toast.success('操作成功')
-        // this.goToLawForm()
+        this.goToLawForm()
       }).finally(() => {
         this.loading = false
       })

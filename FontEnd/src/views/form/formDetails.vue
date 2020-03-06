@@ -263,7 +263,7 @@ export default {
   },
   data () {
     return {
-      formStyleName: 'detailEnforce', // 引用的组件名
+      formStyleName: 'detailPunish', // 引用的组件名
       approvalList: ['负责人1', '负责人2', '负责人3'], // 审批人列表
       formId: 'af5f950b-79a6-45de-829d-4f7e4838cbe2', // 详情id
       detailData: {} // 表单详情

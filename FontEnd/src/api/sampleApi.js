@@ -4,7 +4,7 @@ function condition (params = [], pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
-      groups: [params.rules && params.rules.length > 0 ? params : ''],
+      groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
       op: 'and'
     },
     PageIndex: pageiIndex,

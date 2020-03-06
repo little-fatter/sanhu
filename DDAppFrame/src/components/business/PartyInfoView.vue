@@ -1,7 +1,7 @@
 <template>
   <van-cell-group :title="`${title}信息`">
     <van-panel v-for="(item,index) in partys" :key="index" :title="`${title}(${index+1})`">
-      <template v-if="item.TypesofpartiesID==defaultTypesofpartieID">
+      <template v-if="item.Typesofparties==defaultTypesofpartieID">
         <van-cell :title="item.title"></van-cell>
         <van-cell title="身份证" :value="item.IDcard"></van-cell>
         <van-cell title="手机号" :value="item.Contactnumber"></van-cell>
@@ -47,6 +47,21 @@ export default {
       default: '当事人'
     }
   },
+  watch: {
+    initData (val, oldVal) {
+      const partys = []
+      val.forEach(item => {
+        if (item.TypesofpartiesID === this.defaultTypesofpartieID) {
+          var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
+          item.title = title
+        } else {
+          item.title = item.Name
+        }
+        partys.push(item)
+      })
+      this.partys = partys
+    }
+  },
   data () {
     return {
       partys: [],
@@ -63,9 +78,11 @@ export default {
           this.defaultTypesofpartieID = items[0].ItemCode
           const partys = []
           this.initData.forEach(item => {
-            if (item.TypesofpartieID === this.defaultTypesofpartieID) {
+            if (item.Typesofparties === this.defaultTypesofpartieID) {
               var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
               item.title = title
+            } else {
+              item.title = item.Name
             }
             partys.push(item)
           })

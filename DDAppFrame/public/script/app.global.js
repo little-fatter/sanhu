@@ -16,8 +16,10 @@ var publicAppConfig = {
   hostConfig: {
     appHost: {
       admin: 'http://182.150.28.58:27016/framework',
-      file: 'http://ddfile.vaiwan.com/filesystem',
-      regulatory: 'http://192.168.0.125:8030/webapi'
+      file: 'http://182.150.28.58:27012/filesystem',
+      regulatory: 'http://192.168.0.125:8030/webapi',
+      // 四方德信接口
+      sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
     }
   },
   /** 企业ID */
@@ -27,7 +29,7 @@ var publicAppConfig = {
   /** 后台应用的toolid，如果只对应一个后台应用可以配置在这里，否则请配置为链接参数  */
   toolId: 'SHJG',
   /** 是否强制刷新Token,是则每次都调用免登接口 */
-  isForceRefreshToken: false,
+  isForceRefreshToken: true,
   /** token的缓存过期时间(秒) */
   expiresTimeForTokenCache: 600,
   /** 是否使用本地菜单 */

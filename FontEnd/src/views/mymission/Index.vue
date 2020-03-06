@@ -57,7 +57,7 @@
               display: flex;justify-content: space-between;
             }
             .item-box {
-              margin-top:18px;font-size:14px;color:#7F87AE;
+              margin-top:14px;font-size:14px;color:#7F87AE;
               .title {
                 font-size: 16px;color:#64697C;font-weight: 400;
               }
@@ -70,7 +70,7 @@
             }
             .item-bottom {
               color:#AEBBC3;
-              margin-top:34px;
+              margin-top:24px;
             }
         }
     }
@@ -114,7 +114,7 @@
     <div class="body">
       <a-card :loading="loading" class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID, item.Tasktype)" :key="item.ID">
         <div>
-          <img style="width:100%;height:100%" src="../../assets/icons/defPicture.svg" alt="加载失败">
+          <img style="width:100%;height:200px" src="../../assets/icons/defPicture.svg" alt="加载失败">
         </div>
         <div class="item-type item-box" v-if="item.TaskContent || item.Tasknumber">
           <span class="title">{{ item.TaskContent }}</span>
@@ -184,6 +184,7 @@
         </div>
       </div> -->
     </div>
+    <div style="text-align:center;" v-show="totalCount == 0">暂无数据</div>
     <div class="footer" v-show="totalCount > 0">
       <a-pagination
         :pageSize.sync="PageSize"
@@ -249,14 +250,13 @@ export default {
       console.log(err)
     })
     // 获取用户Id
-    getUser().then(res => {
-      console.log(res)
-      if (res.UserId) {
-        this.rules[2].value = res.UserId
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+    // getUser().then(res => {
+    //   if (res.UserId) {
+    //     this.rules[2].value = res.UserId
+    //   }
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
   },
   mounted () {
     this.getTaskList()

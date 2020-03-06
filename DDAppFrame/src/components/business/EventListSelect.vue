@@ -176,6 +176,11 @@ export default {
        }
     }
 
+    .list-item
+    {
+       border-bottom: 20px solid #fafafa;
+    }
+
     .list-item_title
     {
         height: 30px;

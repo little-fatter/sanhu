@@ -8,7 +8,13 @@ export const TaskTypeDic = {
   // 事件巡查
   EventCheck: 'EventCheck',
   // 现场勘查
-  OnSpot: 'OnSpot'
+  OnSpot: 'OnSpot',
+  // 案件创建
+  CaseInfo: 'CaseInfo',
+  // 现场处罚决定书
+  Punishment: 'Punishment',
+  // 结案报告
+  finalReport: 'finalReport'
 }
 /**
  * 字典表类型编号
@@ -21,7 +27,7 @@ export const DictionaryCode = {
   // 案件类型
   CaseType: 'CaseType',
   // 案件来源
-  Sourceofcase: 'Sourceofcase '
+  CaseSourceType: 'CaseSourceType '
 }
 
 /**
@@ -87,6 +93,27 @@ export const getDetialdataByEventInfoId = (model, eventInfoId) => {
   }]
   var conditon = getQueryConditon(rules)
   return getDetialdataByfilter(model, conditon)
+}
+
+/**
+ * 根据事件ID获取表单明细接口
+ * @param {*} eventInfoid
+ * @param {*} model
+ */
+export const getFormsDetailByEventInfoId = (eventInfoid = null, model, formId = null, filterModels = null) => {
+  return postHttp({
+    url: apiConfig.regulatory.commonOperateApi,
+    data: {
+      id: 'FORMDATA',
+      model: 'work_task',
+      data: {
+        eventInfoid,
+        model,
+        formId,
+        filterModels
+      }
+    }
+  })
 }
 
 /**
