@@ -14,15 +14,25 @@ function condition(params = [], pageiIndex = 1, pageSize = 10) {
         SortOrder: 'asc'
     }
 }
-// 任务列表
-// export function getWorkTaskList (parameter, PageIndex, PageSize) {
-//   return postHttp({
-//     url: apiConfig.work_task,
-//     data: condition(parameter, PageIndex, PageSize)
-//   })
-// }
+
+function relatedCon(params = [], pageiIndex = 1, pageSize = 10) {
+    return {
+        Condition: {
+            rules: params
+        },
+        PageIndex: pageiIndex,
+        PageSize: pageSize
+    }
+}
+// 详情关联查询
+export function getPageDataDetails(model, parameter, PageIndex, PageSize) {
+    return postHttp({
+        url: `${apiConfig.pageData}?model=${model}&appid=`,
+        data: relatedCon(parameter, PageIndex, PageSize)
+    })
+}
 // 列表
-export function getPageData(parameter, PageIndex, PageSize, model) {
+export function getPageData(model, parameter, PageIndex, PageSize) {
     return postHttp({
         url: `${apiConfig.pageData}?model=${model}&appid=`,
         data: condition(parameter, PageIndex, PageSize)

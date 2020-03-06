@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import { getcaseinfo, getDictionary } from '@/api/sampleApi'
+import { getPageData, getDictionary } from '@/api/sampleApi'
 import STable from '@/components/table/'
 import { isNotEmpty } from '@/utils/util'
 export default {
@@ -268,9 +268,8 @@ export default {
     loadData (parameter) {
       // 这里拼搜索参数
       var allParameter = {}
-      return getcaseinfo(allParameter, parameter.pageIndex, parameter.pageSize)
+      return getPageData('case_Info', allParameter, parameter.pageIndex, parameter.pageSize)
         .then(res => {
-          console.log(res)
           return res
         })
         .catch(err => {
