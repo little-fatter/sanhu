@@ -7,6 +7,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
+    <DocumentationFile>D:\web\SanHu.Regulatory.Platform\FastDev.Common\FastDev.Common.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

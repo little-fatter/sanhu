@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastDev.Service</name>
+    </assembly>
+    <members>
+        <member name="P:FastDev.Service.WeatherResponse.Api_Version">
+            <summary>
+            版本号
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResponse.Api_Status">
+            <summary>
+            版本号状态
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResponse.Server_Time">
+            <summary>
+            服务器本次返回的utc时间戳
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResponse.Location">
+            <summary>
+            经纬度
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResponse.TZShift">
+            <summary>
+            时区的偏移秒数，如东八区就是 28800 秒
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResponse.Lang">
+            <summary>
+            语言
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResponse.Unit">
+            <summary>
+            单位制
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Temperature">
+            <summary>
+            温度
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Humidity">
+            <summary>
+            相对湿度
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.CloudRate">
+            <summary>
+            云量
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Skycon">
+            <summary>
+            主要天气现象
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Visibility">
+            <summary>
+            能见度
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Dswrf">
+            <summary>
+            向下短波辐射通量
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Pres">
+            <summary>
+            气压
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Aqi">
+            <summary>
+            AQI（国标）
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Pm25">
+            <summary>
+            pm25，质量浓度值
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Ultraviolet">
+            <summary>
+            紫外线指数及其自然语言描述
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.Comfort">
+            <summary>
+            舒适度指数及其自然语言描述
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.WeatherWind.Speed">
+            <summary>
+            风速，米制下是公里每小时
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.WeatherWind.Direction">
+            <summary>
+            风向，单位是度。正北方向为0度，顺时针增加到360度
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.WeatherPrecipitation.Local.DataSource">
+            <summary>
+            本地降水观测的数据源（radar，GFS）
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.WeatherPrecipitation.Local.Intensity">
+            <summary>
+            本地降水强度（单位为雷达降水强度）
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.WeatherPrecipitation.Nearest.Intensity">
+            <summary>
+            最近的降水带降水强度（单位为雷达降水强度）
+            </summary>
+        </member>
+        <member name="P:FastDev.Service.WeatherResult.WeatherPrecipitation.Nearest.Distance">
+            <summary>
+            最近的降水带距离
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.case_coverService.CreateInfo(FastDev.Model.Entity.case_cover)">
+            <summary>
+            创建表单
+            </summary>
+            <param name="TaskSurvey"></param>
+            <param name="law_Parties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.case_InfoService.CreateInfo(FastDev.Model.Entity.case_Info,System.Collections.Generic.List{FastDev.Model.Entity.law_party})">
+            <summary>
+            创建表单和当事人
+            </summary>
+            <param name="TaskSurvey"></param>
+            <param name="law_Parties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.case_reportService.CreateInfo(FastDev.Model.Entity.case_report)">
+            <summary>
+            创建表单
+            </summary>
+            <param name="TaskSurvey"></param>
+            <param name="law_Parties"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.Service.core_modelService">
+            <summary>
+            运行 读取core_model
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.core_modelService.GetListData(FastDev.DevDB.FilterGroup)">
+            <summary>
+            获取model 改为直接从列表中读出，不再直接从数据库读取
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="F:FastDev.Service.DingDingServices._clientFactory">
+            <summary>
+            httpclient工厂
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.DingDingServices.PostFrameWork``1(System.String,System.Object)">
+            <summary>
+            框架post数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="apiurl"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.event_infoService.Create(System.Object)">
+            <summary>
+            事件每次生成2条,OriginalID为空的不能用于创建任务,仅用作备份
+            </summary>
+            <param name="postdata"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.form_allService.GetDetailData(System.String,FastDev.DevDB.FilterGroup,System.Boolean)">
+             <summary>
+             
+             {
+             	"model": "form_all",
+             	"filter": {
+             		"rules": [
+             			{
+             				"field": "EventInfoId",
+             				"op": "equal",
+             				"value": "45345",
+             				"type": "string"
+             			},
+             			{
+             				"field": "FormType",
+             				"op": "equal",
+             				"value": "from_inspectiontrecord",
+             				"type": "string"
+             			},
+             		]
+             	}
+             }
+             <paramref name="id">数据id， 可以不传id 而传filter，则获取最新一条数据</paramref>
+             <paramref name="filter">如以上json结构所示</paramref>
+            </summary>
+             <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.form_confiscated_itemService.EndEvent(System.String,System.String)">
+            <summary>
+            结束事件和任务
+            </summary>
+            <param name="TaskId"></param>
+            <param name="EventId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.form_confiscated_itemService.CreateInfo(System.Collections.Generic.List{FastDev.Model.Entity.form_confiscated_item},System.String,System.String)">
+            <summary>
+            创建表单
+            </summary>
+            <param name="TaskSurvey"></param>
+            <param name="law_Parties"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.Service.Form_inquestrecordService">
+            <summary>
+            勘验笔录
+            </summary>
+        </member>
+        <member name="T:FastDev.Service.Form_inquiryrecordService">
+            <summary>
+            询问笔录
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.law_punishmentInfoService.CreateInfo(FastDev.Model.Entity.law_punishmentInfo,System.Collections.Generic.List{FastDev.Model.Entity.law_party},System.Collections.Generic.List{FastDev.Model.Entity.attachment})">
+            <summary>
+            创建表单和当事人
+            </summary>
+            <param name="TaskSurvey"></param>
+            <param name="law_Parties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.loc_field_staffService.GetStaff(FastDev.DevDB.APIContext)">
+            <summary>
+            获取执法人员
+            </summary>
+            <param name="aPIContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.psi_goods.GetPageData(FastDev.DevDB.QueryDescriptor)">
+            <summary>
+            获取一页数据
+            </summary>
+            <param name="descriptor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.Service.SHBaseService">
+            <summary>
+            三湖业务基础server
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.SHBaseService.CreateWorkrecor(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            发送待办
+            </summary>
+            <param name="userId">钉钉用户id</param>
+            <param name="title">待办标题</param>
+            <param name="url">跳转地址</param>
+            <param name="formTitle">待办表单标题</param>
+            <param name="fromContent">待办表单内容</param>
+        </member>
+        <member name="M:FastDev.Service.SHBaseService.WorkrecordUpdate(System.String,System.String)">
+            <summary>
+            撤回待办
+            </summary>
+            <param name="userId"></param>
+            <param name="recordId"></param>
+        </member>
+        <member name="M:FastDev.Service.SHBaseService.UpdateEventState(System.String,FD.Model.Enum.EventStatus)">
+            <summary>
+            修改事件状态
+            </summary>
+            <param name="eventId"></param>
+            <param name="eventStatus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.SHBaseService.SaveWorkTask(FastDev.Model.Entity.work_task)">
+            <summary>
+            保存任务
+            </summary>
+            <param name="workTask"></param>
+        </member>
+        <member name="M:FastDev.Service.SHBaseService.UpdateWorkTaskState(System.String,FD.Model.Enum.WorkTaskStatus)">
+            <summary>
+            任务状态更新
+            </summary>
+            <param name="taskid"></param>
+            <param name="workTaskStatus"></param>
+        </member>
+        <member name="M:FastDev.Service.SHBaseService.CreatTasksAndCreatWorkrecor(FastDev.Model.Entity.work_task[],System.String)">
+            <summary>
+            创建后续任务
+            </summary>
+            <param name="NextTasks"></param>
+            <param name="sourcetaskid"></param>
+        </member>
+        <member name="T:FastDev.Service.task_patrolService">
+            <summary>
+            任务-巡查
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.task_patrolService.Task_patrolService_OnGetAPIHandler(System.String)">
+            <summary>
+            是否需要创建新任务
+            1、表单类型， 2、表单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.Service.task_surveyService">
+            <summary>
+            任务-勘察
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.task_surveyService.CreateInfo(FastDev.Model.Entity.task_survey,System.Collections.Generic.List{FastDev.Model.Entity.law_party},System.Collections.Generic.List{FastDev.Model.Entity.attachment})">
+            <summary>
+            创建表单和当事人
+            </summary>
+            <param name="TaskSurvey"></param>
+            <param name="law_Parties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.task_surveyService.EndEvent(System.String,System.String)">
+            <summary>
+            结束事件和任务
+            </summary>
+            <param name="TaskId"></param>
+            <param name="EventId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastDev.Service.work_taskService">
+            <summary>
+            任务
+            </summary>
+        </member>
+        <member name="M:FastDev.Service.work_taskService.HandOver(FastDev.DevDB.APIContext)">
+            <summary>
+            任务转移
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.work_taskService.Reject(FastDev.DevDB.APIContext)">
+            <summary>
+            拒绝
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Service.work_taskService.CreateTask(FastDev.DevDB.APIContext)">
+            <summary>
+            创建任务
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
