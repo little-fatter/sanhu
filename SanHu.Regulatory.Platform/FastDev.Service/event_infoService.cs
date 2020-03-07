@@ -43,7 +43,6 @@ namespace FastDev.Service
                     eventInfo.reportTime = DateTime.Now;
                 }
                 base.Create(eventInfo);
-                //base.Create(postdata);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
                 base.Create(eventInfo);
