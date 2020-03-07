@@ -38,7 +38,12 @@ namespace FastDev.Service
             base.QueryDb.BeginTransaction();
             try
             {
-                base.Create(postdata);
+                if (eventInfo.reportTime == null)
+                {
+                    eventInfo.reportTime = DateTime.Now;
+                }
+                base.Create(eventInfo);
+                //base.Create(postdata);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
                 base.Create(eventInfo);
