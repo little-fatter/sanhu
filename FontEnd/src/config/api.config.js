@@ -32,7 +32,9 @@ const apiConfig = {
   // 详情
   detail: `${getHost('list')}/webapi/detaildata/`,
   // 表单模块
-  form_all: `${getHost('list')}/webapi/pageddata?model=form_all&appid=`
+  form_all: `${getHost('list')}/webapi/pageddata?model=form_all&appid=`,
+  // 信息中心
+  msgCenter: `${getHost('list')}/api/JobMessage`
 }
 
 export default apiConfig

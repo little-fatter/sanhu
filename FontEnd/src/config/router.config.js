@@ -14,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/mission', // 临时定向开发页面
+    redirect: '/data-manage/notice', // 临时定向开发页面
     children: [
       {
         path: 'mission',
@@ -170,12 +170,17 @@ export const asyncRouterMap = [
           {
             path: 'notice',
             component: RouteView,
-            redirect: '/data-manage/notice/notice-detail',
+            redirect: '/data-manage/notice/test',
             children: [
               {
                 path: 'notice-detail',
                 name: 'noticeDetail',
                 component: () => import('@/views/notice/noticeDetail')
+              },
+              {
+                path: 'test',
+                name: 'test',
+                component: () => import('@/views/notice/test')
               }
             ]
           }

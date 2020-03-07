@@ -11,7 +11,7 @@ import '@/permission' // 入口路由权限控制
 import '@/utils/directive'// 公共指令
 import '@/utils/filter' // 公共管道
 import '@/components/global.less'
-// import '@/assets/css/global.less' // 引用全局样式,覆盖默认样式
+import '@/assets/css/global.less' // 引用全局样式,覆盖默认样式
 import print from './views/config/printer'
 Vue.use(print)
 
