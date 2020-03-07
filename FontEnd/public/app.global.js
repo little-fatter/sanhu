@@ -41,13 +41,14 @@ var publicAppConfig = {
   /**
    * 静态文件根目录
    */
-  StaticWebContext: 'http://zhsh.8e9bcb.grapps.cn/webregulatory',
-  // StaticWebContext: '',
+  // StaticWebContext: 'http://zhsh.8e9bcb.grapps.cn/webregulatory',
+  StaticWebContext: '',
   /**
    * 地图相关
    */
   MapOption: {
     WMS_URL: 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_white',
+    // WMS_URL: 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_blue',
     ZOOM_TO_POINT_RADIUS: 5 // 缩放至点目标时的半径范围，单位千米
   },
   /**

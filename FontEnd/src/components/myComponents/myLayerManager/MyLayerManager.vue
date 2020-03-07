@@ -122,7 +122,7 @@ export default {
           layerName: '',
           img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu.png',
           aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu1.png',
-          active: false,
+          active: true,
           subs: []
         }
       ],
