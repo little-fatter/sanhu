@@ -174,18 +174,6 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-<<<<<<< HEAD
-=======
-        // var allParameter = {
-        //   ...parameter,
-        //   ...this.queryParam
-        // }
-        // return getServiceList(allParameter).then(res => {
-        //   return res
-        // }).catch((error) => {
-        //   throw error
-        // })
->>>>>>> d26ce5217904a829c14489a3ffd469b9279a814b
       },
       selectedRowKeys: [],
       selectedRows: []

@@ -478,6 +478,7 @@ namespace FastDev.RunWeb.Controllers
                 return ex.Message;
             }
         }
+        [Authorize]
         public ActionResult Index(string homestyle)
         {
             DbContext currentDb = SysContext.GetCurrentDb();

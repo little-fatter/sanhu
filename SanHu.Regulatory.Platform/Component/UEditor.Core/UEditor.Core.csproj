@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -9,6 +9,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
+    <DocumentationFile>D:\web\SanHu.Regulatory.Platform\Component\UEditor.Core\UEditor.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

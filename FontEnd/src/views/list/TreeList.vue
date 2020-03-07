@@ -55,10 +55,6 @@
 import STree from '@/components/Tree/Tree'
 import STable from '@/components/table/'
 import OrgModal from './modules/OrgModal'
-<<<<<<< HEAD
-=======
-import { getOrgTree } from '@/api/sampleApi'
->>>>>>> d26ce5217904a829c14489a3ffd469b9279a814b
 
 /**
  * 表格树演示实例
@@ -112,18 +108,6 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-<<<<<<< HEAD
-=======
-        // var allParameter = {
-        //   ...parameter,
-        //   ...this.queryParam
-        // }
-        // return getServiceList(allParameter).then(res => {
-        //   return res
-        // }).catch((error) => {
-        //   throw error
-        // })
->>>>>>> d26ce5217904a829c14489a3ffd469b9279a814b
       },
       orgTree: [],
       selectedRowKeys: [],

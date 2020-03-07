@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastDev.Common</name>
+    </assembly>
+    <members>
+        <member name="P:FD.Common.ActionValue.DateTimeConverter.DateTimeFormat">
+            <summary>
+            获取或设置DateTime格式
+            <para>默认为: yyyy-MM-dd HH:mm:ss</para>
+            </summary>
+        </member>
+        <member name="P:FD.Common.ActionValue.DateTimeNullConverter.DateTimeFormat">
+            <summary>
+            获取或设置DateTime格式
+            <para>默认为: yyyy-MM-dd HH:mm:ss</para>
+            </summary>
+        </member>
+        <member name="M:FD.Common.ActionValue.JsonByteConvert.CanConvert(System.Type)">
+            <summary>
+            判断是否为Bool类型
+            </summary>
+            <param name="objectType">类型</param>
+            <returns>为bool类型则可以进行转换</returns>
+        </member>
+        <member name="M:FD.Common.Extensions.HttpClientExtension.GetDataAsync``1(System.Net.Http.HttpClient,System.String,System.Object)">
+            <summary>
+            get异步请求接口数据
+            </summary>
+            <typeparam name="T">输出参数</typeparam>
+            <param name="httpClient"></param>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FD.Common.Extensions.HttpClientExtension.PostAsync``1(System.Net.Http.HttpClient,System.String,System.Object)">
+            <summary>
+            post异步请求接口数据
+            </summary>
+            <typeparam name="T">输出参数</typeparam>
+            <param name="httpClient"></param>
+            <param name="api"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FD.Common.Extensions.HttpClientExtension.PostQueryAsync``1(System.Net.Http.HttpClient,System.String,System.Object)">
+            <summary>
+            post异步请求接口数据,参数放在url里面
+            </summary>
+            <typeparam name="T">输出参数</typeparam>
+            <param name="httpClient"></param>
+            <param name="api"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FD.Common.Extensions.HttpClientExtension.ParaToDictionary(System.Object)">
+            <summary>
+            参数转字典
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FD.Common.Helpers.PDFHelper.HmtlToPDF(System.String,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            html转PDF流
+            </summary>
+            <param name="html"></param>
+            <param name="marginleft">左边距厘米</param>
+            <param name="margintop">上边距厘米</param>
+            <param name="marginright">右边距厘米</param>
+            <param name="marginbottom">下边距厘米</param>
+            <returns></returns>
+        </member>
+        <member name="T:FD.Common.Http.JsonContent">
+            <summary>
+            json序列化content
+            </summary>
+        </member>
+        <member name="P:FastDev.Common.ConfigurationManager.AppSettings">
+            <summary>
+            app设置
+            </summary>
+        </member>
+        <member name="M:FastDev.Common.ConnectionStringSettings.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="connStr"></param>
+            <param name="dbProviderName"></param>
+        </member>
+        <member name="P:FastDev.Common.ConnectionStringSettings.ConnectionString">
+            <summary>
+            连接字符串
+            </summary>
+        </member>
+        <member name="P:FastDev.Common.ConnectionStringSettings.ProviderName">
+            <summary>
+            ProviderName
+            </summary>
+        </member>
+        <member name="T:FastDev.Common.EnvConfig">
+            <summary>
+            简单存放几个环境变量
+            </summary>
+        </member>
+        <member name="P:FastDev.Common.EnvConfig.ContentRootPath">
+            <summary>
+            程序根目录位置
+            </summary>
+        </member>
+        <member name="P:FastDev.Common.EnvConfig.WebRootPath">
+            <summary>
+            wwwroot的物理位置
+            </summary>
+        </member>
+        <member name="M:FastDev.Common.Extensions.DateTimeExtension.GetTimeSpan(System.DateTime)">
+            <summary>
+            获取时间戳 秒
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Common.Extensions.DateTimeExtension.GetTimeStamp(System.DateTime)">
+            <summary>
+            获取时间戳 秒
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Common.Extensions.DateTimeExtension.GetTimeStampM(System.DateTime)">
+            <summary>
+            获取时间戳 毫秒级
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Common.HttpServerUtility.MapPath(System.String)">
+            <summary>
+            获取相对路径
+            </summary>
+            <param name="vPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Common.HttpServerUtility.StickUrl(System.String,System.String)">
+            <summary>
+            处理URL地址，当BranchUrl为一个全名的URL时则返回本身，否则恰当的衔接到BaseUrl后面
+            </summary>
+            <param name="BaseUrl">完整的URL</param>
+            <param name="BranchUrl">分支URL</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Common.JsonHelper.ToDictionary(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            将JObject转化成字典
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.Common.JsonHelper.ToArray(Newtonsoft.Json.Linq.JArray)">
+            <summary>
+            
+            </summary>
+            <param name="array"></param>
+            <returns></returns>
+        </member>
+        <member name="P:FastDev.Common.WebMethod.Encode">
+            <summary>
+            网站的编码
+            </summary>
+        </member>
+        <member name="P:FastDev.Common.WebMethod.ReqUrl">
+            <summary>
+            请求的地址
+            </summary>
+        </member>
+        <member name="M:FastDev.Common.WebMethod.Upload_Request(System.String,System.String)">
+            <summary>
+            将本地文件上传到指定的服务器(HttpWebRequest方法)
+            </summary>
+            <param name="fileNamePath">文件路径名称</param>
+            <param name="pendData"></param>
+            <returns>成功返回1，失败返回0</returns>
+        </member>
+        <member name="M:FastDev.Common.WebMethod.GetDeflateHtml(System.Net.HttpWebResponse,System.Text.Encoding)">
+            <summary>
+            Deflate解压函数
+            JS:var details = eval_r('(' + utf8to16(zip_depress(base64decode(hidEnCode.value))) + ')')对应的C#压缩方法
+            </summary>
+            <param name="strSource"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

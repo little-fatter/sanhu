@@ -14,7 +14,7 @@ namespace FD.Model.Configs
         /// <summary>
         /// 主框架地址
         /// </summary>
-        public string MainServiceBaseUrl { get; set; }
+        public string MainServiceUrl { get; set; }
         public string AgentId { get; set; }
     }
 }

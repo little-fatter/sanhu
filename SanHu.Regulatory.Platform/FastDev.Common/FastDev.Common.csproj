@@ -7,6 +7,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
+    <DocumentationFile>D:\web\SanHu.Regulatory.Platform\FastDev.Common\FastDev.Common.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,6 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.7.0" />
-    <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.6.0" />
+    <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.5.7" />
   </ItemGroup>
 </Project>
