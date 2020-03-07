@@ -37,10 +37,12 @@ namespace FD.Common.Helpers
                     new ObjectSettings() {
                         HtmlContent = html,
                         WebSettings = { DefaultEncoding = "utf-8" },              
+                        //WebSettings = { DefaultEncoding = "gb 2312" },              
                     }
                 }
             };
             byte[] pdf = converter.Convert(doc);
+            //converter = null;
             return pdf;
         }
     }

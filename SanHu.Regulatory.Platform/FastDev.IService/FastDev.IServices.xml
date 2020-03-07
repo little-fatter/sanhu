@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastDev.IServices</name>
+    </assembly>
+    <members>
+        <member name="M:FastDev.IServices.IDingDingServices.WorkrecordAdd(DingTalk.Api.Request.OapiWorkrecordAddRequest)">
+            <summary>
+            新增待办
+            </summary>
+        </member>
+        <member name="M:FastDev.IServices.IDingDingServices.WorkrecordUpdate(System.String,System.String)">
+            <summary>
+            更新取消待办
+            </summary>
+            <param name="oapiWorkrecordAddRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDev.IServices.IDingDingServices.CreateWorkrecor(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            新增待办
+            </summary>
+        </member>
+    </members>
+</doc>
