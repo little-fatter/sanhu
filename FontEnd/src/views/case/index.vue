@@ -88,24 +88,28 @@
             <li class="search-input-ul-li">
               <span>案件类型：</span>
               <a-select placeholder="请选择" v-model="s_case_type">
+                <a-select-option value="">全部</a-select-option>
                 <a-select-option v-for="item in Case_Type" :key="item.ID+'@'" :value="item.ItemCode">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
               <span>适用程序：</span>
               <a-select placeholder="请选择" v-model="s_case_ApplicableProcedureType">
+                <a-select-option value="">全部</a-select-option>
                 <a-select-option v-for="item in CaseApplicableProcedureType" :key="item.ID+'@'" :value="item.ID">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
               <span>案件状态：</span>
               <a-select placeholder="请选择" v-model="s_case_CaseStatus">
+                <a-select-option value="">全部</a-select-option>
                 <a-select-option v-for="item in CaseStatusArr" :key="item.ID+'@'" :value="item.Title">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
               <span>案件区域：</span>
               <a-select placeholder="请选择" v-model="s_case_CaseRegion">
+                <a-select-option value="">全部</a-select-option>
                 <a-select-option v-for="item in CaseRegion" :key="item.ID+'@'" :value="item.ID">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
@@ -140,7 +144,7 @@
       </div>
     </div>
     <div class="case-body">
-      <s-table ref="table" size="default" :columns="columns" :dataCallback="loadData">
+      <s-table ref="MyTable" size="default" :columns="columns" :dataCallback="loadData">
         <template slot="details" slot-scope="text, record">
           <div class="editable-row-operations">
             <span>
@@ -180,7 +184,7 @@
 <script>
 import { getPageData, getDictionary } from '@/api/sampleApi'
 import STable from '@/components/table/'
-// import { isNotEmpty } from '@/utils/util'
+import { isNotEmpty } from '@/utils/util'
 export default {
   name: 'CaseList',
   components: {
@@ -255,10 +259,10 @@ export default {
       CaseStatusArr: [], // 案件状态
       CaseRegion: [], // 案件区域
       // 搜索规则组  按顺序展示
-      s_case_type: '请选择',
-      s_case_ApplicableProcedureType: '请选择',
-      s_case_CaseStatus: '请选择',
-      s_case_CaseRegion: '请选择',
+      s_case_type: '',
+      s_case_ApplicableProcedureType: '',
+      s_case_CaseStatus: '',
+      s_case_CaseRegion: '',
       s_case_LawName: '', // 办案人名称
       s_case_BreakLow: '', // 当事人名称"
       s_case_Number: '', // 案件号
@@ -273,53 +277,6 @@ export default {
     },
     // 获取案件列表
     loadData (parameter) {
-      // 这里拼搜索参数
-      var allParameter = {}
-      return getPageData('case_Info', allParameter, parameter.pageIndex, parameter.pageSize)
-        .then(res => {
-          return res
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    // 搜索菜单字典获取
-    getsearchMenu () {
-      // 获取案件类型
-      getDictionary({ model: 'res_dictionary', context: 'CaseType' }).then(res => {
-        res.map(item => {
-          this.Case_Type.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
-      // 适用程序
-      getDictionary({ model: 'res_dictionary', context: 'ApplicableProcedureType' }).then(res => {
-        res.map(item => {
-          this.CaseApplicableProcedureType.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
-      // 案件处状态
-      getDictionary({ model: 'res_dictionary', context: 'CaseStatus' }).then(res => {
-        res.map(item => {
-          this.CaseStatusArr.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
-      // 案件区域
-      getDictionary({ model: 'res_dictionary', context: 'Lake' }).then(res => {
-        res.map(item => {
-          this.CaseRegion.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
-    // 按条件搜索
-    onSearch () {
       // 这里拼搜索参数
       var allParameter = {
         rules: [
@@ -385,20 +342,69 @@ export default {
             type: 'datepicker'
           }
         ],
-        op: 'or' // 搜索关系
+        op: 'and' // 搜索关系
       }
-      return getPageData('case_Info', allParameter, 1, 10)
+      var data = allParameter.rules.filter(item => { return isNotEmpty(item.value) })
+      allParameter.rules = data
+      console.log(allParameter)
+      return getPageData('case_Info', allParameter, parameter.pageIndex, parameter.pageSize)
         .then(res => {
-          console.log(res)
           return res
         })
         .catch(err => {
           console.log(err)
         })
     },
+    // 搜索菜单字典获取
+    getsearchMenu () {
+      // 获取案件类型
+      getDictionary({ model: 'res_dictionary', context: 'CaseType' }).then(res => {
+        res.map(item => {
+          this.Case_Type.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+      // 适用程序
+      getDictionary({ model: 'res_dictionary', context: 'ApplicableProcedureType' }).then(res => {
+        res.map(item => {
+          this.CaseApplicableProcedureType.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+      // 案件处状态
+      getDictionary({ model: 'res_dictionary', context: 'CaseStatus' }).then(res => {
+        res.map(item => {
+          this.CaseStatusArr.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+      // 案件区域
+      getDictionary({ model: 'res_dictionary', context: 'Lake' }).then(res => {
+        res.map(item => {
+          this.CaseRegion.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 按条件搜索
+    onSearch () {
+      this.$refs.MyTable.refresh()
+    },
     // 搜索条件重置
     onReset () {
-
+      this.s_case_type = '请选择'
+      this.s_case_ApplicableProcedureType = '请选择'
+      this.s_case_CaseStatus = '请选择'
+      this.s_case_CaseRegion = '请选择'
+      this.s_case_LawName = ''
+      this.s_case_BreakLow = ''
+      this.s_case_Number = ''
+      this.s_case_JudgementNum = ''
+      this.s_case_Time = []
     },
     // 查看案件详情跳转
     gotoDetail (caseId, EventInfoId) {
