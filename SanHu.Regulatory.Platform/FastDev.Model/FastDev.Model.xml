@@ -139,6 +139,26 @@
             当事人
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.Form_printPDFReq">
+            <summary>
+            打印pdf
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_printPDFReq.formID">
+            <summary>
+            表单ID
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_printPDFReq.formName">
+            <summary>
+            表单名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_printPDFReq.filePath">
+            <summary>
+            文件绝对路径
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawPunishmentInfo">
             <summary>
             处罚决定书信息

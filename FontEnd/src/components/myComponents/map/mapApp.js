@@ -2,10 +2,11 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 // import MapBrowserEvent from 'ol/MapBrowserEvent'
 import TileLayer from 'ol/layer/Tile'
-import OSM from 'ol/source/OSM'
-// import WMTS from 'ol/source/WMTS'
-// import WMTSTileGrid from 'ol/tilegrid/WMTS'
+// import OSM from 'ol/source/OSM'
+import WMTS from 'ol/source/WMTS'
+import WMTSTileGrid from 'ol/tilegrid/WMTS'
 import TileWMS from 'ol/source/TileWMS'
+import XYZ from 'ol/source/XYZ'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import Heatmap from 'ol/layer/Heatmap'
@@ -15,10 +16,10 @@ import { register } from 'ol/proj/proj4'
 import proj4 from 'proj4'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-import { fromLonLat, toLonLat } from 'ol/proj'
+import { fromLonLat, toLonLat, get as getProjection } from 'ol/proj'
 import { click } from 'ol/events/condition'
 import Select from 'ol/interaction/Select'
-import { buffer as extentBuffer, getHeight as getExtentHeight } from 'ol/extent'
+import { buffer as extentBuffer, getHeight as getExtentHeight, getWidth, getTopLeft } from 'ol/extent'
 import { point, lineString, polygon, buffer, toWgs84, toMercator, randomPoint, bbox, booleanPointInPolygon } from '@turf/turf'
 // import $ from 'jquery'
 import appConfig from '@/config/app.config'
@@ -32,22 +33,48 @@ import { isEmpty } from '@/utils/util'
 
 const lakeJsons = [M_HM_FXH, M_HM_XYH, M_HM_QLH]
 
-proj4.defs('EPSG:4490', '+proj=longlat +ellps=GRS80 +no_defs')
-proj4.defs('EPSG:32648', '+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs')
+// proj4.defs('EPSG:4490', '+proj=longlat +ellps=GRS80 +no_defs')
+// proj4.defs('EPSG:32648', '+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs')
+proj4.defs('EPSG:900913', '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs')
+
 register(proj4)
 
-// const EPSG_4490 = getProjection('EPSG:4490')
-// const imageLayerUrl = 'https://www.panpangis.site:8090/iserver/services/map-agscache-image/wmts100'
-// var resolutions = new Array(20)
-// var matrixIds = new Array(20)
-// const resolution0 = 0.7440944881889767
-// for (var z = 0; z < 14; ++z) {
-//   // generate resolutions and matrixIds arrays for this WMTS
-//   resolutions[z] = resolution0 / Math.pow(2, z)
-//   matrixIds[z] = z
-// }
-
 const WMS_URL = appConfig.MapOption.WMS_URL
+// function createTdtLayer1 () {
+//   var projection = getProjection('EPSG:3857')
+//   var projectionExtent = projection.getExtent()
+//   var size = getWidth(projectionExtent) / 256
+//   var resolutions = new Array(18)
+//   var matrixIds = new Array(18)
+//   for (var z = 1; z < 19; ++z) {
+//     // generate resolutions and matrixIds arrays for this WMTS
+//     resolutions[z] = size / Math.pow(2, z)
+//     matrixIds[z] = z
+//   }
+
+//   var webKey = 'fca2dd0a5d97b284fe802d646ad6430c'
+
+//   var wmtsUrl1 = 'http://t{0-7}.tianditu.gov.cn/vec_w/wmts?tk=' // 矢量底图
+
+//   var layer = new TileLayer({
+//     source: new WMTS({
+//       url: wmtsUrl1 + webKey,
+//       layer: 'vec',
+//       matrixSet: 'w',
+//       format: 'tiles',
+//       style: 'default',
+//       projection: projection,
+//       tileGrid: new WMTSTileGrid({
+//         origin: getTopLeft(projectionExtent),
+//         resolutions: resolutions,
+//         matrixIds: matrixIds
+//       }),
+//       wrapX: true
+//     }),
+//     name: 'tdt'
+//   })
+//   return layer
+// }
 var timer = {
   runId: 0,
   pathBeforeFeature: undefined,
@@ -285,12 +312,15 @@ export default {
     //   name: 'base'
     // })
     // 底图
-    var osm = new TileLayer({
-      source: new OSM(),
-      name: 'baseLayer',
-      zIndex: 0
-    })
-    this.layers.push(osm)
+    // var osm = new TileLayer({
+    //   source: new OSM(),
+    //   name: 'baseLayer',
+    //   zIndex: 0
+    // })
+    // this.layers.push(osm)
+
+    // var tdtCvaLayer = createTdtLayer1()
+    // this.layers.push(tdtCvaLayer)
     var baseLayer = new TileLayer({
       source: new TileWMS({
         url: WMS_URL,

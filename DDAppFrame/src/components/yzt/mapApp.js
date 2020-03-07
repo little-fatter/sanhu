@@ -1,8 +1,10 @@
 import Map from 'ol/Map'
 import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
-import OSM from 'ol/source/OSM'
+// import OSM from 'ol/source/OSM'
 import TileWMS from 'ol/source/TileWMS'
+import WMTS from 'ol/source/WMTS'
+import WMTSTileGrid from 'ol/tilegrid/WMTS'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { GeoJSON } from 'ol/format'
@@ -10,9 +12,9 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { click } from 'ol/events/condition'
 import Select from 'ol/interaction/Select'
-import { fromLonLat, toLonLat } from 'ol/proj'
+import { fromLonLat, toLonLat, get as getProjection } from 'ol/proj'
 import { defaults as defaultControls, Zoom } from 'ol/control'
-import { buffer as extentBuffer, getHeight as getExtentHeight } from 'ol/extent'
+import { buffer as extentBuffer, getHeight as getExtentHeight, getWidth, getTopLeft } from 'ol/extent'
 import { point, toWgs84, toMercator, buffer, bbox } from '@turf/turf'
 import * as dd from 'dingtalk-jsapi'
 
@@ -23,6 +25,60 @@ import M_HM_XYH from './data/M_HM_XYH.json'
 import M_HM_QLH from './data/M_HM_QLH.json'
 const lakeJsons = [M_HM_FXH, M_HM_XYH, M_HM_QLH]
 const WMS_URL = 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_white'
+
+function createTdtLayer () {
+  var projection = getProjection('EPSG:3857')
+  var projectionExtent = projection.getExtent()
+  var size = getWidth(projectionExtent) / 256
+  var resolutions = new Array(18)
+  var matrixIds = new Array(18)
+  for (var z = 1; z < 19; ++z) {
+    // generate resolutions and matrixIds arrays for this WMTS
+    resolutions[z] = size / Math.pow(2, z)
+    matrixIds[z] = z
+  }
+
+  var webKey = 'fca2dd0a5d97b284fe802d646ad6430c'
+
+  var wmtsUrl1 = 'http://t{0-7}.tianditu.gov.cn/vec_w/wmts?tk=' // 矢量底图
+  var wmtsUrl2 = 'http://t{0-7}.tianditu.gov.cn/cva_w/wmts?tk=' // 矢量注记
+
+  var layer = new TileLayer({
+    source: new WMTS({
+      url: wmtsUrl1 + webKey,
+      layer: 'vec',
+      matrixSet: 'w',
+      format: 'tiles',
+      style: 'default',
+      projection: projection,
+      tileGrid: new WMTSTileGrid({
+        origin: getTopLeft(projectionExtent),
+        resolutions: resolutions,
+        matrixIds: matrixIds
+      }),
+      wrapX: true
+    }),
+    name: 'tdt_vec_w'
+  })
+  var layer1 = new TileLayer({
+    source: new WMTS({
+      url: wmtsUrl2 + webKey,
+      layer: 'vec',
+      matrixSet: 'w',
+      format: 'tiles',
+      style: 'default',
+      projection: projection,
+      tileGrid: new WMTSTileGrid({
+        origin: getTopLeft(projectionExtent),
+        resolutions: resolutions,
+        matrixIds: matrixIds
+      }),
+      wrapX: true
+    }),
+    name: 'tdt_cva_w'
+  })
+  return [layer, layer1]
+}
 
 export default {
   map: {},
@@ -65,24 +121,27 @@ export default {
     this.initSelects()
   },
   initLayers: function () {
-    // osm
-    this.layers.push(new TileLayer({
-      source: new OSM(),
-      name: 'osm',
-      zIndex: 0
-    }))
+    // // osm
+    // this.layers.push(new TileLayer({
+    //   source: new OSM(),
+    //   name: 'osm',
+    //   zIndex: 0
+    // }))
+    var tdtVecLayers = createTdtLayer()
+    this.layers.push(...tdtVecLayers)
+
     // 底图
-    var baseLayer = new TileLayer({
-      source: new TileWMS({
-        url: WMS_URL,
-        params: {
-          LAYERS: '0'
-        }
-      }),
-      name: 'baseLayer',
-      zIndex: 1
-    })
-    this.layers.push(baseLayer)
+    // var baseLayer = new TileLayer({
+    //   source: new TileWMS({
+    //     url: WMS_URL,
+    //     params: {
+    //       LAYERS: '0'
+    //     }
+    //   }),
+    //   name: 'baseLayer',
+    //   zIndex: 1
+    // })
+    // this.layers.push(baseLayer)
 
     // 湖
     var lakeJson = lakeJsons[this.option.lakeIndex]

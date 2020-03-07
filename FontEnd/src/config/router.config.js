@@ -139,7 +139,7 @@ export const asyncRouterMap = [
               }
             ]
           },
-          // case 案件
+          // case 案件列表 案件查询
           {
             path: 'case',
             redirect: '/data-manage/case/case-list',
