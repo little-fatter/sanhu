@@ -48,7 +48,7 @@ namespace FastDev.Service
                 base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
                 QueryDb.AbortTransaction();
                 return false;
