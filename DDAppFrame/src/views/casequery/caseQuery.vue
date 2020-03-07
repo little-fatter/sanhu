@@ -26,33 +26,32 @@
       />
     </van-dropdown-menu>
     <div class="case-panel-roll">
-      <s-list :dataCallback="loadData" ref="mylist" >
+      <s-list :dataCallback="loadData" ref="mylist">
         <div
           class="panel_one"
           v-for="(item,index) in caseList"
           :key="item.ID+index"
-          @click="goCaseDetails(item.ID)">
-          <van-cell :title="item.CauseOfAction" size="large" />
+          @click="goCaseDetails(item.ID)"
+        >
+          <van-cell :title="item.CauseOfAction" />
           <p>
-            <span>当事人</span>
+            <span>当事人：</span>
             <span v-if="item.LawPartys && item.LawPartys.length>0">
               <span v-for="(msg,i) in item.LawPartys" :key="i+'@'">{{ msg.Name }}</span>
             </span>
-            <span v-else>
-              测试数据
-            </span>
+            <span v-else>测试数据</span>
           </p>
           <p>
-            <span>办案人</span>
+            <span>办案人：</span>
             <span>{{ item.Investigators? item.Investigators:'测试数据' }}</span>
           </p>
-          <p class="case-tag">
+          <h4 class="case-tag">
             <van-tag plain>{{ item.CaseNumber }}</van-tag>
             <!-- <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>-->
-            <van-tag plain>简易程序</van-tag>
-            <van-tag plain>{{ item.CaseStatus?item.CaseStatus:`已创建` }}</van-tag>
+            <van-tag plain type="primary">简易程序</van-tag>
+            <van-tag plain type="warning">{{ item.CaseStatus?item.CaseStatus:`已创建` }}</van-tag>
             <span>{{ item.ModifyDate }}</span>
-          </p>
+          </h4>
         </div>
       </s-list>
     </div>
@@ -100,12 +99,14 @@ export default {
           op: 'like',
           value: this.serchText,
           type: 'string'
-        }, {
+        },
+        {
           field: 'CaseTitle', // 案件标题
           op: 'like',
           value: this.serchText,
           type: 'string'
-        }, {
+        },
+        {
           field: 'Investigators', // 办案人员
           op: 'like',
           value: this.serchText,
@@ -121,17 +122,20 @@ export default {
               op: 'equal',
               value: this.searchType,
               type: 'string'
-            }, {
+            },
+            {
               field: 'ApplicableProcedureID', //
               value: this.serchFlow,
               op: 'equal',
               type: 'select'
-            }, {
+            },
+            {
               field: 'CaseStatus', // 案件状态
               op: 'equal',
               value: this.serchState,
               type: 'string'
-            }, {
+            },
+            {
               field: 'RegionID', // 地区区域
               op: 'equal',
               value: this.serchRegion,
@@ -217,12 +221,14 @@ export default {
             op: 'like',
             value: this.searchText,
             type: 'string'
-          }, {
+          },
+          {
             field: 'CaseTitle', // 案件标题
             op: 'like',
             value: this.searchText,
             type: 'string'
-          }, {
+          },
+          {
             field: 'Investigators', // 办案人员
             op: 'like',
             value: this.searchText,
@@ -231,7 +237,12 @@ export default {
         ]
       }
       var conditon = getQueryConditon(rules, 'or')
-      return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
+      return getPageDate(
+        'case_Info',
+        parameter.pageIndex,
+        parameter.pageSize,
+        conditon
+      ).then(res => {
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.caseList.push(item)
@@ -246,13 +257,17 @@ export default {
     loadDataMore () {
       this.dealParameter()
       const newGroups = this.groups[0].rules.filter(item => {
-        return item.value !== '' && item.value !== undefined && item.value !== '0'
+        return (
+          item.value !== '' && item.value !== undefined && item.value !== '0'
+        )
       })
       var groups = []
-      groups = [ {
-        rules: newGroups,
-        op: 'and'
-      }]
+      groups = [
+        {
+          rules: newGroups,
+          op: 'and'
+        }
+      ]
       // console.log(newGroups.length, '新的规则数组长度')
 
       if (newGroups.length > 0 && isNotEmpty(this.serchText)) {
@@ -313,16 +328,18 @@ export default {
 * {
   box-sizing: border-box;
 }
+
 .case-panel-roll {
   /* background-color: #e2e2e2 !important; */
-  background-color: #fff !important;
+  background-color: #f6f6f6 !important;
   display: table;
   width: 100%;
   min-height: 90vh;
 }
+
 .panel_one {
   border-radius: 0.3rem;
-  background-color: #f9f9f9;
+  background-color: #fff;
   width: calc(100% - 0.52rem);
   margin-left: 0.26rem;
   margin-right: 0.56rem;
@@ -330,39 +347,54 @@ export default {
   overflow: hidden;
   padding: 0 0.26rem 0.26rem 0.26rem;
 }
+
 .panel_one .van-cell {
-     background-color: #f9f9f9;
-  padding: 0.32rem 0px !important;
+  background-color: #fff;
+  padding: 0.22rem 0px !important;
+  margin-bottom: 0.12rem;
 }
+
 .panel_one .van-cell:not(:last-child)::after {
   border-bottom: 0.02667rem solid #ddd;
   left: 0;
 }
-.panel_one p {
-  margin-top: 0.24rem;
+.panel_one .van-cell__title {
+  font-weight: bold;
+  color: #64697c;
 }
-panel_one p span {
+
+.panel_one p {
+  margin-top: 0.15rem;
+}
+.panel_one p span {
   display: inline-block;
+  color: #7f87ae;
 }
 .panel_one p span:first-child {
-  color: #323232;
-  margin-right: 0.26rem;
+  margin-right: 0rem;
 }
+
 .case-tag {
   display: flex;
   justify-content: space-between;
   margin-top: 0.26rem;
   align-items: center;
-}
-.case-tag > span:first-child {
-  color: #666 !important;
-  margin-right: 0rem !important;
+  margin: 0px;
+  padding: 0px;
+  margin-top: 0.25rem;
 }
 .case-tag > span {
   font-size: 0.28rem;
-  color: #666;
+  /*color: #666;*/
 }
-.case-tag > span::after {
-  border-color: #c5c5c5;
+.case-tag > span:first-child {
+  color: #a1a6ba !important;
+  margin-right: 0rem !important;
+}
+.case-tag > span:first-child::after {
+  border-color: #a1a6ba !important;
+}
+.case-tag > span:last-child {
+  color: #a1a6ba;
 }
 </style>

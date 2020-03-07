@@ -20,11 +20,13 @@
     <my-events-count
       class="my-events-count border-radius box-shadow-style"
       ref="myEventsCount"
+      v-show="show1"
     />
     <my-alert-event-list
       class="my-alert-event-list border-radius box-shadow-style"
       :aftetItemClick="afterAlertListItemClick"
       ref="myAlertEventList"
+      v-show="show1"
     />
     <my-person-list
       class="my-person-list border-radius box-shadow-style"
@@ -34,6 +36,7 @@
       :afterClickOpenVideo="openVideo"
       :afterClickOpenVoice="openVoice"
       :afterClickOpenPhone="openPhone"
+      v-show="show1"
     />
     <people-info-box
       class="my-people-info-box border-radius box-shadow-style"
@@ -101,7 +104,8 @@ export default {
       size: {
         width: 500,
         height: 500
-      }
+      },
+      show1: true // 为了演示,去掉不展示的部分
     }
   },
   computed: {
