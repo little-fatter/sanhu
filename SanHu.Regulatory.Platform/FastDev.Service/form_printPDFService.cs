@@ -6,6 +6,9 @@ using FastDev.Model.Entity;
 using System.IO;
 using FD.Common.Helpers;
 using Aspose.Words;
+using System.Reflection;
+using System.Collections.Generic;
+using System.Text;
 
 namespace FastDev.Service
 {
@@ -39,8 +42,8 @@ namespace FastDev.Service
                 var s = DataAccessHelper.GetEntityType(data.formName);
                 var ss = s.Assembly.CreateInstance(s.ToString());
 
-                var sql = PetaPoco.Sql.Builder
-                    .Append("select * from @0", data.formName);
+                //var sql = PetaPoco.Sql.Builder
+                //    .Append("select * from @0", data.formName);
                 //.Append("LEFT JOIN Task ta ON subt.TaskId=ta.Id");
 
                 //QueryDb.Query<subtask>
@@ -137,9 +140,60 @@ namespace FastDev.Service
             return "";
         }
 
-        private void test(Form_printPDFReq data)
+        /// <summary>
+        /// 测试将html中的标签替换为类中的属性名的属性
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="html"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        private string test<T>(Form_printPDFReq data,string html, T source)
         {
-            var classType = DataAccessHelper.GetEntityType(data.formName);
+            //工具
+            var tool = DataAccessHelper.GetEntityType(source.ToString());
+            //手写
+            var classType = source.GetType();
+            StringBuilder tempHtml = new StringBuilder(html);
+            foreach (var item in classType.GetRuntimeProperties())
+            {
+                var type = item.PropertyType.Name;
+                var IsGenericType = item.PropertyType.IsGenericType;
+                var list = item.PropertyType.GetInterface("IEnumerable", false);
+                string vs = ($"属性名称：{item.Name}，类型：{type}，值：{item.GetValue(source)}");
+
+                //替换数据
+                tempHtml = tempHtml.Replace($"%{item.Name}%", $"item.GetValue(source)");
+
+                //若有IEnumerable等List的话
+                //if (IsGenericType && list != null)
+                //{
+                //    var listVal = item.GetValue(source) as IEnumerable<object>;
+                //    if (listVal == null) continue;
+                //    foreach (var aa in listVal)
+                //    {
+                //        var dtype = aa.GetType();
+                //        foreach (var bb in dtype.GetProperties())
+                //        {
+                //            var dtlName = bb.Name.ToLower();
+                //            var dtlType = bb.PropertyType.Name;
+                //            var oldValue = bb.GetValue(aa);
+                //            if (dtlType == typeof(decimal).Name)
+                //            {
+                //                int dit = 4;
+                //                if (dtlName.Contains("price") || dtlName.Contains("amount"))
+                //                    dit = 2;
+                //                bb.SetValue(aa, Math.Round(Convert.ToDecimal(oldValue), dit, MidpointRounding.AwayFromZero));
+                //            }
+                //            Console.WriteLine($"子级属性名称：{dtlName}，类型：{dtlType}，值：{oldValue}");
+                //        }
+                //    }
+                //}
+
+            }
+            return tempHtml.ToString();
+
+
         }
     }
 }
