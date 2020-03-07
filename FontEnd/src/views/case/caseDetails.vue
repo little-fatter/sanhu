@@ -5,7 +5,7 @@
 
   .case-box {
     background-color: #F4F3F3;
-    height: 100vh;
+    // height: 100vh;
     overflow: auto;
 
     .case-top {
@@ -286,6 +286,7 @@ export default {
   components: { STable },
   data () {
     return {
+      IdInfo: [], // 接收路由过来的ID信息
       caseId: '', // 案件ID
       caseInfo: {}, // 案件信息
       EventInfoId: '', // 事件ID
@@ -436,8 +437,9 @@ export default {
   },
   mounted () {
     // 接收路由传参
-    this.caseId = this.$route.params.caseId
-    this.EventInfoId = this.$route.params.EventInfoId
+    this.IdInfo = this.$route.params.IdInfo
+    this.caseId = this.IdInfo[0]
+    this.EventInfoId = this.IdInfo[1]
     // 获取案件信息
     this.getCaseInfo()
     // 获取当事人信息

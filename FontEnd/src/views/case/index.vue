@@ -346,7 +346,6 @@ export default {
       }
       var data = allParameter.rules.filter(item => { return isNotEmpty(item.value) })
       allParameter.rules = data
-      console.log(allParameter)
       return getPageData('case_Info', allParameter, parameter.pageIndex, parameter.pageSize)
         .then(res => {
           return res
@@ -408,7 +407,8 @@ export default {
     },
     // 查看案件详情跳转
     gotoDetail (caseId, EventInfoId) {
-      this.$router.push({ name: 'caseDetails', params: { caseId: caseId, EventInfoId: EventInfoId } }) // 案件id
+      var IdInfo = [caseId, EventInfoId]
+      this.$router.push({ name: 'caseDetails', params: { IdInfo: IdInfo } }) // 案件id
     }
   },
   mounted () {
