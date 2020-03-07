@@ -29,24 +29,50 @@
     }
 
     .case-serch-bar {
+      display: flex;
+      justify-content: space-between;
+      .search-input {
+        flex: 1;
+        margin-right: 10px;
+        .search-input-ul {
+          width: 100%;
+          list-style: none;
+          padding: 0px;
+          margin: 0px;
+          display: flex;
+          justify-content: space-between;
+          .search-input-ul-li {
+            width: 19%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        }
+      }
       .maigin-top {
         margin-top: 20px;
       }
       .searchBar {
-        color: #7F87AE;
+        color: #7f87ae;
       }
-      .flex {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
-      }
-
-      /*.input-width {
-          width: 160px !important;
-        }*/
+    }
+    .search-input-ul-li span {
+      width: 35%;
+    }
+    .search-input-ul-li div,.search-input-ul-li input {
+      width: 65%;
+    }
+    .two{
+      margin-top: 12px !important;
+      justify-content: flex-start !important;
+    }
+    .two li{
+      margin-right: 1.2%;
+    }
+    .special{
+      width: 36% !important;
     }
   }
-
   .case-body {
     // margin-top: 15px;
   }
@@ -57,75 +83,60 @@
     <div class="case-top">
       <!-- <h5>案件档案列表</h5> -->
       <div class="case-serch-bar">
-        <a-row>
-          <a-col :span="22" class="searchBar">
-            <a-row>
-              <a-col :span="5">
-                <span>案件类型：</span>
-                <a-select style="width:70%" v-model="caseType">
-                  <a-select-option value="全部">全部</a-select-option>
-                  <a-select-option value="水政">水政</a-select-option>
-                  <a-select-option value="渔政">渔政</a-select-option>
-                  <a-select-option value="环保">环保</a-select-option>
-                </a-select>
-              </a-col>
-              <a-col :span="5">
-                <span>案件程序：</span>
-                <a-select style="width:70%" v-model="caseCourse">
-                  <a-select-option value="全部">全部</a-select-option>
-                  <a-select-option value="一般程序">一般程序</a-select-option>
-                  <a-select-option value="简易程序">简易程序</a-select-option>
-                  <a-select-option value="移交程序">移交程序</a-select-option>
-                  <a-select-option value="初查核实">初查核实</a-select-option>
-                  <a-select-option value="受理程序">受理程序</a-select-option>
-                </a-select>
-              </a-col>
-              <a-col :span="5">
-                <span>案件状态：</span>
-                <a-select style="width:70%" v-model="caseState">
-                  <a-select-option value="全部">全部</a-select-option>
-                  <a-select-option value="已完成">已完成</a-select-option>
-                  <a-select-option value="办理中">办理中</a-select-option>
-                </a-select>
-              </a-col>
-              <a-col :span="5">
-                <span>案件区域：</span>
-                <a-select style="width:70%" v-model="caseDistrict">
-                  <a-select-option value="全部">全部</a-select-option>
-                  <a-select-option value="抚仙湖">抚仙湖</a-select-option>
-                  <a-select-option value="星云湖">星云湖</a-select-option>
-                  <a-select-option value="杞麓湖">杞麓湖</a-select-option>
-                </a-select>
-              </a-col>
-              <a-col :span="4" style="display:flex;">
-                <span class="ant-col-5">办案人：</span>
-                <a-input v-model="caseLaw" placeholder="请输入办案人名称" />
-              </a-col>
-            </a-row>
-            <a-row class="mt10">
-              <a-col :span="5" style="display:flex;">
-                <span class="ant-col-5">&nbsp;&nbsp;&nbsp;&nbsp;当事人：</span>
-                <a-input v-model="caseBreakLow" placeholder="请输入当事人名称" style="width:70%" />
-              </a-col>
-              <a-col :span="5" style="display:flex;">
-                <span class="ant-col-5">&nbsp;&nbsp;&nbsp;&nbsp;案件号：</span>
-                <a-input v-model="caseNumber" placeholder="请输入案件号" style="width:70%" />
-              </a-col>
-              <a-col :span="5" style="display:flex;">
-                <span class="ant-col-5">处罚决定书编号：</span>
-                <a-input v-model="caseJudgementNum" placeholder="请输入编号" style="width:70%" />
-              </a-col>
-              <a-col :span="9">
-                <span class="ant-col-3">案发时间：</span>
-                <a-range-picker @change="onChange" class="ant-col-21" />
-              </a-col>
-            </a-row>
-          </a-col>
-          <a-col :span="2" style="display:flex;justify-content:flex-end;align-items: flex-end;">
-            <a-button @click="searchBtn" type="primary" class="mr10">搜索</a-button>
-            <a-button @click="resetBtn" type="default">重置</a-button>
-          </a-col>
-        </a-row>
+        <div class="search-input">
+          <ul class="search-input-ul">
+            <li class="search-input-ul-li">
+              <span>案件类型：</span>
+              <a-select v-model="caseType">
+                <a-select-option v-for="item in Case_Type" :key="item.ID+'@'" :value="item.ItemCode" >{{ item.Title }}</a-select-option>
+              </a-select>
+            </li>
+            <li class="search-input-ul-li">
+              <span>案件程序：</span>
+              <a-select v-model="caseCourse">
+                <a-select-option value="全部">全部</a-select-option>
+              </a-select>
+            </li>
+            <li class="search-input-ul-li">
+              <span>案件状态：</span>
+              <a-select v-model="caseState">
+                <a-select-option value="全部">全部</a-select-option>
+              </a-select>
+            </li>
+            <li class="search-input-ul-li">
+              <span>案件区域：</span>
+              <a-select v-model="caseDistrict">
+                <a-select-option value="全部">全部</a-select-option>
+              </a-select>
+            </li>
+            <li class="search-input-ul-li">
+              <span>办案人：</span>
+              <a-input v-model="caseLaw" placeholder="请输入办案人名称" />
+            </li>
+          </ul>
+          <ul class="search-input-ul two">
+            <li class="search-input-ul-li">
+              <span>当事人：</span>
+              <a-input v-model="caseBreakLow" placeholder="请输入当事人名称" />
+            </li>
+            <li class="search-input-ul-li">
+              <span>案件号：</span>
+              <a-input v-model="caseNumber" placeholder="请输入案件号" />
+            </li>
+            <li class="search-input-ul-li">
+              <span>处罚决定书编号：</span>
+              <a-input v-model="caseJudgementNum" placeholder="请输入编号" />
+            </li>
+            <li class="search-input-ul-li special">
+              <span style="width: 18%;">案发时间：</span>
+              <a-range-picker style="width: 81%" @change="onChange" />
+            </li>
+          </ul>
+        </div>
+        <div class="case-btn">
+          <a-button @click="searchBtn" type="primary" class="mr10">搜索</a-button>
+          <a-button @click="resetBtn" type="default">重置</a-button>
+        </div>
       </div>
     </div>
     <div class="case-body">
@@ -177,16 +188,6 @@ export default {
   },
   data: function () {
     return {
-      current: 2,
-      caseType: '全部', // 案件类型
-      caseCourse: '全部', // 案件程序
-      caseState: '全部', // 案件状态
-      caseDistrict: '全部', // 区域
-      caseLaw: '', // 办案人员  执法人员
-      caseBreakLow: '', // 当事人 , 违法人员
-      caseTime: [], // 案发时间
-      caseNumber: '', // 案件编号
-      caseJudgementNum: '', // 处罚决定文书号
       columns: [
         {
           title: '案件编号',
@@ -249,7 +250,10 @@ export default {
         }
       ],
 
-      data: []
+      data: [],
+      Case_Type: [], // 案件类型
+      CaseSourceType: [], // 案件来源
+      CaseApplicableProcedureType: []// 处理程序
     }
   },
   methods: {
@@ -276,12 +280,49 @@ export default {
           console.log(err)
         })
     },
+    // 获取案件类型
+    getCaseType () {
+      getDictionary({ model: 'res_dictionary', context: 'CaseType' }).then(res => {
+        res.map(item => {
+          this.Case_Type.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取案件来源
+    getCaseSourceType () {
+      getDictionary({ model: 'res_dictionary', context: 'CaseSourceType' }).then(res => {
+        res.map(item => {
+          this.CaseSourceType.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取案件适用程序
+    getApplicableProcedureType () {
+      getDictionary({ model: 'res_dictionary', context: 'ApplicableProcedureType' }).then(res => {
+        res.map(item => {
+          this.CaseApplicableProcedureType.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     // 查看案件详情跳转
     gotoDetail (caseId, EventInfoId) {
       this.$router.push({ name: 'caseDetails', params: { caseId: caseId, EventInfoId: EventInfoId } }) // 案件id
     }
   },
-  mounted () {}
+  mounted () {
+    // 获案件类型
+    this.getCaseType()
+    // 获取案件来源
+    this.getCaseSourceType()
+    // 获取案件适用程序
+    this.getApplicableProcedureType()
+  }
 }
 </script>
 <style scoped>

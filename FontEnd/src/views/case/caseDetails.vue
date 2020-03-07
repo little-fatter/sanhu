@@ -129,7 +129,7 @@
       </div>
     </div>
     <div class="case-body">
-      <a-tabs class="tabs" @change="callback" type="card" :tabBarGutter="tabBarGutterNum">
+      <a-tabs class="tabs" type="card" :tabBarGutter="tabBarGutterNum">
         <a-tab-pane class="tabsBody" tab="基本信息" key="1">
           <a-card class="tabsCard" style="margin-top: -17px">
             <ul>
@@ -329,9 +329,9 @@ export default {
         /*      onChange: (selectedRowKeys, selectedRows) => {
                   console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
                 }, */
-        onSelect: (record, selected, selectedRows) => {
-          console.log(record, selected, selectedRows)
-        }
+        // onSelect: (record, selected, selectedRows) => {
+        //   console.log(record, selected, selectedRows)
+        // }
         /* onSelectAll: (selected, selectedRows, changeRows) => {
              console.log(selected, selectedRows, changeRows)
            } */
@@ -340,12 +340,12 @@ export default {
   },
   methods: {
     // tab切换
-    callback (key) {
-      if (key === 2) {
-        // 获取事件信息
-        this.getEvenInfo()
-      }
-    },
+    // callback (key) {
+    //   if (key === 2) {
+    //     // 获取事件信息
+    //     this.getEvenInfo()
+    //   }
+    // },
     // 地图查看
     viewMap () {
       this.visible = true
@@ -357,6 +357,7 @@ export default {
     },
     // 获取案件详情
     getCaseInfo () {
+      console.log('getCaseInfo')
       getDetails('case_Info', this.caseId)
         .then(res => {
           this.caseInfo = res
@@ -442,6 +443,8 @@ export default {
     this.getCaseInfo()
     // 获取当事人信息
     this.getLawPartysInfo()
+    // 获取事件信息
+    this.getEvenInfo()
   }
 }
 </script>
