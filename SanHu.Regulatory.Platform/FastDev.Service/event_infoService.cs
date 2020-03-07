@@ -106,21 +106,23 @@ namespace FastDev.Service
         {
             List<object> retList = new List<object>();
 
-            QueryDb.BeginTransaction();
-            try
-            {
+            //QueryDb.BeginTransaction();
+          
+          
+            //try
+            //{
                 retList.Add(new { TypeName = "钉钉", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='DD_REPORT' and OriginalID is not null") });
                 retList.Add(new { TypeName = "微信", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='WX_REPORT' and OriginalID is not null") });
                 retList.Add(new { TypeName = "AI告警", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='AI_REPORT' and OriginalID is not null") });
                 retList.Add(new { TypeName = "APP", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='APP_REPORT' and OriginalID is not null") });
                 retList.Add(new { TypeName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='OTHER' and OriginalID is not null") });
-            }
-            catch (Exception e)
-            {
-                QueryDb.AbortTransaction();
-                throw e;
-            }
-            QueryDb.CompleteTransaction();
+            //}
+            //catch (Exception e)
+            //{
+            //    QueryDb.AbortTransaction();
+            //    throw e;
+            //}
+            //QueryDb.CompleteTransaction();
             
             return retList;
         }
@@ -129,20 +131,20 @@ namespace FastDev.Service
         {
             List<object> retList = new List<object>();
 
-            QueryDb.BeginTransaction();
-            try
-            {
+            //QueryDb.BeginTransaction();
+            //try
+            //{
                 retList.Add(new { StateName = "待受理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where (evtState='unAccept' or (evtState!='unAccept' and evtState!='doing' and evtState!='done')) and OriginalID is not null ") });
                 retList.Add(new { StateName = "处理中", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='doing' and OriginalID is not null") });
                 retList.Add(new { StateName = "已处理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='done' and OriginalID is not null") });
                 //retList.Add(new { StateName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState!='unAccept' and evtState!='doing' and evtState!='done' ") });
-            }
-            catch (Exception e)
-            {
-                QueryDb.AbortTransaction();
-                throw e;
-            }
-            QueryDb.CompleteTransaction();
+            //}
+            //catch (Exception e)
+            //{
+            //    QueryDb.AbortTransaction();
+            //    throw e;
+            //}
+            //QueryDb.CompleteTransaction();
             
             return retList;
         }
