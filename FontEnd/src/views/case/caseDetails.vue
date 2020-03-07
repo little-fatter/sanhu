@@ -436,13 +436,8 @@ export default {
   },
   mounted () {
     // 接收路由传参
-    // this.caseId = this.$route.params.caseId
-    // this.EventInfoId = this.$route.params.EventInfoId
-    sessionStorage.caseId = this.$route.params.caseId
-    sessionStorage.EventInfoId = this.$route.params.caseId
-    this.caseId = sessionStorage.caseId
-    this.EventInfoId = sessionStorage.EventInfoId
-    console.log(this.caseId, this.EventInfoId)
+    this.caseId = this.$route.params.caseId
+    this.EventInfoId = this.$route.params.EventInfoId
     // 获取案件信息
     this.getCaseInfo()
     // 获取当事人信息
