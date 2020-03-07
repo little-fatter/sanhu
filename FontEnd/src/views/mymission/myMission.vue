@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import { getWorkTaskList, getUser, getDictionary } from '@/api/sampleApi'
+import { getPageData, getUser, getDictionary } from '@/api/sampleApi'
 import { isNotEmpty } from '@/utils/util'
 
 export default {
@@ -252,7 +252,7 @@ export default {
       this.loading = true
       this.dealParamters()
       if (this.paramters.rules.length > 0) {
-        getWorkTaskList(this.paramters, this.PageIndex, this.PageSize).then(res => {
+        getPageData(this.paramters, this.PageIndex, this.PageSize, 'work_task').then(res => {
           this.dataList = res.Rows
           this.totalCount = res.Total
           this.loading = false
@@ -261,7 +261,7 @@ export default {
           console.log(err)
         })
       } else {
-        getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
+        getPageData([], this.PageIndex, this.PageSize, 'work_task').then(res => {
           this.loading = false
           this.dataList = res.Rows
           this.totalCount = res.Total
@@ -270,12 +270,6 @@ export default {
           console.log(err)
         })
       }
-      // getWorkTaskList([], this.PageIndex, this.PageSize).then(res => {
-      //   this.dataList = res.Rows
-      //   this.totalCount = res.Total
-      // }).catch((err) => {
-      //   console.log(err)
-      // })
     },
     searchList () {
       this.PageIndex = 1

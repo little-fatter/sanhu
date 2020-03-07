@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import { getRelateForm, getEventDetails, getTaskDetails } from '@/api/sampleApi'
+import { getRelateForm, getDetails } from '@/api/sampleApi'
 
 export default {
   name: 'EventInspection',
@@ -192,7 +192,7 @@ export default {
     },
     // 获取事件信息详情
     getDetail () {
-      getEventDetails(this.eventId).then(res => {
+      getDetails('event_info', this.eventId).then(res => {
         this.data = res
       }).catch(err => {
         console.log(err)
@@ -219,7 +219,7 @@ export default {
     },
     // 获取任务详情
     getMissionDetail () {
-      getTaskDetails(this.Id).then(res => {
+      getDetails('work_task', this.Id).then(res => {
         this.missionData = res
         this.getRelateForm()
       }).catch(err => {

@@ -254,7 +254,7 @@ padding:40px;
 
 <script>
 import detailEnforce from './fromComponents/detail-enforce'
-import { getFromPatrolRecord, printPreview } from '@/api/sampleApi'
+import { getDetails, printPreview } from '@/api/sampleApi'
 import detailPunish from './fromComponents/detail-punish'
 export default {
   name: 'FormDetails',
@@ -276,7 +276,7 @@ export default {
   methods: {
     // 获取表单详情
     getFromPatrolRecord () {
-      getFromPatrolRecord(this.formId).then(res => {
+      getDetails('form_patrolRecord', this.formId).then(res => {
         this.detailData = res
       }).catch(err => {
         console.log(err)
