@@ -1,7 +1,7 @@
 import { getHttp, postHttp } from '@/utils/apiRequest'
 import apiConfig from '@/config/api.config'
 
-function condition (params = [], pageiIndex = 1, pageSize = 10) {
+function condition (params = {}, pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
@@ -15,7 +15,7 @@ function condition (params = [], pageiIndex = 1, pageSize = 10) {
   }
 }
 
-function relatedCon (params = [], pageiIndex = 1, pageSize = 10) {
+function relatedCon (params = {}, pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: params

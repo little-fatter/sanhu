@@ -87,55 +87,55 @@
           <ul class="search-input-ul">
             <li class="search-input-ul-li">
               <span>案件类型：</span>
-              <a-select v-model="caseType">
-                <a-select-option v-for="item in Case_Type" :key="item.ID+'@'" :value="item.ItemCode" >{{ item.Title }}</a-select-option>
+              <a-select placeholder="请选择" v-model="s_case_type">
+                <a-select-option v-for="item in Case_Type" :key="item.ID+'@'" :value="item.ItemCode">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
-              <span>案件程序：</span>
-              <a-select v-model="caseCourse">
-                <a-select-option value="全部">全部</a-select-option>
+              <span>适用程序：</span>
+              <a-select placeholder="请选择" v-model="s_case_ApplicableProcedureType">
+                <a-select-option v-for="item in CaseApplicableProcedureType" :key="item.ID+'@'" :value="item.ID">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
               <span>案件状态：</span>
-              <a-select v-model="caseState">
-                <a-select-option value="全部">全部</a-select-option>
+              <a-select placeholder="请选择" v-model="s_case_CaseStatus">
+                <a-select-option v-for="item in CaseStatusArr" :key="item.ID+'@'" :value="item.Title">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
               <span>案件区域：</span>
-              <a-select v-model="caseDistrict">
-                <a-select-option value="全部">全部</a-select-option>
+              <a-select placeholder="请选择" v-model="s_case_CaseRegion">
+                <a-select-option v-for="item in CaseRegion" :key="item.ID+'@'" :value="item.ID">{{ item.Title }}</a-select-option>
               </a-select>
             </li>
             <li class="search-input-ul-li">
               <span>办案人：</span>
-              <a-input v-model="caseLaw" placeholder="请输入办案人名称" />
+              <a-input v-model="s_case_LawName" placeholder="请输入办案人名称" />
             </li>
           </ul>
           <ul class="search-input-ul two">
             <li class="search-input-ul-li">
               <span>当事人：</span>
-              <a-input v-model="caseBreakLow" placeholder="请输入当事人名称" />
+              <a-input v-model="s_case_BreakLow" placeholder="请输入当事人名称" />
             </li>
             <li class="search-input-ul-li">
               <span>案件号：</span>
-              <a-input v-model="caseNumber" placeholder="请输入案件号" />
+              <a-input v-model="s_case_Number" placeholder="请输入案件号" />
             </li>
             <li class="search-input-ul-li">
               <span>处罚决定书编号：</span>
-              <a-input v-model="caseJudgementNum" placeholder="请输入编号" />
+              <a-input v-model="s_case_JudgementNum" placeholder="请输入编号" />
             </li>
             <li class="search-input-ul-li special">
               <span style="width: 18%;">案发时间：</span>
-              <a-range-picker style="width: 81%" @change="onChange" />
+              <a-range-picker style="width: 81%" @change="onTime" />
             </li>
           </ul>
         </div>
         <div class="case-btn">
-          <a-button @click="searchBtn" type="primary" class="mr10">搜索</a-button>
-          <a-button @click="resetBtn" type="default">重置</a-button>
+          <a-button @click="onSearch" type="primary" class="mr10">搜索</a-button>
+          <a-button @click="onReset" type="default">重置</a-button>
         </div>
       </div>
     </div>
@@ -180,7 +180,7 @@
 <script>
 import { getPageData, getDictionary } from '@/api/sampleApi'
 import STable from '@/components/table/'
-import { isNotEmpty } from '@/utils/util'
+// import { isNotEmpty } from '@/utils/util'
 export default {
   name: 'CaseList',
   components: {
@@ -249,25 +249,28 @@ export default {
           scopedSlots: { customRender: 'details' }
         }
       ],
-
       data: [],
       Case_Type: [], // 案件类型
-      CaseSourceType: [], // 案件来源
-      CaseApplicableProcedureType: []// 处理程序
+      CaseApplicableProcedureType: [], // 适用程序
+      CaseStatusArr: [], // 案件状态
+      CaseRegion: [], // 案件区域
+      // 搜索规则组  按顺序展示
+      s_case_type: '请选择',
+      s_case_ApplicableProcedureType: '请选择',
+      s_case_CaseStatus: '请选择',
+      s_case_CaseRegion: '请选择',
+      s_case_LawName: '', // 办案人名称
+      s_case_BreakLow: '', // 当事人名称"
+      s_case_Number: '', // 案件号
+      s_case_JudgementNum: '', // 处罚决定书编号
+      s_case_Time: [] // 案发时间
     }
   },
   methods: {
     // 案发时间  时间选择器
-    onChange: function (date, dateString) {
-      this.caseTime = dateString
-      console.log(this.caseTime) // data中 案发时间
+    onTime (date, dateString) {
+      this.s_case_Time = dateString
     },
-    // 搜索按钮
-    searchBtn () {
-      console.log(this.caseType, this.caseCourse)
-    },
-    // 重置搜索俺就
-    resetBtn () {},
     // 获取案件列表
     loadData (parameter) {
       // 这里拼搜索参数
@@ -280,8 +283,9 @@ export default {
           console.log(err)
         })
     },
-    // 获取案件类型
-    getCaseType () {
+    // 搜索菜单字典获取
+    getsearchMenu () {
+      // 获取案件类型
       getDictionary({ model: 'res_dictionary', context: 'CaseType' }).then(res => {
         res.map(item => {
           this.Case_Type.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
@@ -289,19 +293,7 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
-    },
-    // 获取案件来源
-    getCaseSourceType () {
-      getDictionary({ model: 'res_dictionary', context: 'CaseSourceType' }).then(res => {
-        res.map(item => {
-          this.CaseSourceType.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
-    // 获取案件适用程序
-    getApplicableProcedureType () {
+      // 适用程序
       getDictionary({ model: 'res_dictionary', context: 'ApplicableProcedureType' }).then(res => {
         res.map(item => {
           this.CaseApplicableProcedureType.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
@@ -309,6 +301,104 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+      // 案件处状态
+      getDictionary({ model: 'res_dictionary', context: 'CaseStatus' }).then(res => {
+        res.map(item => {
+          this.CaseStatusArr.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+      // 案件区域
+      getDictionary({ model: 'res_dictionary', context: 'Lake' }).then(res => {
+        res.map(item => {
+          this.CaseRegion.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 按条件搜索
+    onSearch () {
+      // 这里拼搜索参数
+      var allParameter = {
+        rules: [
+          {
+            field: 'CaseType', // 案件类型
+            op: 'like',
+            value: this.s_case_type,
+            type: 'string'
+          },
+          {
+            field: 'ApplicableProcedureID', // 适用程序
+            value: this.s_case_ApplicableProcedureType,
+            op: 'in',
+            type: 'select'
+          },
+          {
+            field: 'CaseStatus', // 案件状态
+            op: 'like',
+            value: this.s_case_CaseStatus,
+            type: 'string'
+          },
+          {
+            field: 'RegionID', // 案件区域
+            op: 'like',
+            value: this.s_case_CaseRegion,
+            type: 'select'
+          },
+          {
+            field: 'Investigators',
+            op: 'like',
+            value: this.s_case_LawName, // 办案人名称
+            type: 'string'
+          },
+          {
+            field: 'PenaltyDecisionNo', // 当事人
+            op: 'like',
+            value: this.s_case_BreakLow,
+            type: 'string'
+          },
+          {
+            field: 'CaseNumber', // 案件编号
+            op: 'like',
+            value: this.s_case_Number,
+            type: 'string'
+          },
+          {
+            field: 'PenaltyDecisionNo', // 处罚决定书编号
+            op: 'like',
+            value: this.s_case_JudgementNum,
+            type: 'string'
+          },
+          // 案发时间组
+          {
+            field: 'IncidentTime',
+            op: 'greaterorequal',
+            value: this.s_case_Time[0],
+            type: 'datepicker'
+          },
+          {
+            field: 'IncidentTime',
+            op: 'lessorequal',
+            value: this.s_case_Time[1],
+            type: 'datepicker'
+          }
+        ],
+        op: 'or' // 搜索关系
+      }
+      return getPageData('case_Info', allParameter, 1, 10)
+        .then(res => {
+          console.log(res)
+          return res
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    // 搜索条件重置
+    onReset () {
+
     },
     // 查看案件详情跳转
     gotoDetail (caseId, EventInfoId) {
@@ -316,12 +406,8 @@ export default {
     }
   },
   mounted () {
-    // 获案件类型
-    this.getCaseType()
-    // 获取案件来源
-    this.getCaseSourceType()
-    // 获取案件适用程序
-    this.getApplicableProcedureType()
+    // 获取案件搜索下拉菜单
+    this.getsearchMenu()
   }
 }
 </script>
