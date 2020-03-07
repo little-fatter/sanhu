@@ -101,5 +101,6 @@
         <models name="case_report" title="结案报告" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="case_cover" title="卷宗封面" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="formwith_eventcase" title="全部表单plus" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="form_printPDF" title="表单打印" textField="Title" moduleName="form" moduleTitle="表单" />
     </models>
 </freedesign>

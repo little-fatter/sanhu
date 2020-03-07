@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\FastDev.RunWeb\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="TopSdk">
       <HintPath>..\libs\TopSdk.dll</HintPath>
     </Reference>
