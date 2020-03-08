@@ -34,8 +34,6 @@
 
 <template>
   <div class="article-wrapper">
-    <div class="logo">
-    </div>
     <div class="article-head">
       <div class="article-title">
         {{ article.Title }}
@@ -54,7 +52,7 @@
 </template>
 
 <script>
-import getDetails from '@/api/sampleApi'
+import { getDetails } from '@/api/sampleApi'
 
 export default {
   data () {
@@ -107,6 +105,8 @@ export default {
       if (ret.statusCode) {
         this.article = ret.data
       }
+    }).catch(err => {
+      console.log(err)
     })
   }
 }

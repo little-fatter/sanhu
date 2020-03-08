@@ -43,13 +43,12 @@ namespace FastDev.Service
                     eventInfo.reportTime = DateTime.Now;
                 }
                 base.Create(eventInfo);
-                //base.Create(postdata);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
                 base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
                 QueryDb.AbortTransaction();
                 return false;
