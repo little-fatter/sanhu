@@ -49,7 +49,7 @@
             <van-tag plain>{{ item.CaseNumber }}</van-tag>
             <!-- <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>-->
             <van-tag plain type="primary">简易程序</van-tag>
-            <van-tag plain type="warning">{{ item.CaseStatus?item.CaseStatus:`已创建` }}</van-tag>
+            <van-tag plain type="success">{{ item.CaseStatus?item.CaseStatus:`已创建` }}</van-tag>
             <span>{{ item.ModifyDate }}</span>
           </h4>
         </div>
@@ -338,14 +338,17 @@ export default {
 }
 
 .panel_one {
-  border-radius: 0.3rem;
+  /* border-radius: 0.3rem; */
+  border-radius: 0rem;
   background-color: #fff;
-  width: calc(100% - 0.52rem);
-  margin-left: 0.26rem;
-  margin-right: 0.56rem;
+  /* width: calc(100% - 0.52rem); */
+  width: calc(100% - 0rem);
+  /* margin-left: 0.26rem;
+  margin-right: 0.56rem; */
   margin-top: 0.3rem;
   overflow: hidden;
-  padding: 0 0.26rem 0.26rem 0.26rem;
+  /* padding: 0 0.26rem 0.26rem 0.26rem; */
+  padding: 0 0.3rem 0.26rem 0.3rem;
 }
 
 .panel_one .van-cell {
@@ -360,7 +363,7 @@ export default {
 }
 .panel_one .van-cell__title {
   font-weight: bold;
-  color: #64697c;
+  color: #111f2c;
 }
 
 .panel_one p {
@@ -372,6 +375,7 @@ export default {
 }
 .panel_one p span:first-child {
   margin-right: 0rem;
+  color: #2b3946;
 }
 
 .case-tag {

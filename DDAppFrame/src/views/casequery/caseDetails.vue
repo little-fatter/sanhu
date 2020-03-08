@@ -63,7 +63,7 @@
           <!-- <van-cell title="上报来源" :value="eventInfo.eventFrom" value-class="con-style" title-class="title-cell" /> -->
           <van-cell title="上报人" :value="eventInfo.reporterName" value-class="con-style" title-class="title-cell" />
           <van-cell title="事件类型" :value="eventInfo.evtTypeDisplayName" value-class="con-style" title-class="title-cell" />
-          <van-cell title="事件描述" :value="eventInfo.remark" value-class="con-style" title-class="title-cell" />
+          <van-cell title="事件描述" :value="eventInfo.remark" value-class="con-style" title-class="title-cell" style="margin-bottom:1.5rem;" />
         </van-cell-group>
       </div>
     </van-panel>
