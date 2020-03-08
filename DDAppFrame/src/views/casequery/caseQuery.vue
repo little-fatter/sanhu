@@ -331,7 +331,7 @@ export default {
 
 .case-panel-roll {
   /* background-color: #e2e2e2 !important; */
-  background-color: #f6f6f6 !important;
+  background-color: #f3f4f6 !important;
   display: table;
   width: 100%;
   min-height: 90vh;

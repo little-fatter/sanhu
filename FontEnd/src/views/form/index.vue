@@ -172,7 +172,7 @@ export default {
       formState: '', // 表单状态
       formTypes: '', // 表单类型
       BInitiationTime: '', // 开始发起时间
-      DInitiationTime: '', // 结束发起时间
+      EInitiationTime: '', // 结束发起时间
       BENDTime: '', // 开始完成时间
       EENDTime: '', // 结束完成时间
       formName: '', // 输入框内容

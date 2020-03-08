@@ -150,13 +150,13 @@ export const asyncRouterMap = [
                 path: 'case-list',
                 name: 'caseList',
                 component: () => import('@/views/case/index'),
-                meta: { title: '案件档案管理', keepAlive: true }
+                meta: { title: '案件档案管理', keepAlive: false }
               },
               {
                 path: 'case-details',
                 name: 'caseDetails',
                 component: () => import('@/views/case/caseDetails'),
-                meta: { title: '案件详情', keepAlive: true }
+                meta: { title: '案件详情', keepAlive: false }
               },
               {
                 path: 'new-case',
