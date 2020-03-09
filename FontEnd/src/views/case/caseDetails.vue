@@ -322,34 +322,27 @@ export default {
       columns: [
         {
           title: '文件名称',
-          dataIndex: 'fileNmae',
-          key: 'fileNmae'
+          dataIndex: 'FormName',
+          key: 'FormName'
         },
         {
           title: '创建时间',
-          dataIndex: 'creationTime',
-          key: 'creationTime'
+          dataIndex: 'InitiationTime',
+          key: 'InitiationTime'
         },
         {
           title: '最后更新时间',
-          dataIndex: 'lastUpdaeTime',
-          key: 'lastUpdaeTime'
+          dataIndex: 'ModifyDate',
+          key: 'ModifyDate'
         },
         {
           title: '创建人',
-          dataIndex: 'founder',
-          key: 'founder'
+          dataIndex: 'OriginatorID',
+          key: 'OriginatorID'
         }
       ],
 
       data: [
-        {
-          key: 1,
-          fileNmae: '巡查记录表',
-          creationTime: '2020-2-28 18:25:23',
-          lastUpdaeTime: '2020-3-1 12:12:02',
-          founder: '王五'
-        }
       ],
       rowSelection: {
         /*      onChange: (selectedRowKeys, selectedRows) => {
@@ -432,7 +425,7 @@ export default {
       var allParameter = {
         rules: [
           {
-            field: 'form_all',
+            field: 'CaseId',
             op: 'equal',
             value: this.caseId, // 案件ID
             type: 'string'
@@ -440,9 +433,9 @@ export default {
         ],
         op: 'and'
       }
-      return getPageData('form_all', allParameter, parameter.pageIndex, parameter.pageSize)
+      return getPageData('formwith_eventcase', allParameter, parameter.pageIndex, parameter.pageSize)
         .then(res => {
-          console.log(res, 123456)
+          console.log(res, 123456789)
           return res
         })
         .catch(err => {

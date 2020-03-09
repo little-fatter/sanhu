@@ -358,7 +358,7 @@ export default {
           // 案发时间组
           {
             field: 'IncidentTime',
-            op: 'less',
+            op: 'greater',
             value: this.s_case_STime,
             type: 'datepicker'
           }, {
@@ -374,7 +374,7 @@ export default {
         return isNotEmpty(item.value)
       })
       allParameter.rules = data
-      console.log(allParameter, 123456)
+      // console.log(allParameter, 123456)
       return getPageData('case_Info', allParameter, parameter.pageIndex, parameter.pageSize)
         .then(res => {
           return res
