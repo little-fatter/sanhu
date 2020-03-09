@@ -18,6 +18,7 @@
         <field name="EventType" dbName="EventType" title="事件类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="NextHandler" dbName="NextHandler" title="下一步用户" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="DingUrl" dbName="DingUrl" title="钉钉Url" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
