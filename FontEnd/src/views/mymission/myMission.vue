@@ -112,7 +112,7 @@
     </div>
 
     <div class="body">
-      <a-card :loading="loading" class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID, item.Tasktype)" :key="item.ID">
+      <a-card :loading="loading" class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID, item.TaskType)" :key="item.ID">
         <div>
           <img style="width:100%;height:200px;" src="../../assets/icons/defPicture.svg" alt="加载失败">
         </div>
@@ -224,12 +224,28 @@ export default {
     },
     // 进入详情页面
     intoDetails (eventId, id, Tasktype) {
-      if (Tasktype) {
-        if (Tasktype === '事件巡查') { this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } }) } else { this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } }) }
-        return
-      }
-      // this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } })
-      this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } })
+      // 现场勘查
+      if (Tasktype === 'OnSpot') { this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } }) }
+      // // 事件核查
+      // if (Tasktype === 'EventCheck') { this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } }) }
+      // // 日常巡查
+      // if (Tasktype === 'DailyPatrol') { this.$router.push({ name: '', params: { eventId: eventId, id: id } }) }
+      // // 案件
+      // if (Tasktype === 'CaseInfo') { this.$router.push({ name: '', params: { eventId: eventId, id: id } }) }
+      // // 现场处罚决定书
+      // if (Tasktype === 'Punishment') { this.$router.push({ name: '', params: { eventId: eventId, id: id } }) }
+      // // 没收物品
+      // if (Tasktype === 'confiscated') { this.$router.push({ name: '', params: { eventId: eventId, id: id } }) }
+      // // 询问笔录
+      // if (Tasktype === 'questionRecord') { this.$router.push({ name: '', params: { eventId: eventId, id: id } }) }
+      // // 勘验笔录
+      // if (Tasktype === 'inquestRecord') { this.$router.push({ name: '', params: { eventId: eventId, id: id } }) }
+      // // 结案报告
+      // if (Tasktype === 'finalReport') {
+      //   // 测试根据事件iD 或 表单id 获取表单详情
+      //   // getFormDetail('', '37bddfff89274d03bd3beb02c3b0d4cd').then(res => { console.log(res) })
+      //   this.$router.push({ name: '', params: { eventId: eventId, id: id } })
+      // }
     },
     // 处理参数
     dealParamters () {
@@ -252,7 +268,7 @@ export default {
       this.loading = true
       this.dealParamters()
       if (this.paramters.rules.length > 0) {
-        getPageData(this.paramters, this.PageIndex, this.PageSize, 'work_task').then(res => {
+        getPageData('work_task', this.paramters, this.PageIndex, this.PageSize).then(res => {
           this.dataList = res.Rows
           this.totalCount = res.Total
           this.loading = false
@@ -261,7 +277,7 @@ export default {
           console.log(err)
         })
       } else {
-        getPageData([], this.PageIndex, this.PageSize, 'work_task').then(res => {
+        getPageData('work_task', [], this.PageIndex, this.PageSize).then(res => {
           this.loading = false
           this.dataList = res.Rows
           this.totalCount = res.Total

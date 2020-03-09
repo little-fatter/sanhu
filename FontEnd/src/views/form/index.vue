@@ -375,7 +375,7 @@ export default {
     },
     loadData (parameter) {
       var queryParam = this.dealParameter()
-      return getPageData(queryParam, parameter.pageIndex, parameter.pageSize, 'formwith_eventcase').then(res => {
+      return getPageData('formwith_eventcase', queryParam, parameter.pageIndex, parameter.pageSize).then(res => {
         return res
       }).catch(err => {
         console.log(err)
