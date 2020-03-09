@@ -127,7 +127,7 @@
 
 <script>
 import STable from '@/components/table/'
-import { msgCenterGet, msgCenterPut, msgCenterDel } from '@/api/backlogApi'
+import { msgCenterGet, msgCenterPut, msgCenterDel } from '@/api/frameworkApi'
 
 // 获取消息中心数据将Message内容反序列化到上层数据中
 function handleRowsMsg (obj) {
@@ -193,136 +193,6 @@ export default {
           console.log(err)
         })
       },
-      msgData: [
-        {
-          title: '张三',
-          key: '张三',
-          content: '我是一段很长的很长的的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长的很长内容。',
-          type: '待办任务',
-          date: '2020-05-21 23:12:22',
-          readed: false
-        },
-        {
-          title: '李四',
-          key: '李四',
-          content: '李四内容',
-          type: '事件告警',
-          date: '2020-02-22 23:12:22',
-          readed: false
-        },
-        {
-          title: '王五',
-          key: '王五',
-          content: '王五内容',
-          type: '待办任务',
-          date: '2020-02-23 23:12:22',
-          readed: true
-        },
-        {
-          title: '赵六',
-          key: '赵六',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-24 23:12:22',
-          readed: true
-        },
-        {
-          title: 'coldplay',
-          key: 'coldplay',
-          content: '赵六内容',
-          type: '待办任务',
-          date: '2020-02-25 23:12:22',
-          readed: true
-        },
-        {
-          title: 'maroon 5',
-          key: 'maroon 5',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'rihanna',
-          key: 'rihanna',
-          content: '赵六内容',
-          type: '待办任务',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'mars',
-          key: '赵六1',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'ed',
-          key: 'ed',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'oasis',
-          key: 'oasis',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'nirvana',
-          key: 'nirvana',
-          content: '赵六内容',
-          type: '待办任务',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'grunge',
-          key: 'grunge',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'bealtes',
-          key: 'bealtes',
-          content: '赵六内容',
-          type: '待办任务',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'bowie',
-          key: 'bowie',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'queen',
-          key: 'queen',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: 'red cape',
-          key: 'red cape',
-          content: '赵六内容',
-          type: '事件告警',
-          date: '2020-02-26 23:12:24',
-          readed: true
-        }
-      ],
       msgSelectedRowKeys: []
     }
   },
