@@ -9,6 +9,7 @@ using Aspose.Words;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
+using DinkToPdf.Contracts;
 
 namespace FastDev.Service
 {
@@ -17,8 +18,10 @@ namespace FastDev.Service
     /// </summary>
     public class form_printPDFService : SHBaseService, IService
     {
+        private IConverter _converter;
         public form_printPDFService()
         {
+            _converter = SysContext.GetService<IConverter>();
             OnGetAPIHandler += form_printPDFService_OnGetAPIHandler;
         }
 
@@ -116,7 +119,8 @@ namespace FastDev.Service
 
             //替换all内容
             //all.Replace("", "");
-            var pdfByte = PDFHelper.HmtlToPDF(html);
+            
+            var pdfByte = _converter.HmtlToPDF(html);
             //byte[] info = new UTF8Encoding(true).GetBytes(pdfByte);
             string filepath2 = "wwwroot/";
             if (File.Exists("wwwroot/pdf/XXX.pdf"))
