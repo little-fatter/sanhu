@@ -67,6 +67,13 @@ export default {
     {
       type: Function,
       required: true
+    },
+    /**
+     * 根据接口设置数据总数的字段Key
+     */
+    totalKey: {
+      type: String,
+      default: 'Total'
     }
   },
   data () {
@@ -100,12 +107,11 @@ export default {
         if (result instanceof Promise || result.toString() === '[object Promise]') {
           result.then(r => {
             this.loading = false
-            const { Total } = r
-            if (!Total || Total <= 0) {
+            if (!r[this.totalKey] || r[this.totalKey] <= 0) {
               this.isEmpty = true
               this.setFinished()
             } else {
-              this.pageCount = Total % this.pageSize === 0 ? Total / this.pageSize : Math.ceil(Total / this.pageSize)
+              this.pageCount = r[this.totalKey] % this.pageSize === 0 ? r[this.totalKey] / this.pageSize : Math.ceil(r[this.totalKey] / this.pageSize)
               if (this.pageCount < this.localPageIndex) {
                 this.setFinished()
               } else {

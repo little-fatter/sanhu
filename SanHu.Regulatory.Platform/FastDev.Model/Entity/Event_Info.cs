@@ -394,6 +394,26 @@ public string OriginalID
 get;
 set;
 }
+public string ReportSource
+{
+get;
+set;
+}
+public string evtTypeName
+{
+get;
+set;
+}
+public string evtFileUrl
+{
+get;
+set;
+}
+public string posFileUrl
+{
+get;
+set;
+}
 }
 
 }

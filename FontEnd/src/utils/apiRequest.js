@@ -70,8 +70,8 @@ export const putHttp = ({ url, params, data, options = {} }) => {
  * @param params    query参数对象
  * @param options   配置参数，覆盖默认配置
  */
-export const delHttp = ({ url, params, options = {} }) => {
-  return httpRequest({ url, params, method: httpDeleteMethod, options })
+export const delHttp = ({ url, params, data, options = {} }) => {
+  return httpRequest({ url, params, data, method: httpDeleteMethod, options })
 }
 
 /**

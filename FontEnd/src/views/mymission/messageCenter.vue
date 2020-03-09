@@ -2,7 +2,7 @@
 
 @import '~@assets/css/mixins.less';
 
-@wholeMargin: 10px;
+@wholeMargin: 16px;
 @fontColor: #1989FA;
 
 .center-wrapper {
@@ -31,14 +31,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: @wholeMargin;
+    margin: @wholeMargin 0;
 
     .handle-before {
       display: flex;
       align-items: center;
 
-      button {
+      .btns {
         margin-left: @wholeMargin;
+        width: 88px;
       }
     }
 
@@ -48,6 +49,7 @@
   }
 
   .center-body {
+
     /deep/ .record-not-read {
       td:nth-child(2) {
         color: #000;
@@ -58,6 +60,11 @@
 
     /deep/ .record-readed {
       color: #aaa;
+    }
+
+    .table-action {
+      display: flex;
+      justify-content: space-between
     }
   }
 
@@ -71,143 +78,121 @@
 <template>
   <div class="center-wrapper">
     <div class="center-header">
-      <a-radio-group @change="onChange" v-model="tabValue">
-        <a-radio-button value="msg">
-          <a-badge :count="msgCount">
-            对话消息
-          </a-badge>
-        </a-radio-button>
-        <!-- <a-radio-button value="task">
-          <a-badge :count="taskCount">
-            任务通知
-          </a-badge>
-        </a-radio-button>
-        <a-radio-button value="warn">
-          <a-badge :count="warnCount">
-            告警消息
-          </a-badge>
-        </a-radio-button> -->
-      </a-radio-group>
       <div class="handle-wrapper">
         <div class="handle-before">
-          <a-checkbox @change="allSelectHandle">
-            全选
-          </a-checkbox>
-          <div class="btns-group">
-            <a-button @click="handleAllReaded">标为已读</a-button>
-            <a-button style="width: 88px" @click="handleAllDelete">删除</a-button>
-          </div>
+          <a-button @click="handleAllRead">标为已读</a-button>
+          <a-popconfirm
+            title="删除该条消息？"
+            @confirm="handleAllDelete">
+            <a-button class="btns" style="width: 88px">删除</a-button>
+          </a-popconfirm>
         </div>
         <div class="handle-after">
           <a-input class="handle-input" placeholder="消息搜索" v-model="searchValue">
           </a-input>
+          <a-button type="primary" style="width: 88px;margin-left:10px">搜索</a-button>
         </div>
       </div>
     </div>
     <div class="center-body">
-      <a-table
-        :rowClassName="handleRowClass"
-        :pagination="{pageSize: 5}"
-        v-if="tabValue === 'msg'"
-        :rowSelection="{selectedRowKeys: msgSelectedRowKeys, onChange: onSelectChange}"
+      <s-table
+        ref="table"
+        size="default"
+        rowKey="Id"
+        :rowClassName="getRowCls"
         :columns="msgColumns"
-        :hideDefaultSelections="true"
-        :dataSource="msgData">
-        <span slot="action" slot-scope="record">
+        :dataCallback="loadData"
+        :alert="options.alert"
+        :rowSelection="options.rowSelection"
+      >
+        <span slot="msgType" slot-scope="record">
+          {{ handleMsgType(record) }}
+        </span>
+        <span slot="time" slot-scope="record">
+          {{ record.Time | dayjs }}
+        </span>
+        <span slot="action" slot-scope="record" class="table-action">
           <span style="width: 28px;display:inline-block">
-            <a href="javascript:;" v-if="!record.readed" @click="handleReaded(record)">已读</a>
+            <a href="javascript:;" :class="!record.Read ? '': 'record-readed'" @click="handleReaded(record)">已读</a>
           </span>
-          <a-divider type="vertical" />
-          <a-popconfirm
-            title="Sure to delete?"
-            @confirm="onDelete(record.key)">
-            <a href="javascript:;">删除</a>
-          </a-popconfirm>
-          <a-divider type="vertical" />
+
+          <a href="javascript:;" @click="handleDelete(record)">删除</a>
           <a href="javascript:;">查看</a>
           </a>
         </span>
-      </a-table>
-      <!-- <a-table
-        :pagination="{pageSize: 5}"
-        v-if="tabValue === 'task'"
-        :rowSelection="{selectedRowKeys: taskSelectedRowKeys, onChange: onSelectChange}"
-        :columns="taskColumns"
-        :dataSource="taskData">
-        <span slot="action" slot-scope="record">
-          <span style="width: 28px;display:inline-block">
-            <a href="javascript:;" v-if="!record.readed" @click="handleReaded(record)">已读</a>
-          </span>
-          <a-divider type="vertical" />
-          <a-popconfirm
-            title="Sure to delete?"
-            @confirm="onDelete(record.key)">
-            <a href="javascript:;">删除</a>
-          </a-popconfirm>
-          <a-divider type="vertical" />
-          <a href="javascript:;">查看</a>
-          </a>
-        </span>
-      </a-table>
-      <a-table :pagination="{pageSize: 5}" v-if="tabValue === 'warn'" :rowSelection="{selectedRowKeys: warnSelectedRowKeys, onChange: onSelectChange}" :columns="warnColumns" :dataSource="warnData">
-        <span slot="action" slot-scope="record">
-          <span style="width: 28px;display:inline-block">
-            <a href="javascript:;" v-if="!record.readed" @click="handleReaded(record)">已读</a>
-          </span>
-          <a-divider type="vertical" />
-          <a-popconfirm
-            title="Sure to delete?"
-            @confirm="onDelete(record.key)">
-            <a href="javascript:;">删除</a>
-          </a-popconfirm>
-          <a-divider type="vertical" />
-          <a href="javascript:;">查看</a>
-          </a>
-        </span>
-      </a-table> -->
+      </s-table>
     </div>
   </div>
 </template>
 
 <script>
+import STable from '@/components/table/'
+import { msgCenterGet, msgCenterPut, msgCenterDel } from '@/api/backlogApi'
 
+// 获取消息中心数据将Message内容反序列化到上层数据中
+function handleRowsMsg (obj) {
+  const rows = obj.Rows
+  for (const index in rows) {
+    // rows[index] = JSON.stringify(JSON.parse(rows[index]))
+    const item = rows[index]
+    if (item.Message) {
+      const msg = JSON.parse(item.Message)
+      rows[index] = Object.assign(msg, item)
+    }
+  }
+}
 export default {
+  components: {
+    STable
+  },
   data () {
     return {
       tabValue: 'msg',
-      // msgCount: '5',
-      // taskCount: '10',
-      // warnCount: '2',
+      maxShowMsg: 5,
       searchValue: '',
       msgColumns: [
         {
           title: '标题',
-          dataIndex: 'title',
-          key: 'title'
+          dataIndex: 'Title',
+          key: 'Title'
         }, {
           title: '消息内容',
-          dataIndex: 'content',
-          key: 'content',
+          dataIndex: 'Content',
+          key: 'Content',
           width: '400px'
         }, {
           title: '类型',
-          dataIndex: 'type',
-          key: 'type'
+          dataIndex: 'MessageType',
+          key: 'MessageType',
+          scopedSlots: { customRender: 'msgType' }
         }, {
           title: '通知时间',
-          dataIndex: 'date',
-          key: 'date',
-          sorter: (a, b) => {
-            const timeA = new Date(a.date.replace(/-/g, '/'))
-            const timeB = new Date(b.date.replace(/-/g, '/'))
-            return timeA - timeB
-          }
+          dataIndex: 'Time',
+          key: 'Time',
+          scopedSlots: { customRender: 'time' }
         }, {
           title: '操作',
           key: 'action',
           scopedSlots: { customRender: 'action' }
         }
       ],
+      selectedRowKeys: [],
+      selectedRows: [],
+      options: {
+        alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
+        rowSelection: {
+          selectedRowKeys: this.selectedRowKeys,
+          onChange: this.onSelectChange
+        }
+      },
+      loadData: (parameter) => {
+        return msgCenterGet(parameter).then(res => {
+          handleRowsMsg(res)
+          return res
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       msgData: [
         {
           title: '张三',
@@ -338,130 +323,16 @@ export default {
           readed: true
         }
       ],
-      taskColumns: [
-        {
-          title: '任务标题',
-          dataIndex: 'title',
-          key: 'title'
-        }, {
-          title: '任务内容',
-          dataIndex: 'message',
-          key: 'message'
-        }, {
-          title: '交办时间',
-          dataIndex: 'date',
-          key: 'date'
-        }, {
-          title: '交办时限',
-          dataIndex: 'deadline',
-          key: 'deadline'
-        },
-        {
-          title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
-      taskData: [
-        {
-          title: '任务标题1',
-          key: '任务标题1',
-          message: '任务标题1内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '任务标题2',
-          key: '任务标题2',
-          message: '任务标题2内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '任务标题3',
-          key: '任务标题3',
-          message: '任务标题2内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: '任务标题4',
-          key: '任务标题4',
-          message: '任务标题4内容',
-          date: '2020-02-26 23:12:22',
-          deadline: '2020-02-26 23:12:22',
-          readed: true
-        }
-      ],
-      warnColumns: [
-        {
-          title: '告警标题',
-          dataIndex: 'title',
-          key: 'title'
-        }, {
-          title: '告警来源',
-          dataIndex: 'source',
-          key: 'source'
-        },
-        {
-          title: '告警内容',
-          dataIndex: 'message',
-          key: 'message'
-        },
-        {
-          title: '告警时间',
-          dataIndex: 'date',
-          key: 'date'
-        },
-        {
-          title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
-      warnData: [
-        {
-          title: '告警标题一',
-          key: '告警标题一',
-          source: '来源1',
-          message: '内容1',
-          date: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '告警标题2',
-          key: '告警标题2',
-          source: '来源2',
-          message: '内容2',
-          date: '2020-02-26 23:12:22',
-          readed: false
-        },
-        {
-          title: '告警标题3',
-          key: '告警标题3',
-          source: '来源3',
-          message: '内容3',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        },
-        {
-          title: '告警标题4',
-          key: '告警标题4',
-          source: '来源4',
-          message: '内容4',
-          date: '2020-02-26 23:12:22',
-          readed: true
-        }
-      ],
-      msgSelectedRowKeys: [],
-      taskSelectedRowKeys: [],
-      warnSelectedRowKeys: []
+      msgSelectedRowKeys: []
     }
   },
   computed: {
+    dataSource () {
+      return `${this.tabValue}Data`
+    },
+    selectRows () {
+      return `${this.tabValue}SelectedRowKeys`
+    },
     msgCount () {
       let count = 0
       this.msgData.forEach((item) => {
@@ -470,67 +341,34 @@ export default {
         }
       })
       return count
-    },
-    taskCount () {
-      let count = 0
-      this.taskData.forEach((item) => {
-        if (!item.readed) {
-          count++
-        }
-      })
-      return count
-    },
-    warnCount () {
-      let count = 0
-      this.warnData.forEach((item) => {
-        if (!item.readed) {
-          count++
-        }
-      })
-      return count
     }
   },
   methods: {
-    handleRowClass (record) {
-      return !record.readed ? 'record-not-read' : 'record-readed'
+    handleMsgType (type) {
+      // console.log('handleMsgType -> record', record)
+      return type === 1 ? '待办任务' : type === 2 ? '事件告警' : ''
     },
-    onChange (e) {
-      console.log(`checked = ${e.target.value}`)
-    },
-    allSelectHandle (e) {
-      console.log('check', e.target.checked)
+    getRowCls (record, index) {
+      return !record.Read ? 'row-readed' : ''
     },
     handleReaded (record) {
-      record.readed = true
+      msgCenterPut([record.Id]).catch(e => { console.log(e) })
     },
-    handleAllReaded () {
-      this[`${this.tabValue}SelectedRowKeys`].forEach(key => {
-        for (const item of this[`${this.tabValue}Data`]) {
-          if (key === item.key) {
-            item.readed = true
-            return
-          }
-        }
-      })
+    handleAllRead () {
+      msgCenterPut(this.selectedRowKeys).catch(e => { console.log(e) })
     },
 
-    onDelete (key) {
-      const data = [...this[`${this.tabValue}Data`]]
-      this[`${this.tabValue}Data`] = data.filter(item => item.key !== key)
+    handleDelete (record) {
+      msgCenterDel([record.Id])
     },
     handleAllDelete () {
-      this[`${this.tabValue}SelectedRowKeys`].forEach(key => {
-        for (const index in this[`${this.tabValue}Data`]) {
-          if (key === this[`${this.tabValue}Data`][index].key) {
-            this[`${this.tabValue}Data`].splice(index, 1)
-          }
-        }
-      })
+      msgCenterDel(this.selectedRowKeys)
     },
-    onSelectChange (selectedRowKeys) {
-      this[`${this.tabValue}SelectedRowKeys`] = selectedRowKeys
+    // 选择项回调函数
+    onSelectChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
     }
-
   }
 }
 </script>

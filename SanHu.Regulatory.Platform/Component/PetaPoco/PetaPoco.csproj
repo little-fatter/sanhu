@@ -16,6 +16,10 @@
     <PackageId>PetaPoco.Compiled</PackageId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>D:\web\SanHu.Regulatory.Platform\Component\PetaPoco\PetaPoco.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
     <Reference Include="System.Configuration" />
   </ItemGroup>

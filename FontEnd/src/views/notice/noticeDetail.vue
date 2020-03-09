@@ -34,8 +34,6 @@
 
 <template>
   <div class="article-wrapper">
-    <div class="logo">
-    </div>
     <div class="article-head">
       <div class="article-title">
         {{ article.Title }}
@@ -54,8 +52,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import getNoticeDetails from '@/api/sampleApi'
+import { getDetails } from '@/api/sampleApi'
 
 export default {
   data () {
@@ -98,20 +95,18 @@ export default {
         
         凡违反以上规定的，县级林业和草原行政主管部门依据《云南省森林防火条例》和《玉溪市森林防火条例》给予相应处罚。构成犯罪的，依法追究刑事责任。
         
-        </p>`,
-        IsPic: '1',
-        ImageUrl: '/framework/images/logos/fwLoginBg.jpg',
-        Publisher: 'sdfasdf'
-
+        </p>`
       }
     }
   },
   mounted () {
     this.id = this.$route.query.id
-    getNoticeDetails(this.id).then((ret) => {
+    getDetails('cms_article', this.id).then((ret) => {
       if (ret.statusCode) {
         this.article = ret.data
       }
+    }).catch(err => {
+      console.log(err)
     })
   }
 }

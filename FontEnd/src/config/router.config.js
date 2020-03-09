@@ -1,4 +1,4 @@
-import { RouteView, BlankLayout, PageView } from '@/components/layouts'
+import { RouteView, BlankLayout } from '@/components/layouts'
 
 /**
  *  配置路由信息
@@ -14,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/mission', // 临时定向开发页面
+    redirect: '/data-manage/notice', // 临时定向开发页面
     children: [
       {
         path: 'mission',
@@ -73,7 +73,7 @@ export const asyncRouterMap = [
           // forms
           {
             path: 'form',
-            redirect: '/form/base-form',
+            redirect: '/data-manage/form/base-form',
             component: RouteView,
             meta: { title: '表单页' },
             children: [
@@ -139,10 +139,10 @@ export const asyncRouterMap = [
               }
             ]
           },
-          // case 案件
+          // case 案件列表 案件查询
           {
             path: 'case',
-            redirect: '/case/case-list',
+            redirect: '/data-manage/case/case-list',
             component: RouteView,
             meta: { title: '案件档案' },
             children: [
@@ -150,13 +150,13 @@ export const asyncRouterMap = [
                 path: 'case-list',
                 name: 'caseList',
                 component: () => import('@/views/case/index'),
-                meta: { title: '案件档案管理', keepAlive: true }
+                meta: { title: '案件档案管理', keepAlive: false }
               },
               {
                 path: 'case-details',
                 name: 'caseDetails',
                 component: () => import('@/views/case/caseDetails'),
-                meta: { title: '案件详情', keepAlive: true }
+                meta: { title: '案件详情', keepAlive: false }
               },
               {
                 path: 'new-case',
@@ -170,11 +170,17 @@ export const asyncRouterMap = [
           {
             path: 'notice',
             component: RouteView,
+            redirect: '/data-manage/notice/test',
             children: [
               {
                 path: 'notice-detail',
                 name: 'noticeDetail',
                 component: () => import('@/views/notice/noticeDetail')
+              },
+              {
+                path: 'test',
+                name: 'test',
+                component: () => import('@/views/notice/test')
               }
             ]
           }
@@ -228,7 +234,7 @@ export const asyncRouterMap = [
       {
         path: 'result',
         name: 'result',
-        component: PageView,
+        component: RouteView,
         redirect: '/result/success',
         meta: { title: '结果页' },
         children: [
@@ -291,7 +297,7 @@ export const asyncRouterMap = [
             component: () => import(/* webpackChunkName: "fail" */ '@/views/workbench/Backlog')
           }
         ]
-      }
+      },
 
       // {
       //   path: 'dashboard',
@@ -316,73 +322,73 @@ export const asyncRouterMap = [
       // },
       // 待办事项
 
-      // // list
-      // {
-      //   path: 'list',
-      //   name: 'list',
-      //   component: RouteView,
-      //   redirect: '/list/query-list',
-      //   meta: { title: '列表页' },
-      //   children: [
-      //     {
-      //       path: 'query-list',
-      //       name: 'QueryListWrapper',
-      //       component: () => import('@/views/list/TableList'),
-      //       meta: { title: '查询表格', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'tree-list',
-      //       name: 'TreeList',
-      //       component: () => import('@/views/list/TreeList'),
-      //       meta: { title: '树目录表格', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'edit-table',
-      //       name: 'EditList',
-      //       component: () => import('@/views/list/TableInnerEditList'),
-      //       meta: { title: '内联编辑表格', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'basic-list',
-      //       name: 'BasicList',
-      //       component: () => import('@/views/list/StandardList'),
-      //       meta: { title: '标准列表', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'card',
-      //       name: 'CardList',
-      //       component: () => import('@/views/list/CardList'),
-      //       meta: { title: '卡片列表', keepAlive: true }
-      //     },
-      //     {
-      //       path: 'search',
-      //       name: 'SearchList',
-      //       component: () => import('@/views/list/search/SearchLayout'),
-      //       redirect: '/list/search/article',
-      //       meta: { title: '搜索列表', keepAlive: true },
-      //       children: [
-      //         {
-      //           path: 'article',
-      //           name: 'SearchArticles',
-      //           component: () => import('../views/list/TableList'),
-      //           meta: { title: '搜索列表（文章）' }
-      //         },
-      //         {
-      //           path: 'project',
-      //           name: 'SearchProjects',
-      //           component: () => import('../views/list/TableList'),
-      //           meta: { title: '搜索列表（项目）' }
-      //         },
-      //         {
-      //           path: 'application',
-      //           name: 'SearchApplications',
-      //           component: () => import('../views/list/TableList'),
-      //           meta: { title: '搜索列表（应用）' }
-      //         }
-      //       ]
-      //     }
-      //   ]
-      // },
+      // list
+      {
+        path: 'list',
+        name: 'list',
+        component: RouteView,
+        redirect: '/list/query-list',
+        meta: { title: '列表页' },
+        children: [
+          {
+            path: 'query-list',
+            name: 'QueryListWrapper',
+            component: () => import('@/views/list/TableList'),
+            meta: { title: '查询表格', keepAlive: true }
+          },
+          {
+            path: 'tree-list',
+            name: 'TreeList',
+            component: () => import('@/views/list/TreeList'),
+            meta: { title: '树目录表格', keepAlive: true }
+          },
+          {
+            path: 'edit-table',
+            name: 'EditList',
+            component: () => import('@/views/list/TableInnerEditList'),
+            meta: { title: '内联编辑表格', keepAlive: true }
+          },
+          {
+            path: 'basic-list',
+            name: 'BasicList',
+            component: () => import('@/views/list/StandardList'),
+            meta: { title: '标准列表', keepAlive: true }
+          },
+          {
+            path: 'card',
+            name: 'CardList',
+            component: () => import('@/views/list/CardList'),
+            meta: { title: '卡片列表', keepAlive: true }
+          },
+          {
+            path: 'search',
+            name: 'SearchList',
+            component: () => import('@/views/list/search/SearchLayout'),
+            redirect: '/list/search/article',
+            meta: { title: '搜索列表', keepAlive: true },
+            children: [
+              {
+                path: 'article',
+                name: 'SearchArticles',
+                component: () => import('../views/list/TableList'),
+                meta: { title: '搜索列表（文章）' }
+              },
+              {
+                path: 'project',
+                name: 'SearchProjects',
+                component: () => import('../views/list/TableList'),
+                meta: { title: '搜索列表（项目）' }
+              },
+              {
+                path: 'application',
+                name: 'SearchApplications',
+                component: () => import('../views/list/TableList'),
+                meta: { title: '搜索列表（应用）' }
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -402,6 +408,12 @@ export const constantRouterMap = [
     component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login'),
     meta: { title: '登录页面' }
   },
+  // {
+  //   path: '/home',
+  //   name: 'home',
+  //   component: () => import(/* webpackChunkName: "user" */ '@/views/Home'),
+  //   meta: { title: '首页' }
+  // },
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),

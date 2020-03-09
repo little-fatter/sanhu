@@ -9,7 +9,7 @@
             主框架名称
             </summary>
         </member>
-        <member name="P:FD.Model.Configs.ServerNameConfigModel.MainServiceBaseUrl">
+        <member name="P:FD.Model.Configs.ServerNameConfigModel.MainServiceUrl">
             <summary>
             主框架地址
             </summary>
@@ -139,6 +139,26 @@
             当事人
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.Form_printPDFReq">
+            <summary>
+            打印pdf
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_printPDFReq.formID">
+            <summary>
+            表单ID
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_printPDFReq.formName">
+            <summary>
+            表单名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Form_printPDFReq.filePath">
+            <summary>
+            文件绝对路径
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.law_punishmentInfoFinishReq.LawPunishmentInfo">
             <summary>
             处罚决定书信息
@@ -232,6 +252,11 @@
         <member name="F:FD.Model.Enum.EventStatus.toCase">
             <summary>
             转为案件办理
+            </summary>
+        </member>
+        <member name="F:FD.Model.Enum.EventStatus.dispose">
+            <summary>
+            处理中
             </summary>
         </member>
         <member name="F:FD.Model.Enum.WorkTaskStatus.Close">

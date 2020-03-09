@@ -403,6 +403,25 @@ export const getQueryConditon = (rules = [], op = 'and') => {
 }
 
 /**
+ * 获取查询条件多层级
+ * @param {*} rules  {field,op,value,type}
+ * @param {*} op  or或者and
+ */
+export const getQueryConditonMore = (rules = [], op = 'or', groups) => {
+  var conditonMore = {
+    rules: [],
+    groups: [{
+      rules: rules,
+      op,
+      groups
+    }],
+    op: 'and'
+  }
+
+  return conditonMore
+}
+
+/**
  * 获取待办地址
  * @param {*} routePath
  */

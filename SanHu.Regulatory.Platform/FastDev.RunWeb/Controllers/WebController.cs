@@ -1870,8 +1870,7 @@ namespace FastDev.RunWeb.Controllers
             }
             printData.formatContent = printData.printTemp.TemplateBody;
             printData.SetDefaultTemplateData();
-            ServiceHelper.GetServiceConfig(printData.printTemp.ModelName);
-            List<TemplatePageInfo> list = printData.GetTemplatePages(context);
+            List<TemplatePageInfo> list = printData.GetTemplatePageInfo(context);
             bool flag = pageindex <= 0 && list.Count > 1;
             bool flag2 = pageindex <= 0 || isjpg == "Y";
             if (flag)

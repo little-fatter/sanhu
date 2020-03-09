@@ -40,6 +40,7 @@ namespace FD.Common.Helpers
                 }
             };
             byte[] pdf = converter.Convert(doc);
+            //converter = null;
             return pdf;
         }
     }

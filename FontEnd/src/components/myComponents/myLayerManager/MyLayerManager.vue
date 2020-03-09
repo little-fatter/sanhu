@@ -1,9 +1,17 @@
 <template>
   <a-list class="list" :bordered="true" :grid="{ gutter: 2, column: 6 }" :dataSource="data">
-    <a-list-item slot="renderItem" slot-scope="item,itemIndex" :class="item.active?'item-active':'item'" @click="onItemClick(item)">
+    <a-list-item
+      slot="renderItem"
+      slot-scope="item,itemIndex"
+      :class="item.active?itemActiveClassNames[itemIndex]:'item'"
+      @click="onItemClick(item)"
+    >
       <a-dropdown placement="bottomCenter">
         <a-list-item-meta >
-          <a slot="title" :style="{color:item.active?'white':'rgba(100, 105, 124, 1)'}">{{ item.title }}</a>
+          <a
+            slot="title"
+            :style="{color:item.active?'white':'rgba(100, 105, 124, 1)'}"
+          >{{ item.title }}</a>
           <a-avatar slot="avatar" shape="square" :size="21" :src="item.active?item.aimg:item.img"></a-avatar>
         </a-list-item-meta>
         <a-menu :key="'item' + itemIndex" slot="overlay" >
@@ -114,9 +122,17 @@ export default {
           layerName: '',
           img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu.png',
           aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu1.png',
-          active: false,
+          active: true,
           subs: []
         }
+      ],
+      itemActiveClassNames: [
+        'item-active item-active-start',
+        'item-active',
+        'item-active',
+        'item-active',
+        'item-active',
+        'item-active item-active-end'
       ]
     }
   },
@@ -155,5 +171,13 @@ export default {
     background-color: rgba(58, 157, 250, 1);
     height: 50px;
     padding-top: 14px;
+}
+.item-active-start{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.item-active-end{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 </style>

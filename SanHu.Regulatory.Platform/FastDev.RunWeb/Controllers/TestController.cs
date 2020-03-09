@@ -29,8 +29,8 @@ namespace FastDev.RunWeb.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize]
-        public async Task<IActionResult> Get()
+        [Authorize]
+        public IActionResult Get()
         {
             //OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
             //{
