@@ -137,7 +137,7 @@
               <a-input v-model="s_case_LawName" placeholder="请输入办案人名称" />
             </li>
           </ul>
-          <ul class="search-input-ul two">
+          <ul class="search-input-ul two" v-if="showMenu">
             <li class="search-input-ul-li">
               <span>当事人：</span>
               <a-input v-model="s_case_BreakLow" placeholder="请输入当事人名称" />
@@ -158,7 +158,8 @@
         </div>
         <div class="case-btn">
           <a-button @click="onSearch" type="primary" class="mr10">搜索</a-button>
-          <a-button @click="onReset" type="default">重置</a-button>
+          <a-button @click="onReset" type="default" class="mr10">重置</a-button>
+          <a-button @click="packUp(PackUpIcon)" :icon="PackUpIcon">{{ PackUpText }}</a-button>
         </div>
       </div>
     </div>
@@ -216,6 +217,9 @@ export default {
   },
   data: function () {
     return {
+      PackUpIcon: 'up',
+      PackUpText: '收起',
+      showMenu: true, // 以上收起与展开按钮
       columns: [
         {
           title: '案件编号',
@@ -432,15 +436,27 @@ export default {
     },
     // 搜索条件重置
     onReset () {
-      this.s_case_type = '请选择'
-      this.s_case_ApplicableProcedureType = '请选择'
-      this.s_case_CaseStatus = '请选择'
-      this.s_case_CaseRegion = '请选择'
+      this.s_case_type = ''
+      this.s_case_ApplicableProcedureType = ''
+      this.s_case_CaseStatus = ''
+      this.s_case_CaseRegion = ''
       this.s_case_LawName = ''
       this.s_case_BreakLow = ''
       this.s_case_Number = ''
       this.s_case_JudgementNum = ''
       this.s_case_Time = []
+    },
+    // 收起与展开按钮
+    packUp (msg) {
+      if (msg === 'up') {
+        this.PackUpIcon = 'down'
+        this.PackUpText = '展开'
+        this.showMenu = false
+      } else {
+        this.PackUpIcon = 'up'
+        this.PackUpText = '收起'
+        this.showMenu = true
+      }
     },
     // 查看案件详情跳转
     gotoDetail (caseId, EventInfoId) {
