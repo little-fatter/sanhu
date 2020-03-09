@@ -50,8 +50,8 @@ namespace FastDev.RunWeb.Controllers
             //var reulst=await _dingDingServices.WorkrecordAdd(oapiWorkrecordAddRequest);
             //var s= reulst.RecordId;
 
-            var reulst = await _dingDingServices.WorkrecordUpdate("2825136819665808", "recordf55f33bd147dc983b096680a5bd76b95");
-            var s = reulst;
+            //var reulst = await _dingDingServices.WorkrecordUpdate("2825136819665808", "recordf55f33bd147dc983b096680a5bd76b95");
+            //var s = reulst;
             return Content("ok");
         }
         [HttpGet("pdf")]
