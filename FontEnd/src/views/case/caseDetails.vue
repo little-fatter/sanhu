@@ -282,7 +282,17 @@
               <a-button type="primary" icon="mail" @click="sendFile">网上送达</a-button>
             </div>
             <!-- 文件列表-->
-            <s-table ref="table" size="default" :columns="columns" :dataCallback="loadData"></s-table>
+            <s-table ref="table" size="default" :columns="columns" :dataCallback="loadData">
+              <template slot="FormName" slot-scope="text,data">
+                <span v-if=" data.FormName!==''">
+                  <span>{{ data.FormName }}</span>
+                </span>
+                <span v-else>空表单名称替换字符</span>
+              </template>
+              <template slot="option" slot-scope="text,data">
+                <a-button type="default" @click="goFormDetils(data.FormID,data.FormType)">查看</a-button>
+              </template>
+            </s-table>
             <!-- <a-table :columns="columns" :dataSource="data" :rowSelection="rowSelection" :pagination="pagination"/> -->
           </a-card>
         </a-tab-pane>
@@ -323,7 +333,8 @@ export default {
         {
           title: '文件名称',
           dataIndex: 'FormName',
-          key: 'FormName'
+          key: 'FormName',
+          scopedSlots: { customRender: 'FormName' }
         },
         {
           title: '创建时间',
@@ -339,6 +350,12 @@ export default {
           title: '创建人',
           dataIndex: 'OriginatorID',
           key: 'OriginatorID'
+        },
+        {
+          title: '查看',
+          dataIndex: 'option',
+          key: 'option',
+          scopedSlots: { customRender: 'option' }
         }
       ],
 
@@ -435,7 +452,7 @@ export default {
       }
       return getPageData('formwith_eventcase', allParameter, parameter.pageIndex, parameter.pageSize)
         .then(res => {
-          console.log(res, 123456789)
+          // console.log(res, 123456789)
           return res
         })
         .catch(err => {
@@ -453,6 +470,10 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    // 到表单详情
+    goFormDetils (formID, formType) {
+      console.log(formID, formType)
     },
     // 导出文件
     exportFile () {
