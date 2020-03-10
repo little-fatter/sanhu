@@ -161,7 +161,7 @@ export default {
       }
     },
     afterAlertFeatureClick: function (fea) {
-      var mapApp = this.$refs.map1.getMapApp()
+      // var mapApp = this.$refs.map1.getMapApp()
       if (fea) {
         var properties = fea.getProperties()
         this.$refs.myAlertInfoBox.open({
@@ -287,6 +287,7 @@ export default {
       mapApp.updateAlertEventLayer(this.$refs.myAlertEventList.getAlertEventList())
       this.$refs.myEventsCount.updataCountList(this.$refs.myAlertEventList.getCountList())
     })
+    document['dataGet'] = dataGet
   }
 }
 </script>

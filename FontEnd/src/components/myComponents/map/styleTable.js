@@ -8,6 +8,9 @@ import event3 from '@/assets/icons/map/event3.png'
 // 人员
 import personZhifa from '@/assets/icons/map/person_zhifa.png'
 import personXunjian from '@/assets/icons/map/person_xunjian.png'
+import personZhifaBack from '@/assets/icons/map/person_zhifa_back.png'
+import personXunjianBack from '@/assets/icons/map/person_xunjian_back.png'
+import personBusy from '@/assets/icons/map/person_busy.png'
 // 设备图标
 import daifei from '@/assets/icons/map/daifei.png'
 import shexiangtou from '@/assets/icons/map/shexiangtou.png'
@@ -89,7 +92,8 @@ export default {
   peopleIcons: [
     // appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan1.png', // 执法人员
     // appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan2.png' // 巡检人员
-    personZhifa, personXunjian, selectG, selectG
+    // personZhifa, personXunjian, selectG, selectG
+    personZhifaBack, personXunjianBack, event2s, event3s
   ],
   evtStateMap: {
     list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
@@ -151,16 +155,39 @@ export default {
     var src = this.peopleIcons[type]
     var show = this.layerShow.peopleLayer.subs[type].active
     if (!show) return undefined
-
-    return new Style({
+    var staffName = feature.getProperties()['name']
+    var lastName = staffName ? staffName[0] : ''
+    var isBusy = Math.random() > 0.5
+    var styles = [new Style({
       image: new Icon({
-        anchor: [0.5, 0.86],
+        anchor: [0.5, 1],
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         src: src,
-        scale: 1.2
+        scale: 1
+      }),
+      text: new Text({
+        text: lastName,
+        font: '18px bolder',
+        // offsetX: 0,
+        offsetY: -22.5,
+        fill: new Fill({
+          color: '#fff'
+        })
       })
-    })
+    })]
+    if (isBusy) {
+      styles.push(new Style({
+        image: new Icon({
+          anchor: [-0.5, 1.5],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: personBusy,
+          scale: 1
+        })
+      }))
+    }
+    return styles
   },
   peopleLayerSelectedStyle: function (feature) {
     var type = feature.getProperties()['teamType']
@@ -173,7 +200,7 @@ export default {
         src: src,
         scale: 1.2
       })
-    }), this.peopleLayerStyle(feature)]
+    }), ...this.peopleLayerStyle(feature)]
   },
   alertEventStyle: function (feature) {
     var size = feature.get('features').length
