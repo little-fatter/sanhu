@@ -1,3 +1,4 @@
+<!--  //勘察笔录-->
 <template>
   <div class="RecordOfInquest">
     <van-cell title="检查事由" :value="loadData.Reason"></van-cell>
@@ -48,8 +49,8 @@ export default {
     },
     // 获取数据
     init () {
-      const id = this.$route.query.id;
-      
+      const id = this.$route.query.id
+
       // getDetaildata('from_inspectiontRecord', id).then(res => {
       //   this.loadData = res
       //   console.log(this.loadData)

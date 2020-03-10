@@ -1,3 +1,4 @@
+<!--//现场巡查-->
 <template>
   <div class="SceneInvestigationDetail">
     <van-cell-group>
@@ -16,16 +17,16 @@
       <van-cell title="事发时间" :value="loadData.IncidentTime" />
       <van-cell title="事发地点" :value="loadData.IncidentAddress"></van-cell>
       <van-cell-group>
-        <PartyInfoView :initData="surveyParty"></PartyInfoView>
+        <PartyInfoView :initData="loadData.LawParties"></PartyInfoView>
       </van-cell-group>
       <van-cell>
         附件：
         <SUpload
           style="margin-left:80px;margin-bottom:5px;"
           ref="myupload"
-          :accept="access"
           :sync2Dingding="false"
           :isOnlyView="true"
+          :initResult="loadData.Attachment"
         ></SUpload>
       </van-cell>
       <van-cell :value="loadData.Result" title="处理结论"></van-cell>
@@ -39,8 +40,14 @@
 </template>
 
 <script>
-import PartyInfoView from "../../components/business/PartyInfoView";
-import SUpload from "../../components/file/StandardUploadFile";
+import PartyInfoView from '../../components/business/PartyInfoView'
+import SUpload from '../../components/file/StandardUploadFile'
+import {
+  isNotEmpty,
+  formatDate,
+  isEmpty,
+  getQueryConditon
+} from '../../utils/util'
 import {
   getDetaildata,
   commonOperateApi,
@@ -50,95 +57,112 @@ import {
   getDetialdataByfilter,
   getDetialdataByEventInfoId,
   getPageDate
-} from "../../api/regulatoryApi";
+} from '../../api/regulatoryApi'
 
 export default {
-  name: "SceneInvestigationDetail",
+  name: 'SceneInvestigationDetail',
   components: {
     SUpload,
     PartyInfoView
   },
   props: {},
-  data() {
+  data () {
     return {
-      loadData: {},
-      eventInfo: {},
-      surveyParty: [],
-      access: "",
-      deliveryTime: "2020-02-28",
-      expectedCompletionTime: "2020-02-28",
-      person: "赵子龙",
-      eventAddress: "玉溪市澄江县 | 15km",
-      reportTime: "2020-02-26 13:52:26",
-      reportType: "举报",
-      reporterName: "张三丰",
-      evtTypeDisplayName: "无",
+      loadData: {}, // 勘察基本信息
+      eventInfo: {}, // 事件信息
+      surveyParty: [], // 当事人信息
+      access: '',
+      deliveryTime: '2020-02-28',
+      expectedCompletionTime: '2020-02-28',
+      person: '赵子龙',
+      eventAddress: '玉溪市澄江县 | 15km',
+      reportTime: '2020-02-26 13:52:26',
+      reportType: '举报',
+      reporterName: '张三丰',
+      evtTypeDisplayName: '无',
       remark:
-        "玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县",
+        '玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县',
       eventCheck: {
-        eventType: "非法捕捞",
+        eventType: '非法捕捞',
         eventTime: new Date(),
-        eventAddress: "成都市",
+        eventAddress: '成都市',
         partyInfoData: [
           {
             partyType: 1,
-            name: "小貂蝉",
-            company: "前端工程师",
-            nation: "汉族",
+            name: '小貂蝉',
+            company: '前端工程师',
+            nation: '汉族',
             sex: 1,
-            idCard: "5113026155355X",
-            address: "成都市武侯区",
+            idCard: '5113026155355X',
+            address: '成都市武侯区',
             phone: 13629091535
           },
           {
             partyType: 2,
-            name: "成都建投",
-            legalName: "张大千",
-            idCard: "5113026155355X",
-            address: "成都市武侯区",
+            name: '成都建投',
+            legalName: '张大千',
+            idCard: '5113026155355X',
+            address: '成都市武侯区',
             tel: 13629091535
           }
         ],
         dealResult:
-          "成都市成都市成都市成都市成都市成都市成都市成都市成都市成都市成都市",
-        dealType: "处理结论类型",
-        needTailAfter: "尚未查询到犯罪记录"
+          '成都市成都市成都市成都市成都市成都市成都市成都市成都市成都市成都市',
+        dealType: '处理结论类型',
+        needTailAfter: '尚未查询到犯罪记录'
       }
-    };
+    }
   },
   watch: {},
   computed: {},
   methods: {
-    returnSubmitForm() {
-      this.$router.push("/submitForm");
+    returnSubmitForm () {
+      this.$router.push('/submitForm')
     },
     // 获取数据
-    init() {
-      const queryParam = this.$route.query;
-      const id = '0bacbe07-d3ab-485b-b4a0-eeec82e621ab'//queryParam.id; 
-      getDetaildata("task_survey", id).then(res => {
-        this.loadData = res;
-        console.log(res);
-      }),
-        // 请求事件信息详情
-        getDetialdataByEventInfoId(
-          "event_info",
-          this.loadData.EventInfoId
-        ).then(res => {
-          this.eventInfo = res;
-        });
-      // 勘查当事人
-      // getPageDate("task_surveyParty", 1, 100, conditon).then(res => {
-      //   // this.surveyParty.push(law_party);
-      //   console.log(res);
-      // });
+    init () {
+      const queryParam = this.$route.query
+      const id = queryParam.id
+      console.log(id)
+      getDetaildata('task_survey', id).then(res => {
+        if (isNotEmpty(res.TaskId)) {
+          getDetaildata('work_task', taskId).then(res => {
+            this.loadEventInfo(res.EventInfoId)
+          })
+        }
+      })
+    },
+    // 获取事件信息
+    loadEventInfo (EventInfoId) {
+      getDetaildata('event_info', EventInfoId).then(res => {
+        if (res) {
+          this.eventInfo = res
+          this.loadEventCheck(EventInfoId)
+        }
+      })
+    },
+    // 获取表单信息
+    loadEventCheck (EventInfoId) {
+      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then(res => {
+        if (res) {
+          this.loadData = {
+            ...res.MainForm,
+            LawParties: res.Party,
+            Attachment: res.Attachment
+          }
+          console.log(this.loadData)
+        }
+      })
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  mounted() {}
-};
+  mounted () {},
+  activated () {
+    this.init()
+  }
+}
 </script>
 <style lang="less">
 </style>

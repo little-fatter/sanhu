@@ -100,6 +100,7 @@
           label="协办人"
           placeholder="请选择协办人"
           :readonly="true"
+          @click="handleSelecOrganiser"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecOrganiser" size="30" />
         </van-field>
@@ -186,7 +187,29 @@ export default {
       getDetaildata('event_info', EventInfoId).then((res) => {
         if (res) {
           this.event = res
+          this.loadEventCheck(res)
         }
+      })
+    },
+    loadEventCheck (event) {
+      getFormsDetailByEventInfoId(event.objId, 'task_survey').then((res) => {
+        if (res) {
+          this.caseInfo = {
+            ...this.caseInfo,
+            ...res.MainForm,
+            LawParties: res.law_party
+          }
+        } else {
+          this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
+          this.caseInfo.IncidentAddress = event.address
+          var incidentAddressXY = ''
+          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+            incidentAddressXY = event.lng + ',' + event.lat
+          }
+          this.caseInfo.IncidentAddressXY = incidentAddressXY
+        }
+      }).finally(() => {
+        this.showPopup = false
       })
     },
     loadSourceofcases () {
@@ -242,7 +265,6 @@ export default {
           name: res.users[0].name,
           id: res.users[0].emplId
         }
-        console.log('organiserTemp', organiserTemp)
         this.caseInfo.CoOrganizer = organiserTemp.name
         this.caseInfo.CoOrganizerId = organiserTemp.id
       })
@@ -255,27 +277,7 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      getFormsDetailByEventInfoId(event.objId, 'task_survey').then((res) => {
-        if (res) {
-          this.caseInfo = {
-            ...this.caseInfo,
-            ...res.MainForm,
-            LawParties: res.law_party
-          }
-        } else {
-          this.event = event
-          this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
-          this.caseInfo.IncidentAddress = event.address
-          var incidentAddressXY = ''
-          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
-            incidentAddressXY = event.lng + ',' + event.lat
-          }
-          this.caseInfo.IncidentAddressXY = incidentAddressXY
-          this.showPopup = false
-        }
-      }).finally(() => {
-        this.showPopup = false
-      })
+      this.loadEventCheck(event)
     },
     save (data) {
       this.loading = true

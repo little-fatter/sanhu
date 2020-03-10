@@ -205,7 +205,7 @@ export const autoLogin = (isInit = true) => {
           apphideLoading()
           resolve()
         }).catch(error => {
-          var msg = '免登录失败,原因:' + JSON.stringify(error)
+          var msg = '免登录失败,请联系管理员'
           ddAlert(msg)
           apphideLoading()
           reject(error)
