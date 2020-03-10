@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FastDev.Model\FastDev.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="TopSdk">
       <HintPath>..\libs\TopSdk.dll</HintPath>
     </Reference>
