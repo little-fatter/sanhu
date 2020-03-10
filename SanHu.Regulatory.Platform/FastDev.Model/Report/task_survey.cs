@@ -64,6 +64,11 @@ public string PreviousformID
 get;
 set;
 }
+public string FormState
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

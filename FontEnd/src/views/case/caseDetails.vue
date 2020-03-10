@@ -1,69 +1,42 @@
 <style scoped lang='less'>
+@bgColor: #fff;
+@borderRadius: 8px;
+@margin: 0px;
+@padding: 0px;
 * {
   box-sizing: border-box;
 }
-
 .case-box {
   background-color: #f4f3f3;
   min-height: 90vh;
   height: auto;
   overflow: auto;
 
-  .case-top {
-    padding: 26px 55px;
-    background-color: #fff;
-  }
-
-  .case-top {
-    // height: 136px;
-
-    h5 {
-      font-size: 18px;
-      color: #222;
-      font-weight: bold;
-    }
-
-    .case-serch-bar {
-      .maigin-top {
-        margin-top: 15px;
-      }
-    }
-    .tagFone {
-      // font-size: 16px;
-    }
-  }
-
   .case-body {
-    margin: 15px 55px;
-    background-color: #f4f3f3;
+    // margin: 15px 55px;
+    // background-color: #f4f3f3;
     padding: 0px;
 
     .tabs {
       .tabsBody {
         .tabsCard {
           width: 100%;
-
-          &:nth-child(1) {
-            margin-top: -17px;
-          }
-
-          &:nth-child(2) {
-            margin-top: 20px;
-          }
-
+          border-radius: @borderRadius;
+          padding: 0px !important;
           ul {
             margin: 0px;
             padding: 0px;
             list-style: none;
+            padding: 15px 31px 25px;
 
             li {
               display: flex;
               flex-flow: row nowrap;
               justify-content: flex-start;
-              height: 35px;
-              line-height: 35px;
-              font-size: 15px;
-              color: #838589;
+              height: 45px;
+              line-height: 45px;
+              font-size: 14px;
+              color: #63687B;
 
               p {
                 width: 600px;
@@ -77,11 +50,11 @@
                   }
                 }
                 span:first-child {
-                  width: 126px;
+                  // width: 126px;
                   display: inline-block;
-                  text-align: right;
-                  color: #515558 !important;
-                  font-weight: bold;
+                  // text-align: right;
+                  color: #222328 !important;
+                  // font-weight: bold;
                 }
               }
             }
@@ -113,47 +86,109 @@
     margin-right: 15px;
   }
 }
+.case-Head {
+  background-color: @bgColor;
+  border-top-right-radius: @borderRadius;
+  border-top-left-radius: @borderRadius;
+}
+.case-Head p {
+  margin: @margin;
+  padding: @padding;
+  height: 75px;
+  border-bottom: solid 1px #dcdee2;
+  padding: 0 25px;
+  line-height: 75px;
+}
+.case-Head p span {
+  font-size: 20px;
+}
+.case-Head p span:first-child {
+  color: #222328;
+}
+.case-Head p span:last-child {
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 80px;
+}
+/deep/ .ant-tabs-nav-scroll {
+  height: 56px;
+  background-color: @bgColor;
+  border-bottom-right-radius: @borderRadius;
+  border-bottom-left-radius: @borderRadius;
+  padding: 0 25px;
+}
+.info-title,.info-title-card {
+  height: 65px;
+  border-bottom: solid 1px #dcdee2;
+  padding: 0 25px;
+  line-height: 65px;
+  font-size: 16px;
+  color: #222328;
+  display: flex;
+  align-items: center;
+}
+.info-title span,.info-title-card span{
+  width: 5px;
+  height: 15px;
+  background-color: #3a9dfa;
+  border-radius: 5px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 6px;
+}
+/deep/ .ant-card-wider-padding .ant-card-body {
+  padding: 0px !important;
+}
 </style>
 <template>
   <div class="case-box">
-    <div class="case-top">
-      <h5>案件详情</h5>
-      <div class="case-serch-bar">
-        <a-row>
-          <a-col :span="3">
-            <span>
-              <a-tag color="#2db7f5" class="tagFone">{{ caseInfo.CaseNumber }}</a-tag>
-            </span>
-          </a-col>
-          <a-col :span="4">
-            <span>案件状态：</span>
-            <span>
-              <a-tag color="#87d068" class="tagFone">{{ caseInfo.CaseStatus }}</a-tag>
-            </span>
-          </a-col>
-        </a-row>
-      </div>
-    </div>
     <div class="case-body">
+      <div class="case-Head">
+        <p class="case-info-base">
+          <span>{{ caseInfo.CaseNumber }}</span>
+          <template>
+            <span
+              v-if="caseInfo.CaseStatus==='已结案'"
+              style="color: #1FC08E;"
+            >{{ caseInfo.CaseStatus }}</span>
+            <span
+              v-else-if="caseInfo.CaseStatus==='移交他部门处理'"
+              style="color: #A1A6BA;"
+            >{{ caseInfo.CaseStatus }}</span>
+            <span
+              v-else-if="caseInfo.CaseStatus==='已做出处罚决定'||caseInfo.CaseStatus==='已执行处罚'"
+              style="color: #FFA73D;"
+            >{{ caseInfo.CaseStatus }}</span>
+            <span
+              v-else-if="caseInfo.CaseStatus==='已归档'||caseInfo.CaseStatus==='已建档'"
+              style="color: #3A9DFA;"
+            >{{ caseInfo.CaseStatus }}</span>
+            <span v-else style="color: #FF7373;">{{ caseInfo.CaseStatus }}</span>
+          </template>
+        </p>
+        <div></div>
+      </div>
       <a-tabs class="tabs" :tabBarGutter="tabBarGutterNum">
         <a-tab-pane class="tabsBody" key="1">
-          <span slot="tab">
-            <a-icon type="file-text" />基本信息
-          </span>
-          <a-card class="tabsCard" style="margin-top: -17px">
+          <span slot="tab">案件详情</span>
+          <a-card class="tabsCard" style="margin-top: -7px">
+            <div class="info-title">
+              <span></span>
+              基本信息
+            </div>
             <ul>
-              <li class="case-Title">
-                <span>案由：</span>
-                <span style="flex: 1">{{ caseInfo.CauseOfAction }}</span>
+              <li>
+                <p>
+                  <span>案由：</span>
+                  <span style="flex: 1">{{ caseInfo.CauseOfAction }}</span>
+                </p>
               </li>
               <li>
                 <p>
                   <span>案件类别：</span>
                   <template>
                     <span v-for="item in Case_Type" :key="item.ID">
-                      <abbr v-if="item.ItemCode===caseInfo.CaseType">
-                        {{ item.Title }}
-                      </abbr>
+                      <abbr v-if="item.ItemCode===caseInfo.CaseType">{{ item.Title }}</abbr>
                     </span>
                   </template>
                 </p>
@@ -170,8 +205,6 @@
                     :key="item.ID"
                   >{{ item.Name+` 电话：`+ item.Contactnumber }}</span>
                 </p>
-              </li>
-              <li>
                 <p>
                   <span>处罚决定书文号：</span>
                   <span>{{ caseInfo.PenaltyDecisionNo }}</span>
@@ -202,11 +235,15 @@
                   <span>办案人员：</span>
                   <span>{{ caseInfo.Investigators }}</span>
                 </p>
-              </li>
-              <li>
                 <p>
                   <span>归档日期：</span>
                   <span>{{ caseInfo.OnDocDay }}</span>
+                </p>
+              </li>
+              <li>
+                <p>
+                  <span>归档人：</span>
+                  <span>{{ caseInfo.DocPeople }}</span>
                 </p>
                 <p>
                   <span>保存期限：</span>
@@ -218,16 +255,15 @@
                   <span>归档号：</span>
                   <span>{{ caseInfo.DocNo }}</span>
                 </p>
-                <p>
-                  <span>归档人：</span>
-                  <span>{{ caseInfo.DocPeople }}</span>
-                </p>
               </li>
             </ul>
           </a-card>
           <!--  事件信息-->
-          <a-card title="事件信息" :bordered="false" class="tabsCard" style="margin-top: 20px">
-            <!-- <a href="#" slot="extra">事件详情&gt;</a> -->
+          <a-card :bordered="false" class="tabsCard" style="margin-top: 10px">
+            <div class="info-title-card">
+              <span></span>
+              事件信息
+            </div>
             <ul>
               <li>
                 <p>
@@ -239,13 +275,13 @@
                 </p>
                 <p>
                   <span>上报时间：</span>
-                  <span>{{ EvenInfo.address }}</span>
+                  <span>{{ EvenInfo.reportTime }}</span>
                 </p>
               </li>
               <li>
                 <p>
                   <span>事发时间：</span>
-                  <span>{{ EvenInfo.reportTime }}</span>
+                  <span>{{ EvenInfo.createTime }}</span>
                 </p>
                 <p>
                   <span>上报人：</span>
@@ -255,7 +291,7 @@
               <li>
                 <p>
                   <span>事件类型：</span>
-                  <span>{{ EvenInfo.evtTypeDisplayName }}</span>
+                  <span>{{ EvenInfo.evtTypeName }}</span>
                 </p>
                 <p>
                   <span>上报来源：</span>
@@ -272,15 +308,13 @@
           </a-card>
         </a-tab-pane>
         <a-tab-pane key="2">
-          <span slot="tab">
-            <a-icon type="book" />案卷文件
-          </span>
-          <a-card class="tabsCard" style="margin-top: -17px">
-            <div class="btn-group">
+          <span slot="tab">案卷文件</span>
+          <a-card class="tabsCard" style="margin-top: -7px;padding:25px;border-radius: 8px;border:none;">
+            <!-- <div class="btn-group">
               <a-button type="primary" icon="file-pdf" @click="exportFile">导出</a-button>
               <a-button type="primary" icon="audit" @click="printFile">打印</a-button>
               <a-button type="primary" icon="mail" @click="sendFile">网上送达</a-button>
-            </div>
+            </div> -->
             <!-- 文件列表-->
             <s-table ref="table" size="default" :columns="columns" :dataCallback="loadData">
               <template slot="FormName" slot-scope="text,data">
@@ -359,8 +393,7 @@ export default {
         }
       ],
 
-      data: [
-      ],
+      data: [],
       rowSelection: {
         /*      onChange: (selectedRowKeys, selectedRows) => {
                   console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
@@ -510,7 +543,11 @@ export default {
 }
 /deep/ .ant-tabs-tab {
   font-size: 16px !important;
-  font-weight: bold !important;
+  height: 56px;
+  line-height: 56px;
+  margin-right: 60px !important;
+  padding: 0 6px;
+  border-bottom: solid 4px #fff !important;
 }
 .case-Title {
   font-size: 18px !important;
@@ -519,8 +556,8 @@ export default {
   margin-bottom: 15px;
 }
 .case-Title span:first-child {
-  width: 126px;
-  text-align: right;
+  /* width: 126px;
+  text-align: right; */
 }
 /deep/ .ant-card-head-title {
   font-size: 16px;

@@ -9,6 +9,7 @@
         <field name="BaseInfo" dbName="BaseInfo" title="基本情况" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="IllegalCauseInfo" dbName="IllegalCauseInfo" title="案情" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="LawDesc" dbName="LawDesc" title="法律描述" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
