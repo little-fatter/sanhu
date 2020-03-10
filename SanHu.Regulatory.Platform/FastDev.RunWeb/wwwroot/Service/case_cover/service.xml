@@ -16,6 +16,7 @@
         <field name="FilingId" dbName="FilingId" title="归档人Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="SaveYear" dbName="SaveYear" title="保存期限" type="string" length="50" isPK="N" />
         <field name="EventInfoId" dbName="EventInfoId" title="事件" type="string" length="50" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

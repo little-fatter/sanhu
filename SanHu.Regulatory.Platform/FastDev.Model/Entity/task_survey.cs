@@ -1,10 +1,7 @@
-using System;
- using System.Runtime.CompilerServices;
-
-
 namespace FastDev.Model.Entity
 {
-  
+  using System;
+ using System.Runtime.CompilerServices;
 public partial class task_survey
 {
 public string ID
@@ -63,6 +60,11 @@ get;
 set;
 }
 public string PreviousformID
+{
+get;
+set;
+}
+public string FormState
 {
 get;
 set;

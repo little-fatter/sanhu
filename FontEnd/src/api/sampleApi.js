@@ -10,10 +10,24 @@ function condition (params = {}, pageiIndex = 1, pageSize = 10) {
     },
     PageIndex: pageiIndex,
     PageSize: pageSize,
-    SortName: 'ID',
-    SortOrder: 'asc'
+    SortName: 'ModifyDate',
+    SortOrder: 'desc'
   }
 }
+
+// function condition (params = {}, pageiIndex = 1, pageSize = 10) {
+//   return {
+//     Condition: {
+//       rules: [],
+//       groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
+//       op: 'and'
+//     },
+//     PageIndex: pageiIndex,
+//     PageSize: pageSize,
+//     SortName: 'ID',
+//     SortOrder: 'asc'
+//   }
+// }
 
 function relatedCon (params = {}, pageiIndex = 1, pageSize = 10) {
   return {

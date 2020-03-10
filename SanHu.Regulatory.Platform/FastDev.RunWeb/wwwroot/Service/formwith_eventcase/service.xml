@@ -2,7 +2,7 @@
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <model name="formwith_eventcase" title="全部表单plus" textField="OriginatorID" moduleName="form" moduleTitle="表单" dbName="" />
     <fields>
-        <field name="OriginatorID" dbName="OriginatorID" title="发起人" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="OriginatorID" dbName="OriginatorID" title="发起人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="CompletionTime" dbName="CompletionTime" title="完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
         <field name="FormName" dbName="FormName" title="表单名称" type="string" length="50" enabledSearch="Y" isPK="N" />
@@ -20,8 +20,8 @@
         <field name="evtTypeId" dbName="evtTypeId" title="事件类型ID" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="CaseType" dbName="CaseType" title="案件类型" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="CaseNumber" dbName="CaseNumber" title="案件编号" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name="evtTypeName" dbName="evtTypeName" title="事件类型名称" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="350" relationModel="" relationField="" isPK="N" />
+        <field name="evtTypeName" dbName="evtTypeName" title="事件类型名称" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

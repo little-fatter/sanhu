@@ -106,7 +106,7 @@ namespace FastDev.Service
         //            var rule = source.FirstOrDefault(a => a.FieldName == "Tasknumber");
         //            if (rule != null)
         //            {
-        //                string newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
+        //                data.newAutoCode = new DevDB.AutoCode.AutoCodeService(QueryDb, rule).GetNewAutoCode();
         //                wTask.Tasknumber = newAutoCode;
         //            }
         //            wTask.MainHandler = data.MainHandler;
@@ -130,6 +130,8 @@ namespace FastDev.Service
                     return FormData;
                 case "CREATE":
                     return CreateTask;
+                case "GETPROCESS":
+                    return GetProcess;
             }
             return null;
         }
@@ -219,6 +221,13 @@ namespace FastDev.Service
         {
             var data = base.GetPageData(descriptor);
             return data;
+        }
+
+        private object GetProcess(APIContext context)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<GetProcessReq>(context.Data);
+            var ddService = SysContext.GetService<IDingDingServices>();
+            return ddService.GetProcess(data.OriUserId, data.OriDeptId, data.taskUserId, data.OpeUserId, data.pageIndex, data.pageSize).Result;
         }
 
     }
