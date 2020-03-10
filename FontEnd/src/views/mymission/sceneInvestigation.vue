@@ -1,17 +1,20 @@
 <template>
   <div class="wrapper">
+    <div class="title">
+      现场勘验
+    </div>
     <div class="headLine">
       <div>
         <span>交办时间：</span>
-        <span>{{ missionData.createTime }}</span>
+        <span>{{ missionData.createTime || '2020-02-28 20:00:45' }}</span>
       </div>
       <div>
         <span>期望完成时间：</span>
-        <span>{{ missionData.ExpectedCompletionTime }}</span>
+        <span>{{ missionData.ExpectedCompletionTime || '2020-03-01 23:46:47' }}</span>
       </div>
       <div>
         <span>协办人：</span>
-        <span>{{ missionData.CoOrganizer }}</span>
+        <span>{{ missionData.CoOrganizer || '马艳' }}</span>
       </div>
     </div>
     <div class="details">
@@ -19,13 +22,13 @@
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事发地点：</a-col>
         <a-col class="colSize" :span="12">
-          <span>{{ data.address }}</span>
-          <span>坐标{{ data.lng }},{{ data.lat }}</span>
+          <span>{{ data.address || '玉溪市抚仙湖区抚仙湖路38号' }}</span>
+          <!-- <span>坐标{{ data.lng }},{{ data.lat }}</span> -->
         </a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报时间：</a-col>
-        <a-col class="colSize" :span="12">{{ data.reportTime }}</a-col>
+        <a-col class="colSize" :span="12">{{ data.reportTime|| '2020-02-25 12:46:11' }}</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报来源：</a-col>
@@ -33,22 +36,42 @@
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">上报人：</a-col>
-        <a-col class="colSize" :span="12">{{ data.reporterName }}（{{ data.wxUserId }}）</a-col>
+        <a-col class="colSize" :span="12">{{ data.reporterName || '周围' }}（{{ data.wxUserId || '13685462132' }}）</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事件类型：</a-col>
-        <a-col class="colSize" :span="12">{{ data.evtTypeDisplayName }}</a-col>
+        <a-col class="colSize" :span="12">{{ data.evtTypeDisplayName || '执法事件' }}</a-col>
       </a-row>
       <a-row class="row">
         <a-col class="colSize colLine" :span="5">事件描述：</a-col>
-        <a-col class="colSize" :span="12">{{ data.remark }}</a-col>
+        <a-col class="colSize" :span="12">{{ data.remark || '违法排污' }}</a-col>
       </a-row>
-      <a-row class="row">
+      <!-- <a-row class="row">
         <a-col class="colSize colLine" :span="5">关联表单：</a-col>
         <a-col class="colSize" :span="12">
-          <div>关联的表单主键{{ data.responseRefId }}</div>
+          <div>
+            <span>
+              <svg
+                t="1582606760517"
+                class="icon"
+                viewBox="0 0 1000 1000"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                p-id="5583"
+                width="20"
+                height="20"
+              >
+                <path
+                  d="M546.133333 520.533333l59.733334-59.733333 21.333333 21.333333 115.2-115.2-119.466667-119.466666-115.2 115.2 4.266667 8.533333-59.733333 59.733333L384 358.4 614.4 128l243.2 243.2-230.4 230.4-81.066667-81.066667z m-115.2-68.266666L371.2 512l-8.533333-8.533333-115.2 115.2 119.466666 119.466666 115.2-115.2-21.333333-21.333333 59.733333-59.733333 81.066667 81.066666L371.2 853.333333 128 614.4 358.4 384l72.533333 68.266667zM571.733333 341.333333l59.733334 59.733334-230.4 230.4L341.333333 571.733333 571.733333 341.333333z"
+                  fill="#8a8a8a"
+                  p-id="5584"
+                />
+              </svg>
+              相关表单
+            </span>
+          </div>
         </a-col>
-      </a-row>
+      </a-row> -->
     </div>
     <!-- <div>
       <a-form
@@ -163,7 +186,7 @@
 </template>
 
 <script>
-import { getRelateForm, getEventDetails, getTaskDetails } from '@/api/sampleApi'
+import { getRelateForm, getDetails, getPageData } from '@/api/sampleApi'
 import partyForm from './components/partyorcompany'
 
 export default {
@@ -207,6 +230,7 @@ export default {
       eventId: ' ', // 事件id
       Id: '', // 任务id
       data: {}, // 事件信息，
+      formAll: [], // 关联的表单
       missionData: {} // 任务信息
     }
   },
@@ -230,7 +254,7 @@ export default {
       }
     },
     getDetail () {
-      getEventDetails(this.eventId).then(res => {
+      getDetails('event_info', this.eventId).then(res => {
         this.data = res
       }).catch(err => {
         console.log(err)
@@ -248,13 +272,14 @@ export default {
         ]
       }
       getRelateForm(params).then(res => {
+        this.formAll = res
         console.log(res)
       }).catch(err => {
         console.log(err)
       })
     },
     getMissionDetail () {
-      getTaskDetails(this.Id).then(res => {
+      getDetails('work_task', this.Id).then(res => {
         this.missionData = res
         this.getRelateForm()
         console.log(res)
@@ -276,7 +301,18 @@ export default {
     border: 1px solid #bbbbbb;
     margin-top: 20px;
     color: #101010;
-    border-radius: 4px;
+    border-radius: 10px;
+    box-shadow: 2px 0px 2px 3px #aaaaaa;
+    .title {
+      text-align: center;
+      color: #111111;
+      font-size: 20px;
+      font-weight: 700;
+      position: absolute;
+      top: 30px;
+      left: 160px;
+      letter-spacing: 8px;
+    }
     .headLine {
         display:flex;justify-content:space-around;
         border-bottom: 1px solid #aaaaaa;
@@ -287,9 +323,9 @@ export default {
         border-bottom: 1px solid #aaaaaa;
         padding-bottom: 20px;
         .detailTitle {
-            margin-left: 20px;
-            font-size: 18px;
-            font-weight: bold;
+            margin-left: 30px;
+            font-size: 16px;
+            font-weight: bold
         }
         .row {
             margin-top: 10px;

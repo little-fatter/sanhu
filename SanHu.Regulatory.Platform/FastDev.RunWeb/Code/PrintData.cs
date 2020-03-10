@@ -123,7 +123,7 @@ namespace FastDev.RunWeb.Code
                 }
             }
         }
-        public List<TemplatePageInfo> GetTemplatePages(string strContexts)
+        public List<TemplatePageInfo> GetTemplatePageInfo(string contextIds)
         {
             List<TemplatePageInfo> list = new List<TemplatePageInfo>();
             if (printTemp != null)
@@ -133,20 +133,16 @@ namespace FastDev.RunWeb.Code
                 int num = 1;
                 if (string.IsNullOrEmpty(detailFieldName))
                 {
-                    string[] array = strContexts.Split(';');
+                    string[] array = contextIds.Split(';');
                     foreach (string context in array)
                     {
-                        int num2 = 1;
-                        List<TemplatePageInfo> list2 = list;
                         TemplatePageInfo templatePageInfo = new TemplatePageInfo
                         {
-                            Context = context
+                            Context = context,
+                            PageIndex = 1,
+                            AllPageIndex = num++
                         };
-                        TemplatePageInfo templatePageInfo2 = templatePageInfo;
-                        num2 = 2;
-                        templatePageInfo2.PageIndex = 1;
-                        templatePageInfo.AllPageIndex = num++;
-                        list2.Add(templatePageInfo);
+                        list.Add(templatePageInfo);
                     }
                 }
                 else
@@ -158,7 +154,7 @@ namespace FastDev.RunWeb.Code
                     if (field != null)
                     {
                         ServiceHelper.GetService(field.relationModel);
-                        string[] array = strContexts.Split(';');
+                        string[] array = contextIds.Split(';');
                         foreach (string context in array)
                         {
                             int num2 = 1;
@@ -195,11 +191,11 @@ namespace FastDev.RunWeb.Code
             }
             return list;
         }
-        public List<string> GetTemplatePage(string strContext, int? currentPage, bool bool_0)
+        public List<string> GetTemplatePage(string contextIds, int? currentPage, bool bool_0)
         {
             IService service = ServiceHelper.GetService(printTemp.ModelName);
             List<string> list = new List<string>();
-            List<TemplatePageInfo> list2 = GetTemplatePages(strContext);
+            List<TemplatePageInfo> list2 = GetTemplatePageInfo(contextIds);
             int num = (!currentPage.HasValue) ? 1 : currentPage.Value;
             dicPageInfo["page"] = ObjectExtensions.ToStr((object)num);
             dicPageInfo["pagecount"] = ObjectExtensions.ToStr((object)list2.Count);

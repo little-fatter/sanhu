@@ -151,7 +151,7 @@ import CaseListSelect from '../../../components/business/CaseListSelect'
 import { ddgetMapLocation, ddMapSearch, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import { formatDate } from '../../../utils/util'
 /**
- * 询问笔录
+ * 询问笔录   成林龙  要做详情
  */
 export default {
   name: 'AskPutdownCreate',

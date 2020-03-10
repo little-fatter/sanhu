@@ -63,7 +63,7 @@
         <models name="from_baseinfo" title="表单基础-不用" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="organization" title="frameworkorganization" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="attachment" title="附件" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="form_base" title="表单基础" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="form_base" title="表单基础-作废" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_patrolRecord" title="巡查记录表" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="organizationuser" title="frameworkorganizationuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="form_caseMove" title="案件移送" textField="Title" moduleName="form" moduleTitle="表单" />
@@ -100,5 +100,7 @@
         <models name="cms_article" title="文章" textField="Title" moduleName="cms" moduleTitle="cms" />
         <models name="case_report" title="结案报告" textField="Title" moduleName="case" moduleTitle="案件" />
         <models name="case_cover" title="卷宗封面" textField="Title" moduleName="case" moduleTitle="案件" />
+        <models name="formwith_eventcase" title="全部表单plus" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="form_printPDF" title="表单打印" textField="Title" moduleName="form" moduleTitle="表单" />
     </models>
 </freedesign>

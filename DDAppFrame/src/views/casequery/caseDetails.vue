@@ -63,7 +63,7 @@
           <!-- <van-cell title="上报来源" :value="eventInfo.eventFrom" value-class="con-style" title-class="title-cell" /> -->
           <van-cell title="上报人" :value="eventInfo.reporterName" value-class="con-style" title-class="title-cell" />
           <van-cell title="事件类型" :value="eventInfo.evtTypeDisplayName" value-class="con-style" title-class="title-cell" />
-          <van-cell title="事件描述" :value="eventInfo.remark" value-class="con-style" title-class="title-cell" />
+          <van-cell title="事件描述" :value="eventInfo.remark" value-class="con-style" title-class="title-cell" style="margin-bottom:1.5rem;" />
         </van-cell-group>
       </div>
     </van-panel>
@@ -72,8 +72,6 @@
 </template>
 
 <script>
-// import { getQueryConditon } from '../../utils/util' // 以及搜索规则
-import { isNotEmpty } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
 export default {
   name: 'CaseDetails',

@@ -244,6 +244,7 @@ padding:40px;
           </div> -->
         </div>
         <div class="returnBox">
+          <div @click="printForm" style="margin-right:20px;background-color:#1890FF;color:white;">打印预览</div>
           <div @click="$router.back()">返回</div>
         </div>
       </div>
@@ -253,7 +254,7 @@ padding:40px;
 
 <script>
 import detailEnforce from './fromComponents/detail-enforce'
-import { getFromPatrolRecord } from '@/api/sampleApi'
+import { getDetails, printPreview } from '@/api/sampleApi'
 import detailPunish from './fromComponents/detail-punish'
 export default {
   name: 'FormDetails',
@@ -262,23 +263,47 @@ export default {
   },
   data () {
     return {
-      formStyleName: 'detailEnforce', // 引用的组件名
-      approvalList: ['负责人1', '负责人2', '负责人3'],
+      formStyleName: 'detailPunish', // 引用的组件名
+      approvalList: ['负责人1', '负责人2', '负责人3'], // 审批人列表
       formId: 'af5f950b-79a6-45de-829d-4f7e4838cbe2', // 详情id
-      detailData: {}
+      detailData: {} // 表单详情
     }
   },
   mounted () {
+    if (this.$route.query.id) { this.formId = this.$route.query.id }
     this.getFromPatrolRecord()
   },
   methods: {
+    // 获取表单详情
     getFromPatrolRecord () {
-      getFromPatrolRecord(this.formId).then(res => {
+      getDetails('form_patrolRecord', this.formId).then(res => {
         this.detailData = res
-        console.log(res)
       }).catch(err => {
         console.log(err)
       })
+    },
+    // 打印预览
+    printForm () {
+      printPreview().then(res => {
+        const url = `http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/web/preview?rnd=${new Date().getTime()}`
+        const data1 = `${res[0].ID}`
+        const data2 = this.formId
+        this.openPostWindow(url, data1, data2)
+      }).catch(err => { console.log(err) })
+    },
+    // 生成表单进行post请求
+    openPostWindow (url, data1, data2) {
+      const newWin = window.open()
+      let formStr = ''
+      formStr = '<form style="visibility:hidden;" method="POST" action="' + url + '">' +
+           '<input type="hidden" name="templateId" value="' + data1 + '" />' +
+           '<input type="hidden" name="context" value="' + data2 + '" />' +
+           '</form>'
+
+      newWin.document.body.innerHTML = formStr
+      newWin.document.forms[0].submit()
+
+      return newWin
     }
   }
 }

@@ -16,6 +16,8 @@ namespace FastDev.Service
     {
         public event_infoService()
         {
+            OnGetAPIHandler += Event_InfoService_OnGetAPIHandler;
+            OnAfterGetPagedData += Event_InfoService_OnAfterGetPagedData;
             OnAfterGetDetailData += Event_infoService_OnAfterGetDetailData;
         }
 
@@ -36,14 +38,17 @@ namespace FastDev.Service
             base.QueryDb.BeginTransaction();
             try
             {
-                base.Create(postdata);
+                if (eventInfo.reportTime == null)
+                {
+                    eventInfo.reportTime = DateTime.Now;
+                }
+                base.Create(eventInfo);
                 eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
-                eventInfo.evtState = ((int)FD.Model.Enum.EventStatus.untreated).ToString();
                 base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
                 QueryDb.AbortTransaction();
                 return false;
@@ -82,6 +87,84 @@ namespace FastDev.Service
             }
             pageData.Records = revData;
             return pageData;
+        }
+
+
+        private Func<APIContext, object> Event_InfoService_OnGetAPIHandler(string id)
+        {
+            switch (id.ToUpper())
+            {
+                case "TYPECOUNT":
+                    return Handle;
+                case "STATECOUNT":
+                    return HandleState;
+            }
+            return null;
+        }
+        public object Handle(APIContext context)
+        {
+            List<object> retList = new List<object>();
+
+            //QueryDb.BeginTransaction();
+          
+          
+            //try
+            //{
+                retList.Add(new { TypeName = "钉钉", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='DD_REPORT' and OriginalID is not null") });
+                retList.Add(new { TypeName = "微信", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='WX_REPORT' and OriginalID is not null") });
+                retList.Add(new { TypeName = "AI告警", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='AI_REPORT' and OriginalID is not null") });
+                retList.Add(new { TypeName = "APP", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='APP_REPORT' and OriginalID is not null") });
+                retList.Add(new { TypeName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where reportType='OTHER' and OriginalID is not null") });
+            //}
+            //catch (Exception e)
+            //{
+            //    QueryDb.AbortTransaction();
+            //    throw e;
+            //}
+            //QueryDb.CompleteTransaction();
+            
+            return retList;
+        }
+
+        object HandleState(APIContext context)
+        {
+            List<object> retList = new List<object>();
+
+            //QueryDb.BeginTransaction();
+            //try
+            //{
+                retList.Add(new { StateName = "待受理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where (evtState='unAccept' or (evtState!='unAccept' and evtState!='doing' and evtState!='done')) and OriginalID is not null ") });
+                retList.Add(new { StateName = "处理中", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='doing' and OriginalID is not null") });
+                retList.Add(new { StateName = "已处理", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState='done' and OriginalID is not null") });
+                //retList.Add(new { StateName = "其他", Count = QueryDb.ExecuteScalar<int>("SELECT count(*) FROM event_info where evtState!='unAccept' and evtState!='doing' and evtState!='done' ") });
+            //}
+            //catch (Exception e)
+            //{
+            //    QueryDb.AbortTransaction();
+            //    throw e;
+            //}
+            //QueryDb.CompleteTransaction();
+            
+            return retList;
+        }
+
+        private void Event_InfoService_OnAfterGetPagedData(object query, object data)
+        {
+            var lst = (data as PagedData).Records;
+
+            foreach (var item in lst)
+            {
+                var info = item as Dictionary<string, object>;
+                switch (info["evtState"])
+                {
+                    case "unAccept": info["evtStateName"]= "待受理"; break;
+                    case "doing": info["evtStateName"] = "处理中"; break;
+                    case "done": info["evtStateName"] = "已处理"; break;
+                    default:
+                        info["evtStateName"] = "";
+                        break;
+                }
+            }
         }
 
     }

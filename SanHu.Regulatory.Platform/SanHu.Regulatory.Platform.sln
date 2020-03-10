@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.Model", "FastDev.Model\FastDev.Model.csproj", "{40784917-2556-427C-BF59-C11105C8B488}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D7C1C40A-F15C-4642-A55D-F2D901B2F148} = {D7C1C40A-F15C-4642-A55D-F2D901B2F148}
+		{523D3BA2-5943-4565-A71A-940194B5FBFC} = {523D3BA2-5943-4565-A71A-940194B5FBFC}
+		{BC4EE6C7-CB67-409E-8135-4037E4BA8181} = {BC4EE6C7-CB67-409E-8135-4037E4BA8181}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastDev.Common", "FastDev.Common\FastDev.Common.csproj", "{9DFD4EFA-43EB-4EE1-8954-E4C08F94C7E9}"
 EndProject

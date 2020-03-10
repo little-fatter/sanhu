@@ -39,7 +39,13 @@ namespace FD.Model.Enum
         /// 转为案件办理
         /// </summary>
         [Display(Name = "转为案件办理")]
-        toCase
+        toCase,
+        /// <summary>
+        /// 处理中
+        /// </summary>
+        [Display(Name = "处理中")]
+        dispose,
+
     }
 
     public enum WorkTaskStatus

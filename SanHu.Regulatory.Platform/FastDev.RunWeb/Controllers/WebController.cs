@@ -32,6 +32,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using FastDev.RunWeb.Code;
+using DinkToPdf.Contracts;
 
 namespace FastDev.RunWeb.Controllers
 {
@@ -1830,7 +1831,7 @@ namespace FastDev.RunWeb.Controllers
                 var list = printData.GetTemplatePage(context, null, true);
                 list[0] = list[0].Insert(0, "<style type=\"text/css\">\r\n                     {style}\r\n             </style> ".Replace("{style}", printData.printTemp.TemplateStyle));
 
-                byte[] array = PDFHelper.HmtlToPDF(list[0], (double)printData.printTemp.MarginLeft.Value, (double)printData.printTemp.MarginTop.Value,
+                byte[] array = _converter.HmtlToPDF(list[0], (double)printData.printTemp.MarginLeft.Value, (double)printData.printTemp.MarginTop.Value,
                     (double)printData.printTemp.MarginRight.Value, (double)printData.printTemp.MarginBottom.Value);
 
 
@@ -1869,8 +1870,7 @@ namespace FastDev.RunWeb.Controllers
             }
             printData.formatContent = printData.printTemp.TemplateBody;
             printData.SetDefaultTemplateData();
-            ServiceHelper.GetServiceConfig(printData.printTemp.ModelName);
-            List<TemplatePageInfo> list = printData.GetTemplatePages(context);
+            List<TemplatePageInfo> list = printData.GetTemplatePageInfo(context);
             bool flag = pageindex <= 0 && list.Count > 1;
             bool flag2 = pageindex <= 0 || isjpg == "Y";
             if (flag)
@@ -3068,8 +3068,8 @@ namespace FastDev.RunWeb.Controllers
                 });
             }
         }
-
-        public WebController()
+        IConverter _converter;
+        public WebController(IConverter converter)
         {
 
             printWidth = 760;
@@ -3084,7 +3084,7 @@ namespace FastDev.RunWeb.Controllers
                     "树-大数据库加载"
                 }
             };
-
+            _converter = converter;
         }
 
         [NonAction]

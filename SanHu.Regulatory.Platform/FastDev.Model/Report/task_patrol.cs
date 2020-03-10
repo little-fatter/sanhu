@@ -89,6 +89,11 @@ public string DingUrl
 get;
 set;
 }
+public string FormState
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

@@ -1,3 +1,4 @@
+<!--//事件详情-->
 <template>
   <div class="eventDetail">
     <van-cell-group>
@@ -9,8 +10,8 @@
         <van-cell is-link style="background-color:#DFDDDD;" value="事件信息"></van-cell>
       </van-cell>
       <van-cell title="事发地点：" :value="eventInfo.address"></van-cell>
-      <van-cell title="上报时间：" :value="eventInfo.reportTime"></van-cell>
-      <van-cell title="上报来源：" :value="loadData.reportType"></van-cell>
+      <van-cell title="上报时间：" :value="eventInfo.reportTime | dayjs('YYYY-MM-DD HH:mm')"></van-cell>
+      <van-cell title="上报来源：" :value="eventInfo.ReportSource"></van-cell>
       <van-cell title="上报人：" :value="eventInfo.reporterName"></van-cell>
       <van-cell title="事件类型：" :value="eventInfo.evtTypeDisplayName"></van-cell>
       <van-cell title="事件描述：" :value="eventInfo.remark"></van-cell>
@@ -32,7 +33,7 @@
               p-id="5584"
             />
           </svg>
-          {{loadData.Associatedforms}}
+          {{ loadData.Associatedforms }}
         </span>
       </van-cell>
     </van-cell-group>
@@ -42,25 +43,18 @@
       <van-cell title="事发时间" :value="loadData.IncidentTime"></van-cell>
       <van-cell title="事发地点" :value="loadData.IncidentAddress"></van-cell>
       <van-cell title="处理结果" :value="loadData.Result"></van-cell>
-      <!-- <van-cell title="" :value=""></van-cell>-->
-      <van-cell title="图片">
-        <SUpload
-          ref="myupload"
-          :sync2Dingding="false"
-          :isOnlyView="true"
-          style="margin-left:80px;margin-bottom:5px;"
-        ></SUpload>
-      </van-cell>
       <van-cell title="附件">
         <SUpload
           ref="myupload"
           :sync2Dingding="false"
           :isOnlyView="true"
           style="margin-left:80px;margin-bottom:5px;"
+          :initResult="loadData.Attachment"
         ></SUpload>
+        <!-- :initResult="loadData.Attachment"附件展示传入值 -->
       </van-cell>
-      <van-cell title="是否请求执法人员处理" :value="eventCheck.Needlawenforcement===0? '是':'否'"></van-cell>
-      <van-cell title="是否需要跟踪整改" :value="eventCheck.Needtracking===0? '是':'否'"></van-cell>
+      <van-cell title="是否请求执法人员处理" :value="loadData.Needlawenforcement === 0 ? '否' : '是'"></van-cell>
+      <van-cell title="是否需要跟踪整改" :value="loadData.Needtracking === 0 ? '否' : '是'"></van-cell>
       <van-cell>
         <van-button type="info" native-type="submit" @click="returnSubmitForm" size="large">返回</van-button>
       </van-cell>
@@ -69,13 +63,13 @@
 </template>
 
 <script>
-import SUpload from "../../components/file/StandardUploadFile";
+import SUpload from '../../components/file/StandardUploadFile'
 import {
   isNotEmpty,
   formatDate,
   isEmpty,
   getQueryConditon
-} from "../../utils/util";
+} from '../../utils/util'
 import {
   getDetaildata,
   commonOperateApi,
@@ -83,70 +77,92 @@ import {
   DictionaryCode,
   commonSaveApi,
   getDetialdataByfilter,
-  getDetialdataByEventInfoId
-} from "../../api/regulatoryApi";
+  getDetialdataByEventInfoId,
+  getFormsDetailByEventInfoId
+} from '../../api/regulatoryApi'
 export default {
-  name: "EventDetail",
+  name: 'EventDetail',
   components: {
     SUpload
   },
   props: {},
-  data() {
+  data () {
     return {
-      loadData: {},
-      eventInfo:{},
-      eventAddress: "玉溪市澄江县 | 1.5km",
-      reportTime: "123",
-      reportType: "公众号举报",
-      reporterName: "小马哥",
-      evtTypeDisplayName: "非法捕捞",
-      remark:
-        "武汉一名患者的这句话让医生红了双眼，也让无数人泪目。让医生远点，是担心传染，是希望“他们为更多武汉市民护佑生命”。“一个人撑起一片天，一颗心温暖一座城……”很多人这样留言。在这座城市，这些天来，这样的故事每天都在发生。",
-      eventCheck: {
-        desc:
-          "武汉一名患者的这句话让医生红了双眼，也让无数人泪目。让医生远点，是担心传染，是希望“他们为更多武汉市民护佑生命”。“一个人撑起一片天，一颗心温暖一座城……”很多人这样留言。在这座城市，这些天来，这样的故事每天都在发生。",
-        eventType: "非法捕捞",
-        eventTime: "2018-12-01",
-        eventAddress: "成都市",
-        dealResult:
-          "武汉一名患者的这句话让医生红了双眼，也让无数人泪目。让医生远点，是担心传染，是希望“他们为更多武汉市民护佑生命”。“一个人撑起一片天，一颗心温暖一座城……”很多人这样留言。",
-        dealType: "自行处理",
-        needTailAfter: "需要跟踪"
-      },
-      rejectReason: "",
-      eventTypeption: "465456",
-      access: ""
-    };
+      loadData: {}, // 详情信息
+      eventInfo: {} // 事件信息
+      // eventAddress: "玉溪市澄江县 | 1.5km",
+      // reportTime: "123",
+      // reportType: "公众号举报",
+      // reporterName: "小马哥",
+      // evtTypeDisplayName: "非法捕捞",
+      // remark:
+      //   "武汉一名患者的这句话让医生红了双眼，也让无数人泪目。让医生远点，是担心传染，是希望“他们为更多武汉市民护佑生命”。“一个人撑起一片天，一颗心温暖一座城……”很多人这样留言。在这座城市，这些天来，这样的故事每天都在发生。",
+      // eventCheck: {
+      //   desc:
+      //     "武汉一名患者的这句话让医生红了双眼，也让无数人泪目。让医生远点，是担心传染，是希望“他们为更多武汉市民护佑生命”。“一个人撑起一片天，一颗心温暖一座城……”很多人这样留言。在这座城市，这些天来，这样的故事每天都在发生。",
+      //   eventType: "非法捕捞",
+      //   eventTime: "2018-12-01",
+      //   eventAddress: "成都市",
+      //   dealResult:
+      //     "武汉一名患者的这句话让医生红了双眼，也让无数人泪目。让医生远点，是担心传染，是希望“他们为更多武汉市民护佑生命”。“一个人撑起一片天，一颗心温暖一座城……”很多人这样留言。",
+      //   dealType: "自行处理",
+      //   needTailAfter: "需要跟踪"
+      // },
+      // rejectReason: "",
+      // eventTypeption: "465456",
+    }
   },
   watch: {},
   computed: {},
   methods: {
-    returnSubmitForm() {
-      this.$router.go(-1);
+    returnSubmitForm () {
+      this.$router.go(-1)
     },
     // 页面数据
-    init() {
-      const id = this.$route.query.id;
+    init () {
+      const queryParam = this.$route.query
+      const id = queryParam.id
+      console.log(id)
       // 请求事件巡查详情
-      getDetaildata("task_patrol", id).then(res => {
-        this.loadData = res;
-      });
-      // 请求事件信息详情
-      getDetialdataByEventInfoId("event_info", this.loadData.EventInfoId).then(
-        resolve => {
-          this.eventInfo=resolve;
-          console.log();
-          
+      getDetaildata('task_patrol', id).then(res => {
+        if (isNotEmpty(res.TaskId)) {
+          getDetaildata('work_task', taskId).then(res => {
+            this.loadEventInfo(res.EventInfoId)
+          })
         }
-      );
-      console.log(id);
+      })
+    },
+    // 获取事件信息
+    loadEventInfo (EventInfoId) {
+      getDetaildata('event_info', EventInfoId).then(res => {
+        if (res) {
+          this.eventInfo = res
+          this.loadEventCheck(EventInfoId)
+        }
+      })
+    },
+    // 获取表单信息
+    loadEventCheck (EventInfoId) {
+      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then(res => {
+        if (res) {
+          this.loadData = {
+            ...res.MainForm,
+            LawParties: res.Party,
+            Attachment: res.Attachment
+          }
+          console.log(this.loadData)
+        }
+      })
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  mounted() {}
-};
+  mounted () {},
+  activated () {
+    this.init()
+  }
+}
 </script>
 <style lang="less">
 </style>

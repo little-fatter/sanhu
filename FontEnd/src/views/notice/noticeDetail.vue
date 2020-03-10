@@ -34,8 +34,6 @@
 
 <template>
   <div class="article-wrapper">
-    <div class="logo">
-    </div>
     <div class="article-head">
       <div class="article-title">
         {{ article.Title }}
@@ -54,7 +52,7 @@
 </template>
 
 <script>
-import { getNoticeDetails } from '@/api/sampleApi'
+import { getDetails } from '@/api/sampleApi'
 
 export default {
   data () {
@@ -103,10 +101,12 @@ export default {
   },
   mounted () {
     this.id = this.$route.query.id
-    getNoticeDetails(this.id).then((ret) => {
+    getDetails('cms_article', this.id).then((ret) => {
       if (ret.statusCode) {
         this.article = ret.data
       }
+    }).catch(err => {
+      console.log(err)
     })
   }
 }

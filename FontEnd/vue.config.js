@@ -69,10 +69,10 @@ module.exports = {
           /* less 变量覆盖，用于自定义 ant design 主题 */
 
           /*
-          'primary-color': '#F5222D',
-          'link-color': '#F5222D',
-          'border-radius-base': '4px',
-          */
+                                                                                                                                                      'primary-color': '#F5222D',
+                                                                                                                                                      'link-color': '#F5222D',
+                                                                                                                                                      'border-radius-base': '4px',
+                                                                                                                                                      */
           'table-padding-vertical': '16px',
           'table-padding-horizontal': '16px',
           'menu-collapsed-width': '50px',
@@ -90,7 +90,7 @@ module.exports = {
       // 必须使用/easymock开头的接口才使用该代理
       '/api': {
         target: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
-        // target: 'http://192.168.0.155:8030/',
+        // target: 'http://192.168.0.125:8030/',
         ws: false,
         changeOrigin: true,
         // 真实接口是/api开头的，使用pathRewrite将/gateway替换为/api

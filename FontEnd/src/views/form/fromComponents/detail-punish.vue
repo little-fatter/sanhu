@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { getLawPunish } from '@/api/sampleApi'
+import { getDetails } from '@/api/sampleApi'
 
 export default {
   name: 'DetailPunish',
@@ -70,9 +70,8 @@ export default {
   },
   methods: {
     getLawPunish () {
-      getLawPunish(this.id).then(res => {
+      getDetails('law_punishmentInfo', this.id).then(res => {
         this.detailData = res
-        console.log(res)
       }).catch(err => {
         console.log(err)
       })

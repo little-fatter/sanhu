@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="formwith_eventcase" title="全部表单plus" textField="OriginatorID" moduleName="form" moduleTitle="表单" dbName="" />
+    <fields>
+        <field name="OriginatorID" dbName="OriginatorID" title="发起人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="InitiationTime" dbName="InitiationTime" title="发起时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="CompletionTime" dbName="CompletionTime" title="完成时间" type="datetime" relationModel="" relationField="" isPK="N" />
+        <field name="FormName" dbName="FormName" title="表单名称" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="ContentValidity" dbName="ContentValidity" title="内容简介" type="string" length="500" enabledSearch="Y" isPK="N" />
+        <field name="Department" dbName="Department" title="部门" type="string" length="200" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="NeedNotice" dbName="NeedNotice" title="需要通知" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="NeedFine" dbName="NeedFine" title="需要罚款" type="boolean" relationModel="" relationField="" isPK="N" />
+        <field name="FormID" dbName="FormID" title="表单id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="handler" dbName="handler" title="处理人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="FormType" dbName="FormType" title="表单类型" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="evtCode" dbName="evtCode" title="事件编码" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="evtTypeId" dbName="evtTypeId" title="事件类型ID" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CaseType" dbName="CaseType" title="案件类型" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CaseNumber" dbName="CaseNumber" title="案件编号" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="CauseOfAction" dbName="CauseOfAction" title="案由" type="string" length="350" relationModel="" relationField="" isPK="N" />
+        <field name="evtTypeName" dbName="evtTypeName" title="事件类型名称" type="string" length="50" relationModel="" relationField="" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

@@ -30,7 +30,7 @@
 import CaseListSelect from '../../../components/business/CaseListSelect'
 import InventoryForm from '../../../components/business/InventoryForm'
 /**
- * 物品清单表单
+ * 物品清单表单  成林龙 要做详情
  */
 export default {
   name: 'InventoryCreate',
