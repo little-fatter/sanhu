@@ -74,6 +74,11 @@ public string FormState
 get;
 set;
 }
+public string Recorder
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
