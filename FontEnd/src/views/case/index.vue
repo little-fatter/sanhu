@@ -342,7 +342,7 @@ export default {
             type: 'string'
           },
           {
-            field: 'PenaltyDecisionNo', // 当事人  这个不会查
+            field: 'PenaltyDecisionNo', // 当事人
             op: 'like',
             value: this.s_case_BreakLow,
             type: 'string'
