@@ -99,12 +99,12 @@ public string CaseNumber
 get;
 set;
 }
-public string evtTypeName
+public string CauseOfAction
 {
 get;
 set;
 }
-public string CauseOfAction
+public string evtTypeName
 {
 get;
 set;
