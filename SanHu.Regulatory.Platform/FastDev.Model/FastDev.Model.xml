@@ -174,6 +174,51 @@
             证据信息
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.IsDefault">
+            <summary>
+            是否是系统默认角色
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.LevelEnumName">
+            <summary>
+            角色等级枚举名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.LevelEnumItemId">
+            <summary>
+            角色等级枚举值Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.LevelEnumItemName">
+            <summary>
+            角色等级枚举Item名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.LevelEnumValue">
+            <summary>
+            角色等级枚举Item值
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.BizTypeEnumName">
+            <summary>
+            业务类型枚举名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.BizTypeEnumItemId">
+            <summary>
+            业务类型枚举值Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.BizTypeEnumItemName">
+            <summary>
+            业务类型枚举Item名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.RoleDetailsDTO.BizTypeEnumValue">
+            <summary>
+            业务类型枚举Item值
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.TaskNextStepReq">
             <summary>
             任务下一步
@@ -217,6 +262,71 @@
         <member name="P:FD.Model.Dto.task_surveyFinishReq.Attachments">
             <summary>
             证据信息
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.Id">
+            <summary>
+            组织机构Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.Name">
+            <summary>
+            组织机构名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.ParentId">
+            <summary>
+            父级组织机构Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.Level">
+            <summary>
+            组织机构级别
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.Latitude">
+            <summary>
+            组织机构的地址位置纬度
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.Longitude">
+            <summary>
+            组织机构的地址位置经度
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.AreaId">
+            <summary>
+            行政区划Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.ParentAreaId">
+            <summary>
+            父级行政区划Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.AreaName">
+            <summary>
+            行政区划名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.AreaLevel">
+            <summary>
+            行政区划级别
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.PositionId">
+            <summary>
+            职位Id
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationInfoDTO.UserPosition">
+            <summary>
+            用户职位名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.OrganizationInfoUsersDTO.AccountId">
+            <summary>
+            用于登录名
             </summary>
         </member>
         <member name="T:FD.Model.Enum.EventStatus">
