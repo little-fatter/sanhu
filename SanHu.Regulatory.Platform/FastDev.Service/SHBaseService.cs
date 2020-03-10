@@ -117,7 +117,7 @@ namespace FastDev.Service
             }
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
-            if (obj == null) throw new Exception("未取得关联数据");
+            if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
 
             //构建其他需要查询的数据
@@ -235,14 +235,17 @@ namespace FastDev.Service
                 Task.ID = id;
 
                 //发送待办
-                Task.LocalLinks = Task.RemoteLinks;
-                Task.RemoteLinks = Task.RemoteLinks + (Task.RemoteLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
+                if (!string.IsNullOrEmpty(Task.AppLinks))
+                    Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
+                if (!string.IsNullOrEmpty(Task.PCLinks))
+                    Task.PCLinks += (Task.PCLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
                 string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
                 var dic = new Dictionary<string, string>();
-                dic.Add("事件类型", taskTypeStr);
-                dic.Add("上报时间", Task.InitiationTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                dic.Add("任务类型", taskTypeStr);
+                dic.Add("派发时间", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
-                Task.TodotaskID = CreateWorkrecor(Task.AssignUsers, taskTypeStr, Task.RemoteLinks, dic);   //待办id
+                dic.Add("任务描述", Task.TaskContent);
+                Task.TodotaskID = CreateWorkrecor(Task.AssignUsers, Task.TaskTitle, Task.AppLinks, dic);   //待办id
 
                 //记录待办id
                 ServiceHelper.GetService("work_task").Update(Task);  //修改关联的

@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
 using DinkToPdf.Contracts;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace FastDev.Service
 {
@@ -38,37 +40,94 @@ namespace FastDev.Service
         public object PrintTPdf(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
+            string FilePath = "";
             QueryDb.BeginTransaction();
             try
             {
-                //var queryDat = QueryDb.FirstOrDefault<object>("where formId = '@0'", data.formID);
-                var s = DataAccessHelper.GetEntityType(data.formName);
-                var ss = s.Assembly.CreateInstance(s.ToString());
+                //检查表中是否已经生成
+                if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID))
+                    return QueryDb.FirstOrDefault<form_printPDF>("where FormId = @0", data.formID).FilePath;
 
-                //var sql = PetaPoco.Sql.Builder
-                //    .Append("select * from @0", data.formName);
-                //.Append("LEFT JOIN Task ta ON subt.TaskId=ta.Id");
+                //根据模板名的相关数据更改模板目标 只能swith固定死
 
-                //QueryDb.Query<subtask>
+                //获取替换数据 无数据抛异常
 
-                //QueryDb.FirstOrDefault<form_allService>("where formId = '@0'", data.formID);
+                var jsonData = FormData(new FormDataReq() { FormId = data.formID, Model = data.formName, FilterModels = new string[] { "law_staff", "law_party" } });
+                //寻找模板获取html字符串
+                string filepath = $"wwwroot/pdf/{data.formName}.html";
+                string newHtml = File.ReadAllText(filepath);
+                //string newHtml = html;
+                var jsonStr = JsonHelper.SerializeObject(jsonData);
+                //var Jdic = JsonHelper.DeserializeJsonToObject<Dictionary<string,object>>(jsonStr);
+                var item = JsonHelper.DeserializeJsonToObject<JObject>(jsonStr);
+                ////案件信息
+                //if (QueryDb.Exists<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID))
+                //{
+                //    var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID);
+                //    newHtml = ReplaceHtml(newHtml, caseInfo);
+                //}
 
-                htmlTPdfData(data);
-                //QueryDb.
-                //先查询filepath 有->直接返回；无->根据模板创建 测试的时候直接返回
+                //执行人
+                if (item["law_party"].ToString() != "[]")
+                {
+                    var lparty = item["law_party"].ToObject<List<law_party>>();
+                    for (int i = 0; i < lparty.Count; i++)
+                    {
+                        newHtml = ReplaceHtml(newHtml, lparty[i], i + 1);
+                    }
+                }
+                //当事人
+                if (item["law_staff"].ToString() != "[]")
+                {
+                    var lstaff = item["law_staff"].ToObject<List<law_staff>>();
+                    for (int i = 0; i < lstaff.Count; i++)
+                    {
+                        newHtml = ReplaceHtml(newHtml, lstaff[i], i + 1);
+                    }
+                }
+                //主表信息
+                if (item["MainForm"].ToString() != "[]")
+                {
+                    var obj = item["MainForm"].ToObject(DataAccessHelper.GetEntityType(data.formName.ToString()));
+                    //案件信息
+                    var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID = @0", item["MainForm"]["CaseId"].ToString());
+                    if (caseInfo != null)
+                        newHtml = ReplaceHtml(newHtml, caseInfo);
+                    var typeList = item["MainForm"]["InspectionType"];
+                    if (typeList != null)
+                    {
+                        var type = typeList.ToObject<List<string>>();
+                        newHtml = newHtml.Replace("%Type%", type.Count > 1 ? type[1] : "");
+                    }
+                    //ReplaceHtml<JToken>(data, html, item["MainForm"]);
+                    newHtml = ReplaceHtml(newHtml, obj);
+                }
+                //将剩下的替换成 
+                Regex.Replace(newHtml, "%[a-zA-Z0-9]+%", "");
+                //执行人和执行列表 还有MainForm
+                //替换数据
 
-                //QueryDb.Insert(new form_printPDF() { FormID =})
+                //并且生成PDF返回路径
+                var pdfByte = _converter.HmtlToPDF(newHtml);
 
+                //FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
+                FilePath = $"/pdf/{Guid.NewGuid()}.pdf";
 
+                if (File.Exists($"wwwroot/{FilePath}"))
+                    File.Delete($"wwwroot/{FilePath}");
+
+                File.WriteAllBytes($"wwwroot/{FilePath}", pdfByte);
+                //插数
+                //QueryDb.Insert(new form_printPDF() { ID = Guid.NewGuid().ToString(), FormID = data.formID, FilePath = FilePath, CreateDate = DateTime.Now });
 
             }
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                return "";
+                return "null";
             }
             QueryDb.CompleteTransaction();
-            return "";
+            return FilePath;
         }
         private void htmlTPdfData(Form_printPDFReq para)
         {
@@ -111,15 +170,14 @@ namespace FastDev.Service
             //Directory.GetCurrentDirectory();
             //string str = (Request.HttpContext.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + Request.HttpContext.Connection.LocalPort;
 
-            var dataRecord = QueryDb.FirstOrDefault<from_inspectiontRecord>("where formId = @0", data.formID);
+            //var dataRecord = QueryDb.FirstOrDefault<from_inspectiontRecord>("where formId = @0", data.formID);
 
             string filepath = "wwwroot/pdf/" + data.formName + ".html";
-            //string html = File.ReadAllText("http://localhost:5023/template/" + data.FormName + ".html");
             string html = File.ReadAllText(filepath);
 
-            //替换all内容
-            //all.Replace("", "");
-            
+            //替换html内容
+
+
             var pdfByte = _converter.HmtlToPDF(html);
             //byte[] info = new UTF8Encoding(true).GetBytes(pdfByte);
             string filepath2 = "wwwroot/";
@@ -144,19 +202,21 @@ namespace FastDev.Service
             return "";
         }
 
+
         /// <summary>
-        /// 测试将html中的标签替换为类中的属性名的属性
+        /// 替换HTML相应类中的属性及值
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
         /// <param name="html"></param>
         /// <param name="source"></param>
+        /// <param name="markList"></param>
         /// <returns></returns>
-        private string test<T>(Form_printPDFReq data,string html, T source)
+        private string ReplaceHtml<T>(string html, T source, int markList = 0)
         {
             //工具
-            var tool = DataAccessHelper.GetEntityType(source.ToString());
+            //var tool = DataAccessHelper.GetEntityType(source.ToString());
             //手写
+            string mark = markList == 0 ? "" : markList.ToString();
             var classType = source.GetType();
             StringBuilder tempHtml = new StringBuilder(html);
             foreach (var item in classType.GetRuntimeProperties())
@@ -165,9 +225,10 @@ namespace FastDev.Service
                 var IsGenericType = item.PropertyType.IsGenericType;
                 var list = item.PropertyType.GetInterface("IEnumerable", false);
                 string vs = ($"属性名称：{item.Name}，类型：{type}，值：{item.GetValue(source)}");
-
+                string replaceHtml = $"%{item.Name}{mark}%";
                 //替换数据
-                tempHtml = tempHtml.Replace($"%{item.Name}%", $"item.GetValue(source)");
+                if (html.Contains(replaceHtml) && item.GetValue(source) != null)
+                    tempHtml = tempHtml.Replace(replaceHtml, $"{item.GetValue(source)}");
 
                 //若有IEnumerable等List的话
                 //if (IsGenericType && list != null)
