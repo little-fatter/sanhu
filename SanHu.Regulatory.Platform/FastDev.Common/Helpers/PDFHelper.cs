@@ -1,5 +1,6 @@
 ﻿
 using DinkToPdf;
+using DinkToPdf.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,14 +18,12 @@ namespace FD.Common.Helpers
         /// <param name="marginright">右边距厘米</param>
         /// <param name="marginbottom">下边距厘米</param>
         /// <returns></returns>
-        public static byte[] HmtlToPDF(string html,double marginleft=1.25, double margintop = 1.25, double marginright = 1.25, double marginbottom = 1.25)
+        public static byte[] HmtlToPDF(this IConverter converter, string html, double marginleft = 1.25, double margintop = 1.25, double marginright = 1.25, double marginbottom = 1.25)
         {
-            var converter = new SynchronizedConverter(new PdfTools());
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                     ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Landscape,
                     PaperSize = PaperKind.A4,
                     Margins = new MarginSettings()
                     {
@@ -36,8 +35,7 @@ namespace FD.Common.Helpers
                 Objects = {
                     new ObjectSettings() {
                         HtmlContent = html,
-                        WebSettings = { DefaultEncoding = "utf-8" },              
-                        //WebSettings = { DefaultEncoding = "gb 2312" },              
+                        WebSettings = { DefaultEncoding = "utf-8" },
                     }
                 }
             };

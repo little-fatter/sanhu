@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <model name="law_staff" title="执法检查人员" textField="CaseId" moduleName="case" moduleTitle="案件" dbName="" />
     <fields>
@@ -6,9 +6,10 @@
         <field name="EventInfoId" dbName="EventInfoId" title="事件id" type="string" length="50" isPK="N" />
         <field name="PreviousformID" dbName="PreviousformID" title="上一个表单id" type="string" length="50" isPK="N" />
         <field name="AssociatedobjectID" dbName="AssociatedobjectID" title="关联表单Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name="UserId" dbName="UserId" title="用户Id" type="many2one" relationModel="user" relationField="" isPK="N" />
+        <field name="UserId" dbName="UserIdID" title="用户Id" type="many2one" relationModel="user" relationField="" isPK="N" />
         <field name="Username" dbName="Username" title="用户姓名" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联对象" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

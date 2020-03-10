@@ -136,6 +136,11 @@ export const asyncRouterMap = [
                 name: 'FileCover',
                 component: () => import('@/views/form/fileCover'),
                 meta: { title: '卷宗封面', keepAlive: false }
+              },
+              {
+                path: 'judgment-detail',
+                name: 'judgmentDetail',
+                component: () => import('@/views/form/judgmentDetail')
               }
             ]
           },

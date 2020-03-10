@@ -22,7 +22,8 @@ var publicAppConfig = {
       // admin: '/api',
       // list: '/api'
       admin: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
-      list: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn'
+      list: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
+      framework: 'http://182.150.28.58:27011/framework'
     }
   },
   /** 配置业务localStorage的key值 */

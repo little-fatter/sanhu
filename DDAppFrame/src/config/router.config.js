@@ -111,6 +111,7 @@ export const asyncRouterMap = [{
       }
     },
     {
+      // 行政处罚案 结案报告
       path: '/caseFinalReportCreate',
       name: 'caseFinalReportCreate',
       component: () => import('@/views/lawform/cases/CaseFinalReportCreate.vue'),

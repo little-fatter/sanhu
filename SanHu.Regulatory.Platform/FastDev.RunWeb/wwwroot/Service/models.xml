@@ -63,7 +63,7 @@
         <models name="from_baseinfo" title="表单基础-不用" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="organization" title="frameworkorganization" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="attachment" title="附件" textField="Title" moduleName="res" moduleTitle="基础资料" />
-        <models name="form_base" title="表单基础" textField="Title" moduleName="form" moduleTitle="表单" />
+        <models name="form_base" title="表单基础-作废" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="form_patrolRecord" title="巡查记录表" textField="Title" moduleName="form" moduleTitle="表单" />
         <models name="organizationuser" title="frameworkorganizationuser" textField="Title" moduleName="res" moduleTitle="基础资料" />
         <models name="form_caseMove" title="案件移送" textField="Title" moduleName="form" moduleTitle="表单" />

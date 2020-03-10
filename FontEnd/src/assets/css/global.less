@@ -2,10 +2,10 @@
 
 /* 字体设置 */
 @font-face {
-    font-family: 'PingFang-Regular';
-    src: url('../font/PingFang-Regular.ttf');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'PingFang-Regular';
+  src: url('../font/PingFang-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* 表格字体大小定义 */
@@ -16,172 +16,213 @@
 /* 定义表格斑马线颜色 */
 @table_even_bgcolor: #fefefe;
 @table_odd_bgcolor: #eaedf4;
-*{
-    font-family: '微软雅黑';
+
+//滚动条配置
+::-webkit-scrollbar-track {
+  background-color: transparent;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #f8f8f8;
+  /*滚动条背景色*/
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #00a2ca;
+  /*滚动条颜色*/
+  background: linear-gradient(to bottom, #00c1de, #1890ff);
+}
+
+* {
+  font-family: 'Microsoft YaHei';
+  // font-size: 14px;
+}
+
 /* 修改表格的一些基础样式 */
 .ant-table-thead {
-    font-family: 'PingFang-Regular';
-    font-size: @table_font_size;
-    border-bottom: 4px solid #edeff5;
-    color: @thend_font_color;
-    font-weight: 400;
+  font-family: 'PingFang-Regular';
+  font-size: @table_font_size;
+  border-bottom: 4px solid #edeff5;
+  color: @thend_font_color;
+  font-weight: 400;
 }
+
 .ant-table-tbody {
-    font-family: 'PingFang-Regular';
-    font-size: @table_font_size;
-    color: @tbody_font_color;
-    font-weight: 400;
+  font-family: 'PingFang-Regular';
+  font-size: @table_font_size;
+  color: @tbody_font_color;
+  font-weight: 400;
 }
+
 .even-tr {
-    background-color: @table_even_bgcolor;
+  background-color: @table_even_bgcolor;
 }
+
 .odd-tr {
-    background-color: @table_odd_bgcolor;
+  background-color: @table_odd_bgcolor;
 }
 
 /* 修改表格排序时，小箭头的颜色 */
 .ant-table-column-sorter {
-    .ant-table-column-sorter-up {
-        &.on {
-            color: red !important;
-        }
+  .ant-table-column-sorter-up {
+    &.on {
+      color: red !important;
     }
-    .ant-table-column-sorter-down {
-        &.on {
-            color: green !important;
-        }
+  }
+
+  .ant-table-column-sorter-down {
+    &.on {
+      color: green !important;
     }
+  }
 }
+
 /* 修改菜单在top上时，整体靠右对其 */
 .top-menu {
-    flex: 1;
-    text-align: right;
+  flex: 1;
+  text-align: right;
 }
 
 /* 修改菜单在top上时，border的颜色和大小 */
 .ant-menu-horizontal {
-    .ant-menu-item-selected {
-        border-bottom: 3px solid #1890ff !important;
-    }
+  .ant-menu-item-selected {
+    border-bottom: 3px solid #1890ff !important;
+  }
 }
 
 /*  修改左侧菜单栏缩进时的距离为50px */
 .ant-layout-sider-collapsed {
-    // &.cover-width {
-        flex: 0 0 50px !important;
-        max-width: 50px !important;
-        min-width: 50px !important;
-        width: 50px !important;
-    // }
+  // &.cover-width {
+  flex: 0 0 50px !important;
+  max-width: 50px !important;
+  min-width: 50px !important;
+  width: 50px !important;
+  // }
 }
 
 /* 修改菜单栏的active为左边 */
 .cover-width {
-    .ant-menu-item-selected {
-        &::after{
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            border-left: 3px solid #1890ff;
-            border-right: none;
-        }
+  .ant-menu-item-selected {
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      border-left: 3px solid #1890ff;
+      border-right: none;
     }
+  }
 }
 
 .ant-menu-submenu-vertical {
-    &.ant-menu-submenu-selected {
-        border-left: 3px solid #1890ff;
-    }
+  &.ant-menu-submenu-selected {
+    border-left: 3px solid #1890ff;
+  }
 }
 
 /* 修改菜单栏的active为左边 */
 .ant-menu-inline-collapsed {
-    .ant-menu-item-selected {
-        &::before{
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            border-left: 3px solid #1890ff;
-            border-right: none;
-        }
+  .ant-menu-item-selected {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      border-left: 3px solid #1890ff;
+      border-right: none;
     }
+  }
 }
 
 /* 修改头部menu的高度 */
 .ant-menu-horizontal {
-    height: 50px !important;
-    line-height: 50px !important;
+  height: 50px !important;
+  line-height: 50px !important;
 }
 
 /* 修改头部logo部分的垂直居中 */
 .top-nav-header {
-    height: 50px !important;
-    line-height: 50px !important;
+  height: 50px !important;
+  line-height: 50px !important;
 }
 
 /* 修改头部缩进的垂直居中 */
 .trigger {
-    line-height: 50px !important;
+  line-height: 50px !important;
 }
 
 /* 总览 */
 .overview {
-    height: 40px;
-    line-height: 40px;
-    color: #A1A6BB;
-    font-size: 12px;
-    font-family: 'PingFang-Regular';
-    text-align: center;
-    cursor: pointer;
+  height: 40px;
+  line-height: 40px;
+  color: #A1A6BB;
+  font-size: 12px;
+  font-family: 'PingFang-Regular';
+  text-align: center;
+  cursor: pointer;
 }
 
 
 // 表格样式修改
 .ant-table {
-    overflow: hidden;
-    border-radius: 8px;
-    border:1px solid #dcdee2;
-    /deep/ tr > th {
-        background:#f8f8f9;
-    }
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #dcdee2;
+
+  /deep/ tr>th {
+    background: #f8f8f9;
+  }
 }
 
 .ant-table-thead {
-    border-bottom: 1px solid #dcdee2;
-    font-family: 'Microsoft YaHei';
-    font-size: 14px;
-    color: #222328;
+  border-bottom: 1px solid #dcdee2;
+  font-family: 'Microsoft YaHei';
+  font-size: 14px;
+  color: #222328;
 }
 
 .ant-table-tbody {
-    font-size: 14px;
-    font-family: 'Microsoft YaHei';
-    color: #AEBBC3;
+  font-size: 14px;
+  font-family: 'Microsoft YaHei';
+  color: #63687B;
 }
 
-.ant-table-tbody > tr:last-child > td {
-    border:none;
+.ant-table-tbody>tr:last-child>td {
+  border: none;
 }
 
 .ant-table-pagination.ant-pagination {
-    float: none;
-    margin: 30px auto 10px auto;
-    text-align: center;
+  float: none;
+  margin: 30px auto 10px auto;
+  text-align: center;
 }
 
 // 表单已读行样式
 .row-readed {
-    color: #7F87AE;
+  color: #7F87AE;
 }
+
 //表单输入框 选择框  多行文本框
-.ant-input,.ant-select-selection{
-    border-radius: 2px;
+.ant-input,
+.ant-select-selection {
+  border-radius: 2px;
 }
 .ant-btn{
-    border-radius: 2.5px;
+    border-radius: 4px;
+}
+
+.btn-success {
+    background-color: #1FC08E;
+    color: #FFF;
+}
+
+.btn-success:hover,.btn-success:focus {
+    opacity: 0.8;
+    background-color: #1FC08E;
+    color: #FFF;
+    border-color: #1FC08E;
 }

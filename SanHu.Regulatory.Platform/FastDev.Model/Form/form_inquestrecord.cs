@@ -4,7 +4,7 @@ namespace FastDev.Model.Form
    using System.Collections.Generic;
 public partial class form_inquestrecord : FastDev.Model.Entity.form_inquestrecord
 {
-public IList<string> Inspectiontype
+public IList<string> InspectionType
 {
 get;
 set;

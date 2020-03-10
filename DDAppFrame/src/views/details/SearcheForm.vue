@@ -1,3 +1,4 @@
+
 <template>
   <div class="search">
     <div class="searchBox">
@@ -26,27 +27,27 @@
 
 <script>
 export default {
-  name: "SearcheForm",
+  name: 'SearcheForm',
   components: {},
   props: {},
-  data() {
+  data () {
     return {
       // Keyword: "",
       list: [],
       searchShow: false,
       historyList: [
-        "非法捕捞",
-        "排放污水",
-        "非法捕捞",
-        "排放污水",
-        "非法捕捞",
-        "排放污水",
-        "非法捕捞",
-        "排放污水"
+        '非法捕捞',
+        '排放污水',
+        '非法捕捞',
+        '排放污水',
+        '非法捕捞',
+        '排放污水',
+        '非法捕捞',
+        '排放污水'
       ],
-      formListData: "",
+      formListData: '',
       showFlag: true // 历史记录显示隐藏标杆
-    };
+    }
   },
   watch: {},
   computed: {
@@ -57,18 +58,18 @@ export default {
   },
   methods: {
     // 搜索
-    onSearch() {
-      this.$emit("show", this.searchShow);
-      this.$emit("getSearchKeyword", this.keyword);
+    onSearch () {
+      this.$emit('show', this.searchShow)
+      this.$emit('getSearchKeyword', this.keyword)
     },
     // 关闭历史记录
-    closeHistory() {
-      this.showFlag = !this.showFlag;
+    closeHistory () {
+      this.showFlag = !this.showFlag
     }
   },
-  created() {},
-  mounted() {}
-};
+  created () {},
+  mounted () {}
+}
 </script>
 <style lang="less">
 .search {

@@ -144,6 +144,11 @@ public string CaseDescription
 get;
 set;
 }
+public string Formstate
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

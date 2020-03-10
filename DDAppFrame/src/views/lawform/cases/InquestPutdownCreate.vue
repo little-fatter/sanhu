@@ -142,7 +142,7 @@ import CaseListSelect from '../../../components/business/CaseListSelect'
 import { ddgetMapLocation, ddMapSearch, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import { formatDate } from '../../../utils/util'
 /**
- * 勘验笔录表单
+ * 勘验笔录表单   成林龙 要做详情
  */
 export default {
   name: 'InquestPutdownCreate',
