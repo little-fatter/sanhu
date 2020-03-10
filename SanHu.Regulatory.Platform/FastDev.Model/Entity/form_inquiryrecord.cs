@@ -54,11 +54,6 @@ public string Inquiryrecord
 get;
 set;
 }
-public string ObjectofinquiryID
-{
-get;
-set;
-}
 public string Enquiryplace
 {
 get;
@@ -70,6 +65,16 @@ get;
 set;
 }
 public string TaskId
+{
+get;
+set;
+}
+public string Interrogator
+{
+get;
+set;
+}
+public string ObjectofinquiryID
 {
 get;
 set;
