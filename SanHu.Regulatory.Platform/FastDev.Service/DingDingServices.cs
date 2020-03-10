@@ -70,6 +70,14 @@ namespace FastDev.Service
             return WorkrecordAdd(oapiWorkrecordAddRequest).Result.RecordId;
         }
 
+        public async Task<string> GetProcess(string OriUserId, string OriDeptId, string taskUserId, string OpeUserId, int pageIndex = 0, int pageSize = 50)
+        {
+            var url = $"framework/api/Process/GetProcess?OriUserId={OriUserId}&OriDeptId={OriDeptId}&taskUserId={taskUserId}&OpeUserId={OpeUserId}&pageIndex={pageIndex}&pageSize={pageSize}";
+
+            var client = _clientFactory.CreateClient(HostData.FrameWorkSeverName);
+            return await client.GetAsync(url).Result.Content.ReadAsStringAsync();
+        }
+
         /// <summary>
         /// 框架post数据
         /// </summary>
