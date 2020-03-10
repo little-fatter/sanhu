@@ -1,10 +1,17 @@
 import $ from 'jquery'
+import gisUtils from '@/utils/gisUtils'
+import dictionary from '@/utils/dictionary'
 import appConfig from '@/config/app.config'
+// 事件状态对应
+var statuMap = dictionary.eventStateMap
+
 export default {
   data: {
     peopleList: {},
     depList: {},
-    alertEventList: {}
+    alertEventList: {},
+    wurenjiList: {},
+    shexiangtouList: {}
   },
   doPostDataAjax: function (url, body, dataKey) {
     var that = this
@@ -43,34 +50,45 @@ export default {
       })
     })
   },
+  doGetDataAjax: function (url, dataKey) {
+    var that = this
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        type: 'get',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: (res) => {
+          that.data[dataKey] = res
+          resolve()
+        },
+        error: err => {
+          reject(err)
+        }
+      })
+    })
+  },
   getAlertEventList: function () {
-    // var evtStateMap = {
-    //   list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
-    //   map: {
-    //     '待处理': 0,
-    //     '事件核查中': 1,
-    //     '跟踪整改中': 2,
-    //     '现场勘察中': 3,
-    //     '处理完成': 4,
-    //     '转为案件办理': 5
-    //   }
-    // }
     var list = []
     var Records = this.data.alertEventList.Records
     for (let i = 0; i < Records.length; i++) {
       const element = Records[i]
-      // var evtStateName = element.evtStateName
-      // var status = evtStateMap.map[evtStateName]
-      var status = i % 6 // 模拟事件处理状态
-      if (status === undefined) continue
+      var status = statuMap[element.evtState]
       var lng = element.lng
       var lat = element.lat
+      var _p = gisUtils.baiduTomars({
+        lon: lng,
+        lat: lat
+      })
+      var _p1 = gisUtils.transformGCJ2WGS(_p.lat, _p.lon)
+      lng = _p1.lon
+      lat = _p1.lat
       var reportTime = element.reportTime
       var finishLimitTime = element.finishLimitTime
       list.push({
         id: element.objId,
-        title: element.targetName, // 事件对象名称
-        status: status,
+        title: element.evtTypeName, // 事件对象名称
+        status: status, // 事件状态
         timeLimit: finishLimitTime, // 当前阶段处理时限
         uploadTime: reportTime, // 上报时间，
         countdown: '00:00:00',
@@ -80,10 +98,11 @@ export default {
         personInfo: {
           dep: '执法一大队',
           members: ['黄庆令', '黄民全']
-        }
+        },
+        reportType: element.reportType, // 上报来源
+        evtTypeName: element.evtTypeName // 事件类型
       })
     }
-    // list.push(...list)
     return list
   },
   getPeopleList: function () {
@@ -131,18 +150,27 @@ export default {
     list = depNames.map(x => depMap[x])
     return list
   },
+  getEquipmentList: function () {
+    return {
+      wurenji: [...this.data.wurenjiList.Records],
+      shexiangtou: [...this.data.shexiangtouList.Records]
+    }
+  },
   initData: function (after) {
     var urlDep = appConfig.ApiWebContext + '/web/pageddata?model=organization'
     var urlPeople = appConfig.ApiWebContext + '/web/pageddata?model=loc_field_staff'
     var urlEvent = appConfig.ApiWebContext + '/web/pageddata?model=event_info'
-
+    var urlWurenji = appConfig.StaticWebContext + '/gis_data/wurenji.json'
+    var urlShexiangtou = appConfig.StaticWebContext + '/gis_data/shexiangtou.json'
     var bodyPeople = { 'Condition': { 'rules': [], 'groups': [], 'op': 'and' }, 'PageIndex': 1, 'PageSize': 30, 'SortName': 'ID', 'SortOrder': 'asc' }
 
     var that = this
     Promise.all([
       this.doPostDataAjax(urlDep, bodyPeople, 'depList'),
       this.doPostDataAjax(urlPeople, bodyPeople, 'peopleList'),
-      this.doPostDataAjax(urlEvent, bodyPeople, 'alertEventList')
+      this.doPostDataAjax(urlEvent, bodyPeople, 'alertEventList'),
+      this.doGetDataAjax(urlWurenji, 'wurenjiList'),
+      this.doGetDataAjax(urlShexiangtou, 'shexiangtouList')
     ]).then(() => {
       console.log(that.data)
       if (after) {

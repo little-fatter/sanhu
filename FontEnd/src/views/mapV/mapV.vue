@@ -161,6 +161,7 @@ export default {
       }
     },
     afterAlertFeatureClick: function (fea) {
+      var mapApp = this.$refs.map1.getMapApp()
       if (fea) {
         var properties = fea.getProperties()
         this.$refs.myAlertInfoBox.open({
@@ -170,8 +171,9 @@ export default {
           des: properties.remark, // 事件描述
           uploadTime: properties.uploadTime, // 上报时间
           addr: properties.address, // 事发地点
-          uploadSource: 'AI摄像头识别'
+          uploadSource: properties.reportType
         })
+        // mapApp.zoomToPoint(fea.getGeometry().getCoordinates(), ZOOM_TO_POINT_RADIUS)
       } else {
         this.$refs.myAlertInfoBox.close()
       }
@@ -276,6 +278,7 @@ export default {
       var $personList = this.$refs.personList
       var mapApp = this.$refs.map1.getMapApp()
       $personList.updatePersonList(dataGet.getPeopleList())
+      $personList.updateEquipmentList(dataGet.getEquipmentList())
 
       mapApp.updatePeopleLayer($personList.getPersonList())
       mapApp.updateEquipmentLayer($personList.getEquipmentList())

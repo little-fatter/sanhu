@@ -14,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/data-manage/notice', // 临时定向开发页面
+    redirect: '/map/index', // 临时定向开发页面
     children: [
       {
         path: 'mission',
