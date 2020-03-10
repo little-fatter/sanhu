@@ -16,6 +16,7 @@
         <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Interrogator" dbName="Interrogator" title="询问人" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Objectofinquiry" dbName="ObjectofinquiryID" title="询问对象" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

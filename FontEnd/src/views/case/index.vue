@@ -18,7 +18,7 @@
 
   .case-top,
   .case-body {
-    padding: 26px 55px 0 55px;
+    padding: 25px 25px 0px;
     background-color: #fff;
   }
 
@@ -159,7 +159,7 @@
         <div class="case-btn">
           <a-button @click="onSearch" type="primary" class="mr10">搜索</a-button>
           <a-button @click="onReset" type="default" class="mr10">重置</a-button>
-          <a-button @click="packUp(PackUpIcon)" :icon="PackUpIcon">{{ PackUpText }}</a-button>
+          <a-button type="link" @click="packUp(PackUpIcon)" :icon="PackUpIcon">{{ PackUpText }}</a-button>
         </div>
       </div>
     </div>
@@ -342,7 +342,7 @@ export default {
             type: 'string'
           },
           {
-            field: 'PenaltyDecisionNo', // 当事人  这个不会查
+            field: 'PenaltyDecisionNo', // 当事人
             op: 'like',
             value: this.s_case_BreakLow,
             type: 'string'

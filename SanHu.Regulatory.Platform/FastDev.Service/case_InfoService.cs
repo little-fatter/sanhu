@@ -6,6 +6,7 @@ using FD.Model.Dto;
 using FD.Model.Enum;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FastDev.Service
@@ -20,7 +21,36 @@ namespace FastDev.Service
             OnAfterGetListData += Case_InfoService_OnAfterListData;
         }
 
+        public override object GetPageData(QueryDescriptor descriptor)
+        {
+            //处理查询条件,排序 
+            FilterTranslator filterTranslator = new FilterTranslator();
+            if (descriptor.Condition != null)
+            {
+                filterTranslator.Group = descriptor.Condition;
+            }
+            filterTranslator.Translate();
+            string whereTxt = filterTranslator.CommandText;
 
+            //处理 新增定义当事人名称(party),当事人号码(partyPhone)
+
+
+            string text = "";
+            string text2 = "";
+            if (descriptor.OrderBy != null && descriptor.OrderBy.Any())
+            {
+                text = descriptor.OrderBy[0].Key;
+                if (string.IsNullOrEmpty(text))
+                    text = "CreateDate";
+                text2 = ((descriptor.OrderBy[0].Order == OrderSequence.ASC) ? "asc" : "desc");
+            }
+            whereTxt += string.Format(" order by {0} {1}", text, text2);
+
+            StringBuilder sqlBuild = new StringBuilder();
+            sqlBuild.AppendLine("select a.* from case_info a");
+
+            return base.GetPageData(descriptor);
+        }
 
         private void Case_InfoService_GetDetail(object query, object data)
         {

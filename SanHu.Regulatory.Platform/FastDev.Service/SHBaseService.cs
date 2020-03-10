@@ -117,7 +117,7 @@ namespace FastDev.Service
             }
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
-            if (obj == null) throw new Exception("未取得关联数据");
+            if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
 
             //构建其他需要查询的数据

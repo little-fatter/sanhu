@@ -1,3 +1,4 @@
+<!--//事件详情-->
 <template>
   <div class="eventDetail">
     <van-cell-group>
@@ -10,7 +11,7 @@
       </van-cell>
       <van-cell title="事发地点：" :value="eventInfo.address"></van-cell>
       <van-cell title="上报时间：" :value="eventInfo.reportTime | dayjs('YYYY-MM-DD HH:mm')"></van-cell>
-      <van-cell title="上报来源：" :value="loadData.ReportSource"></van-cell>
+      <van-cell title="上报来源：" :value="eventInfo.ReportSource"></van-cell>
       <van-cell title="上报人：" :value="eventInfo.reporterName"></van-cell>
       <van-cell title="事件类型：" :value="eventInfo.evtTypeDisplayName"></van-cell>
       <van-cell title="事件描述：" :value="eventInfo.remark"></van-cell>
@@ -32,7 +33,7 @@
               p-id="5584"
             />
           </svg>
-          {{loadData.Associatedforms}}
+          {{ loadData.Associatedforms }}
         </span>
       </van-cell>
     </van-cell-group>
@@ -48,6 +49,7 @@
           :sync2Dingding="false"
           :isOnlyView="true"
           style="margin-left:80px;margin-bottom:5px;"
+          :initResult="loadData.Attachment"
         ></SUpload>
         <!-- :initResult="loadData.Attachment"附件展示传入值 -->
       </van-cell>
@@ -61,13 +63,13 @@
 </template>
 
 <script>
-import SUpload from "../../components/file/StandardUploadFile";
+import SUpload from '../../components/file/StandardUploadFile'
 import {
   isNotEmpty,
   formatDate,
   isEmpty,
   getQueryConditon
-} from "../../utils/util";
+} from '../../utils/util'
 import {
   getDetaildata,
   commonOperateApi,
@@ -77,18 +79,17 @@ import {
   getDetialdataByfilter,
   getDetialdataByEventInfoId,
   getFormsDetailByEventInfoId
-} from "../../api/regulatoryApi";
+} from '../../api/regulatoryApi'
 export default {
-  name: "EventDetail",
+  name: 'EventDetail',
   components: {
     SUpload
   },
   props: {},
-  data() {
+  data () {
     return {
-      loadData: {}, //详情信息
-      eventInfo: {}, //事件信息
-      id: "",
+      loadData: {}, // 详情信息
+      eventInfo: {} // 事件信息
       // eventAddress: "玉溪市澄江县 | 1.5km",
       // reportTime: "123",
       // reportType: "公众号举报",
@@ -109,44 +110,59 @@ export default {
       // },
       // rejectReason: "",
       // eventTypeption: "465456",
-      access: ""
-    };
+    }
   },
   watch: {},
   computed: {},
   methods: {
-    returnSubmitForm() {
-      this.$router.go(-1);
+    returnSubmitForm () {
+      this.$router.go(-1)
     },
     // 页面数据
-    init() {
-      const queryParam = this.$route.query;
-      const id = "253bac98-c94d-475d-83f4-d36204c4b998"//queryParam.id;
-      // getFormsDetailByEventInfoId(eventInfoid = null, 'task_patrol', formId = null, filterModels = null).then(res=>{
-      //   console.log(res);
-      // })
-
+    init () {
+      const queryParam = this.$route.query
+      const id = queryParam.id
+      console.log(id)
       // 请求事件巡查详情
-      getDetaildata("task_patrol", id).then(res => {
-        this.loadData = res;
-        console.log(this.loadData);
-      }),
-      // 请求事件信息详情
-      getDetialdataByEventInfoId(
-        "event_info",
-        this.loadData.EventInfoId
-      ).then(resolve => {
-        this.eventInfo = resolve;
-      });
-      // 请求附件信息
-      getDetaildata("task_patrol", id).then(res => {});
+      getDetaildata('task_patrol', id).then(res => {
+        if (isNotEmpty(res.TaskId)) {
+          getDetaildata('work_task', taskId).then(res => {
+            this.loadEventInfo(res.EventInfoId)
+          })
+        }
+      })
+    },
+    // 获取事件信息
+    loadEventInfo (EventInfoId) {
+      getDetaildata('event_info', EventInfoId).then(res => {
+        if (res) {
+          this.eventInfo = res
+          this.loadEventCheck(EventInfoId)
+        }
+      })
+    },
+    // 获取表单信息
+    loadEventCheck (EventInfoId) {
+      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then(res => {
+        if (res) {
+          this.loadData = {
+            ...res.MainForm,
+            LawParties: res.Party,
+            Attachment: res.Attachment
+          }
+          console.log(this.loadData)
+        }
+      })
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
-  mounted() {}
-};
+  mounted () {},
+  activated () {
+    this.init()
+  }
+}
 </script>
 <style lang="less">
 </style>

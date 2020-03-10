@@ -29,14 +29,14 @@ namespace FastDev.Service
 
         public Task<OapiWorkrecordAddResponse> WorkrecordAdd(OapiWorkrecordAddRequest oapiWorkrecordAddRequest)
         {
-            var url = "framework/api/dingding/workrecordadd?" + GetAgentIDString();
+            var url = "api/dingding/workrecordadd?" + GetAgentIDString();
 
             return PostFrameWork<OapiWorkrecordAddResponse>(url, oapiWorkrecordAddRequest);
         }
         public async Task<bool> WorkrecordUpdate(string userId, string record_id)
         {
             var oapiWorkrecordAddRequest = new OapiWorkrecordUpdateRequest() { };
-            var url = "framework/api/dingding/WorkrecordUpdateAsync?" + GetAgentIDString();
+            var url = "api/dingding/WorkrecordUpdateAsync?" + GetAgentIDString();
 
             var result= await PostFrameWork<OapiWorkrecordUpdateResponse>(url, oapiWorkrecordAddRequest);
             if (result.Errcode==0)
@@ -68,6 +68,14 @@ namespace FastDev.Service
 
             //返回待办id
             return WorkrecordAdd(oapiWorkrecordAddRequest).Result.RecordId;
+        }
+
+        public async Task<string> GetProcess(string OriUserId, string OriDeptId, string taskUserId, string OpeUserId, int pageIndex = 0, int pageSize = 50)
+        {
+            var url = $"framework/api/Process/GetProcess?OriUserId={OriUserId}&OriDeptId={OriDeptId}&taskUserId={taskUserId}&OpeUserId={OpeUserId}&pageIndex={pageIndex}&pageSize={pageSize}";
+
+            var client = _clientFactory.CreateClient(HostData.FrameWorkSeverName);
+            return await client.GetAsync(url).Result.Content.ReadAsStringAsync();
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ var publicAppConfig = {
   /** 不启用网关时配置模块host地址 */
   hostConfig: {
     appHost: {
-      admin: 'http://182.150.28.58:27016/framework',
+      admin: 'http://182.150.28.58:27011/framework',
       file: 'http://182.150.28.58:27012/filesystem',
       // regulatory: 'http://192.168.0.125:8030/webapi',
       regulatory: 'http://14.205.92.142:10680/webapi',
@@ -35,7 +35,7 @@ var publicAppConfig = {
   /** 是否强制刷新Token,是则每次都调用免登接口 */
   isForceRefreshToken: true,
   /** token的缓存过期时间(秒) */
-  expiresTimeForTokenCache: 600,
+  expiresTimeForTokenCache: 300,
   /** 是否使用本地菜单 */
   isUseLocalMenu: true,
   /** 用于jsapi的应用签名鉴权 */
