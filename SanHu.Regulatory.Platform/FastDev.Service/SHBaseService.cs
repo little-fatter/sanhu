@@ -239,12 +239,17 @@ namespace FastDev.Service
                     Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
                 if (!string.IsNullOrEmpty(Task.PCLinks))
                     Task.PCLinks += (Task.PCLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
-                string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
                 var dic = new Dictionary<string, string>();
-                dic.Add("任务类型", taskTypeStr);
-                dic.Add("派发时间", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                dic.Add("任务说明", Task.TaskContent);
+                dic.Add("任务发起时间", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
-                dic.Add("任务描述", Task.TaskContent);
+
+                if (Task.TaskType.ToUpper() == TaskType.Punishment.ToString().ToUpper()) {
+                    string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
+                    string caseNumber = QueryDb.ExecuteScalar<string>("select caseNumber from case_info where id=@0", Task.CaseID);
+                    Task.TaskTitle = caseNumber + "-" + taskTypeStr;
+                }
+
                 Task.TodotaskID = CreateWorkrecor(Task.AssignUsers, Task.TaskTitle, Task.AppLinks, dic);   //待办id
 
                 //记录待办id
