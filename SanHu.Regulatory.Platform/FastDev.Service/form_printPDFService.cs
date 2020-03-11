@@ -12,6 +12,7 @@ using System.Text;
 using DinkToPdf.Contracts;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using Aspose.Words.Replacing;
 
 namespace FastDev.Service
 {
@@ -29,7 +30,8 @@ namespace FastDev.Service
 
         private Func<APIContext, object> form_printPDFService_OnGetAPIHandler(string id)
         {
-            return PrintTPdf;
+            //return PrintTPdf;
+            return AsposeToPdf;
         }
 
         /// <summary>
@@ -58,14 +60,7 @@ namespace FastDev.Service
                 string newHtml = File.ReadAllText(filepath);
                 //string newHtml = html;
                 var jsonStr = JsonHelper.SerializeObject(jsonData);
-                //var Jdic = JsonHelper.DeserializeJsonToObject<Dictionary<string,object>>(jsonStr);
                 var item = JsonHelper.DeserializeJsonToObject<JObject>(jsonStr);
-                ////案件信息
-                //if (QueryDb.Exists<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID))
-                //{
-                //    var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID);
-                //    newHtml = ReplaceHtml(newHtml, caseInfo);
-                //}
 
                 //执行人
                 if (item["law_party"].ToString() != "[]")
@@ -129,79 +124,140 @@ namespace FastDev.Service
             QueryDb.CompleteTransaction();
             return FilePath;
         }
-        private void htmlTPdfData(Form_printPDFReq para)
+
+        private object AsposeToPdf(APIContext context)
         {
-            switch (para.formName)
+            var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
+            string templatePath = $"wwwroot/pdf/{data.formName}.doc";
+            string FilePath = "";
+            QueryDb.BeginTransaction();
+            try
             {
-                //勘验（检查）笔录
-                case "from_inspectiontRecord":
-                    var data = QueryDb.FirstOrDefault<from_inspectiontRecord>("where formId = @0", para.formID);
-                    TransModel2Template(para);
-                    //TransModel2Pdf(para);
-                    break;
-                case "2":
-                    QueryDb.FirstOrDefault<from_inspectiontRecord>("where formId = '@0'", para.formName);
-                    break;
-                case "3":
-                    break;
-                case "4":
-                    break;
-                default:
-                    break;
-            }
-        }
+                //检查表中是否已经生成
+                if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID))
+                    return QueryDb.FirstOrDefault<form_printPDF>("where FormId = @0", data.formID).FilePath;
 
-        private string TransModel2Pdf(Form_printPDFReq data)
+                //根据模板名的相关数据更改模板目标 只能swith固定死
+
+                //获取替换数据 无数据抛异常
+                var pDic = new Dictionary<string, string>();
+                var jsonData = FormData(new FormDataReq() { FormId = data.formID, Model = data.formName, FilterModels = new string[] { "law_staff", "law_party" } });
+                //寻找模板获取html字符串
+                foreach (var ss in jsonData as Dictionary<string, object>)
+                {
+                    switch (ss.Key)
+                    {
+                        case "law_party"://执行人
+                            var lparty = ss.Value as List<Dictionary<string, object>>;
+                            for (int i = 0; i < lparty.Count; i++)
+                            {
+                                foreach (var j in lparty[i])
+                                {
+                                    if (j.Value is string && !pDic.ContainsKey(j.Key + (i + 1)))
+                                        pDic.Add(j.Key + (i + 1), j.Value.ToString());
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+                            break;
+                        case "law_staff": //当事人
+                            var lstaff = ss.Value as List<Dictionary<string, object>>;
+                            for (int i = 0; i < lstaff.Count; i++)
+                            {
+                                foreach (var j in lstaff[i])
+                                {
+                                    if (j.Value is string && !pDic.ContainsKey(j.Key + (i + 1)))
+                                        pDic.Add(j.Key + (i + 1), j.Value.ToString());
+                                    else
+                                    {
+                                        //if ()
+                                    }
+                                }
+
+                            }
+                            break;
+                        case "MainForm"://主表信息
+                            var main = ss.Value as Dictionary<string, object>;
+                            foreach (var j in main)
+                            {
+                                if (j.Value is string && !pDic.ContainsKey(j.Key))
+                                    pDic.Add(j.Key, j.Value.ToString());
+                                else
+                                {
+                                    if (j.Key == "InspectionType" && (j.Value is IList<string>))
+                                    {
+                                        var type = j.Value as List<string>;
+                                        if (!pDic.ContainsKey("Type"))
+                                            pDic.Add("Type", type[type.Count - 1]);
+                                    }
+                                }
+                            }
+                            if (main.ContainsKey("CaseId") && main["CaseId"] != null)
+                            {
+                                var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID = @0", main["CaseId"].ToString());
+                                if (caseInfo == null)
+                                    break;
+                                var dicCaseInfo = JsonHelper.DeserializeJsonToObject<Dictionary<string, object>>(JsonHelper.SerializeObject(caseInfo));
+                                if (caseInfo == null) break;
+                                foreach (var j in dicCaseInfo)
+                                {
+                                    if (j.Value is string && !pDic.ContainsKey(j.Key))
+                                        pDic.Add(j.Key, j.Value.ToString());
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+                            break;
+                        default: break;
+                    }
+
+                }
+                //字典存入完毕 开启并替换
+                FilePath = ReplaceAspose(templatePath, pDic, false);
+
+                //执行人
+
+                //主表信
+
+                //File.WriteAllBytes($"wwwroot/{FilePath}", pdfByte);
+                //插数
+                //QueryDb.Insert(new form_printPDF() { ID = Guid.NewGuid().ToString(), FormID = data.formID, FilePath = FilePath, CreateDate = DateTime.Now });
+
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                return "null";
+            }
+            QueryDb.CompleteTransaction();
+            return FilePath;
+        }
+        //替换Aspose标签内容
+        private string ReplaceAspose(string filePath, Dictionary<string, string> pDic, bool testMark = false)
         {
-            //var dir = newFilePath.Substring(0, newFilePath.LastIndexOf("/") + 1);
-            string filepath = "wwwroot/pdf/" + data.formName + ".doc";
-            if (File.Exists("wwwroot/pdf/Aspose.pdf"))
+            Aspose.Words.Document doc = new Aspose.Words.Document(filePath);
+            Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(doc);
+            var replaceOPT = new FindReplaceOptions();
+            replaceOPT.MatchCase = false;
+
+            foreach (var kv in pDic)
             {
-                File.Delete("wwwroot/pdf/Aspose.pdf");
+                doc.Range.Replace($"@{kv.Key}", kv.Value, replaceOPT);
             }
-            Aspose.Words.Document doc = new Aspose.Words.Document(filepath);
-            doc.Save("wwwroot/pdf/Aspose.pdf", SaveFormat.Pdf);
-            return "";
-        }
-
-        private string TransModel2Template(Form_printPDFReq data)
-        {
-            //获取html地址
-            //Directory.GetCurrentDirectory();
-            //string str = (Request.HttpContext.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + Request.HttpContext.Connection.LocalPort;
-
-            //var dataRecord = QueryDb.FirstOrDefault<from_inspectiontRecord>("where formId = @0", data.formID);
-
-            string filepath = "wwwroot/pdf/" + data.formName + ".html";
-            string html = File.ReadAllText(filepath);
-
-            //替换html内容
-
-
-            var pdfByte = _converter.HmtlToPDF(html);
-            //byte[] info = new UTF8Encoding(true).GetBytes(pdfByte);
-            string filepath2 = "wwwroot/";
-            if (File.Exists("wwwroot/pdf/XXX.pdf"))
+            //替换剩下不需要的
+            if (testMark)
             {
-                File.Delete("wwwroot/pdf/XXX.pdf");
+                doc.Range.Replace(new Regex("@[0-9a-zA-Z]+"), "", replaceOPT);
             }
-            //FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
 
-            //Stream stream = new MemoryStream(bytes);
-
-            FileStream pFileStream = null;
-            pFileStream = new FileStream("wwwroot/pdf/XXX2.pdf", FileMode.Create);
-            pFileStream.Write(pdfByte, 0, pdfByte.Length);
-            pFileStream.Close();
-            File.WriteAllBytes("wwwroot/pdf/XXX.pdf", pdfByte);
-
-            //FileStream fileStream = new FileStream("wwwroot/XXX.pdf", FileMode.Create);
-            //fileStream.Write(pdfByte, 0, pdfByte.Length);
-            //获取指定类的所有的类名 并将data中该类中中数据获取
-
-            return "";
+            string newFilePath = $"pdf/{Guid.NewGuid()}.pdf";
+            doc.Save($"wwwroot/{newFilePath}", SaveFormat.Pdf);
+            return newFilePath;
         }
-
 
         /// <summary>
         /// 替换HTML相应类中的属性及值
