@@ -157,7 +157,7 @@ export default {
     if (!show) return undefined
     var staffName = feature.getProperties()['name']
     var lastName = staffName ? staffName[0] : ''
-    var isBusy = Math.random() > 0.5
+    var isBusy = true
     var styles = [new Style({
       image: new Icon({
         anchor: [0.5, 1],
