@@ -19,6 +19,17 @@ namespace FastDev.Service
             OnAfterGetPagedData += Case_InfoService_OnAfterGetPagedData;
             OnAfterGetDetailData += Case_InfoService_GetDetail;
             OnAfterGetListData += Case_InfoService_OnAfterListData;
+            OnBeforeSave += Case_InfoService_OnBeforeSave;
+        }
+
+        private void Case_InfoService_OnBeforeSave(object entity, object viewdata, bool isCreate)
+        {
+            //var caseInfo = entity as case_Info;
+            //var loginClientInfo = SysContext.GetService<WanJiang.Framework.Infrastructure.Logging.ClientInfo>();
+            //var userService = SysContext.GetService<IServices.IUserServices>();
+            //var userDetail = userService.GetUserDetails("1057149267036213248").Result;
+            //caseInfo.Department = userService.GetUserDetails(loginClientInfo.UserId).Result.Organizations[0].Name;
+            //throw new NotImplementedException();
         }
 
         public override object GetPageData(QueryDescriptor descriptor)
@@ -33,7 +44,36 @@ namespace FastDev.Service
             string whereTxt = filterTranslator.CommandText;
 
             //处理 新增定义当事人名称(party),当事人号码(partyPhone)
+            string sqlParty = "select * from law_party where 1=1 ";
+            foreach (var item in descriptor.Condition.groups)
+            {
+                var partyCond = item.rules.FirstOrDefault(m => m.field == "party");
+                if (partyCond != null)
+                {
+                    if (partyCond.op.ToLower()== "equal")
+                    {
+                        sqlParty += string.Format("and Name='{0}' ", partyCond.value);
+                    }
+                    else 
+                    {
+                        sqlParty += string.Format("and Name like '{0}' ", partyCond.value);
+                    }
+                }
 
+                var partyPhoneCond = item.rules.FirstOrDefault(m => m.field == "partyPhone");
+                if (partyPhoneCond != null)
+                {
+                    if (partyPhoneCond.op.ToLower() == "equal")
+                    {
+                        sqlParty += string.Format("and Name='{0}' ", partyPhoneCond.value);
+                    }
+                    else
+                    {
+                        sqlParty += string.Format("and Name like '{0}' ", partyPhoneCond.value);
+                    }
+                }
+            }
+            //var parties = QueryDb.Query<law_party>(sqlParty);
 
             string text = "";
             string text2 = "";
@@ -48,6 +88,10 @@ namespace FastDev.Service
 
             StringBuilder sqlBuild = new StringBuilder();
             sqlBuild.AppendLine("select a.* from case_info a");
+            //if (parties != null && parties.Count() > 0)
+            //{
+
+            //}
 
             return base.GetPageData(descriptor);
         }
