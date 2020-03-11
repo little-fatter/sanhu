@@ -81,6 +81,9 @@ export default {
     pdfDownload () {
       saveAs(this.fileUrl)
     }
+  },
+  mounted () {
+    console.log(this.fileUrl, this.fileName)
   }
 }
 </script>

@@ -22,8 +22,17 @@ namespace FD.Common.Extensions
         {
             try
             {
-                var dicts = ParaToDictionary(pairs);
-                var uri = QueryHelpers.AddQueryString(url, dicts);
+                string uri;
+                if (pairs != null)
+                {
+                    var dicts = ParaToDictionary(pairs);
+                    uri = QueryHelpers.AddQueryString(url, dicts);
+                }
+                else
+                {
+                    uri = url;
+                }
+             
                 var response = await httpClient.GetStringAsync(uri);
                 if (!string.IsNullOrEmpty(response))//请求成功
                 {

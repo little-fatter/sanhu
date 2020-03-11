@@ -9,7 +9,7 @@ public string ID
 get;
 set;
 }
-public string Inspectiontype
+public string CaseId
 {
 get;
 set;
