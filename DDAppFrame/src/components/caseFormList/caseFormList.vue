@@ -53,7 +53,7 @@ export default {
       }
       var conditon = getQueryConditon(rules, 'and')
       // 请求
-      return getPageDate('form_all', parameter.pageIndex, parameter.pageSize, conditon).then(res => {
+      return getPageDate('formwith_eventcase', parameter.pageIndex, parameter.pageSize, conditon).then(res => {
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.caseFileList.push(item)

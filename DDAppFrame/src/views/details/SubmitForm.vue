@@ -48,7 +48,7 @@
         v-for="(item, index) in listData"
         class="case-panel"
         :key="index+'@'"
-        @click="goTodetail(item)"
+        @click="goTodetail(FormType)"
       >
         <div slot="header"></div>
         <div>
@@ -242,42 +242,101 @@ export default {
       statusBtns[index].className = 'from_type_active'
       this.screenPage()// 关闭弹窗 cll
       this.SformType = item.ItemCode
-      this.loadDataMore()
+      // this.loadDataMore()
     },
     // 去详情
     goTodetail (item) {
-      // 事件巡查
-      if (item.FormType === 'task_patrol') {
-        this.$router.push({
-          path: '/eventDetail',
-          query: { id: item }
-        })
-      } else if (item.FormType === 'task_survey') {
-        this.$router.push({
-          path: '/sceneInvestigationDetail',
-          query: { id: item.FormID }
-        })
-      } else if (item.FormType === 'case_info') {
-        this.$router.push({
-          path: '/caseDetails',
-          query: { id: item.FormID }
-        })
+      /**
+       *
+        案件移送 caseMove
+        巡查记录 patrolrecord
+        勘验笔录 inspectiontRecord
+        犯罪案件移送书 criminalCaseMoveMain
+        犯罪案件移送 criminalCaseMove
+        行政处罚案件结案报告_个人 APRPerson
+        询问记录 InvestigatingParty
+        没收物品清单 inventory
+        没收物品清单详情 punishmentInfoDetail
+        行政处罚案件结案报告_单位 APROrg
+        物品清单 form_confiscated_item
+        案件 case_Info
+        处罚当场决定书 law_punishmentInfo
+       */
+
+      // cll 获取字典后判断跳转
+      if (item.FormType === 'caseMove') {
+        // 案件移送
+        this.$toast('暂无案件移送详情')
+      } else if (item.FormType === 'patrolrecord') {
+        // 巡查记录
+        // this.$router.push({ path: '/eventDetail', query: { id: item } })
+      } else if (item.FormType === 'inspectiontRecord') {
+        // 勘验笔录
+        this.$router.push({ path: '/recordOfInquestDetail', query: { id: item.FormID } })
+      } else if (item.FormType === 'criminalCaseMoveMain') {
+        // 犯罪案件移送书
+        // this.$router.push({ path: '/recordOfInquestDetail', query: { id: item.FormID } })
+      } else if (item.FormType === 'criminalCaseMove') {
+        // 犯罪案件移送
+        // this.$router.push({ path: '/recordOfInquestDetail', query: { id: item.FormID } })
+      } else if (item.FormType === 'APRPerson') {
+        // 行政处罚案件结案报告_个人
+        this.$router.push({ path: '/CaseClosingReportSingle', query: { id: item.FormID } })
+      } else if (item.FormType === 'InvestigatingParty') {
+        // 询问记录
+        this.$router.push({ path: '/AskPartyNote', query: { id: item.FormID } })
+      } else if (item.FormType === 'inventory') {
+        // 没收物品清单
+        this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
+      } else if (item.FormType === 'punishmentInfoDetail') {
+        // 没收物品清单详情
+        // this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
+      } else if (item.FormType === 'APROrg') {
+        // 行政处罚案件结案报告_单位
+        this.$router.push({ path: '/CaseClosingReportCompany', query: { id: item.FormID } })
+      } else if (item.FormType === 'form_confiscated_item') {
+        // 物品清单
+        this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
+      } else if (item.FormType === 'case_Info') {
+        // 案件信息
+        this.$router.push({ path: '/caseDetails', query: { id: item.CaseId } })
       } else if (item.FormType === 'law_punishmentInfo') {
-        this.$router.push({
-          path: '/PenalizeBookDetial',
-          query: { id: item.FormID }
-        })
-      } else if (item.FormType === 'case_report') {
-        this.$router.push({
-          path: '/closingReportDetail',
-          query: { id: item.FormID }
-        })
-      } else if (item.FormType === 'case_filing_report') {
-        this.$router.push({
-          path: '/createCaseDetails',
-          query: { id: item.FormID }
-        })
+        // 处罚当场决定书
+        this.$router.push({ path: '/PromptlyPunishNote', query: { id: item.FormID } })
       }
+
+      // 事件巡查
+      // if (item.FormType === 'task_patrol') {
+      //   this.$router.push({
+      //     path: '/eventDetail',
+      //     query: { id: item }
+      //   })
+      // } else if (item.FormType === 'task_survey') {
+      //   this.$router.push({
+      //     path: '/sceneInvestigationDetail',
+      //     query: { id: item.FormID }
+      //   })
+      // } else if (item.FormType === 'case_info') {
+      //   this.$router.push({
+      //     path: '/caseDetails',
+      //     query: { id: item.FormID }
+      //   })
+      // } else if (item.FormType === 'law_punishmentInfo') {
+      //   this.$router.push({
+      //     path: '/PenalizeBookDetial',
+      //     query: { id: item.FormID }
+      //   })
+      // } else if (item.FormType === 'case_report') {
+      //   this.$router.push({
+      //     path: '/closingReportDetail',
+      //     query: { id: item.FormID }
+      //   })
+      // } else if (item.FormType === 'case_filing_report') {
+      //   this.$router.push({
+      //     path: '/createCaseDetails',
+      //     query: { id: item.FormID }
+      //   })
+      // }
     },
     // 处理参数
     dealParameter () {
@@ -413,6 +472,7 @@ export default {
             ItemCode: item.ItemCode
           })
         })
+        console.log(this.FormType, '表单类型')
       })
     }
 
