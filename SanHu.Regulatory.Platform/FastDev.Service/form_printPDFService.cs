@@ -55,17 +55,17 @@ namespace FastDev.Service
                 var jsonData = FormData(new FormDataReq() { FormId = data.formID, Model = data.formName, FilterModels = new string[] { "law_staff", "law_party" } });
                 //寻找模板获取html字符串
                 string filepath = $"wwwroot/pdf/{data.formName}.html";
-                string html = File.ReadAllText(filepath);
-                string newHtml = html;
+                string newHtml = File.ReadAllText(filepath);
+                //string newHtml = html;
                 var jsonStr = JsonHelper.SerializeObject(jsonData);
                 //var Jdic = JsonHelper.DeserializeJsonToObject<Dictionary<string,object>>(jsonStr);
                 var item = JsonHelper.DeserializeJsonToObject<JObject>(jsonStr);
-                //案件信息
-                if (QueryDb.Exists<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID))
-                {
-                    var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID);
-                    newHtml = ReplaceHtml(newHtml, caseInfo);
-                }
+                ////案件信息
+                //if (QueryDb.Exists<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID))
+                //{
+                //    var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID in (select CaseId from form_inquestrecord where ID = '@0')", data.formID);
+                //    newHtml = ReplaceHtml(newHtml, caseInfo);
+                //}
 
                 //执行人
                 if (item["law_party"].ToString() != "[]")
@@ -89,11 +89,16 @@ namespace FastDev.Service
                 if (item["MainForm"].ToString() != "[]")
                 {
                     var obj = item["MainForm"].ToObject(DataAccessHelper.GetEntityType(data.formName.ToString()));
+                    //案件信息
                     var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID = @0", item["MainForm"]["CaseId"].ToString());
                     if (caseInfo != null)
                         newHtml = ReplaceHtml(newHtml, caseInfo);
-                    var type = item["MainForm"]["InspectionType"].ToObject<List<string>>();
-                    newHtml = newHtml.Replace("%Type%", type.Count > 1 ? type[1] : "");
+                    var typeList = item["MainForm"]["InspectionType"];
+                    if (typeList != null)
+                    {
+                        var type = typeList.ToObject<List<string>>();
+                        newHtml = newHtml.Replace("%Type%", type.Count > 1 ? type[1] : "");
+                    }
                     //ReplaceHtml<JToken>(data, html, item["MainForm"]);
                     newHtml = ReplaceHtml(newHtml, obj);
                 }
@@ -103,7 +108,7 @@ namespace FastDev.Service
                 //替换数据
 
                 //并且生成PDF返回路径
-                var pdfByte = _converter.HmtlToPDF(html);
+                var pdfByte = _converter.HmtlToPDF(newHtml);
 
                 //FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
                 FilePath = $"/pdf/{Guid.NewGuid()}.pdf";
@@ -223,7 +228,7 @@ namespace FastDev.Service
                 string replaceHtml = $"%{item.Name}{mark}%";
                 //替换数据
                 if (html.Contains(replaceHtml) && item.GetValue(source) != null)
-                    tempHtml = tempHtml.Replace(replaceHtml, $"item.GetValue(source)");
+                    tempHtml = tempHtml.Replace(replaceHtml, $"{item.GetValue(source)}");
 
                 //若有IEnumerable等List的话
                 //if (IsGenericType && list != null)
