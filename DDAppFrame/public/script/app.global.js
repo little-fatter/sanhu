@@ -52,7 +52,7 @@ var publicAppConfig = {
   /** 审批配置 */
   auditCondig: {
     // 结案报告审批模板
-    CaseFinalReportProcessCode: 'PROC-CEF3CE57-8E80-4718-8B56-44973CF24FA9'
+    CaseFinalReportProcessCode: 'PROC-24B1FD66-D778-40E4-A0E3-82CEC072C24F'
   },
   /** 配置pc站点host,用于任务PC链接 */
   pcHost: '',
