@@ -24,7 +24,7 @@ namespace FastDev.Service
         private void Event_infoService_OnAfterGetDetailData(object query, object data)
         {
             var o = data as Dictionary<string, object>;
-            if (o["evtTypeDisplayName"] == null) o["evtTypeDisplayName"] = "执法事件";
+            if (o["evtTypeDisplayName"] == null) o["evtTypeDisplayName"] = "综合执法";
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace FastDev.Service
             foreach (var d in pageDatas)
             {
                 var data = JsonHelper.ToDictionary(JObject.Parse(JsonHelper.SerializeObject(d)));
-                if (data["evtTypeDisplayName"]==null) data["evtTypeDisplayName"] = "执法事件";
+                if (data["evtTypeDisplayName"]==null) data["evtTypeDisplayName"] = "综合执法";
                 revData.Add(data);
             }
             pageData.Records = revData;
