@@ -111,22 +111,25 @@
       </van-form>
     </van-cell-group>
     <event-list-select :showPopup="showPopup" @onClosePopup="onCloseEvent" @onPopupConfirm="onEventConfirm"></event-list-select>
+    <next-task-modal @onPopupConfirm="onTaskConfirm" ref="taskModel"></next-task-modal>
   </div>
 </template>
 
 <script>
-import { formatDate, isNotEmpty, getNextTask } from '../../../utils/util'
+import { formatDate, isNotEmpty, getNextTask, getCaseTaskDefault } from '../../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import PartyInfo from '../../../components/business/PartyInfo'
 import EventListSelect from '../../../components/business/EventListSelect'
 import { getDictionaryItems, DictionaryCode, getDetaildata, commonOperateApi, TaskTypeDic, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 import { getCurrentUserInfo } from '../../../service/currentUser.service'
+import NextTaskModal from '../../../components/business/NextTaskModal'
 var timer = null
 export default {
   name: 'CaseCreate',
   components: {
     PartyInfo,
-    EventListSelect
+    EventListSelect,
+    NextTaskModal
   },
   props: {
 
@@ -288,8 +291,15 @@ export default {
         this.loading = false
       })
     },
+    onTaskConfirm (result) {
+      var data = result.data
+      var nextTask = null
+      var userInfo = getCurrentUserInfo()
+      nextTask = getNextTask(TaskTypeDic.Punishment, userInfo.userid, 'penalizeBookCreate', result.taskTitle, result.taskContent, data.Attachments, this.event.evtFileUrl, this.event.objId)
+      data.NextTasks.push(nextTask)
+      this.save(data)
+    },
     onSubmit (values) {
-      console.log('submit', values)
       var caseInfo = {
         ...this.caseInfo,
         IncidentAddressXY: this.caseInfo.IncidentAddressXY
@@ -300,12 +310,9 @@ export default {
         caseInfo,
         NextTasks: []
       }
-      var userInfo = getCurrentUserInfo()
-      var nextTask = null
-      nextTask = getNextTask(TaskTypeDic.Punishment, userInfo.userid, 'penalizeBookCreate', '当场处罚决定书', this.event.objId)
-      data.NextTasks.push(nextTask)
       data.LawParties = this.$refs.party.getResult()
-      this.save(data)
+      var defaultTask = getCaseTaskDefault(this.caseInfo, '当场处罚')
+      this.$refs.taskModel.show(defaultTask.title, defaultTask.content, data)
     },
     onFailed (errorInfo) {
       console.log('failed', errorInfo)

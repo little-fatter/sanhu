@@ -405,7 +405,7 @@ export default {
       }, 5000)
     },
     isImg (fileName) {
-      const imgTypes = ['png', 'jpg', 'gif', 'bmp']
+      const imgTypes = ['png', 'jpg', 'gif', 'bmp', 'jpeg']
       let fileType = ''
       const index = fileName.lastIndexOf('.')
       if (index > -1) {

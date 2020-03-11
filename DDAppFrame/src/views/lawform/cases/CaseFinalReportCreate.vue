@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import appConfig from '../../../config/app.config'
 import PartyInfoView from '../../../components/business/PartyInfoView'
 import PenaltyDecisionView from '../../../components/business/PenaltyDecisionView'
 import CaseListSelect from '../../../components/business/CaseListSelect'
@@ -152,7 +153,7 @@ export default {
         if (res) {
           this.penalizeBook = {
             ...res.MainForm,
-            LawParties: res.Party
+            LawParties: res.law_party
           }
           console.log('LawParties', this.penalizeBook)
           this.caseFinalReport.CaseDetail = this.penalizeBook.Illegalfacts + this.penalizeBook.IllegalbasisIDs + this.penalizeBook.PunishmentbasisIDs
@@ -195,27 +196,28 @@ export default {
           EventInfoId: this.caseInfo.EventInfoId,
           caseReport
         }
+        var userInfo = getCurrentUserInfo()
+        const data = {}
+        data.AgentId = parseInt(getAgentId())
+        data.ProcessCode = appConfig.auditCondig.CaseFinalReportProcessCode
+        data.OriginatorUserId = userInfo.userid
+        data.DeptId = userInfo.deptid
+        data.Approvers = getApproverIds(approve)
+        data.FormComponentValues = JSON.stringify(this.getFormComponentValues())
         this.loading = true
-        commonOperateApi('FINISH', 'case_report', model).then((result) => {
-          if (result) {
-            var userInfo = getCurrentUserInfo()
-            const data = {}
-            data.AgentId = parseInt(getAgentId())
-            data.ProcessCode = 'PROC-CEF3CE57-8E80-4718-8B56-44973CF24FA9'
-            data.OriginatorUserId = userInfo.userid
-            data.DeptId = userInfo.deptid
-            data.Approvers = getApproverIds(approve)
-            data.FormComponentValues = JSON.stringify(this.getFormComponentValues())
-            startProcessInstance(data).then(res => {
-              var msg = '提交审批流程成功'
+        startProcessInstance(data).then(res => {
+          model.caseReport.processInstanceId = res.ProcessInstanceId
+          commonOperateApi('FINISH', 'case_report', model).then((result) => {
+            if (result) {
+              var msg = '提交结案报告审批流程成功'
               this.$toast.success(msg)
               this.goToLawForm()
-            }).finally(() => {
+            } else {
               this.loading = false
-            })
-          } else {
+            }
+          }).finally(() => {
             this.loading = false
-          }
+          })
         }).catch(() => {
           this.loading = false
         })
