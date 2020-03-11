@@ -66,8 +66,7 @@
             </div>
           </div>
           <template
-            v-if="item.FormType ==='case_filing_report'||'case_info'||'case_report'||'law_punishmentInfo'? false:true"
-          >
+            v-if="item.FormType ==='case_filing_report'||'case_info'||'case_report'||'law_punishmentInfo'? false:true">
             <div class="default-info">
               <span>事件编号：</span>
               <div>
@@ -353,7 +352,7 @@ export default {
     },
     // 请求页面数据
     loadDataMore () {
-      console.log(111111)
+      console.log(this.dealParameter(), '参数处理结果')
       this.dealParameter()
       const newGroups = this.groups[0].rules.filter(item => {
         return item.value !== '' && item.value !== undefined && item.value !== '0'
