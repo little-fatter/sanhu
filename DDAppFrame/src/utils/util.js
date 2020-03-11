@@ -1,4 +1,6 @@
 import { Toast } from 'vant'
+import appConfig from '@/config/app.config'
+import apiConfig from '../config/api.config'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
@@ -422,12 +424,21 @@ export const getQueryConditonMore = (rules = [], op = 'or', groups) => {
 }
 
 /**
- * 获取待办地址
+ * 获取APP待办地址
  * @param {*} routePath
  */
-export const getTaskUrl = (routePath) => {
+export const getAppTaskUrl = (routePath) => {
   var webUrl = getMainUrl()
   return `${webUrl}#/${routePath}`
+}
+
+/**
+ * 获取PC的待办地址
+ * @param {*} routePath
+ */
+export const getPCTaskUrl = (routePath) => {
+  var hostUrl = appConfig.pcHost
+  return `${hostUrl}/${routePath}`
 }
 
 /**
@@ -439,15 +450,92 @@ export const getTaskUrl = (routePath) => {
  * @param {*} eventInfoId
  * @param {*} caseID
  */
-export const getNextTask = (taskType, assignUsersID, routePath, taskContent, eventInfoId, caseID) => {
+export const getNextTask = (taskType, assignUsersID, routePath, TaskTitle, taskContent, attachments, evtFileUrl, eventInfoId, caseID) => {
   var task = {
     TaskType: taskType,
-    AssignUsers: assignUsersID,
-    RemoteLinks: getTaskUrl(routePath),
+    TaskTitle: TaskTitle,
+    TaskImg: getTaskImg(attachments, evtFileUrl),
     TaskContent: taskContent,
+    AssignUsers: assignUsersID,
+    AppLinks: getAppTaskUrl(routePath),
+    PCLinks: getPCTaskUrl(routePath),
     EventInfoId: eventInfoId,
     CaseID: caseID
   }
 
   return task
+}
+
+/**
+ * 获取图片读取地址
+ */
+export const getFileReadUrl = (fileCode) => {
+  return apiConfig.admin.file.downloadFile + '/' + fileCode
+}
+
+/**
+ * 获取任务图片
+ * @param {*} attachments
+ * @param {*} evtFileUrl
+ */
+export const getTaskImg = (attachments, evtFileUrl) => {
+  var taskImg = ''
+  if (isNotEmpty(attachments) && attachments.length > 0) {
+    var attachment = attachments.find(item => isImg(item.fileName || item.FileName))
+    if (isNotEmpty(attachment)) {
+      var fileCode = attachment.fileCode || attachment.FileCode
+      taskImg = getFileReadUrl(fileCode)
+    }
+  }
+  if (isEmpty(taskImg) && isNotEmpty(evtFileUrl)) {
+    var evtFileUrlArray = evtFileUrl.split(',')
+    if (evtFileUrlArray.length > 0) {
+      taskImg = evtFileUrlArray[0]
+    }
+  }
+  return taskImg
+}
+
+/**
+ * 根据文件名称判断是否图片
+ * @param {*} fileName
+ */
+export const isImg = (fileName) => {
+  const imgTypes = ['png', 'jpg', 'gif', 'bmp', 'jpeg']
+  let fileType = ''
+  const index = fileName.lastIndexOf('.')
+  if (index > -1) {
+    fileType = fileName.substr(index + 1)
+  }
+  return imgTypes.includes(fileType)
+}
+
+/**
+ * 获取事件相关的任务默认的标题和内容
+ * @param {*} event
+ * @param {*} taskTypeDesc
+ */
+export const getEventTaskDefault = (event, taskTypeDesc) => {
+  var title = `${event.evtTypeDisplayName}-${taskTypeDesc}`
+  var content = `${event.reportTime}上报在${event.address}发现${event.evtTypeDisplayName}事件`
+
+  return {
+    title,
+    content
+  }
+}
+
+/**
+ * 获取案件相关的任务默认的标题和内容
+ * @param {*} caseInfo
+ * @param {*} taskTypeDesc
+ */
+export const getCaseTaskDefault = (caseInfo, taskTypeDesc) => {
+  var title = `${caseInfo.DocNo}-${taskTypeDesc}`
+  var content = `${caseInfo.CauseOfAction}`
+
+  return {
+    title,
+    content
+  }
 }

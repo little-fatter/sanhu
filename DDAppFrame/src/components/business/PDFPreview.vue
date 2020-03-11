@@ -5,6 +5,7 @@
         ref="pdf"
         :src="fileUrl">
       </pdf>
+      <slot></slot>
     </div>
 
     <div class="operate-area-center">

@@ -1,7 +1,7 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
+      <van-cell title="任务类型" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
       <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
       <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
@@ -88,11 +88,13 @@
             v-model="eventCheck.IncidentAddress"
             label="事发地点"
             placeholder="请输入事发地点"
-            required
-            :rules="requiredRule"
             rows="2"
             autosize
             type="textarea"
+            maxlength="200"
+            show-word-limit
+            required
+            :rules="requiredRule"
           >
             <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
           </van-field>
@@ -162,6 +164,7 @@
     </template>
 
     <event-list-select :showPopup="showPopup" @onClosePopup="onCloseEvent" @onPopupConfirm="onEventConfirm"></event-list-select>
+    <next-task-modal @onPopupConfirm="onTaskConfirm" ref="taskModel"></next-task-modal>
     <van-dialog
       v-model="showRejectDialog"
       title="您确认拒绝吗？"
@@ -182,7 +185,7 @@
 </template>
 
 <script>
-import { isNotEmpty, formatDate, isEmpty, getNextTask } from '../../utils/util'
+import { isNotEmpty, formatDate, isEmpty, getNextTask, getEventTaskDefault } from '../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../service/ddJsApi.service'
 import ItemGroup from '../../components/tools/ItemGroup'
 import SUpload from '../../components/file/StandardUploadFile'
@@ -191,6 +194,7 @@ import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, Ta
 import { getCurrentUserInfo } from '../../service/currentUser.service'
 import { getWorkrecordPageListbyCurrent } from '../../api/ddApi'
 import { AcceptImageAll } from '../../utils/helper/accept.helper'
+import NextTaskModal from '../../components/business/NextTaskModal'
 var timer = null
 /**
  * 事件巡查
@@ -200,7 +204,8 @@ export default {
   components: {
     ItemGroup,
     SUpload,
-    EventListSelect
+    EventListSelect,
+    NextTaskModal
   },
   data () {
     // 必填规则
@@ -229,7 +234,8 @@ export default {
       showCalendar: false,
       showPopup: false,
       showRejectDialog: false,
-      currentDate: new Date()
+      currentDate: new Date(),
+      showTaskModel: false
     }
   },
   created () {
@@ -287,6 +293,7 @@ export default {
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
+          this.eventCheck.EventType = event.evtTypeId
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
           this.eventCheck.IncidentAddress = event.address
           var incidentAddressXY = ''
@@ -360,6 +367,7 @@ export default {
     onEventConfirm (event) {
       this.event = event
       getFormsDetailByEventInfoId(event.objId, 'task_patrol').then((res) => {
+        console.log('res', res)
         if (res) {
           this.eventCheck = {
             ...this.eventCheck,
@@ -367,6 +375,7 @@ export default {
             Attachment: res.attachment
           }
         } else {
+          this.eventCheck.EventType = event.evtTypeId
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
           this.eventCheck.IncidentAddress = event.address
@@ -416,6 +425,23 @@ export default {
     handleShowRejectDialog () {
       this.showRejectDialog = true
     },
+    onTaskConfirm (result) {
+      var data = result.data
+      var nextTask = null
+      var userInfo = getCurrentUserInfo()
+      if (this.eventCheck.Needlawenforcement === 1) {
+        ddcomplexPicker().then((res) => {
+          var user = res.users[0]
+          nextTask = getNextTask(TaskTypeDic.OnSpot, user.emplId, 'lawCheckCreate', result.taskTitle, result.taskContent, data.Attachments, this.event.evtFileUrl, this.event.objId)
+          data.NextTasks.push(nextTask)
+          this.save(data)
+        })
+      } else {
+        nextTask = getNextTask(TaskTypeDic.EventCheck, userInfo.userid, 'eventCheckCreate', result.taskTitle, result.taskContent, data.Attachments, this.event.evtFileUrl, this.event.objId)
+        data.NextTasks.push(nextTask)
+        this.save(data)
+      }
+    },
     onSubmit (values) {
       var TaskPatrol = {
         ...values,
@@ -427,23 +453,17 @@ export default {
         TaskPatrol,
         NextTasks: []
       }
-      var userInfo = getCurrentUserInfo()
-      var nextTask = null
       var attachments = this.$refs.myupload.getUploadResult()
       if (attachments && attachments.length > 0) {
         data.Attachments = attachments
       }
+      var defaultTask = null
       if (this.eventCheck.Needlawenforcement === 1) {
-        ddcomplexPicker().then((res) => {
-          var user = res.users[0]
-          nextTask = getNextTask(TaskTypeDic.OnSpot, user.emplId, 'lawCheckCreate', '现场勘查', this.event.objId)
-          data.NextTasks.push(nextTask)
-          this.save(data)
-        })
+        defaultTask = getEventTaskDefault(this.event, '现场勘查')
+        this.$refs.taskModel.show(defaultTask.title, defaultTask.content, data)
       } else if (this.eventCheck.Needtracking === 1) {
-        nextTask = getNextTask(TaskTypeDic.EventCheck, userInfo.userid, 'eventCheckCreate', '事件核查', this.event.objId)
-        data.NextTasks.push(nextTask)
-        this.save(data)
+        defaultTask = getEventTaskDefault(this.event, '事件核查')
+        this.$refs.taskModel.show(defaultTask.title, defaultTask.content, data)
       } else {
         this.save(data)
       }
