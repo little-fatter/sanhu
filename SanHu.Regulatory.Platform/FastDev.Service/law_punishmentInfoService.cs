@@ -42,6 +42,10 @@ namespace FastDev.Service
                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
+
+                //打印预生成
+                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formName"":""law_punishmentInfo""}" });
             }
             catch (Exception e)
             {

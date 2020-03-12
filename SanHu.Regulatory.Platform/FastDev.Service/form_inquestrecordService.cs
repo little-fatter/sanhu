@@ -16,7 +16,7 @@ namespace FastDev.Service
     {
         public Form_inquestrecordService()
         {
-            OnGetAPIHandler += Form_inquestrecordService_OnGetAPIHandler;         
+            OnGetAPIHandler += Form_inquestrecordService_OnGetAPIHandler;
         }
 
         private Func<APIContext, object> Form_inquestrecordService_OnGetAPIHandler(string id)
@@ -44,6 +44,10 @@ namespace FastDev.Service
                 ServiceHelper.GetService("law_party").SaveList(data.law_Parties);
 
                 CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
+
+                //PDF打印预生成
+                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":"""+data.form_inquestrecord.ID+@""",""formName"":""form_inquestrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
