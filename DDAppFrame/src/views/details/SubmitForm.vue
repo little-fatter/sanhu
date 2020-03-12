@@ -30,7 +30,7 @@
                 @click="FormStatusEvn(index,item)"
               >{{ item.Title }}</button>
             </div> -->
-            <van-cell title="类型" icon="stop"/>
+            <van-cell title="表单类型" icon="stop"/>
             <div class="contentBox type">
               <button
                 v-for="(item,index) in FormType"
@@ -94,7 +94,6 @@
               </div>
             </div>
           </template>
-
           <div class="case-tag">
             <div>
               <van-tag plain v-show="item.FormState">{{ item.FormState }}</van-tag>
@@ -105,14 +104,15 @@
           </div>
         </div>
       </van-panel>
+
     </SList>
   </div>
 </template>
 
 <script>
 import SList from '@/components/list/SList.vue'
-import { getQueryConditon, isNotEmpty } from '../../utils/util'
-import { getPageDate, getDictionaryItems, getQueryConditonMore } from '../../api/regulatoryApi'
+import { getQueryConditon, isNotEmpty, getQueryConditonMoreForm } from '../../utils/util'
+import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi'
 export default {
   name: 'SubmitForm',
   components: {
@@ -222,6 +222,28 @@ export default {
       // 关闭弹窗
       // this.searchePage()
     },
+    // 成林龙 增加从字典获取表单状态 和类型
+    getsearchMenu () {
+      getDictionaryItems('FormState').then(res => {
+        res.map(item => {
+          this.FormState.push({
+            ID: item.ID,
+            Title: item.Title,
+            ItemCode: item.ItemCode
+          })
+        })
+      })
+      getDictionaryItems('FormType').then(res => {
+        res.map(item => {
+          this.FormType.push({
+            ID: item.ID,
+            Title: item.Title,
+            ItemCode: item.ItemCode
+          })
+        })
+        console.log(this.FormType, '表单类型')
+      })
+    },
     // 筛选 cll 改 筛选菜单
     FormStatusEvn (index, item) {
       var statusBtns = document.querySelectorAll('.status > button')
@@ -241,11 +263,104 @@ export default {
       })
       statusBtns[index].className = 'from_type_active'
       this.screenPage()// 关闭弹窗 cll
-      this.SformType = item.ItemCode
-      // this.loadDataMore()
+      this.SformType = item.ItemCode // 搜索用
+      // this.loadData('formwith_eventcase', 1, 10, this.dealParameter(conditon)) // 调用请求
     },
+    // 处理参数
+    dealParameter (searchKeyWords, SformType) {
+      if (isNotEmpty(searchKeyWords) || isNotEmpty(SformType)) {
+        const data = getQueryConditonMoreForm(this.rules, this.groups, 'or')
+        return data
+      } else {
+        const data = getQueryConditon([], 'or')
+        return data
+      }
+    },
+    // 获取列表信息
+
+    loadData (parameter) {
+      console.log(this.dealParameter(this.searchKeyWords), isNotEmpty(this.SformType))
+      // 第一次请求 筛选规则为空
+      // var rules = []
+      this.dealParameter()
+      return getPageDate(
+        'formwith_eventcase',
+        parameter.pageIndex,
+        parameter.pageSize,
+        this.dealParameter(this.searchKeyWords), isNotEmpty(this.SformType)
+      ).then(res => {
+        if (res.Rows) {
+          console.log(res.Rows, '初次请求结果')
+          res.Rows.forEach(item => {
+            this.listData.push(item)
+          })
+          // 时间排序
+          this.listData.sort(function (a, b) {
+            return a.InitiationTime > b.InitiationTime ? -1 : 1
+          })
+        }
+        return res
+      })
+    },
+
+    // 请求页面数据
+    // loadDataMore () {
+    //   this.dealParameter()
+    //   const newGroups = this.groups[0].rules.filter(item => {
+    //     return isNotEmpty(item.value)
+    //     //! == '' && item.value !== undefined && item.value !== '0'
+    //   })
+    //   var groups = []
+    //   groups = [
+    //     {
+    //       rules: newGroups,
+    //       op: 'and'
+    //     }
+    //   ]
+    //   if (newGroups.length > 0 && !isNotEmpty(this.searchKeyWords)) {
+    //   //  const conditonNew = getQueryConditonMore([], 'and', groups)
+    //     return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
+    //       if (res.Rows) {
+    //         console.log(res.Rows, '筛选结果展示')
+    //         this.listData = res.Rows
+    //       }
+    //       return res
+    //     })
+    //   }
+    //   // if (newGroups.length > 0 && isNotEmpty(this.searchKeyWords)) {
+    //   //   var conditonNew = getQueryConditonMore(this.rules, 'and', groups)
+    //   //   return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
+    //   //     if (res.Rows) {
+    //   //       this.caseList = res.Rows
+    //   //     }
+    //   //     return res
+    //   //   })
+    //   // } else if (newGroups.length > 0 && !isNotEmpty(this.searchKeyWords)) {
+    //   //   const conditonNew = getQueryConditonMore([], 'and', groups)
+    //   //   return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
+    //   //     if (res.Rows) {
+    //   //       console.log(res.Rows, '筛选结果展示')
+    //   //       this.caseList = res.Rows
+    //   //     }
+    //   //     return res
+    //   //   })
+    //   // } else if (newGroups.length === 0 && isNotEmpty(this.searchKeyWords)) {
+    //   //   const conditon = getQueryConditon(this.rules, 'and')
+    //   //   return getPageDate('formwith_eventcase', 1, 10, conditon).then(res => {
+    //   //     if (res.Rows) {
+    //   //       this.caseList = res.Rows
+    //   //     }
+    //   //     return res
+    //   //   })
+    //   // } else {
+    //   //   const conditon = getQueryConditon(this.rules, 'and')
+    //   //   this.loadData('formwith_eventcase', 1, 10, conditon)
+    //   // }
+    // },
     // 去详情
     goTodetail (item) {
+      console.log(item, '跳转信息')
+
       /**
        *
         案件移送 caseMove
@@ -303,6 +418,12 @@ export default {
       } else if (item.FormType === 'law_punishmentInfo') {
         // 处罚当场决定书
         this.$router.push({ path: '/PromptlyPunishNote', query: { id: item.FormID } })
+      } else if (item.FormType === 'task_patrol') {
+        // 事件详情  lp
+        this.$router.push({ path: '/eventDetail', query: { id: item } })
+      } else if (item.FormType === 'task_survey') {
+        // 现场巡查 lp
+        this.$router.push({ path: '/sceneInvestigationDetail', query: { id: item.FormID } })
       }
 
       // 事件巡查
@@ -337,145 +458,7 @@ export default {
       //     query: { id: item.FormID }
       //   })
       // }
-    },
-    // 处理参数
-    dealParameter () {
-      this.rules.map(item => {
-        item.value = this.serchText
-      })
-      this.groups[0].rules[0].value = this.SformType
-    },
-    // 获取列表信息
-    loadData (parameter) {
-      // 第一次请求 筛选规则为空
-      var rules = []
-      if (isNotEmpty(this.searchKeyWords)) {
-        rules = [
-          {
-            field: 'ContentValidity',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'FormName',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'FormState',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'OriginatorID',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'handler',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'CaseNumber',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          }
-        ]
-      }
-      var conditon = getQueryConditon(rules, 'or')
-      return getPageDate(
-        'formwith_eventcase',
-        parameter.pageIndex,
-        parameter.pageSize,
-        conditon
-      ).then(res => {
-        if (res.Rows) {
-          console.log(res.Rows)
-          res.Rows.forEach(item => {
-            this.listData.push(item)
-          })
-          // 时间排序
-          this.listData.sort(function (a, b) {
-            return a.InitiationTime > b.InitiationTime ? -1 : 1
-          })
-        }
-        return res
-      })
-    },
-    // 请求页面数据
-    loadDataMore () {
-      console.log(this.dealParameter(), '参数处理结果')
-      this.dealParameter()
-      const newGroups = this.groups[0].rules.filter(item => {
-        return item.value !== '' && item.value !== undefined && item.value !== '0'
-      })
-      var groups = []
-      groups = [
-        {
-          rules: newGroups,
-          op: 'and'
-        }
-      ]
-      if (newGroups.length > 0 && isNotEmpty(this.searchKeyWords)) {
-        var conditonNew = getQueryConditonMore(this.rules, 'and', groups)
-        return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
-          if (res.Rows) {
-            this.caseList = res.Rows
-          }
-          return res
-        })
-      } else if (newGroups.length > 0 && !isNotEmpty(this.searchKeyWords)) {
-        const conditonNew = getQueryConditonMore([], 'and', groups)
-        return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
-          if (res.Rows) {
-            this.caseList = res.Rows
-          }
-
-          return res
-        })
-      } else if (newGroups.length === 0 && isNotEmpty(this.searchKeyWords)) {
-        const conditon = getQueryConditon(this.rules, 'and')
-        return getPageDate('formwith_eventcase', 1, 10, conditon).then(res => {
-          if (res.Rows) {
-            this.caseList = res.Rows
-          }
-          return res
-        })
-      } else {
-        const conditon = getQueryConditon(this.rules, 'and')
-        this.loadData('formwith_eventcase', 1, 10, conditon)
-      }
-    },
-    // 成林龙 增加从字典获取表单状态 和类型
-    getsearchMenu () {
-      getDictionaryItems('FormState').then(res => {
-        res.map(item => {
-          this.FormState.push({
-            ID: item.ID,
-            Title: item.Title,
-            ItemCode: item.ItemCode
-          })
-        })
-      })
-      getDictionaryItems('FormType').then(res => {
-        res.map(item => {
-          this.FormType.push({
-            ID: item.ID,
-            Title: item.Title,
-            ItemCode: item.ItemCode
-          })
-        })
-        console.log(this.FormType, '表单类型')
-      })
     }
-
     // 测试页面
     // go() {
     //   this.$router.push({

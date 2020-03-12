@@ -44,7 +44,9 @@ export const getPageDate = (model, PageIndex, PageSize, Condition = defaultCondi
     data: {
       Condition,
       PageIndex,
-      PageSize
+      PageSize,
+      SortName: 'ID', // 后台说要新增 这两个
+      SortOrder: 'desc'
     }
   })
 }

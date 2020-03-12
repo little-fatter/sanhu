@@ -422,7 +422,24 @@ export const getQueryConditonMore = (rules = [], op = 'or', groups) => {
 
   return conditonMore
 }
+/**
+ * 获取查询条件多层级 cll 复制
+ * @param {*} rules  {field,op,value,type}
+ * @param {*} op  or或者and
+ */
+export const getQueryConditonMoreForm = (rules = [], groups, op = 'or') => {
+  var conditonMore = {
+    rules: [],
+    groups: [{
+      rules: rules,
+      groups,
+      op
+    }],
+    op: 'and'
+  }
 
+  return conditonMore
+}
 /**
  * 获取APP待办地址
  * @param {*} routePath
