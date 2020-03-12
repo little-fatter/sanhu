@@ -118,7 +118,6 @@ export default {
   components: {
     SList
   },
-  props: {},
   data () {
     return {
       searchShow: false,
@@ -206,6 +205,12 @@ export default {
       newGroups: []
     }
   },
+  // 计算属性
+  computed: {
+    newRules () {
+      return this.searchKeyWords // this.rules.map(item => item.value ===)
+    }
+  },
   methods: {
     // 搜索弹窗显示隐藏
     searchePage () {
@@ -269,7 +274,8 @@ export default {
     // 处理参数
     dealParameter (searchKeyWords, SformType) {
       if (isNotEmpty(searchKeyWords) || isNotEmpty(SformType)) {
-        const data = getQueryConditonMoreForm(this.rules, this.groups, 'or')
+        var rulesOk = this.rules.map(item => item.value === this.newRules)
+        const data = getQueryConditonMoreForm(rulesOk, this.groups, 'or')
         return data
       } else {
         const data = getQueryConditon([], 'or')
@@ -279,7 +285,6 @@ export default {
     // 获取列表信息
 
     loadData (parameter) {
-      console.log(this.dealParameter(this.searchKeyWords), isNotEmpty(this.SformType))
       // 第一次请求 筛选规则为空
       // var rules = []
       this.dealParameter()
