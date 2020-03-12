@@ -100,6 +100,7 @@
           label="协办人"
           placeholder="请选择协办人"
           :readonly="true"
+          @click="handleSelecOrganiser"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecOrganiser" size="30" />
         </van-field>
@@ -110,22 +111,25 @@
       </van-form>
     </van-cell-group>
     <event-list-select :showPopup="showPopup" @onClosePopup="onCloseEvent" @onPopupConfirm="onEventConfirm"></event-list-select>
+    <next-task-modal @onPopupConfirm="onTaskConfirm" ref="taskModel"></next-task-modal>
   </div>
 </template>
 
 <script>
-import { formatDate, isNotEmpty, getNextTask } from '../../../utils/util'
+import { formatDate, isNotEmpty, getNextTask, getCaseTaskDefault } from '../../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import PartyInfo from '../../../components/business/PartyInfo'
 import EventListSelect from '../../../components/business/EventListSelect'
 import { getDictionaryItems, DictionaryCode, getDetaildata, commonOperateApi, TaskTypeDic, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 import { getCurrentUserInfo } from '../../../service/currentUser.service'
+import NextTaskModal from '../../../components/business/NextTaskModal'
 var timer = null
 export default {
   name: 'CaseCreate',
   components: {
     PartyInfo,
-    EventListSelect
+    EventListSelect,
+    NextTaskModal
   },
   props: {
 
@@ -186,7 +190,29 @@ export default {
       getDetaildata('event_info', EventInfoId).then((res) => {
         if (res) {
           this.event = res
+          this.loadEventCheck(res)
         }
+      })
+    },
+    loadEventCheck (event) {
+      getFormsDetailByEventInfoId(event.objId, 'task_survey').then((res) => {
+        if (res) {
+          this.caseInfo = {
+            ...this.caseInfo,
+            ...res.MainForm,
+            LawParties: res.law_party
+          }
+        } else {
+          this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
+          this.caseInfo.IncidentAddress = event.address
+          var incidentAddressXY = ''
+          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+            incidentAddressXY = event.lng + ',' + event.lat
+          }
+          this.caseInfo.IncidentAddressXY = incidentAddressXY
+        }
+      }).finally(() => {
+        this.showPopup = false
       })
     },
     loadSourceofcases () {
@@ -242,7 +268,6 @@ export default {
           name: res.users[0].name,
           id: res.users[0].emplId
         }
-        console.log('organiserTemp', organiserTemp)
         this.caseInfo.CoOrganizer = organiserTemp.name
         this.caseInfo.CoOrganizerId = organiserTemp.id
       })
@@ -255,27 +280,7 @@ export default {
     },
     onEventConfirm (event) {
       this.event = event
-      getFormsDetailByEventInfoId(event.objId, 'task_survey').then((res) => {
-        if (res) {
-          this.caseInfo = {
-            ...this.caseInfo,
-            ...res.MainForm,
-            LawParties: res.law_party
-          }
-        } else {
-          this.event = event
-          this.caseInfo.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
-          this.caseInfo.IncidentAddress = event.address
-          var incidentAddressXY = ''
-          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
-            incidentAddressXY = event.lng + ',' + event.lat
-          }
-          this.caseInfo.IncidentAddressXY = incidentAddressXY
-          this.showPopup = false
-        }
-      }).finally(() => {
-        this.showPopup = false
-      })
+      this.loadEventCheck(event)
     },
     save (data) {
       this.loading = true
@@ -286,8 +291,15 @@ export default {
         this.loading = false
       })
     },
+    onTaskConfirm (result) {
+      var data = result.data
+      var nextTask = null
+      var userInfo = getCurrentUserInfo()
+      nextTask = getNextTask(TaskTypeDic.Punishment, userInfo.userid, 'penalizeBookCreate', result.taskTitle, result.taskContent, data.Attachments, this.event.evtFileUrl, this.event.objId)
+      data.NextTasks.push(nextTask)
+      this.save(data)
+    },
     onSubmit (values) {
-      console.log('submit', values)
       var caseInfo = {
         ...this.caseInfo,
         IncidentAddressXY: this.caseInfo.IncidentAddressXY
@@ -298,12 +310,9 @@ export default {
         caseInfo,
         NextTasks: []
       }
-      var userInfo = getCurrentUserInfo()
-      var nextTask = null
-      nextTask = getNextTask(TaskTypeDic.Punishment, userInfo.userid, 'penalizeBookCreate', '当场处罚决定书', this.event.objId)
-      data.NextTasks.push(nextTask)
       data.LawParties = this.$refs.party.getResult()
-      this.save(data)
+      var defaultTask = getCaseTaskDefault(this.caseInfo, '当场处罚')
+      this.$refs.taskModel.show(defaultTask.title, defaultTask.content, data)
     },
     onFailed (errorInfo) {
       console.log('failed', errorInfo)

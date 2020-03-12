@@ -34,11 +34,6 @@ public string Incidentlocation
 get;
 set;
 }
-public string InspectiontypeID
-{
-get;
-set;
-}
 public DateTime? Starttime
 {
 get;
@@ -60,6 +55,26 @@ get;
 set;
 }
 public string TaskId
+{
+get;
+set;
+}
+public string Examiner
+{
+get;
+set;
+}
+public string InspectionTypeID
+{
+get;
+set;
+}
+public string FormState
+{
+get;
+set;
+}
+public string Recorder
 {
 get;
 set;

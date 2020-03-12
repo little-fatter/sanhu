@@ -41,7 +41,7 @@
             ref="myupload"
             :accept="accept"
             :sync2Dingding="true"
-            :initResult="penalizeBook.Attachment"
+            :initResult="Attachment"
           >
           </s-upload>
         </item-group>
@@ -152,7 +152,7 @@ export default {
       getDetaildata('work_task', taskId).then(res => {
         this.taskInfo = res
         this.loadCaseInfo(res.CaseID)
-        // this.loadEventCheck(res.EventInfoId)
+        this.loadEventCheck(res.EventInfoId)
       })
     },
     loadCaseInfo (CaseID) {
@@ -165,8 +165,8 @@ export default {
     loadEventCheck (EventInfoId) {
       getFormsDetailByEventInfoId(EventInfoId, 'task_survey').then((res) => {
         if (res) {
-          this.LawParties = res.Party
-          this.Attachment = res.Attachment
+          this.LawParties = res.law_party
+          this.Attachment = res.attachment
         }
       })
     },
@@ -178,7 +178,7 @@ export default {
     },
     onCaseConfirm (caseInfo) {
       this.caseInfo = caseInfo
-      // this.loadEventCheck(caseInfo.EventInfoId)
+      this.loadEventCheck(caseInfo.EventInfoId)
       this.showPopup = false
     },
     handleShowSelectLaw (selectLawType) {

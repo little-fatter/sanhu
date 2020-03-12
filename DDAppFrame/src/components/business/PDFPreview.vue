@@ -5,6 +5,7 @@
         ref="pdf"
         :src="fileUrl">
       </pdf>
+      <slot></slot>
     </div>
 
     <div class="operate-area-center">
@@ -80,6 +81,9 @@ export default {
     pdfDownload () {
       saveAs(this.fileUrl)
     }
+  },
+  mounted () {
+    console.log(this.fileUrl, this.fileName)
   }
 }
 </script>

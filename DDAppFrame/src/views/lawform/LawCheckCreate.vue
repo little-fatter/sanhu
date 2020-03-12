@@ -152,6 +152,7 @@
       </van-cell-group>
     </template>
     <event-list-select :showPopup="showPopup" @onClosePopup="onCloseEvent" @onPopupConfirm="onEventConfirm"></event-list-select>
+    <next-task-modal @onPopupConfirm="onTaskConfirm" ref="taskModel"></next-task-modal>
     <van-dialog
       v-model="showRejectDialog"
       title="您确认拒绝吗？"
@@ -172,7 +173,7 @@
 </template>
 
 <script>
-import { isNotEmpty, formatDate, isEmpty, getNextTask } from '../../utils/util'
+import { isNotEmpty, formatDate, isEmpty, getNextTask, getEventTaskDefault } from '../../utils/util'
 import { ddMapSearch, ddgetMapLocation, ddcomplexPicker } from '../../service/ddJsApi.service'
 import ItemGroup from '../../components/tools/ItemGroup'
 import SUpload from '../../components/file/StandardUploadFile'
@@ -182,6 +183,7 @@ import EventListSelect from '../../components/business/EventListSelect'
 import { getDetaildata, commonOperateApi, getDictionaryItems, DictionaryCode, TaskTypeDic, getFormsDetailByEventInfoId } from '../../api/regulatoryApi'
 import { AcceptImageAll } from '../../utils/helper/accept.helper'
 import { getCurrentUserInfo } from '../../service/currentUser.service'
+import NextTaskModal from '../../components/business/NextTaskModal'
 var timer = null
 /**
  * 执法现场核查
@@ -192,7 +194,8 @@ export default {
     ItemGroup,
     SUpload,
     PartyInfo,
-    EventListSelect
+    EventListSelect,
+    NextTaskModal
   },
   data () {
     // 必填规则
@@ -293,6 +296,7 @@ export default {
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
+          this.eventCheck.EventType = event.evtTypeId
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
           this.eventCheck.IncidentAddress = event.address
           var incidentAddressXY = ''
@@ -349,6 +353,7 @@ export default {
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
+          this.eventCheck.EventType = event.evtTypeId
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
           this.eventCheck.IncidentAddress = event.address
           var incidentAddressXY = ''
@@ -388,6 +393,14 @@ export default {
     handleShowRejectDialog () {
       this.showRejectDialog = true
     },
+    onTaskConfirm (result) {
+      var data = result.data
+      var nextTask = null
+      var userInfo = getCurrentUserInfo()
+      nextTask = getNextTask(TaskTypeDic.CaseInfo, userInfo.userid, 'caseCreate', result.taskTitle, result.taskContent, data.Attachments, this.event.evtFileUrl, this.event.objId)
+      data.NextTasks.push(nextTask)
+      this.save(data)
+    },
     onSubmit (values) {
       console.log('submit', values)
       var TaskSurvey = {
@@ -400,18 +413,17 @@ export default {
         TaskSurvey,
         NextTasks: []
       }
-      var userInfo = getCurrentUserInfo()
-      var nextTask = null
       var attachments = this.$refs.myupload.getUploadResult()
       if (attachments && attachments.length > 0) {
         data.Attachments = attachments
       }
       data.LawParties = this.$refs.party.getResult()
       if (this.eventCheck.ProcessingDecisions === 3) {
-        nextTask = getNextTask(TaskTypeDic.CaseInfo, userInfo.userid, 'caseCreate', '案件创建', this.event.objId)
-        data.NextTasks.push(nextTask)
+        var defaultTask = getEventTaskDefault(this.event, '案件创建')
+        this.$refs.taskModel.show(defaultTask.title, defaultTask.content, data)
+      } else {
+        this.save(data)
       }
-      this.save(data)
     },
     save (data) {
       this.loading = true

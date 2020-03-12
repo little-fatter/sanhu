@@ -1,3 +1,4 @@
+<!--  //当场处罚决定书-->
 <template>
   <div>
     <van-cell-group>
@@ -37,6 +38,9 @@
       />
       <!-- <penalty-decision-view :initData="penalizeBook.decisions"></penalty-decision-view> -->
       <van-cell title="协办人" :value="penalizeBook.CoOrganizer"></van-cell>
+      <van-cell>
+        <van-button type="info" native-type="submit" @click="returnSubmitForm" size="large">返回</van-button>
+      </van-cell>
     </van-cell-group>
   </div>
 </template>
@@ -47,7 +51,12 @@ import SUpload from '../../components/file/StandardUploadFile'
 import PartyInfoView from '../../components/business/PartyInfoView'
 import PenaltyDecisionView from '../../components/business/PenaltyDecisionView'
 import { getDetaildata, getFormsDetailByEventInfoId } from '../../api/regulatoryApi'
-import { isNotEmpty } from '../../utils/util'
+import {
+  isNotEmpty,
+  formatDate,
+  isEmpty,
+  getQueryConditon
+} from '../../utils/util'
 /**
  * 执法决定书明细
  */
@@ -71,11 +80,13 @@ export default {
     this.init()
   },
   methods: {
+    returnSubmitForm () {
+      this.$router.go(-1)
+    },
     init () {
       const queryParam = this.$route.query
       const id = queryParam.id
       getDetaildata('law_punishmentInfo', id).then(res => {
-        // this.penalizeBook = res
         if (isNotEmpty(res.EventInfoId)) {
           getFormsDetailByEventInfoId(res.EventInfoId, 'law_punishmentInfo').then((res) => {
             if (res) {

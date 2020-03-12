@@ -111,6 +111,7 @@ export const asyncRouterMap = [{
       }
     },
     {
+      // 行政处罚案 结案报告
       path: '/caseFinalReportCreate',
       name: 'caseFinalReportCreate',
       component: () => import('@/views/lawform/cases/CaseFinalReportCreate.vue'),
@@ -148,85 +149,177 @@ export const asyncRouterMap = [{
     }
     ]
   },
-  // 详情
+  // 详情页面  增加PDF展示
   {
     path: '/details',
     name: 'details',
     redirect: '/eventDetail',
     component: RouteView,
-    children: [{
-      path: '/eventDetail',
-      name: 'eventDetail',
-      component: () => import('@/views/details/EventDetail.vue'),
-      meta: {
-        title: '事件核查详情',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/submitForm',
-      name: 'submitForm',
-      component: () => import('@/views/details/SubmitForm.vue'),
-      meta: {
-        title: '我提交的表单',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/sceneInvestigationDetail',
-      name: 'sceneInvestigationDetail',
-      component: () => import('@/views/details/SceneInvestigationDetail.vue'),
-      meta: {
-        title: '现场勘察详情',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/recordOfInquestDetail',
-      name: 'recordOfInquestDetail',
-      component: () => import('@/views/details/RecordOfInquestDetail.vue'),
-      meta: {
-        title: '勘验(检查)笔录',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/closingReportDetail',
-      name: 'closingReportDetail',
-      component: () => import('@/views/details/ClosingReportDetail.vue'),
-      meta: {
-        title: '结案报告',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/itemDetails',
-      name: 'itemDetails',
-      component: () => import('@/views/details/ItemDetails.vue'),
-      meta: {
-        title: '没收物品详情',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/createCaseDetails',
-      name: 'createCaseDetails',
-      component: () => import('@/views/details/CreateCaseDetails.vue'),
-      meta: {
-        title: '创建案件详情',
-        keepAlive: false
-      }
-    },
-    {
-      path: '/PenalizeBookDetial',
-      name: 'PenalizeBookDetial',
-      component: () =>
+    children: [
+      {
+        path: '/submitForm',
+        name: 'submitForm',
+        component: () => import('@/views/details/SubmitForm.vue'),
+        meta: {
+          title: '我提交的表单',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/eventDetail',
+        name: 'eventDetail',
+        component: () => import('@/views/details/EventDetail.vue'),
+        meta: {
+          title: '事件核查详情',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/sceneInvestigationDetail',
+        name: 'sceneInvestigationDetail',
+        component: () => import('@/views/details/SceneInvestigationDetail.vue'),
+        meta: {
+          title: '现场勘察详情',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/recordOfInquestDetail',
+        name: 'recordOfInquestDetail',
+        component: () => import('@/views/details/RecordOfInquestDetail.vue'),
+        meta: {
+          title: '勘验(检查)笔录',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/closingReportDetail',
+        name: 'closingReportDetail',
+        component: () => import('@/views/details/ClosingReportDetail.vue'),
+        meta: {
+          title: '结案报告',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/itemDetails',
+        name: 'itemDetails',
+        component: () => import('@/views/details/ItemDetails.vue'),
+        meta: {
+          title: '没收物品详情',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/createCaseDetails',
+        name: 'createCaseDetails',
+        component: () => import('@/views/details/CreateCaseDetails.vue'),
+        meta: {
+          title: '创建案件详情',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/PenalizeBookDetial',
+        name: 'PenalizeBookDetial',
+        component: () =>
         import('@/views/details/PenalizeBookDetial.vue'),
-      meta: {
-        title: '当场处罚决定书明细',
-        keepAlive: true
+        meta: {
+          title: '当场处罚决定书明细',
+          keepAlive: true
+        }
+      },
+      // pdf展示页面
+      {
+        path: '/RecordOfInquest',
+        name: 'RecordOfInquest',
+        component: () => import('@/views/details/showInPdf/RecordOfInquest.vue'),
+        meta: {
+          title: '勘验笔录',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/AskPartyNote.vue',
+        name: 'AskPartyNote.vue',
+        component: () => import('@/views/details/showInPdf/AskPartyNote.vue'),
+        meta: {
+          title: '询问当事人笔录',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/AskWitnessNote.vue',
+        name: 'AskWitnessNote.vue',
+        component: () => import('@/views/details/showInPdf/AskWitnessNote.vue'),
+        meta: {
+          title: '询问证人笔录',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/AskThirdPartyNote.vue',
+        name: 'AskThirdPartyNote.vue',
+        component: () => import('@/views/details/showInPdf/AskThirdPartyNote.vue'),
+        meta: {
+          title: '询问第三人笔录',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/PromptlyPunishNote.vue',
+        name: 'PromptlyPunishNote.vue',
+        component: () => import('@/views/details/showInPdf/PromptlyPunishNote.vue'),
+        meta: {
+          title: '当场处罚决定书',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/ConfiscateGoodsBills.vue',
+        name: 'ConfiscateGoodsBills.vue',
+        component: () => import('@/views/details/showInPdf/ConfiscateGoodsBills.vue'),
+        meta: {
+          title: '没收物品凭证',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/GoodsList.vue',
+        name: 'GoodsList.vue',
+        component: () => import('@/views/details/showInPdf/GoodsList.vue'),
+        meta: {
+          title: '物品清单',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/CaseClosingReportSingle.vue',
+        name: 'CaseClosingReportSingle.vue',
+        component: () => import('@/views/details/showInPdf/CaseClosingReportSingle.vue'),
+        meta: {
+          title: ' 行政处罚案件结案报告（个人）',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/CaseClosingReportCompany.vue',
+        name: 'CaseClosingReportCompany.vue',
+        component: () => import('@/views/details/showInPdf/CaseClosingReportCompany.vue'),
+        meta: {
+          title: ' 行政处罚案件结案报告（企业）',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/CaseClosingReportNormal.vue',
+        name: 'CaseClosingReportNormal.vue',
+        component: () => import('@/views/details/showInPdf/CaseClosingReportNormal.vue'),
+        meta: {
+          title: ' 行政处罚案件结案报告（通用）', // 看后面情况是否使用
+          keepAlive: false
+        }
       }
-    }
     ]
   },
   // 案件查询

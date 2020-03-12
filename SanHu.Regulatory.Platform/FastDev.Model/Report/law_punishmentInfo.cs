@@ -99,6 +99,11 @@ public string PunishmentTitle
 get;
 set;
 }
+public string FormState
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

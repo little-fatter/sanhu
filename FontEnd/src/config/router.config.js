@@ -14,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/data-manage/notice', // 临时定向开发页面
+    redirect: '/data-manage/form/judgment-detail', // 临时定向开发页面
     children: [
       {
         path: 'mission',
@@ -136,6 +136,11 @@ export const asyncRouterMap = [
                 name: 'FileCover',
                 component: () => import('@/views/form/fileCover'),
                 meta: { title: '卷宗封面', keepAlive: false }
+              },
+              {
+                path: 'judgment-detail',
+                name: 'judgmentDetail',
+                component: () => import('@/views/form/judgmentDetail')
               }
             ]
           },

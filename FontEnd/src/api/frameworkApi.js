@@ -3,6 +3,7 @@ import apiConfig from '@/config/api.config'
 
 // 获取消息中心
 export function msgCenterGet (parameter) {
+  console.log(apiConfig.msgCenter)
   return getHttp({
     url: apiConfig.msgCenter,
     params: {

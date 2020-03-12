@@ -44,6 +44,16 @@ public string Associatedobjecttype
 get;
 set;
 }
+public string FormState
+{
+get;
+set;
+}
+public string LawenforcementcertificateNo
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
