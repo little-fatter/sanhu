@@ -5,16 +5,12 @@ import appConfig from './app.config'
  * @param {*} moduleName
  * @param {*} isRead
  */
-const getHost = (moduleName, isRead = false) => {
+const getHost = (moduleName) => {
   var host = ''
   if (appConfig.isUseGateWare) {
     host = appConfig.gatewayAddress
   } else {
-    if (isRead) {
-      host = appConfig.hostConfig.readHost[moduleName]
-    } else {
-      host = appConfig.hostConfig.writeHost[moduleName]
-    }
+    host = appConfig.hostConfig[moduleName]
   }
   return host
 }
@@ -36,7 +32,10 @@ const apiConfig = {
   pageData: `${getHost('list')}/webapi/pageddata`,
   // 打印
   print: `${getHost('list')}/webapi/listdata/`,
-  commonOperateApi: `${getHost('list')}/webapi/api`
+  // 通用接口
+  commonOperateApi: `${getHost('list')}/webapi/api`,
+  // dd审批
+  startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`
 }
 
 export default apiConfig

@@ -164,10 +164,34 @@ export const asyncRouterMap = [
                 meta: { title: '案件详情', keepAlive: false }
               },
               {
-                path: 'new-case',
+                path: 'caseCreate',
                 name: 'newCase',
                 component: () => import('@/views/case/newCase'),
-                meta: { title: '新增案件', keepAlive: false }
+                meta: { title: '创建案件', keepAlive: false }
+              },
+              {
+                path: 'askPutdownCreate',
+                name: 'askPutDownCreate',
+                component: () => import('@/views/case/askPutDownCreate'),
+                meta: { title: '询问笔录', keepAlive: false }
+              },
+              {
+                path: 'askPutdownPreview',
+                name: 'askPutdownPreview',
+                component: () => import('@/views/case/askPutDownView'),
+                meta: { title: '询问笔录明细', keepAlive: false }
+              },
+              {
+                path: 'inventoryCreate',
+                name: 'inventoryCreate',
+                component: () => import('@/views/case/inventoryCreate'),
+                meta: { title: '物品清单', keepAlive: false }
+              },
+              {
+                path: 'inventoryView',
+                name: 'inventoryView',
+                component: () => import('@/views/case/inventoryView'),
+                meta: { title: '物品清单明细', keepAlive: false }
               }
             ]
           },
