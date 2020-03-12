@@ -240,7 +240,7 @@ export default {
           value: this.caseInfo.CauseOfAction
         },
         {
-          name: '案件来源',
+          name: '案件类型',
           value: '网络上报'
         },
         {

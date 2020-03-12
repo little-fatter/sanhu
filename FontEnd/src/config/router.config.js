@@ -397,6 +397,36 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/examples',
+    name: 'Example',
+    component: () => import('@/views/examples/Index'),
+    meta: { title: 'examples演示' }
+  },
+  {
+    path: '/examples/data-panel',
+    name: 'ExampleDataPanel',
+    component: () => import('@/views/examples/DataPanel'),
+    meta: { title: '通用列表数据面板组件' }
+  },
+  {
+    path: '/examples/pdf-panel',
+    name: 'ExamplePdfPanel',
+    component: () => import('@/views/examples/PdfPanel'),
+    meta: { title: '通用列表数据面板组件' }
+  },
+  {
+    path: '/examples/modal',
+    name: 'ExampleModal',
+    component: () => import('@/views/examples/Modal'),
+    meta: { title: '模态组件' }
+  },
+  {
+    path: '/examples/case-detail',
+    name: 'ExampleCaseDetail',
+    component: () => import('@/views/examples/CaseDetail'),
+    meta: { title: '模态组件' }
+  },
+  {
     path: '*', redirect: '/404'
   }
 
