@@ -114,7 +114,7 @@
     <div class="body">
       <a-card :loading="loading" class="body-item" v-for="item in dataList" @click="intoDetails(item.EventInfoId,item.ID, item.TaskType)" :key="item.ID">
         <div>
-          <img style="width:100%;height:200px;" src="../../assets/icons/defPicture.svg" alt="加载失败">
+          <img style="width:100%;height:200px;" src="../../assets/icons/组 650.png" alt="加载失败">
         </div>
         <div class="item-type item-box" v-if="item.TaskContent || item.Tasknumber">
           <span class="title">{{ item.TaskContent }}</span>

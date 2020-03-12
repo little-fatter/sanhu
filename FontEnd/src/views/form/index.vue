@@ -44,12 +44,12 @@
 <template>
   <div class="formContent">
     <div class="tags" >
-      <a-button class="button" :type="clickIndex == 1 ? 'primary' : 'default'" @click="clickIndex = 1">全部</a-button>
+      <!-- <a-button class="button" :type="clickIndex == 1 ? 'primary' : 'default'" @click="clickIndex = 1">全部</a-button>
       <a-button class="button" :type="clickIndex == 2 ? 'primary' : 'default'" @click="clickIndex = 2">我发起的</a-button>
       <a-button class="button" :type="clickIndex == 3 ? 'primary' : 'default'" @click="clickIndex = 3">我审批的</a-button>
       <a-button class="button" :type="clickIndex == 4 ? 'primary' : 'default'" @click="clickIndex = 4">待我审批的</a-button>
       <a-button class="button" :type="clickIndex == 5 ? 'primary' : 'default'" @click="clickIndex = 5">抄送我的</a-button>
-      <!-- <a-button class="button" type="primary" @click="$router.push('/form/form-add-list')">新增</a-button> -->
+      <a-button class="button" type="primary" @click="$router.push('/form/form-add-list')">新增</a-button> -->
     </div>
     <div class="searchItemBox">
       <div>
@@ -57,7 +57,7 @@
           <span>发起时间：</span>
           <a-range-picker @change="onInitiationChange" />
         </div>
-        <div class="secondLine">
+        <div v-show="open" class="secondLine">
           <span>表单状态：</span>
           <a-select class="select" v-model="formState">
             <a-select-option v-for="item in formStateOptions" :key="item.ID" :value="item.ItemCode">{{ item.Title }}</a-select-option>
@@ -69,7 +69,7 @@
           <span>完成时间：</span>
           <a-range-picker @change="onEndChange" />
         </div>
-        <div class="secondLine">
+        <div v-show="open" class="secondLine">
           <span>表单类型：</span>
           <a-select class="select" v-model="formTypes" style="min-width: 120px">
             <a-select-option v-for="item in formTypeOptions" :key="item.ID" :value="item.ItemCode">{{ item.Title }}</a-select-option>
@@ -82,6 +82,8 @@
       </div>
       <div class="searchButtonItem">
         <a-button class="search" type="primary" @click="onSearch">搜索</a-button>
+        <span v-show="!open" class="search" @click="open = true">展开</span>
+        <span v-show="open" class="search" @click="open = false">收起</span>
       </div>
     </div>
     <div class="table">
@@ -165,6 +167,7 @@ export default {
   },
   data () {
     return {
+      open: true,
       visible: false,
       clickIndex: 1,
       formStateOptions: [],
@@ -266,14 +269,31 @@ export default {
       this.EEndTime = dateString[1]
     },
     gotoDetail (record) {
-      if (record.FormType === 'from_patrolrecord') {
-        this.$router.push({ path: '/data-manage/form/form-details', query: { id: 'record.FormID' } })
-      } else if (record.FormType === 'from_APRPerson') {
-        this.$router.push({ path: '/data-manage/form/close-person-report', query: { id: 'record.FormID' } })
-      } else if (record.FormType === 'from_APROrg') {
-        this.$router.push({ path: '/data-manage/form/close-org-report', query: { id: 'record.FormID' } })
-      } else {
-        this.$router.push({ path: '/data-manage/form/close-person-report', query: { id: null } })
+      if (record.FormType === 'form_patrolrecord') {
+        this.$router.push({
+          path: '/data-manage/form/form-details',
+          query: { id: record.FormID }
+        })
+      } else if (record.FormType === 'task_survey') {
+        this.$router.push({
+          path: '',
+          query: { id: record.FormID }
+        })
+      } else if (record.FormType === 'case_Info') {
+        this.$router.push({
+          path: '',
+          query: { id: record.FormID }
+        })
+      } else if (record.FormType === 'law_punishmentInfo') {
+        this.$router.push({
+          path: '',
+          query: { id: record.FormID }
+        })
+      } else if (record.FormType === 'case_report') {
+        this.$router.push({
+          path: '/data-manage/form/close-person-report',
+          query: { id: record.FormID }
+        })
       }
     },
     // 处理参数

@@ -14,17 +14,16 @@ var publicAppConfig = {
 
   /** 不启用网关时配置模块host地址 */
   hostConfig: {
-    readHost: {
-      admin: 'http://localhost:9666',
-      order: 'http://localhost:9002'
-    },
-    writeHost: {
-      // admin: '/api',
-      // list: '/api'
-      admin: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
-      list: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn'
-    }
+    // admin: '/api',
+    // list: '/api'
+    admin: 'http://182.150.28.58:27016/framework',
+    file: 'http://182.150.28.58:27012/filesystem',
+    list: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
+    // 四方德信接口
+    sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
   },
+  /** 微应用ID 如果只有一个微应用可以配置在这里，否则请配置为链接参数 */
+  agentId: '456468162',
   /** 配置业务localStorage的key值 */
   localStorageKey: {
     userInfo: 'userInfo', // 获取用户信息

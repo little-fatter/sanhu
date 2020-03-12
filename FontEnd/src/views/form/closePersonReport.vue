@@ -1,52 +1,39 @@
-// <style lang="less" scoped>
-// .wrapper {
-//     margin: 0 15%;
-//     padding: 20px 0px;
-//     color: #101010;
-//     .title {
-//           text-align: center;
-//           font-weight: bold;
-//           color:#101010;
-//           padding: 20px 0;
-//           letter-spacing: 16px;
-//           border-bottom: 1px solid #DCDEE2;
-//           font-size: 22px;
-//         }
-//     .content {
-//       .box {
-//         .row {
-//       padding: 10px;
-//       .colLine {
-//         text-align: left;
-//       }
-//       .colSize {
-//         padding: 0 20px;
-//         div {
-//           margin-bottom:10px;
-//         }
-//       }
-//     }
-//       }
-//     }
-//     .footer {
-//       display:flex;justify-content:center;
-//     }
-
-// }
-// </style>
 <style lang="less" scoped>
 .wrapper {
     margin: 0 15%;
     padding: 20px 0px;
     color: #101010;
+    font-family: Microsoft YaHei;
     .title {
-          text-align: center;
-          font-weight: bold;
-          color:#101010;
-          padding: 20px 0;
-          letter-spacing: 16px;
+          padding: 20px;
           border-bottom: 1px solid #DCDEE2;
-          font-size: 22px;
+          font-size: 16px;
+          position: relative;
+          .staff-box{
+            display: flex;
+            align-items: center;
+            .pic {
+              width: 60px;
+              height: 60px;
+              border-radius: 50%;
+              line-height: 60px;
+              color:#ffffff;
+              background: #1FC08E;
+              text-align: center;
+            }
+          .staff {
+            color:#222328;
+            margin-left: 20px;
+            font-weight:400;
+          }
+          }
+          .state {
+            position: absolute;
+            right:30px;
+            color:#3A9DFA;
+            top: 40px;
+            font-weight: 400;
+          }
         }
     .content {
       .box {
@@ -85,63 +72,108 @@
     }
 
 }
+.contentColor {
+  color:#64697C;
+  font-size: 14px;;
+}
 </style>
 <template>
   <div class="wrapper">
-    <div class="title">结案报告（个人）</div>
+    <div class="title">
+      <div class="staff-box">
+        <div class="pic">
+          {{ lawStaff.Username || '王五' }}
+        </div>
+        <div class="staff">
+          <span>执法人:</span><span>{{ lawStaff.Username || '王五' }}</span>
+        </div>
+      </div>
+      <div class="state">
+        {{ caseData.CaseStatus || '已完成' }}
+      </div>
+    </div>
     <div class="content">
       <div class="box">
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">案由：</a-col>
-          <a-col class="colSize" :span="12">{{ data.CauseOfAction || '乱丢垃圾' }}</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ caseData.CauseOfAction || '乱丢垃圾' }}</a-col>
         </a-row>
         <a-row class="row">
-          <a-col class="colSize colLine" :span="4">当事人:</a-col>
-          <a-col class="colSize" :span="12">
-            <div>
-              <span> {{ data.PartyName || '张伟达' }}  |</span>
-              <span> {{ data.PartySex == "f"?'女' : '男' }} |</span>
-              <span> {{ data.PartyAge || '26' }} |</span>
-              <span> {{ data.PartyJob || '自由职业' }}</span>
-            </div>
-            <div>
-              <span>身份证：</span>
-              <span>{{ data.PartyIDCard || '510012356549115024'  }}</span>
-            </div>
-            <div>
-              <span>电话：</span>
-              <span>{{ data.PartyPhone || '18888886666' }}</span>
-            </div>
-            <div>
-              <span>地址：</span>
-              <span>{{ data.PartyAddress || '玉溪市广庙街12号' }}</span>
-            </div>
-          </a-col>
+          <a-col class="colSize colLine" :span="4">案件号：</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ caseData.CaseNumber || '案20200309-00001号' }}</a-col>
         </a-row>
+        <a-row class="row">
+          <a-col class="colSize colLine" :span="4">创建时间：</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ caseData.CreateDate || '2020-03-09 13:43:04' }}</a-col>
+        </a-row>
+        <!-- <a-row class="row">
+          <a-col class="colSize colLine" :span="4">案件类型：</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ caseData.CaseType || 'other' }}</a-col>
+        </a-row> -->
+        <div v-for="(item,index) in lawParty" :key="item.AssociationobjectID" >
+          <a-row class="row" v-if="item.Typesofparties==1">
+            <a-col class="colSize colLine" :span="4">当事人({{ index+1 }}):</a-col>
+            <a-col class="colSize contentColor" :span="12">
+              <div>
+                <span>身份证：</span>
+                <span>{{ item.IDcard || '510012356549115024' }}</span>
+              </div>
+              <div>
+                <span>电话：</span>
+                <span>{{ item.Contactnumber || '18888886666' }}</span>
+              </div>
+              <div>
+                <span>地址：</span>
+                <span>{{ item.address || '玉溪市广庙街12号' }}</span>
+              </div>
+            </a-col>
+          </a-row>
+          <a-row class="row" v-else>
+            <a-col class="colSize colLine" :span="4">当事人({{ index+1 }})：</a-col>
+            <a-col class="colSize contentColor" :span="12">
+              <div>
+                {{ item.Name || '马三立' }}
+              </div>
+              <div>
+                <span>法人：</span>
+                <span> {{ item.Nameoflegalperson || '徐国强' }}  | </span>
+                <span>  {{ item.IDcard || '510012356549115024' }} </span>
+              </div>
+              <div>
+                <span>电话：</span>
+                <span> {{ item.Contactnumber || '18888886666' }} </span>
+              </div>
+              <div>
+                <span>地址：</span>
+                <span> {{ item.address || '玉溪市广庙街12号' }} </span>
+              </div>
+            </a-col>
+          </a-row>
+        </div>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">案件来源：</a-col>
-          <a-col class="colSize" :span="12">{{ data.Source || '网上投诉' }}</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ caseData.sourceOfCase || '网上投诉' }}</a-col>
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">简要案情及调查经过:</a-col>
-          <a-col class="colSize" :span="12">
-            <a-textarea autosize :placeholder="data.Content"></a-textarea>
+          <a-col class="colSize contentColor" :span="12">
+            <a-textarea autosize style="min-height:100px;" :v-model="mainData.CaseDetail"></a-textarea>
           </a-col>
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">处罚结果:</a-col>
-          <a-col class="colSize" :span="12">
+          <a-col class="colSize contentColor" :span="12">
             <div>
               <span>
-                {{ data.PenaltyResult || '口头警告' }} |
+                <!-- {{ data.PenaltyResult || '口头警告' }} | -->
               </span>
-              <span> {{ data.ExecuteResult || '已处理' }}</span>
+              <span> {{ mainData.ExecuteState || '已执行' }}</span>
             </div>
           </a-col>
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">关联表单</a-col>
-          <a-col class="colSize" :span="12">
+          <a-col class="colSize contentColor" :span="12">
             <div>
               <span>
                 <svg
@@ -159,15 +191,16 @@
                     fill="#8a8a8a"
                     p-id="5584"
                   />
+                  {{ }}
                 </svg>
-                相关表单
+                {{ relateForm ? '处罚决定书' : '无' }}
               </span>
             </div>
           </a-col>
         </a-row>
       </div>
     </div>
-    <div class="handlerInfo">
+    <!-- <div class="handlerInfo">
       <div class="handler">{{ data.CaseHandler || '王小五' }}</div>
       <div class="handlerBox">
         <div class="top">发起上传</div>
@@ -176,34 +209,56 @@
           <div>{{ data.InitiationTime || '2020-02-10 16:00:45' }}</div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="footer">
-      <!-- <a-button style="margin-right:20px;" type="primary">提交</a-button> -->
       <a-button @click="$router.back()">返回</a-button>
     </div>
   </div>
 </template>
 
 <script>
-import { getDetails } from '@/api/sampleApi'
+import { getDetails, getPageData, getFormDetail } from '@/api/sampleApi'
 export default {
   name: 'ClosePersonReport',
   data () {
     return {
-      data: {},
-      id: '49d7d99e-49bc-4ab3-854a-4a7eaa475c58'
+      mainData: {},
+      caseData: {},
+      lawParty: [], // 当事人
+      lawStaff: [], // 执法人
+      relateForm: {}, // 关联处罚决定书
+      id: '04514e23-3b14-4a17-a258-c6cf1b610dea'
     }
   },
   mounted () {
     if (this.$route.query.id) { this.id = this.$route.query.id }
-    this.getFormReport()
+    this.init()
+    // this.initData()
   },
   methods: {
-    // 获取结案报告
-    getFormReport () {
-      getDetails('from_APRPerson', this.id).then(res => {
-        this.data = res
-      }).catch(err => { console.log(err) })
+    // 获取页面数据
+    init () {
+      getFormDetail('case_report', null, this.id).then(res => {
+        this.mainData = res.MainForm
+        this.lawParty = res.law_party
+        this.lawStaff = res.law_staff
+        console.log(res)
+        getDetails('case_Info', res.MainForm.CaseId).then(res => {
+          this.caseData = res
+          console.log(res)
+        })
+        // var paramter = { rules: [{
+        //   field: 'CaseId',
+        //   op: 'equal',
+        //   value: res.MainForm.CaseId,
+        //   type: 'string'
+        // }],
+        // op: 'and' }
+        getFormDetail('law_punishmentInfo', res.MainForm.EventInfoId).then(res => {
+          console.log(res.MainForm)
+          this.relateForm = res.MainForm
+        })
+      })
     }
   }
 }
