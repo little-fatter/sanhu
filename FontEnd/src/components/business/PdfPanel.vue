@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-09 17:32:32
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-11 10:43:08
+ * @LastEditTime: 2020-03-13 17:46:14
  * @Description:  PDF面板组件
  -->
 
@@ -35,7 +35,7 @@
         </span>
       </div>
     </div>
-    <select-people ref="selectPeopleModal" />
+    <!-- <select-people ref="selectPeopleModal" /> -->
   </div>
 </template>
 
@@ -43,14 +43,14 @@
 import moment from 'moment'
 import Pdf from 'vue-pdf'
 import FileReview from '@/components/file/FileReview'
-import SelectPeople from './SelectPeople'
+// import SelectPeople from './SelectPeople'
 import { downloadFile } from '@/utils/util'
 
 export default {
   components: {
     Pdf,
     FileReview,
-    SelectPeople
+    // SelectPeople
   },
   props: {
     // pdf文件路径
@@ -88,21 +88,24 @@ export default {
     // 打印
     handleConsole () {
       this.$nextTick(() => {
-        // if (this.pageCount > 100) return this.$message.info('当前pdf超过100页，网页打印会有严重的新能问')
+        // if (this.pageCount > 100) return this.$message.info('当前pdf超过100页，网页打印会有严重的性能问题')
         this.$refs.pdf.print()
       })
+      this.$emit('on-console')
     },
     // 下载pdf
     async handleDownload () {
       downloadFile({ url: this.pdf, name: this.pdfName })
+      this.$emit('on-download')
     },
     // 送达
     handleService () {
-
+      this.$emit('on-searvice')
     },
     // 转发
     handleForward () {
-      this.$refs.selectPeopleModal.open()
+      this.$emit('on-forward')
+      // this.$refs.selectPeopleModal.open()
     }
   }
 }

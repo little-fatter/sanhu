@@ -23,7 +23,10 @@ var publicAppConfig = {
       // list: '/api'
       admin: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
       list: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
-      framework: 'http://182.150.28.58:27011/framework'
+      // framework: 'http://182.150.28.58:27011/framework'
+      framework: 'http://192.168.0.108:5022/framework',
+      // 四方德信接口
+      sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
     }
   },
   /** 配置业务localStorage的key值 */

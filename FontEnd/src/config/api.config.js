@@ -22,6 +22,15 @@ const getHost = (moduleName, isRead = false) => {
 /* 配置API接口应用访问地址 */
 const apiConfig = {
   // 《框架》
+  framework: {
+    // 用户列表
+    users: `${getHost('framework')}/api/Users`
+  },
+  // 第三方
+  other: {
+    // 法律法规
+    regulations: `${getHost('sfdx')}/law_rule_page`
+  },
   // 信息中心
   msgCenter: `${getHost('workframe')}/webapi/api/JobMessage`,
   // 用户ID

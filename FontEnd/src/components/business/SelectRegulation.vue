@@ -1,16 +1,16 @@
 <!--
  * @Author: 616749285@qq.com
- * @Date: 2020-03-10 17:12:25
+ * @Date: 2020-03-13 09:34:03
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-11 17:54:58
- * @Description:  选择案件
+ * @LastEditTime: 2020-03-13 10:41:02
+ * @Description:  选择法规
  -->
 
 <template>
-  <select-modal ref="modal" title="选择案件" :width="920" :height="500">
+  <select-modal ref="modal" title="选择法律法规" :width="920" :height="500">
     <div class="filter-wrap" slot="other">
       <a-input
-        v-model="queryParam.Keyword"
+        v-model="queryParam.lawRuleName"
         placeholder="模糊查询(回车搜索)"
         style="width: 320px;"
         @pressEnter="$refs.list.loadData(true)" />
@@ -27,35 +27,29 @@
         v-for="item in list"
         :key="item.objId"
         :item="item"
-        :title="item.CauseOfAction"
+        :title="item.evtTypeDisplayName"
         :cover="getCover(item.evtFileUrl)"
       >
         <a-button slot="headerEnd" type="primary" @click="handleSelect(item)">选择</a-button>
         <div class="item-info">
           <span>
-            <span class="item-info-label">案件编号：</span>
-            <span class="item-info-value">{{ item.CaseNumber }}</span>
-            <span class="item-info-label">案件类型：</span>
-            <span class="item-info-value">{{ item.CaseType }}</span>
-          </span>
-        </div>
-        <div class="item-info" v-if="item.CaseStatus">
-          <span>
-            <span class="item-info-label">案件状态：</span>
-            <a-tag color="#87d068">{{ item.CaseStatus }}</a-tag>
+            <span class="item-info-label">事发地点：</span>
+            <span class="item-info-value">{{ item.address }}</span>
           </span>
         </div>
         <div class="item-info">
           <span>
             <span class="item-info-label">上报时间：</span>
-            <span class="item-info-value">{{ item.CreateDate }}</span>
+            <span class="item-info-value">{{ item.reportTime }}</span>
+          </span>
+          <span>
+            <span class="item-info-label">上报来源：</span>
+            <span class="item-info-value">{{ item.reportType }}</span>
           </span>
         </div>
         <div class="item-info">
-          <span>
-            <span class="item-info-label">办案人：</span>
-            <span class="item-info-value">{{ item.Investigators || '无数据' }}</span>
-          </span>
+          <span class="item-info-label">事件描述：</span>
+          <span class="item-info-content" :title="item.remark">{{ item.remark }}</span>
         </div>
       </item>
     </list>
@@ -66,25 +60,7 @@
 import SelectModal from '@/components/modal/SelectModal'
 import List from '@/components/list/List'
 import Item from '@/components/item/Item'
-import { getPageData } from '@/api/sampleApi'
-
-// 查询mode
-const MODE = 'case_Info'
-// 查询字段集合
-const fields = ['CauseOfAction', 'CaseType', 'CaseTitle']
-// 查询规则
-const genSearchRules = key => {
-  if (!key) return {}
-  return {
-    rules: fields.map(i => ({
-      field: i,
-      value: key,
-      op: 'like',
-      type: 'string'
-    })),
-    op: 'or'
-  }
-}
+import { getRegulations } from '@/api/otherApi'
 
 export default {
   components: {
@@ -98,19 +74,19 @@ export default {
   data () {
     return {
       queryParam: {
-        Keyword: ''
+        lawRuleName: ''
       }
     }
   },
   methods: {
     // 打开弹窗， query：列表查询条件
     open (query = {}) {
-      Object.assign(this.queryParam, { Keyword: '' }, query)
+      Object.assign(this.queryParam, { lawRuleName: '' }, query)
       this.$refs.modal.open()
       this.$nextTick(() => this.$refs.list.loadData(true))
     },
-    loadData ({ pageIndex, pageSize }) {
-      return getPageData(MODE, genSearchRules(this.queryParam.Keyword), pageIndex, pageSize)
+    loadData (params) {
+      return getRegulations({ ...params, ...this.queryParam })
     },
     // 解析封面图
     getCover (urls) {

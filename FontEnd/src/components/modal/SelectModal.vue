@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 16:48:34
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-11 16:29:49
+ * @LastEditTime: 2020-03-12 14:00:23
  * @Description:  
  -->
 
@@ -113,20 +113,6 @@ export default {
     height: 0;
     flex: 1;
     overflow-y: auto;
-    &::-webkit-scrollbar {
-      width: 3px;
-      height: 1px;
-    }
-    &::-webkit-scrollbar-thumb {
-      border-radius: 5px;
-      box-shadow: none;
-      background: #dcdee2;
-    }
-    &::-webkit-scrollbar-track {
-      box-shadow: none;
-      border-radius: 5px;
-      background: #f6f6f6;
-    }
   }
 }
 </style>

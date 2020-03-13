@@ -2,55 +2,59 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 13:23:22
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-11 15:46:37
+ * @LastEditTime: 2020-03-13 17:34:15
  * @Description:  文件预览
  -->
 
 <template>
   <div class="file-riview">
-    <div class="file-riview-header">
-      <span class="file-riview-header-title">
-        <slot name="imgHeaderTitle">证据:</slot>
-      </span>
-    </div>
-    <div class="file-riview-content">
-      <template v-for="(item, index) in imgs">
-        <img-preview
-          v-if="index < showImgCount || showImgCount === 0 || show"
-          class="file-riview-img"
-          :group="groupId"
-          :key="index"
-          :src="item.path"
-          :thumb-src="item.path"
-        />
-      </template>
-      <div
-        v-if="!show && imgs.length > showImgCount && showImgCount !== 0"
-        class="file-riview-img mask"
-        :style="genMask(imgs[3].path)"
-        title="展示全部图片"
-        @click="switchShow"
-      >
-        <span>+{{ imgs.length - showImgCount }}</span>
+    <template v-if="imgs.length">
+      <div class="file-riview-header">
+        <span class="file-riview-header-title">
+          <slot name="imgHeaderTitle">证据:</slot>
+        </span>
       </div>
-      <div v-if="show && showImgCount !== 0" class="file-riview-img-hide">
-        <div @click="switchShow">
-          <span>收起</span>
-          <a-icon type="up" />
+      <div class="file-riview-content">
+        <template v-for="(item, index) in imgs">
+          <img-preview
+            v-if="index < showImgCount || showImgCount === 0 || show"
+            class="file-riview-img"
+            :group="groupId"
+            :key="index"
+            :src="item.path"
+            :thumb-src="item.path"
+          />
+        </template>
+        <div
+          v-if="!show && imgs.length > showImgCount && showImgCount !== 0"
+          class="file-riview-img mask"
+          :style="genImgBackground(imgs[showImgCount] ? imgs[showImgCount].path : '')"
+          title="展示全部图片"
+          @click="switchShow"
+        >
+          <span>+{{ imgs.length - showImgCount }}</span>
+        </div>
+        <div v-if="show && showImgCount !== 0" class="file-riview-img-hide">
+          <div @click="switchShow">
+            <span>收起</span>
+            <a-icon type="up" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="file-riview-header">
-      <span class="file-riview-header-title">
-        <slot name="fileHeaderTitle">附件:</slot>
-      </span>
-    </div>
-    <div class="file-riview-content">
-      <div class="file-riview-file" v-for="(item, index) in otherFiles" :key="index" title="下载" @click="downloadFile(item)">
-        <a-icon class="file-riview-file-icon" type="link" />
-        <span class="file-riview-file-title">{{ item.title }}</span>
+    </template>
+    <template v-if="otherFiles.length">
+      <div class="file-riview-header">
+        <span class="file-riview-header-title">
+          <slot name="fileHeaderTitle">附件:</slot>
+        </span>
       </div>
-    </div>
+      <div class="file-riview-content">
+        <div class="file-riview-file" v-for="(item, index) in otherFiles" :key="index" title="下载" @click="downloadFile(item)">
+          <a-icon class="file-riview-file-icon" type="link" />
+          <span class="file-riview-file-title">{{ item.title }}</span>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -88,7 +92,7 @@ export default {
     }
   },
   data () {
-    this.genMask = genMask
+    this.genImgBackground = genImgBackground
     return {
       // 是否展示全部图片
       show: false,
