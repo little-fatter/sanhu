@@ -19,6 +19,16 @@ namespace FastDev.Service
             OnGetAPIHandler += Event_InfoService_OnGetAPIHandler;
             OnAfterGetPagedData += Event_InfoService_OnAfterGetPagedData;
             OnAfterGetDetailData += Event_infoService_OnAfterGetDetailData;
+            OnAfterSave += Event_infoService_OnAfterSave;
+        }
+
+        private void Event_infoService_OnAfterSave(object entity, object viewdata, bool isCreate)
+        {
+            var eventInfo = viewdata as event_info;
+            if (string.IsNullOrWhiteSpace(eventInfo.OriginalID) && !isCreate) //四方德信修改了上传的事件数据的状态, 同步修改备份数据
+            {
+                QueryDb.Execute(string.Format("update event_info set evtState='{0}' where OriginalID='{1}'", eventInfo.evtState, eventInfo.objId));
+            }
         }
 
         private void Event_infoService_OnAfterGetDetailData(object query, object data)
@@ -38,13 +48,13 @@ namespace FastDev.Service
             base.QueryDb.BeginTransaction();
             try
             {
-                if (eventInfo.reportTime == null)
+                if (!eventInfo.reportTime.HasValue)
                 {
                     eventInfo.reportTime = DateTime.Now;
                 }
                 base.Create(eventInfo);
-                eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 eventInfo.OriginalID = eventInfo.objId;
+                eventInfo.objId = Guid.NewGuid().ToString().Replace("-", "");
                 base.Create(eventInfo);
                 QueryDb.CompleteTransaction();
             }
