@@ -34,7 +34,7 @@
       }
 
       .attach-item {
-        margin: 15px 0 0 65px;
+        margin: 15px 0 0 40px;
         background-color: #ccc;
       }
     }
@@ -63,11 +63,11 @@
 <template>
   <div class="de-wrapper">
     <div class="pdf-wrapper">
-      <img src="" alt="处罚决定书pdf">
+      <img src="" alt="勘验笔录pdf">
     </div>
     <div class="attach-wrapper">
       <div class="attach-item-wrapper">
-        <div class="attach-title">证据附件：</div>
+        <div class="attach-title">附件：</div>
         <div class="attach-item">
           <s-upload></s-upload>
           <s1-upload></s1-upload>

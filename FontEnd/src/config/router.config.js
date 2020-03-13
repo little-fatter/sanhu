@@ -137,10 +137,15 @@ export const asyncRouterMap = [
                 component: () => import('@/views/form/fileCover'),
                 meta: { title: '卷宗封面', keepAlive: false }
               },
-              {
+              { // 行政处罚决定书详情
                 path: 'judgment-detail',
                 name: 'judgmentDetail',
                 component: () => import('@/views/form/judgmentDetail')
+              },
+              { // 勘验笔录详情
+                path: 'record-detail',
+                name: 'recordDetail',
+                component: () => import('@/views/form/recordDetail')
               }
             ]
           },
