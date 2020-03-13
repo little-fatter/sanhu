@@ -237,18 +237,22 @@
         </a-col>
       </a-row>
     </div>
+    <div>
+      <select-case ref="selectCase" @on-select="selectCase"></select-case>
+    </div>
   </div>
 </template>
-
+1
 <script>
 import { getDictionary, commonOperateApi } from '../../api/sampleApi'
 import { getCurrentUser } from '../../config/currentUser'
 import { isNotEmpty } from '../../utils/util'
+import SelectCase from '../../components/business/SelectCase'
 import PartyInfo from './components/party'
 import moment from 'moment'
 export default {
   name: 'AskPutDownCreate',
-  components: { PartyInfo },
+  components: { PartyInfo, SelectCase },
   data () {
     return {
       caseInfo: {},
@@ -287,7 +291,13 @@ export default {
       recordPersonOption: [{ id: '1', name: '张柳' }, { id: '2', name: '张思' }, { id: '3', name: '王华' }, { id: '4', name: '陈华' }] // 执法检查人
     }
   },
+  created () {
+  },
   methods: {
+    selectCase (record) {
+      this.caseInfo = record
+      this.mode.CauseOfAction = record.CauseOfAction
+    },
     disabledDate (current) {
       return current && current > moment().endOf('day')
     },
@@ -338,6 +348,7 @@ export default {
   },
   // 生命周期钩子
   mounted () {
+    this.$refs.selectCase.open()
   }
 }
 </script>

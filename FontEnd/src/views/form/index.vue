@@ -244,6 +244,7 @@ export default {
           ItemCode: '',
           Title: '全部类型' }
         this.formTypeOptions.splice(0, 0, option)
+        console.log(this.formTypeOptions)
       }).catch((err) => {
         console.log(err)
       })
@@ -269,30 +270,41 @@ export default {
       this.EEndTime = dateString[1]
     },
     gotoDetail (record) {
-      if (record.FormType === 'form_patrolrecord') {
-        this.$router.push({
-          path: '/data-manage/form/form-details',
-          query: { id: record.FormID }
-        })
-      } else if (record.FormType === 'task_survey') {
+      console.log(record)
+      if (record.FormType === 'form_confiscated_item') { // 物品清单
         this.$router.push({
           path: '',
-          query: { id: record.FormID }
+          query: { id: record.ID }
         })
-      } else if (record.FormType === 'case_Info') {
+      } else if (record.FormType === 'form_inquiryrecord') { // 询问记录
         this.$router.push({
           path: '',
-          query: { id: record.FormID }
+          query: { id: record.ID }
         })
-      } else if (record.FormType === 'law_punishmentInfo') {
+      } else if (record.FormType === 'case_Info') { // 案件
         this.$router.push({
           path: '',
-          query: { id: record.FormID }
+          query: { id: record.ID }
         })
-      } else if (record.FormType === 'case_report') {
+      } else if (record.FormType === 'law_punishmentInfo') { // 处罚决定书
+        this.$router.push({
+          path: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'case_report') { // 结案报告
         this.$router.push({
           path: '/data-manage/form/close-person-report',
-          query: { id: record.FormID }
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'case_cover') { // 卷宗封面
+        this.$router.push({
+          path: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'form_inquestrecord') { // 勘验记录
+        this.$router.push({
+          name: 'sceneInvestigationDetail',
+          query: { id: record.ID }
         })
       }
     },

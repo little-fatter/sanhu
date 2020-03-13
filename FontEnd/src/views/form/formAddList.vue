@@ -53,7 +53,7 @@
         <div class="top-card">
           <a-card title="受理立案">
             <a-row>
-              <a-col :span="12">
+              <a-col :span="12" @click="gotoCreate('caseCreate')">
                 <div>
                   <img src="../../assets/icons/组 685.png" alt="图片加载失败">
                 </div>
@@ -132,11 +132,11 @@
                   </div>
                   <div class="formName">勘验记录表</div>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="8" @click="gotoCreate('askPutDownCreate')">
                   <div>
                     <img src="../../assets/icons/组 691.png" alt="图片加载失败">
                   </div>
-                  <div class="formName">询问笔录</div>
+                  <div class="formName" >询问笔录</div>
                 </a-col>
                 <a-col :span="8">
                   <div>
@@ -439,6 +439,10 @@ export default {
     }
   },
   methods: {
+    gotoCreate (name) {
+      console.log(name)
+      this.$router.push({ name: name })
+    }
   }
 }
 </script>

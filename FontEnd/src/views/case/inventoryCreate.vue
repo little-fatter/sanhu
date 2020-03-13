@@ -129,11 +129,8 @@
         <a-col :span="20">
           <span class="ant-col-2">当事人</span>
           <a-select class="ant-col-20" labelInValue v-model="dsr.id" @change="objectChange" placeholder="请选择">
-            <a-select-option v-for="(item) in caseInfo.dsrs" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
+            <a-select-option v-for="(item) in caseInfo.LawPartys" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
           </a-select>
-          <span class="ant-col-20">
-            选择当事人
-          </span>
         </a-col>
       </a-row>
       <a-row class="margin-bottom30" type="flex" justify="center">
@@ -203,16 +200,20 @@
         </a-col>
       </a-row>
     </div>
+    <div>
+      <select-case ref="selectCase" @on-select="selectCase"></select-case>
+    </div>
   </div>
 </template>
 
 <script>
 import { getDictionary, commonOperateApi, getDetails } from '../../api/sampleApi'
+import SelectCase from '../../components/business/SelectCase'
 import { isNotEmpty } from '../../utils/util'
 export default {
   name: 'InventoryCreate',
-  components: {
-  },
+  components: { SelectCase },
+
   props: {
 
   },
@@ -246,7 +247,14 @@ export default {
   created () {
     this.init()
   },
+  mounted () {
+    this.$refs.selectCase.open()
+  },
   methods: {
+    selectCase (record) {
+      this.caseInfo = record
+      console.log(record)
+    },
     // 添加物品
     addList () {
       this.list.push({

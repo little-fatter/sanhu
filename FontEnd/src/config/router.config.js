@@ -42,15 +42,15 @@ export const asyncRouterMap = [
             meta: { title: '我发起的任务' }
           },
           {
-            path: 'event-inspection',
-            name: 'EventInspeion',
-            component: () => import('@/views/mymission/eventInspection'),
-            meta: { title: '事件巡查' }
+            path: 'eventDetail',
+            name: 'eventDetail',
+            component: () => import('@/views/mymission/eventDetail'),
+            meta: { title: '事件核查' }
           },
           {
-            path: 'scene-investigation',
-            name: 'SceneInvestigation',
-            component: () => import('@/views/mymission/sceneInvestigation'),
+            path: 'sceneInvestigationDetail',
+            name: 'sceneInvestigationDetail',
+            component: () => import('@/views/form/sceneInvestigation'),
             meta: { title: '现场勘查' }
           },
           {
@@ -165,7 +165,7 @@ export const asyncRouterMap = [
               },
               {
                 path: 'caseCreate',
-                name: 'newCase',
+                name: 'caseCreate',
                 component: () => import('@/views/case/newCase'),
                 meta: { title: '创建案件', keepAlive: false }
               },
@@ -192,6 +192,12 @@ export const asyncRouterMap = [
                 name: 'inventoryView',
                 component: () => import('@/views/case/inventoryView'),
                 meta: { title: '物品清单明细', keepAlive: false }
+              },
+              {
+                path: 'caseFinalReportCreate',
+                name: 'caseFinalReportCreate',
+                component: () => import('@/views/case/caseFinalReportCreate'),
+                meta: { title: '结案报告创建', keepAlive: false }
               }
             ]
           },

@@ -18,7 +18,7 @@ var publicAppConfig = {
     // list: '/api'
     admin: 'http://182.150.28.58:27016/framework',
     file: 'http://182.150.28.58:27012/filesystem',
-    list: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
+    list: 'http://192.168.0.125:8030',
     // 四方德信接口
     sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
   },

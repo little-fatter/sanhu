@@ -82,10 +82,10 @@
     <div class="title">
       <div class="staff-box">
         <div class="pic">
-          {{ lawStaff.Username || '王五' }}
+          {{ lawStaff[0].Username.slice(0,2) || '王五' }}
         </div>
         <div class="staff">
-          <span>执法人:</span><span>{{ lawStaff.Username || '王五' }}</span>
+          <span>执法人:</span><span>{{ lawStaff[0].Username || '王五' }}</span>
         </div>
       </div>
       <div class="state">
@@ -157,7 +157,7 @@
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">简要案情及调查经过:</a-col>
           <a-col class="colSize contentColor" :span="12">
-            <a-textarea autosize style="min-height:100px;" :v-model="mainData.CaseDetail"></a-textarea>
+            <a-textarea autosize style="min-height:100px;" v-model="mainData.CaseDetail"></a-textarea>
           </a-col>
         </a-row>
         <a-row class="row">
@@ -165,7 +165,6 @@
           <a-col class="colSize contentColor" :span="12">
             <div>
               <span>
-                <!-- {{ data.PenaltyResult || '口头警告' }} | -->
               </span>
               <span> {{ mainData.ExecuteState || '已执行' }}</span>
             </div>
@@ -175,7 +174,7 @@
           <a-col class="colSize colLine" :span="4">关联表单</a-col>
           <a-col class="colSize contentColor" :span="12">
             <div>
-              <span>
+              <span @click="checkPunishInfo">
                 <svg
                   t="1582606760517"
                   class="icon"
@@ -191,25 +190,26 @@
                     fill="#8a8a8a"
                     p-id="5584"
                   />
-                  {{ }}
                 </svg>
-                {{ relateForm ? '处罚决定书' : '无' }}
+                {{ relateForm.length > 0 ? '处罚决定书' : '无' }}
               </span>
             </div>
           </a-col>
         </a-row>
       </div>
-    </div>
-    <!-- <div class="handlerInfo">
-      <div class="handler">{{ data.CaseHandler || '王小五' }}</div>
-      <div class="handlerBox">
-        <div class="top">发起上传</div>
-        <div class="bottom">
-          <div>{{ data.CaseHandler || '王小五' }}</div>
-          <div>{{ data.InitiationTime || '2020-02-10 16:00:45' }}</div>
-        </div>
+      <div v-if="fileData.length > 0" class="box border">
+        <a-row class="row">
+          <a-col class="colSize colLine" :span="4">附件:</a-col>
+          <a-col class="colSize contentColor" :span="20">
+            <div style="display:flex;flex-wrap:wrap;">
+              <div style="margin-right:20px;" v-for="(item,index) in fileData" :key="index+'ScImg'" >
+                <img style="width:200px;" :src="item" alt="图片加载失败" >
+              </div>
+            </div>
+          </a-col>
+        </a-row>
       </div>
-    </div> -->
+    </div>
     <div class="footer">
       <a-button @click="$router.back()">返回</a-button>
     </div>
@@ -218,6 +218,9 @@
 
 <script>
 import { getDetails, getPageData, getFormDetail } from '@/api/sampleApi'
+import {
+  isNotEmpty
+} from '../../utils/util'
 export default {
   name: 'ClosePersonReport',
   data () {
@@ -226,14 +229,14 @@ export default {
       caseData: {},
       lawParty: [], // 当事人
       lawStaff: [], // 执法人
-      relateForm: {}, // 关联处罚决定书
-      id: '04514e23-3b14-4a17-a258-c6cf1b610dea'
+      relateForm: [], // 关联处罚决定书
+      fileData: [],
+      id: 'd2440a27-7abf-4cd1-95bf-0b800972f5be'
     }
   },
   mounted () {
     if (this.$route.query.id) { this.id = this.$route.query.id }
     this.init()
-    // this.initData()
   },
   methods: {
     // 获取页面数据
@@ -242,23 +245,28 @@ export default {
         this.mainData = res.MainForm
         this.lawParty = res.law_party
         this.lawStaff = res.law_staff
-        console.log(res)
         getDetails('case_Info', res.MainForm.CaseId).then(res => {
           this.caseData = res
-          console.log(res)
         })
-        // var paramter = { rules: [{
-        //   field: 'CaseId',
-        //   op: 'equal',
-        //   value: res.MainForm.CaseId,
-        //   type: 'string'
-        // }],
-        // op: 'and' }
         getFormDetail('law_punishmentInfo', res.MainForm.EventInfoId).then(res => {
-          console.log(res.MainForm)
-          this.relateForm = res.MainForm
+          this.lawParty = res.law_party
+          this.relateForm = res.attachment
+          console.log(this.relateForm)
         })
+        // this.loadEventInfo(res.MainForm.EventInfoId)
       })
+    },
+    // 获取事件信息
+    loadEventInfo (EventInfoId) {
+      getDetails('event_info', EventInfoId).then(res => {
+        if (res) {
+          this.fileData = res.evtFileUrl.split(',').filter(item => { return isNotEmpty(item) })
+        }
+      })
+    },
+    // 查看处罚决定书
+    checkPunishInfo () {
+      // this.$router.push({ name: '', query: { id: this.relateForm[0].ID } })
     }
   }
 }
