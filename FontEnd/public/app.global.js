@@ -1,3 +1,10 @@
+/*
+ * @Author: 616749285@qq.com
+ * @Date: 2020-03-13 17:55:51
+ * @LastEditors: 616749285@qq.com
+ * @LastEditTime: 2020-03-13 17:57:34
+ * @Description:  
+ */
 var publicAppConfig = {
   /**
      * 是否使用环境变量来区分Api的host地址
@@ -29,6 +36,8 @@ var publicAppConfig = {
       sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
     }
   },
+  /** 微应用ID 如果只有一个微应用可以配置在这里，否则请配置为链接参数 */
+  agentId: '456468162',
   /** 配置业务localStorage的key值 */
   localStorageKey: {
     userInfo: 'userInfo', // 获取用户信息

@@ -53,7 +53,7 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       show: false
     }

@@ -42,15 +42,15 @@ export const asyncRouterMap = [
             meta: { title: '我发起的任务' }
           },
           {
-            path: 'event-inspection',
-            name: 'EventInspeion',
-            component: () => import('@/views/mymission/eventInspection'),
-            meta: { title: '事件巡查' }
+            path: 'eventDetail',
+            name: 'eventDetail',
+            component: () => import('@/views/mymission/eventDetail'),
+            meta: { title: '事件核查' }
           },
           {
-            path: 'scene-investigation',
-            name: 'SceneInvestigation',
-            component: () => import('@/views/mymission/sceneInvestigation'),
+            path: 'sceneInvestigationDetail',
+            name: 'sceneInvestigationDetail',
+            component: () => import('@/views/form/sceneInvestigation'),
             meta: { title: '现场勘查' }
           },
           {
@@ -137,10 +137,15 @@ export const asyncRouterMap = [
                 component: () => import('@/views/form/fileCover'),
                 meta: { title: '卷宗封面', keepAlive: false }
               },
-              {
+              { // 行政处罚决定书详情
                 path: 'judgment-detail',
                 name: 'judgmentDetail',
                 component: () => import('@/views/form/judgmentDetail')
+              },
+              { // 勘验笔录详情
+                path: 'record-detail',
+                name: 'recordDetail',
+                component: () => import('@/views/form/recordDetail')
               }
             ]
           },
@@ -164,10 +169,40 @@ export const asyncRouterMap = [
                 meta: { title: '案件详情', keepAlive: false }
               },
               {
-                path: 'new-case',
-                name: 'newCase',
+                path: 'caseCreate',
+                name: 'caseCreate',
                 component: () => import('@/views/case/newCase'),
-                meta: { title: '新增案件', keepAlive: false }
+                meta: { title: '创建案件', keepAlive: false }
+              },
+              {
+                path: 'askPutdownCreate',
+                name: 'askPutDownCreate',
+                component: () => import('@/views/case/askPutDownCreate'),
+                meta: { title: '询问笔录', keepAlive: false }
+              },
+              {
+                path: 'askPutdownPreview',
+                name: 'askPutdownPreview',
+                component: () => import('@/views/case/askPutDownView'),
+                meta: { title: '询问笔录明细', keepAlive: false }
+              },
+              {
+                path: 'inventoryCreate',
+                name: 'inventoryCreate',
+                component: () => import('@/views/case/inventoryCreate'),
+                meta: { title: '物品清单', keepAlive: false }
+              },
+              {
+                path: 'inventoryView',
+                name: 'inventoryView',
+                component: () => import('@/views/case/inventoryView'),
+                meta: { title: '物品清单明细', keepAlive: false }
+              },
+              {
+                path: 'caseFinalReportCreate',
+                name: 'caseFinalReportCreate',
+                component: () => import('@/views/case/caseFinalReportCreate'),
+                meta: { title: '结案报告创建', keepAlive: false }
               }
             ]
           },
