@@ -285,8 +285,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/GoodsList.vue',
-        name: 'GoodsList.vue',
+        path: '/goodsList.vue',
+        name: 'goodsList.vue',
         component: () => import('@/views/details/showInPdf/GoodsList.vue'),
         meta: {
           title: '物品清单',
@@ -317,6 +317,15 @@ export const asyncRouterMap = [{
         component: () => import('@/views/details/showInPdf/CaseClosingReportNormal.vue'),
         meta: {
           title: ' 行政处罚案件结案报告（通用）', // 看后面情况是否使用
+          keepAlive: false
+        }
+      },
+      {
+        path: '/caseReport.vue',
+        name: 'caseReport.vue',
+        component: () => import('@/views/details/showInPdf/CaseReport.vue'),
+        meta: {
+          title: '结案报告', // 看后面情况是否使用
           keepAlive: false
         }
       }

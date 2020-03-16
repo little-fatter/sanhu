@@ -1,8 +1,8 @@
-<!--没收物品清单 PDF展示页面-->
+<!--询问当事人笔录 PDF展示页面-->
 <template>
   <div class="">
-    <h1>物品清单</h1>
     <PdfShow ref="pdf" :fileUrl="PdfFileUrl" :fileName="PdfFileName">
+
     </PdfShow>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
   },
 
   mounted () {
-    this.FormID = this.$route.query.id // 准备接受传过来的参数
+    // this.$route.query.id 准备接受传过来的参数
   }
 }
 </script>

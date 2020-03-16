@@ -285,6 +285,7 @@ export default {
         1, 10,
         this.dealParameter(this.searchKeyWords, this.SformType)
       ).then(res => {
+        this.listData = [] // 重新搜索将搜索结果清空
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.listData.push(item)
@@ -307,22 +308,43 @@ export default {
         案件 case_Info
         处罚当场决定书 law_punishmentInfo
         勘验记录 form_inquestrecord
-        询问记录 form_inquiryrecord
+        询问第三人笔录 form_inquiryrecord_third
         结案报告 case_report
         卷宗封面 case_cover
+        询问当事人笔录 form_inquiryrecord_litigant
+        询问证人笔录 form_inquiryrecord_witness
+
        */
 
-      // cll 获取字典后判断跳转
+      // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === 'form_confiscated_item') {
         // 物品清单
-        this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
-        // this.$toast('暂无案件移送详情')
-      } else if (item.FormType === 'case_Info') {
+        console.log(1111111111111111111111111111111)
+        this.$router.push({ path: '/goodsList', query: { id: item.FormID } })
+      } else if (item.FormType === 'case_info') {
         // 案件详情
-        this.$router.push({ path: '/caseDetails', query: { id: item.CaseId } })
+        this.$router.push({ path: '/caseDetails', query: { id: item.FormID } })
       } else if (item.FormType === 'law_punishmentInfo') {
         // 处罚当场决定书
         this.$router.push({ path: '/PromptlyPunishNote', query: { id: item.CaseId } })
+      } else if (item.FormType === 'form_inquestrecord') {
+        // 勘验记录
+        this.$router.push({ path: '/RecordOfInquest', query: { id: item.CaseId } })
+      } else if (item.FormType === 'case_report') {
+        // 结案报告
+        this.$router.push({ path: '/caseReport', query: { id: item.CaseId } })
+      } else if (item.FormType === 'case_cover') {
+        // 卷宗封面
+        this.$router.push({ path: '/form_inquiryrecord', query: { id: item.CaseId } })
+      } else if (item.FormType === 'form_inquiryrecord_third') {
+        // 询问第三人笔录
+        this.$router.push({ path: '/AskThirdPartyNote', query: { id: item.CaseId } })
+      } else if (item.FormType === 'form_inquiryrecord_litigant') {
+        // 询问当事人笔录
+        this.$router.push({ path: '/AskPartyNote', query: { id: item.CaseId } })
+      } else if (item.FormType === 'form_inquiryrecord_witness') {
+        // 询问证人笔录
+        this.$router.push({ path: '/AskWitnessNote', query: { id: item.CaseId } })
       }
     }
   },
