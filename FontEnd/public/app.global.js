@@ -38,8 +38,8 @@ var publicAppConfig = {
   /**
      * API跟目录
      */
-  // ApiWebContext: '/regulatory',
-  ApiWebContext: 'http://zhsh.8e9bcb.grapps.cn/regulatory',
+  // ApiWebContext: 'http://192.168.0.169:8030',
+  ApiWebContext: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/regulatory',
   /**
    * 静态文件根目录
    */

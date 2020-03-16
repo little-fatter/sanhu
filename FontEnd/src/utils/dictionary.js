@@ -18,6 +18,11 @@ export default {
     doing: 1,
     done: 4
   },
+  eventStateNameMap: {
+    unAccept: '待受理',
+    doing: '处理中',
+    done: '已处理'
+  },
   // 事件状态信息(旧)
   evtStateMap: {
     list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
@@ -60,5 +65,17 @@ export default {
       title: '三级',
       color: '#3A9DFA'
     }
-  ]
+  ],
+  // 事件类型和优先级对应
+  eventTypeLevel: {
+    '综合执法': 1,
+    '环境污染': 1,
+    '污水处理厂': 2,
+    '生活垃圾': 2,
+    '园林绿化': 3,
+    '河道湖道': 3,
+    '河面保洁': 3
+  },
+  timeFormat: 'YYYY-MM-DD HH:mm:ss',
+  timeFormat1: 'YYYYMMDDHHmmss'
 }

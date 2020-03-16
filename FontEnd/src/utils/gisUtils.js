@@ -32,7 +32,18 @@ function transformGCJ2WGS (gcjLat, gcjLon) {
     'lon': gcjLon - d.lon
   }
 }
-
+/**
+ * 百度坐标转WGS84
+ * @param {*} lon 经度
+ * @param {*} lat 纬度
+ */
+function baiduToWGS84 (lon, lat) {
+  var _p = baiduTomars({
+    lon: lon,
+    lat: lat
+  })
+  return transformGCJ2WGS(_p.lat, _p.lon)
+}
 function delta (lat, lon) {
   const a = 6378245.0 //  a: 卫星椭球坐标投影到平面地图坐标系的投影因子。
   const ee = 0.00669342162296594323 //  ee: 椭球的偏心率。
@@ -116,6 +127,25 @@ var afterFunc = function (func, ms) {
   }, ms
   )
 }
+/**
+ * 去除首尾空格
+ */
+var trimToStr = function (o) {
+  return o ? (o + '').trim() : ''
+}
+/**
+ * 判断对象是否有某个属性
+ * @param {*} object
+ * @param {*} key
+ */
+var hasKey = function (object, key) {
+  for (var k in object) {
+    if (k === key) {
+      return true
+    }
+  }
+  return false
+}
 export default {
-  baiduTomars, transformGCJ2WGS, createTdtLayer, afterFunc
+  baiduTomars, transformGCJ2WGS, baiduToWGS84, createTdtLayer, afterFunc, trimToStr, hasKey
 }
