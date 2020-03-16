@@ -1,4 +1,4 @@
-<!--当场处罚决定书 PDF展示页面-->
+<!--结案报告 PDF展示页面-->
 <template>
   <div class="">
     <PdfShow ref="pdf" :fileUrl="PdfFileUrl" :fileName="PdfFileName">

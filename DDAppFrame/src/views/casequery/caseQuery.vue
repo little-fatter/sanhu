@@ -218,9 +218,9 @@ export default {
         }
         console.log(res.Rows)
         // 时间排序
-        this.listData.sort(function (a, b) {
-          return a.InitiationTime > b.InitiationTime ? -1 : 1
-        })
+        // this.listData.sort(function (a, b) {
+        //   return a.InitiationTime > b.InitiationTime ? -1 : 1
+        // })
         return res
       })
     },
@@ -228,7 +228,7 @@ export default {
     loadDataMore () {
       this.dealParameter()
       const newGroups = this.groups[0].rules.filter(item => {
-        return item.value !== '' && item.value !== undefined && item.value !== '0'
+        return item.value !== '' && item.value !== undefined && item.value !== '0' && item.value !== 0
       })
       var groups = []
       groups = [

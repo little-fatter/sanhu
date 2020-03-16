@@ -30,7 +30,7 @@
                 @click="FormStatusEvn(index,item)"
               >{{ item.Title }}</button>
             </div> -->
-            <van-cell title="类型" icon="stop"/>
+            <van-cell title="表单类型" icon="stop"/>
             <div class="contentBox type">
               <button
                 v-for="(item,index) in FormType"
@@ -48,7 +48,7 @@
         v-for="(item, index) in listData"
         class="case-panel"
         :key="index+'@'"
-        @click="goTodetail(FormType)"
+        @click="goTodetail(item)"
       >
         <div slot="header"></div>
         <div>
@@ -94,7 +94,6 @@
               </div>
             </div>
           </template>
-
           <div class="case-tag">
             <div>
               <van-tag plain v-show="item.FormState">{{ item.FormState }}</van-tag>
@@ -105,20 +104,20 @@
           </div>
         </div>
       </van-panel>
+
     </SList>
   </div>
 </template>
 
 <script>
 import SList from '@/components/list/SList.vue'
-import { getQueryConditon, isNotEmpty } from '../../utils/util'
-import { getPageDate, getDictionaryItems, getQueryConditonMore } from '../../api/regulatoryApi'
+import { getQueryConditon, isNotEmpty, getQueryConditonMoreForm } from '../../utils/util'
+import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi'
 export default {
   name: 'SubmitForm',
   components: {
     SList
   },
-  props: {},
   data () {
     return {
       searchShow: false,
@@ -151,8 +150,75 @@ export default {
       FormType: [], // 类型
       SformType: '', // 待搜索的表单类型
       // 查询规则
-      rules: [
-        {
+      rules: [],
+      // 交叉查询规则
+      groups: [],
+      newGroups: []
+    }
+  },
+  methods: {
+    // 搜索弹窗显示隐藏
+    searchePage () {
+      this.searchShow = !this.searchShow
+    },
+    // 筛选弹窗显示隐藏
+    screenPage () {
+      this.screenShow = !this.screenShow
+    },
+    // 搜索关键字
+    onSearch () {
+      this.listData = [] // 重新搜索将搜索结果清空
+      this.$refs.mylist.refresh()
+      // 关闭弹窗
+      // this.searchePage()
+    },
+    // 成林龙 增加从字典获取表单状态 和类型
+    getsearchMenu () {
+      getDictionaryItems('FormState').then(res => {
+        res.map(item => {
+          this.FormState.push({
+            ID: item.ID,
+            Title: item.Title,
+            ItemCode: item.ItemCode
+          })
+        })
+      })
+      getDictionaryItems('FormType').then(res => {
+        res.map(item => {
+          this.FormType.push({
+            ID: item.ID,
+            Title: item.Title,
+            ItemCode: item.ItemCode
+          })
+        })
+      })
+    },
+    // 筛选 cll 改 筛选菜单
+    FormStatusEvn (index, item) {
+      var statusBtns = document.querySelectorAll('.status > button')
+      statusBtns.forEach(item => {
+        item.className = ''
+      })
+      statusBtns[index].className = 'from_state_active'
+      // this.searchKeyWords = item
+      // this.screenPage()
+      // this.listData = [] // 重新搜索将 搜索结果清空
+      // this.$refs.mylist.refresh()
+    },
+    FormTypeEvn (index, item) {
+      var statusBtns = document.querySelectorAll('.type > button')
+      statusBtns.forEach(item => {
+        item.className = ''
+      })
+      statusBtns[index].className = 'from_type_active'
+      this.screenPage()// 关闭弹窗 cll
+      this.SformType = item.ItemCode // 搜索用
+      this.loadData('formwith_eventcase', 1, 10, this.dealParameter(this.searchKeyWords, this.SformType)) // 调用请求
+    },
+    // 处理参数
+    dealParameter (searchKeyWords, SformType) {
+      if (isNotEmpty(searchKeyWords) && !isNotEmpty(SformType)) {
+        this.rules.splice(0, this.rules.length, {
           field: 'ContentValidity',
           op: 'like',
           value: this.searchKeyWords,
@@ -187,11 +253,11 @@ export default {
           op: 'like',
           value: this.searchKeyWords,
           type: 'string'
-        }
-      ],
-      // 交叉查询规则
-      groups: [
-        {
+        })
+        const data = getQueryConditonMoreForm(this.rules, [], 'or')
+        return data
+      } else if (!isNotEmpty(searchKeyWords) && isNotEmpty(SformType)) {
+        this.groups.splice(0, this.rules.length, {
           rules: [
             {
               field: 'FormType', // 表单类型
@@ -201,203 +267,26 @@ export default {
             }
           ],
           op: 'and'
-        }
-      ],
-      newGroups: []
-    }
-  },
-  methods: {
-    // 搜索弹窗显示隐藏
-    searchePage () {
-      this.searchShow = !this.searchShow
-    },
-    // 筛选弹窗显示隐藏
-    screenPage () {
-      this.screenShow = !this.screenShow
-    },
-    // 搜索关键字
-    onSearch () {
-      this.listData = [] // 重新搜索将搜索结果清空
-      this.$refs.mylist.refresh()
-      // 关闭弹窗
-      // this.searchePage()
-    },
-    // 筛选 cll 改 筛选菜单
-    FormStatusEvn (index, item) {
-      var statusBtns = document.querySelectorAll('.status > button')
-      statusBtns.forEach(item => {
-        item.className = ''
-      })
-      statusBtns[index].className = 'from_state_active'
-      // this.searchKeyWords = item
-      // this.screenPage()
-      // this.listData = [] // 重新搜索将 搜索结果清空
-      // this.$refs.mylist.refresh()
-    },
-    FormTypeEvn (index, item) {
-      var statusBtns = document.querySelectorAll('.type > button')
-      statusBtns.forEach(item => {
-        item.className = ''
-      })
-      statusBtns[index].className = 'from_type_active'
-      this.screenPage()// 关闭弹窗 cll
-      this.SformType = item.ItemCode
-      // this.loadDataMore()
-    },
-    // 去详情
-    goTodetail (item) {
-      /**
-       *
-        案件移送 caseMove
-        巡查记录 patrolrecord
-        勘验笔录 inspectiontRecord
-        犯罪案件移送书 criminalCaseMoveMain
-        犯罪案件移送 criminalCaseMove
-        行政处罚案件结案报告_个人 APRPerson
-        询问记录 InvestigatingParty
-        没收物品清单 inventory
-        没收物品清单详情 punishmentInfoDetail
-        行政处罚案件结案报告_单位 APROrg
-        物品清单 form_confiscated_item
-        案件 case_Info
-        处罚当场决定书 law_punishmentInfo
-       */
-
-      // cll 获取字典后判断跳转
-      if (item.FormType === 'caseMove') {
-        // 案件移送
-        this.$toast('暂无案件移送详情')
-      } else if (item.FormType === 'patrolrecord') {
-        // 巡查记录
-        // this.$router.push({ path: '/eventDetail', query: { id: item } })
-      } else if (item.FormType === 'inspectiontRecord') {
-        // 勘验笔录
-        this.$router.push({ path: '/recordOfInquestDetail', query: { id: item.FormID } })
-      } else if (item.FormType === 'criminalCaseMoveMain') {
-        // 犯罪案件移送书
-        // this.$router.push({ path: '/recordOfInquestDetail', query: { id: item.FormID } })
-      } else if (item.FormType === 'criminalCaseMove') {
-        // 犯罪案件移送
-        // this.$router.push({ path: '/recordOfInquestDetail', query: { id: item.FormID } })
-      } else if (item.FormType === 'APRPerson') {
-        // 行政处罚案件结案报告_个人
-        this.$router.push({ path: '/CaseClosingReportSingle', query: { id: item.FormID } })
-      } else if (item.FormType === 'InvestigatingParty') {
-        // 询问记录
-        this.$router.push({ path: '/AskPartyNote', query: { id: item.FormID } })
-      } else if (item.FormType === 'inventory') {
-        // 没收物品清单
-        this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
-      } else if (item.FormType === 'punishmentInfoDetail') {
-        // 没收物品清单详情
-        // this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
-      } else if (item.FormType === 'APROrg') {
-        // 行政处罚案件结案报告_单位
-        this.$router.push({ path: '/CaseClosingReportCompany', query: { id: item.FormID } })
-      } else if (item.FormType === 'form_confiscated_item') {
-        // 物品清单
-        this.$router.push({ path: '/GoodsList', query: { id: item.FormID } })
-      } else if (item.FormType === 'case_Info') {
-        // 案件信息
-        this.$router.push({ path: '/caseDetails', query: { id: item.CaseId } })
-      } else if (item.FormType === 'law_punishmentInfo') {
-        // 处罚当场决定书
-        this.$router.push({ path: '/PromptlyPunishNote', query: { id: item.FormID } })
+        })
+        const data = getQueryConditonMoreForm([], this.groups, 'or')
+        return data
+      } else {
+        const data = getQueryConditon([], 'or')
+        return data
       }
-
-      // 事件巡查
-      // if (item.FormType === 'task_patrol') {
-      //   this.$router.push({
-      //     path: '/eventDetail',
-      //     query: { id: item }
-      //   })
-      // } else if (item.FormType === 'task_survey') {
-      //   this.$router.push({
-      //     path: '/sceneInvestigationDetail',
-      //     query: { id: item.FormID }
-      //   })
-      // } else if (item.FormType === 'case_info') {
-      //   this.$router.push({
-      //     path: '/caseDetails',
-      //     query: { id: item.FormID }
-      //   })
-      // } else if (item.FormType === 'law_punishmentInfo') {
-      //   this.$router.push({
-      //     path: '/PenalizeBookDetial',
-      //     query: { id: item.FormID }
-      //   })
-      // } else if (item.FormType === 'case_report') {
-      //   this.$router.push({
-      //     path: '/closingReportDetail',
-      //     query: { id: item.FormID }
-      //   })
-      // } else if (item.FormType === 'case_filing_report') {
-      //   this.$router.push({
-      //     path: '/createCaseDetails',
-      //     query: { id: item.FormID }
-      //   })
-      // }
-    },
-    // 处理参数
-    dealParameter () {
-      this.rules.map(item => {
-        item.value = this.serchText
-      })
-      this.groups[0].rules[0].value = this.SformType
     },
     // 获取列表信息
+
     loadData (parameter) {
       // 第一次请求 筛选规则为空
-      var rules = []
-      if (isNotEmpty(this.searchKeyWords)) {
-        rules = [
-          {
-            field: 'ContentValidity',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'FormName',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'FormState',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'OriginatorID',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'handler',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          },
-          {
-            field: 'CaseNumber',
-            op: 'like',
-            value: this.searchKeyWords,
-            type: 'string'
-          }
-        ]
-      }
-      var conditon = getQueryConditon(rules, 'or')
+      // var rules = []
       return getPageDate(
         'formwith_eventcase',
-        parameter.pageIndex,
-        parameter.pageSize,
-        conditon
+        1, 10,
+        this.dealParameter(this.searchKeyWords, this.SformType)
       ).then(res => {
+        this.listData = [] // 重新搜索将搜索结果清空
         if (res.Rows) {
-          console.log(res.Rows)
           res.Rows.forEach(item => {
             this.listData.push(item)
           })
@@ -409,85 +298,53 @@ export default {
         return res
       })
     },
-    // 请求页面数据
-    loadDataMore () {
-      console.log(this.dealParameter(), '参数处理结果')
-      this.dealParameter()
-      const newGroups = this.groups[0].rules.filter(item => {
-        return item.value !== '' && item.value !== undefined && item.value !== '0'
-      })
-      var groups = []
-      groups = [
-        {
-          rules: newGroups,
-          op: 'and'
-        }
-      ]
-      if (newGroups.length > 0 && isNotEmpty(this.searchKeyWords)) {
-        var conditonNew = getQueryConditonMore(this.rules, 'and', groups)
-        return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
-          if (res.Rows) {
-            this.caseList = res.Rows
-          }
-          return res
-        })
-      } else if (newGroups.length > 0 && !isNotEmpty(this.searchKeyWords)) {
-        const conditonNew = getQueryConditonMore([], 'and', groups)
-        return getPageDate('formwith_eventcase', 1, 10, conditonNew).then(res => {
-          if (res.Rows) {
-            this.caseList = res.Rows
-          }
+    // 去详情
+    goTodetail (item) {
+      console.log(item, '跳转信息')
+      /**
+       *
+        物品清单 form_confiscated_item
+        案件 case_Info
+        处罚当场决定书 law_punishmentInfo
+        勘验记录 form_inquestrecord
+        询问第三人笔录 form_inquiryrecord_third
+        结案报告 case_report
+        卷宗封面 case_cover
+        询问当事人笔录 form_inquiryrecord_litigant
+        询问证人笔录 form_inquiryrecord_witness
 
-          return res
-        })
-      } else if (newGroups.length === 0 && isNotEmpty(this.searchKeyWords)) {
-        const conditon = getQueryConditon(this.rules, 'and')
-        return getPageDate('formwith_eventcase', 1, 10, conditon).then(res => {
-          if (res.Rows) {
-            this.caseList = res.Rows
-          }
-          return res
-        })
-      } else {
-        const conditon = getQueryConditon(this.rules, 'and')
-        this.loadData('formwith_eventcase', 1, 10, conditon)
+       */
+
+      // cll 获取字典后判断跳转          // this.$toast('提示信息')
+      if (item.FormType === 'form_confiscated_item') {
+        // 物品清单
+        this.$router.push({ path: '/goodsList', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+      } else if (item.FormType === 'case_info') {
+        // 案件详情
+        this.$router.push({ path: '/caseDetails', query: { id: item.FormID } })
+      } else if (item.FormType === 'law_punishmentInfo') {
+        // 处罚当场决定书
+        this.$router.push({ path: '/PromptlyPunishNote', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+      } else if (item.FormType === 'form_inquestrecord') {
+        // 勘验记录
+        this.$router.push({ path: '/RecordOfInquest', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+      } else if (item.FormType === 'case_report') {
+        // 结案报告
+        this.$router.push({ path: '/caseReport', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+      } else if (item.FormType === 'case_cover') {
+        // 卷宗封面
+        this.$router.push({ path: '/form_inquiryrecord', query: { id: item.CaseId } })
+      } else if (item.FormType === 'form_inquiryrecord_third') {
+        // 询问第三人笔录
+        this.$router.push({ path: '/AskThirdPartyNote', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+      } else if (item.FormType === 'form_inquiryrecord_litigant') {
+        // 询问当事人笔录
+        this.$router.push({ path: '/AskPartyNote', query: { id: item.CaseId } })
+      } else if (item.FormType === 'form_inquiryrecord_witness') {
+        // 询问证人笔录
+        this.$router.push({ path: '/AskWitnessNote', query: { id: item.CaseId } })
       }
-    },
-    // 成林龙 增加从字典获取表单状态 和类型
-    getsearchMenu () {
-      getDictionaryItems('FormState').then(res => {
-        res.map(item => {
-          this.FormState.push({
-            ID: item.ID,
-            Title: item.Title,
-            ItemCode: item.ItemCode
-          })
-        })
-      })
-      getDictionaryItems('FormType').then(res => {
-        res.map(item => {
-          this.FormType.push({
-            ID: item.ID,
-            Title: item.Title,
-            ItemCode: item.ItemCode
-          })
-        })
-        console.log(this.FormType, '表单类型')
-      })
     }
-
-    // 测试页面
-    // go() {
-    //   this.$router.push({
-    //     path: "/eventDetail",
-    //     query: { id: "253bac98-c94d-475d-83f4-d36204c4b998" }
-    //   });
-    // task_patrol: 253bac98-c94d-475d-83f4-d36204c4b998
-    // task_survey 253bac98-c94d-475d-83f4-d36204c4b998
-    // law_punishmentinfo:  47f6f786-f478-4948-9705-1918cac58f23
-    // case_report:  d2440a27-7abf-4cd1-95bf-0b800972f5be
-    // case_filing_report:   4d77125c-7352-4a5d-827c-c524cdac07ff
-    // }
   },
   created () {},
   mounted () {
