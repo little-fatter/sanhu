@@ -18,7 +18,7 @@ namespace FD.Model.Dto
         /// <summary>
         /// 表单名称
         /// </summary>
-        public string formName { get; set; }
+        public string formType { get; set; }
         /// <summary>
         /// 文件绝对路径
         /// </summary>
