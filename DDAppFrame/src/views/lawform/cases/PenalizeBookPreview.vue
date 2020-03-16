@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-cell-group>
-      <van-cell title="案件号" :value="penalizeBook.caseInfo.DocNo"></van-cell>
+      <van-cell title="案件号" :value="penalizeBook.caseInfo.CaseNumber"></van-cell>
       <van-cell title="案件类型" :value="penalizeBook.caseInfo.CaseType"></van-cell>
       <van-cell title="案由" :value="penalizeBook.caseInfo.CauseOfAction"></van-cell>
       <party-info-view :initData="penalizeBook.LawParties"></party-info-view>

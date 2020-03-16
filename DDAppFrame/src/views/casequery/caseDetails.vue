@@ -36,7 +36,7 @@
       <van-cell title="结案日期" :value="caseInfo.CaseCloseDay" value-class="con-style" title-class="title-cell" />
       <van-cell title="办案人员" :value="caseInfo.Investigators" value-class="con-style" title-class="title-cell" />
       <van-cell title="归档人员" :value="caseInfo.DocPeople" value-class="con-style" title-class="title-cell" />
-      <van-cell title="归档号" :value="caseInfo.DocNo" value-class="con-style" title-class="title-cell" />
+      <van-cell title="归档号" :value="caseInfo.CaseNumber" value-class="con-style" title-class="title-cell" />
       <van-cell title="保存期限" :value="caseInfo.DocRetentionTimes" value-class="con-style" title-class="title-cell" />
     </van-cell-group>
     <!--        地图加载-->
