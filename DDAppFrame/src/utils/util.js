@@ -467,10 +467,10 @@ export const getPCTaskUrl = (routePath) => {
  * @param {*} eventInfoId
  * @param {*} caseID
  */
-export const getNextTask = (taskType, assignUsersID, routePath, TaskTitle, taskContent, attachments, evtFileUrl, eventInfoId, caseID) => {
+export const getNextTask = (taskType, assignUsersID, routePath, taskTitle, taskContent, attachments, evtFileUrl, eventInfoId, caseID) => {
   var task = {
     TaskType: taskType,
-    TaskTitle: TaskTitle,
+    TaskTitle: taskTitle,
     TaskImg: getTaskImg(attachments, evtFileUrl),
     TaskContent: taskContent,
     AssignUsers: assignUsersID,
@@ -534,12 +534,33 @@ export const isImg = (fileName) => {
  */
 export const getEventTaskDefault = (event, taskTypeDesc) => {
   var title = `${event.evtTypeDisplayName}-${taskTypeDesc}`
-  var content = `${event.reportTime}上报在${event.address}发现${event.evtTypeDisplayName}事件`
+  var reportTime = getTaskReportTime(event.reportTime)
+  var address = getTaskAddress(event.address)
+  var content = `${reportTime}上报在${address}发现${event.evtTypeDisplayName}事件`
 
   return {
     title,
     content
   }
+}
+
+const getTaskReportTime = (orireportTime) => {
+  var reportTime = ''
+  if (isNotEmpty(orireportTime)) {
+    reportTime = formatDate(orireportTime, 'DD日HH:mm').toString()
+  }
+  return reportTime
+}
+
+const getTaskAddress = (oriAddress) => {
+  var address = oriAddress
+  if (isNotEmpty(oriAddress)) {
+    const index = oriAddress.lastIndexOf('市')
+    if (index > -1) {
+      address = oriAddress.substr(index + 1)
+    }
+  }
+  return address
 }
 
 /**
@@ -548,7 +569,13 @@ export const getEventTaskDefault = (event, taskTypeDesc) => {
  * @param {*} taskTypeDesc
  */
 export const getCaseTaskDefault = (caseInfo, taskTypeDesc) => {
-  var title = `${caseInfo.DocNo}-${taskTypeDesc}`
+  var docNo = isNotEmpty(caseInfo.CaseNumber) ? caseInfo.CaseNumber : ''
+  var title = ''
+  if (isNotEmpty(docNo)) {
+    title = `${docNo}-${taskTypeDesc}`
+  } else {
+    title = `${taskTypeDesc}`
+  }
   var content = `${caseInfo.CauseOfAction}`
 
   return {

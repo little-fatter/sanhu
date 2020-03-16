@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-cell-group>
-      <van-cell title="案件号" :value="inventory.caseInfo.DocNo"></van-cell>
+      <van-cell title="案件号" :value="inventory.caseInfo.CaseNumber"></van-cell>
       <van-cell title="案由" :value="inventory.caseInfo.CauseOfAction"></van-cell>
       <inventory-form-view :inventory="inventory.inventory"></inventory-form-view>
       <div class="operate-area">

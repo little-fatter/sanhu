@@ -1,9 +1,10 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
-      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
-      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
+      <van-cell title="任务标题" :value="taskInfo.TaskTitle"></van-cell>
+      <van-cell title="任务内容" :value="taskInfo.TaskContent"></van-cell>
+      <van-cell title="任务派发时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望完成时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -118,7 +119,7 @@
               </van-dropdown-menu>
             </template>
           </van-field>
-          <van-field name="ExistCrim" label="是否涉及违法" v-show="showTailAfter">
+          <van-field name="ExistCrim" label="是否涉及违法" v-show="showTailAfter" >
             <van-radio-group v-model="eventCheck.ExistCrim" direction="horizontal" slot="input">
               <van-radio :name="1">是</van-radio>
               <van-radio :name="0">否</van-radio>
@@ -351,6 +352,7 @@ export default {
             ...res.MainForm,
             Attachment: res.attachment
           }
+          console.log('EventType', this.eventCheck.EventType)
         } else {
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.EventType = event.evtTypeId
