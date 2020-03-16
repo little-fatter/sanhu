@@ -38,8 +38,8 @@ namespace FastDev.Service
             var oapiWorkrecordAddRequest = new OapiWorkrecordUpdateRequest() { };
             var url = "api/dingding/WorkrecordUpdateAsync?" + GetAgentIDString();
 
-            var result= await PostFrameWork<OapiWorkrecordUpdateResponse>(url, oapiWorkrecordAddRequest);
-            if (result.Errcode==0)
+            var result = await PostFrameWork<OapiWorkrecordUpdateResponse>(url, oapiWorkrecordAddRequest);
+            if (result.Errcode == 0)
             {
                 return result.Result;
             }
@@ -76,6 +76,24 @@ namespace FastDev.Service
 
             var client = _clientFactory.CreateClient(HostData.FrameWorkSeverName);
             return await client.GetAsync(url).Result.Content.ReadAsStringAsync();
+        }
+
+        /// <summary>
+        /// 发起审核流
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Task<OapiWorkrecordAddResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request)
+        {
+            var url = "api/dingding/ProcessInstaceCreateAsync";
+
+            request.AgentId = long.Parse(_serverNameConfig.AgentId);
+
+            //TODO fill up the list property
+            request.DeptId = long.MinValue;
+            request.OriginatorUserId = "AccountId"; 
+                //
+            return PostFrameWork<OapiWorkrecordAddResponse>(url, request);
         }
 
         /// <summary>

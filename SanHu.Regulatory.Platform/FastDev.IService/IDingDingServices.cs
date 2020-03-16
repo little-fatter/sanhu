@@ -35,5 +35,12 @@ namespace FastDev.IServices
         /// <param name="pageSize"></param>
         /// <returns></returns>
         Task<string> GetProcess(string OriUserId, string OriDeptId, string taskUserId, string OpeUserId, int pageIndex = 0, int pageSize = 50);
+
+        /// <summary>
+        /// 发起审核流
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Task<OapiWorkrecordAddResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request);
     }
 }
