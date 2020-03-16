@@ -82,10 +82,10 @@
     <div class="title">
       <div class="staff-box">
         <div class="pic">
-          {{ lawStaff[0].Username.slice(0,2) || '王五' }}
+          {{ lawStaff[0] ? lawStaff[0].Username.slice(0,2) : '王五' }}
         </div>
         <div class="staff">
-          <span>执法人:</span><span>{{ lawStaff[0].Username || '王五' }}</span>
+          <span>执法人:</span><span>{{ lawStaff[0] ? lawStaff[0].Username : '王五' }}</span>
         </div>
       </div>
       <div class="state">
