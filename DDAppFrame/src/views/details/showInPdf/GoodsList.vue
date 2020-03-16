@@ -8,7 +8,7 @@
 
 <script>
 import PdfShow from '../../../components/business/PDFPreview'
-import { getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
+import { getFormsDetailByEventInfoIdPdf } from '../../../api/regulatoryApi'
 export default {
   components: {
     PdfShow
@@ -29,13 +29,11 @@ export default {
       //   console.log(res.MainForm, 123456789)
       //   // this.lawPartyInfoL = res.Rows
       // })
-      getFormsDetailByEventInfoId(
-        null,
-        'form_printPDF',
-        { 'formId': this.FormID, 'formType': 'form_confiscated_item' },
-        null)
+      console.log(this.FormID, 123456)
+
+      getFormsDetailByEventInfoIdPdf('1e400234-d9e3-4dd8-85ef-3a3fdd549099', 'form_confiscated_item')
         .then((res) => {
-          console.log(res.MainForm, 6666666666666666666666666666666666666)
+          console.log(res, 6666666666666666666666666666666666666)
         // this.lawPartyInfoL = res.Rows
         })
     }
