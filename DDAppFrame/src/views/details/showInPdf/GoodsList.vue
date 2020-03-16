@@ -2,32 +2,43 @@
 <template>
   <div class="">
     <PdfShow ref="pdf" :fileUrl="PdfFileUrl" :fileName="PdfFileName">
-
     </PdfShow>
   </div>
 </template>
 
 <script>
 import PdfShow from '../../../components/business/PDFPreview'
+import { getFormsDetailByEventInfoIdPdf } from '../../../api/regulatoryApi'
 export default {
   components: {
     PdfShow
   },
   data () {
     return {
-      PdfFileUrl: 'TestPdfFileUrl', // PDF 文件路径
-      PdfFileName: 'TestPdfFileName', // PDF 文件名称
+      PdfFileUrl: '', // PDF 文件路径
+      PdfFileName: '', // PDF 文件名称
       FormID: '', // 表单id
-      Model: '' // 模型名称
+      FormType: '' // 表单类型
     }
   },
 
   methods: {
+    // 获取表单详情
+    getFormInfo () {
+      getFormsDetailByEventInfoIdPdf(this.FormID, this.FormType)
+        .then((res) => {
+          console.log(res, 11111111111111111111111111111111)
 
+          this.PdfFileUrl = res // PDF 文件路径
+          this.PdfFileName = this.FormType
+        })
+    }
   },
 
   mounted () {
-    // this.$route.query.id 准备接受传过来的参数
+    this.FormID = this.$route.query.msg.FormID // 表单ID
+    this.FormType = this.$route.query.msg.FormType // 表单类型
+    this.getFormInfo()
   }
 }
 </script>
