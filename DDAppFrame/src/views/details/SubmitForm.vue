@@ -4,18 +4,15 @@
     <!--cll 重写搜索组件-->
     <van-row>
       <van-col span="20">
-        <van-search
-          v-model="searchKeyWords"
-          placeholder="请输入搜索关键词"
-          show-action
-          shape="round"
-        >
+        <van-search v-model="searchKeyWords" placeholder="请输入搜索关键词" show-action shape="round">
           <div class="search-text" slot="action" @click="onSearch">搜索</div>
         </van-search>
       </van-col>
       <van-col span="4">
         <div class="filter-btn">
-          <span @click="screenPage" > <van-icon name="filter-o" />筛选</span>
+          <span @click="screenPage">
+            <van-icon name="filter-o" />筛选
+          </span>
         </div>
       </van-col>
       <van-popup v-model="screenShow" closeable close-icon-position="top-right" position="top">
@@ -29,8 +26,8 @@
                 :key="item.ID"
                 @click="FormStatusEvn(index,item)"
               >{{ item.Title }}</button>
-            </div> -->
-            <van-cell title="表单类型" icon="stop"/>
+            </div>-->
+            <van-cell title="表单类型" icon="stop" />
             <div class="contentBox type">
               <button
                 v-for="(item,index) in FormType"
@@ -52,66 +49,86 @@
       >
         <div slot="header"></div>
         <div>
-          <h4 class="case-title">{{ item.FormName }}</h4>
+          <div class="case-title-head">
+            <h4 class="case-title">
+              <template v-if="item.FormName===''||item.FormName===null">表单名称-测试数据</template>
+              <template v-else>{{ item.FormName }}</template>
+            </h4>
+            <span>{{ item.InitiationTime }}</span>
+          </div>
           <div class="default-info">
             <span>申请部门：</span>
             <div>
-              <span>{{ item.Department }}</span>
+              <span>
+                <template v-if="item.Department===''||item.Department===null">测试数据</template>
+                <template v-else>{{ item.Department }}</template>
+              </span>
             </div>
           </div>
           <div class="default-info">
-            <span>申请人：</span>
+            <span>申请人员：</span>
             <div>
-              <span>{{ item.OriginatorID }}</span>
+              <span>
+                <template v-if="item.handler===''||item.handler===null">测试数据</template>
+                <template v-else>{{ item.handler }}</template>
+              </span>
             </div>
           </div>
           <template
-            v-if="item.FormType ==='case_filing_report'||'case_info'||'case_report'||'law_punishmentInfo'? false:true">
+            v-if="item.FormType === 'form_confiscated_item'||'case_info'||'case_report'||'case_report'||'law_punishmentInfo'||'form_inquestrecord'||'form_inquiryrecord_litigant'||'form_inquiryrecord_witness'? false:true"
+          >
             <div class="default-info">
               <span>事件编号：</span>
               <div>
-                <span>{{ item.evtCode }}</span>
+                <span>
+                  <template v-if="item.evtCode===''||item.evtCode===null">测试数据</template>
+                  <template v-else>{{ item.evtCode }}</template>
+                </span>
               </div>
             </div>
             <div class="default-info">
               <span>事件类型:</span>
               <div>
-                <span>{{ item.evtTypeName }}</span>
+                <span>
+                  <template v-if="item.evtTypeName===''||item.evtTypeName===null">测试数据</template>
+                  <template v-else>{{ item.evtTypeName }}</template>
+                </span>
               </div>
             </div>
           </template>
           <template v-else>
             <div class="default-info">
-              <span>案件号：</span>
+              <span>案件编号：</span>
               <div>
-                <span>{{ item.CaseNumber }}</span>
+                <span>
+                  <template v-if="item.CaseNumber===''||item.CaseNumber===null">测试数据</template>
+                  <template v-else>{{ item.CaseNumber }}</template>
+                </span>
               </div>
             </div>
             <div class="default-info">
-              <span>案由：</span>
+              <span>案件案由：</span>
               <div>
-                <span>{{ item.CaseType }}</span>
+                <span>
+                  <template v-if="item.CauseOfAction===''||item.CauseOfAction===null">测试数据</template>
+                  <template v-else>{{ item.CauseOfAction }}</template>
+                </span>
               </div>
             </div>
           </template>
-          <div class="case-tag">
-            <div>
-              <van-tag plain v-show="item.FormState">{{ item.FormState }}</van-tag>
-            </div>
-            <div>
-              <van-tag plain v-show="item.CompletionTime">{{ item.InitiationTime }}</van-tag>
-            </div>
-          </div>
         </div>
       </van-panel>
-
     </SList>
   </div>
 </template>
 
 <script>
 import SList from '@/components/list/SList.vue'
-import { getQueryConditon, isNotEmpty, getQueryConditonMoreForm } from '../../utils/util'
+import {
+  getQueryConditon,
+  isNotEmpty,
+  getQueryConditonMoreForm
+} from '../../utils/util'
 import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi'
 export default {
   name: 'SubmitForm',
@@ -191,10 +208,16 @@ export default {
             ItemCode: item.ItemCode
           })
         })
+        // 处理不需要的 案件封面
+        const data = this.FormType.filter(item => {
+          return item.ItemCode !== 'case_cover'
+        })
+        this.FormType = data
       })
     },
     // 筛选 cll 改 筛选菜单
     FormStatusEvn (index, item) {
+      // 表单状态不需要
       var statusBtns = document.querySelectorAll('.status > button')
       statusBtns.forEach(item => {
         item.className = ''
@@ -210,50 +233,61 @@ export default {
       statusBtns.forEach(item => {
         item.className = ''
       })
-      statusBtns[index].className = 'from_type_active'
-      this.screenPage()// 关闭弹窗 cll
+      statusBtns[index].className = 'from_state_active'
+      this.screenPage() // 关闭弹窗 cll
       this.SformType = item.ItemCode // 搜索用
-      this.loadData('formwith_eventcase', 1, 10, this.dealParameter(this.searchKeyWords, this.SformType)) // 调用请求
+      this.listData = [] // 重新搜索将 搜索结果清空
+      this.$refs.mylist.refresh()
+      this.loadData(
+        'formwith_eventcase',
+        1,
+        10,
+        this.dealParameter(this.searchKeyWords, this.SformType)
+      ) // 调用请求
     },
     // 处理参数
     dealParameter (searchKeyWords, SformType) {
       if (isNotEmpty(searchKeyWords) && !isNotEmpty(SformType)) {
-        this.rules.splice(0, this.rules.length, {
-          field: 'ContentValidity',
-          op: 'like',
-          value: this.searchKeyWords,
-          type: 'string'
-        },
-        {
-          field: 'FormName',
-          op: 'like',
-          value: this.searchKeyWords,
-          type: 'string'
-        },
-        {
-          field: 'FormState',
-          op: 'like',
-          value: this.searchKeyWords,
-          type: 'string'
-        },
-        {
-          field: 'OriginatorID',
-          op: 'like',
-          value: this.searchKeyWords,
-          type: 'string'
-        },
-        {
-          field: 'handler',
-          op: 'like',
-          value: this.searchKeyWords,
-          type: 'string'
-        },
-        {
-          field: 'CaseNumber',
-          op: 'like',
-          value: this.searchKeyWords,
-          type: 'string'
-        })
+        this.rules.splice(
+          0,
+          this.rules.length,
+          {
+            field: 'ContentValidity',
+            op: 'like',
+            value: this.searchKeyWords,
+            type: 'string'
+          },
+          {
+            field: 'FormName',
+            op: 'like',
+            value: this.searchKeyWords,
+            type: 'string'
+          },
+          {
+            field: 'FormState',
+            op: 'like',
+            value: this.searchKeyWords,
+            type: 'string'
+          },
+          {
+            field: 'OriginatorID',
+            op: 'like',
+            value: this.searchKeyWords,
+            type: 'string'
+          },
+          {
+            field: 'handler',
+            op: 'like',
+            value: this.searchKeyWords,
+            type: 'string'
+          },
+          {
+            field: 'CaseNumber',
+            op: 'like',
+            value: this.searchKeyWords,
+            type: 'string'
+          }
+        )
         const data = getQueryConditonMoreForm(this.rules, [], 'or')
         return data
       } else if (!isNotEmpty(searchKeyWords) && isNotEmpty(SformType)) {
@@ -282,10 +316,11 @@ export default {
       // var rules = []
       return getPageDate(
         'formwith_eventcase',
-        1, 10,
+        1,
+        10,
         this.dealParameter(this.searchKeyWords, this.SformType)
       ).then(res => {
-        this.listData = [] // 重新搜索将搜索结果清空
+        console.log(res.Rows, '返回的数据')
         if (res.Rows) {
           res.Rows.forEach(item => {
             this.listData.push(item)
@@ -318,31 +353,55 @@ export default {
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === 'form_confiscated_item') {
         // 物品清单
-        this.$router.push({ path: '/goodsList', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+        this.$router.push({
+          path: '/goodsList',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       } else if (item.FormType === 'case_info') {
         // 案件详情
         this.$router.push({ path: '/caseDetails', query: { id: item.FormID } })
       } else if (item.FormType === 'law_punishmentInfo') {
         // 处罚当场决定书
-        this.$router.push({ path: '/PromptlyPunishNote', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+        this.$router.push({
+          path: '/PromptlyPunishNote',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       } else if (item.FormType === 'form_inquestrecord') {
         // 勘验记录
-        this.$router.push({ path: '/RecordOfInquest', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+        this.$router.push({
+          path: '/RecordOfInquest',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       } else if (item.FormType === 'case_report') {
         // 结案报告
-        this.$router.push({ path: '/caseReport', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+        this.$router.push({
+          path: '/caseReport',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       } else if (item.FormType === 'case_cover') {
         // 卷宗封面
-        this.$router.push({ path: '/form_inquiryrecord', query: { id: item.CaseId } })
+        this.$router.push({
+          path: '/form_inquiryrecord',
+          query: { id: item.CaseId }
+        })
       } else if (item.FormType === 'form_inquiryrecord_third') {
         // 询问第三人笔录
-        this.$router.push({ path: '/AskThirdPartyNote', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
+        this.$router.push({
+          path: '/AskThirdPartyNote',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       } else if (item.FormType === 'form_inquiryrecord_litigant') {
         // 询问当事人笔录
-        this.$router.push({ path: '/AskPartyNote', query: { id: item.CaseId } })
+        this.$router.push({
+          path: '/AskPartyNote',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       } else if (item.FormType === 'form_inquiryrecord_witness') {
         // 询问证人笔录
-        this.$router.push({ path: '/AskWitnessNote', query: { id: item.CaseId } })
+        this.$router.push({
+          path: '/AskWitnessNote',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
       }
     }
   },
@@ -353,16 +412,30 @@ export default {
 }
 </script>
 <style lang="less">
+.van-list {
+  background-color: #f6f6f6;
+}
 .center {
   padding: 20px 35%;
 }
 .case-panel {
   padding: 0.32rem;
   color: #101010;
-  margin-top: 0.32rem;
-  .case-title {
-    margin: 5px 0 10px;
-    color: 16px;
+  margin-bottom: 0.32rem;
+  .case-title-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.1rem;
+    .case-title {
+      margin: 0px 0 10px 0;
+      color: 16px;
+      color: #64697c;
+    }
+    span{
+      color: #A1A6BA;
+      font-size: 0.3rem;
+    }
   }
 
   .default-info {
@@ -371,10 +444,13 @@ export default {
     justify-content: flex-start;
     margin-bottom: 0.15rem;
   }
+  .default-info > span {
+    color: #7f87ae;
+  }
   .default-info > div {
     flex: 1;
-    padding-left: 0.32rem;
-    color: #666;
+    // padding-left: 0.2rem;
+    color: #7f87ae;
   }
   .case-tag {
     display: flex;
@@ -399,7 +475,7 @@ export default {
       line-height: 50px;
       padding: 0 20px;
       margin-bottom: 5px;
-      color: #64697C;
+      color: #64697c;
     }
     .listBox {
       padding: 0 20px;
@@ -432,11 +508,13 @@ export default {
     margin: 0.2rem 0 0.1rem 1rem;
     button {
       //cll改
-      width: auto;
-      height: auto;
-      font-size: 0.28rem;
+      // width: auto;
+      // height: auto;
+      width: 30%;
+      height: 1rem;
+      font-size: 0.32rem;
       margin: 0 0.15rem 0 0;
-      padding: 0.16rem 0.3rem;
+      // padding: 0.16rem 0.3rem;
       border-radius: 0.08rem;
       border: none;
       background-color: #f4f4f4;
@@ -465,28 +543,29 @@ export default {
   color: #0973ec;
   background-color: #bbb;
 }
-.van-search{
+.van-search {
   padding: 0.26rem;
 }
-.van-icon-filter-o::before,.van-icon-search::before{
-font-size:   0.4266rem;
-color: #7F87AE;
+.van-icon-filter-o::before,
+.van-icon-search::before {
+  font-size: 0.4266rem;
+  color: #7f87ae;
 }
-.filter-btn{
+.filter-btn {
   height: 1.42rem;
   line-height: 1.42rem;
-  background-color: #FFF;
+  background-color: #fff;
   padding-right: 0.26rem;
   display: flex;
 }
-.filter-btn span{
+.filter-btn span {
   align-items: center;
   display: flex;
-  color: #64697C;
+  color: #64697c;
   position: relative;
 }
-.filter-btn span::after{
-  content: '';
+.filter-btn span::after {
+  content: "";
   height: 0.4rem;
   width: 1px;
   background-color: #b9bcca;
@@ -494,7 +573,7 @@ color: #7F87AE;
   left: -12%;
   top: calc((1.42rem - 0.4rem) / 2);
 }
-.search-text{
-   color: #64697C;
+.search-text {
+  color: #64697c;
 }
 </style>

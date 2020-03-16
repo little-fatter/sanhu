@@ -1,7 +1,6 @@
 <!--询问第三人笔录 PDF展示页面-->
 <template>
   <div class="">
-    <h1>第三人</h1>
     <PdfShow ref="pdf" :fileUrl="PdfFileUrl" :fileName="PdfFileName">
     </PdfShow>
   </div>
