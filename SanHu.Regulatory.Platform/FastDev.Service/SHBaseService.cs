@@ -97,10 +97,15 @@ namespace FastDev.Service
 
         public object FormData(FormDataReq data)
         {
+            if (data.Model.ToUpper() == "case_Info".ToUpper())
+            {
+                data.Model = "case_Info";
+            }
             IService service = ServiceHelper.GetService(data.Model);
 
             //根据事件id或者id查询数据
             var filter = new FilterGroup();
+         
             if (!string.IsNullOrEmpty(data.FormId))
             {
                 filter.rules.Add(new FilterRule("ID", data.FormId, "equal"));
@@ -109,12 +114,13 @@ namespace FastDev.Service
             {
                 filter.rules.Add(new FilterRule("EventInfoId", data.EventInfoId, "equal"));
             }
-
-            //案件特殊判断
-            if (data.Model == "case_info")
+              //案件特殊判断
+            if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
+
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
             }
+            
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
@@ -239,12 +245,17 @@ namespace FastDev.Service
                     Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
                 if (!string.IsNullOrEmpty(Task.PCLinks))
                     Task.PCLinks += (Task.PCLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
-                string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
                 var dic = new Dictionary<string, string>();
-                dic.Add("任务类型", taskTypeStr);
-                dic.Add("派发时间", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                dic.Add("任务说明", Task.TaskContent);
+                dic.Add("任务发起时间", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 dic.Add("期望完成时间", Task.ExpectedCompletionTime.Value.ToString("yyyy-MM-dd HH:mm:ss"));
-                dic.Add("任务描述", Task.TaskContent);
+
+                if (Task.TaskType.ToUpper() == TaskType.Punishment.ToString().ToUpper()) {
+                    string taskTypeStr = QueryDb.ExecuteScalar<string>("select title from res_dictionaryitems where itemcode=@0", Task.TaskType);  //获取任务类型中文描述
+                    string caseNumber = QueryDb.ExecuteScalar<string>("select caseNumber from case_info where id=@0", Task.CaseID);
+                    Task.TaskTitle = caseNumber + "-" + taskTypeStr;
+                }
+
                 Task.TodotaskID = CreateWorkrecor(Task.AssignUsers, Task.TaskTitle, Task.AppLinks, dic);   //待办id
 
                 //记录待办id

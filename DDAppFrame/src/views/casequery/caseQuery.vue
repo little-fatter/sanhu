@@ -4,52 +4,44 @@
       <div slot="action" @click="onSearch">搜索</div>
     </van-search>
     <van-dropdown-menu>
-      <van-dropdown-item
-        v-model="searchType"
-        :options="searchTypeOptions"
-        @change="searchTypeEvn "
-      />
-      <van-dropdown-item
-        v-model="searchFlow"
-        :options="searchFlowOptions"
-        @change="searchFlowEvn "
-      />
+      <van-dropdown-item v-model="searchType" :options="searchTypeOptions" @change="searchTypeEvn" />
+      <van-dropdown-item v-model="searchFlow" :options="searchFlowOptions" @change="searchFlowEvn" />
       <van-dropdown-item
         v-model="searchState"
         :options="searchStateOptions"
-        @change="searchStateEvn "
+        @change="searchStateEvn"
       />
       <van-dropdown-item
         v-model="searchRegion"
         :options="searchRegionOptions"
-        @change="searchRegionEvn "
+        @change="searchRegionEvn"
       />
     </van-dropdown-menu>
     <div class="case-panel-roll">
       <s-list :dataCallback="loadData" ref="mylist">
         <div
           class="panel_one"
-          v-for="(item,index) in caseList"
-          :key="item.ID+index"
+          v-for="(item, index) in caseList"
+          :key="item.ID + index"
           @click="goCaseDetails(item.ID)"
         >
           <van-cell :title="item.CauseOfAction" />
           <p>
             <span>当事人：</span>
-            <span v-if="item.LawPartys && item.LawPartys.length>0">
-              <span v-for="(msg,i) in item.LawPartys" :key="i+'@'">{{ msg.Name }}</span>
+            <span v-if="item.LawPartys && item.LawPartys.length > 0">
+              <span v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
             </span>
             <span v-else>测试数据</span>
           </p>
           <p>
             <span>办案人：</span>
-            <span>{{ item.Investigators? item.Investigators:'测试数据' }}</span>
+            <span>{{ item.Investigators ? item.Investigators : '测试数据' }}</span>
           </p>
           <h4 class="case-tag">
             <van-tag plain>{{ item.CaseNumber }}</van-tag>
             <!-- <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>-->
             <van-tag plain type="primary">简易程序</van-tag>
-            <van-tag plain type="success">{{ item.CaseStatus?item.CaseStatus:`已创建` }}</van-tag>
+            <van-tag plain type="success">{{ item.CaseStatus ? item.CaseStatus : `已创建` }}</van-tag>
             <span>{{ item.ModifyDate }}</span>
           </h4>
         </div>
@@ -249,7 +241,10 @@ export default {
           })
         }
         console.log(res.Rows)
-
+        // 时间排序
+        // this.listData.sort(function (a, b) {
+        //   return a.InitiationTime > b.InitiationTime ? -1 : 1
+        // })
         return res
       })
     },
@@ -258,7 +253,10 @@ export default {
       this.dealParameter()
       const newGroups = this.groups[0].rules.filter(item => {
         return (
-          item.value !== '' && item.value !== undefined && item.value !== '0'
+          item.value !== '' &&
+          item.value !== undefined &&
+          item.value !== '0' &&
+          item.value !== 0
         )
       })
       var groups = []
@@ -345,7 +343,7 @@ export default {
   width: calc(100% - 0rem);
   /* margin-left: 0.26rem;
   margin-right: 0.56rem; */
-  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
   overflow: hidden;
   /* padding: 0 0.26rem 0.26rem 0.26rem; */
   padding: 0 0.3rem 0.26rem 0.3rem;
@@ -358,12 +356,12 @@ export default {
 }
 
 .panel_one .van-cell:not(:last-child)::after {
-  border-bottom: 0.02667rem solid #ddd;
+  border-bottom: 0.02667rem solid transparent;
   left: 0;
 }
 .panel_one .van-cell__title {
   font-weight: bold;
-  color: #111f2c;
+  color: #64697c;
 }
 
 .panel_one p {
@@ -375,7 +373,7 @@ export default {
 }
 .panel_one p span:first-child {
   margin-right: 0rem;
-  color: #2b3946;
+  color: #7f87ae;
 }
 
 .case-tag {
@@ -400,5 +398,11 @@ export default {
 }
 .case-tag > span:last-child {
   color: #a1a6ba;
+}
+.van-search__content {
+  border-radius: 100px;
+}
+/deep/.van-ellipsis {
+  color: #64697c !important;
 }
 </style>

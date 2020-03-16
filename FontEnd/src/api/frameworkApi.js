@@ -37,3 +37,14 @@ export function msgCenterDel (parameter) {
     data: parameter
   })
 }
+
+/**
+ * 获取用户列表
+ * @param {object} parameter 
+ */
+export const getUsers = parameter => {
+  return getHttp({
+    url: apiConfig.framework.users,
+    params: parameter
+  })
+}

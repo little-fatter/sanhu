@@ -35,65 +35,128 @@ namespace FastDev.Service
         public override object GetPageData(QueryDescriptor descriptor)
         {
             //处理查询条件,排序 
-            FilterTranslator filterTranslator = new FilterTranslator();
-            if (descriptor.Condition != null)
-            {
-                filterTranslator.Group = descriptor.Condition;
-            }
-            filterTranslator.Translate();
-            string whereTxt = filterTranslator.CommandText;
+            //FilterTranslator filterTranslator = new FilterTranslator();
+            //if (descriptor.Condition != null)
+            //{
+            //    filterTranslator.Group = descriptor.Condition;
+            //}
 
-            //处理 新增定义当事人名称(party),当事人号码(partyPhone)
-            string sqlParty = "select * from law_party where 1=1 ";
-            foreach (var item in descriptor.Condition.groups)
+            //filterTranslator.Translate();
+            //string whereTxt = filterTranslator.CommandText;
+
+            //string text = "";
+            //string text2 = "";
+            //if (descriptor.OrderBy != null && descriptor.OrderBy.Any())
+            //{
+            //    text = descriptor.OrderBy[0].Key;
+            //    if (string.IsNullOrEmpty(text))
+            //        text = "CreateDate";
+            //    text2 = ((descriptor.OrderBy[0].Order == OrderSequence.ASC) ? "asc" : "desc");
+            //}
+            //whereTxt += string.Format(" order by {0} {1}", text, text2);
+
+            //StringBuilder sqlBuild = new StringBuilder();
+            //sqlBuild.AppendLine("select a.* from case_info a where 1=1 ");
+            //if (parties != null && parties.Count() > 0)
+            //{
+            //    sqlBuild.AppendLine(string.Format("and ID in ({0}) and ", string.Join(",", parties.Select(m => "'" + m.AssociationobjectID + "'"))));
+            //}
+            //sqlBuild.AppendLine(whereTxt);
+            //var cases = QueryDb.Query<case_Info>(sqlBuild.ToString());
+
+            #region 新增定义当事人名称(party),当事人号码(partyPhone)
+
+            var partyWhere = DeepPartyGroups(descriptor.Condition.groups);
+            if (partyWhere.Count > 0)
             {
-                var partyCond = item.rules.FirstOrDefault(m => m.field == "party");
-                if (partyCond != null)
+                var parties = QueryDb.Query<law_party>("select * from law_party where " + string.Join(descriptor.Condition.op, partyWhere));
+
+                if (parties.Count() > 0)
                 {
-                    if (partyCond.op.ToLower()== "equal")
+                    var filerGroup = new FilterGroup() { op = "or" };
+                    foreach (var item in parties)
                     {
-                        sqlParty += string.Format("and Name='{0}' ", partyCond.value);
+                        filerGroup.rules.Add(new FilterRule
+                        {
+                            field = "ID",
+                            op = "in",
+                            type = "select",
+                            value = item.AssociationobjectID
+                        });
                     }
-                    else 
-                    {
-                        sqlParty += string.Format("and Name like '{0}' ", partyCond.value);
-                    }
+
+                    descriptor.Condition.groups.Add(filerGroup);
                 }
 
-                var partyPhoneCond = item.rules.FirstOrDefault(m => m.field == "partyPhone");
-                if (partyPhoneCond != null)
+                DeletePartyRules(descriptor.Condition.groups);
+            }
+
+            #endregion
+
+            return base.GetPageData(descriptor);
+        }
+
+        List<string> DeepPartyGroups(IList<FilterGroup> groups)
+        {
+            List<string> partyWhere = new List<string>();
+            foreach (var item in groups)
+            {
+                var tmpWhere = new List<string>();
+                foreach (var itemRule in item.rules)
                 {
-                    if (partyPhoneCond.op.ToLower() == "equal")
+                    if (itemRule.op.ToLower() == "equal")
                     {
-                        sqlParty += string.Format("and Name='{0}' ", partyPhoneCond.value);
+                        if (itemRule.field.ToLower() == "party")
+                        {
+                            tmpWhere.Add(string.Format(" Name='{0}' ", itemRule.value));
+                        }
+                        else if (itemRule.field.ToLower() == "partyphone")
+                        {
+                            tmpWhere.Add(string.Format(" Contactnumber='{0}' ", itemRule.value));
+                        }
                     }
                     else
                     {
-                        sqlParty += string.Format("and Name like '{0}' ", partyPhoneCond.value);
+                        if (itemRule.field.ToLower() == "party")
+                        {
+                            tmpWhere.Add(string.Format(" Name like '%{0}%' ", itemRule.value));
+                        }
+                        else if (itemRule.field.ToLower() == "partyphone")
+                        {
+                            tmpWhere.Add(string.Format(" Contactnumber like '%{0}%' ", itemRule.value));
+                        }
                     }
                 }
-            }
-            //var parties = QueryDb.Query<law_party>(sqlParty);
+                if (tmpWhere.Count > 0)
+                {
+                    partyWhere.Add("(" + string.Join(item.op, tmpWhere) + ")");
+                }
 
-            string text = "";
-            string text2 = "";
-            if (descriptor.OrderBy != null && descriptor.OrderBy.Any())
+                if (item.groups.Count > 0)
+                {
+                    partyWhere.AddRange(DeepPartyGroups(item.groups)); //递归下一级groups
+                }
+            }
+            return partyWhere;
+        }
+
+        void DeletePartyRules(IList<FilterGroup> groups)
+        {
+            foreach (var item in groups) // 删除当事人名称(party),当事人号码(partyPhone)条件
             {
-                text = descriptor.OrderBy[0].Key;
-                if (string.IsNullOrEmpty(text))
-                    text = "CreateDate";
-                text2 = ((descriptor.OrderBy[0].Order == OrderSequence.ASC) ? "asc" : "desc");
+                for (int i = item.rules.Count - 1; i >= 0; i--)
+                {
+                    if (item.rules[i].field.ToLower() == "party" || item.rules[i].field.ToLower() == "partyphone")
+                    {
+                        item.rules.RemoveAt(i);
+                    }
+                }
+
+                if (item.groups.Count > 0)
+                {
+                    DeletePartyRules(item.groups); //递归下一级groups
+                }
             }
-            whereTxt += string.Format(" order by {0} {1}", text, text2);
-
-            StringBuilder sqlBuild = new StringBuilder();
-            sqlBuild.AppendLine("select a.* from case_info a");
-            //if (parties != null && parties.Count() > 0)
-            //{
-
-            //}
-
-            return base.GetPageData(descriptor);
         }
 
         private void Case_InfoService_GetDetail(object query, object data)

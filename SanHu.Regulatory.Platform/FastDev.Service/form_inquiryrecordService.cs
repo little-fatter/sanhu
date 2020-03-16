@@ -43,6 +43,10 @@ namespace FastDev.Service
                 data.law_Parties.ToList().ForEach(s => { s.AssociationobjectID = form.ID; });
                 ServiceHelper.GetService("law_staff").SaveList(data.law_Staffs);
                 ServiceHelper.GetService("law_party").SaveList(data.law_Parties);
+
+                //打印预生成
+                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.form_Inquiryrecord.ID + @""",""formName"":""form_inquiryrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)

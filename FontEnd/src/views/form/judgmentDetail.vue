@@ -34,7 +34,7 @@
       }
 
       .attach-item {
-        margin: 15px 0 0 40px;
+        margin: 15px 0 0 65px;
         background-color: #ccc;
       }
     }
@@ -63,16 +63,16 @@
 <template>
   <div class="de-wrapper">
     <div class="pdf-wrapper">
-      <img src="" alt="处罚决定书图片">
+      <img src="" alt="处罚决定书pdf">
     </div>
     <div class="attach-wrapper">
       <div class="attach-item-wrapper">
-        <div class="attach-title">证据：</div>
-        <div class="attach-item">图片预留</div>
-      </div>
-      <div class="attach-item-wrapper">
-        <div class="attach-title">附件：</div>
-        <div class="attach-item">附件预留</div>
+        <div class="attach-title">证据附件：</div>
+        <div class="attach-item">
+          <s-upload></s-upload>
+          <s1-upload></s1-upload>
+          <s2-upload></s2-upload>
+        </div>
       </div>
     </div>
     <div class="handle-wrapper">
@@ -89,7 +89,14 @@
 </template>
 
 <script>
+import SUpload from '@/components/file/ImportFile'
+import S1Upload from '@/components/file/DownFile'
+import S2Upload from '@/components/file/StandardUploadFile'
 export default {
-
+  components: {
+    SUpload,
+    S1Upload,
+    S2Upload
+  }
 }
 </script>

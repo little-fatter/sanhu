@@ -1,3 +1,10 @@
+import { saveAs } from 'file-saver'
+import { downfileHttp } from '@/utils/apiRequest'
+import { message } from 'ant-design-vue'
+import moment from 'moment'
+
+const COVER = '/img/common/cover.jpg'
+
 export function timeFix () {
   const time = new Date()
   const hour = time.getHours()
@@ -290,5 +297,55 @@ export const createPostMessageEvent = (receivePostMessageFunc) => {
     window.addEventListener('message', receiveMessageFromIndex, false)
   } else if (window.attachEvent) {
     window.attachEvent('onmessage', receiveMessageFromIndex)
+  }
+}
+
+/**
+ * 根据文件名判断该文件是否为图片
+ * @param {string} fileName 
+ */
+export const isImg = fileName => {
+  const imgTypes = ['png', 'jpg', 'gif', 'bmp', 'jpeg']
+  let fileType = ''
+  const index = fileName.lastIndexOf('.')
+  if (index > -1) {
+    fileType = fileName.substr(index + 1)
+  }
+  return imgTypes.includes(fileType)
+}
+
+/**
+ * 下载文件
+ * @param {string} url 
+ * @param {string} name 
+ */
+export const downloadFile = async ({ url, name = moment().format('YYYY年MM月DD日'), isOpenBrowser = false} = {}) => {
+  if (isOpenBrowser) {
+    window.open(url)
+  } else {
+    const loading = message.loading('下载中…', 0)
+    try {
+      const res = await downfileHttp({ url })
+      saveAs(res, decodeURI(name))
+      // loading()
+      // message.success('下载成功')
+    } catch (error) {
+      console.error(error)
+      // loading()
+      // message.error('下载失败')
+    }
+    loading()
+  }
+}
+
+/**
+ * 根据图片生成保留短边居中的背景图样式
+ * @param {string} img 
+ */
+export const genImgBackground = (img) => {
+  return {
+    background: `url(${img || COVER})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
   }
 }

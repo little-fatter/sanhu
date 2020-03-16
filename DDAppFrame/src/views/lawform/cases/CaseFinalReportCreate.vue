@@ -1,9 +1,10 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
-      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
-      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
+      <van-cell title="任务标题" :value="taskInfo.TaskTitle"></van-cell>
+      <van-cell title="任务内容" :value="taskInfo.TaskContent"></van-cell>
+      <van-cell title="任务派发时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望完成时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -19,7 +20,7 @@
     </van-cell-group>
     <van-cell-group v-if="caseInfo.CauseOfAction">
       <van-form @submit="onSubmit" @failed="onFailed">
-        <van-cell title="案件号" :value="caseInfo.DocNo"></van-cell>
+        <van-cell title="案件号" :value="caseInfo.CaseNumber"></van-cell>
         <van-cell title="案件类型" :value="caseInfo.CaseType"></van-cell>
         <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
         <party-info-view :initData="penalizeBook.LawParties"></party-info-view>
@@ -64,6 +65,7 @@
 </template>
 
 <script>
+import appConfig from '../../../config/app.config'
 import PartyInfoView from '../../../components/business/PartyInfoView'
 import PenaltyDecisionView from '../../../components/business/PenaltyDecisionView'
 import CaseListSelect from '../../../components/business/CaseListSelect'
@@ -152,7 +154,7 @@ export default {
         if (res) {
           this.penalizeBook = {
             ...res.MainForm,
-            LawParties: res.Party
+            LawParties: res.law_party
           }
           console.log('LawParties', this.penalizeBook)
           this.caseFinalReport.CaseDetail = this.penalizeBook.Illegalfacts + this.penalizeBook.IllegalbasisIDs + this.penalizeBook.PunishmentbasisIDs
@@ -195,27 +197,28 @@ export default {
           EventInfoId: this.caseInfo.EventInfoId,
           caseReport
         }
+        var userInfo = getCurrentUserInfo()
+        const data = {}
+        data.AgentId = parseInt(getAgentId())
+        data.ProcessCode = appConfig.auditCondig.CaseFinalReportProcessCode
+        data.OriginatorUserId = userInfo.userid
+        data.DeptId = userInfo.deptid
+        data.Approvers = getApproverIds(approve)
+        data.FormComponentValues = JSON.stringify(this.getFormComponentValues())
         this.loading = true
-        commonOperateApi('FINISH', 'case_report', model).then((result) => {
-          if (result) {
-            var userInfo = getCurrentUserInfo()
-            const data = {}
-            data.AgentId = parseInt(getAgentId())
-            data.ProcessCode = 'PROC-CEF3CE57-8E80-4718-8B56-44973CF24FA9'
-            data.OriginatorUserId = userInfo.userid
-            data.DeptId = userInfo.deptid
-            data.Approvers = getApproverIds(approve)
-            data.FormComponentValues = JSON.stringify(this.getFormComponentValues())
-            startProcessInstance(data).then(res => {
-              var msg = '提交审批流程成功'
+        startProcessInstance(data).then(res => {
+          model.caseReport.processInstanceId = res.ProcessInstanceId
+          commonOperateApi('FINISH', 'case_report', model).then((result) => {
+            if (result) {
+              var msg = '提交结案报告审批流程成功'
               this.$toast.success(msg)
               this.goToLawForm()
-            }).finally(() => {
+            } else {
               this.loading = false
-            })
-          } else {
+            }
+          }).finally(() => {
             this.loading = false
-          }
+          })
         }).catch(() => {
           this.loading = false
         })
@@ -238,7 +241,7 @@ export default {
           value: this.caseInfo.CauseOfAction
         },
         {
-          name: '案件来源',
+          name: '案件类型',
           value: '网络上报'
         },
         {

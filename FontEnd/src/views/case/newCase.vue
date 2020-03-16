@@ -5,6 +5,15 @@
 
 .margin-bottom30 {
   margin-bottom: 30px;
+  .box {
+    display:inline-block;
+    .boxItem {
+      .span {
+      color:#3A9DFA;
+    margin-bottom: 30px;
+}
+    }
+  }
 }
 
 .margin-bottom15 {
@@ -13,8 +22,6 @@
 
 .case-box {
   background-color: #f4f3f3;
-  // height: 100vh;
-  // overflow: auto;
 
   .case-top {
     padding: 0px 55px;
@@ -72,254 +79,253 @@
 }
 </style>
 <template>
-  <div class="case-box">
-    <div class="case-top">
-      <a-row type="flex" justify="center">
-        <a-col :span="20" class="border-bottom">
-          <span class="page-title-border"></span>
-          <span class="page-title">创建案件</span>
-        </a-col>
-      </a-row>
+  <div>
+    <div>
+      <select-case ref="selectCase" @on-select="selectCase"></select-case>
     </div>
-    <div class="case-body">
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="20">
-          <span class="ant-col-2">案由</span>
-          <span class="ant-col-20">
-            <a-textarea
-              v-model="caseInfo.caseReason"
-              placeholder="请填写案由"
-              :autosize="{ minRows: 2, maxRows: 10 }"
-            />
-          </span>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="10">
-          <span class="ant-col-4">案件类型</span>
-          <span class="ant-col-16">
-            <a-select placeholder="请选择" class="ant-col-24" v-model="caseInfo.caseType" @change="CaseTypeChoiceEvn">
-              <a-select-option v-for="item in Case_Type" :key="item.ID+'@'" :value="item.ItemCode" >{{ item.Title }}</a-select-option>
-            </a-select>
-          </span>
-        </a-col>
-        <a-col :span="10">
-          <span class="ant-col-4">案件来源</span>
-          <span class="ant-col-16">
-            <a-select placeholder="请选择" class="ant-col-24" v-model="caseInfo.caseFrom" @change="CaseSourceEvn">
-              <a-select-option v-for="item in CaseSourceType" :key="item.ID+'@'" :value="item.ItemCode">{{ item.Title }}</a-select-option>
-            </a-select>
-          </span>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="10">
-          <span class="ant-col-4">适用程序</span>
-          <span class="ant-col-16">
-            <a-select placeholder="请选择" class="ant-col-24" v-model="caseInfo.caseFunction" @change="CaseApplicableProcedureTypeEvn">
-              <a-select-option v-for="item in CaseApplicableProcedureType" :key="item.ID+'@'" :value="item.ID">{{ item.Title }}</a-select-option>
-            </a-select>
-          </span>
-        </a-col>
-        <a-col :span="10">
-          <span class="ant-col-4">事发时间</span>
-          <span class="ant-col-16">
-            <a-date-picker
-              showTime
-              placeholder="请选择时间"
-              format="YYYY-MM-DD HH:mm"
-              @change="selectTime"
-            />
-          </span>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="20">
-          <span class="ant-col-2">事发地点</span>
-          <span class="ant-col-20">
-            <a-input defaultValue="请输入事发地点" class="ant-col-24" v-model="caseInfo.caseLocation">
-              <a-button
-                @click="viewMap"
-                slot="addonAfter"
-                type="primary"
-                shape="circle"
-                icon="environment"
-                size="small"
+    <div class="case-box">
+      <div class="case-top">
+        <a-row type="flex" justify="center">
+          <a-col :span="20" class="border-bottom">
+            <span class="page-title-border"></span>
+            <span class="page-title">创建案件</span>
+          </a-col>
+        </a-row>
+      </div>
+      <div class="case-body">
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="20">
+            <span class="ant-col-2">案由</span>
+            <span class="ant-col-20">
+              <a-textarea
+                v-model="caseInfo.CauseOfAction"
+                placeholder="请填写案由"
+                :autosize="{ minRows: 2, maxRows: 10 }"
               />
-            </a-input>
-            <!--    地图查看弹窗-->
-            <a-modal title="请选择位置" :visible="visible" @cancel="handleCancel">
-              <!--<template slot="footer">
-              <a-button @click="handleCancel">取消</a-button>
-              </template>-->
-              <p>展示地图</p>
-            </a-modal>
-          </span>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="20">
-          <span class="ant-col-2">当事人</span>
-          <span class="ant-col-20">
-            <a-button type="primary" @click="addCaseBreakLow">新增当事人</a-button>
-          </span>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center" >
-        <a-col
-          class="margin-bottom15"
-          :span="20"
-          v-for="(item,index) in caseInfo.caseBreakLow"
-          :key="index+'@'">
-          <div class="ant-col-2"></div>
-          <div class="ant-col-20">
-            <span class="ant-col-24 lay_part_info margin-bottom15" >
-              <a-select placeholder="请选择" v-model="item.belong" class="sub_info">
-                <a-select-option value="个人">个人</a-select-option>
-                <a-select-option value="单位">单位</a-select-option>
+            </span>
+          </a-col>
+        </a-row>
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="10">
+            <span class="ant-col-4">案件类型</span>
+            <span class="ant-col-16">
+              <a-select placeholder="请选择" class="ant-col-24" v-model="caseInfo.CaseType" @change="CaseTypeChoiceEvn">
+                <a-select-option v-for="item in Case_Type" :key="item.ID+'@'" :value="item.ItemCode" >{{ item.Title }}</a-select-option>
               </a-select>
-
-              <template v-if="item.belong=='个人'">
-                <a-input placeholder="请输入姓名" v-model="item.name" class="sub_info"/>
-                <a-select placeholder="请选择" v-model="item.sex" class="sub_info">
-                  <a-select-option value="男">男</a-select-option>
-                  <a-select-option value="女">女</a-select-option>
-                </a-select>
-                <a-input placeholder="请输入职业" v-model="item.profession" class="sub_info"/>
-              </template>
-              <template v-else>
-                <a-input placeholder="请输入单位名称" v-model="item.companyName" class=" sub_info_compy"/>
-                <a-input placeholder="请输入法人姓名" v-model="item.legalPerson" class=" sub_info_compy"/>
-              </template>
-              <a-input placeholder="请输入身份证号" v-model="item.idNumber" class="sub_info"/>
             </span>
-            <span class="ant-col-24 lay_part_info" style="justify-content:start">
-              <a-input placeholder="请输入现居住地址" class="sub_info_address" v-model="item.address" />
-              <a-input placeholder="手机号" class="sub_info sub_info_hao" v-model="item.telNumber" />
-              <a-button
-                type="primary"
-                icon="delete"
-                class="sub_info_hao"
-                @click="delCaseBreakLow(index)"
-              >删除</a-button>
+          </a-col>
+          <a-col :span="10">
+            <span class="ant-col-4">案件来源</span>
+            <span class="ant-col-16">
+              <a-select placeholder="请选择" class="ant-col-24" v-model="caseInfo.Sourceofcase" @change="CaseSourceEvn">
+                <a-select-option v-for="item in CaseSourceType" :key="item.ID+'@'" :value="item.ItemCode">{{ item.Title }}</a-select-option>
+              </a-select>
             </span>
-          </div>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="20">
-          <span class="ant-col-2">协办人</span>
-          <span class="ant-col-20">
-            <a-select mode="tags" class="ant-col-9" @change="handleChange" placeholder="请选择">
-              <a-select-option v-for="item in waitingCasePartin" :key="item">{{ item }}</a-select-option>
-            </a-select>
-          </span>
-        </a-col>
-      </a-row>
-      <a-row class="margin-bottom30" type="flex" justify="center">
-        <a-col :span="8">
-          <span class="ant-col-4"></span>
-          <span class="ant-col-16">
-            <a-button block type="primary" icon="check" @click="pushCaseInfo">确认提交</a-button>
-          </span>
-        </a-col>
-      </a-row>
+          </a-col>
+        </a-row>
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="10">
+            <span class="ant-col-4">适用程序</span>
+            <span class="ant-col-16">
+              <a-select placeholder="请选择" class="ant-col-24" v-model="caseInfo.caseFunction" @change="CaseApplicableProcedureTypeEvn">
+                <a-select-option v-for="item in CaseApplicableProcedureType" :key="item.ID+'@'" :value="item.ID">{{ item.Title }}</a-select-option>
+              </a-select>
+            </span>
+          </a-col>
+          <a-col :span="10">
+            <span class="ant-col-4">事发时间</span>
+            <span class="ant-col-16">
+              <a-date-picker
+                showTime
+                placeholder="请选择时间"
+                format="YYYY-MM-DD HH:mm"
+                @change="selectTime"
+              />
+            </span>
+          </a-col>
+        </a-row>
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="20">
+            <span class="ant-col-2">事发地点</span>
+            <span class="ant-col-8">
+              <a-input placeholder="请输入事发地点" class="ant-col-24" v-model="caseInfo.IncidentAddress">
+              </a-input>
+            </span>
+          </a-col>
+        </a-row>
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="20">
+            <span class="ant-col-2">当事人</span>
+            <party-info ref="partyInfo"></party-info>
+          </a-col>
+        </a-row>
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="20">
+            <span class="ant-col-2">协办人</span>
+            <span class="ant-col-20">
+              <a-select class="ant-col-9" labelInValue @change="handleChange" placeholder="请选择">
+                <a-select-option v-for="(item,index) in waitingCasePartin" :value="item.id" :key="index + '12'">{{ item.name }}</a-select-option>
+              </a-select>
+            </span>
+          </a-col>
+        </a-row>
+        <a-row class="margin-bottom30" type="flex" justify="center">
+          <a-col :span="8">
+            <span class="ant-col-4"></span>
+            <span class="ant-col-16">
+              <a-button block type="primary" icon="check" @click="onSubmit">确认提交</a-button>
+            </span>
+          </a-col>
+        </a-row>
+      </div>
+      <a-modal
+        v-model="visible"
+        onOk="handleOk"
+      >
+        <template slot="title">
+          <span v-show="!titleInputShow" @click="titleInputShow = true">{{ taskTitle }}</span>
+        <!-- <a-input v-show="titleInputShow" v-model="taskTitle" @pressEnter="onblur"></a-input> -->
+        </template>
+        <p v-show="!bodyInputShow" @click="bodyInputShow = true">{{ taskContent }}</p>
+        <a-input v-show="bodyInputShow" v-model="taskContent" @pressEnter="onblur"></a-input>
+      </a-modal>
     </div>
   </div>
 </template>
 
 <script>
-import { getDictionary } from '../../api/sampleApi'
+import { getDictionary, commonOperateApi, getDetails } from '../../api/sampleApi'
+import { getCurrentUser } from '../../config/currentUser'
+import PartyInfo from './components/party'
+import SelectCase from '../../components/business/SelectCase'
+import { isNotEmpty } from '../../utils/util'
 export default {
   name: 'NewCase',
+  components: { PartyInfo, SelectCase },
   data () {
     return {
-      visible: false, // 地图弹窗默认不显示,
+      titleInputShow: false,
+      bodyInputShow: false,
+      taskTitle: 'title', // 任务名
+      taskContent: 'content', // 任务内容
+      visible: false, // 弹窗默认不显示,
+      taskInfo: null,
+      event: {},
+      eventInfoId: null,
       caseInfo: {
-        caseNumber: '', // 案件号
-        caseReason: '', // 案由
-        caseType: '请选择', // 案件类型
-        caseFrom: '请选择', // 案件来源
+        CauseOfAction: '', // 案由
+        CaseType: null, // 案件类型
+        Sourceofcase: null, // 案件来源
         caseFunction: '请选择', // 案件适用程序
-        caseTime: '', // 案发时间
-        caseLocation: '请输入事发地点',
-        caseBreakLow: [
-          // 当事人信息组
-          {
-            belong: '个人', // 违规违法人员性质
-            name: '', // 姓名
-            sex: '男', // 性别
-            profession: '', // 职业
-            companyName: '', // 单位名称
-            legalPerson: '', // 法人姓名
-            idNumber: '', // 身份证号
-            address: '', // 住址
-            telNumber: '' // 手机号
-          }
-        ],
-        casePartin: [] // 协办人数组
+        IncidentTime: '', // 案发时间
+        IncidentAddress: '',
+        IncidentAddressXY: '',
+        CoOrganizerId: '',
+        CoOrganizer: '' // 协办人数组
       },
-      waitingCasePartin: ['张柳', '李思', '王琴', '陈华', '黛玉'], // 候选协办人
+      waitingCasePartin: [{ id: '1', name: '张柳' }, { id: '2', name: '李思' }, { id: '3', name: '王琴' }, { id: '4', name: '陈华' }], // 候选协办人
       Case_Type: [], // 案件类型
       CaseSourceType: [], // 案件来源
       CaseApplicableProcedureType: []// 处理程序
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
-    viewMap () {
-      this.visible = true // 显示地图加载模态框
+    selectCase (record) {
+      this.caseInfo = record
+      console.log(record)
     },
-    handleCancel (e) {
-      this.visible = false // 关闭地图模态框
+    onblur () {
+      this.titleInputShow = false
+      this.bodyInputShow = false
     },
-    // 新增当事
-    addCaseBreakLow () {
-      this.caseInfo.caseBreakLow.push({
-        belong: '个人', // 违规违法人员性质
-        name: '', // 姓名
-        sex: '男', // 性别
-        profession: '', // 职业
-        companyName: '', // 单位名称
-        legalPerson: '', // 法人姓名
-        idNumber: '', // 身份证号
-        address: '', // 住址
-        telNumber: '' // 手机号
+    init () {
+      const queryParam = this.$route.query
+      const taskId = queryParam.taskid
+      if (isNotEmpty(taskId)) {
+        this.loadTaskInfo(taskId)
+      }
+      this.getCaseType()
+      this.getCaseSourceType()
+      this.getApplicableProcedureType()
+    },
+    loadTaskInfo (taskId) {
+      getDetails('work_task', taskId).then(res => {
+        this.taskInfo = res
+        this.eventInfoId = res.EventInfoId
+        this.loadEventInfo(res.EventInfoId)
       })
     },
-    // 删除当事人
-    delCaseBreakLow (index) {
-      if (this.caseInfo.caseBreakLow.length <= 1) {
-        alert('最少有一个当事人')
+    loadEventInfo (EventInfoId) {
+      getDetails('event_info', EventInfoId).then((res) => {
+        if (res) {
+          this.event = res
+        }
+      })
+    },
+    onSubmit () {
+      var caseBreakLow = this.$refs.partyInfo.getResult()
+      var caseInfo = {
+        ...this.caseInfo,
+        caseBreakLow: caseBreakLow,
+        IncidentAddressXY: this.caseInfo.IncidentAddressXY
+      }
+      var data = {
+        SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
+        EventInfoId: this.eventInfoId,
+        caseInfo,
+        NextTasks: []
+      }
+      data.LawParties = caseBreakLow
+      // var userInfo = getCurrentUser()
+      var nextTask = null
+      nextTask = {
+        TaskType: '1', // 任务类型
+        AssignUsers: '165906044420484870', // 执行人
+        TaskContent: this.taskContent, // 任务描述
+        EventInfoId: this.eventInfoId, // 事件id
+        CaseID: '', // 案件id
+        ExpectedCompletionTime: '2020-02-03', // 期望完成时间
+        MainHandler: '测试主办人', // 主办人
+        CoOrganizer: '协办人', // 协办人
+        TaskTitle: this.taskTitle, // 任务标题
+        TaskImg: '', // 任务图片
+        AppLinks: '', // app跳转地址
+        PCLinks: '' // pc跳转地址
+      }
+      data.NextTasks.push(nextTask)
+      if (isNotEmpty(caseInfo.CauseOfAction) && isNotEmpty(caseInfo.CoOrganizer)) {
+        this.save(data)
       } else {
-        this.caseInfo.caseBreakLow.splice(index, 1)
+        this.$message.error('填写不完整', 1)
       }
     },
-    // 案件号生成
-    caseNumber () {
-      // 生成案件编号
-      const date = new Date()
-      // 此处应该获取后台最后一个案件的编号
-      const testCaseNmuber = '20201234' // 测试的案件编号
-      if (testCaseNmuber === '') {
-        this.caseInfo.caseNumber = date.getFullYear() + '1'
-      } else {
-        const lastNumber = testCaseNmuber.slice(4) // 获取除开年份的案件编号
-        this.caseInfo.caseNumber = date.getFullYear().toString() + (lastNumber - 0 + 1)
-      }
-      console.log('这是生成的案件号：' + this.caseInfo.caseNumber)
+    save (data) {
+      commonOperateApi('FINISH', 'case_Info', data).then((res) => {
+        if (res) {
+          this.$message.success('创建成功', 1)
+          this.$router.push('/data-manage/form/form-add-list')
+        } else {
+          this.$message.error('创建失败', 1)
+        }
+      }).finally(() => {
+      })
     },
     // 协办人输入
-    handleChange (value) {
-      this.caseInfo.casePartin = []
-      this.caseInfo.casePartin = value
+    handleChange (value, index) {
+      this.caseInfo.CoOrganizer = value.label
+      this.caseInfo.CoOrganizerId = value.key
     },
     // 案发时间选择
     selectTime (value, dateString) {
-      this.caseInfo.caseTime = dateString
+      this.caseInfo.IncidentTime = dateString
     },
     // 获取案件类型
     getCaseType () {
       getDictionary({ model: 'res_dictionary', context: 'CaseType' }).then(res => {
+        console.log(res)
         res.map(item => {
           this.Case_Type.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
         })
@@ -349,35 +355,25 @@ export default {
     },
     // 选中的案件类型
     CaseTypeChoiceEvn (msg) {
-      this.caseInfo.caseType = msg
+      this.caseInfo.CaseType = msg
     },
     // 选中的案件来源
     CaseSourceEvn (msg) {
-      this.caseInfo.caseFrom = msg
+      this.caseInfo.Sourceofcase = msg
     },
     // 选中案件 处理程序
     CaseApplicableProcedureTypeEvn (msg) {
       console.log(msg)
-    },
-    // 提交新建案件
-    pushCaseInfo () {
     }
   },
   // 生命周期钩子
   mounted () {
-    // 案件号生成
-    this.caseNumber()
-    // 获案件类型
-    this.getCaseType()
-    // 获取案件来源
-    this.getCaseSourceType()
-    // 获取案件适用程序
-    this.getApplicableProcedureType()
+    this.$refs.selectCase.open()
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 /deep/ .ant-calendar-picker {
   width: 100% !important;
 }

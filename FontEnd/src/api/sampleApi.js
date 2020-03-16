@@ -1,11 +1,12 @@
 import { getHttp, postHttp } from '@/utils/apiRequest'
 import apiConfig from '@/config/api.config'
+const defaultCondition = { 'rules': [], 'groups': [], 'op': 'and' }
 
 function condition (params = {}, pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
-      groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
+      groups: (params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? [params] : [],
       op: 'and'
     },
     PageIndex: pageiIndex,
@@ -15,20 +16,35 @@ function condition (params = {}, pageiIndex = 1, pageSize = 10) {
   }
 }
 
-// function condition (params = {}, pageiIndex = 1, pageSize = 10) {
-//   return {
-//     Condition: {
-//       rules: [],
-//       groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
-//       op: 'and'
-//     },
-//     PageIndex: pageiIndex,
-//     PageSize: pageSize,
-//     SortName: 'ID',
-//     SortOrder: 'asc'
-//   }
-// }
-
+/**
+ * 根据过滤器获取详情接口
+ * @param {*} model 模块名称
+ * @param {*} Condition 查询条件
+ */
+export const getDetialdataByfilter = (model, Condition = defaultCondition) => {
+  return postHttp({
+    url: apiConfig.detail,
+    data: {
+      model,
+      filter: Condition
+    }
+  })
+}
+/**
+ * 根据事件ID获取详情接口
+ * @param {*} model 模块名称
+ * @param {*} eventInfoId 事件ID
+ */
+export const getDetialdataByEventInfoId = (model, eventInfoId) => {
+  var rules = [{
+    field: 'EventInfoId',
+    op: 'equal',
+    value: eventInfoId,
+    type: 'string'
+  }]
+  var conditons = condition({ rules: rules, op: 'and' })
+  return getDetialdataByfilter(model, conditons)
+}
 function relatedCon (params = {}, pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
@@ -106,6 +122,54 @@ export function getFormDetail (model, eventInfoid = null, formId = null, filterM
         eventInfoid,
         formId,
         filterModels
+      }
+    }
+  })
+}
+/**
+ * 通用操作接口
+ * @param {*} id 操作标识
+ * @param {*} model 模块名称
+ * @param {*} data 数据对象
+ * @param {*} context
+ */
+export const commonOperateApi = (id, model, data, context = '') => {
+  var dataStr = JSON.stringify(data)
+  return postHttp({
+    url: apiConfig.commonOperateApi,
+    data: {
+      id,
+      model,
+      data: dataStr,
+      context
+    }
+  })
+}
+
+/**
+ * 发起审批流程
+ * @param {*} parameter
+ */
+export const startProcessInstance = (parameter) => {
+  return postHttp({
+    url: apiConfig.startProcessInstance,
+    data: parameter
+  })
+}
+/**
+ * 根据表单ID获取PDF
+ * @param {*} eventInfoid
+ * @param {*} model
+ */
+export const getFormsDetailByEventInfoIdPdf = (formId = '', formType = '') => {
+  return postHttp({
+    url: apiConfig.commonOperateApi,
+    data: {
+      id: '',
+      model: 'form_printPDF',
+      data: {
+        formId,
+        formType
       }
     }
   })

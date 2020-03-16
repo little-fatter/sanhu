@@ -5,7 +5,12 @@
       <van-tag type="success">{{ caseInfo.CaseStatus }}</van-tag>
     </div>
     <van-cell-group>
-      <van-cell :title="caseInfo.caseTitle" title-class="title-cell title-cell-div" />
+      <template v-if="caseInfo.CaseTitle===''|| caseInfo.CaseTitle=== null">
+        <van-cell title="案件测试标题" title-class="title-cell title-cell-div" />
+      </template>
+      <template v-else>
+        <van-cell :title="caseInfo.CaseTitle" title-class="title-cell title-cell-div" />
+      </template>
       <van-cell title="案件类型" :value="caseInfo.CauseOfAction" value-class="con-style" title-class="title-cell" />
       <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
       <template>
@@ -36,7 +41,7 @@
       <van-cell title="结案日期" :value="caseInfo.CaseCloseDay" value-class="con-style" title-class="title-cell" />
       <van-cell title="办案人员" :value="caseInfo.Investigators" value-class="con-style" title-class="title-cell" />
       <van-cell title="归档人员" :value="caseInfo.DocPeople" value-class="con-style" title-class="title-cell" />
-      <van-cell title="归档号" :value="caseInfo.DocNo" value-class="con-style" title-class="title-cell" />
+      <van-cell title="归档号" :value="caseInfo.CaseNumber" value-class="con-style" title-class="title-cell" />
       <van-cell title="保存期限" :value="caseInfo.DocRetentionTimes" value-class="con-style" title-class="title-cell" />
     </van-cell-group>
     <!--        地图加载-->
@@ -122,7 +127,7 @@ export default {
       // 请求案件详情
       getDetaildata('case_Info', this.caseId).then((res) => {
         this.caseInfo = res
-        // console.log('案件详情', this.caseInfo)
+        console.log('案件详情', this.caseInfo)
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {
