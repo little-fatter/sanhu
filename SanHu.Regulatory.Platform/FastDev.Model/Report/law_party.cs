@@ -79,7 +79,12 @@ public string Typesofparties
 get;
 set;
 }
-public string FormState
+public string InquiryType
+{
+get;
+set;
+}
+public string SignImg
 {
 get;
 set;
