@@ -42,7 +42,7 @@
             border-top: 1px solid #DCDEE2;
       }
       .box {
-        margin-top:20px;
+        // margin-top:20px;
         .row {
       padding: 10px;
       .colLine {
@@ -134,7 +134,7 @@
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">上报来源：</a-col>
-          <a-col class="colSize contentColor" :span="12">{{ eventInfo.ReportSource }}</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ eventInfo.ReportSource || '公众号举报' }}</a-col>
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">上报人：</a-col>
