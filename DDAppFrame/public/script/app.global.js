@@ -17,8 +17,8 @@ var publicAppConfig = {
     appHost: {
       admin: 'http://182.150.28.58:27011/framework',
       file: 'http://182.150.28.58:27012/filesystem',
-      // regulatory: 'http://192.168.0.125:8030/webapi',
-      regulatory: 'http://14.205.92.142:10680/webapi',
+      regulatory: 'http://192.168.0.125:8030/webapi',
+      // regulatory: 'http://14.205.92.142:10680/webapi',
       // 四方德信接口
       sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
     },
