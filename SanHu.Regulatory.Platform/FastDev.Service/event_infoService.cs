@@ -2,7 +2,6 @@
 using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
-using FD.Model.Dto;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -109,8 +108,6 @@ namespace FastDev.Service
                     return Handle;
                 case "STATECOUNT":
                     return HandleState;
-                case "SFAPI":
-                    return HandleSF;
             }
             return null;
         }
@@ -159,21 +156,6 @@ namespace FastDev.Service
             //QueryDb.CompleteTransaction();
             
             return retList;
-        }
-
-        object HandleSF(APIContext context)
-        {
-            var data = JsonHelper.DeserializeJsonToObject<SFApiDTO>(context.Data);
-
-            var client = new HttpClient();
-            var content = new StringContent(JsonConvert.SerializeObject(new { id = data.ObjId }));
-            var response = client.PostAsync(string.Format("http://yuxi.mysinosoft.com/yuxi/api/{0}/{1}", data.ObjId, data.ApiType), content).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                System.Threading.Tasks.Task<string> t = response.Content.ReadAsStringAsync();
-                return t.Result;
-            }
-            return null;
         }
 
         private void Event_InfoService_OnAfterGetPagedData(object query, object data)
