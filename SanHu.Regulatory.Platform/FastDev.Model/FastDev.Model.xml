@@ -234,6 +234,11 @@
             业务类型枚举Item值
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.SFApiDTO">
+            <summary>
+            请求四方德信平台api输入数据
+            </summary>
+        </member>
         <member name="T:FD.Model.Dto.TaskNextStepReq">
             <summary>
             任务下一步

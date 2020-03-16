@@ -16,7 +16,8 @@
         <field name="Associatedobjecttype" dbName="Associatedobjecttype" title="关联对象" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="Occupation" dbName="Occupation" title="当事人职业" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="Typesofparties" dbName="Typesofparties" title="当事人类型" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name="FormState" dbName="FormState" title="表单状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="InquiryType" dbName="InquiryType" title="询问类型" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="SignImg" dbName="SignImg" title="签名" type="text" length="4000" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

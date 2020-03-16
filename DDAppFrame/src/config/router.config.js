@@ -162,7 +162,7 @@ export const asyncRouterMap = [{
         component: () => import('@/views/details/SubmitForm.vue'),
         meta: {
           title: '我提交的表单',
-          keepAlive: false
+          keepAlive: true
         }
       },
       {

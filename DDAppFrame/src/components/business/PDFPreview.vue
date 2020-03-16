@@ -1,12 +1,6 @@
 <template>
   <div>
     <div class="pdf-wapper">
-      <!-- <pdf
-        ref="pdf"
-        :src="pdfUrl">
-      </pdf>
-      <slot></slot> -->
-
       <pdf ref="pdf" :page="1" :src="pdfUrl" @num-pages="pageCount = $event" />
       <template v-if="pageCount > 1">
         <template v-for="item in (pageCount - 1)">
@@ -79,11 +73,16 @@ export default {
     fileName: {
       type: String,
       default: ''
+    },
+    maxPage: {
+      type: Number,
+      default: 5
     }
   },
   data () {
     return {
-      pdfUrl: ''
+      pdfUrl: '',
+      pageCount: 0
     }
   },
   watch: {

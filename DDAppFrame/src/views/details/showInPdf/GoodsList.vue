@@ -27,8 +27,6 @@ export default {
     getFormInfo () {
       getFormsDetailByEventInfoIdPdf(this.FormID, this.FormType)
         .then((res) => {
-          console.log(res, 11111111111111111111111111111111)
-
           this.PdfFileUrl = res // PDF 文件路径
           this.PdfFileName = this.FormType
         })
