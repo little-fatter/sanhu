@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="patrol_points" title="巡查轨迹点" textField="UserId" moduleName="zhzx" moduleTitle="指挥中心" dbName="" />
+    <fields>
+        <field name="UserId" dbName="UserId" title="执行人员ID" type="string" length="50" enabledSearch="Y" isPK="N" />
+        <field name="lng" dbName="lng" title="百度坐标经度" type="string" length="50" isPK="N" />
+        <field name="lat" dbName="lat" title="百度坐标纬度" type="string" length="50" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

@@ -34,6 +34,10 @@ namespace FastDev.Service
                 CreateInfo(data.CaseReport);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
+
+                //打印预生成
+                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.CaseReport.ID + @""",""formName"":""case_report""}" });
             }
             catch (Exception e)
             {

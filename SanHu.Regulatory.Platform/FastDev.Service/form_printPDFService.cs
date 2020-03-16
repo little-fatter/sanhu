@@ -125,7 +125,7 @@ namespace FastDev.Service
             return FilePath;
         }
 
-        private object AsposeToPdf(APIContext context)
+        public object AsposeToPdf(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
             string templatePath = $"wwwroot/pdf/{data.formName}.doc";
@@ -138,7 +138,6 @@ namespace FastDev.Service
                     return QueryDb.FirstOrDefault<form_printPDF>("where FormId = @0", data.formID).FilePath;
 
                 //根据模板名的相关数据更改模板目标 只能swith固定死
-
                 //获取替换数据 无数据抛异常
                 var pDic = new Dictionary<string, string>();
                 var jsonData = FormData(new FormDataReq() { FormId = data.formID, Model = data.formName, FilterModels = new string[] { "law_staff", "law_party" } });
@@ -192,6 +191,12 @@ namespace FastDev.Service
                                         if (!pDic.ContainsKey("Type"))
                                             pDic.Add("Type", type[type.Count - 1]);
                                     }
+                                    else if (j.Key == "Objectofinquiry" && (j.Value is IList<string>))
+                                    {
+                                        var type = j.Value as List<string>;
+                                        if (!pDic.ContainsKey("Type"))
+                                            pDic.Add("Type", type[type.Count - 1]);
+                                    }
                                 }
                             }
                             if (main.ContainsKey("CaseId") && main["CaseId"] != null)
@@ -216,6 +221,27 @@ namespace FastDev.Service
                     }
 
                 }
+
+                //特殊处理
+                if (data.formName == "form_inquiryrecord" && pDic.ContainsKey("Type"))
+                {
+                    //判断类型
+                    switch (pDic["Type"])
+                    {
+                        case "当事人":
+                            templatePath = $"wwwroot/pdf/{data.formName}1.doc";
+                            break;
+                        case "证人":
+                            templatePath = $"wwwroot/pdf/{data.formName}2.doc";
+                            break;
+                        case "第三人":
+                            templatePath = $"wwwroot/pdf/{data.formName}3.doc";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 //字典存入完毕 开启并替换
                 FilePath = ReplaceAspose(templatePath, pDic, false);
 

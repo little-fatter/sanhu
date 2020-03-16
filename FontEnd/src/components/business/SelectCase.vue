@@ -105,7 +105,7 @@ export default {
   methods: {
     // 打开弹窗， query：列表查询条件
     open (query = {}) {
-      Object.assign(this.queryParam, query)
+      Object.assign(this.queryParam, { Keyword: '' }, query)
       this.$refs.modal.open()
       this.$nextTick(() => this.$refs.list.loadData(true))
     },

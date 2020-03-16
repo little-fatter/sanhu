@@ -2,13 +2,13 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-11 13:45:41
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-11 16:08:33
+ * @LastEditTime: 2020-03-13 10:41:15
  * @Description:  通用列表组件
  -->
 
 <template>
   <div class="list">
-    <div class="list-container" :class="{ optimize: this.optimizeScrollBar }">
+    <div class="list-container" :class="{ 'scroll-small': this.optimizeScrollBar }">
       <a-spin :spinning="loading">
         <slot :list="list" />
       </a-spin>
@@ -98,22 +98,6 @@ export default {
     height: 0;
     flex: 1;
     overflow-y: auto;
-    &.optimize {
-      &::-webkit-scrollbar {
-        width: 3px;
-        height: 1px;
-      }
-      &::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        box-shadow: none;
-        background: #dcdee2;
-      }
-      &::-webkit-scrollbar-track {
-        box-shadow: none;
-        border-radius: 5px;
-        background: #f6f6f6;
-      }
-    }
   }
   &-pagination {
     padding-top: 10px;
