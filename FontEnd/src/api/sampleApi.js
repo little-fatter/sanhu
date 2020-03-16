@@ -156,3 +156,21 @@ export const startProcessInstance = (parameter) => {
     data: parameter
   })
 }
+/**
+ * 根据表单ID获取PDF
+ * @param {*} eventInfoid
+ * @param {*} model
+ */
+export const getFormsDetailByEventInfoIdPdf = (formId = '', formType = '') => {
+  return postHttp({
+    url: apiConfig.commonOperateApi,
+    data: {
+      id: '',
+      model: 'form_printPDF',
+      data: {
+        formId,
+        formType
+      }
+    }
+  })
+}
