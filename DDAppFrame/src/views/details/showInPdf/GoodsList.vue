@@ -1,8 +1,8 @@
 <!--没收物品清单 PDF展示页面-->
 <template>
   <div class="">
-    <!-- <PdfShow ref="pdf" :fileUrl="PdfFileUrl" :fileName="PdfFileName">
-    </PdfShow> -->
+    <PdfShow ref="pdf" :fileUrl="PdfFileUrl" :fileName="PdfFileName">
+    </PdfShow>
   </div>
 </template>
 
@@ -15,32 +15,29 @@ export default {
   },
   data () {
     return {
-      PdfFileUrl: 'TestPdfFileUrl', // PDF 文件路径
-      PdfFileName: 'TestPdfFileName', // PDF 文件名称
+      PdfFileUrl: '', // PDF 文件路径
+      PdfFileName: '', // PDF 文件名称
       FormID: '', // 表单id
-      Model: '' // 模型名称
+      FormType: '' // 表单类型
     }
   },
 
   methods: {
     // 获取表单详情
     getFormInfo () {
-      // getFormsDetailByEventInfoId(null, 'form_confiscated_item', this.FormID, null).then((res) => {
-      //   console.log(res.MainForm, 123456789)
-      //   // this.lawPartyInfoL = res.Rows
-      // })
-      console.log(this.FormID, 123456)
-
-      getFormsDetailByEventInfoIdPdf('1e400234-d9e3-4dd8-85ef-3a3fdd549099', 'form_confiscated_item')
+      getFormsDetailByEventInfoIdPdf(this.FormID, this.FormType)
         .then((res) => {
-          console.log(res, 6666666666666666666666666666666666666)
-        // this.lawPartyInfoL = res.Rows
+          console.log(res, 11111111111111111111111111111111)
+
+          this.PdfFileUrl = res // PDF 文件路径
+          this.PdfFileName = this.FormType
         })
     }
   },
 
   mounted () {
-    this.FormID = this.$route.query.id // 准备接受传过来的参数
+    this.FormID = this.$route.query.msg.FormID // 表单ID
+    this.FormType = this.$route.query.msg.FormType // 表单类型
     this.getFormInfo()
   }
 }

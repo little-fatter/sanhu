@@ -318,25 +318,25 @@ export default {
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === 'form_confiscated_item') {
         // 物品清单
-        this.$router.push({ path: '/goodsList', query: { id: item.FormID } })
+        this.$router.push({ path: '/goodsList', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
       } else if (item.FormType === 'case_info') {
         // 案件详情
         this.$router.push({ path: '/caseDetails', query: { id: item.FormID } })
       } else if (item.FormType === 'law_punishmentInfo') {
         // 处罚当场决定书
-        this.$router.push({ path: '/PromptlyPunishNote', query: { id: item.CaseId } })
+        this.$router.push({ path: '/PromptlyPunishNote', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
       } else if (item.FormType === 'form_inquestrecord') {
         // 勘验记录
-        this.$router.push({ path: '/RecordOfInquest', query: { id: item.CaseId } })
+        this.$router.push({ path: '/RecordOfInquest', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
       } else if (item.FormType === 'case_report') {
         // 结案报告
-        this.$router.push({ path: '/caseReport', query: { id: item.CaseId } })
+        this.$router.push({ path: '/caseReport', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
       } else if (item.FormType === 'case_cover') {
         // 卷宗封面
         this.$router.push({ path: '/form_inquiryrecord', query: { id: item.CaseId } })
       } else if (item.FormType === 'form_inquiryrecord_third') {
         // 询问第三人笔录
-        this.$router.push({ path: '/AskThirdPartyNote', query: { id: item.CaseId } })
+        this.$router.push({ path: '/AskThirdPartyNote', query: { msg: { FormID: item.FormID, FormType: item.FormType } } })
       } else if (item.FormType === 'form_inquiryrecord_litigant') {
         // 询问当事人笔录
         this.$router.push({ path: '/AskPartyNote', query: { id: item.CaseId } })

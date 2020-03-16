@@ -1,11 +1,23 @@
 <template>
   <div>
     <div class="pdf-wapper">
-      <pdf
+      <!-- <pdf
         ref="pdf"
-        :src="fileUrl">
+        :src="pdfUrl">
       </pdf>
-      <slot></slot>
+      <slot></slot> -->
+
+      <pdf ref="pdf" :page="1" :src="pdfUrl" @num-pages="pageCount = $event" />
+      <template v-if="pageCount > 1">
+        <template v-for="item in (pageCount - 1)">
+          <pdf
+            v-if="item <= maxPage"
+            :key="item"
+            :page="item + 1"
+            :src="pdfUrl" />
+        </template>
+      </template>
+
     </div>
 
     <div class="operate-area-center">
@@ -45,6 +57,8 @@
  */
 import pdf from 'vue-pdf'
 import { saveAs } from 'file-saver'
+import appConfig from '../../config/app.config'
+import { isNotEmpty } from '../../utils/util'
 export default {
   name: 'PDFPreview',
   components: {
@@ -69,12 +83,23 @@ export default {
   },
   data () {
     return {
+      pdfUrl: ''
+    }
+  },
+  watch: {
+    fileUrl (val) {
+      this.init()
     }
   },
   created () {
-
+    this.init()
   },
   methods: {
+    init () {
+      if (isNotEmpty(this.fileUrl)) {
+        this.pdfUrl = appConfig.pdfHost + this.fileUrl
+      }
+    },
     pdfPrint () {
       this.$refs.pdf.print()
     },
@@ -83,7 +108,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.fileUrl, this.fileName)
   }
 }
 </script>
