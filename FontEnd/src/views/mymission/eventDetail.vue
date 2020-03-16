@@ -128,11 +128,11 @@
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">上报来源：</a-col>
-          <a-col class="colSize contentColor" :span="12">{{ eventInfo.ReportSource }}</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ eventInfo.ReportSource || ' 公众号举报' }}</a-col>
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">上报人：</a-col>
-          <a-col class="colSize contentColor" :span="12">{{ eventInfo.reportreporterNameTime }}</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ eventInfo.reporterName }}</a-col>
         </a-row>
         <!-- <a-row class="row">
           <a-col class="colSize colLine" :span="4">当事人：</a-col>
@@ -197,7 +197,7 @@
 </template>
 
 <script>
-import { getDetails, getFormsDetailByEventInfoId } from '@/api/sampleApi'
+import { getDetails, getFormDetail } from '@/api/sampleApi'
 import {
   isNotEmpty
 } from '../../utils/util'
@@ -221,11 +221,15 @@ export default {
       const queryParam = this.$route.query
       const id = queryParam.id || 'd652c736-609b-41b3-a491-90828bf32d25'
       // 请求事件巡查详情
-      getDetails('task_patrol', id).then(res => {
-        if (isNotEmpty(res.TaskId)) {
-          getDetails('work_task', res.TaskId).then(res => {
-            this.loadEventInfo(res.EventInfoId)
-          })
+      getFormDetail('task_patrol', null, id).then(res => {
+        if (isNotEmpty(res)) {
+          this.lawStaff = res.law_staff
+          this.loadData = {
+            ...res.MainForm,
+            LawParties: res.law_party,
+            Attachment: res.attachment
+          }
+          this.loadEventInfo(res.MainForm.EventInfoId)
         }
       })
     },
@@ -234,20 +238,6 @@ export default {
       getDetails('event_info', EventInfoId).then(res => {
         if (res) {
           this.eventInfo = res
-          this.loadEventCheck(EventInfoId)
-        }
-      })
-    },
-    // 获取表单信息
-    loadEventCheck (EventInfoId) {
-      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then(res => {
-        if (res) {
-          this.loadData = {
-            ...res.MainForm,
-            LawParties: res.Party,
-            Attachment: res.Attachment
-          }
-          console.log(this.loadData)
         }
       })
     }

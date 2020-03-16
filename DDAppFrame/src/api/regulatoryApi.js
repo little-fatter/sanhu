@@ -115,7 +115,24 @@ export const getFormsDetailByEventInfoId = (eventInfoid = null, model, formId = 
     }
   })
 }
-
+/**
+ * 根据表单ID获取PDF
+ * @param {*} eventInfoid
+ * @param {*} model
+ */
+export const getFormsDetailByEventInfoIdPdf = (formId = '', formType = '') => {
+  return postHttp({
+    url: apiConfig.regulatory.commonOperateApi,
+    data: {
+      id: '',
+      model: 'form_printPDF',
+      data: {
+        formId,
+        formType
+      }
+    }
+  })
+}
 /**
  * 通用操作接口
  * @param {*} id 操作标识
