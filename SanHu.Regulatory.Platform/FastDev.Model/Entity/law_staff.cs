@@ -44,12 +44,7 @@ public string Associatedobjecttype
 get;
 set;
 }
-public string FormState
-{
-get;
-set;
-}
-public string LawenforcementcertificateNo
+public string SignImg
 {
 get;
 set;
