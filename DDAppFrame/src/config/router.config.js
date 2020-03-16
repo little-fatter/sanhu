@@ -240,8 +240,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/AskPartyNote.vue',
-        name: 'AskPartyNote.vue',
+        path: '/AskPartyNote',
+        name: 'AskPartyNote',
         component: () => import('@/views/details/showInPdf/AskPartyNote.vue'),
         meta: {
           title: '询问当事人笔录',
@@ -249,8 +249,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/AskWitnessNote.vue',
-        name: 'AskWitnessNote.vue',
+        path: '/AskWitnessNote',
+        name: 'AskWitnessNote',
         component: () => import('@/views/details/showInPdf/AskWitnessNote.vue'),
         meta: {
           title: '询问证人笔录',
@@ -258,8 +258,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/AskThirdPartyNote.vue',
-        name: 'AskThirdPartyNote.vue',
+        path: '/AskThirdPartyNote',
+        name: 'AskThirdPartyNote',
         component: () => import('@/views/details/showInPdf/AskThirdPartyNote.vue'),
         meta: {
           title: '询问第三人笔录',
@@ -267,8 +267,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/PromptlyPunishNote.vue',
-        name: 'PromptlyPunishNote.vue',
+        path: '/PromptlyPunishNote',
+        name: 'PromptlyPunishNote',
         component: () => import('@/views/details/showInPdf/PromptlyPunishNote.vue'),
         meta: {
           title: '当场处罚决定书',
@@ -276,8 +276,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/ConfiscateGoodsBills.vue',
-        name: 'ConfiscateGoodsBills.vue',
+        path: '/ConfiscateGoodsBills',
+        name: 'ConfiscateGoodsBills',
         component: () => import('@/views/details/showInPdf/ConfiscateGoodsBills.vue'),
         meta: {
           title: '没收物品凭证',
@@ -285,8 +285,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/goodsList.vue',
-        name: 'goodsList.vue',
+        path: '/goodsList',
+        name: 'goodsList',
         component: () => import('@/views/details/showInPdf/GoodsList.vue'),
         meta: {
           title: '物品清单',
@@ -294,8 +294,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/CaseClosingReportSingle.vue',
-        name: 'CaseClosingReportSingle.vue',
+        path: '/CaseClosingReportSingle',
+        name: 'CaseClosingReportSingle',
         component: () => import('@/views/details/showInPdf/CaseClosingReportSingle.vue'),
         meta: {
           title: ' 行政处罚案件结案报告（个人）',
@@ -303,8 +303,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/CaseClosingReportCompany.vue',
-        name: 'CaseClosingReportCompany.vue',
+        path: '/CaseClosingReportCompany',
+        name: 'CaseClosingReportCompany',
         component: () => import('@/views/details/showInPdf/CaseClosingReportCompany.vue'),
         meta: {
           title: ' 行政处罚案件结案报告（企业）',
@@ -312,8 +312,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/CaseClosingReportNormal.vue',
-        name: 'CaseClosingReportNormal.vue',
+        path: '/CaseClosingReportNormal',
+        name: 'CaseClosingReportNormal',
         component: () => import('@/views/details/showInPdf/CaseClosingReportNormal.vue'),
         meta: {
           title: ' 行政处罚案件结案报告（通用）', // 看后面情况是否使用
@@ -321,8 +321,8 @@ export const asyncRouterMap = [{
         }
       },
       {
-        path: '/caseReport.vue',
-        name: 'caseReport.vue',
+        path: '/caseReport',
+        name: 'caseReport',
         component: () => import('@/views/details/showInPdf/CaseReport.vue'),
         meta: {
           title: '结案报告', // 看后面情况是否使用

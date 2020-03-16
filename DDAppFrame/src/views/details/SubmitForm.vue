@@ -301,7 +301,6 @@ export default {
     // 去详情
     goTodetail (item) {
       console.log(item, '跳转信息')
-
       /**
        *
         物品清单 form_confiscated_item
@@ -319,7 +318,6 @@ export default {
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === 'form_confiscated_item') {
         // 物品清单
-        console.log(1111111111111111111111111111111)
         this.$router.push({ path: '/goodsList', query: { id: item.FormID } })
       } else if (item.FormType === 'case_info') {
         // 案件详情
