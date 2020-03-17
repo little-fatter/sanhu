@@ -17,8 +17,8 @@ var publicAppConfig = {
     appHost: {
       admin: 'http://182.150.28.58:27011/framework',
       file: 'http://182.150.28.58:27012/filesystem',
-      regulatory: 'http://192.168.11.49:8082/webapi', // 黎朗机器
-      // regulatory: 'http://192.168.0.125:8030/webapi', // 唐周机器
+      // regulatory: 'http://192.168.11.49:8082/webapi', // 黎朗机器
+      regulatory: 'http://192.168.0.125:8030/webapi', // 唐周机器
       // regulatory: 'http://192.168.0.169:8030/webapi',  // 本地公用服务器
       // regulatory: 'http://14.205.92.142:10680/webapi', // 远程服务器
       // 四方德信接口
@@ -58,7 +58,7 @@ var publicAppConfig = {
   },
   /** 配置pc站点host,用于任务PC链接 */
   pcHost: '',
-  pdfHost: 'http://192.168.11.49:8082/', // PDF 路径配置
+  pdfHost: 'http://192.168.0.125:8083/', // PDF 路径配置
   /**
      * 请求超时的毫秒数
      */
