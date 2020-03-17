@@ -61,7 +61,7 @@ export default {
   methods: {
     init () {
       this.id = this.$route.query.id || 'e68050bf-e3a6-44dc-949b-f35e996606e2'
-      this.formType = this.$route.query.formType || 'law_punishmentInfo'
+      this.formType = this.$route.query.formType || 'form_inquiryrecord_third'
       if (isNotEmpty(this.id)) {
         this.loadData(this.id)
       }
@@ -75,7 +75,7 @@ export default {
       const FormID = '47f6f786-f478-4948-9705-1918cac58f23'
       getFormsDetailByEventInfoIdPdf(FormID, this.formType).then(res => {
         if (isNotEmpty(res)) {
-          this.pdf = `http://192.168.0.169:8030/${res}`
+          this.pdf = `http://192.168.0.125:8030/${res}`
           console.log('loadData -> this.pdf', this.pdf)
         }
       })

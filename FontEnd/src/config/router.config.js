@@ -14,7 +14,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BlankLayout,
     meta: { title: '首页' },
-    redirect: '/data-manage/form/judgment-detail', // 临时定向开发页面
+    redirect: '/data-manage/form/record-check-detail', // 临时定向开发页面
     children: [
       {
         path: 'mission',
@@ -140,12 +140,20 @@ export const asyncRouterMap = [
               { // 行政处罚决定书详情
                 path: 'judgment-detail',
                 name: 'judgmentDetail',
-                component: () => import('@/views/form/judgmentDetail')
+                component: () => import('@/views/form/judgmentDetail'),
+                meta: { title: '行政处罚决定书详情', keepAlive: false }
               },
               { // 勘验笔录详情
-                path: 'record-detail',
-                name: 'recordDetail',
-                component: () => import('@/views/form/recordDetail')
+                path: 'record-check-detail',
+                name: 'recordCheckDetail',
+                component: () => import('@/views/form/recordCheckDetail'),
+                meta: { title: '勘验笔录详情', keepAlive: false }
+              },
+              { // 勘验笔录详情
+                path: 'record-query-detail',
+                name: 'recordQueryDetail',
+                component: () => import('@/views/form/recordQueryDetail'),
+                meta: { title: '询问笔录详情', keepAlive: false }
               }
             ]
           },
