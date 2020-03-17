@@ -2,143 +2,190 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-11 09:52:57
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-13 17:31:34
+ * @LastEditTime: 2020-03-17 14:43:52
  * @Description:  案件详情
  -->
 
 <template>
   <div class="case-detail">
-    <panel hide-header>
+    <panel hide-header :body-style="{ padding: 0 }">
       <div class="case-detail-top">
         <span class="case-detail-title">案〔2020〕3206号</span>
         <span class="case-detail-status">已结案</span>
       </div>
       <div class="case-detail-tab">
-        <div>案件详情</div>
-        <div>案卷列表</div>
+        <div
+          class="case-detail-tab-item"
+          v-for="(item, index) in tabs"
+          :key="item"
+          :class="{ active: current === index }"
+          @click="current = index"
+        >{{ item }}</div>
       </div>
     </panel>
-    <panel title="基本信息">
-      <info-panel :data="baseinfo" :columns="baseColumns" />
-    </panel>
-    <panel title="事件信息">
-      <info-panel :data="eventinfo" :columns="eventColumns" />
-    </panel>
-    <panel title="证据附件" :body-style="{ padding: 0 }">
-      <file-review :files="files" :showImgCount="3" />
-    </panel>
-    <panel title="审批流程" :body-style="{ maxWidth: '800px', padding: '30px 60px' }">
-      <approval-process />
-    </panel>
+    <template v-if="current === 0">
+      <panel title="基本信息">
+        <info-panel :data="detail" :columns="baseColumns">
+          <template slot="party">
+            <people-popover v-for="(item, index) in detail.LawPartys" :key="index" :data="item">
+              <span class="case-detail-people">{{ item.Name }}</span>
+            </people-popover>
+          </template>
+        </info-panel>
+      </panel>
+      <panel title="事件信息" v-if="detail.EventId">
+        <info-panel :data="eventInfo" :columns="eventColumns" />
+      </panel>
+      <panel title="证据附件" :body-style="{ padding: '0 20px' }" v-if="files[0]">
+        <file-review :files="files" :showImgCount="3" />
+      </panel>
+      <panel title="案件流程" :body-style="{ maxWidth: '800px', padding: '30px 60px' }">
+        <process />
+      </panel>
+    </template>
+    <template v-else>
+      <panel hide-header v-if="caseId">
+        <dossier-list :case-id="caseId" />
+      </panel>
+    </template>
   </div>
 </template>
-
+ 
 <script>
 import Panel from '@/components/panel/Panel'
 import FileReview from '@/components/file/FileReview'
-import ApprovalProcess from './ApprovalProcess'
+import Process from './Process'
 import InfoPanel from '@/components/info/InfoPanel'
+import DossierList from './DossierList'
+import PeoplePopover from './PeoplePopover'
+import { getFormDetail, getDetails } from '@/api/sampleApi'
+import { formatTime, formatDay } from '@/utils/util'
 
-const baseColumns = [
+/**
+ * 本页面调用4个接口，获取表单详情、事件信息、案件流程、案卷列表
+ */
+
+// 案件mode
+const CASE_MODEL = 'case_Info'
+// 事件mode
+const EVENT_MODEL = 'event_info'
+// 案件流程
+
+const TABS = ['案件详情', '案卷列表']
+
+const genBaseColumns = context => [
   {
     label: '案由',
-    key: 'a'
-  },
-  {
-    label: '程序',
-    key: 'a',
-    span: 12
+    key: 'CauseOfAction'
   },
   {
     label: '当事人',
-    key: 'a',
-    span: 12
+    slot: 'party'
+  },
+  {
+    label: '程序',
+    key: 'ApplicableProcedure',
+    span: 12,
+    customContent: () => {
+      const arr = context.detail.ApplicableProcedure || []
+      return arr[1] || '-'
+    }
   },
   {
     label: '处罚决定书文号',
+    key: 'PenaltyDecisionNo',
     span: 12
   },
   {
-    label: '触发种类',
-    key: 'a',
-    span: 12
+    label: '处罚种类',
+    slot: 'PenaltyType',
+    span: 12,
+    customContent: () => {
+      const arr = context.detail.PenaltyType || []
+      return arr[1] || '-'
+    }
   },
   {
     label: '执行情况',
-    key: 'a',
+    key: 'CaseDescription',
     span: 12
   },
   {
     label: '立案日期',
-    key: 'a',
-    span: 12
+    key: 'CaseRegisterDay',
+    span: 12,
+    customContent: text => text ? formatDay(text) : ''
   },
   {
     label: '结案日期',
-    key: 'a',
-    span: 12
+    key: 'CaseCloseDay',
+    span: 12,
+    customContent: text => text ? formatDay(text) : ''
   },
   {
     label: '办案人员',
-    key: 'a',
+    key: 'Investigators',
     span: 12
   },
   {
     label: '归档日期',
-    key: 'a',
-    span: 12
+    key: 'OnDocDay',
+    span: 12,
+    customContent: text => text ? formatDay(text) : ''
   },
   {
     label: '保存期限',
-    key: 'a',
+    key: 'DocRetentionTimes',
     span: 12
   },
   {
     label: '归档人',
-    key: 'a',
+    key: 'DocPeople',
     span: 12
   },
   {
-    label: '归档好',
-    key: 'a',
+    label: '归档号',
+    key: 'DocNo',
     span: 12
   }
 ]
 
-const eventColumns = [
+const genEventColumns = context => [
   {
     label: '事发地点',
-    key: 'a',
+    key: 'address',
     span: 12
   },
   {
     label: '上报时间',
-    key: 'a',
-    span: 12
+    key: 'reportTime',
+    span: 12,
+    customContent: text => text ? formatTime(text) : ''
   },
   {
     label: '事发时间',
-    key: 'a',
-    span: 12
+    key: 'createTime',
+    span: 12,
+    customContent: text => text ? formatTime(text) : ''
   },
   {
     label: '上报人',
-    key: 'a',
+    key: 'reporterName',
     span: 12
   },
   {
     label: '案件类型',
-    key: 'a',
+    key: 'evtTypeName',
     span: 12
   },
   {
     label: '上报来源',
-    key: 'a',
+    key: 'ReportSource',
     span: 12
   },
   {
     label: '事件描述',
-    key: 'a'
+    key: 'remark'
   }
 ]
 
@@ -146,13 +193,20 @@ export default {
   components: {
     Panel,
     FileReview,
-    ApprovalProcess,
-    InfoPanel
+    Process,
+    InfoPanel,
+    DossierList,
+    PeoplePopover
   },
   data () {
-    this.baseColumns = baseColumns
-    this.eventColumns = eventColumns
+    this.tabs = TABS
+    this.baseColumns = genBaseColumns(this)
+    this.eventColumns = genEventColumns(this)
     return {
+      current: 0,
+      // 表单id
+      caseId: null,
+      // 文件列表
       files: [
         {
           title: '污染源.jpg',
@@ -179,8 +233,36 @@ export default {
           path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-07/dd3f1d954fcafa8f93135b47f8b5fd75.jpg'
         }
       ],
-      baseinfo: {},
-      eventinfo: {}
+      detail: {
+        // 主要信息
+        MainForm: {},
+        // 当事人
+        LawPartys: [],
+        // 处罚种类
+        PenaltyType: [],
+        ApplicableProcedure: [],
+        Region: []
+      },
+      // 事件信息
+      eventInfo: {}
+    }
+  },
+  mounted () {
+    this.caseId = this.$route.query.id
+    this.getDetail()
+  },
+  methods: {
+    // 获取详情
+    async getDetail () {
+      const data = await getFormDetail(CASE_MODEL, null, this.caseId, null)
+      if (data) {
+        this.detail = data
+        this.detail.EventId && this.getEventDetail()
+      }
+    },
+    // 获取事件详情
+    async getEventDetail () {
+      this.eventInfo = await getDetailsO(EVENT_MODEL, this.detail.EventId)
     }
   }
 }
@@ -191,8 +273,67 @@ export default {
   & > div {
     margin-bottom: 10px;
   }
-  &-header {
-
+  &-top, &-tab {
+    color: #222328;
+  }
+  &-top {
+    height: 70px;
+    padding: 0 20px;
+    line-height: 70px;
+    vertical-align: middle;
+    border-bottom: 1px solid #DCDEE2;
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+  &-title {
+    font-size: 20px;
+  }
+  &-status {
+    margin-left: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #3A9DFA;
+    // 已完成
+    &.completed {
+      color: #1FC08E;
+    }
+  }
+  &-tab {
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    &-item {
+      position: relative;
+      display: inline-block;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0 20px;
+      cursor: pointer;
+      transition: all .3s;
+      &:before {
+        content: '';
+        position: absolute;
+        width: 4em;
+        height: 4px;
+        margin-left: 50px;
+        bottom: 0;
+        left: -2em;
+        background-color: transparent;
+        border-radius: 5px;
+      }
+      &.active {
+        color: #3A9DFA;
+        &::before {
+          background-color: #3A9DFA;
+        }
+      }
+    }
+  }
+  &-people {
+    margin-right: 10px;
+    cursor: pointer;
   }
 }
 </style>

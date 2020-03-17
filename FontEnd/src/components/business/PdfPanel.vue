@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-09 17:32:32
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-13 17:46:14
+ * @LastEditTime: 2020-03-17 14:42:21
  * @Description:  PDF面板组件
  -->
 
@@ -43,6 +43,7 @@
 import moment from 'moment'
 import Pdf from 'vue-pdf'
 import FileReview from '@/components/file/FileReview'
+import appConfig from '@/config/app.config'
 // import SelectPeople from './SelectPeople'
 import { downloadFile } from '@/utils/util'
 
@@ -81,7 +82,7 @@ export default {
   },
   computed: {
     pdfUrl () {
-      return Pdf.createLoadingTask(this.pdf)
+      return Pdf.createLoadingTask(`${appConfig.pdfHost}/${this.pdf}`)
     }
   },
   methods: {
@@ -95,7 +96,7 @@ export default {
     },
     // 下载pdf
     async handleDownload () {
-      downloadFile({ url: this.pdf, name: this.pdfName })
+      downloadFile({ url: this.pdfUrl, name: this.pdfName })
       this.$emit('on-download')
     },
     // 送达
@@ -122,6 +123,7 @@ export default {
   }
   &-body, &-file {
     overflow: hidden;
+    padding: 0 20px;
     margin-bottom: 10px;
     border: 1px solid #DCDEE2;
     border-radius: 8px;

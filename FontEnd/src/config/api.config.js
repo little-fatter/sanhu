@@ -5,12 +5,16 @@ import appConfig from './app.config'
  * @param {*} moduleName
  * @param {*} isRead
  */
-const getHost = (moduleName) => {
+const getHost = (moduleName, isRead = false) => {
   var host = ''
   if (appConfig.isUseGateWare) {
     host = appConfig.gatewayAddress
   } else {
-    host = appConfig.hostConfig[moduleName]
+    if (isRead) {
+      host = appConfig.hostConfig.readHost[moduleName]
+    } else {
+      host = appConfig.hostConfig.writeHost[moduleName]
+    }
   }
   return host
 }
@@ -21,6 +25,10 @@ const apiConfig = {
   framework: {
     // 用户列表
     users: `${getHost('framework')}/api/Users`
+  },
+  // 文件服务
+  file: {
+    download: code => `${getHost('file')}/api/file/Get/${code}`,
   },
   // 第三方
   other: {
@@ -44,7 +52,8 @@ const apiConfig = {
   // 通用接口
   commonOperateApi: `${getHost('list')}/webapi/api`,
   // dd审批
-  startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`
+  startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`,
+
 }
 
 export default apiConfig
