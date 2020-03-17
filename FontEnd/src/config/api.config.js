@@ -5,16 +5,12 @@ import appConfig from './app.config'
  * @param {*} moduleName
  * @param {*} isRead
  */
-const getHost = (moduleName, isRead = false) => {
+const getHost = (moduleName) => {
   var host = ''
   if (appConfig.isUseGateWare) {
     host = appConfig.gatewayAddress
   } else {
-    if (isRead) {
-      host = appConfig.hostConfig.readHost[moduleName]
-    } else {
-      host = appConfig.hostConfig.writeHost[moduleName]
-    }
+    host = appConfig.hostConfig[moduleName]
   }
   return host
 }
@@ -28,7 +24,7 @@ const apiConfig = {
   },
   // 文件服务
   file: {
-    download: code => `${getHost('file')}/api/file/Get/${code}`,
+    download: code => `${getHost('file')}/api/file/Get/${code}`
   },
   // 第三方
   other: {
@@ -36,7 +32,7 @@ const apiConfig = {
     regulations: `${getHost('sfdx')}/law_rule_page`
   },
   // 信息中心
-  msgCenter: `${getHost('workframe')}/webapi/api/JobMessage`,
+  msgCenter: `${getHost('framework')}/webapi/api/JobMessage`,
   // 用户ID
   userId: `${getHost('list')}/webapi/getuserinfo`,
   // 字典查询
@@ -52,7 +48,7 @@ const apiConfig = {
   // 通用接口
   commonOperateApi: `${getHost('list')}/webapi/api`,
   // dd审批
-  startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`,
+  startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`
 
 }
 
