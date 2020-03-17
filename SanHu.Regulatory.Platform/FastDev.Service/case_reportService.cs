@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Model.Dto;
@@ -21,11 +22,11 @@ namespace FastDev.Service
         private Func<APIContext, object> case_reportService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-                    return Handle;
+            return Handle;
         }
         public object Handle(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<case_reportFinishReq>(context.Data);    
+            var data = JsonHelper.DeserializeJsonToObject<case_reportFinishReq>(context.Data);
             if (data.CaseReport == null) throw new Exception("没有主体数据");
             data.CaseReport.TaskId = data.SourceTaskId;
             data.CaseReport.EventInfoId = data.EventInfoId;
@@ -33,9 +34,49 @@ namespace FastDev.Service
             try
             {
                 #region 发起钉钉的审批 并将其返回的ID写入Task内
+                if (data.oapiProcessinstanceCreateRequest != null)
+                {
+                    //填值
+                    var UsrService = SysContext.GetService<IUserServices>();
+                    var loginClientInfo = SysContext.GetService<WanJiang.Framework.Infrastructure.Logging.ClientInfo>();
+                    var te = loginClientInfo.AccountId;
 
-                var loginClientInfo = SysContext.GetService<WanJiang.Framework.Infrastructure.Logging.ClientInfo>();
-                var ddService = SysContext.GetService<IDingDingServices>();
+                    //ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+                    //var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
+
+                    //var deptId = OTDB.FirstOrDefault<long>(@"SELECT org.id FROM organization org 
+                    //                        inner join organizationuser ou on ou.OrganizationId = org.Id
+                    //                        inner join user usr on usr.Id = ou.UserId
+                    //                        where usr.AccountId = @0", loginClientInfo.AccountId);
+                    ////
+                    //if (deptId == null)
+                    //    throw new Exception("无组织部门");
+
+
+                    var usrDetail = UsrService.GetUserDetails(loginClientInfo.UserId);
+                    var ddService = SysContext.GetService<IDingDingServices>();
+                    if (usrDetail.Result.Organizations == null)
+                        throw new Exception("无组织部门");
+                    var deptId = usrDetail.Result.Organizations[0].Id;
+
+
+                    data.oapiProcessinstanceCreateRequest.DeptId = deptId;
+
+                    var result = ddService.ProcessInstaceCreateAsync(data.oapiProcessinstanceCreateRequest);
+                    if (result.Result.Errmsg.ToLower() != "ok")
+                        throw new Exception("发起审核流失败");
+                    //var targetId = result.Result.ProcessInstanceId;
+                    if (data.CaseReport.TaskId == null || data.CaseReport.TaskId == "")
+                        throw new Exception("Task为空");
+                    var taskObj = QueryDb.FirstOrDefault<work_task>("where TaskID =@0", data.CaseReport.TaskId);
+                    if (taskObj == null)
+                        throw new Exception("该Task不存在");
+                    //更新值
+                    taskObj.processInstanceId = result.Result.ProcessInstanceId;
+                    //data.CaseReport.
+                    QueryDb.Update(taskObj);
+                    //ServiceHelper.GetService("work_task").Update(taskObj);
+                }
                 #endregion
                 CreateInfo(data.CaseReport);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);

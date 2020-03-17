@@ -16,6 +16,12 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="TopSdk">
+      <HintPath>..\libs\TopSdk.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 
 
 </Project>
