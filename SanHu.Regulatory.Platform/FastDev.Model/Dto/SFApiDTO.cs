@@ -12,5 +12,14 @@ namespace FD.Model.Dto
         public string ObjId { get; set; }
 
         public string ApiType { get; set; }
+
+        public LawFilter filter { get; set; }
+    }
+
+    public class LawFilter
+    {
+        public string keyWord { get; set; }
+
+        public string lawRuleFileId { get; set; }
     }
 }
