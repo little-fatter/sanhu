@@ -29,7 +29,7 @@
           <p>
             <span>当事人：</span>
             <span v-if="item.LawPartys && item.LawPartys.length > 0">
-              <span v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
+              <span style="margin-right:0.15rem" v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
             </span>
             <span v-else>测试数据</span>
           </p>
@@ -240,11 +240,6 @@ export default {
             this.caseList.push(item)
           })
         }
-        console.log(res.Rows)
-        // 时间排序
-        // this.listData.sort(function (a, b) {
-        //   return a.InitiationTime > b.InitiationTime ? -1 : 1
-        // })
         return res
       })
     },

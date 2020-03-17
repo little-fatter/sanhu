@@ -14,14 +14,16 @@
       <van-cell title="案件类型" :value="caseInfo.CauseOfAction" value-class="con-style" title-class="title-cell" />
       <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
       <template>
-        <van-cell
+        <!--当事人信息-->
+        <PartyInfo :initData="initData" ref="MyPartyInfo"></PartyInfo>
+        <!-- <van-cell
           title="当事人"
           v-for="item in lawPartyInfoL"
           :key="item.ID+'@'"
           :value="item.Name"
           :label="caseInfo.IDcard"
           value-class="con-style"
-          title-class="title-cell" />
+          title-class="title-cell" /> -->
       </template>
 
       <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
@@ -78,8 +80,12 @@
 
 <script>
 import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
+import PartyInfo from '../../components/business/PartyInfoView'
 export default {
   name: 'CaseDetails',
+  components: {
+    PartyInfo
+  },
   data () {
     return {
       caseId: '', // 案件ID
@@ -92,7 +98,8 @@ export default {
       },
       eventInfo: {
 
-      }
+      },
+      initData: []// 组件当事人
     }
   },
   methods: {
@@ -127,11 +134,12 @@ export default {
       // 请求案件详情
       getDetaildata('case_Info', this.caseId).then((res) => {
         this.caseInfo = res
-        console.log('案件详情', this.caseInfo)
+        // console.log('案件详情', this.caseInfo)
       })
       // 请求当事人
       getPageDate('law_party', 1, 100, conditon).then((res) => {
-        this.lawPartyInfoL = res.Rows
+        // this.lawPartyInfoL = res.Rows
+        this.initData = res.Rows
         // console.log('当事人', this.lawPartyInfoL)
       })
       // 请求案件 关联事件
