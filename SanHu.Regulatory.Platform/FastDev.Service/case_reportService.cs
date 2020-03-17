@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Model.Dto;
 using FD.Model.Enum;
@@ -34,7 +35,7 @@ namespace FastDev.Service
                 #region 发起钉钉的审批 并将其返回的ID写入Task内
 
                 var loginClientInfo = SysContext.GetService<WanJiang.Framework.Infrastructure.Logging.ClientInfo>();
-
+                var ddService = SysContext.GetService<IDingDingServices>();
                 #endregion
                 CreateInfo(data.CaseReport);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);

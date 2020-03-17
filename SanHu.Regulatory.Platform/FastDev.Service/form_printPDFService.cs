@@ -250,7 +250,7 @@ namespace FastDev.Service
                 //}
 
                 //字典存入完毕 开启并替换
-                FilePath = ReplaceAspose(templatePath, pDic, false);
+                FilePath = ReplaceAspose(templatePath, pDic);
 
                 //执行人
 
@@ -270,7 +270,7 @@ namespace FastDev.Service
             return FilePath;
         }
         //替换Aspose标签内容
-        private string ReplaceAspose(string filePath, Dictionary<string, string> pDic, bool testMark = false)
+        private string ReplaceAspose(string filePath, Dictionary<string, string> pDic)
         {
             Aspose.Words.Document doc = new Aspose.Words.Document(filePath);
             Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(doc);
@@ -282,7 +282,7 @@ namespace FastDev.Service
                 doc.Range.Replace($"@{kv.Key}", kv.Value, replaceOPT);
             }
             //替换剩下不需要的
-            if (testMark)
+            if (SysContext.IsDev)
             {
                 doc.Range.Replace(new Regex("@[0-9a-zA-Z]+"), "", replaceOPT);
             }
