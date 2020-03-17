@@ -248,7 +248,7 @@ export default {
       })
     },
     loadPenalizeBook (eventInfoId) {
-      getFormDetail(eventInfoId, 'law_punishmentInfo').then((res) => {
+      getFormDetail('law_punishmentInfo', eventInfoId).then((res) => {
         if (res) {
           this.penalizeBook = {
             ...res.MainForm,

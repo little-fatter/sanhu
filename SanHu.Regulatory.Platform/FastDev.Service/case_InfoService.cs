@@ -81,7 +81,7 @@ namespace FastDev.Service
                             field = "ID",
                             op = "in",
                             type = "select",
-                            value = item.AssociationobjectID
+                            value = item.CaseId
                         });
                     }
 
@@ -89,6 +89,15 @@ namespace FastDev.Service
                 }
 
                 DeletePartyRules(descriptor.Condition.groups);
+
+                //FilterTranslator filterTranslator = new FilterTranslator();
+                //if (descriptor.Condition != null)
+                //{
+                //    filterTranslator.Group = descriptor.Condition;
+                //}
+
+                //filterTranslator.Translate();
+                //string whereTxt = filterTranslator.CommandText;
             }
 
             #endregion

@@ -220,6 +220,8 @@ export default {
     init () {
       const queryParam = this.$route.query
       const id = queryParam.id || 'd652c736-609b-41b3-a491-90828bf32d25'
+      const formType = queryParam.formType
+      console.log(formType)
       // 请求事件巡查详情
       getFormDetail('task_patrol', null, id).then(res => {
         if (isNotEmpty(res)) {
