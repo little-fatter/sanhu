@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FD.Common.Extensions;
 using FD.Model.Dto;
+using FastDev.DevDB;
 
 namespace FastDev.Service
 {
@@ -42,5 +43,7 @@ namespace FastDev.Service
             var client = _clientFactory.CreateClient(HostData.FrameWorkSeverName);
             return await client.GetDataAsync<T>(apiurl, data);
         }
+
+
     }
 }

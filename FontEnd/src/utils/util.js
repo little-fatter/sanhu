@@ -349,3 +349,21 @@ export const genImgBackground = (img) => {
     backgroundPosition: 'center'
   }
 }
+
+/**
+ * 格式化日期
+ * @param {string/object} date 
+ */
+export const formatDay = date => {
+  if (!date) return '-'
+  return moment(date).format('YYYY-MM-DD')
+}
+
+/**
+ * 格式化时间
+ * @param {string/object} date 
+ */
+export const formatTime = date => {
+  if (!date) return '-'
+  return moment(date).format('YYYY-MM-DD HH:mm:ss')
+}

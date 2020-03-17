@@ -459,7 +459,13 @@ export const asyncRouterMap = [
     path: '/examples/case-detail',
     name: 'ExampleCaseDetail',
     component: () => import('@/views/examples/CaseDetail'),
-    meta: { title: '模态组件' }
+    meta: { title: '案件详情' }
+  },
+  {
+    path: '/examples/form-detail',
+    name: 'ExampleFormDetail',
+    component: () => import('@/views/examples/FormDetail'),
+    meta: { title: '表单详情' }
   },
   {
     path: '*', redirect: '/404'

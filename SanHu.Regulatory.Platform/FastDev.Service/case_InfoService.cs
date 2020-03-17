@@ -367,6 +367,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoSource;
                     l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
                     QueryDb.Insert(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
@@ -374,6 +375,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoNew;
                     l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
                     QueryDb.Insert(l);
                 }
 
