@@ -6,7 +6,7 @@ function condition (params = {}, pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
-      groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
+      groups: (params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? [params] : [],
       op: 'and'
     },
     PageIndex: pageiIndex,
@@ -156,28 +156,21 @@ export const startProcessInstance = (parameter) => {
     data: parameter
   })
 }
-
 /**
- * 获取【表单】详情
- * @param {string} eventId 事件id，只有eventId时，获取的数据为当前事件最新的表单详情
- * @param {string} model 表单类型
- * @param {string} formId 表单的id，优先级最高，会覆盖eventId，获取的是当前表单的详情
- * @param {array<string>} filters 过滤数据项，默认不过滤，全部获取
- * @author 616749285@qq.com
- * 注释的原因为已有实现方法，在上面
+ * 根据表单ID获取PDF
+ * @param {*} eventInfoid
+ * @param {*} model
  */
-// export const getFormDetail = ({ eventId, model, formId, filters = []} = {}) => {
-//   return postHttp({
-//     url: apiConfig.commonOperateApi,
-//     data: {
-//       id: 'FORMDATA',
-//       model: 'work_task',
-//       data: {
-//         eventInfoId: eventId,
-//         model,
-//         formId,
-//         filterModels: filters
-//       }
-//     }
-//   })
-// }
+export const getFormsDetailByEventInfoIdPdf = (formId = '', formType = '') => {
+  return postHttp({
+    url: apiConfig.commonOperateApi,
+    data: {
+      id: '',
+      model: 'form_printPDF',
+      data: {
+        formId,
+        formType
+      }
+    }
+  })
+}

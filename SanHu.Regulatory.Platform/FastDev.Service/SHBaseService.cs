@@ -97,10 +97,15 @@ namespace FastDev.Service
 
         public object FormData(FormDataReq data)
         {
+            if (data.Model.ToUpper() == "case_Info".ToUpper())
+            {
+                data.Model = "case_Info";
+            }
             IService service = ServiceHelper.GetService(data.Model);
 
             //根据事件id或者id查询数据
             var filter = new FilterGroup();
+         
             if (!string.IsNullOrEmpty(data.FormId))
             {
                 filter.rules.Add(new FilterRule("ID", data.FormId, "equal"));
@@ -109,12 +114,13 @@ namespace FastDev.Service
             {
                 filter.rules.Add(new FilterRule("EventInfoId", data.EventInfoId, "equal"));
             }
-
-            //案件特殊判断
-            if (data.Model == "case_info")
+              //案件特殊判断
+            if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
+
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
             }
+            
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");

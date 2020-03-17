@@ -147,7 +147,7 @@
               <a-input v-model="s_case_Number" placeholder="请输入案件号" />
             </li>
             <li class="search-input-ul-li">
-              <span>处罚决定书编号：</span>
+              <span>处罚书号：</span>
               <a-input v-model="s_case_JudgementNum" placeholder="请输入编号" />
             </li>
             <li class="search-input-ul-li special">
@@ -185,7 +185,7 @@
         </template>
         <template slot="LawPartys" slot-scope="text,data">
           <span v-if=" data.LawPartys && data.LawPartys .length>0">
-            <span v-for="(msg,i) in data.LawPartys" :key="i+'@'">{{ msg.Name }}</span>
+            <span style="margin-right: 6px;" v-for="(msg,i) in data.LawPartys" :key="i+'@'">{{ msg.Name }}</span>
           </span>
           <span v-else>测试数据</span>
         </template>
@@ -342,7 +342,7 @@ export default {
             type: 'string'
           },
           {
-            field: 'PenaltyDecisionNo', // 当事人
+            field: 'party', // 当事人
             op: 'like',
             value: this.s_case_BreakLow,
             type: 'string'

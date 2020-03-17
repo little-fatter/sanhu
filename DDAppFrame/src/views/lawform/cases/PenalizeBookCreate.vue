@@ -1,9 +1,10 @@
 <template>
   <div class="form_wapper">
     <van-cell-group title="任务信息" v-if="taskInfo">
-      <van-cell title="任务" :value="taskInfo.TaskTypeInfo[1]"></van-cell>
-      <van-cell title="交办时间" :value="taskInfo.InitiationTime"></van-cell>
-      <van-cell title="期望时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
+      <van-cell title="任务标题" :value="taskInfo.TaskTitle"></van-cell>
+      <van-cell title="任务内容" :value="taskInfo.TaskContent"></van-cell>
+      <van-cell title="任务派发时间" :value="taskInfo.InitiationTime"></van-cell>
+      <van-cell title="期望完成时间" :value="taskInfo.ExpectedCompletionTime"></van-cell>
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
@@ -17,9 +18,9 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
       </van-field>
     </van-cell-group>
-    <van-cell-group v-if="caseInfo.CauseOfAction">
+    <van-cell-group v-if="caseInfo.CauseOfAction" title="案件信息">
       <van-form @submit="onSubmit" @failed="onFailed">
-        <van-cell title="案件号" :value="caseInfo.DocNo"></van-cell>
+        <van-cell title="案件号" :value="caseInfo.CaseNumber"></van-cell>
         <van-cell title="案件类型" :value="caseInfo.CaseType"></van-cell>
         <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
         <party-info :initData="LawParties" ref="party"></party-info>

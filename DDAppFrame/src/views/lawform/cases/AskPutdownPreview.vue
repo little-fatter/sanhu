@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-cell-group>
-      <van-cell title="案件号" :value="model.caseInfo.DocNo"></van-cell>
+      <van-cell title="案件号" :value="model.caseInfo.CaseNumber"></van-cell>
       <van-cell title="案由" :value="model.caseInfo.CauseOfAction"></van-cell>
       <van-cell title="询问对象" :value="model.objectTypeDesc"></van-cell>
       <van-cell title="询问地点" :value="model.eventAddress"></van-cell>

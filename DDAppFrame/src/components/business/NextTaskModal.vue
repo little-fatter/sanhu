@@ -7,7 +7,7 @@
   >
     <div class="list_wapper">
       <div class="list_wapper_title">
-        <div class="desc">任务信息</div>
+        <div class="desc">下一步任务信息</div>
         <div class="list_wapper_title_right">
           <van-icon name="cross" slot="right-icon" @click="onClosePopup" size="20" />
         </div>

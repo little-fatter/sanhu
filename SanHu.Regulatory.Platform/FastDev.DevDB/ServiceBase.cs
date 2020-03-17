@@ -1095,7 +1095,14 @@ namespace FastDev.DevDB
                 lstFileds = new RightsServer(MainDb).GetDisabledFields(ModelName);
             }
             List<Dictionary<string, object>> result = GetRelatedListData(db, listData, ModelName, serviceConfig, lstFileds);
-            afterGetDataDelegate_OnAfterGetListData?.Invoke(filter, listData);
+            try
+            {
+                afterGetDataDelegate_OnAfterGetListData?.Invoke(filter, listData);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return result;
         }
 

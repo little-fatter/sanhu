@@ -201,6 +201,7 @@
                 <p>
                   <span>当事人：</span>
                   <span
+                    style="margin-right: 30px;"
                     v-for="item in lawPartysInfo"
                     :key="item.ID"
                   >{{ item.Name+` 电话：`+ item.Contactnumber }}</span>

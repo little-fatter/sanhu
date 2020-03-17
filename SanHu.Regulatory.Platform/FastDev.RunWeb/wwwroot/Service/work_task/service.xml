@@ -24,10 +24,11 @@
         <field name="AssignUsers" dbName="AssignUsers" title="任务执行人" type="string" length="50" isPK="N" />
         <field name="TaskTypeInfo" dbName="TaskTypeInfoID" title="任务类型描述" type="many2one" relationModel="res_dictionaryItems" relationField="" enabledSearch="Y" isPK="N" />
         <field name="TodotaskID" dbName="TodotaskID" title="待办任务id" type="string" length="50" isPK="N" />
+        <field name="TaskTitle" dbName="TaskTitle" title="TaskTitle" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TaskImg" dbName="TaskImg" title="TaskImg" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="AppLinks" dbName="AppLinks" title="AppLinks" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="PCLinks" dbName="PCLinks" title="PCLinks" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="TaskTitle" dbName="TaskTitle" title="任务标题" type="string" length="200" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="TaskImg" dbName="TaskImg" title="任务图片链接" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="processInstanceId" dbName="processInstanceId" title="钉钉审核ID" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
