@@ -104,6 +104,16 @@ public string FormState
 get;
 set;
 }
+public string processInstanceId
+{
+get;
+set;
+}
+public string FormName
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
