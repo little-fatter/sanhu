@@ -60,7 +60,8 @@ namespace FastDev.Service
                     data.oapiProcessinstanceCreateRequest.OriginatorUserId = loginClientInfo.AccountId;
 
                     var result = ddService.ProcessInstaceCreateAsync(data.oapiProcessinstanceCreateRequest);
-                    if (result.Result.Errmsg.ToLower() != "ok")
+                    var test = result.Result;
+                    if (result.Result?.Errmsg.ToLower() != "ok")
                         throw new Exception("发起审核流失败");
                     //var targetId = result.Result.ProcessInstanceId;
                     if (data.CaseReport.TaskId == null || data.CaseReport.TaskId == "")
@@ -103,7 +104,7 @@ namespace FastDev.Service
         {
             var CaseInfoSource = base.Create(caserport) as string;
             ///更新案件信息
-
+            caserport.ID = CaseInfoSource;
             var tasknow = ServiceHelper.GetService("work_task").GetDetailData(caserport.TaskId, null);
             if (tasknow != null)
             {

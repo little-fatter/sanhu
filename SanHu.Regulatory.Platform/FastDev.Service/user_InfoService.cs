@@ -112,11 +112,22 @@ namespace FastDev.Service
         //获取表单的状态
         public string GetFormStatus()
         {
+            //request
             string formId = "";
 
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
             var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
+            OTDB.FirstOrDefault<string>("");
             return "";
+        }
+
+        //获取审批流数据
+        public List<object> GetFormApprovalList()
+        {
+            string formID = "";
+
+
+            return null;
         }
 
     }
