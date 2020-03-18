@@ -52,4 +52,15 @@ const apiConfig = {
 
 }
 
+export const formType = {
+  // 询问笔录
+  form_inquiryrecord_third: 'form_inquiryrecord_third',
+  // 勘验笔录
+  form_inquestrecord: 'form_inquestrecord',
+  // 处罚当场决定书
+  law_punishmentInfo: 'law_punishmentInfo',
+  // 物品清单
+  form_confiscated_item: 'form_confiscated_item'
+}
+
 export default apiConfig
