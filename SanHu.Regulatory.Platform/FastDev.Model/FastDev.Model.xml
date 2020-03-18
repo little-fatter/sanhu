@@ -99,7 +99,12 @@
             巡检表
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.form_confiscated_itemFinishReq.formConfiscatedItems">
+        <member name="P:FD.Model.Dto.form_confiscatedFinishReq.formConfiscated">
+            <summary>
+            没收清单
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.form_confiscatedFinishReq.formConfiscatedItems">
             <summary>
             没收物品列表
             </summary>

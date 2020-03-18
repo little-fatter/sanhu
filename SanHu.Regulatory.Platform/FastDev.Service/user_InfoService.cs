@@ -25,8 +25,8 @@ namespace FastDev.Service
             {
                 case "CHECKSTAFFLIST":
                     return CheckStaffList;
-                case "TAKEUSERTASK":
-                    return TakeUserTask;
+                //case "TAKEUSERTASK":
+                //    return TakeUserTask;
             }
             return null;
         }
@@ -71,10 +71,17 @@ namespace FastDev.Service
                     var ur = SysContext.GetOtherDB(userConfig.model.dbName).FirstOrDefault<user>($"select * from user where Id={u.UserId}");
                     if (ur != null)
                     {
+                        int taskunm=QueryDb.ExecuteScalar<int>("select count(*) from work_task where MainHandler=@0 and TaskStatus=1", ur.Id);
                         udic.Add("Organization", organzation.Name);
                         udic.Add("OrganizationId", organzation.Id);
                         udic.Add("userId", ur.Id);
                         udic.Add("userName", ur.Name);
+                        udic.Add("Tel", ur.Mobile);
+                        udic.Add("TaskNum", taskunm);
+                        //请求四方人员在线
+                        udic.Add("Online", false);
+                        //范围
+                        udic.Add("Range", null);
                         returncollection.Add(udic);
                     }
                 }

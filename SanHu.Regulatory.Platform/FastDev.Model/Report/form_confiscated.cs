@@ -24,6 +24,36 @@ public string LawpartyId
 get;
 set;
 }
+public string MainHandlersign
+{
+get;
+set;
+}
+public string CoOrganizersign
+{
+get;
+set;
+}
+public string Lawpartysign
+{
+get;
+set;
+}
+public string EventInfoId
+{
+get;
+set;
+}
+public string TaskId
+{
+get;
+set;
+}
+public string CaseId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

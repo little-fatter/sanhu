@@ -12,14 +12,14 @@ using System.Text;
 
 namespace FastDev.Service
 {
-    class form_confiscated_itemService : ServiceBase, IService
+    class form_confiscatedService : ServiceBase, IService
     {
 
-        public form_confiscated_itemService()
+        public form_confiscatedService()
         {
-           // OnGetAPIHandler += form_confiscated_itemService_OnGetAPIHandler;
+            OnGetAPIHandler += form_confiscatedService_OnGetAPIHandler;
         }
-        private Func<APIContext, object> form_confiscated_itemService_OnGetAPIHandler(string id)
+        private Func<APIContext, object> form_confiscatedService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
             return Handle;
@@ -31,16 +31,15 @@ namespace FastDev.Service
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<form_confiscatedFinishReq>(context.Data);
-            if (data.formConfiscatedItems == null) return null;
+            if (data.formConfiscated == null) return null;
+            data.formConfiscated.EventInfoId = data.EventInfoId;
+            data.formConfiscated.TaskId = data.SourceTaskId;
             QueryDb.BeginTransaction();
             try
             {
-                CreateInfo(data.formConfiscatedItems, data.SourceTaskId, data.EventInfoId);
-               
-                        EndEvent(data.SourceTaskId, data.EventInfoId);
-                    
-                        _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
-         
+                CreateInfo(data.formConfiscated,data.formConfiscatedItems);                                  
+               _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);//创建下一步任务
+                _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
             }
             catch (Exception)
             {
@@ -81,19 +80,21 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(List<form_confiscated_item> lists,string taskid,string eventid)
+        private void CreateInfo(form_confiscated formConfiscated,List<form_confiscated_item> formConfiscatedItems)
         {
-            if (lists.Count < 1) return;
-
-            foreach (var l in lists)
+            var formConfiscated_Info = base.Create(formConfiscated) as string;//保存原始信息
+            formConfiscated.ID = formConfiscated_Info;
+            if (formConfiscatedItems != null && formConfiscatedItems.Count > 0)//创建物品清单
             {
-                form_confiscated_item item = new form_confiscated_item();
-                item = l;
-                item.EventInfoId = eventid;
-                item.TaskId = taskid;
-                base.Create(item);
+                foreach (var l in formConfiscatedItems)
+                {
+                    l.Associatedobjecttype = "form_confiscated";
+                    l.AssociationobjectID = formConfiscated_Info;
+                    l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
+                    QueryDb.Insert(l);
+                }
             }
-            return;
         }
     }
 }
