@@ -54,17 +54,18 @@ export default {
       })
     } else {
       return new Style({
-        image: new Circle({
-          radius: 20,
-          stroke: new Stroke({
-            color: '#fff'
-          }),
-          fill: new Fill({
-            color: '#3399CC'
-          })
+        image: new Icon({
+          anchor: [0.5, 1],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: event0,
+          scale: 1.2
         }),
         text: new Text({
-          text: size.toString(),
+          text: size + '',
+          font: '18px bolder',
+          // offsetX: 0,
+          offsetY: -30,
           fill: new Fill({
             color: '#fff'
           })
@@ -72,13 +73,17 @@ export default {
       })
     }
   },
+  /**
+   * 人员样式函数
+   * @param {*} feature
+   */
   peopleStyle: function (feature) {
     var properties = feature.getProperties()
-    var type = properties['Lawenforcer']// 1-执法者
+    var type = 1 // 1-执法者,0- 巡检
     var src = type ? personZhifaBack : personXunjianBack
-    var staffName = properties['StaffName']
+    var staffName = properties['userName']
     var lastName = staffName ? staffName[0] : ''
-    var isBusy = true
+    var isBusy = properties['isBusy']
     var styles = [new Style({
       image: new Icon({
         anchor: [0.5, 1],
@@ -109,6 +114,38 @@ export default {
       }))
     }
     return styles
+  },
+  /**
+   * 人员样式函数
+   * @param {*} clusteFeatures
+   */
+  clusterPeopleStyle: function (clusteFeatures) {
+    var size = clusteFeatures.get('features').length
+    if (size === 1) { // 非聚合
+      var feature = clusteFeatures.get('features')[0]
+      return this.peopleStyle(feature)
+    } else {
+      var type = 1 // 1-执法者,0- 巡检
+      var src = type ? personZhifaBack : personXunjianBack
+      return [new Style({
+        image: new Icon({
+          anchor: [0.5, 1],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: src,
+          scale: 1
+        }),
+        text: new Text({
+          text: size + '',
+          font: '18px bolder',
+          // offsetX: 0,
+          offsetY: -22.5,
+          fill: new Fill({
+            color: '#fff'
+          })
+        })
+      })]
+    }
   },
   /**
    * 计算事件优先级

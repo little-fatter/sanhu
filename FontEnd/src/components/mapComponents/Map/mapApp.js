@@ -8,7 +8,7 @@ import TileWMS from 'ol/source/TileWMS'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import Cluster from 'ol/source/Cluster'
-import { buffer as extentBuffer, getHeight as getExtentHeight } from 'ol/extent'
+import { buffer as extentBuffer, getHeight as getExtentHeight, getWidth as getExtentWidth } from 'ol/extent'
 import { GeoJSON } from 'ol/format'
 import { defaults as defaultControls, Zoom } from 'ol/control'
 import { singleClick } from 'ol/events/condition'
@@ -20,11 +20,12 @@ import Overlay from 'ol/Overlay'
 /**
  * turf
  */
-import { point, featureCollection, toMercator, bbox } from '@turf/turf'
+import { point, featureCollection, toMercator, bbox, toWgs84, buffer } from '@turf/turf'
 
 /**
  * 项目中的js
  */
+import { isEmpty } from '@/utils/util'
 import layerStyle from './layerStyle'
 import appConfig from '@/config/app.config'
 /**
@@ -169,15 +170,21 @@ var mapApp = {
     this.layers['alertEventLayer'] = alertEventLayer
     // 执法人员
     this.layers['peopleLayerZhifa'] = new VectorLayer({
-      source: new VectorSource(),
-      style: (f) => layerStyle.peopleStyle(f),
+      source: new Cluster({
+        distance: 50,
+        source: new VectorSource()
+      }),
+      style: (f) => layerStyle.clusterPeopleStyle(f),
       zIndex: 9,
       name: 'peopleLayerZhifa'
     })
     // 巡检人员
     this.layers['peopleLayerXunjian'] = new VectorLayer({
-      source: new VectorSource(),
-      style: (f) => layerStyle.peopleStyle(f),
+      source: new Cluster({
+        distance: 50,
+        source: new VectorSource()
+      }),
+      style: (f) => layerStyle.clusterPeopleStyle(f),
       zIndex: 10,
       name: 'peopleLayerXunjian'
     })
@@ -187,6 +194,7 @@ var mapApp = {
    */
   initSelects: function () {
     var that = this
+    // 事件
     this.selects['alertEventLayer'] = new Select({
       condition: singleClick,
       layers: [this.layers['alertEventLayer']],
@@ -196,6 +204,16 @@ var mapApp = {
       that.onSelectedAlertEventLayer(e)
     })
     this.map.addInteraction(this.selects['alertEventLayer'])
+    // 人员
+    this.selects['peopleLayer'] = new Select({
+      condition: singleClick,
+      layers: [this.layers['peopleLayerZhifa'], this.layers['peopleLayerXunjian']],
+      style: (f) => layerStyle.clusterPeopleStyle(f)
+    })
+    this.selects['peopleLayer'].on('select', function (e) {
+      that.onSelectedpeopleLayer(e)
+    })
+    this.map.addInteraction(this.selects['peopleLayer'])
   },
   /**
    * 初始化各类infobox
@@ -246,8 +264,33 @@ var mapApp = {
    * @param {*} extent
    */
   zoomToExtent: function (extent) {
-    extent = extentBuffer(extent, getExtentHeight(extent) * 0.3)
+    var w = getExtentWidth(extent)
+    var h = getExtentHeight(extent)
+    var d = Math.max(w, h)
+    extent = extentBuffer(extent, d * 0.5)
     this.view.fit(extent, { duration: 1000 })
+  },
+  /**
+   * 缩放至点的半径范围
+   * @param {*} p EPSG:3857,点坐标
+   * @param {*} r 半径，单位千米
+   */
+  zoomToPoint: function (p, r) {
+    var tpoint = point(p)
+    tpoint = toWgs84(tpoint)
+    var tbuffered = buffer(tpoint, r, { units: 'kilometers' })
+    tbuffered = toMercator(tbuffered)
+    var extent = bbox(tbuffered)
+    this.zoomToExtent(extent)
+  },
+  /**
+   * 缩放至点要素的半径范围
+   * @param {*} feature 点要素
+   * @param {*} r 半径范围
+   */
+  zoomToPointFeature: function (feature, r) {
+    var p = feature.getGeometry().getCoordinates()
+    this.zoomToPoint(p, r)
   },
   /**
    * 从前端数据中心获取事件列表,更新事件图层数据
@@ -276,8 +319,8 @@ var mapApp = {
     var peopleLayerXunjian = this.layers['peopleLayerXunjian']
     var sourceZhifa = peopleLayerZhifa.getSource()
     var sourceXunjian = peopleLayerXunjian.getSource()
-    sourceZhifa.clear()
-    sourceXunjian.clear()
+    sourceZhifa.getSource().clear()
+    sourceXunjian.getSource().clear()
     for (let i = 0; i < list.length; i++) {
       const element = list[i]
       var type = element.Lawenforcer
@@ -287,9 +330,9 @@ var mapApp = {
       })
       fea.setProperties(element)
       if (type) {
-        sourceZhifa.addFeature(fea)
+        sourceZhifa.getSource().addFeature(fea)
       } else {
-        sourceXunjian.addFeature(fea)
+        sourceXunjian.getSource().addFeature(fea)
       }
     }
   },
@@ -303,13 +346,47 @@ var mapApp = {
     } else {
       var clusetrFeature = e.selected[0]
       var features = clusetrFeature.get('features')
-      if (features.length > 1) {
-        // 点击的聚合要素
-        var extent = this.getExtentOfClusterFeature(clusetrFeature)
-        this.zoomToExtent(extent)
+      if (features) {
+        // 通过地图点击触发
+        if (features.length > 1) {
+          // 点击的聚合要素
+          var extent = this.getExtentOfClusterFeature(clusetrFeature)
+          this.zoomToExtent(extent)
+        } else {
+          // 点击的单一要素
+          this.openAlertEventInfobox(features[0])
+        }
       } else {
-        // 点击的单一要素
-        this.openAlertEventInfobox(features[0])
+        // 通过代码触发，不是地图点击触发
+        this.zoomToPointFeature(clusetrFeature, 0.5)
+        this.openAlertEventInfobox(clusetrFeature)
+      }
+    }
+  },
+  /**
+   * 地图中的人员图标被点击
+   * @param {*} e
+   */
+  onSelectedpeopleLayer: function (e) {
+    if (e.selected.length < 1) {
+      this.closeAllInfobox()
+    } else {
+      var clusetrFeature = e.selected[0]
+      var features = clusetrFeature.get('features')
+      if (features) {
+        // 通过地图点击触发
+        if (features.length > 1) {
+          // 点击的聚合要素
+          var extent = this.getExtentOfClusterFeature(clusetrFeature)
+          this.zoomToExtent(extent)
+        } else {
+          // 点击的单一要素
+
+        }
+      } else {
+        // 通过代码触发，不是地图点击触发
+        this.zoomToPointFeature(clusetrFeature, 0.5)
+        //
       }
     }
   },
@@ -344,6 +421,7 @@ var mapApp = {
       title: evtTypeName
     }
     var content = {
+      id: properties['id'],
       evtFileUrl: gisUtils.trimToStr(properties['evtFileUrl']),
       remark: gisUtils.trimToStr(properties['remark']),
       evtState: gisUtils.trimToStr(properties['evtState']),
@@ -365,7 +443,63 @@ var mapApp = {
     for (var name in this.infoboxs) {
       this.infoboxs[name].setPosition(undefined)
     }
+  },
+  /**
+   * 根据图层名和id 查询
+   * @param {*} layerName 图层名
+   * @param {*} id
+   */
+  findFeatureByLayerNameAndFeatureId: function (layerName, id) {
+    if (isEmpty(id)) return undefined
+
+    var layer = this.layers[layerName]
+    if (!layer) return undefined
+    var features = []
+    if (layer.getSource().getSource) {
+      // 聚合图层
+      features = layer.getSource().getSource().getFeatures()
+    } else {
+      features = layer.getSource().getFeatures()
+    }
+    var idField = layerAndfeatureId[layerName]
+    for (let i = 0; i < features.length; i++) {
+      const element = features[i]
+      var properties = element.getProperties()
+      if (properties[idField] === id) {
+        return element
+      }
+    }
+    return undefined
+  },
+  /**
+   * 通过代码选中要素
+   */
+  selectFeature: function (layerName, id) {
+    var selectName = layerAndSelects.layer2select[layerName]
+    var select = this.selects[selectName]
+    var feature = this.findFeatureByLayerNameAndFeatureId(layerName, id)
+    select.getFeatures().push(feature)
+    select && select.dispatchEvent({
+      type: 'select',
+      selected: [feature],
+      deselected: []
+    })
   }
 }
-
+var layerAndSelects = {
+  layer2select: {
+    alertEventLayer: 'alertEventLayer',
+    peopleLayer: ['peopleLayerZhifa', 'peopleLayerXunjian']
+  },
+  select2layer: {
+    alertEventLayer: 'alertEventLayer',
+    peopleLayerZhifa: 'peopleLayer',
+    peopleLayerXunjian: 'peopleLayer'
+  }
+}
+var layerAndfeatureId = {
+  alertEventLayer: 'id',
+  peopleLayerZhifa: 'userId',
+  peopleLayerXunjian: 'userId'
+}
 export default mapApp

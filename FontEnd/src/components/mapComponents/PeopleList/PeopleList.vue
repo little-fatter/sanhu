@@ -14,7 +14,7 @@
       </div>
       <div class="clear"></div>
     </a-layout-header>
-    <a-layout-content>
+    <a-layout-content id="people-layout-content">
       <hr class="line"/>
       <!-- 人员列表tab -->
       <div v-show="selectedTab === 0">
@@ -26,7 +26,7 @@
         <a-input-search class="a-input-search" placeholder="请输入执法人姓名" @search="onSearch" size="large">
           <a-button slot="enterButton">搜索</a-button>
         </a-input-search>
-        <a-list :dataSource="tabs[0].subs">
+        <a-list :dataSource="tabs[0].subs" :style="getPeopleListStyle">
           <a-list-item slot="renderItem" slot-scope="item">
             <div>
               <div class="left sub-title font-16">{{ item.name }}</div>
@@ -259,6 +259,16 @@ export default {
         shexiangtou: appConfig.StaticWebContext + '/img/yzt-renyuanceng/shexiangtou.png',
         huatong: appConfig.StaticWebContext + '/img/yzt-renyuanceng/huatong.png',
         dianhua: appConfig.StaticWebContext + '/img/yzt-renyuanceng/dianhua.png'
+      },
+      peopleListHeight: 798
+    }
+  },
+  computed: {
+    getPeopleListStyle: function () {
+      return {
+        'overflow-y': 'auto',
+        'overflow-x': 'hidden',
+        height: this.peopleListHeight + 'px'
       }
     }
   },
@@ -371,6 +381,11 @@ export default {
   },
   mounted: function () {
     // document['personList'] = this
+    var that = this
+    setInterval(function () {
+      var height = that.$el.querySelector('#people-layout-content').offsetHeight
+      that.peopleListHeight = height - 96
+    }, 1000)
   }
 }
 </script>
@@ -451,11 +466,11 @@ export default {
 }
 .person-name{
     margin-left: 20px;
-    min-width: 50px;
+    min-width: 60px;
     text-align:justify;text-justify:distribute-all-lines;text-align-last:justify;
 }
 .person-online{
-    margin-left: 75px;
+    margin-left: 65px;
     color: rgba(31, 192, 142, 1);
 }
 .person-operation{

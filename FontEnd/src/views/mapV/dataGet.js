@@ -15,8 +15,20 @@ export default {
    * 存储各类数据
    */
   data: {
-    peopleList: {},
+    /**
+     * 执法/巡检人员
+     */
+    peopleList: {
+      Records: [],
+      Total: []
+    },
+    /**
+     * 部门
+     */
     depList: {},
+    /**
+     * 事件
+     */
     alertEventList: {},
     wurenjiList: {},
     shexiangtouList: {}
@@ -47,6 +59,40 @@ export default {
     })
   },
   /**
+   * 从接口获取人员列表
+   */
+  doPostPeopleListAjax: function () {
+    var that = this
+    var url = appConfig.ApiWebContext + '/web/api'
+    var body = {
+      'id': 'CHECKSTAFFLIST',
+      'model': 'user_info',
+      'data': '',
+      'context': ''
+    }
+    return new Promise((resolve, reject) => {
+      postHttp(
+        {
+          url: url,
+          params: {},
+          data: body
+        }
+      ).then(function (res) {
+        if (!res.Success) {
+          resolve()
+          return
+        }
+        that.data.peopleList.Records.length = 0
+        that.data.peopleList.Records.push(...res.data)
+        that.data.peopleList.Total = res.data.length
+        resolve()
+      }, function (err) {
+        console.log(err)
+        reject(err)
+      })
+    })
+  },
+  /**
    * 从接口获取事件的默认处理人
    * @param {*} indexInAlertList data.alertEventList.Records 中的索引
    */
@@ -68,6 +114,10 @@ export default {
           data: body
         }
       ).then(function (res) {
+        if (!res.data) {
+          resolve()
+          return
+        }
         var data = JSON.parse(res.data)
         if (gisUtils.hasKey(data, 'successful')) {
           // successful 是四方德信接口返回的结果字段，接口出错才有
@@ -103,6 +153,10 @@ export default {
           data: body
         }
       ).then(function (res) {
+        if (!res.data) {
+          resolve()
+          return
+        }
         var data = JSON.parse(res.data)
         if (gisUtils.hasKey(data, 'successful')) {
           // successful 是四方德信接口返回的结果字段，接口出错才有
@@ -114,6 +168,48 @@ export default {
           return b.createTime - a.createTime
         })
         alertEventListItem['logs'] = logs
+        resolve()
+      }, function (err) {
+        console.log(err)
+        reject(err)
+      })
+    })
+  },
+  /**
+   * 任务派发
+   * @param {*} AssignUsers 执行人id
+   * @param {*} TaskContent 任务描述
+   * @param {*} EventInfoId 事件id
+   * @param {*} ExpectedCompletionTime 期望完成时间
+   * @param {*} MainHandler 主办人姓名
+   * @param {*} CoOrganizer 协办人姓名
+   */
+  doPostTastHandout: function (AssignUsers, TaskContent, EventInfoId, ExpectedCompletionTime, MainHandler, CoOrganizer) {
+    var url = appConfig.ApiWebContext + '/web/api'
+    var RemoteLinks = appConfig.AppHost + 'eventCheckCreate'
+    var data = {
+      // 'TaskType': 'EventCheck', // 任务类型
+      'AssignUsers': AssignUsers, // 执行人
+      'RemoteLinks': RemoteLinks, // 钉钉url连接
+      'TaskContent': TaskContent, // 任务描述
+      'EventInfoId': EventInfoId, // 事件id
+      // 'CaseID': '', // 案件id
+      'ExpectedCompletionTime': ExpectedCompletionTime, // 期望完成时间
+      'MainHandler': MainHandler, // 主办人
+      'CoOrganizer': CoOrganizer // 协办人
+    }
+
+    var body = '{"id": "create","model": "work_task","data":\'' + JSON.stringify(data) + '\'}'
+    console.log('body', body)
+    return new Promise((resolve, reject) => {
+      postHttp(
+        {
+          url: url,
+          params: {},
+          data: body
+        }
+      ).then(function (res) {
+        console.log('doPostTastHandout', res)
         resolve()
       }, function (err) {
         console.log(err)
@@ -134,9 +230,9 @@ export default {
       var _p = gisUtils.baiduToWGS84(lng, lat)
       var finishLimitTime = element.finishLimitTime ? element.finishLimitTime : moment().add(10, 'minutes').format(timeFormat)
       // var dealerName = isEmpty(element.dealerName) ? '' : element.dealerName
-      var dealerName = isEmpty(element.Dealers) || isEmpty(element.Dealers[0].realName) ? '-' : element.Dealers[0].realName
+      var dealerName = isEmpty(element.Dealers) || isEmpty(element.Dealers[0].realName) ? '' : element.Dealers[0].realName
       var dep = isEmpty(element.Dealers) ? undefined : this.findDepById(element.Dealers[0].deptId)
-      var depName = dep ? dep['Name'] : '-'
+      var depName = dep ? dep['Name'] : ''
       var evtFileUrl = isEmpty(element.evtFileUrl) ? '' : element.evtFileUrl.split(',')[0]
       var logs = element.logs
       list.push({
@@ -182,7 +278,7 @@ export default {
     for (let i = 0; i < Records.length; i++) {
       const element = Records[i]
       var depIndex = i
-      var depName = element.Department[1]
+      var depName = element.Organization
       depNames.push(depName)
       var depTamType = i % 2
       var open = true
@@ -195,17 +291,19 @@ export default {
           list: []
         }
       }
-      var StaffName = element.StaffName
-      var Longitude = element.Longitude
-      var Latitude = element.Latitude
-      var ID = element.ID
+      var StaffName = element.userName
+      // var Longitude = element.Longitude
+      // var Latitude = element.Latitude
+      var ID = element.userId
 
       depMap[depName].list.push({
         id: ID,
-        StaffName: StaffName,
-        online: element.IsOnline * 1 === 1,
-        location: [Longitude, Latitude],
-        isBusy: i % 2 === 0 // 模拟忙碌状态
+        type: 1, // 1-执法，0-巡检
+        StaffName: StaffName, // 姓名
+        depName: depName, // 部门名称
+        online: i % 2 === 0 // 模拟在线状态
+        // location: [Longitude, Latitude],
+        // isBusy: i % 2 === 0 // 模拟忙碌状态
       })
     }
     depNames = [...new Set(depNames)]
@@ -235,6 +333,18 @@ export default {
       element.Latitude = Latitude
     }
     return Records
+  },
+  /**
+   * 根据人员姓名查询人员信息
+   * @param {*} name 人员姓名
+   */
+  findPersonByName: function (name) {
+    for (var i = 0; i < this.data.peopleList.Records.length; i++) {
+      var element = this.data.peopleList.Records[i]
+      if (element.userName === name) {
+        return element
+      }
+    }
   },
   /**
    * 事件统计
@@ -276,24 +386,23 @@ export default {
   initData: function (after) {
     var urlApi = appConfig.ApiWebContext + '/web/pageddata'
     var bodyNotDoneAlert = { 'Condition': { 'rules': [], 'groups': [{ 'rules': [{ 'field': 'evtState', 'op': 'notequal', 'value': 'done', 'type': 'string' }], 'op': 'and' }], 'op': 'and' }, 'PageIndex': 1, 'PageSize': '50', 'SortName': 'objId', 'SortOrder': 'asc' }
-    var bodyAllPeople = { 'Condition': { 'rules': [], 'groups': [], 'op': 'and' }, 'PageIndex': 1, 'PageSize': '50', 'SortName': 'ID', 'SortOrder': 'asc' }
     var bodyAllDep = { 'Condition': { 'rules': [], 'groups': [], 'op': 'and' }, 'PageIndex': 1, 'PageSize': '50' }
     var that = this
     Promise.all([
       this.doPostDataAjax(urlApi, { model: 'event_info' }, bodyNotDoneAlert, 'alertEventList'),
-      this.doPostDataAjax(urlApi, { model: 'loc_field_staff' }, bodyAllPeople, 'peopleList'),
+      this.doPostPeopleListAjax(),
       this.doPostDataAjax(urlApi, { model: 'organization' }, bodyAllDep, 'depList')
     ]).then(() => {
       // 获取默认处理人
-      var promiseListGetDealer = that.data.alertEventList.Records.map(function (row, index) {
-        return that.doPostAlertEventAjaxGetDealerName(index)
-      })
+      // var promiseListGetDealer = that.data.alertEventList.Records.map(function (row, index) {
+      //   return that.doPostAlertEventAjaxGetDealerName(index)
+      // })
       // 获取事件进度列表
       var promiseListGetEventLog = that.data.alertEventList.Records.map(function (row, index) {
         return that.doPostAlertEventAjaxGetEventLog(index)
       })
       var promiseList = []
-      promiseList.push(...promiseListGetDealer)
+      // promiseList.push(...promiseListGetDealer)
       promiseList.push(...promiseListGetEventLog)
       Promise.all(promiseList).then(() => {
         console.log('dataGet', that.data)

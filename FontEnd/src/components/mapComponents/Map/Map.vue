@@ -116,8 +116,8 @@
             style="width:306px;float:right"
             v-model="infobox.alertEventLayer.other.mainPerson"
           >
-            <a-select-option v-for="p in infobox.alertEventLayer.other.list" :key="p.StaffName">
-              {{ p.StaffName }}
+            <a-select-option v-for="p in infobox.alertEventLayer.other.list" :key="p.userName">
+              {{ p.userName }}
             </a-select-option>
           </a-select>
         </div>
@@ -129,17 +129,20 @@
             placeholder="选择协办人"
             v-model="infobox.alertEventLayer.other.subPeople"
           >
-            <a-select-option v-for="p in infobox.alertEventLayer.other.list" :key="p.StaffName">
-              {{ p.StaffName }}
+            <a-select-option v-for="p in infobox.alertEventLayer.other.list" :key="p.userName">
+              {{ p.userName }}
             </a-select-option>
           </a-select>
         </div>
-        <div class="task-panel-lyr">
+        <div class="task-panel-lyr" style="height: 55px;">
           <div class="font-14 task-panel-lyr-title">任务说明</div>
           <a-textarea
             v-model="infobox.alertEventLayer.other.description"
             style="width:306px;float:right"
           />
+        </div>
+        <div class="task-panel-lyr" style="text-align: -webkit-center;">
+          <a-button type="primary" class="button-cuiban" @click="onClick_handoutTask">派发</a-button>
         </div>
       </div>
     </a-modal>
@@ -161,6 +164,7 @@ import addressPng from '../../../assets/icons/map/infobox/address.png'
 import laiyuanPng from '../../../assets/icons/map/infobox/laiyuan.png'
 import shijianWaitingPng from '../../../assets/icons/map/infobox/shijian@3x.png'
 import shijianDonePng from '../../../assets/icons/map/infobox/wancheng@3x.png'
+import gisUtils from '../../../utils/gisUtils'
 
 const INIT_CENTER_POINT = [11453501.9292637, 2813740.344427822]
 const INIT_ZOOM = 12
@@ -280,6 +284,7 @@ export default {
       this.infobox.alertEventLayer.other.list = this.dataGet.getPeopleListForMap()
       this.infobox.alertEventLayer.other.mainPerson = this.infobox.alertEventLayer.content.dealerName
       this.infobox.alertEventLayer.other.description = this.createTaskDescription()
+      this.infobox.alertEventLayer.other.time = moment().add(10, 'minutes')
     },
     /**
      * 创建事件任务描述
@@ -290,6 +295,32 @@ export default {
       var evtTypeName = this.infobox.alertEventLayer.header.title
       var txt = reportTime + ',上报在' + address + ',发现' + evtTypeName + '事件'
       return txt
+    },
+    /**
+     * 点击派发
+     */
+    onClick_handoutTask: function () {
+      var taskPanel = this.infobox.alertEventLayer.other
+      taskPanel.show = false
+      console.log('onClick_handoutTask', taskPanel)
+      var person = this.dataGet.findPersonByName(taskPanel.mainPerson)
+      if (!person) {
+        return
+      }
+      var AssignUsers = person.userId
+      var TaskContent = taskPanel.description
+      var EventInfoId = this.infobox.alertEventLayer.content.id
+      var ExpectedCompletionTime = taskPanel.time.format(dictionary.timeFormat)
+      var MainHandler = taskPanel.mainPerson
+      var CoOrganizer = taskPanel.subPeople.length ? taskPanel.subPeople.toLocaleString() : ''
+      this.dataGet.doPostTastHandout(
+        AssignUsers, TaskContent, EventInfoId, ExpectedCompletionTime, MainHandler, CoOrganizer
+      )
+        .then(function (res) {
+          console.log('onClick_handoutTask', res)
+        }, function (err) {
+          console.log('onClick_handoutTask', err)
+        })
     }
   },
   mounted: function () {
@@ -382,6 +413,9 @@ export default {
   height: 59px;
   padding: 0 25px;
 }
+.infobox-foot button{
+  box-shadow:0px 5px 15px rgba(58,157,250,0.5);
+}
 
 .alertEventLayer-content-lyr1{
   height: 205px;
@@ -419,10 +453,6 @@ export default {
   position: relative;
   overflow-y: auto;
 }
-.infobox-foot button{
-  width: 88px;
-  margin: 0 21px;
-}
 .title-icon{
   width:4px;
   height: 20px;
@@ -442,7 +472,9 @@ export default {
   color: rgba(127, 135, 174, 1);
 }
 .task-panel-lyr{
-  min-height: 40px;
+  min-height: 32px;
+  line-height: 32px;
+  margin: 12px 0;
 }
 .task-panel-lyr-title{
   float: left;
@@ -451,5 +483,12 @@ export default {
 .task-panel-lyr-content{
   width: 306px;
   float:right;
+}
+.button-cuiban{
+  width: 88px;
+  margin: 0 21px;
+}
+.task-panel-lyr button{
+  box-shadow:0px 5px 15px rgba(58,157,250,0.5);
 }
 </style>

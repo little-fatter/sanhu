@@ -11,7 +11,7 @@
         :style="getListStyle"
       >
         <a-list :dataSource="list" style="padding:0">
-          <a-list-item slot="renderItem" slot-scope="item" class="item" @click="onItemClick(item)">
+          <a-list-item slot="renderItem" slot-scope="item" class="item" @click="onItemClick(item) ">
             <hr class="line"/>
             <a-list :bordered="false" style="padding:0">
               <a-list-item class="item-lyr">
@@ -69,13 +69,6 @@ export default {
      * 前端数据中心
      */
     dataGet: {
-      type: Object,
-      default: undefined
-    },
-    /**
-     * 地图功能封装对象
-     */
-    mapApp: {
       type: Object,
       default: undefined
     }
@@ -158,8 +151,13 @@ export default {
         return _h + ':' + _m + ':' + _s
       }
     },
+    /**
+     * 点击事件
+     */
     onItemClick: function (item) {
-      this.aftetItemClick && this.aftetItemClick(item)
+      var layerName = 'alertEventLayer'
+      var id = item.id
+      mapApp.selectFeature(layerName, id)
     }
   },
   mounted: function () {
