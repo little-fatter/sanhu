@@ -95,7 +95,7 @@ namespace FastDev.Service
             {
                 if (!string.IsNullOrEmpty(lawpunishmentInfo.CaseId))
                 {
-                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", lawpunishmentInfo.CaseId);
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where Id=@0", lawpunishmentInfo.CaseId);
                     if (caseinfo != null)
                     {
                         caseinfo.CaseStatus = "已做出处罚决定";
@@ -111,7 +111,7 @@ namespace FastDev.Service
                     var caseid = (string)tasknow["CaseID"];
                     if (!string.IsNullOrEmpty(caseid))
                     {
-                        var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                        var caseinfo = QueryDb.FirstOrDefault<case_Info>("where Id=@0", caseid);
                         if (caseinfo != null)
                         {
                             caseinfo.CaseStatus = "已做出处罚决定";
