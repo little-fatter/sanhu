@@ -31,11 +31,11 @@
             <span v-if="item.LawPartys && item.LawPartys.length > 0">
               <span style="margin-right:0.15rem" v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
             </span>
-            <span v-else>测试数据</span>
+            <span v-else>无数据</span>
           </p>
           <p>
             <span>办案人：</span>
-            <span>{{ item.Investigators ? item.Investigators : '测试数据' }}</span>
+            <span>{{ item.Investigators ? item.Investigators : '无数据' }}</span>
           </p>
           <h4 class="case-tag">
             <van-tag plain>{{ item.CaseNumber }}</van-tag>
@@ -399,5 +399,8 @@ export default {
 }
 /deep/.van-ellipsis {
   color: #64697c !important;
+}
+.van-cell__title{
+  width: auto !important;
 }
 </style>

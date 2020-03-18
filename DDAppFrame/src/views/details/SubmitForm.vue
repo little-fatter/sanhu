@@ -237,7 +237,6 @@ export default {
       this.screenPage() // 关闭弹窗 cll
       this.SformType = item.ItemCode // 搜索用
       this.listData = [] // 重新搜索将 搜索结果清空
-      this.$refs.mylist.refresh()
       this.loadData(
         'formwith_eventcase',
         1,
@@ -291,7 +290,7 @@ export default {
         const data = getQueryConditonMoreForm(this.rules, [], 'or')
         return data
       } else if (!isNotEmpty(searchKeyWords) && isNotEmpty(SformType)) {
-        this.groups.splice(0, this.rules.length, {
+        this.groups.splice(0, this.groups.length, {
           rules: [
             {
               field: 'FormType', // 表单类型
@@ -312,6 +311,10 @@ export default {
     // 获取列表信息
 
     loadData (parameter) {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true
+      })
       // 第一次请求 筛选规则为空
       // var rules = []
       return getPageDate(
@@ -320,8 +323,8 @@ export default {
         10,
         this.dealParameter(this.searchKeyWords, this.SformType)
       ).then(res => {
-        console.log(res.Rows, '返回的数据')
         if (res.Rows) {
+          this.$toast.clear()
           res.Rows.forEach(item => {
             this.listData.push(item)
           })
@@ -335,7 +338,8 @@ export default {
     },
     // 去详情
     goTodetail (item) {
-      console.log(item, '跳转信息')
+      // console.log(item)
+
       /**
        *
         物品清单 form_confiscated_item
@@ -347,6 +351,8 @@ export default {
         卷宗封面 case_cover
         询问当事人笔录 form_inquiryrecord_litigant
         询问证人笔录 form_inquiryrecord_witness
+        现场勘查 task_survey
+        事件核查 task_patrol
 
        */
 
@@ -401,6 +407,18 @@ export default {
         this.$router.push({
           path: '/AskWitnessNote',
           query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
+      } else if (item.FormType === 'task_survey') {
+        // 现场勘查
+        this.$router.push({
+          path: '/sceneInvestigationDetail',
+          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+        })
+      } else if (item.FormType === 'task_patrol') {
+        // 事件核查
+        this.$router.push({
+          path: '/eventDetail',
+          query: { msg: { EventInfoId: item.EventInfoId, FormType: item.FormType } }
         })
       }
     }

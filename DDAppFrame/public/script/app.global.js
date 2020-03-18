@@ -58,7 +58,7 @@ var publicAppConfig = {
   },
   /** 配置pc站点host,用于任务PC链接 */
   pcHost: '',
-  pdfHost: 'http://192.168.0.125:8083/', // PDF 路径配置
+  pdfHost: 'http://192.168.0.125:8030/', // PDF 路径配置
   /**
      * 请求超时的毫秒数
      */
