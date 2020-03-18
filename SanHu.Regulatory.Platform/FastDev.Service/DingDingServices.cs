@@ -90,8 +90,8 @@ namespace FastDev.Service
             request.AgentId = long.Parse(_serverNameConfig.AgentId);
             
             //TODO fill up the list property
-            request.OriginatorUserId = "AccountId";//框架User表中AccountId
-            request.DeptId = long.MinValue; //user表中的deptId是GUID
+            //request.OriginatorUserId = "AccountId";//框架User表中AccountId
+            //request.DeptId = long.MinValue; //user表中的deptId是GUID
             return PostFrameWork<OapiProcessinstanceCreateResponse>(url, request);
         }
 
