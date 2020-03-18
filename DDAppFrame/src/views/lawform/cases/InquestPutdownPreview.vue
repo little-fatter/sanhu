@@ -2,32 +2,20 @@
   <div>
     <van-cell-group>
       <van-cell title="案件号" :value="model.caseInfo.CaseNumber"></van-cell>
-      <van-cell title="案由" :value="model.form.Originofcase"></van-cell>
-      <van-cell title="询问对象" :value="model.form.InquiryType"></van-cell>
-      <van-cell title="询问地点" :value="model.form.Enquiryplace"></van-cell>
-      <party-info-view :initData="model.lawParties" :title="model.form.InquiryType"></party-info-view>
+      <van-cell title="案由" :value="model.caseInfo.CauseOfAction"></van-cell>
+      <van-cell title="检查事由" :value="model.form.Inspectionreason"></van-cell>
+      <van-cell title="检查地点" :value="model.form.Incidentlocation"></van-cell>
+      <party-info-view :initData="model.caseInfo.LawParties"></party-info-view>
       <van-cell title="执法检查人员" :value="model.lawPersionNames"></van-cell>
       <van-cell title="记录人员" :value="model.recordPersionNames"></van-cell>
+      <van-cell title="监督检查类别" :value="model.form.InspectiontypeName"></van-cell>
       <van-cell title="开始时间" :value="model.form.startTime"></van-cell>
       <van-cell title="结束时间" :value="model.form.endTime"></van-cell>
-      <van-cell title="被询问人是否看清执法证件" :value="model.form.Isseeclearly"></van-cell>
-      <van-cell class="explain">
-        依照法律规定，被询问人对调查询问，享有申请执法人员回避的权利，有如实接受调查询问的法律义务，如有意隐匿违法行为或者故意作伪证将承担法律责任。
-      </van-cell>
-      <van-cell title="被询问人是否明白权责义务" :value="model.form.Isunderstand"></van-cell>
-      <van-field
-        name="Inquiryrecord"
-        v-model="model.form.Inquiryrecord"
-        rows="2"
-        autosize
-        label="询问记录"
-        type="textarea"
-        placeholder="请输入询问记录"
-        readonly
-      />
+      <van-cell title="被检查陪同人" :value="model.form.Companions"></van-cell>
+      <van-cell title="勘验记录" :value="model.form.Inspectionrecord"></van-cell>
       <div class="operate-area">
-        <div class="person_item" v-for="(item,index) in model.lawParties" :key="index">
-          <span style="margin-right:20px">{{ `${model.form.InquiryType}${index+1}` }}:</span>  <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" >手签</van-button>
+        <div class="person_item" v-for="(item,index) in model.caseInfo.LawParties" :key="index">
+          <span style="margin-right:20px">{{ `当事人${index+1}` }}:</span>  <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" >手签</van-button>
           <van-icon name="success" color="green" v-show="dsrSignature" style="margin-left:20px"></van-icon>
         </div>
         <div class="person_item">
@@ -50,14 +38,14 @@
 <script>
 import Signature from '../../../components/tools/Signature'
 import PartyInfoView from '../../../components/business/PartyInfoView'
-import { isNotEmpty } from '../../../utils/util'
 import { commonOperateApi } from '../../../api/regulatoryApi'
+import { isNotEmpty } from '../../../utils/util'
 var timer
 /**
- *  询问笔录详情
+ *  勘查笔录预览详情
  */
 export default {
-  name: 'AskPutdownPreview',
+  name: 'InquestPutdownPreview',
   components: {
     Signature,
     PartyInfoView
@@ -70,7 +58,7 @@ export default {
       loading: false,
       model: null,
       signatureType: null,
-      dsrSignature: null,
+      dsrSignature: [],
       zfr1Signature: null,
       zfr2Signature: null,
       showPopup: false
@@ -96,11 +84,10 @@ export default {
     onCloseSignature () {
       this.showPopup = false
     },
-    onSignatureConfirm (signature) {
+    onSignatureConfirm (signature, index) {
       if (this.signatureType === 'dsrSignature') {
-        this.dsrSignature = signature
+        this.dsrSignature.push(signature)
       }
-
       if (this.signatureType === 'zfr1Signature') {
         this.zfr1Signature = signature
       }
@@ -111,20 +98,17 @@ export default {
       this.showPopup = false
     },
     submit () {
-      var formInquiryrecord = {
+      var formInquestrecord = {
         ...this.model.form,
         CaseId: this.model.caseInfo.ID,
         EventInfoId: this.model.caseInfo.EventInfoId,
         Recorder: this.model.recordPersionNames
       }
       var data = {
-        formInquiryrecord,
+        formInquestrecord,
         LawParties: this.model.caseInfo.LawParties,
         lawStaff: []
       }
-      data.LawParties.forEach(item => {
-        item.InquiryType = this.model.form.InquiryType
-      })
       this.model.lawPersions.forEach(item => {
         var user = {
           UserId: item.emplId,
@@ -136,7 +120,7 @@ export default {
     },
     save (data) {
       this.loading = true
-      commonOperateApi('FINISH', 'form_inquiryrecord', data).then((res) => {
+      commonOperateApi('FINISH', 'form_inquestrecord', data).then((res) => {
         this.$toast.success('操作成功')
         this.goToLawForm()
       }).finally(() => {

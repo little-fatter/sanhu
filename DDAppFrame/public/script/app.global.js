@@ -17,10 +17,8 @@ var publicAppConfig = {
     appHost: {
       admin: 'http://182.150.28.58:27011/framework',
       file: 'http://182.150.28.58:27012/filesystem',
-      regulatory: 'http://192.168.0.125:8030/webapi',
-      // regulatory: 'http://14.205.92.142:10680/webapi',
-      // 四方德信接口
-      sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
+      regulatory: 'http://192.168.0.125:8030/webapi'
+      // regulatory: 'http://182.150.28.58:8030/webapi',
     },
     mapConfig: {
       regulatory: 'http://zhsh.8e9bcb.grapps.cn/regulatory'
@@ -47,7 +45,8 @@ var publicAppConfig = {
     'biz.cspace.saveFile',
     'biz.contact.complexPicker',
     'biz.map.search',
-    'device.geolocation.get'
+    'device.geolocation.get',
+    'biz.chat.chooseConversationByCorpId'
   ],
   /** 审批配置 */
   auditCondig: {
@@ -59,7 +58,7 @@ var publicAppConfig = {
   /**
      * 请求超时的毫秒数
      */
-  httpClientTimeout: 20000,
+  httpClientTimeout: 30000,
   /**
      * signalr服务端地址
      */
