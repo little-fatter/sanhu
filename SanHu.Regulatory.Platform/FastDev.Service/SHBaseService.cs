@@ -76,6 +76,7 @@ namespace FastDev.Service
         /// <param name="workTaskStatus"></param>
         public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
+            if (taskid == null) return;
             var taskInfo = GetWorkTask(taskid);
             if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;

@@ -39,13 +39,13 @@ namespace FastDev.Service
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
-                CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
+                string laid= CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
 
                 //打印预生成
                 var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formName"":""law_punishmentInfo""}" });
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + laid + @""",""formName"":""law_punishmentInfo""}" });
             }
             catch (Exception e)
             {
@@ -62,7 +62,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
+        private string CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
         {
             var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
@@ -75,6 +75,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "law_punishmentInfo";
                     l.AssociationobjectID = lawpunishment_Info;
                     l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
                     QueryDb.Insert(l);
                     //_Lawpartys.Create(l);
                 }
@@ -86,6 +87,7 @@ namespace FastDev.Service
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
                     a.ID = Guid.NewGuid().ToString();
+                   a.CreateDate = DateTime.Now;
                     QueryDb.Insert(a);
                    // _attachment.Create(a);           
                 }
@@ -121,7 +123,7 @@ namespace FastDev.Service
                 }
             }
 
-
+            return lawpunishment_Info;
         }
     }
 }

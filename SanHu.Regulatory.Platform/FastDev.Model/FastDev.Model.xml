@@ -154,7 +154,7 @@
             表单ID
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.Form_printPDFReq.formType">
+        <member name="P:FD.Model.Dto.Form_printPDFReq.formName">
             <summary>
             表单名称
             </summary>
