@@ -34,6 +34,11 @@
             结案报告
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.case_reportFinishReq.oapiProcessinstanceCreateRequest">
+            <summary>
+            钉钉审核流参数
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormDataReq.Model">
             <summary>
             主表模块
@@ -149,7 +154,7 @@
             表单ID
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.Form_printPDFReq.formName">
+        <member name="P:FD.Model.Dto.Form_printPDFReq.formType">
             <summary>
             表单名称
             </summary>
@@ -232,6 +237,11 @@
         <member name="P:FD.Model.Dto.RoleDetailsDTO.BizTypeEnumValue">
             <summary>
             业务类型枚举Item值
+            </summary>
+        </member>
+        <member name="T:FD.Model.Dto.SFApiDTO">
+            <summary>
+            请求四方德信平台api输入数据
             </summary>
         </member>
         <member name="T:FD.Model.Dto.TaskNextStepReq">

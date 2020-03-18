@@ -55,6 +55,7 @@ var publicAppConfig = {
   },
   /** 配置pc站点host,用于任务PC链接 */
   pcHost: '',
+  pdfHost: 'http://192.168.11.49:8082/', // PDF 路径配置
   /**
      * 请求超时的毫秒数
      */

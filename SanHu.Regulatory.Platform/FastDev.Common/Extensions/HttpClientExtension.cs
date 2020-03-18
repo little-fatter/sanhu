@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace FD.Common.Extensions
 {
+    public class WanjiangResponse
+    { 
+        public object Code { get; set; }
+        public object Message { get; set; }
+        public object Data { get; set; }
+    }
+
     public static class HttpClientExtension
     {
         /// <summary>
@@ -36,7 +43,8 @@ namespace FD.Common.Extensions
                 var response = await httpClient.GetStringAsync(uri);
                 if (!string.IsNullOrEmpty(response))//请求成功
                 {
-                    return JsonConvert.DeserializeObject<T>(response);
+                    var result = JsonConvert.DeserializeObject<WanjiangResponse>(response);
+                    return JsonConvert.DeserializeObject<T>(result.Data.ToString());
                 }
                 return default(T);
             }

@@ -6,7 +6,7 @@ function condition (params = {}, pageiIndex = 1, pageSize = 10) {
   return {
     Condition: {
       rules: [],
-      groups: [(params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? params : ''],
+      groups: (params.rules && params.rules.length > 0) || (params.groups && params.groups.length > 0) ? [params] : [],
       op: 'and'
     },
     PageIndex: pageiIndex,
@@ -154,5 +154,23 @@ export const startProcessInstance = (parameter) => {
   return postHttp({
     url: apiConfig.startProcessInstance,
     data: parameter
+  })
+}
+/**
+ * 根据表单ID获取PDF
+ * @param {*} eventInfoid
+ * @param {*} model
+ */
+export const getFormsDetailByEventInfoIdPdf = (formId = '', formType = '') => {
+  return postHttp({
+    url: apiConfig.commonOperateApi,
+    data: {
+      id: '',
+      model: 'form_printPDF',
+      data: {
+        formId,
+        formType
+      }
+    }
   })
 }

@@ -65,12 +65,12 @@ import { getPageData } from '@/api/sampleApi'
 // 查询mode
 const MODE = 'event_info'
 // 查询字段集合
-const fields = ['evtCode', 'remark', 'evtTypeDisplayName']
+const FIELDS = ['evtCode', 'remark', 'evtTypeDisplayName']
 // 查询规则
 const genSearchRules = key => {
   if (!key) return {}
   return {
-    rules: fields.map(i => ({
+    rules: FIELDS.map(i => ({
       field: i,
       value: key,
       op: 'like',

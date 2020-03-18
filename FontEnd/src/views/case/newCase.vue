@@ -235,6 +235,7 @@ export default {
   methods: {
     selectCase (record) {
       this.caseInfo = record
+      console.log(record)
     },
     onblur () {
       this.titleInputShow = false

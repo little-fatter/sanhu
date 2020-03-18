@@ -7,217 +7,138 @@ function() {
             type: "form",
             form: {
                 fields: [{
-                    newline: true,
                     name: "EventInfoId",
                     label: "事件id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
+                    newline: 1,
+                    editor: {},
                     type: "text"
                 },
                 {
-                    newline: false,
                     name: "CaseId",
                     label: "案件Id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
+                    editor: {},
+                    type: "text",
+                    newline: 0
                 },
                 {
-                    newline: true,
                     name: "PreviousformID",
                     label: "上一个表单id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
+                    newline: 1,
+                    editor: {},
                     type: "text"
                 },
                 {
-                    newline: false,
                     name: "Illegalfacts",
                     label: "违法事实",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
+                    editor: {},
+                    type: "text",
+                    newline: 0
                 },
                 {
-                    newline: true,
                     name: "IllegalbasisID",
                     label: "违法依据Id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
+                    newline: 1,
+                    editor: {},
                     type: "text"
                 },
                 {
-                    newline: false,
                     name: "PunishmentbasisID",
                     label: "处罚依据id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
+                    editor: {},
+                    type: "text",
+                    newline: 0
                 },
                 {
-                    newline: true,
                     name: "Punishmentdecision",
                     label: "处罚决定",
+                    newline: 1,
                     editor: {
-                        url: "/web/listdata",
+                        url: "/web/namedata",
                         parms: {
                             model: "res_dictionary"
                         },
+                        detailEnabled: true,
+                        detailUrl: "/web/detaildata",
+                        detailParms: {
+                            model: "res_dictionary"
+                        },
                         valueField: "ID",
+                        sourceFilter: null,
                         textField: "Title",
-                        many2one: true,
-                        type: "ref_select"
+                        many2one: true
                     },
                     type: "ref_select"
                 },
                 {
-                    newline: false,
                     name: "Isfine",
                     label: "是否罚款",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
+                    editor: {},
+                    type: "text",
+                    newline: 0
                 },
                 {
-                    newline: true,
                     name: "IsConfiscationgoods",
                     label: "是否没收物品",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
+                    newline: 1,
+                    editor: {},
                     type: "text"
                 },
                 {
-                    newline: false,
                     name: "Amountofpenalty",
                     label: "罚款金额",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
+                    editor: {},
+                    type: "text",
+                    newline: 0
                 },
                 {
-                    newline: true,
                     name: "Paymentmethod",
                     label: "缴纳方式",
+                    newline: 1,
                     editor: {
-                        url: "/web/listdata",
+                        url: "/web/namedata",
                         parms: {
                             model: "res_dictionary"
                         },
+                        detailEnabled: true,
+                        detailUrl: "/web/detaildata",
+                        detailParms: {
+                            model: "res_dictionary"
+                        },
                         valueField: "ID",
+                        sourceFilter: null,
                         textField: "Title",
-                        many2one: true,
-                        type: "ref_select"
+                        many2one: true
                     },
                     type: "ref_select"
                 },
                 {
-                    newline: false,
                     name: "  Assistants",
                     label: "协办人",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
+                    editor: {},
+                    type: "text",
+                    newline: 0
+                },
+                {
+                    name: " AssistantsId",
+                    label: "协办人Id",
+                    newline: 1,
+                    editor: {},
                     type: "text"
                 },
                 {
-                    newline: true,
-                    name: " AssistantsId",
-                    label: "协办人Id",
-                    editor: {
-                        many2many: "ref_select_mul",
-                        many2one: "ref_select",
-                        one2many: "ref_grid_edit",
-                        datetime: "datepicker",
-                        integer: "int",
-                        float: "float",
-                        boolean: "checkbox",
-                        type: "text"
-                    },
-                    type: "text"
-                }]
+                    name: "FormName",
+                    label: "表单名称",
+                    editor: {},
+                    type: "text",
+                    newline: 0
+                }],
+                tab: null
             },
             common: {
                 saveCallbackType: "toClose"
-            }
+            },
+            link: {},
+            addins: {}
         },
         dataset: 'web/dataset?model=law_punishmentInfo&viewname=form'
     };
@@ -225,6 +146,10 @@ function() {
         name: 'law_punishmentInfo',
         title: '处罚当场决定书'
     };
+
+    exports.service = function service(page) {
+
+};
 
     return exports;
 });

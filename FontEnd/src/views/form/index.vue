@@ -274,37 +274,37 @@ export default {
       if (record.FormType === 'form_confiscated_item') { // 物品清单
         this.$router.push({
           path: '',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       } else if (record.FormType === 'form_inquiryrecord') { // 询问记录
         this.$router.push({
           path: '',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       } else if (record.FormType === 'case_Info') { // 案件
         this.$router.push({
           path: '',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       } else if (record.FormType === 'law_punishmentInfo') { // 处罚决定书
         this.$router.push({
           path: '',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       } else if (record.FormType === 'case_report') { // 结案报告
         this.$router.push({
           path: '/data-manage/form/close-person-report',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       } else if (record.FormType === 'case_cover') { // 卷宗封面
         this.$router.push({
           path: '',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       } else if (record.FormType === 'form_inquestrecord') { // 勘验记录
         this.$router.push({
           name: 'sceneInvestigationDetail',
-          query: { id: record.ID }
+          query: { id: record.ID, formType: record.FormType }
         })
       }
     },

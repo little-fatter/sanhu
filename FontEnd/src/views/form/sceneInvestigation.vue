@@ -42,7 +42,7 @@
             border-top: 1px solid #DCDEE2;
       }
       .box {
-        margin-top:20px;
+        // margin-top:20px;
         .row {
       padding: 10px;
       .colLine {
@@ -134,7 +134,7 @@
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">上报来源：</a-col>
-          <a-col class="colSize contentColor" :span="12">{{ eventInfo.ReportSource }}</a-col>
+          <a-col class="colSize contentColor" :span="12">{{ eventInfo.ReportSource || '公众号举报' }}</a-col>
         </a-row>
         <a-row class="row">
           <a-col class="colSize colLine" :span="4">上报人：</a-col>
@@ -234,7 +234,8 @@ export default {
     init () {
       const queryParam = this.$route.query
       const id = queryParam.id || '2a656a23-5914-49ad-91ae-e6b16aa530f7'
-      console.log(id)
+      const formType = queryParam.formType
+      console.log(formType)
       getFormDetail('task_survey', null, id).then(res => {
         if (res) {
           this.loadData = {
