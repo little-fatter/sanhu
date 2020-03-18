@@ -46,7 +46,7 @@ namespace FastDev.Service
 
                 //打印预生成
                 var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.form_Inquiryrecord.ID + @""",""formName"":""form_inquiryrecord""}" });
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + form.ID + @""",""formType"":""form_inquiryrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)

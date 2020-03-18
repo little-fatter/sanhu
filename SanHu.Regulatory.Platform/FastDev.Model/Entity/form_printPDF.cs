@@ -14,11 +14,6 @@ public string FormID
 get;
 set;
 }
-public string FormName
-{
-get;
-set;
-}
 public string FilePath
 {
 get;
@@ -30,6 +25,11 @@ get;
 set;
 }
 public string ReferenceFilePath
+{
+get;
+set;
+}
+public string formtypes
 {
 get;
 set;
