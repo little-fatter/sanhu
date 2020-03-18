@@ -76,6 +76,7 @@ namespace FastDev.Service
         /// <param name="workTaskStatus"></param>
         public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
+            if (taskid == null) return;
             var taskInfo = GetWorkTask(taskid);
             if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
@@ -125,6 +126,17 @@ namespace FastDev.Service
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
+
+            if (data.Model.ToLower()== "task_survey")  // 现场勘查 EventType 显示中文title
+            {
+                var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+                var eventType = obj["EventType"].ToString();
+                if (dicItems.ContainsKey(eventType))
+                {
+                    obj["EventType"] = dicItems[eventType];
+                }
+            }
 
             //构建其他需要查询的数据
             var dicData = BuildData(data, formId);

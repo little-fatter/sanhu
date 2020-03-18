@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freedesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <model name="form_confiscated" title="没收清单" textField="Othergoods" moduleName="case" moduleTitle="案件" dbName="" />
+    <fields>
+        <field name="Othergoods" dbName="Othergoods" title="其他物品" type="string" length="200" isPK="N" />
+        <field name="Department" dbName="Department" title="申请部门" type="string" length="100" isPK="N" />
+        <field name="LawpartyId" dbName="LawpartyId" title="当事人Id" type="string" length="100" isPK="N" />
+        <field name="MainHandlersign" dbName="MainHandlersign" title="主办人签名" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="CoOrganizersign" dbName="CoOrganizersign" title="协办人签名" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="Lawpartysign" dbName="Lawpartysign" title="当事人签名" type="text" length="4000" relationModel="" relationField="" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="TaskId" dbName="TaskId" title="任务" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseId" dbName="CaseId" title="案件" type="string" length="100" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+    </fields>
+    <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <delete base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getdetail base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
+    <getlist base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+    <getpageddata base_fields="*" base_ignore_fields="" many2one="" one2many="" many2many="" />
+</freedesign>

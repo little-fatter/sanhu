@@ -208,7 +208,7 @@ export const autoLogin = (isInit = true) => {
           var msg = '免登录失败,请联系管理员'
           ddAlert(msg)
           apphideLoading()
-          resolve(error)
+          reject(error)
         })
       } else {
         resolve()

@@ -2,34 +2,54 @@ namespace FastDev.Model.Report
 {
   using System;
  using System.Runtime.CompilerServices;
-public partial class form_printPDF
+public partial class form_confiscated
 {
 public string ID
 {
 get;
 set;
 }
-public string FormID
+public string Othergoods
 {
 get;
 set;
 }
-public string FilePath
+public string Department
 {
 get;
 set;
 }
-public string Sign
+public string LawpartyId
 {
 get;
 set;
 }
-public string ReferenceFilePath
+public string MainHandlersign
 {
 get;
 set;
 }
-public string formtypes
+public string CoOrganizersign
+{
+get;
+set;
+}
+public string Lawpartysign
+{
+get;
+set;
+}
+public string EventInfoId
+{
+get;
+set;
+}
+public string TaskId
+{
+get;
+set;
+}
+public string CaseId
 {
 get;
 set;

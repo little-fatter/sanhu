@@ -39,11 +39,9 @@ namespace FastDev.Service
                     //填值
                     var UsrService = SysContext.GetService<IUserServices>();
                     var loginClientInfo = SysContext.GetService<WanJiang.Framework.Infrastructure.Logging.ClientInfo>();
-                    var te = loginClientInfo.AccountId;
 
                     //ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
                     //var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
-
                     //var deptId = OTDB.FirstOrDefault<long>(@"SELECT org.id FROM organization org 
                     //                        inner join organizationuser ou on ou.OrganizationId = org.Id
                     //                        inner join user usr on usr.Id = ou.UserId
@@ -52,18 +50,18 @@ namespace FastDev.Service
                     //if (deptId == null)
                     //    throw new Exception("无组织部门");
 
-
                     var usrDetail = UsrService.GetUserDetails(loginClientInfo.UserId);
                     var ddService = SysContext.GetService<IDingDingServices>();
-                    if (usrDetail.Result.Organizations == null)
+                    if (usrDetail.Result.Organizations == null || usrDetail.Result.Organizations.Count <= 0)
                         throw new Exception("无组织部门");
                     var deptId = usrDetail.Result.Organizations[0].Id;
 
-
                     data.oapiProcessinstanceCreateRequest.DeptId = deptId;
+                    data.oapiProcessinstanceCreateRequest.OriginatorUserId = loginClientInfo.AccountId;
 
                     var result = ddService.ProcessInstaceCreateAsync(data.oapiProcessinstanceCreateRequest);
-                    if (result.Result.Errmsg.ToLower() != "ok")
+                    var test = result.Result;
+                    if (result.Result?.Errmsg.ToLower() != "ok")
                         throw new Exception("发起审核流失败");
                     //var targetId = result.Result.ProcessInstanceId;
                     if (data.CaseReport.TaskId == null || data.CaseReport.TaskId == "")
@@ -73,6 +71,7 @@ namespace FastDev.Service
                         throw new Exception("该Task不存在");
                     //更新值
                     taskObj.processInstanceId = result.Result.ProcessInstanceId;
+                    data.CaseReport.FormState = "待审批";
                     //data.CaseReport.
                     QueryDb.Update(taskObj);
                     //ServiceHelper.GetService("work_task").Update(taskObj);
@@ -84,7 +83,7 @@ namespace FastDev.Service
 
                 //打印预生成
                 var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.CaseReport.ID + @""",""formName"":""case_report""}" });
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.CaseReport.ID + @""",""formType"":""case_report""}" });
             }
             catch (Exception e)
             {
@@ -105,7 +104,7 @@ namespace FastDev.Service
         {
             var CaseInfoSource = base.Create(caserport) as string;
             ///更新案件信息
-
+            caserport.ID = CaseInfoSource;
             var tasknow = ServiceHelper.GetService("work_task").GetDetailData(caserport.TaskId, null);
             if (tasknow != null)
             {

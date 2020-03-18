@@ -21,6 +21,25 @@ namespace FastDev.DevDB
 
         private static Assembly designModelAssembly;
 
+        /// <summary>
+        /// 主框架授权码
+        /// </summary>
+        public static string FrameworkAccessToken { get; set; }
+        /// <summary>
+        /// 主框架授权时间
+        /// </summary>
+        public static DateTime AuthTime { get; set; }
+        /// <summary>
+        /// 主框架授权时间时间是否超时
+        /// </summary>
+        public static bool IsAuthOutTime
+        {
+            get
+            {
+                TimeSpan ts = DateTime.Now.Subtract(AuthTime);
+                return ts.TotalMinutes > 55;
+            }
+        }
 
         public static string AppId
         {
