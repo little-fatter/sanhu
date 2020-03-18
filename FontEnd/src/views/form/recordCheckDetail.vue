@@ -8,7 +8,7 @@
 
 <template>
   <div class="pdf-page">
-    <pdf-panel :pdf="pdf" :files="files" pdfName="处罚决定" />
+    <pdf-panel :pdf="pdf" :files="files" pdfName="勘验笔录" />
   </div>
 </template>
 
@@ -27,12 +27,7 @@ export default {
       // pdf页数
       pdf: '/pdf/test.pdf',
       id: '',
-      files: [
-        {
-          fileName: '污染源.jpg',
-          FileCode: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-04/6457641638b8ee17a95c930d624f63a3.png'
-        }
-      ]
+      files: []
     }
   },
   mounted () {
@@ -46,7 +41,7 @@ export default {
       }
     },
     loadData (id) {
-      const type = formType.law_punishmentInfo
+      const type = formType.form_inquestrecord
       getFormDetail(type, null, id, ['attachment']).then((res) => {
         if (res) {
           console.log('getFormDetail -> res', res)

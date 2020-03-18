@@ -29,7 +29,7 @@ var publicAppConfig = {
     sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
   },
   /** PDF拼接地址 */
-  pdfHost: 'http://192.168.0.125:8030',
+  pdfHost: 'http://192.168.0.169:8030',
   /** 微应用ID 如果只有一个微应用可以配置在这里，否则请配置为链接参数 */
   agentId: '456468162',
   /** 配置业务localStorage的key值 */
