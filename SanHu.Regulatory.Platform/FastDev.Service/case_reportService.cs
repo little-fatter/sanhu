@@ -77,7 +77,19 @@ namespace FastDev.Service
                     //ServiceHelper.GetService("work_task").Update(taskObj);
                 }
                 #endregion
-                CreateInfo(data.CaseReport);
+                 CreateInfo(data.CaseReport);
+                if (string.IsNullOrEmpty(data.CaseReport.CaseId))
+                {
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("select * from case_Info where Id=@0", data.CaseReport.CaseId);
+                    if(caseinfo==null)
+                        throw new Exception("没有案件信息");
+                    caseinfo.CaseStatus = "已处罚";
+                    QueryDb.Update(caseinfo);
+                }
+                else
+                {
+                    throw new Exception("没有案件信息");
+                }
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
 
