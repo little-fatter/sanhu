@@ -18,19 +18,19 @@ namespace FastDev.Service
         {
             var lst = (data as PagedData).Records;
 
-            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            //ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
 
-            for (int i = 0; i < lst.Count; i++)
-            {
-                var item = lst[i] as Dictionary<string, object>;
+            //for (int i = 0; i < lst.Count; i++)
+            //{
+            //    var item = lst[i] as Dictionary<string, object>;
 
-                string userid = item["CreateUserID"] == null ? string.Empty : item["CreateUserID"].ToString();
-                if (!string.IsNullOrWhiteSpace(userid))
-                {
-                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
-                    item["handler"] = user.Name;
-                }
-            }
+            //    string userid = item["CreateUserID"] == null ? string.Empty : item["CreateUserID"].ToString();
+            //    if (!string.IsNullOrWhiteSpace(userid))
+            //    {
+            //        var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
+            //        item["handler"] = user.Name;
+            //    }
+            //}
         }
     }
 }
