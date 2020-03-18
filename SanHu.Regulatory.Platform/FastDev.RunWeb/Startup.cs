@@ -1,7 +1,10 @@
 using FastDev.Common.ActionValue;
 using FastDev.Common.Extensions;
+using FastDev.RunWeb.Code;
 using FD.Common.ActionValue;
+using FD.Model.Configs;
 using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,10 +21,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using UEditor.Core;
 using WanJiang.Framework.Web.Core;
 using WanJiang.Framework.Web.Core.Authentication;
@@ -48,6 +53,8 @@ namespace FastDev.RunWeb
               .AddEnvironmentVariables();
             Configuration = configuration;// builder.Build();
             WebEnvironment = env;
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -77,39 +84,39 @@ namespace FastDev.RunWeb
             var rsaSecurityKey = new RsaSecurityKey(rsaParams);
             services.AddSingleton(rsaSecurityKey);
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
+            {
+                option.Authority = jwtParameterConfig.Issuer;
+                option.RequireHttpsMetadata = false;
+                option.Audience = jwtParameterConfig.Audience;
+                option.TokenValidationParameters = new TokenValidationParameters
                 {
-                    //option.Cookie.Expiration = TimeSpan.FromDays(14);
-                    option.Cookie.Path = "/";
-                    option.ExpireTimeSpan = TimeSpan.FromDays(14);
-                    option.Cookie.SameSite = SameSiteMode.Lax;
-                    option.SlidingExpiration = true;
-                    option.LoginPath = "/Account/Login";
-                    option.LogoutPath = "/Account/Logout";
-                    option.AccessDeniedPath = "/Account/AccessDenied";
-                })
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
+                    NameClaimType = JwtClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role,
+                };
+                option.Events = new JwtBearerEvents
                 {
-                    option.TokenValidationParameters = new TokenValidationParameters
+                    OnMessageReceived = context =>
                     {
-                        NameClaimType = JwtClaimTypes.Name,
-                        RoleClaimType = JwtClaimTypes.Role,
-
-                        ValidIssuer = jwtParameterConfig.Issuer,
-                        ValidAudience = jwtParameterConfig.Audience,
-                        IssuerSigningKey = rsaSecurityKey
-                    };
-                    option.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                            new TokenValidatedInvoker(expiresTime.SessionTimeout).Invoke(context),
-                    };
-                })
-                .AddAppKey(AppKeyDefaults.AuthenticationScheme, option =>
-                {
-                    option.XWsseTimeout = expiresTime.XWsseTimeout;
-                });
+                        if (context.Request.Headers.TryGetValue("Authorization", out var tokenInfo))
+                        {
+                            context.Token = tokenInfo[0].Split(" ")[1];
+                        }
+                        else if (context.Request.Cookies.TryGetValue(jwtParameterConfig.CookieName, out var token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                        new TokenValidatedInvoker().Invoke(context),
+                };
+            });
             services.AddConfigHttpClient(Configuration);
 
             services.AddControllersWithViews(options =>
@@ -169,8 +176,8 @@ namespace FastDev.RunWeb
                 options.Cookie.HttpOnly = true;
             });
             services.AddCors();
-            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-            services.AddTransient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>();
+            //services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            //services.AddTransient<CookieAuthenticationHandler, CustomCookieAuthenticationHandler>();
             //配置数据保护共享的机器秘钥
             services.AddDataProtection(configure =>
             {
@@ -206,7 +213,7 @@ namespace FastDev.RunWeb
                 var xmlPath = Path.Combine(basePath, "FastDev.RunWeb.xml");
                 var ModelPath = Path.Combine(basePath, "FastDev.Model.xml");
                 var devDbPath = Path.Combine(basePath, "FastDev.DevDB.xml");
-                
+
                 option.IncludeXmlComments(xmlPath);
                 option.IncludeXmlComments(ModelPath);
                 option.IncludeXmlComments(devDbPath);
@@ -256,7 +263,7 @@ namespace FastDev.RunWeb
             });
             var mainServiceName = $"/{Configuration["MainServiceName"].Trim()}";
             app.UseGlobalExceptionHandler(mainServiceName);
-            app.UserSpaService(new PathString("/api"));
+            //app.UserSpaService(new PathString("/api"));
             app.UseDefaultFiles();
             app.UseStaticFiles();
             //绕过SameSite Cookie的设置，如果不使用此语句，会导致部分版本的360浏览器无法登陆
@@ -277,12 +284,13 @@ namespace FastDev.RunWeb
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint($"/swagger/v1/swagger.json", "Data Center API V1");
-                
+
             });
 
             app.UseRouting();
 
-            app.UseMultipleAuthentication();
+            //app.UseMultipleAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
             //app.UseMvc(routes =>
             //{
@@ -299,7 +307,7 @@ namespace FastDev.RunWeb
             FastDev.Common.HttpContext.ServiceProvider = app.ApplicationServices;//后面通过这个来获取已注入的服务
 
 
-           
+
         }
     }
 }

@@ -2,12 +2,12 @@
   <van-popup
     v-model="showModel"
     position="bottom"
-    :style="{ height: '80%' }"
+    :style="{ height: '100%' }"
     @close="onClosePopup"
   >
     <div class="list_wapper">
       <div class="list_wapper_title">
-        <div class="desc">选择法规</div>
+        <div class="desc">选择法律法规</div>
         <div class="list_wapper_title_right">
           <van-icon name="cross" slot="right-icon" @click="onClosePopup" size="20" />
         </div>
@@ -15,18 +15,18 @@
       <div class="search-area">
         <van-cell-group>
           <van-field
-            v-model="queryParam.lawType"
+            v-model="queryParam.plawRuleFileId"
             readonly
             class="dropdown-menu_noboder">
             <template slot="input">
               <van-dropdown-menu>
-                <van-dropdown-item v-model="queryParam.lawType" :options="lawTypeoptions" @change="lawTypeSelectChange" />
+                <van-dropdown-item v-model="queryParam.plawRuleFileId" :options="lawFileoptions" />
               </van-dropdown-menu>
             </template>
           </van-field>
           <van-search
             v-model="queryParam.Keyword"
-            placeholder="请输入搜索关键词"
+            placeholder="请输入搜索关键词后查询"
             show-action
             shape="round"
           >
@@ -34,14 +34,14 @@
           </van-search>
           <div class="keyword-wapper">
             <span>常用关键字：</span>
-            <a>禁止</a>
-            <a>行为</a>
-            <a>处罚</a>
+            <a @click="keywordSearch('禁止')">禁止</a>
+            <a @click="keywordSearch('行为')">行为</a>
+            <a @click="keywordSearch('处罚')">处罚</a>
           </div>
         </van-cell-group>
       </div>
       <div>
-        <s-list
+        <!-- <s-list
           :dataCallback="loadData"
           :totalKey="totalRows"
           ref="mylist">
@@ -54,12 +54,20 @@
                 <a @click="onPopupConfirm(item)">选择</a>
               </div>
             </div>
-            <!-- <van-cell v-for="(child,mIndex) in item.items" :key="mIndex" :title="child.content">
-
-            </van-cell> -->
             <van-cell :value="lawRuleContent"></van-cell>
           </van-panel>
-        </s-list>
+        </s-list> -->
+        <van-panel class="list-item" v-for="(item,index) in list" :key="index">
+          <div class="list-item_title" slot="header">
+            <div class="list-item_title_left">
+              {{ item.lawRuleName }}
+            </div>
+            <div class="list-item_title_right">
+              <a @click="onPopupConfirm(item)">选择</a>
+            </div>
+          </div>
+          <van-cell :value="item.lawRuleContent"></van-cell>
+        </van-panel>
       </div>
     </div>
   </van-popup>
@@ -70,34 +78,8 @@
  * 法规选择组件
  */
 import SList from '../../components/list/SList.vue'
-import { getLawRulePage } from '../../api/sfdxApi'
-const lawData = [{
-  objId: 1,
-  title: '第十二条 抚仙湖一级保护区内禁止下列行为',
-  items: [
-    {
-      content: '（一）新建排污口；'
-    },
-    {
-      content: '（二）新建、扩建或者擅自改建建筑物、构筑物，经玉溪市人民政府批准的环境监测、执法 ……'
-    }
-  ]
-},
-{
-  objId: 2,
-  title: '第十四条 抚仙湖二级保护区内禁止新建、改建、扩建污染环境、破坏生态平衡和自然景观的工矿企业和其他项目',
-  items: []
-},
-{
-  objId: 3,
-  title: '第十五条 抚仙湖保护范围内禁止下列行为',
-  items: [
-    {
-      content: '（四）生产、经营、使用含磷洗涤用品和国家禁止的剧毒、高毒、高残留农药；'
-    }
-  ]
-}
-]
+import { getLawRuleItemList, getLawFileList } from '../../api/sfdxApi'
+import { isEmpty, isNotEmpty } from '../../utils/util'
 export default {
   name: 'LawListSelect',
   components: {
@@ -112,17 +94,15 @@ export default {
   },
   data () {
     return {
+      loading: false,
       queryParam: {
         Keyword: '',
-        lawType: -1
+        plawRuleFileId: -1
       },
       list: [],
       showModel: false,
-      lawTypeoptions: [
-        { text: '请选择法律文件后查询', value: -1 },
-        { text: '云南抚仙湖保护条例', value: 1 },
-        { text: '云南星云湖保护条例', value: 2 },
-        { text: '云南省杞麓湖保护条例', value: 3 }
+      lawFileoptions: [
+        { text: '请选择法律文件后查询', value: -1 }
       ]
     }
   },
@@ -139,28 +119,68 @@ export default {
   methods: {
     init () {
       this.showModel = this.showPopup
+      this.loadLawFile()
     },
-    loadData (parameter) {
-      return getLawRulePage(parameter.pageIndex, parameter.pageSize, this.queryParam.Keyword).then(res => {
-        if (res.list) {
-          res.list.forEach(item => {
-            this.list.push(item)
+    loadLawFile () {
+      getLawFileList().then(res => {
+        if (res) {
+          res = JSON.parse(res)
+          res.forEach(item => {
+            var option = {
+              text: item.fileName,
+              value: item.objId
+            }
+            this.lawFileoptions.push(option)
           })
         }
-        return res
+      })
+    },
+    loadData () {
+      if (this.queryParam.plawRuleFileId === -1) {
+        this.$toast('请先选择法律法规文件')
+        return
+      }
+      if (isEmpty(this.queryParam.Keyword)) {
+        this.$toast('请输入搜索关键词后查询')
+        return
+      }
+      this.loading = true
+      getLawRuleItemList(this.queryParam.Keyword, this.queryParam.plawRuleFileId).then((res) => {
+        var list = []
+        if (res) {
+          res = JSON.parse(res)
+          res.forEach(rule => {
+            var item = {
+              lawRuleName: '',
+              lawRuleContent: ''
+            }
+            if (isNotEmpty(rule.itemParentContent)) {
+              item.lawRuleName = rule.itemParentContent
+              item.lawRuleContent = rule.itemContent
+            } else {
+              item.lawRuleName = rule.itemContent
+              item.lawRuleContent = isEmpty(rule.itemSubContent) ? '' : rule.itemSubContent
+            }
+            list.push(item)
+          })
+        }
+        this.list = list
+      }).finally(() => {
+        this.loading = false
       })
     },
     onSearch () {
-
+      this.loadData()
+    },
+    keywordSearch (item) {
+      this.queryParam.Keyword = item
+      this.onSearch()
     },
     onClosePopup () {
       this.$emit('onClosePopup')
     },
     onPopupConfirm (item) {
       this.$emit('onPopupConfirm', item)
-    },
-    lawTypeSelectChange (value) {
-
     }
   }
 }

@@ -120,8 +120,8 @@
 <script>
 import { phoneValidator, idcardValidator } from '../../utils/helper/validate.helper'
 import ItemGroup from '../../components/tools/ItemGroup'
-import { getDictionaryItems } from '../../api/regulatoryApi'
-import { isNotEmpty } from '../../utils/util'
+// import { getDictionaryItems } from '../../api/regulatoryApi'
+// import { isNotEmpty } from '../../utils/util'
 
 /**
  * 当事人信息组件（单位个人）
@@ -160,8 +160,11 @@ export default {
     ]
     return {
       partys: [],
-      typesofparties: [],
-      defaultTypesofpartieID: null
+      typesofparties: [
+        { text: '个人', value: '个人' },
+        { text: '个人', value: '单位' }
+      ],
+      defaultTypesofpartieID: '个人'
     }
   },
   created () {
@@ -179,19 +182,20 @@ export default {
       this.loadTypesofparties(this.initData)
     },
     loadTypesofparties (initData) {
-      getDictionaryItems('Typesofparties').then(items => {
-        var typesofparties = []
-        if (isNotEmpty(items)) {
-          items.forEach(item => {
-            typesofparties.push({
-              text: item.Title, value: item.ItemCode
-            })
-            this.defaultTypesofpartieID = items[0].ItemCode
-          })
-        }
-        this.typesofparties = typesofparties
-        this.initParty(initData)
-      })
+      // getDictionaryItems('Typesofparties').then(items => {
+      //   var typesofparties = []
+      //   if (isNotEmpty(items)) {
+      //     items.forEach(item => {
+      //       typesofparties.push({
+      //         text: item.Title, value: item.ItemCode
+      //       })
+      //       this.defaultTypesofpartieID = items[0].ItemCode
+      //     })
+      //   }
+      //   this.typesofparties = typesofparties
+      //   this.initParty(initData)
+      // })
+      this.initParty(initData)
     },
     initParty (initData) {
       if (initData.length === 0) {

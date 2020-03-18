@@ -104,6 +104,7 @@ export default {
           pageSize: this.pageSize
         }
         const result = this.dataCallback(parameter)
+        console.log('result', result)
         if (result instanceof Promise || result.toString() === '[object Promise]') {
           result.then(r => {
             this.loading = false

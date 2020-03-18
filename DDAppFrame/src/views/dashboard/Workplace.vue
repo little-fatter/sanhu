@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <home-page-layout ref="homePageLayout" :isNeedBanner="false" v-if="isNeedMenuLayout">
+    <!-- <home-page-layout ref="homePageLayout" :isNeedBanner="false" v-if="isNeedMenuLayout">
       <div>
         <p>测试Token： {{ token }}</p>
         <p>当前人： {{ userName }}</p>
@@ -19,17 +19,20 @@
       <p>当前人： {{ userName }}</p>
       <p>部门：{{ deptId }}</p>
       <van-button @click="selectPersion">选择人</van-button>
-    </div>
+    </div> -->
+    <van-button @click="test">测试</van-button>
   </div>
 </template>
 
 <script>
 import { getCurrentUserInfo } from '../../service/currentUser.service'
-import { ddgetCustomSpace, ddgrantCustomSpace, ddfilePreview, ddcomplexPicker } from '../../service/ddJsApi.service'
+import { ddgetCustomSpace, ddgrantCustomSpace, ddfilePreview, ddcomplexPicker, ddAlert } from '../../service/ddJsApi.service'
 import { startProcessInstance } from '@/api/ddApi'
 import HomePageLayout from '@/components/layouts/HomePageLayout'
 import appConfig from '@/config/app.config'
 import SUpload from '@/components/file/StandardUploadFile'
+import * as dd from 'dingtalk-jsapi'
+import { sendChatMsg } from '../../api/ddApi'
 export default {
   name: 'Workplace',
   components: {
@@ -55,18 +58,46 @@ export default {
     this.deptId = userInfo.deptid
     this.token = userInfo.token
 
-    ddgetCustomSpace('abcdef').then(res => {
-      this.spaceid = res
-    })
+    // ddgetCustomSpace('abcdef').then(res => {
+    //   this.spaceid = res
+    // })
 
-    ddgrantCustomSpace('add', 'abcdef').then((res) => {
-      console.log('附加新增授权信息：', res)
-    })
+    // ddgrantCustomSpace('add', 'abcdef').then((res) => {
+    //   console.log('附加新增授权信息：', res)
+    // })
   },
   mounted () {
 
   },
   methods: {
+    test () {
+      dd.biz.chat.chooseConversationByCorpId({
+        corpId: 'ding8fd8d57eb130109b4ac5d6980864d335', // 企业id,必须是用户所属的企业的corpid
+        isAllowCreateGroup: false,
+        filterNotOwnerGroup: false,
+        onSuccess: function (res) {
+          ddAlert(res.chatId)
+          // onSuccess将在选择结束之后调用
+          /* {
+            chatId: 'xxxx',
+            title:'xxx'
+        } */
+          var data = {
+            Chatid: res.chatId,
+            Msgtype: 'text',
+            Text_: {
+              Content: '这是群消息测试'
+            }
+          }
+          sendChatMsg(data).then((res) => {
+            this.$toast.success('发送群消息成功')
+          })
+        },
+        onFail: function (err) {
+          ddAlert(err)
+        }
+      })
+    },
     onSubmit () {
       var data = {
         originator_user_id: this.userId,

@@ -34,6 +34,11 @@
             结案报告
             </summary>
         </member>
+        <member name="P:FD.Model.Dto.case_reportFinishReq.oapiProcessinstanceCreateRequest">
+            <summary>
+            钉钉审核流参数
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormDataReq.Model">
             <summary>
             主表模块

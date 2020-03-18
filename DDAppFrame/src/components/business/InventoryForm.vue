@@ -3,55 +3,51 @@
     <van-cell-group title="物品清单">
       <van-cell-group>
         <van-field
-          v-model="inventory.dsr.id"
+          v-model="inventory.lawParty"
           label="当事人"
           readonly
           placeholder="请选择当事人"
           class="dropdown-menu_noboder">
           <template slot="input">
             <van-dropdown-menu>
-              <van-dropdown-item v-model="inventory.dsr.id" :options="dsrOptions" @change="dsrSelectChange" />
+              <van-dropdown-item v-model="inventory.lawParty" :options="dsrOptions" />
             </van-dropdown-menu>
           </template>
         </van-field>
       </van-cell-group>
       <van-panel v-for="(item,mindex) in inventory.list" :key="mindex" :title="`物品(${mindex+1})`">
         <van-field
-          v-model="item.name"
+          v-model="item.ProductName"
           placeholder="请输入名称"
         />
         <van-field
-          v-model="item.enterprise"
+          v-model="item.Enterprise"
           placeholder="请输入生产企业或经营单位"
         />
         <van-field
-          v-model="item.specification"
+          v-model="item.Specifications"
           placeholder="请输入规格"
         />
         <van-field
-          v-model="item.batchNumber"
-          placeholder="请输入生产批次"
+          v-model="item.DateOfManufacture"
+          placeholder="请输入生产批次或者生产日期"
         />
         <van-field
-          v-model="item.produceDate"
-          placeholder="请输入生产时间"
-        />
-        <van-field
-          v-model="item.count"
+          v-model="item.Number"
           type="number"
           placeholder="请输入数量"
         />
         <van-field
-          v-model="item.price"
+          v-model="item.UnitPrice"
           type="number"
           placeholder="请输入价格"
         />
         <van-field
-          v-model="item.pack"
+          v-model="item.Packing"
           placeholder="请输入包装"
         />
         <van-field
-          v-model="item.remark"
+          v-model="item.Remarks"
           rows="2"
           autosize
           type="textarea"
@@ -93,7 +89,6 @@
 </template>
 
 <script>
-import { isEmpty } from '../../utils/util'
 /**
  * 物品清单表单组件
  */
@@ -115,9 +110,8 @@ export default {
   },
   data () {
     return {
-      tempDsrs: [],
       inventory: {
-        dsr: {},
+        lawParty: null,
         list: [],
         otherItem: ''
       },
@@ -133,42 +127,28 @@ export default {
     },
     initdsyOptions () {
       var dsrOptions = []
-      var isfirst = true
-      this.tempDsrs = this.dsrs
-      this.tempDsrs.forEach((item, index) => {
-        var id = isEmpty(item.id) ? index : item.id
-        item.id = id
-        if (isfirst) {
-          this.inventory.dsr = item
-        }
-        isfirst = false
-        var title = item.partyType === 1 ? (item.name + '|' + item.idCard) : item.name
+      this.dsrs.forEach(item => {
+        var title = item.Typesofparties === '个人' ? (item.Name + '|' + item.IDcard) : item.Name
         var dsrOption = {
-          text: title, value: item.id
+          text: title, value: item.ID
         }
-
         dsrOptions.push(dsrOption)
       })
       this.dsrOptions = dsrOptions
+      this.inventory.lawParty = dsrOptions[0].value
+      this.inventory.lawPartyName = dsrOptions[0].text
       this.addItem()
-    },
-    dsrSelectChange (value) {
-      var dsy = this.tempDsrs.find(item => item.id === value)
-      if (dsy) {
-        this.inventory.dsr = dsy
-      }
     },
     addItem () {
       var item = {
-        name: '',
-        enterprise: '',
-        specification: '',
-        batchNumber: '',
-        produceDate: '',
-        count: null,
-        price: null,
-        pack: '',
-        remark: ''
+        ProductName: '',
+        Enterprise: '',
+        Specifications: '',
+        DateOfManufacture: '',
+        Number: null,
+        UnitPrice: null,
+        Packing: '',
+        Remarks: ''
       }
       this.inventory.list.push(item)
     },

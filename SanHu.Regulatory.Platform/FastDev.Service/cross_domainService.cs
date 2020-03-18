@@ -29,8 +29,14 @@ namespace FastDev.Service
         {
             var data = JsonHelper.DeserializeJsonToObject<SFApiDTO>(context.Data);
 
-            var client = new HttpClient();
             var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new { id = data.ObjId }));
+            if (data.filter != null && data.ApiType.ToLower() == "law_rule_item_list")
+            {
+                content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new { keyWord = data.filter.keyWord, lawRuleFileId = data.filter.lawRuleFileId }));
+            }
+
+            var client = new HttpClient();
+            
             var response = client.PostAsync(string.Format("http://yuxi.mysinosoft.com/yuxi/api/7FFA47F368D84E1FAD68A57E22975E50/{0}", data.ApiType), content).Result;
             if (response.IsSuccessStatusCode)
             {

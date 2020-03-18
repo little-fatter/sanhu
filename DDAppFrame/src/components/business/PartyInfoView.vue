@@ -6,7 +6,6 @@
         <van-cell title="身份证" :value="item.IDcard"></van-cell>
         <van-cell title="手机号" :value="item.Contactnumber"></van-cell>
         <van-cell title="现住址" :value="item.address"></van-cell>
-        <van-cell title="职业" :value="item.Occupation"></van-cell>
         <van-cell title="民族" :value="item.Nationality"></van-cell>
         <van-cell title="工作单位" :value="item.WorkUnit"></van-cell>
       </template>
@@ -22,8 +21,8 @@
 </template>
 
 <script>
-import { getDictionaryItems } from '../../api/regulatoryApi'
-import { isNotEmpty } from '../../utils/util'
+// import { getDictionaryItems } from '../../api/regulatoryApi'
+// import { isNotEmpty } from '../../utils/util'
 /**
  * 当事人查看组件
  */
@@ -65,7 +64,7 @@ export default {
   data () {
     return {
       partys: [],
-      defaultTypesofpartieID: null
+      defaultTypesofpartieID: '个人'
     }
   },
   created () {
@@ -73,22 +72,33 @@ export default {
   },
   methods: {
     init () {
-      getDictionaryItems('Typesofparties').then(items => {
-        if (isNotEmpty(items)) {
-          this.defaultTypesofpartieID = items[0].ItemCode
-          const partys = []
-          this.initData.forEach(item => {
-            if (item.Typesofparties === this.defaultTypesofpartieID) {
-              var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
-              item.title = title
-            } else {
-              item.title = item.Name
-            }
-            partys.push(item)
-          })
-          this.partys = partys
+      // getDictionaryItems('Typesofparties').then(items => {
+      //   if (isNotEmpty(items)) {
+      //     this.defaultTypesofpartieID = items[0].ItemCode
+      //     const partys = []
+      //     this.initData.forEach(item => {
+      //       if (item.Typesofparties === this.defaultTypesofpartieID) {
+      //         var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
+      //         item.title = title
+      //       } else {
+      //         item.title = item.Name
+      //       }
+      //       partys.push(item)
+      //     })
+      //     this.partys = partys
+      //   }
+      // })
+      const partys = []
+      this.initData.forEach(item => {
+        if (item.Typesofparties === this.defaultTypesofpartieID) {
+          var title = `${item.Name} | ${item.Gender} | ${item.Occupation}`
+          item.title = title
+        } else {
+          item.title = item.Name
         }
+        partys.push(item)
       })
+      this.partys = partys
     }
 
   }

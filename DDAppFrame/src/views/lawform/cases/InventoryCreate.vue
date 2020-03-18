@@ -2,7 +2,7 @@
   <div class="form_wapper">
     <van-cell-group>
       <van-field
-        v-model="caseInfo.CauseOfAction"
+        v-model="caseInfo.CaseNumber"
         label="案件"
         placeholder="请选择案件"
         :readonly="true"
@@ -13,10 +13,9 @@
       </van-field>
     </van-cell-group>
     <van-cell-group v-if="caseInfo.CauseOfAction">
-      <van-cell title="案件号" :value="caseInfo.DocNo"></van-cell>
       <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
       <van-form @submit="onSubmit" @failed="onFailed">
-        <inventory-form :dsrs="caseInfo.dsrs" ref="inventoryForm"></inventory-form>
+        <inventory-form :dsrs="caseInfo.LawParties" ref="inventoryForm"></inventory-form>
         <div class="operate-area single-save">
           <van-button type="info" :loading="loading" size="large" native-type="submit">确定</van-button>
         </div>
@@ -29,6 +28,7 @@
 <script>
 import CaseListSelect from '../../../components/business/CaseListSelect'
 import InventoryForm from '../../../components/business/InventoryForm'
+import { getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 /**
  * 物品清单表单  成林龙 要做详情
  */
@@ -61,9 +61,14 @@ export default {
       this.showPopup = false
     },
     onCaseConfirm (caseInfo) {
-      console.log('dsrs', caseInfo.dsrs)
-      this.caseInfo = caseInfo
-      this.showPopup = false
+      getFormsDetailByEventInfoId(null, 'case_Info', caseInfo.ID).then((res) => {
+        this.caseInfo = {
+          ...res.MainForm,
+          LawParties: res.law_party
+        }
+      }).finally(() => {
+        this.showPopup = false
+      })
     },
     onSubmit (values) {
       var forms = {
