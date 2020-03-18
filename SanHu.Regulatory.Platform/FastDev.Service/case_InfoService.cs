@@ -178,6 +178,15 @@ namespace FastDev.Service
             //    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid[0] }");
             //    caseinfo.Add("Jobnumber",user.Jobnumber);
             //}
+
+            var caseinfo = data as Dictionary<string, object>;
+            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
+            var caseType = caseinfo["CaseType"].ToString();
+            if (dicItems.ContainsKey(caseType))
+            {
+                caseinfo["CaseType"] = dicItems[caseType];
+            }
         }
 
 

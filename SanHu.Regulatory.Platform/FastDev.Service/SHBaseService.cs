@@ -127,6 +127,17 @@ namespace FastDev.Service
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
 
+            if (data.Model.ToLower()== "task_survey")  // 现场勘查 EventType 显示中文title
+            {
+                var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+                var eventType = obj["EventType"].ToString();
+                if (dicItems.ContainsKey(eventType))
+                {
+                    obj["EventType"] = dicItems[eventType];
+                }
+            }
+
             //构建其他需要查询的数据
             var dicData = BuildData(data, formId);
             dicData.Add("MainForm", obj);

@@ -29,8 +29,8 @@ namespace FastDev.RunWeb.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
-        public IActionResult Get()
+        //[Authorize]
+        public async Task<IActionResult> Get()
         {
             //OapiWorkrecordAddRequest oapiWorkrecordAddRequest = new OapiWorkrecordAddRequest()
             //{
@@ -42,16 +42,16 @@ namespace FastDev.RunWeb.Controllers
             //    {
             //        new OapiWorkrecordAddRequest.FormItemVoDomain
             //        {
-            //            Title=""待办表单标题22555",
-            //            Content=""待办表单内容333555"
+            //            Title="待办表单标题22555",
+            //            Content="待办表单内容333555"
             //        },
             //    }
             //};
             //var reulst=await _dingDingServices.WorkrecordAdd(oapiWorkrecordAddRequest);
             //var s= reulst.RecordId;
 
-            //var reulst = await _dingDingServices.WorkrecordUpdate("2825136819665808", "recordf55f33bd147dc983b096680a5bd76b95");
-            //var s = reulst;
+            var reulst = await _dingDingServices.WorkrecordUpdate("2825136819665808", "recordf55f33bd147dc983b096680a5bd76b95");
+            var s = reulst;
             return Content("ok");
         }
         [HttpGet("pdf")]
