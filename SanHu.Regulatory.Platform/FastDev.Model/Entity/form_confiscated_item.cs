@@ -9,11 +9,6 @@ public string ID
 get;
 set;
 }
-public string lawPartyID
-{
-get;
-set;
-}
 public string ProductName
 {
 get;
@@ -84,11 +79,6 @@ public string TaskId
 get;
 set;
 }
-public string FormState
-{
-get;
-set;
-}
 public DateTime? CreateDate
 {
 get;
@@ -114,6 +104,14 @@ public string Status
 get;
 set;
 }
+        public string Department
+        {
+            get;set;
+        }
+        public string FormState
+        {
+            get;set;
+        }
 }
 
 }

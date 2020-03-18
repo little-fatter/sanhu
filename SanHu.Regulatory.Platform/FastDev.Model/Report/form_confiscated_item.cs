@@ -9,11 +9,6 @@ public string ID
 get;
 set;
 }
-public string lawPartyID
-{
-get;
-set;
-}
 public string ProductName
 {
 get;
@@ -80,11 +75,6 @@ get;
 set;
 }
 public string TaskId
-{
-get;
-set;
-}
-public string FormState
 {
 get;
 set;

@@ -25,9 +25,19 @@ namespace FastDev.Service
             {
                 case "CHECKSTAFFLIST":
                     return CheckStaffList;
+                case "TAKEUSERTASK":
+                    return TakeUserTask;
             }
             return null;
         }
+
+
+        private object TakeUserTask(APIContext context)
+        {
+            var userid = JsonHelper.DeserializeJsonToObject<string>(context.Data);
+            return QueryDb.ExecuteScalar<int>("select count(*) from work_task where MainHandler=@0 and TaskStatus=1", userid);
+        }
+
 
         private object CheckStaffList(APIContext context)
         {

@@ -91,18 +91,32 @@ namespace FastDev.Service
                 }
             }
             ///更新案件信息
-
-            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(lawpunishmentInfo.TaskId,null);
-            if (tasknow!=null)
+            if (string.IsNullOrEmpty(lawpunishmentInfo.TaskId))
             {
-                var caseid = (string)tasknow["CaseID"];
-                if (string.IsNullOrEmpty(caseid))
+                if (!string.IsNullOrEmpty(lawpunishmentInfo.CaseId))
                 {
-                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", lawpunishmentInfo.CaseId);
                     if (caseinfo != null)
                     {
                         caseinfo.CaseStatus = "已做出处罚决定";
                         QueryDb.Update(caseinfo);
+                    }
+                }
+            }
+            else
+            {
+                var tasknow = ServiceHelper.GetService("work_task").GetDetailData(lawpunishmentInfo.TaskId, null);
+                if (tasknow != null)
+                {
+                    var caseid = (string)tasknow["CaseID"];
+                    if (!string.IsNullOrEmpty(caseid))
+                    {
+                        var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                        if (caseinfo != null)
+                        {
+                            caseinfo.CaseStatus = "已做出处罚决定";
+                            QueryDb.Update(caseinfo);
+                        }
                     }
                 }
             }
