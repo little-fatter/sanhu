@@ -257,7 +257,7 @@ namespace FastDev.Service
 
                 //File.WriteAllBytes($"wwwroot/{FilePath}", pdfByte);
                 //插数
-                if (SysContext.IsDev)
+                if (!SysContext.IsDev)
                 {
                     QueryDb.Insert(new form_printPDF()
                     {
@@ -291,7 +291,7 @@ namespace FastDev.Service
                 doc.Range.Replace($"@{kv.Key}", kv.Value, replaceOPT);
             }
             //替换剩下不需要的
-            if (SysContext.IsDev)
+            if (!SysContext.IsDev)
             {
                 doc.Range.Replace(new Regex("@[0-9a-zA-Z]+"), "", replaceOPT);
             }

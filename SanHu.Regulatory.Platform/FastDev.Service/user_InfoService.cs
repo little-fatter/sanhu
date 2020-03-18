@@ -109,6 +109,15 @@ namespace FastDev.Service
             }
         }
 
+        //获取表单的状态
+        public string GetFormStatus()
+        {
+            string formId = "";
+
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
+            return "";
+        }
 
     }
 }
