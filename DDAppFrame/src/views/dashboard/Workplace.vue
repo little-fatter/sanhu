@@ -21,6 +21,7 @@
       <van-button @click="selectPersion">选择人</van-button>
     </div> -->
     <van-button @click="test">测试</van-button>
+    <Signature :showPopup="true"></Signature>
   </div>
 </template>
 
@@ -33,11 +34,13 @@ import appConfig from '@/config/app.config'
 import SUpload from '@/components/file/StandardUploadFile'
 import * as dd from 'dingtalk-jsapi'
 import { sendChatMsg } from '../../api/ddApi'
+import Signature from '../../components/tools/Signature'
 export default {
   name: 'Workplace',
   components: {
     HomePageLayout,
-    SUpload
+    SUpload,
+    Signature
   },
   data () {
     return {
@@ -72,11 +75,12 @@ export default {
   methods: {
     test () {
       dd.biz.chat.chooseConversationByCorpId({
-        corpId: 'ding8fd8d57eb130109b4ac5d6980864d335', // 企业id,必须是用户所属的企业的corpid
+        corpId: appConfig.corpId, // 企业id,必须是用户所属的企业的corpid
         isAllowCreateGroup: false,
         filterNotOwnerGroup: false,
         onSuccess: function (res) {
-          ddAlert(res.chatId)
+          var msg = res.title + '|' + res.chatId
+          ddAlert(msg)
           // onSuccess将在选择结束之后调用
           /* {
             chatId: 'xxxx',

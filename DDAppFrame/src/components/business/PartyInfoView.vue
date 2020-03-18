@@ -10,7 +10,7 @@
         <van-cell title="工作单位" :value="item.WorkUnit"></van-cell>
       </template>
       <template v-else>
-        <van-cell :title="item.name"></van-cell>
+        <van-cell :title="item.Name"></van-cell>
         <van-cell title="法人姓名" :value="item.Nameoflegalperson"></van-cell>
         <van-cell title="法人身份证" :value="item.IDcard"></van-cell>
         <van-cell title="地址" :value="item.address"></van-cell>

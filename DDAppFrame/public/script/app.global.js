@@ -17,7 +17,7 @@ var publicAppConfig = {
     appHost: {
       admin: 'http://182.150.28.58:27011/framework',
       file: 'http://182.150.28.58:27012/filesystem',
-      regulatory: 'http://192.168.0.125:8030/webapi'
+      regulatory: 'http://192.168.0.169:8030/webapi'
       // regulatory: 'http://182.150.28.58:8030/webapi',
     },
     mapConfig: {
@@ -59,7 +59,7 @@ var publicAppConfig = {
   /**
      * 请求超时的毫秒数
      */
-  httpClientTimeout: 30000,
+  httpClientTimeout: 10000,
   /**
      * signalr服务端地址
      */
