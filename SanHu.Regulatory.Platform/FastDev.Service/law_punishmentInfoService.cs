@@ -62,7 +62,7 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private string CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
+        private string  CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
         {
             var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
