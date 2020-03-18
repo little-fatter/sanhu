@@ -139,8 +139,7 @@ namespace FastDev.Service
                 if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID))
                     return QueryDb.FirstOrDefault<form_printPDF>("where FormId = @0", data.formID).FilePath;
 
-                //根据模板名的相关数据更改模板目标 只能swith固定死
-                //获取替换数据 无数据抛异常
+                //根据模板名的相关数据更改模板目标
                 var pDic = new Dictionary<string, string>();
 
                 var jsonData = FormData(new FormDataReq()
@@ -258,13 +257,23 @@ namespace FastDev.Service
 
                 //File.WriteAllBytes($"wwwroot/{FilePath}", pdfByte);
                 //插数
-                //QueryDb.Insert(new form_printPDF() { ID = Guid.NewGuid().ToString(), FormID = data.formID, FilePath = FilePath, CreateDate = DateTime.Now });
+                if (SysContext.IsDev)
+                {
+                    QueryDb.Insert(new form_printPDF()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        FormID = data.formID,
+                        formtypes = data.formType,
+                        FilePath = FilePath,
+                        CreateDate = DateTime.Now
+                    });
+                }
 
             }
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
-                return "null";
+                throw e;
             }
             QueryDb.CompleteTransaction();
             return FilePath;
