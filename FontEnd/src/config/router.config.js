@@ -149,11 +149,17 @@ export const asyncRouterMap = [
                 component: () => import('@/views/form/recordCheckDetail'),
                 meta: { title: '勘验笔录详情', keepAlive: false }
               },
-              { // 勘验笔录详情
+              { // 询问笔录详情
                 path: 'record-query-detail',
                 name: 'recordQueryDetail',
                 component: () => import('@/views/form/recordQueryDetail'),
                 meta: { title: '询问笔录详情', keepAlive: false }
+              },
+              { // 物品清单及凭证详情
+                path: 'confiscated-detail',
+                name: 'confiscatedDetail',
+                component: () => import('@/views/form/confiscatedDetail'),
+                meta: { title: '物品清单及凭证详情', keepAlive: false }
               }
             ]
           },

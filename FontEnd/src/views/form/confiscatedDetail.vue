@@ -8,7 +8,7 @@
 
 <template>
   <div class="pdf-page">
-    <pdf-panel :pdf="pdf" :files="files" pdfName="勘验笔录" />
+    <pdf-panel :pdf="pdf" :files="files" pdfName="物品清单" />
   </div>
 </template>
 
@@ -17,17 +17,20 @@ import PdfPanel from '@/components/business/PdfPanel'
 import { isNotEmpty } from '../../utils/util'
 import { getFormDetail, getFormsDetailByEventInfoIdPdf } from '../../api/sampleApi'
 import { formType } from '@/config/api.config'
-
 export default {
   components: {
     'pdfPanel': PdfPanel
   },
   data () {
     return {
-      // pdf页数
       pdf: '/pdf/test.pdf',
       id: '',
-      files: []
+      files: [
+        {
+          title: '污染源.jpg',
+          path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-04/6457641638b8ee17a95c930d624f63a3.png'
+        }
+      ]
     }
   },
   mounted () {
@@ -41,10 +44,9 @@ export default {
       }
     },
     loadData (id) {
-      const type = formType.form_inquestrecord
+      const type = formType.form_confiscated_item
       getFormDetail(type, null, id, ['attachment']).then((res) => {
         if (res) {
-          console.log('getFormDetail -> res', res)
           this.files = res
         }
       })
