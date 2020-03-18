@@ -8,7 +8,7 @@
 
 <script>
 import PdfShow from '../../../components/business/PDFPreview'
-import { getFormsDetailByEventInfoIdPdf } from '../../../api/regulatoryApi'
+import { getFormsDetailByEventInfoIdPdf, FromType } from '../../../api/regulatoryApi'
 export default {
   components: {
     PdfShow
@@ -17,26 +17,26 @@ export default {
     return {
       PdfFileUrl: '', // PDF 文件路径
       PdfFileName: '', // PDF 文件名称
-      FormID: '', // 表单id
-      FormType: '' // 表单类型
+      FormID: '' // 表单id
     }
   },
 
   methods: {
     // 获取表单详情
     getFormInfo () {
-      getFormsDetailByEventInfoIdPdf(this.FormID, this.FormType)
+      getFormsDetailByEventInfoIdPdf(this.FormID, FromType.PromptlyPunishNote)
         .then((res) => {
           this.PdfFileUrl = res // PDF 文件路径
           this.PdfFileName = this.FormType
         })
     }
   },
-
-  mounted () {
-    this.FormID = this.$route.query.msg.FormID // 表单ID
-    this.FormType = this.$route.query.msg.FormType // 表单类型
+  created () {
+    this.FormID = this.$route.query.ID // 表单ID
     this.getFormInfo()
+  },
+  mounted () {
+
   }
 }
 </script>

@@ -5,13 +5,13 @@
       <van-tag type="success">{{ caseInfo.CaseStatus }}</van-tag>
     </div>
     <van-cell-group>
-      <template v-if="caseInfo.CaseTitle===''|| caseInfo.CaseTitle=== null">
-        <van-cell title="案件测试标题" title-class="title-cell title-cell-div" />
+      <template v-if="caseInfo.CauseOfAction===''|| caseInfo.CauseOfAction=== null">
+        <van-cell title="案由：" value="无数据" title-class="title-cell " />
       </template>
       <template v-else>
-        <van-cell :title="caseInfo.CaseTitle" title-class="title-cell title-cell-div" />
+        <van-cell title="案由：" :value="caseInfo.CauseOfAction" title-class="title-cell " />
       </template>
-      <van-cell title="案件类型" :value="caseInfo.CauseOfAction" value-class="con-style" title-class="title-cell" />
+      <van-cell title="案件类型" :value="caseInfo.CaseType" value-class="con-style" title-class="title-cell" />
       <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
       <template>
         <!--当事人信息-->
@@ -149,11 +149,14 @@ export default {
       })
     }
   },
-  mounted () {
+  created () {
     // 接收路由案件ID传参
-    this.caseId = this.$route.query.id
+    this.caseId = this.$route.query.ID
     // 执行数据请求
     this.getCaseInfo()
+  },
+  mounted () {
+
   }
 }
 </script>
@@ -185,9 +188,6 @@ export default {
     .title-cell{
       width: 2.4rem;
       flex: unset;
-    }
-    .title-cell-div{
-      width: 100%;
     }
     .con-style{
       flex: 1;

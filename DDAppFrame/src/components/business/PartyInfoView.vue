@@ -2,7 +2,7 @@
   <van-cell-group :title="`${title}信息`">
     <van-panel v-for="(item,index) in partys" :key="index" :title="`${title}(${index+1})`">
       <template v-if="item.Typesofparties==defaultTypesofpartie">
-        <van-cell :title="item.title"></van-cell>
+        <van-cell :title="item.title" class="title-cell-div"></van-cell>
         <van-cell title="身份证" :value="item.IDcard"></van-cell>
         <van-cell title="手机号" :value="item.Contactnumber"></van-cell>
         <van-cell title="现住址" :value="item.address"></van-cell>
@@ -94,5 +94,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+    .title-cell-div > .van-cell__title{
+      width: 100% !important;
+    }
 </style>

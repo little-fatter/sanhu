@@ -129,7 +129,7 @@ import {
   isNotEmpty,
   getQueryConditonMoreForm
 } from '../../utils/util'
-import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi'
+import { getPageDate, getDictionaryItems, FromType } from '../../api/regulatoryApi'
 export default {
   name: 'SubmitForm',
   components: {
@@ -339,86 +339,82 @@ export default {
     // 去详情
     goTodetail (item) {
       // console.log(item)
-
       /**
-       *
-        物品清单 form_confiscated_item
-        案件 case_Info
-        处罚当场决定书 law_punishmentInfo
-        勘验记录 form_inquestrecord
-        询问第三人笔录 form_inquiryrecord_third
-        结案报告 case_report
-        卷宗封面 case_cover
-        询问当事人笔录 form_inquiryrecord_litigant
-        询问证人笔录 form_inquiryrecord_witness
-        现场勘查 task_survey
-        事件核查 task_patrol
-
+        goodsList: 'form_confiscated_item', // 物品清单
+        caseDetails: 'case_info', // 案件详情
+        PromptlyPunishNote: 'law_punishmentInfo', // 当场处罚决定书
+        RecordOfInquest: 'form_inquestrecord', // 勘验记录
+        caseReport: 'case_report', // 结案报告
+        caseCover: 'case_cover', // 卷宗封面
+        AskPartyNote: 'form_inquiryrecord_litigant', // 询问当事笔录
+        AskWitnessNote: 'form_inquiryrecord_witness', // 询问证人笔录
+        AskThirdPartyNote: 'form_inquiryrecord_third', // 询问第三人笔录
+        sceneInvestigationDetail: 'task_survey', // 现场勘查
+        eventDetail: 'task_patrol'// 事件核查
        */
-
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
-      if (item.FormType === 'form_confiscated_item') {
+      if (item.FormType === FromType.goodsList) {
         // 物品清单
         this.$router.push({
-          path: '/goodsList',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          path: '/goodsList', query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'case_info') {
+      } else if (item.FormType === FromType.caseDetails) {
         // 案件详情
-        this.$router.push({ path: '/caseDetails', query: { id: item.FormID } })
-      } else if (item.FormType === 'law_punishmentInfo') {
+        this.$router.push({
+          path: '/caseDetails', query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.PromptlyPunishNote) {
         // 处罚当场决定书
         this.$router.push({
-          path: '/PromptlyPunishNote',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          path: '/PromptlyPunishNote', query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'form_inquestrecord') {
+      } else if (item.FormType === FromType.RecordOfInquest) {
         // 勘验记录
         this.$router.push({
           path: '/RecordOfInquest',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'case_report') {
+      } else if (item.FormType === FromType.caseReport) {
         // 结案报告
         this.$router.push({
           path: '/caseReport',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'case_cover') {
+      } else if (item.FormType === FromType.caseCover) {
         // 卷宗封面
         this.$router.push({
           path: '/form_inquiryrecord',
           query: { id: item.CaseId }
         })
-      } else if (item.FormType === 'form_inquiryrecord_third') {
+      } else if (item.FormType === FromType.AskThirdPartyNote) {
         // 询问第三人笔录
         this.$router.push({
           path: '/AskThirdPartyNote',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'form_inquiryrecord_litigant') {
+      } else if (item.FormType === FromType.AskPartyNote) {
         // 询问当事人笔录
         this.$router.push({
           path: '/AskPartyNote',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'form_inquiryrecord_witness') {
+      } else if (item.FormType === FromType.AskWitnessNote) {
         // 询问证人笔录
         this.$router.push({
           path: '/AskWitnessNote',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          query: { ID: item.FormID }
         })
-      } else if (item.FormType === 'task_survey') {
+      } else if (item.FormType === FromType.sceneInvestigationDetail) {
         // 现场勘查
         this.$router.push({
           path: '/sceneInvestigationDetail',
-          query: { msg: { FormID: item.FormID, FormType: item.FormType } }
+          query: { ID: item.EventInfoId }
         })
-      } else if (item.FormType === 'task_patrol') {
+      } else if (item.FormType === FromType.eventDetail) {
         // 事件核查
         this.$router.push({
           path: '/eventDetail',
-          query: { msg: { EventInfoId: item.EventInfoId, FormType: item.FormType } }
+          query: { ID: item.EventInfoId }
         })
       }
     }
