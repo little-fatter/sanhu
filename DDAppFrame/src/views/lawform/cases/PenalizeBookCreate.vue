@@ -47,9 +47,13 @@
           </s-upload>
         </item-group>
         <van-field
-          v-model="illegalbasis.title"
+          v-model="illegalbasis"
           label="违法依据"
           placeholder="请选择违法依据"
+          rows="4"
+          autosize
+          type="textarea"
+          maxlength="200"
           :readonly="true"
           clickable
           required
@@ -59,10 +63,14 @@
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectLaw('illegalbasis')" size="25" />
         </van-field>
         <van-field
-          v-model="punishmentbasis.title"
+          v-model="punishmentbasis"
           label="处罚依据"
           placeholder="请选择处罚依据"
           :readonly="true"
+          rows="4"
+          autosize
+          type="textarea"
+          maxlength="200"
           clickable
           required
           :rules="requiredRule"
@@ -85,7 +93,7 @@
         </div>
       </van-form>
     </van-cell-group>
-    <law-list-select :showPopup="showLaw" @onClosePopup="onCloseLaw" @onPopupConfirm="onLawConfirm"></law-list-select>
+    <law-list-select :showPopup="showLaw" @onClosePopup="onCloseLaw" @onPopupConfirm="onLawConfirm" v-if="showLaw"></law-list-select>
     <case-list-select :showPopup="showPopup" @onClosePopup="onCloseCase" @onPopupConfirm="onCaseConfirm"></case-list-select>
   </div>
 </template>
@@ -134,8 +142,8 @@ export default {
       },
       LawParties: [],
       Attachment: [],
-      illegalbasis: {},
-      punishmentbasis: {}
+      illegalbasis: '',
+      punishmentbasis: ''
     }
   },
   created () {
@@ -192,10 +200,10 @@ export default {
     },
     onLawConfirm (law) {
       if (this.selectLawType === 'illegalbasis') {
-        this.illegalbasis = law
+        this.illegalbasis += law.lawRuleName + law.lawRuleContent
       }
       if (this.selectLawType === 'punishmentbasis') {
-        this.punishmentbasis = law
+        this.punishmentbasis = law.lawRuleName + law.lawRuleContent
       }
       this.showLaw = false
     },
@@ -225,12 +233,8 @@ export default {
         caseInfo: {
           ...this.caseInfo
         },
-        illegalbasis: {
-          ...this.illegalbasis
-        },
-        punishmentbasis: {
-          ...this.punishmentbasis
-        },
+        illegalbasis: this.illegalbasis,
+        punishmentbasis: this.punishmentbasis,
         LawParties: LawParties,
         decisions: decisions,
         attachments: attachments

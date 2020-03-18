@@ -1,18 +1,17 @@
 <template>
   <div>
     <van-cell-group title="物品清单">
-      <van-cell :title="obj.dsr.name"></van-cell>
+      <van-cell :title="obj.lawPartyName"></van-cell>
       <van-panel v-for="(item,mindex) in obj.list" :key="mindex" :title="`物品(${mindex+1})`">
-        <van-cell title="名称" :value="item.name"></van-cell>
-        <van-cell title="生产企业或经营单位" :value="item.enterprise"></van-cell>
-        <van-cell title="规格" :value="item.specification"></van-cell>
-        <van-cell title="生产批次" :value="item.batchNumber"></van-cell>
-        <van-cell title="生产时间" :value="item.produceDate"></van-cell>
-        <van-cell title="数量" :value="item.count"></van-cell>
-        <van-cell title="价格" :value="item.price"></van-cell>
-        <van-cell title="包装" :value="item.pack"></van-cell>
+        <van-cell title="名称" :value="item.ProductName"></van-cell>
+        <van-cell title="生产企业或经营单位" :value="item.Enterprise"></van-cell>
+        <van-cell title="规格" :value="item.Specifications"></van-cell>
+        <van-cell title="生产批次或者生产日期" :value="item.DateOfManufacture"></van-cell>
+        <van-cell title="数量" :value="item.Number"></van-cell>
+        <van-cell title="价格" :value="item.UnitPrice"></van-cell>
+        <van-cell title="包装" :value="item.Packing"></van-cell>
         <van-field
-          v-model="item.remark"
+          v-model="item.Remarks"
           label="备注"
           rows="2"
           autosize

@@ -149,3 +149,14 @@ export const getWorkrecordPageListbyCurrent = (offset, limit = 10, status = 0) =
     }
   })
 }
+
+/**
+ * 发送群消息
+ * @param {*} parameter
+ */
+export const sendChatMsg = (parameter) => {
+  return postHttp({
+    url: apiConfig.admin.dd.sendChatMsg,
+    data: parameter
+  })
+}

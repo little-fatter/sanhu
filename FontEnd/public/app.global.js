@@ -21,17 +21,15 @@ var publicAppConfig = {
 
   /** 不启用网关时配置模块host地址 */
   hostConfig: {
-    // admin: '/api',
-    // list: '/api'
-    admin: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
-    list: 'http://192.168.0.125:8030',
-    // framework: 'http://182.150.28.58:27011/framework'
-    framework: 'http://192.168.0.108:5022/framework',
+    admin: 'http://192.168.0.169:8030',
+    list: 'http://192.168.0.169:8030',
+    framework: 'http://192.168.0.169:8030/framework',
+    // framework: 'http://182.150.28.58:3308/framework'
     // 四方德信接口
     sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
   },
   /** PDF拼接地址 */
-  pdfHost: 'http://192.168.0.125:8030',
+  pdfHost: 'http://192.168.0.169:8030',
   /** 微应用ID 如果只有一个微应用可以配置在这里，否则请配置为链接参数 */
   agentId: '456468162',
   /** 配置业务localStorage的key值 */

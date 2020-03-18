@@ -22,13 +22,17 @@ const apiConfig = {
     // 用户列表
     users: `${getHost('framework')}/api/Users`
   },
+  // 文件服务
+  file: {
+    download: code => `${getHost('file')}/api/file/Get/${code}`
+  },
   // 第三方
   other: {
     // 法律法规
     regulations: `${getHost('sfdx')}/law_rule_page`
   },
   // 信息中心
-  msgCenter: `${getHost('workframe')}/webapi/api/JobMessage`,
+  msgCenter: `${getHost('framework')}/webapi/api/JobMessage`,
   // 用户ID
   userId: `${getHost('list')}/webapi/getuserinfo`,
   // 字典查询
@@ -45,6 +49,18 @@ const apiConfig = {
   commonOperateApi: `${getHost('list')}/webapi/api`,
   // dd审批
   startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`
+
+}
+
+export const formType = {
+  // 询问笔录
+  form_inquiryrecord_third: 'form_inquiryrecord_third',
+  // 勘验笔录
+  form_inquestrecord: 'form_inquestrecord',
+  // 处罚当场决定书
+  law_punishmentInfo: 'law_punishmentInfo',
+  // 物品清单
+  form_confiscated_item: 'form_confiscated_item'
 }
 
 export default apiConfig

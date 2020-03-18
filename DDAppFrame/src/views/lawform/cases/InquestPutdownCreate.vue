@@ -2,7 +2,7 @@
   <div class="form_wapper">
     <van-cell-group>
       <van-field
-        v-model="caseInfo.CauseOfAction"
+        v-model="caseInfo.CaseNumber"
         label="案件"
         placeholder="请选择案件"
         :readonly="true"
@@ -12,11 +12,11 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
       </van-field>
     </van-cell-group>
-    <van-cell-group>
+    <van-cell-group title="笔录详情" v-if="caseInfo.CauseOfAction">
       <van-form @submit="onSubmit" @failed="onFailed">
         <van-field
-          name="CauseOfAction"
-          v-model="model.CauseOfAction"
+          name="Inspectionreason"
+          v-model="model.Inspectionreason"
           rows="2"
           autosize
           label="检查事由"
@@ -28,21 +28,27 @@
           :rules="requiredRule"
         />
         <van-field
-          name="EventAddress"
-          v-model="model.eventAddress"
-          label="事发地点"
-          placeholder="请输入事发地点"
+          name="Incidentlocation"
+          v-model="model.Incidentlocation"
+          label="检查地点"
+          placeholder="请输入检查地点"
           required
           :rules="requiredRule"
+          rows="2"
+          autosize
+          type="textarea"
         >
           <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
         </van-field>
-        <party-info ref="partyInfo"></party-info>
+        <party-info-view :initData="caseInfo.LawParties" ref="party"></party-info-view>
         <van-field
           v-model="lawPersionNames"
           label="执法检查人员"
           placeholder="请选择执法检查人员"
+          required
+          :rules="requiredRule"
           :readonly="true"
+          @click="handleSelecLawPersions"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecLawPersions" size="30" />
         </van-field>
@@ -51,13 +57,14 @@
           label="记录人员"
           placeholder="请选择记录人员"
           :readonly="true"
+          @click="handleSelecRecordPersions"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecRecordPersions" size="30" />
         </van-field>
 
         <van-field
-          name="checkType"
-          v-model="model.checkType"
+          name="inspectiontype"
+          v-model="model.Inspectiontype"
           label="监督检查类别"
           readonly
           required
@@ -65,7 +72,7 @@
           class="dropdown-menu_noboder">
           <template slot="input">
             <van-dropdown-menu>
-              <van-dropdown-item v-model="model.checkType" :options="checkTypeOptions" @change="checkTypeSelectChange" />
+              <van-dropdown-item v-model="model.Inspectiontype" :options="inspectiontypeOptions" @change="inspectiontypeChange" />
             </van-dropdown-menu>
           </template>
         </van-field>
@@ -102,8 +109,8 @@
         </van-popup>
 
         <van-field
-          name="accompanys"
-          v-model="model.accompanys"
+          name="Companions"
+          v-model="model.Companions"
           rows="2"
           autosize
           label="被检查陪同人"
@@ -114,8 +121,8 @@
         />
 
         <van-field
-          name="remark"
-          v-model="model.remark"
+          name="Inspectionrecord"
+          v-model="model.Inspectionrecord"
           rows="2"
           autosize
           label="勘验记录"
@@ -137,17 +144,18 @@
 </template>
 
 <script>
-import PartyInfo from '../../../components/business/PartyInfo'
+import PartyInfoView from '../../../components/business/PartyInfoView'
 import CaseListSelect from '../../../components/business/CaseListSelect'
 import { ddgetMapLocation, ddMapSearch, ddcomplexPicker } from '../../../service/ddJsApi.service'
-import { formatDate } from '../../../utils/util'
+import { formatDate, isNotEmpty } from '../../../utils/util'
+import { getFormsDetailByEventInfoId, getDictionaryItems, DictionaryCode } from '../../../api/regulatoryApi'
 /**
  * 勘验笔录表单   成林龙 要做详情
  */
 export default {
   name: 'InquestPutdownCreate',
   components: {
-    PartyInfo,
+    PartyInfoView,
     CaseListSelect
   },
   data () {
@@ -157,36 +165,47 @@ export default {
     return {
       caseInfo: {},
       model: {
-        checkType: 1,
-        CauseOfAction: '',
-        remark: '',
-        accompanys: ''
+        Inspectionreason: '',
+        Companions: '',
+        Inspectionrecord: '',
+        Inspectiontype: '',
+        InspectiontypeName: ''
       },
       loading: false,
       showPopup: false,
       lawPersions: [],
       lawPersionNames: '',
       recordPersions: [],
-      recordPersionNames: [],
+      recordPersionNames: '',
       accompanys: [],
-      accompanyNames: [],
-      checkTypeOptions: [
-        {
-          text: '类型1', value: 1
-        },
-        {
-          text: '类型2', value: 2
-        }
-      ],
+      accompanyNames: '',
+      inspectiontypeOptions: [],
       showCalendar: false,
       seletTimeType: null,
       currentDate: new Date()
     }
   },
   created () {
-
+    this.init()
   },
   methods: {
+    init () {
+      this.loadInspectiontypeOptions()
+    },
+    loadInspectiontypeOptions () {
+      getDictionaryItems(DictionaryCode.CheckType).then((items) => {
+        var inspectiontypeOptions = []
+        if (isNotEmpty(items)) {
+          items.forEach(item => {
+            inspectiontypeOptions.push({
+              text: item.Title, value: item.ItemCode
+            })
+          })
+          this.model.Inspectiontype = items[0].ItemCode
+        }
+        this.inspectiontypeOptions = inspectiontypeOptions
+      })
+    },
     handleShowSelectCase () {
       this.showPopup = true
     },
@@ -194,10 +213,16 @@ export default {
       this.showPopup = false
     },
     onCaseConfirm (caseInfo) {
-      console.log('caseInfo', caseInfo)
-      this.caseInfo = caseInfo
-      this.model.CauseOfAction = caseInfo.CauseOfAction
-      this.showPopup = false
+      getFormsDetailByEventInfoId(null, 'case_Info', caseInfo.ID).then((res) => {
+        this.caseInfo = {
+          ...res.MainForm,
+          LawParties: res.law_party
+        }
+        this.model.Inspectionreason = caseInfo.CauseOfAction
+        this.model.Incidentlocation = caseInfo.IncidentAddress
+      }).finally(() => {
+        this.showPopup = false
+      })
     },
     handleShowCalendar (seletTimeType) {
       this.seletTimeType = seletTimeType
@@ -218,21 +243,14 @@ export default {
     handleShowLocation () {
       ddgetMapLocation().then(location => {
         ddMapSearch(location.latitude, location.longitude).then((res) => {
-          this.model.eventAddress = `${res.province}${res.city}${res.adName}${res.snippet}`
+          this.model.Incidentlocation = `${res.province}${res.city}${res.adName}${res.snippet}`
         })
       })
-    },
-    checkTypeSelectChange (value) {
-      this.model.checkType = value
     },
     handleSelecLawPersions () {
       var that = this
       ddcomplexPicker(0, '选择人员', true).then((res) => {
         console.log('res', res)
-        // var organiserTemp = {
-        //   name: res.users[0].name,
-        //   id: res.users[0].emplId
-        // }
         that.lawPersions = res.users
         var lawPersions = []
         res.users.forEach(item => {
@@ -251,6 +269,10 @@ export default {
         this.recordPersionNames = recordPersions.join()
       })
     },
+    inspectiontypeChange (value) {
+      this.model.Inspectiontype = value
+      this.model.InspectiontypeName = this.inspectiontypeOptions.find(item => item.value === value).text
+    },
     handleSelecAccompanys () {
       ddcomplexPicker(0, '选择人员', true).then((res) => {
         this.accompanys = res.users
@@ -263,6 +285,14 @@ export default {
     },
     onSubmit (values) {
       console.log('submit', values)
+      var forms = {
+        caseInfo: this.caseInfo,
+        form: this.model,
+        lawPersions: this.lawPersions,
+        lawPersionNames: this.lawPersionNames,
+        recordPersionNames: this.recordPersionNames
+      }
+      this.$router.push({ name: 'inquestPutdownPreview', params: { forms: forms } })
     },
     onFailed (errorInfo) {
       console.log('failed', errorInfo)

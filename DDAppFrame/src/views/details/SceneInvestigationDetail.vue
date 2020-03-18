@@ -2,167 +2,112 @@
 <template>
   <div class="SceneInvestigationDetail">
     <van-cell-group>
-      <!-- <van-cell title="交办时间：" :value="loadData.deliveryTime"></van-cell>
-      <van-cell title="期望完成时间：" :value="loadData.expectedCompletionTime"></van-cell>
-      <van-cell title="协办人：" :value="loadData.person"></van-cell>-->
-      <van-cell is-link style="background-color:#DFDDDD;">事件信息</van-cell>
+      <van-cell >
+        <h5>事件信息</h5>
+      </van-cell>
       <van-cell title="事发地点：" :value="eventInfo.address"></van-cell>
       <van-cell title="上报时间：" :value="eventInfo.reportTime"></van-cell>
       <van-cell title="上报来源：" :value="eventInfo.ReportSource"></van-cell>
       <van-cell title="上报人：" :value="eventInfo.reporterName"></van-cell>
       <van-cell title="事件类型：" :value="eventInfo.evtTypeDisplayName"></van-cell>
       <van-cell title="事件描述" :value="eventInfo.remark"></van-cell>
-      <!-- <van-cell title="上报来源：" :value="loadData.reportType"></van-cell>  -->
+    </van-cell-group>
+    <van-cell-group style="margin-top:0.3rem">
+      <van-cell >
+        <h5>现场核查信息</h5>
+      </van-cell>
       <van-cell title="事件类型" :value="loadData.EventType" />
       <van-cell title="事发时间" :value="loadData.IncidentTime" />
       <van-cell title="事发地点" :value="loadData.IncidentAddress"></van-cell>
-      <van-cell-group>
-        <PartyInfoView :initData="loadData.LawParties"></PartyInfoView>
-      </van-cell-group>
+    </van-cell-group>
+    <van-cell-group style="margin-top:0.3rem">
       <van-cell>
-        附件：
-        <SUpload
+        <!--当事人-->
+        <PartyInfo :initData="Partys"></PartyInfo>
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group style="margin-top:0.3rem">
+      <van-cell >
+        <h5>处理结果</h5>
+      </van-cell>
+      <van-cell title="处理结论" :value="loadData.Result" ></van-cell>
+      <van-cell title="处理决定" :value="ProcessingDecisions" />
+      <van-cell title="是否涉嫌犯罪" :value="loadData.ExistCrim === 0 ? '否' : '是'" />
+      <van-cell title="附件">
+        <S-upload
           style="margin-left:80px;margin-bottom:5px;"
           ref="myupload"
           :sync2Dingding="false"
           :isOnlyView="true"
-          :initResult="loadData.Attachment"
-        ></SUpload>
-      </van-cell>
-      <van-cell :value="loadData.Result" title="处理结论"></van-cell>
-      <van-cell :value="loadData.ProcessingDecisions" title="处理决定" />
-      <van-cell :value="loadData.ExistCrim === 0 ? '否' : '是'" title="是否涉嫌犯罪" />
-      <van-cell>
-        <van-button type="info" @click="returnSubmitForm" native-type="submit" size="large">返回</van-button>
+          :initResult="eventFile"
+        ></S-upload>
       </van-cell>
     </van-cell-group>
   </div>
 </template>
 
 <script>
-import PartyInfoView from '../../components/business/PartyInfoView'
+import PartyInfo from '../../components/business/PartyInfoView' // 当事人预览组件
 import SUpload from '../../components/file/StandardUploadFile'
-import {
-  isNotEmpty,
-  formatDate,
-  isEmpty,
-  getQueryConditon
-} from '../../utils/util'
-import {
-  getDetaildata,
-  commonOperateApi,
-  getDictionaryItems,
-  DictionaryCode,
-  commonSaveApi,
-  getDetialdataByfilter,
-  getDetialdataByEventInfoId,
-  getPageDate
-} from '../../api/regulatoryApi'
+import { isNotEmpty } from '../../utils/util'
+import { getDetaildata, getFormsDetailByEventInfoId, FromType } from '../../api/regulatoryApi'
 
 export default {
   name: 'SceneInvestigationDetail',
   components: {
     SUpload,
-    PartyInfoView
+    PartyInfo
   },
   props: {},
   data () {
     return {
-      loadData: {}, // 勘察基本信息
+      loadData: {}, // 勘查基本信息
       eventInfo: {}, // 事件信息
-      surveyParty: [], // 当事人信息
-      access: '',
-      deliveryTime: '2020-02-28',
-      expectedCompletionTime: '2020-02-28',
-      person: '赵子龙',
-      eventAddress: '玉溪市澄江县 | 15km',
-      reportTime: '2020-02-26 13:52:26',
-      reportType: '举报',
-      reporterName: '张三丰',
-      evtTypeDisplayName: '无',
-      remark:
-        '玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县玉溪市澄江县',
-      eventCheck: {
-        eventType: '非法捕捞',
-        eventTime: new Date(),
-        eventAddress: '成都市',
-        partyInfoData: [
-          {
-            partyType: 1,
-            name: '小貂蝉',
-            company: '前端工程师',
-            nation: '汉族',
-            sex: 1,
-            idCard: '5113026155355X',
-            address: '成都市武侯区',
-            phone: 13629091535
-          },
-          {
-            partyType: 2,
-            name: '成都建投',
-            legalName: '张大千',
-            idCard: '5113026155355X',
-            address: '成都市武侯区',
-            tel: 13629091535
-          }
-        ],
-        dealResult:
-          '成都市成都市成都市成都市成都市成都市成都市成都市成都市成都市成都市',
-        dealType: '处理结论类型',
-        needTailAfter: '尚未查询到犯罪记录'
-      }
+      eventFile: [], // 附件
+      EventInfoId: '', // 事件ID
+      Partys: [], // 当事人信息
+      ProcessingDecisions: '不予处理' // 处理决定
     }
   },
-  watch: {},
-  computed: {},
   methods: {
-    returnSubmitForm () {
-      this.$router.push('/submitForm')
-    },
-    // 获取数据
-    init () {
-      const queryParam = this.$route.query
-      const id = queryParam.id
-      console.log(id)
-      getDetaildata('task_survey', id).then(res => {
-        if (isNotEmpty(res.TaskId)) {
-          getDetaildata('work_task', taskId).then(res => {
-            this.loadEventInfo(res.EventInfoId)
+    // 页面数据
+    initPage () {
+      // 请求现场巡查详情
+      getFormsDetailByEventInfoId(this.EventInfoId, FromType.sceneInvestigationDetail).then(res => {
+        if (res) {
+          this.loadData = res.MainForm
+          this.Partys = res.law_party
+          this.eventFile = res.attachment // 附件
+          getDetaildata('event_info', this.EventInfoId).then(res => {
+            if (res) {
+              this.eventInfo = res
+            }
           })
         }
       })
     },
-    // 获取事件信息
-    loadEventInfo (EventInfoId) {
-      getDetaildata('event_info', EventInfoId).then(res => {
-        if (res) {
-          this.eventInfo = res
-          this.loadEventCheck(EventInfoId)
-        }
-      })
-    },
-    // 获取表单信息
-    loadEventCheck (EventInfoId) {
-      getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then(res => {
-        if (res) {
-          this.loadData = {
-            ...res.MainForm,
-            LawParties: res.Party,
-            Attachment: res.Attachment
-          }
-          console.log(this.loadData)
-        }
-      })
+    theDecision () {
+      if (this.loadData.ProcessingDecisions === 1) {
+        this.ProcessingDecisions = '不予处理'
+      } else if (this.loadData.ProcessingDecisions === 2) {
+        this.ProcessingDecisions = '移送其他部门'
+      } else {
+        this.ProcessingDecisions = '执法程序'
+      }
     }
   },
   created () {
-    this.init()
+    this.EventInfoId = this.$route.query.ID // 事件ID
+    this.initPage()
+    this.theDecision()
   },
-  mounted () {},
-  activated () {
-    this.init()
+  mounted () {
+
   }
 }
 </script>
 <style lang="less">
+.van-cell__title{
+  color: #323232 !important;
+}
 </style>

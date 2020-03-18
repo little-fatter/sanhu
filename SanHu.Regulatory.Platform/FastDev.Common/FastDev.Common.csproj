@@ -22,6 +22,6 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.7.0" />
-    <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.5.7" />
+    <PackageReference Include="WanJiang.Framework.Web.Core" Version="1.6.0" />
   </ItemGroup>
 </Project>

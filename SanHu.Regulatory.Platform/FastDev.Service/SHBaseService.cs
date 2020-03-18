@@ -76,6 +76,7 @@ namespace FastDev.Service
         /// <param name="workTaskStatus"></param>
         public void UpdateWorkTaskState(string taskid, WorkTaskStatus workTaskStatus)
         {
+            if (taskid == null) return;
             var taskInfo = GetWorkTask(taskid);
             if (taskInfo == null) return;
             taskInfo.TaskStatus = (int)workTaskStatus;
@@ -126,6 +127,17 @@ namespace FastDev.Service
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
 
+            if (data.Model.ToLower()== "task_survey")  // 现场勘查 EventType 显示中文title
+            {
+                var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+                var eventType = obj["EventType"].ToString();
+                if (dicItems.ContainsKey(eventType))
+                {
+                    obj["EventType"] = dicItems[eventType];
+                }
+            }
+
             //构建其他需要查询的数据
             var dicData = BuildData(data, formId);
             dicData.Add("MainForm", obj);
@@ -161,6 +173,7 @@ namespace FastDev.Service
         {
             var filter = new FilterGroup();
             filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
+            var list= ServiceHelper.GetService("law_party").GetListData(filter);
             return ServiceHelper.GetService("law_party").GetListData(filter);
         }
         private object Getlaw_staffByFormId(string formId)
@@ -226,7 +239,7 @@ namespace FastDev.Service
             if (NextTasks == null) return null;
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
-            {
+            { 
                 //保存任务
                 Task.LaskTaskId = sourcetaskid;  //上一个任务id
                 Task.InitiationTime = DateTime.Now;  //状态

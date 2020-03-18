@@ -47,7 +47,8 @@ const apiConfig = {
       processinstanceCspaceInfo: getHost('admin') + '/api/DingDing/processinstanceCspaceInfo',
       workrecordAdd: getHost('admin') + '/api/DingDing/workrecordAdd',
       workrecordUpdate: getHost('admin') + '/api/DingDing/workrecordUpdate',
-      getWorkrecordPageListbyCurrent: getHost('admin') + '/api/DingDing/getWorkrecordPageListbyCurrent'
+      getWorkrecordPageListbyCurrent: getHost('admin') + '/api/DingDing/getWorkrecordPageListbyCurrent',
+      sendChatMsg: getHost('admin') + '/api/DingDing/SendChatMsg'
     },
     // 文件信息模块
     file: {
@@ -68,12 +69,6 @@ const apiConfig = {
     commonOperateApi: getHost('regulatory') + '/api',
     getDictionaryItems: getHost('regulatory') + '/api/items',
     commonSaveApi: getHost('regulatory') + '/save'
-  },
-  /**
-   * 四方德信接口
-   */
-  sfdx: {
-    getLawRulePage: getHost('sfdx') + '/law_rule_page'
   }
 }
 

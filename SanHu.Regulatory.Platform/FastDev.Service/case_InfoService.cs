@@ -81,7 +81,7 @@ namespace FastDev.Service
                             field = "ID",
                             op = "in",
                             type = "select",
-                            value = item.AssociationobjectID
+                            value = item.CaseId
                         });
                     }
 
@@ -89,6 +89,15 @@ namespace FastDev.Service
                 }
 
                 DeletePartyRules(descriptor.Condition.groups);
+
+                //FilterTranslator filterTranslator = new FilterTranslator();
+                //if (descriptor.Condition != null)
+                //{
+                //    filterTranslator.Group = descriptor.Condition;
+                //}
+
+                //filterTranslator.Translate();
+                //string whereTxt = filterTranslator.CommandText;
             }
 
             #endregion
@@ -169,6 +178,15 @@ namespace FastDev.Service
             //    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid[0] }");
             //    caseinfo.Add("Jobnumber",user.Jobnumber);
             //}
+
+            var caseinfo = data as Dictionary<string, object>;
+            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
+            var caseType = caseinfo["CaseType"].ToString();
+            if (dicItems.ContainsKey(caseType))
+            {
+                caseinfo["CaseType"] = dicItems[caseType];
+            }
         }
 
 
@@ -358,6 +376,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoSource;
                     l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
                     QueryDb.Insert(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
@@ -365,6 +384,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "case_Info";
                     l.AssociationobjectID = CaseInfoNew;
                     l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
                     QueryDb.Insert(l);
                 }
 

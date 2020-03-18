@@ -17,7 +17,7 @@ namespace FastDev.Service
 
         public form_confiscated_itemService()
         {
-            OnGetAPIHandler += form_confiscated_itemService_OnGetAPIHandler;
+           // OnGetAPIHandler += form_confiscated_itemService_OnGetAPIHandler;
         }
         private Func<APIContext, object> form_confiscated_itemService_OnGetAPIHandler(string id)
         {
@@ -30,7 +30,7 @@ namespace FastDev.Service
 
         public object Handle(APIContext context)
         {
-            var data = JsonHelper.DeserializeJsonToObject<form_confiscated_itemFinishReq>(context.Data);
+            var data = JsonHelper.DeserializeJsonToObject<form_confiscatedFinishReq>(context.Data);
             if (data.formConfiscatedItems == null) return null;
             QueryDb.BeginTransaction();
             try

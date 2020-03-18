@@ -2,8 +2,8 @@
   <div>
     <van-cell-group>
       <van-cell title="案件号" :value="penalizeBook.caseInfo.CaseNumber"></van-cell>
-      <van-cell title="案件类型" :value="penalizeBook.caseInfo.CaseType"></van-cell>
       <van-cell title="案由" :value="penalizeBook.caseInfo.CauseOfAction"></van-cell>
+      <van-cell title="案件类型" :value="penalizeBook.caseInfo.CaseType"></van-cell>
       <party-info-view :initData="penalizeBook.LawParties"></party-info-view>
       <van-field
         v-model="penalizeBook.Illegalfacts"
@@ -23,7 +23,7 @@
         </s-upload>
       </item-group>
       <van-field
-        v-model="penalizeBook.illegalbasis.title"
+        v-model="penalizeBook.illegalbasis"
         rows="2"
         autosize
         label="违法依据"
@@ -31,7 +31,7 @@
         readonly
       />
       <van-field
-        v-model="penalizeBook.punishmentbasis.title"
+        v-model="penalizeBook.punishmentbasis"
         rows="2"
         autosize
         label="处罚依据"
@@ -168,8 +168,8 @@ export default {
         CaseID: this.penalizeBook.caseInfo.ID,
         EventInfoId: this.penalizeBook.caseInfo.EventInfoId,
         Illegalfacts: this.penalizeBook.Illegalfacts,
-        IllegalbasisIDs: this.penalizeBook.illegalbasis.title,
-        PunishmentbasisIDs: this.penalizeBook.punishmentbasis.title,
+        IllegalbasisIDs: this.penalizeBook.illegalbasis,
+        PunishmentbasisIDs: this.penalizeBook.punishmentbasis,
         CoOrganizer: this.penalizeBook.CoOrganizer,
         CoorganizerID: this.penalizeBook.CoOrganizerId,
         ...decision

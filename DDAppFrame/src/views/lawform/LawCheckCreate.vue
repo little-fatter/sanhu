@@ -45,7 +45,7 @@
             class="dropdown-menu_noboder">
             <template slot="input">
               <van-dropdown-menu>
-                <van-dropdown-item v-model="eventCheck.EventType" :options="eventTypeption" @change="eventTypeSelectChange" />
+                <van-dropdown-item v-model="eventCheck.EventType" :options="eventTypeption" />
               </van-dropdown-menu>
             </template>
           </van-field>
@@ -271,6 +271,7 @@ export default {
           this.eventCheck.EventType = items[0].ItemCode
         }
         this.eventTypeption = eventTypeOptions
+        console.log('eventTypeOptions', eventTypeOptions)
       })
     },
     loadTaskInfo (taskId) {
@@ -307,9 +308,6 @@ export default {
           this.eventCheck.IncidentAddressXY = incidentAddressXY
         }
       })
-    },
-    eventTypeSelectChange (eventType) {
-      this.eventCheck.EventType = eventType
     },
     dealTypeSelectChange (dealType) {
       this.eventCheck.ProcessingDecisions = dealType
@@ -352,7 +350,6 @@ export default {
             ...res.MainForm,
             Attachment: res.attachment
           }
-          console.log('EventType', this.eventCheck.EventType)
         } else {
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.EventType = event.evtTypeId
