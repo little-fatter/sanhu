@@ -1,6 +1,8 @@
-﻿using FastDev.DevDB;
+﻿using FastDev.Common;
+using FastDev.DevDB;
 using FastDev.DevDB.Model.Config;
 using FastDev.Model.Entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +14,7 @@ namespace FastDev.Service
         public formwith_eventcaseService()
         {
             OnAfterGetPagedData += Formwith_eventcaseService_OnAfterGetPagedData;
+            OnGetAPIHandler += Formwith_eventcaseService_OnGetAPIHandler;
         }
 
         private void Formwith_eventcaseService_OnAfterGetPagedData(object query, object data)
@@ -31,6 +34,29 @@ namespace FastDev.Service
                     item["handler"] = user.Name;
                 }
             }
+        }
+
+        private Func<APIContext, object> Formwith_eventcaseService_OnGetAPIHandler(string id)
+        {          
+                switch (id.ToUpper())
+                {
+                    case "FORMBYEVENT":
+                        return FORMBYEVENT;
+                }
+                return null;
+        }
+
+
+        private object FORMBYEVENT(APIContext context)
+        { 
+        string id= JsonHelper.DeserializeJsonToObject<string>(context.Data);
+            if (string.IsNullOrEmpty(id)) return null;
+            var list= QueryDb.Query<formwith_eventcase>("SELECT * FROM formwith_eventcase where EventInfoId=@0 Order by CreatTime desc", id);
+            //TODO 
+            
+            return list;
+
+
         }
     }
 }
