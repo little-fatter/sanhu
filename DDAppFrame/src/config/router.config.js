@@ -130,6 +130,15 @@ export const asyncRouterMap = [{
       }
     },
     {
+      path: '/inquestPutdownPreview',
+      name: 'inquestPutdownPreview',
+      component: () => import('@/views/lawform/cases/InquestPutdownPreview.vue'),
+      meta: {
+        title: '勘验(检查)笔录预览',
+        keepAlive: false
+      }
+    },
+    {
       path: '/askPutdownCreate',
       name: 'askPutdownCreate',
       component: () => import('@/views/lawform/cases/AskPutdownCreate.vue'),
@@ -143,7 +152,7 @@ export const asyncRouterMap = [{
       name: 'askPutdownPreview',
       component: () => import('@/views/lawform/cases/AskPutdownPreview.vue'),
       meta: {
-        title: '询问笔录明细',
+        title: '询问笔录预览',
         keepAlive: false
       }
     }

@@ -83,17 +83,16 @@ namespace FastDev.Service
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Task<OapiWorkrecordAddResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request)
+        public Task<OapiProcessinstanceCreateResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request)
         {
             var url = "api/dingding/ProcessInstaceCreateAsync";
 
             request.AgentId = long.Parse(_serverNameConfig.AgentId);
-
+            
             //TODO fill up the list property
-            request.DeptId = long.MinValue;
-            request.OriginatorUserId = "AccountId"; 
-                //
-            return PostFrameWork<OapiWorkrecordAddResponse>(url, request);
+            request.OriginatorUserId = "AccountId";//框架User表中AccountId
+            request.DeptId = long.MinValue; //user表中的deptId是GUID
+            return PostFrameWork<OapiProcessinstanceCreateResponse>(url, request);
         }
 
         /// <summary>

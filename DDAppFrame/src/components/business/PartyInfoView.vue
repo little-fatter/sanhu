@@ -6,7 +6,6 @@
         <van-cell title="身份证" :value="item.IDcard"></van-cell>
         <van-cell title="手机号" :value="item.Contactnumber"></van-cell>
         <van-cell title="现住址" :value="item.address"></van-cell>
-        <van-cell title="职业" :value="item.Occupation"></van-cell>
         <van-cell title="民族" :value="item.Nationality"></van-cell>
         <van-cell title="工作单位" :value="item.WorkUnit"></van-cell>
       </template>

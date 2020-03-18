@@ -41,6 +41,6 @@ namespace FastDev.IServices
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Task<OapiWorkrecordAddResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request);
+        public Task<OapiProcessinstanceCreateResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request);
     }
 }

@@ -161,6 +161,7 @@ namespace FastDev.Service
         {
             var filter = new FilterGroup();
             filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
+            var list= ServiceHelper.GetService("law_party").GetListData(filter);
             return ServiceHelper.GetService("law_party").GetListData(filter);
         }
         private object Getlaw_staffByFormId(string formId)
@@ -226,7 +227,7 @@ namespace FastDev.Service
             if (NextTasks == null) return null;
             if (NextTasks.Length < 1) return null;
             foreach (var Task in NextTasks)
-            {
+            { 
                 //保存任务
                 Task.LaskTaskId = sourcetaskid;  //上一个任务id
                 Task.InitiationTime = DateTime.Now;  //状态

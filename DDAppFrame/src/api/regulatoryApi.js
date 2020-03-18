@@ -27,7 +27,9 @@ export const DictionaryCode = {
   // 案件类型
   CaseType: 'CaseType',
   // 案件来源
-  CaseSourceType: 'CaseSourceType '
+  CaseSourceType: 'CaseSourceType',
+  //
+  CheckType: 'CheckType'
 }
 
 /**

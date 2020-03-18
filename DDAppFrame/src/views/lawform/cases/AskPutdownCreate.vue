@@ -2,7 +2,7 @@
   <div class="form_wapper">
     <van-cell-group>
       <van-field
-        v-model="caseInfo.CauseOfAction"
+        v-model="caseInfo.CaseNumber"
         label="案件"
         placeholder="请选择案件"
         :readonly="true"
@@ -12,11 +12,11 @@
         <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
       </van-field>
     </van-cell-group>
-    <van-cell-group v-if="caseInfo.CauseOfAction">
+    <van-cell-group title="笔录详情" v-if="caseInfo.CauseOfAction">
       <van-form @submit="onSubmit" @failed="onFailed">
         <van-field
-          name="objectType"
-          v-model="model.objectType"
+          name="InquiryType"
+          v-model="model.InquiryType"
           label="询问对象"
           readonly
           required
@@ -24,13 +24,13 @@
           class="dropdown-menu_noboder">
           <template slot="input">
             <van-dropdown-menu>
-              <van-dropdown-item v-model="model.objectType" :options="objectTypeOptions" @change="objectTypeSelectChange" />
+              <van-dropdown-item v-model="model.InquiryType" :options="inquiryTypeOptions" />
             </van-dropdown-menu>
           </template>
         </van-field>
         <van-field
-          name="CauseOfAction"
-          v-model="model.CauseOfAction"
+          name="Originofcase"
+          v-model="model.Originofcase"
           rows="2"
           autosize
           label="案由"
@@ -38,21 +38,29 @@
           readonly
         />
         <van-field
-          name="EventAddress"
-          v-model="model.eventAddress"
+          name="Enquiryplace"
+          v-model="model.Enquiryplace"
           label="询问地点"
           placeholder="请输入询问地点"
           required
           :rules="requiredRule"
+          rows="2"
+          autosize
+          type="textarea"
         >
           <van-icon name="location" color="#1989fa" slot="right-icon" @click="handleShowLocation" size="30" />
         </van-field>
-        <party-info ref="partyInfo" :title="model.objectTypeDesc"></party-info>
+
+        <party-info-view :initData="caseInfo.LawParties" :title="model.InquiryType" v-if="model.InquiryType=='当事人'"></party-info-view>
+        <party-info ref="partyInfo" :title="model.InquiryType" v-else></party-info>
         <van-field
           v-model="lawPersionNames"
           label="执法检查人员"
           placeholder="请选择执法检查人员"
+          required
+          :rules="requiredRule"
           readonly
+          @click="handleSelecLawPersions"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecLawPersions" size="30" />
         </van-field>
@@ -61,6 +69,7 @@
           label="记录人员"
           placeholder="请选择记录人员"
           readonly
+          @click="handleSelecRecordPersions"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecRecordPersions" size="30" />
         </van-field>
@@ -107,24 +116,24 @@
           placeholder="请输入被检查陪同人"
           show-word-limit
         /> -->
-        <van-field name="isLookCredential" label="被询问人是否看清执法证件" required :rules="requiredMsgRule">
-          <van-radio-group v-model="model.isLookCredential" direction="horizontal" slot="input">
-            <van-radio :name="1">清楚</van-radio>
-            <van-radio :name="2">不清楚</van-radio>
+        <van-field name="Isseeclearly" label="被询问人是否看清执法证件" required :rules="requiredMsgRule">
+          <van-radio-group v-model="model.Isseeclearly" direction="horizontal" slot="input">
+            <van-radio :name="'清楚'">清楚</van-radio>
+            <van-radio :name="'不清楚'">不清楚</van-radio>
           </van-radio-group>
         </van-field>
         <van-cell class="explain">
           依照法律规定，被询问人对调查询问，享有申请执法人员回避的权利，有如实接受调查询问的法律义务，如有意隐匿违法行为或者故意作伪证将承担法律责任。
         </van-cell>
-        <van-field name="isUnderstandRights" label="被询问人是否明白权责义务" required :rules="requiredMsgRule">
-          <van-radio-group v-model="model.isUnderstandRights" direction="horizontal" slot="input">
-            <van-radio :name="1">明白</van-radio>
-            <van-radio :name="2">不明白</van-radio>
+        <van-field name="Isunderstand" label="被询问人是否明白权责义务" required :rules="requiredMsgRule">
+          <van-radio-group v-model="model.Isunderstand" direction="horizontal" slot="input">
+            <van-radio :name="'明白'">明白</van-radio>
+            <van-radio :name="'不明白'">不明白</van-radio>
           </van-radio-group>
         </van-field>
         <van-field
-          name="remark"
-          v-model="model.remark"
+          name="Inquiryrecord"
+          v-model="model.Inquiryrecord"
           rows="2"
           autosize
           label="询问记录"
@@ -147,9 +156,11 @@
 
 <script>
 import PartyInfo from '../../../components/business/PartyInfo'
+import PartyInfoView from '../../../components/business/PartyInfoView'
 import CaseListSelect from '../../../components/business/CaseListSelect'
 import { ddgetMapLocation, ddMapSearch, ddcomplexPicker } from '../../../service/ddJsApi.service'
 import { formatDate } from '../../../utils/util'
+import { getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 /**
  * 询问笔录   成林龙  要做详情
  */
@@ -157,7 +168,8 @@ export default {
   name: 'AskPutdownCreate',
   components: {
     PartyInfo,
-    CaseListSelect
+    CaseListSelect,
+    PartyInfoView
   },
   data () {
     this.requiredRule = [
@@ -169,12 +181,11 @@ export default {
     return {
       caseInfo: {},
       model: {
-        objectType: 1,
-        objectTypeDesc: '当事人',
-        CauseOfAction: '',
-        remark: '',
+        InquiryType: '当事人',
+        Originofcase: '',
+        Inquiryrecord: '',
         accompanys: '',
-        isLookCredential: null,
+        isseeclearly: null,
         isUnderstandRights: null
       },
       loading: false,
@@ -185,15 +196,15 @@ export default {
       recordPersionNames: [],
       accompanys: [],
       accompanyNames: [],
-      objectTypeOptions: [
+      inquiryTypeOptions: [
         {
-          text: '当事人', value: 1
+          text: '当事人', value: '当事人'
         },
         {
-          text: '证人', value: 2
+          text: '证人', value: '证人'
         },
         {
-          text: '第三人', value: 2
+          text: '第三人', value: '第三人'
         }
       ],
       showCalendar: false,
@@ -212,10 +223,17 @@ export default {
       this.showPopup = false
     },
     onCaseConfirm (caseInfo) {
-      console.log('caseInfo', caseInfo)
-      this.caseInfo = caseInfo
-      this.model.CauseOfAction = caseInfo.CauseOfAction
-      this.showPopup = false
+      getFormsDetailByEventInfoId(null, 'case_Info', caseInfo.ID).then((res) => {
+        console.log('case_Info', res)
+        this.caseInfo = {
+          ...res.MainForm,
+          LawParties: res.law_party
+        }
+        this.model.Originofcase = caseInfo.CauseOfAction
+        this.model.Enquiryplace = caseInfo.IncidentAddress
+      }).finally(() => {
+        this.showPopup = false
+      })
     },
     handleShowCalendar (seletTimeType) {
       this.seletTimeType = seletTimeType
@@ -236,16 +254,9 @@ export default {
     handleShowLocation () {
       ddgetMapLocation().then(location => {
         ddMapSearch(location.latitude, location.longitude).then((res) => {
-          this.model.eventAddress = `${res.province}${res.city}${res.adName}${res.snippet}`
+          this.model.Enquiryplace = `${res.province}${res.city}${res.adName}${res.snippet}`
         })
       })
-    },
-    objectTypeSelectChange (value) {
-      var item = this.objectTypeOptions.find(p => p.value === value)
-      if (item) {
-        this.model.objectTypeDesc = item.text
-      }
-      this.model.objectType = value
     },
     handleSelecLawPersions () {
       var that = this
@@ -283,14 +294,16 @@ export default {
       })
     },
     onSubmit (values) {
-      console.log('submit', values)
-      const dsrs = this.$refs.partyInfo.getResult()
+      var lawParties = this.caseInfo.LawParties
+      if (this.model.InquiryType !== '当事人') {
+        lawParties = this.$refs.partyInfo.getResult()
+      }
       var forms = {
         caseInfo: this.caseInfo,
-        dsrs,
-        ...this.model,
+        lawParties: lawParties,
+        form: this.model,
+        lawPersions: this.lawPersions,
         lawPersionNames: this.lawPersionNames,
-        recordPersions: this.recordPersions,
         recordPersionNames: this.recordPersionNames
       }
       this.$router.push({ name: 'askPutdownPreview', params: { forms: forms } })
