@@ -127,7 +127,8 @@ namespace FastDev.Service
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
-
+            string eventinfoid = null; 
+            if(obj.ContainsKey("EventInfoId"))eventinfoid = obj["EventInfoId"]!=null? obj["EventInfoId"].ToString():string.Empty;
             if (data.Model.ToLower() == "task_survey")  // 现场勘查 EventType 显示中文title
             {
                 var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
@@ -140,7 +141,7 @@ namespace FastDev.Service
             }
 
             //构建其他需要查询的数据
-            var dicData = BuildData(data, formId);
+            var dicData = BuildData(data, formId,eventinfoid);
             dicData.Add("MainForm", obj);
             //添加处罚决定书证据附件
             if (atlist != null)
@@ -158,7 +159,7 @@ namespace FastDev.Service
             }
             return dicData;
         }
-        private Dictionary<string, object> BuildData(FormDataReq data, string formId)
+        private Dictionary<string, object> BuildData(FormDataReq data, string formId,string eventinfoid)
         {
             var dic = new Dictionary<string, object>();
             if (data.FilterModels == null || data.FilterModels.Count() < 1)
@@ -181,6 +182,12 @@ namespace FastDev.Service
             {
                 dic.Add("attachment", GetattachmentByFormId(formId));
             }
+            if (data.FilterModels.Contains("casedetail"))
+            {
+                dic.Add("casetimeline", GetAllFormByEventId(eventinfoid));
+            }
+
+
             return dic;
         }
         private object Getlaw_partyByFormId(string formId)
@@ -240,6 +247,26 @@ namespace FastDev.Service
         }
 
 
+        private object GetAllFormByEventId(string eventinfoid)
+        {
+            if (string.IsNullOrEmpty(eventinfoid)) return null;
+            //var filter = new FilterGroup();
+            //filter.rules.Add(new FilterRule("EventInfoId", eventinfoid, "equal"));
+            //return ServiceHelper.GetService("formwith_eventcase").GetListData(filter);
+           var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateTime ",eventinfoid);
+            Dictionary<string, object> formlist = new Dictionary<string, object>();
+            foreach (var f in formall)
+            {
+                Dictionary<string, object> temp = new Dictionary<string, object>();
+                temp.Add("CreateUser", f.CreateUserID);
+                temp.Add("CreateDate", f.CreateDate);
+                formlist.Add(f.FormName, temp);
+            }
+            return formlist;
+            
+        }
+
+
         private object GetSurvey(string taskid)
         {
             var form = QueryDb.FirstOrDefault<task_survey>(" where TaskId=@0 order PreviousformID!=null by CreateDate desc", taskid);
@@ -275,7 +302,6 @@ namespace FastDev.Service
                 }
                 string id = SaveWorkTask(Task);
                 Task.ID = id;
-
                 //发送待办
                 if (!string.IsNullOrEmpty(Task.AppLinks))
                     Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
