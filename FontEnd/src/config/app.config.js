@@ -1,3 +1,5 @@
+import * as listConfig from './list.config'
+
 /**
  * 初始化配置环境
  */
@@ -14,6 +16,7 @@ const initAppConig = () => {
  * 系统配置
  */
 const appConfig = {
+  ...listConfig,
   ...initAppConig()
 }
 
