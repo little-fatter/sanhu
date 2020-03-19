@@ -243,13 +243,6 @@ export default {
       this.SformType = item.ItemCode // 搜索用
       // 判断是否是全部类型按钮
       if (this.SformType !== null) {
-        // this.listData = [] // 重新搜索将 搜索结果清空
-        // this.loadData(
-        //   'formwith_eventcase',
-        //   1,
-        //   10,
-        //   this.dealParameter(this.searchKeyWords, this.SformType)
-        // ) // 调用请求
         this.dealParameter(this.searchKeyWords, this.SformType)
       }
       this.onSearch()
