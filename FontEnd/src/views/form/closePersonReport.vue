@@ -3,7 +3,7 @@
     margin: 0 15%;
     padding: 20px 0px;
     color: #101010;
-    font-family: Microsoft YaHei;
+    font-family: 'Microsoft YaHei';
     .title {
           padding: 20px;
           border-bottom: 1px solid #DCDEE2;
@@ -79,7 +79,7 @@
 </style>
 <template>
   <div>
-    <div v-if="pdfUrl">
+    <div v-if="!pdfUrl">
       <pdf-panel :pdf="pdfUrl" :files="attachment"></pdf-panel>
     </div>
     <div v-else class="wrapper">
@@ -251,13 +251,22 @@ export default {
       console.log(formType)
     }
     this.init()
+    this.test()
   },
   methods: {
+    test () {
+      getFormDetail('case_info', null, '75159f38-cec3-4688-ba5b-cbc70a5eaadb', ['casedetail']).then(res => {
+        console.log('case_info', res)
+      })
+    },
     // 获取页面数据
     init () {
       this.getFormsDetailByEventInfoIdPdf()
+      getDetails('case_report', this.id).then((res) => {
+        console.log('222', res)
+      })
       getFormDetail('case_report', null, this.id).then(res => {
-        console.log(res)
+        console.log('1111', res)
         this.mainData = res.MainForm
         this.attachment = res.attachment
         this.lawParty = res.law_party

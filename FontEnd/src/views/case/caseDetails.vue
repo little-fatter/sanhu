@@ -13,8 +13,6 @@
   overflow: auto;
 
   .case-body {
-    // margin: 15px 55px;
-    // background-color: #f4f3f3;
     padding: 0px;
 
     .tabs {
