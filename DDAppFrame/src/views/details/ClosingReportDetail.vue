@@ -49,7 +49,6 @@ export default {
       getFormsDetailByEventInfoId(this.EventInfoId, FromType.caseReport).then(res => {
         if (res) {
           console.log(res)
-
           // this.loadData = res.MainForm
           // this.Partys = res.law_party
           // this.eventFile = res.attachment // 附件
