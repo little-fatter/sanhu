@@ -70,10 +70,9 @@ import PenaltyDecisionView from '../../../components/business/PenaltyDecisionVie
 import CaseListSelect from '../../../components/business/CaseListSelect'
 import RelCaseFormListSelect from '../../../components/business/RelCaseFormListSelect'
 import { ddcomplexPicker, getApproverIds } from '../../../service/ddJsApi.service'
-import { getAgentId, getCurrentUserInfo } from '../../../service/currentUser.service'
+import { getAgentId } from '../../../service/currentUser.service'
 import { getMainUrl, isNotEmpty, formatDate, isEmpty } from '../../../utils/util'
-import { startProcessInstance } from '../../../api/ddApi'
-import { getDetaildata, commonOperateApi, getDictionaryItems, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
+import { getDetaildata, commonOperateApi, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 var timer = null
 /**
  * 结案报告
@@ -178,7 +177,7 @@ export default {
     onSubmit (values) {
       ddcomplexPicker().then((approve) => {
         var caseReport = {
-          CaseId: this.caseInfo.Id,
+          CaseId: this.caseInfo.ID,
           CaseDetail: this.caseFinalReport.CaseDetail,
           PunishmentId: isNotEmpty(this.penalizeBook) ? this.penalizeBook.ID : null,
           ExecuteState: '已执行'
@@ -187,12 +186,12 @@ export default {
           AgentId: parseInt(getAgentId()),
           ProcessCode: appConfig.auditCondig.CaseFinalReportProcessCode,
           approvers: getApproverIds(approve),
-          form_component_values: this.getFormComponentValues()
+          FormComponentValues: JSON.stringify(this.getFormComponentValues())
         }
         var model = {
           SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
           EventInfoId: this.caseInfo.EventInfoId,
-          CaseId: this.caseInfo.Id,
+          CaseId: this.caseInfo.ID,
           caseReport,
           oapiProcessinstanceCreateRequest
         }
