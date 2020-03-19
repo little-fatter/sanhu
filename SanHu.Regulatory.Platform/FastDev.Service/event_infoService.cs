@@ -34,7 +34,12 @@ namespace FastDev.Service
         private void Event_infoService_OnAfterGetDetailData(object query, object data)
         {
             var o = data as Dictionary<string, object>;
-            if (o["evtTypeDisplayName"] == null) o["evtTypeDisplayName"] = "综合执法";
+
+            if (o["evtTypeDisplayName"] == null)
+            { 
+            
+            }
+               
         }
 
         /// <summary>
