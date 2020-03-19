@@ -248,7 +248,7 @@ namespace FastDev.Service
 
         private object GetAllFormByEventId(string eventinfoid)
         { 
-        
+        var formall=QueryDb.Query<formwith_eventcase>
         }
 
 
