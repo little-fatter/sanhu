@@ -218,6 +218,8 @@ namespace FastDev.Service
             var db = this.QueryDb;
             IService svc = ServiceHelper.GetService("law_party");
 
+            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
 
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
 
@@ -252,6 +254,11 @@ namespace FastDev.Service
 
                 item.Add("LawPartys", partys);
 
+                var caseType = item["CaseType"].ToString();
+                if (dicItems.ContainsKey(caseType))  // CaseType 显示中文title
+                {
+                    item["CaseType"] = dicItems[caseType];
+                }
             }
         }
         private void Case_InfoService_OnAfterListData(object query, object data)
