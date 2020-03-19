@@ -85,10 +85,10 @@ namespace FastDev.Service
         /// <returns></returns>
         public Task<OapiProcessinstanceCreateResponse> ProcessInstaceCreateAsync(OapiProcessinstanceCreateRequest request)
         {
-            var url = "api/dingding/ProcessInstanceCreate";
+            var url = "api/dingding/ProcessInstanceCreate?" + GetAgentIDString();
 
             request.AgentId = long.Parse(_serverNameConfig.AgentId);
-            
+
             //TODO fill up the list property
             //request.OriginatorUserId = "AccountId";//框架User表中AccountId
             //request.DeptId = long.MinValue; //user表中的deptId是GUID

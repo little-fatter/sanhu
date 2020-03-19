@@ -130,7 +130,7 @@ namespace FastDev.Service
         public object AsposeToPdf(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
-            string templatePath = $"wwwroot/pdf/{data.formType}.doc";
+            string templatePath = $"wwwroot/template/{data.formType}.doc";
             string FilePath = "";
             QueryDb.BeginTransaction();
             try
@@ -148,6 +148,7 @@ namespace FastDev.Service
                     Model = data.formType.Contains("form_inquiryrecord") ? "form_inquiryrecord" : data.formType,
                     FilterModels = new string[] { "law_staff", "law_party" }
                 });
+                List<string> staff = new List<string>();
                 //寻找模板获取html字符串
                 foreach (var ss in jsonData as Dictionary<string, object>)
                 {
@@ -165,6 +166,8 @@ namespace FastDev.Service
                                     {
 
                                     }
+                                    if (j.Key == "Username")
+                                        staff.Add(j.Value.ToString());
                                 }
                             }
                             break;
@@ -180,6 +183,8 @@ namespace FastDev.Service
                                     {
                                         //if ()
                                     }
+                                    //当事人名字使用,增加到一个字段内
+
                                 }
                             }
                             break;
@@ -227,6 +232,8 @@ namespace FastDev.Service
                     }
 
                 }
+                if (pDic.ContainsKey("fullStaff"))
+                    pDic.Add("FullStaff", string.Join(",", staff));
 
                 ////特殊处理
                 //if (data.formType == "form_inquiryrecord" && pDic.ContainsKey("Type"))

@@ -32,13 +32,31 @@
         @click="pdfDownload">
         下载
       </van-button>
-      <van-button icon="idcard" type="default" native-type="button" size="small" class="item">
+      <van-button
+        icon="idcard"
+        type="default"
+        native-type="button"
+        size="small"
+        class="item"
+        disabled>
         送达
       </van-button>
-      <van-button icon="share" type="default" native-type="button" size="small" class="item">
+      <van-button
+        icon="share"
+        type="default"
+        native-type="button"
+        size="small"
+        class="item"
+        disabled>
         转发
       </van-button>
-      <van-button icon="balance-pay" type="default" native-type="button" size="small" class="item">
+      <van-button
+        icon="balance-pay"
+        type="default"
+        native-type="button"
+        size="small"
+        class="item"
+        disabled>
         收缴
       </van-button>
     </div>
