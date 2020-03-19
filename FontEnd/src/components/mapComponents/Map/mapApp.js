@@ -164,7 +164,7 @@ var mapApp = {
         source: new VectorSource()
       }),
       style: (f) => layerStyle.alertEventStyle(f),
-      zIndex: 8,
+      zIndex: 10,
       name: 'alertEventLayer'
     })
     this.layers['alertEventLayer'] = alertEventLayer
@@ -175,7 +175,7 @@ var mapApp = {
         source: new VectorSource()
       }),
       style: (f) => layerStyle.clusterPeopleStyle(f),
-      zIndex: 9,
+      zIndex: 8,
       name: 'peopleLayerZhifa'
     })
     // 巡检人员
@@ -185,7 +185,7 @@ var mapApp = {
         source: new VectorSource()
       }),
       style: (f) => layerStyle.clusterPeopleStyle(f),
-      zIndex: 10,
+      zIndex: 9,
       name: 'peopleLayerXunjian'
     })
   },
