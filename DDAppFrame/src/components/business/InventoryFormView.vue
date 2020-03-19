@@ -10,25 +10,9 @@
         <van-cell title="数量" :value="item.Number"></van-cell>
         <van-cell title="价格" :value="item.UnitPrice"></van-cell>
         <van-cell title="包装" :value="item.Packing"></van-cell>
-        <van-field
-          v-model="item.Remarks"
-          label="备注"
-          rows="2"
-          autosize
-          type="textarea"
-          maxlength="200"
-          readonly
-        />
+        <van-cell title="备注" :value="item.Remarks"></van-cell>
       </van-panel>
-      <van-field
-        v-model="obj.otherItem"
-        rows="2"
-        autosize
-        label="其他物品"
-        type="textarea"
-        maxlength="200"
-        readonly
-      />
+      <van-cell title="其他物品" :value="obj.Othergoods"></van-cell>
     </van-cell-group>
   </div>
 </template>

@@ -62,9 +62,11 @@ export default {
     },
     onCaseConfirm (caseInfo) {
       getFormsDetailByEventInfoId(null, 'case_Info', caseInfo.ID).then((res) => {
-        this.caseInfo = {
-          ...res.MainForm,
-          LawParties: res.law_party
+        if (res) {
+          this.caseInfo = {
+            ...res.MainForm,
+            LawParties: res.law_party
+          }
         }
       }).finally(() => {
         this.showPopup = false

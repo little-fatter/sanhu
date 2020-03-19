@@ -24,14 +24,19 @@
                 <div class="item-person-info">当前处理人: {{ item.personInfo.dep + ' ' + item.personInfo.members[0] + ' ' + item.personInfo.members[1] }} </div>
               </a-list-item>
               <a-list-item class="item-lyr">
-                <div class="item-status-info">处理状态: <font>{{ evtStateMap.list[item.status] }}</font> </div>
+                <div class="item-status-info">
+                  处理状态:
+                  <font :style="{color: getColor(item.status)}">
+                    {{ evtStateMap.list[item.status] }}
+                  </font>
+                </div>
               </a-list-item>
               <a-list-item class="item-lyr">
                 <div class="item-time-limit-info">流转时限: {{ item.timeLimit }} </div>
               </a-list-item>
               <a-list-item class="item-lyr">
                 <div class="item-time-info left"> {{ item.uploadTime }} </div>
-                <div class="left ai-link" v-show="countdownShow"><a >AI摄像头识别</a></div>
+                <div class="left ai-link" v-show="countdownShow"><a >{{ reportType[item.reportType] }}</a></div>
                 <div class="clear"></div>
               </a-list-item>
             </a-list>
@@ -45,28 +50,9 @@
 
 <script>
 import moment from 'moment'
-import appConfig from '@/config/app.config'
-
+import dictionary from '@/utils/dictionary'
 const timeFormat = 'YYYY-MM-DD HH:mm:ss'
-var evtStateMap = {
-  list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
-  map: {
-    '待处理': 0,
-    '事件核查中': 1,
-    '跟踪整改中': 2,
-    '现场勘察中': 3,
-    '处理完成': 4,
-    '转为案件办理': 5
-  },
-  level: {
-    '待处理': 0,
-    '事件核查中': 1,
-    '跟踪整改中': 1,
-    '现场勘察中': 1,
-    '处理完成': 2,
-    '转为案件办理': 2
-  }
-}
+
 export default {
   name: 'MyAlertEventList',
   components: { },
@@ -87,7 +73,7 @@ export default {
   },
   data: function () {
     return {
-      countdownShow: false,
+      countdownShow: true,
       title: '告警事件',
       list: [
         // {
@@ -104,33 +90,22 @@ export default {
         //   }
         // }
       ],
-      statusTable: [
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi.png',
-          title: '一级'
-        },
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(1).png',
-          title: '二级'
-        },
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(2).png',
-          title: '三级'
-        },
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(3).png',
-          title: '任务失败'
-        }
-      ],
-      evtStateMap: evtStateMap,
-      listHeight: 761
+      statusTable: dictionary.eventLevelTable,
+      evtStateMap: dictionary.evtStateMap,
+      listHeight: 761,
+      reportType: dictionary.reportType
     }
   },
   methods: {
     getSrc: function (type) {
-      var statusName = evtStateMap.list[type]
-      var level = evtStateMap.level[statusName]
+      var statusName = this.evtStateMap.list[type]
+      var level = this.evtStateMap.level[statusName]
       return this.statusTable[level].src
+    },
+    getColor : function (status) {
+      var name = this.evtStateMap.list[status]
+      var level = this.evtStateMap.level[name]
+      return this.statusTable[level].color
     },
     getAlertEventList: function () {
       return [...this.list]
@@ -264,9 +239,9 @@ export default {
     color: rgba(127, 135, 174, 1);
     font-size: 14px;
 }
-.item-status-info font{
+/* .item-status-info font{
     color: rgba(44, 140, 240, 1);
-}
+} */
 .item-time-limit-info{
     margin-left: 20px;
     color: rgba(127, 135, 174, 1);

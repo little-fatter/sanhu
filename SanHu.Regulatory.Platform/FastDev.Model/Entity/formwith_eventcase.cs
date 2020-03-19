@@ -99,12 +99,17 @@ public string CaseNumber
 get;
 set;
 }
-public string CauseOfAction
+public string MainHandler
 {
 get;
 set;
 }
-public string evtTypeName
+public string CoOrganizer
+{
+get;
+set;
+}
+public string TaskId
 {
 get;
 set;

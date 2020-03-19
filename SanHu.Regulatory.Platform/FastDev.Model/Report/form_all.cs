@@ -79,6 +79,11 @@ public string CaseId
 get;
 set;
 }
+public string TaskId
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;

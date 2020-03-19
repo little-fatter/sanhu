@@ -75,7 +75,7 @@
         </div>
       </van-panel>
       <van-field
-        v-model="inventory.otherItem"
+        v-model="inventory.Othergoods"
         rows="2"
         autosize
         label="其他物品"
@@ -113,7 +113,7 @@ export default {
       inventory: {
         lawParty: null,
         list: [],
-        otherItem: ''
+        Othergoods: ''
       },
       dsrOptions: []
     }

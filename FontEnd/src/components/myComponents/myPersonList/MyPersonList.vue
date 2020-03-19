@@ -245,24 +245,12 @@ export default {
               name: '摄像头',
               open: true,
               list: [
-                {
-                  id: 0,
-                  name: '摄像头xxx',
-                  online: true,
-                  location: [11451694.011647668, 2831054.013192837]
-                },
-                {
-                  id: 1,
-                  name: '摄像头xxx',
-                  online: true,
-                  location: [11458112.428043475, 2830667.3616027283]
-                },
-                {
-                  id: 2,
-                  name: '摄像头xxx',
-                  online: true,
-                  location: [11454980.550163593, 2811528.107892338]
-                }
+                // {
+                //   id: 0,
+                //   name: '摄像头xxx',
+                //   online: true,
+                //   location: [11451694.011647668, 2831054.013192837]
+                // }
               ]
             },
             {
@@ -270,24 +258,7 @@ export default {
               name: '无人机',
               open: true,
               list: [
-                {
-                  id: 3,
-                  name: '无人机xxx',
-                  online: true,
-                  location: [11454129.916665353, 2820498.424782865]
-                },
-                {
-                  id: 4,
-                  name: '无人机xxx',
-                  online: false,
-                  location: [11448591.454069318, 2811285.1068306305]
-                },
-                {
-                  id: 5,
-                  name: '无人机xxx',
-                  online: true,
-                  location: [11451539.351011623, 2806230.981107847]
-                }
+
               ]
             }
           ]
@@ -364,6 +335,10 @@ export default {
         }
       }
       return ps
+    },
+    updateEquipmentList: function (list) {
+      this.tabs[1].subs[0].list = [...list.shexiangtou]
+      this.tabs[1].subs[1].list = [...list.wurenji]
     },
     onClickVideo: function (p) {
       var info = this.findP(p.name)
