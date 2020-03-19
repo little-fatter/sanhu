@@ -345,10 +345,11 @@ export default {
         AskThirdPartyNote: 'form_inquiryrecord_third', // 询问第三人笔录
         sceneInvestigationDetail: 'task_survey', // 现场勘查
         eventDetail: 'task_patrol'// 事件核查
+         confiscatoryGoodsList: 'form_confiscated' //没收物品清单
        */
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
-      if (item.FormType === FromType.goodsList) {
-        // 物品清单
+      if (item.FormType === FromType.confiscatoryGoodsList) {
+        // 没收物品清单
         this.$router.push({
           path: '/goodsList', query: { ID: item.FormID }
         })
@@ -376,7 +377,7 @@ export default {
             query: { ID: item.FormID }
           })
         } else {
-          // 结案报告未审批
+          // 结案报告未完成状态
           this.$router.push({
             path: '/closingReportDetail',
             query: { ID: item.FormID }
@@ -525,6 +526,10 @@ export default {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    &:after{
+    content: ""; width: 30%; display: block; height:0;
+      /*只需要添加父元素的after伪元素中 高度0 ，宽度与item的宽一样*/
+}
     button {
       //cll改
       // width: auto;

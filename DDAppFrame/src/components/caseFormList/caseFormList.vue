@@ -66,8 +66,8 @@ export default {
     // 去该案件表单详情
     goFromDetails (item) {
       // console.log(item)
-      if (item.FormType === FromType.goodsList) {
-        // 物品清单
+      if (item.FormType === FromType.confiscatoryGoodsList) {
+        // 没收物品清单
         this.$router.push({
           path: '/goodsList', query: { ID: item.FormID }
         })
