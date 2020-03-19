@@ -5,12 +5,14 @@
         <field name="TaskId" dbName="TaskId" title="任务id" type="string" length="50" isPK="N" />
         <field name="CaseId" dbName="CaseId" title="案件id" type="string" length="50" isPK="N" />
         <field name="LawPartyIds" dbName="LawPartyIds" title="当事人id" type="string" length="200" isPK="N" />
-        <field name="CaseDetail" dbName="CaseDetail" title="案件详情" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="PunishmentId" dbName="PunishmentId" title="惩罚决定书Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="ExecuteState" dbName="ExecuteState" title="执行情况" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="Url" dbName="Url" title="Url" type="string" length="500" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="EventInfoId" dbName="EventInfoId" title="事件Id" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="CaseDetail" dbName="CaseDetail" title="案件详情" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="PunishmentId" dbName="PunishmentId" title="惩罚决定书Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="ExecuteState" dbName="ExecuteState" title="执行情况" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="Url" dbName="Url" title="Url" type="string" length="500" relationModel="" relationField="" isPK="N" />
+        <field name="EventInfoId" dbName="EventInfoId" title="事件Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="ProcessInstanceId" dbName="ProcessInstanceId" title="钉钉审核ID" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="state" dbName="state" title="状态" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="FormState" dbName="FormState" title="状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

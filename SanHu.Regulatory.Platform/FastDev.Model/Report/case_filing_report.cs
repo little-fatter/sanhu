@@ -49,11 +49,6 @@ public string FormState
 get;
 set;
 }
-public string Department
-{
-get;
-set;
-}
 public DateTime? CreateDate
 {
 get;
