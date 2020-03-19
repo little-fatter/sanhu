@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
+    <Folder Include="wwwroot\template\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Aspose.Words">

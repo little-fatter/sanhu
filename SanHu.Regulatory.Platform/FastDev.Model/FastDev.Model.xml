@@ -39,6 +39,21 @@
             钉钉审核流参数
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.Case_Report_StateChange">
+            <summary>
+            更改表单状态
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Case_Report_StateChange.InstaceId">
+            <summary>
+            审批实例ID
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.Case_Report_StateChange.FormState">
+            <summary>
+            表单状态
+            </summary>
+        </member>
         <member name="P:FD.Model.Dto.FormDataReq.Model">
             <summary>
             主表模块
