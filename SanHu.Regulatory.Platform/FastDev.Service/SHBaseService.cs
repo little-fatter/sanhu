@@ -109,6 +109,8 @@ namespace FastDev.Service
 
         public object FormData(FormDataReq data)
         {
+            var res_dictionarycase = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItemscase = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionarycase.ID).ToDictionary(k => k.ItemCode, v => v.Title);
             if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
                 data.Model = "case_Info";
@@ -137,6 +139,19 @@ namespace FastDev.Service
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
+            if (data.Model.ToUpper() == "case_Info".ToUpper())
+            {
+                if (obj.ContainsKey("CaseType"))
+                {
+                    if (obj["CaseType"] != null)
+                    {
+                        if (dicItemscase.ContainsKey(obj["CaseType"].ToString()))  // CaseType 显示中文title
+                        {
+                            obj["CaseType"] = dicItemscase[obj["CaseType"].ToString()];
+                        }
+                    }
+                }
+            }
             string formId = obj["ID"].ToString();  //得到id
             string eventinfoid = null; 
             if(obj.ContainsKey("EventInfoId"))eventinfoid = obj["EventInfoId"]!=null? obj["EventInfoId"].ToString():string.Empty;
@@ -153,6 +168,7 @@ namespace FastDev.Service
 
             //构建其他需要查询的数据
             var dicData = BuildData(data, formId,eventinfoid);
+
             dicData.Add("MainForm", obj);
             //添加处罚决定书证据附件
             if (atlist != null)
@@ -160,8 +176,18 @@ namespace FastDev.Service
                 if (dicData.ContainsKey("attachment"))
                 {
                     var als = dicData["attachment"] as List<attachment>;
-                    als.AddRange(atlist as List<attachment>);
-                    dicData.Add("attachment", als);
+                    if (als != null)
+                    {
+                        als.AddRange(atlist as List<attachment>);
+                        dicData["attachment"] = als;
+ 
+
+                    }
+                    else
+                    {
+                        dicData["attachment"] = atlist;
+                    }
+
                 }
                 else
                 {
@@ -263,8 +289,7 @@ namespace FastDev.Service
             if (string.IsNullOrEmpty(eventinfoid)) return null;
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");            
             var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateDate",eventinfoid);
-            Dictionary<string, object> formlist = new Dictionary<string, object>();
-
+            Dictionary<string, object> formlist = new Dictionary<string, object>();            
             foreach (var f in formall)
             {
                 try
@@ -280,6 +305,12 @@ namespace FastDev.Service
                         temp.Add("CreateUser", "");
                     }
                     temp.Add("CreateDate", f.CreateDate);
+
+                    if (f.FormType == "case_report")
+                    {
+                        temp.Add("state",f.FormState);
+                    }
+                    else { temp.Add("state", "已完成"); }
                     formlist.Add(f.FormName, temp);
                 }
                 catch(Exception e)
