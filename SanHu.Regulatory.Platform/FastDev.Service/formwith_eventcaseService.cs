@@ -41,9 +41,14 @@ namespace FastDev.Service
                     item.Add("LawpartyName", lawpartyName);
                 }
 
-                if (formType == "law_punishmentInfo" || formType == "form_inquiryrecord" || formType == "case_report") //处罚当场决定书、勘察、结案、没收、询问表单新增详情的pdf文件地址
+                if (formType == "law_punishmentinfo")  //当场处罚决定书 新增处罚决定书文号
                 {
-                    
+                    item.Add("PunishmentTitle", QueryDb.FirstOrDefault<string>("SELECT PunishmentTitle FROM law_punishmentinfo where ID=@0", item["FormID"].ToString()));
+                }
+
+                if (formType == "law_punishmentinfo" || formType == "form_inquiryrecord" || formType == "case_report") //处罚当场决定书、勘察、结案、没收、询问表单新增详情的pdf文件地址
+                {
+                    item.Add("PdfFilePath", QueryDb.FirstOrDefault<string>("SELECT FilePath FROM form_printpdf where FormID=@0", item["FormID"].ToString()));
                 }
             }
         }
