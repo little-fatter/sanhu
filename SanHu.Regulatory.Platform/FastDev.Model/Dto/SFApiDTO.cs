@@ -14,6 +14,12 @@ namespace FD.Model.Dto
         public string ApiType { get; set; }
 
         public LawFilter filter { get; set; }
+
+        public string keyword { get; set; }
+
+        public string pageNo { get; set; }
+
+        public string pageSize { get; set; }
     }
 
     public class LawFilter
