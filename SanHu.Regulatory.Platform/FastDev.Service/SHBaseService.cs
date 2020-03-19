@@ -181,6 +181,12 @@ namespace FastDev.Service
             {
                 dic.Add("attachment", GetattachmentByFormId(formId));
             }
+            if (data.FilterModels.Contains("casedetail"))
+            { 
+            
+            }
+
+
             return dic;
         }
         private object Getlaw_partyByFormId(string formId)
@@ -240,6 +246,12 @@ namespace FastDev.Service
         }
 
 
+        private object GetAllFormByEventId(string eventinfoid)
+        { 
+        
+        }
+
+
         private object GetSurvey(string taskid)
         {
             var form = QueryDb.FirstOrDefault<task_survey>(" where TaskId=@0 order PreviousformID!=null by CreateDate desc", taskid);
@@ -275,7 +287,6 @@ namespace FastDev.Service
                 }
                 string id = SaveWorkTask(Task);
                 Task.ID = id;
-
                 //发送待办
                 if (!string.IsNullOrEmpty(Task.AppLinks))
                     Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;
