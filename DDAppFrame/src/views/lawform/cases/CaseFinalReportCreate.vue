@@ -45,7 +45,7 @@
         <van-button type="info" :loading="loading" size="large" native-type="button">保存</van-button>
       </div> -->
         <van-field
-          v-model="penalizeBook.BookTitle"
+          v-model="penalizeBook.PunishmentTitle"
           label="处罚决定"
           :readonly="true"
         >
@@ -70,10 +70,9 @@ import PenaltyDecisionView from '../../../components/business/PenaltyDecisionVie
 import CaseListSelect from '../../../components/business/CaseListSelect'
 import RelCaseFormListSelect from '../../../components/business/RelCaseFormListSelect'
 import { ddcomplexPicker, getApproverIds } from '../../../service/ddJsApi.service'
-import { getAgentId, getCurrentUserInfo } from '../../../service/currentUser.service'
+import { getAgentId } from '../../../service/currentUser.service'
 import { getMainUrl, isNotEmpty, formatDate, isEmpty } from '../../../utils/util'
-import { startProcessInstance } from '../../../api/ddApi'
-import { getDetaildata, commonOperateApi, getDictionaryItems, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
+import { getDetaildata, commonOperateApi, getFormsDetailByEventInfoId } from '../../../api/regulatoryApi'
 var timer = null
 /**
  * 结案报告
@@ -100,7 +99,7 @@ export default {
       taskInfo: null,
       caseInfo: {},
       penalizeBook: {
-        BookTitle: '当场执法决定书'
+        PunishmentTitle: '当场执法决定书'
       },
       caseFinalReport: {
         CaseDetail: ''
@@ -148,6 +147,9 @@ export default {
             ...res.MainForm,
             LawParties: res.law_party
           }
+          if (isEmpty(this.penalizeBook.PunishmentTitle)) {
+            this.penalizeBook.PunishmentTitle = '当场执法决定书'
+          }
           this.caseFinalReport.CaseDetail = this.penalizeBook.Illegalfacts + this.penalizeBook.IllegalbasisIDs + this.penalizeBook.PunishmentbasisIDs
         }
       })
@@ -176,9 +178,13 @@ export default {
       this.$router.push({ name: 'PenalizeBookDetial', query: { id: id } })
     },
     onSubmit (values) {
+      if (isEmpty(this.penalizeBook.ID)) {
+        this.$toast('该案件还未做出处罚确定不能结案')
+        return
+      }
       ddcomplexPicker().then((approve) => {
         var caseReport = {
-          CaseId: this.caseInfo.Id,
+          CaseId: this.caseInfo.ID,
           CaseDetail: this.caseFinalReport.CaseDetail,
           PunishmentId: isNotEmpty(this.penalizeBook) ? this.penalizeBook.ID : null,
           ExecuteState: '已执行'
@@ -187,12 +193,12 @@ export default {
           AgentId: parseInt(getAgentId()),
           ProcessCode: appConfig.auditCondig.CaseFinalReportProcessCode,
           approvers: getApproverIds(approve),
-          form_component_values: this.getFormComponentValues()
+          FormComponentValues: JSON.stringify(this.getFormComponentValues())
         }
         var model = {
           SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
           EventInfoId: this.caseInfo.EventInfoId,
-          CaseId: this.caseInfo.Id,
+          CaseId: this.caseInfo.ID,
           caseReport,
           oapiProcessinstanceCreateRequest
         }

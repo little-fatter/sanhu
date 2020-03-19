@@ -117,7 +117,7 @@ export default {
       this.loading = true
       commonOperateApi('FINISH', 'form_confiscated', data).then((res) => {
         this.$toast.success('操作成功')
-        // this.goToLawForm()
+        this.goToLawForm()
       }).finally(() => {
         this.loading = false
       })

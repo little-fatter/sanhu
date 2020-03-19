@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
@@ -58,6 +59,16 @@ namespace FastDev.Service
         public bool UpdateEventState(string eventId, EventStatus eventStatus)
         {
             return base.QueryDb.Execute("update event_info set evtState = @0 where objid=@1", (int)eventStatus, eventId) > 0;
+        }
+        /// <summary>
+        /// 修改事件状态和办理人信息
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="eventStatus"></param>
+        /// <returns></returns>
+        public bool UpdateEventStateHandler(string eventId, EventStatus eventStatus,string handler)
+        {
+            return base.QueryDb.Execute("update event_info set evtState = @0,finishUserName=@1 where objid=@2", (int)eventStatus,handler, eventId) > 0;
         }
 
         /// <summary>
@@ -127,7 +138,8 @@ namespace FastDev.Service
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             string formId = obj["ID"].ToString();  //得到id
-
+            string eventinfoid = null; 
+            if(obj.ContainsKey("EventInfoId"))eventinfoid = obj["EventInfoId"]!=null? obj["EventInfoId"].ToString():string.Empty;
             if (data.Model.ToLower() == "task_survey")  // 现场勘查 EventType 显示中文title
             {
                 var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
@@ -140,7 +152,7 @@ namespace FastDev.Service
             }
 
             //构建其他需要查询的数据
-            var dicData = BuildData(data, formId);
+            var dicData = BuildData(data, formId,eventinfoid);
             dicData.Add("MainForm", obj);
             //添加处罚决定书证据附件
             if (atlist != null)
@@ -158,7 +170,7 @@ namespace FastDev.Service
             }
             return dicData;
         }
-        private Dictionary<string, object> BuildData(FormDataReq data, string formId)
+        private Dictionary<string, object> BuildData(FormDataReq data, string formId,string eventinfoid)
         {
             var dic = new Dictionary<string, object>();
             if (data.FilterModels == null || data.FilterModels.Count() < 1)
@@ -180,6 +192,12 @@ namespace FastDev.Service
             if (data.FilterModels.Contains("attachment"))
             {
                 dic.Add("attachment", GetattachmentByFormId(formId));
+            }
+            if (data.FilterModels.Contains("casedetail"))
+            {
+                dic.Add("law_party", Getlaw_partyByFormId(formId));
+                dic.Add("attachment", GetattachmentByFormId(formId));
+                dic.Add("casetimeline", GetAllFormByEventId(eventinfoid));
             }
             return dic;
         }
@@ -240,6 +258,39 @@ namespace FastDev.Service
         }
 
 
+        private object GetAllFormByEventId(string eventinfoid)
+        {
+            if (string.IsNullOrEmpty(eventinfoid)) return null;
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");            
+            var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateDate",eventinfoid);
+            Dictionary<string, object> formlist = new Dictionary<string, object>();
+
+            foreach (var f in formall)
+            {
+                try
+                {
+                    Dictionary<string, object> temp = new Dictionary<string, object>();
+                    if (!string.IsNullOrEmpty(f.CreateUserID))
+                    {
+                        var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{f.CreateUserID}'");
+                        temp.Add("CreateUser", user.Name);
+                    }
+                    else
+                    {
+                        temp.Add("CreateUser", "");
+                    }
+                    temp.Add("CreateDate", f.CreateDate);
+                    formlist.Add(f.FormName, temp);
+                }
+                catch(Exception e)
+                {
+                    continue;
+                }
+            }
+            return formlist;        
+        }
+
+
         private object GetSurvey(string taskid)
         {
             var form = QueryDb.FirstOrDefault<task_survey>(" where TaskId=@0 order PreviousformID!=null by CreateDate desc", taskid);
@@ -275,7 +326,6 @@ namespace FastDev.Service
                 }
                 string id = SaveWorkTask(Task);
                 Task.ID = id;
-
                 //发送待办
                 if (!string.IsNullOrEmpty(Task.AppLinks))
                     Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;

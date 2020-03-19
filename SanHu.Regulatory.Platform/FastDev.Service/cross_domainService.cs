@@ -34,6 +34,10 @@ namespace FastDev.Service
             {
                 content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new { keyWord = data.filter.keyWord, lawRuleFileId = data.filter.lawRuleFileId }));
             }
+            else if (data.ApiType.ToLower() == "user_online_list" || data.ApiType.ToLower() == "ess_evt_target_page")
+            {
+                content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(new { keyword = data.keyword, pageNo = data.pageNo, pageSize = data.pageSize }));
+            }
 
             var client = new HttpClient();
             

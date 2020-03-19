@@ -49,7 +49,7 @@ public string EventInfoId
 get;
 set;
 }
-public string FormState
+public string ProcessInstanceId
 {
 get;
 set;

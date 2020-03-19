@@ -10,6 +10,13 @@ namespace FD.Model.Enum
     /// </summary>
     public enum EventStatus
     {
+        [Display(Name = "四方-待处理")]
+        unAccept,
+        [Display(Name = "四方-处理中")]
+        doning,
+        [Display(Name = "四方-已处理")]
+        done,
+
         /// <summary>
         /// 待处理
         /// </summary>
@@ -68,6 +75,8 @@ namespace FD.Model.Enum
         HandOver = 3
     }
 
+
+
     public enum TaskType
     {
         /// <summary>
@@ -115,5 +124,16 @@ namespace FD.Model.Enum
         /// </summary>
         [Display(Name = "结案报告")]
         finalReport
+    }
+    public enum ApprovalStatus
+    {
+        [Display(Name = "待审核")]
+        Close = 0,
+        [Display(Name = "审核中")]
+        Normal = 1,
+        [Display(Name = "完结")]
+        Reject = 2,
+        [Display(Name = "中止")]
+        HandOver = 3
     }
 }
