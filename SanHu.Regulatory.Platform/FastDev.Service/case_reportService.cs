@@ -77,7 +77,19 @@ namespace FastDev.Service
                     //ServiceHelper.GetService("work_task").Update(taskObj);
                 }
                 #endregion
-                CreateInfo(data.CaseReport);
+                 CreateInfo(data.CaseReport);
+                if (string.IsNullOrEmpty(data.CaseReport.CaseId))
+                {
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("select * from case_Info where Id=@0", data.CaseReport.CaseId);
+                    if(caseinfo==null)
+                        throw new Exception("没有案件信息");
+                    caseinfo.CaseStatus = "完成处罚";
+                    QueryDb.Update(caseinfo);
+                }
+                else
+                {
+                    throw new Exception("没有案件信息");
+                }
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
 
@@ -105,20 +117,20 @@ namespace FastDev.Service
             var CaseInfoSource = base.Create(caserport) as string;
             ///更新案件信息
             caserport.ID = CaseInfoSource;
-            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(caserport.TaskId, null);
-            if (tasknow != null)
-            {
-                var caseid = (string)tasknow["CaseID"];
-                if (string.IsNullOrEmpty(caseid))
-                {
-                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
-                    if (caseinfo != null)
-                    {
-                        caseinfo.CaseStatus = "已结案";
-                        QueryDb.Update(caseinfo);
-                    }
-                }
-            }
+            //var tasknow = ServiceHelper.GetService("work_task").GetDetailData(caserport.TaskId, null);
+            //if (tasknow != null)
+            //{
+            //    var caseid = (string)tasknow["CaseID"];
+            //    if (string.IsNullOrEmpty(caseid))
+            //    {
+            //        var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+            //        if (caseinfo != null)
+            //        {
+            //            caseinfo.CaseStatus = "已结案";
+            //            QueryDb.Update(caseinfo);
+            //        }
+            //    }
+            //}
 
         }
 

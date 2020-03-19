@@ -16,7 +16,7 @@
         </div>
         <div class="font-14 info-row">
           <div class="info-row-title left">处理状态:</div>
-          <div class="left info-row-right"> {{ evtStateMap.list[info.status] }}</div>
+          <div class="left info-row-right" :style="{color: getColor(info.status)}"> {{ evtStateMap.list[info.status] }}</div>
           <div class="clear"></div>
         </div>
         <div class="font-14 info-row">
@@ -31,7 +31,7 @@
         </div>
         <div class="font-14 info-row">
           <div class="info-row-title left">上报来源:</div>
-          <div class="left info-row-right"> {{ info.uploadSource }}</div>
+          <div class="left info-row-right"> {{ reportType[info.uploadSource] }}</div>
           <div class="clear"></div>
         </div>
       </div>
@@ -108,26 +108,8 @@
 <script>
 import moment from 'moment'
 import appConfig from '@/config/app.config'
+import dictionary from '@/utils/dictionary'
 
-var evtStateMap = {
-  list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
-  map: {
-    '待处理': 0,
-    '事件核查中': 1,
-    '跟踪整改中': 2,
-    '现场勘察中': 3,
-    '处理完成': 4,
-    '转为案件办理': 5
-  },
-  level: {
-    '待处理': 0,
-    '事件核查中': 1,
-    '跟踪整改中': 1,
-    '现场勘察中': 1,
-    '处理完成': 2,
-    '转为案件办理': 2
-  }
-}
 export default {
   name: 'MyAlertInfoBox',
   props: {
@@ -144,32 +126,16 @@ export default {
     return {
       show: false,
       info: {
-        name: '禁渔区捕捞',
+        name: '-',
         status: 0, // 处理状态
-        des: '经过AI视频监控分析，抚仙湖海口镇 为禁渔范围，疑似有驾驶渔船捕鱼的 违法行为。', // 事件描述
+        des: '-', // 事件描述
         uploadTime: '2019-12-26  15：33：47', // 上报时间
-        addr: '玉溪市华宁县甸海县', // 事发地点
-        uploadSource: 'AI摄像头识别'
+        addr: '-', // 事发地点
+        uploadSource: '-'
       },
-      statusTable: [
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi.png',
-          title: '任务待接受'
-        },
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(1).png',
-          title: '任务已接受'
-        },
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(2).png',
-          title: '任务已完成'
-        },
-        {
-          src: appConfig.StaticWebContext + '/img/yzt-renyuanceng/zhuyi(3).png',
-          title: '任务失败'
-        }
-      ],
-      evtStateMap: evtStateMap,
+      statusTable: dictionary.eventLevelTable,
+      evtStateMap: dictionary.evtStateMap,
+      reportType: dictionary.reportType,
       taskPanel: {
         list: [],
         show: false,
@@ -180,6 +146,11 @@ export default {
     }
   },
   methods: {
+    getColor : function (status) {
+      var name = this.evtStateMap.list[status]
+      var level = this.evtStateMap.level[name]
+      return this.statusTable[level].color
+    },
     close: function () {
       this.show = false
       this.afterClose && this.afterClose()

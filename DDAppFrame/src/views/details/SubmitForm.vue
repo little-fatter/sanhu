@@ -15,7 +15,7 @@
           </span>
         </div>
       </van-col>
-      <van-popup v-model="screenShow" closeable close-icon-position="top-right" position="top">
+      <van-popup v-model="screenShow" position="top">
         <div class="screenForm">
           <van-cell-group>
             <!--表单没有状态 不做搜索 cll-->
@@ -51,7 +51,7 @@
         <div>
           <div class="case-title-head">
             <h4 class="case-title">
-              <template v-if="item.FormName===''||item.FormName===null">表单名称-测试数据</template>
+              <template v-if="item.FormName===''||item.FormName===null">表单名称-无数据</template>
               <template v-else>{{ item.FormName }}</template>
             </h4>
             <span>{{ item.InitiationTime }}</span>
@@ -60,7 +60,7 @@
             <span>申请部门：</span>
             <div>
               <span>
-                <template v-if="item.Department===''||item.Department===null">测试数据</template>
+                <template v-if="item.Department===''||item.Department===null">无数据</template>
                 <template v-else>{{ item.Department }}</template>
               </span>
             </div>
@@ -69,7 +69,7 @@
             <span>申请人员：</span>
             <div>
               <span>
-                <template v-if="item.handler===''||item.handler===null">测试数据</template>
+                <template v-if="item.handler===''||item.handler===null">无数据</template>
                 <template v-else>{{ item.handler }}</template>
               </span>
             </div>
@@ -81,7 +81,7 @@
               <span>事件编号：</span>
               <div>
                 <span>
-                  <template v-if="item.evtCode===''||item.evtCode===null">测试数据</template>
+                  <template v-if="item.evtCode===''||item.evtCode===null">无数据</template>
                   <template v-else>{{ item.evtCode }}</template>
                 </span>
               </div>
@@ -90,7 +90,7 @@
               <span>事件类型:</span>
               <div>
                 <span>
-                  <template v-if="item.evtTypeName===''||item.evtTypeName===null">测试数据</template>
+                  <template v-if="item.evtTypeName===''||item.evtTypeName===null">无数据</template>
                   <template v-else>{{ item.evtTypeName }}</template>
                 </span>
               </div>
@@ -101,7 +101,7 @@
               <span>案件编号：</span>
               <div>
                 <span>
-                  <template v-if="item.CaseNumber===''||item.CaseNumber===null">测试数据</template>
+                  <template v-if="item.CaseNumber===''||item.CaseNumber===null">无数据</template>
                   <template v-else>{{ item.CaseNumber }}</template>
                 </span>
               </div>
@@ -110,7 +110,7 @@
               <span>案件案由：</span>
               <div>
                 <span>
-                  <template v-if="item.CauseOfAction===''||item.CauseOfAction===null">测试数据</template>
+                  <template v-if="item.CauseOfAction===''||item.CauseOfAction===null">无数据</template>
                   <template v-else>{{ item.CauseOfAction }}</template>
                 </span>
               </div>
@@ -375,11 +375,19 @@ export default {
           query: { ID: item.FormID }
         })
       } else if (item.FormType === FromType.caseReport) {
-        // 结案报告
-        this.$router.push({
-          path: '/caseReport',
-          query: { ID: item.FormID }
-        })
+        if (item.FormState === 1) {
+          // 结案报告
+          this.$router.push({
+            path: '/caseReport',
+            query: { ID: item.FormID }
+          })
+        } else {
+          // 结案报告未审批
+          this.$router.push({
+            path: '/closingReportDetail',
+            query: { ID: item.FormID }
+          })
+        }
       } else if (item.FormType === FromType.caseCover) {
         // 卷宗封面
         this.$router.push({
@@ -435,7 +443,7 @@ export default {
 .case-panel {
   padding: 0.32rem;
   color: #101010;
-  margin-bottom: 0.32rem;
+  margin-bottom: 0.25rem;
   .case-title-head {
     display: flex;
     justify-content: space-between;
@@ -519,7 +527,10 @@ export default {
 }
 .screenForm {
   .contentBox {
-    margin: 0.2rem 0 0.1rem 1rem;
+    margin: 0.3rem;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
     button {
       //cll改
       // width: auto;
@@ -527,13 +538,13 @@ export default {
       width: 30%;
       height: 1rem;
       font-size: 0.32rem;
-      margin: 0 0.15rem 0 0;
+      // margin: 0 0.15rem 0 0;
       // padding: 0.16rem 0.3rem;
       border-radius: 0.08rem;
       border: none;
       background-color: #f4f4f4;
       color: #7f87ae;
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.4rem;
     }
     // 激活样式 cll改
     .from_state_active {

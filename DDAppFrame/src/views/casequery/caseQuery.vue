@@ -55,7 +55,8 @@ import SList from '../../components/list/SList'
 import {
   isNotEmpty,
   getQueryConditon,
-  getQueryConditonMore
+  getQueryConditonMore,
+  formatDate
 } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi' // 引入封装的请求
 export default {
@@ -338,7 +339,7 @@ export default {
   width: calc(100% - 0rem);
   /* margin-left: 0.26rem;
   margin-right: 0.56rem; */
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
   overflow: hidden;
   /* padding: 0 0.26rem 0.26rem 0.26rem; */
   padding: 0 0.3rem 0.26rem 0.3rem;
@@ -347,7 +348,7 @@ export default {
 .panel_one .van-cell {
   background-color: #fff;
   padding: 0.22rem 0px !important;
-  margin-bottom: 0.12rem;
+  /* margin-bottom: 0.12rem; */
 }
 
 .panel_one .van-cell:not(:last-child)::after {
@@ -356,6 +357,7 @@ export default {
 }
 .panel_one .van-cell__title {
   font-weight: bold;
+  font-size: 0.42667rem;
   color: #64697c;
 }
 

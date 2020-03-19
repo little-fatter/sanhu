@@ -100,7 +100,7 @@ namespace FastDev.Service
                     var caseinfo = QueryDb.FirstOrDefault<case_Info>("where Id=@0", lawpunishmentInfo.CaseId);
                     if (caseinfo != null)
                     {
-                        caseinfo.CaseStatus = "已做出处罚决定";
+                        caseinfo.CaseStatus = "做出处罚决定";
                         QueryDb.Update(caseinfo);
                     }
                 }
@@ -116,7 +116,7 @@ namespace FastDev.Service
                         var caseinfo = QueryDb.FirstOrDefault<case_Info>("where Id=@0", caseid);
                         if (caseinfo != null)
                         {
-                            caseinfo.CaseStatus = "已做出处罚决定";
+                            caseinfo.CaseStatus = "做出处罚决定";
                             QueryDb.Update(caseinfo);
                         }
                     }

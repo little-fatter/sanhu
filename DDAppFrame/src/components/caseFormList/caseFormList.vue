@@ -7,7 +7,7 @@
           :title="item.FormName?item.FormName:'测试表单名称'"
           icon="label-o"
           :value="item.CompletionTime"
-          @click="goFromDetails(item.ID,item.FormType)"
+          @click="goFromDetails(item)"
         />
       </van-cell-group>
     </Slist>
@@ -17,7 +17,7 @@
 <script>
 import Slist from '../list/SList' // 翻页组件
 import { isNotEmpty, getQueryConditon } from '../../utils/util' // 引入搜索规则
-import { getPageDate } from '../../api/regulatoryApi' // 引入封装的请求
+import { getPageDate, FromType } from '../../api/regulatoryApi' // 引入封装的请求
 export default {
   components: {
     Slist
@@ -64,59 +64,91 @@ export default {
       })
     },
     // 去该案件表单详情
-    goFromDetails (id, FormType) {
-      if (FormType === 'from_inspectiontrecord') {
-        // 勘验(检查)笔录表详情
-        this.$router.push({ path: 'recordOfInquestDetail', query: { id } })
-      } else if (FormType === 'form_patrolRecord') {
-        // 巡查记录表
-        console.log(FormType)
-      } else if (FormType === 'form_caseMove') {
-        // 案件移送表
-        console.log(FormType)
-      } else if (FormType === 'form_criminalCaseMove') {
-        // 犯罪案件移送表
-        console.log(FormType)
-      } else if (FormType === 'form_criminalCaseMoveMain') {
-        // 犯罪案件移送书
-        console.log(FormType)
-      } else if (FormType === 'from_InvestigatingParty') {
-        // 询问记录表
-        console.log(FormType)
-      } else if (FormType === 'from_inventory') {
-        // 没收物品
-        console.log(FormType)
-      } else if (FormType === 'from_punishmentInfoDetail') {
-        // 没收物品详情
-        console.log(FormType)
-      } else if (FormType === 'from_APRPerson') {
-        // 行政处罚案件结案报告_个人
-        console.log(FormType)
-      } else if (FormType === 'from_APROrg') {
-        // 行政处罚案件结案报告_单位
-        console.log(FormType)
+    goFromDetails (item) {
+      // console.log(item)
+      if (item.FormType === FromType.goodsList) {
+        // 物品清单
+        this.$router.push({
+          path: '/goodsList', query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.caseDetails) {
+        // 案件详情
+        this.$router.push({
+          path: '/caseDetails', query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.PromptlyPunishNote) {
+        // 处罚当场决定书
+        this.$router.push({
+          path: '/PromptlyPunishNote', query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.RecordOfInquest) {
+        // 勘验记录
+        this.$router.push({
+          path: '/RecordOfInquest',
+          query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.caseReport) {
+        if (item.FormState === 1) {
+          // 结案报告
+          this.$router.push({
+            path: '/caseReport',
+            query: { ID: item.FormID }
+          })
+        } else {
+          // 结案报告未审批
+          this.$router.push({
+            path: '/closingReportDetail',
+            query: { ID: item.FormID }
+          })
+        }
+      } else if (item.FormType === FromType.caseCover) {
+        // 卷宗封面
+        this.$router.push({
+          path: '/form_inquiryrecord',
+          query: { id: item.CaseId }
+        })
+      } else if (item.FormType === FromType.AskThirdPartyNote) {
+        // 询问第三人笔录
+        this.$router.push({
+          path: '/AskThirdPartyNote',
+          query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.AskPartyNote) {
+        // 询问当事人笔录
+        this.$router.push({
+          path: '/AskPartyNote',
+          query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.AskWitnessNote) {
+        // 询问证人笔录
+        this.$router.push({
+          path: '/AskWitnessNote',
+          query: { ID: item.FormID }
+        })
+      } else if (item.FormType === FromType.sceneInvestigationDetail) {
+        // 现场勘查
+        this.$router.push({
+          path: '/sceneInvestigationDetail',
+          query: { ID: item.EventInfoId }
+        })
+      } else if (item.FormType === FromType.eventDetail) {
+        // 事件核查
+        this.$router.push({
+          path: '/eventDetail',
+          query: { ID: item.EventInfoId }
+        })
       }
-
-      // if (FormType === 'form_patrolrecord') {
-      //   this.$router.push({ path: 'recordOfInquestDetail', query: { id } })
-      // } else if (FormType === 'task_patrol') {
-      //   this.$router.push({ path: 'eventDetail', query: { id } })
-      // } else if (FormType === 'task_survey') {
-      //   this.$router.push({ path: 'sceneInvestigationDetail', query: { id } })
-      // } else if (FormType === 'from_inspectiontRecord') {
-      //   console.log(`进入了这个跳转`)
-      //   this.$router.push({ path: 'recordOfInquestDetail', query: { id } })
-      // } else if (FormType === 'form_confiscated_item') {
-      //   this.$router.push({ path: 'itemDetails', query: { id } })
-      // } else if (FormType === 'case_Info') {
-      //   this.$router.push({ path: 'createCaseDetails', query: { id } })
-      // } else if (FormType === 'law_punishmentInfo') {
-      //   this.$router.push({ path: 'PenalizeBookDetial', query: { id } })
-      // }
     }
   },
   mounted () {}
 }
 </script>
 <style scoped>
+.van-cell__title{
+  flex: 1 !important;
+}
+.van-cell__value{
+  flex: unset !important;
+  width: auto !important;
+}
 </style>

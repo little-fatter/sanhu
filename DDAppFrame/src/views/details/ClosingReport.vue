@@ -56,7 +56,7 @@
 </template>
 
 <script>
-// 成林龙  要改结案报告项情形
+// 成林龙 接收李攀 要改结案报告项情形
 import PenaltyDecisionView from '../../components/business/PenaltyDecisionView.vue'
 export default {
   name: '',
