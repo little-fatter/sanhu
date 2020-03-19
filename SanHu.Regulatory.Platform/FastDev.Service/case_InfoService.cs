@@ -102,6 +102,27 @@ namespace FastDev.Service
 
             #endregion
 
+            #region 过滤掉PreviousformID为空的数据
+
+            var filter = descriptor.Condition;
+            if (filter == null) filter = new FilterGroup();
+
+            FilterGroup filterNew = new FilterGroup();
+            filterNew.rules = new List<FilterRule>
+                {
+                    new FilterRule("PreviousformID", null, "isnotnull")
+                };
+            FilterGroup filterOut = new FilterGroup();
+            filterOut.op = "and";
+            filterOut.groups = new List<FilterGroup>
+                {
+                    filter,
+                    filterNew
+                };
+            descriptor.Condition = filterOut;
+
+            #endregion
+
             return base.GetPageData(descriptor);
         }
 
