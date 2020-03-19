@@ -10,6 +10,13 @@ namespace FD.Model.Enum
     /// </summary>
     public enum EventStatus
     {
+        [Display(Name = "四方-待处理")]
+        unAccept,
+        [Display(Name = "四方-处理中")]
+        doning,
+        [Display(Name = "四方-已处理")]
+        done,
+
         /// <summary>
         /// 待处理
         /// </summary>

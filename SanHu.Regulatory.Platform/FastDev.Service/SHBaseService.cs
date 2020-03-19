@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
@@ -58,6 +59,16 @@ namespace FastDev.Service
         public bool UpdateEventState(string eventId, EventStatus eventStatus)
         {
             return base.QueryDb.Execute("update event_info set evtState = @0 where objid=@1", (int)eventStatus, eventId) > 0;
+        }
+        /// <summary>
+        /// 修改事件状态和办理人信息
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="eventStatus"></param>
+        /// <returns></returns>
+        public bool UpdateEventStateHandler(string eventId, EventStatus eventStatus,string handler)
+        {
+            return base.QueryDb.Execute("update event_info set evtState = @0,finishUserName=@1 where objid=@2", (int)eventStatus,handler, eventId) > 0;
         }
 
         /// <summary>
@@ -184,10 +195,10 @@ namespace FastDev.Service
             }
             if (data.FilterModels.Contains("casedetail"))
             {
+                dic.Add("law_party", Getlaw_partyByFormId(formId));
+                dic.Add("attachment", GetattachmentByFormId(formId));
                 dic.Add("casetimeline", GetAllFormByEventId(eventinfoid));
             }
-
-
             return dic;
         }
         private object Getlaw_partyByFormId(string formId)
@@ -250,20 +261,33 @@ namespace FastDev.Service
         private object GetAllFormByEventId(string eventinfoid)
         {
             if (string.IsNullOrEmpty(eventinfoid)) return null;
-            //var filter = new FilterGroup();
-            //filter.rules.Add(new FilterRule("EventInfoId", eventinfoid, "equal"));
-            //return ServiceHelper.GetService("formwith_eventcase").GetListData(filter);
-           var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateTime ",eventinfoid);
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");            
+            var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateDate",eventinfoid);
             Dictionary<string, object> formlist = new Dictionary<string, object>();
+
             foreach (var f in formall)
             {
-                Dictionary<string, object> temp = new Dictionary<string, object>();
-                temp.Add("CreateUser", f.CreateUserID);
-                temp.Add("CreateDate", f.CreateDate);
-                formlist.Add(f.FormName, temp);
+                try
+                {
+                    Dictionary<string, object> temp = new Dictionary<string, object>();
+                    if (!string.IsNullOrEmpty(f.CreateUserID))
+                    {
+                        var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{f.CreateUserID}'");
+                        temp.Add("CreateUser", user.Name);
+                    }
+                    else
+                    {
+                        temp.Add("CreateUser", "");
+                    }
+                    temp.Add("CreateDate", f.CreateDate);
+                    formlist.Add(f.FormName, temp);
+                }
+                catch(Exception e)
+                {
+                    continue;
+                }
             }
-            return formlist;
-            
+            return formlist;        
         }
 
 
