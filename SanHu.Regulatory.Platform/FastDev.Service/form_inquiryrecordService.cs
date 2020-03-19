@@ -43,19 +43,30 @@ namespace FastDev.Service
                 var formid = form.ToString();
                 if (data.lawStaffs != null)
                 {
-                    data.lawStaffs.ToList().ForEach(s => { s.AssociatedobjectID = formid; });
-                    ServiceHelper.GetService("law_staff").SaveList(data.lawStaffs);
+                    foreach (var l in data.lawStaffs)
+                    {
+                        l.Associatedobjecttype = "form_inquiryrecord";
+                        l.AssociatedobjectID= formid;
+                        l.CreateDate = DateTime.Now;
+                        QueryDb.Save(l);
+                    }
                 }
                 if (data.lawParties != null)
                 {
-                    data.lawParties.ToList().ForEach(s => { s.AssociationobjectID = formid; });
-                    ServiceHelper.GetService("law_party").SaveList(data.lawParties);
+                    foreach (var l in data.lawParties)
+                    {
+                        l.Associatedobjecttype = "form_inquiryrecord";
+                        l.AssociationobjectID = formid;
+                        l.CreateDate = DateTime.Now;
+                        QueryDb.Save(l);
+                    }
                 }
 
 
+
                 //打印预生成
-                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formid + @""",""formType"":""form_inquiryrecord""}" });
+                //var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                //PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formid + @""",""formType"":""form_inquiryrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)

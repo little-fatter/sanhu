@@ -25,6 +25,8 @@ namespace FastDev.Service
         protected const string AccountId = "165906044420484870";
         protected const string AccountName = "余盛全";
 
+        string publishtypet = null;
+        string closeDate = null;
         /// <summary>
         /// 发送待办
         /// </summary>
@@ -133,12 +135,16 @@ namespace FastDev.Service
             if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
-                atlist = Getpunishattchment(data.FormId);
+                atlist = Getpunishattchment(data.FormId);          
             }
-
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
+            obj.Add("publishtype", publishtypet);
+            var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{obj["CreateUserID"].ToString()}'");
+            obj["CreateUserID"]=user.Name;
+
             if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
                 if (obj.ContainsKey("CaseType"))
@@ -168,7 +174,7 @@ namespace FastDev.Service
 
             //构建其他需要查询的数据
             var dicData = BuildData(data, formId,eventinfoid);
-
+            obj.Add("closeDate", closeDate);
             dicData.Add("MainForm", obj);
             //添加处罚决定书证据附件
             if (atlist != null)
@@ -180,8 +186,6 @@ namespace FastDev.Service
                     {
                         als.AddRange(atlist as List<attachment>);
                         dicData["attachment"] = als;
- 
-
                     }
                     else
                     {
@@ -252,6 +256,16 @@ namespace FastDev.Service
             var filter = new FilterGroup();
             var law = QueryDb.FirstOrDefault<law_punishmentInfo>("select * from law_punishmentInfo where CaseId=@0", formId);
             if (law == null) return null;
+            string publishtype = "";
+            if (law.IsConfiscationgoods=="1")
+           {
+                publishtype = "没收物品";
+            }
+            if (law.Isfine=="1")
+            {
+                publishtype = publishtype + " " + "罚款";
+            }
+            publishtypet = publishtype;
             filter.rules.Add(new FilterRule("AssociationobjectID", law.ID, "equal"));
             return ServiceHelper.GetService("attachment").GetListData(filter);
         }
@@ -289,7 +303,7 @@ namespace FastDev.Service
             if (string.IsNullOrEmpty(eventinfoid)) return null;
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");            
             var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateDate",eventinfoid);
-            Dictionary<string, object> formlist = new Dictionary<string, object>();            
+            List<Dictionary<string, object>> formlist = new List<Dictionary<string, object>>();            
             foreach (var f in formall)
             {
                 try
@@ -309,9 +323,15 @@ namespace FastDev.Service
                     if (f.FormType == "case_report")
                     {
                         temp.Add("state",f.FormState);
+                        if (f.FormState == "审核通过")
+                        {
+                            closeDate = f.CreateDate.ToString();
+                        }
                     }
                     else { temp.Add("state", "已完成"); }
-                    formlist.Add(f.FormName, temp);
+
+                    temp.Add("FormType", f.FormName);
+                    formlist.Add(temp);
                 }
                 catch(Exception e)
                 {

@@ -42,13 +42,23 @@ namespace FastDev.Service
                 var formid = form.ToString();
                 if (data.lawStaffs != null)
                 {
-                    data.lawStaffs.ToList().ForEach(s => { s.AssociatedobjectID = formid; });
-                    ServiceHelper.GetService("law_staff").SaveList(data.lawStaffs);
+                    foreach (var l in data.lawStaffs)
+                    {
+                        l.Associatedobjecttype = "form_inquestrecord";
+                        l.AssociatedobjectID = formid;
+                        l.CreateDate = DateTime.Now;
+                        QueryDb.Save(l);
+                    }
                 }
                 if (data.lawParties != null)
                 {
-                    data.lawParties.ToList().ForEach(s => { s.AssociationobjectID = formid; });
-                    ServiceHelper.GetService("law_party").SaveList(data.lawParties);
+                    foreach (var l in data.lawParties)
+                    {
+                        l.Associatedobjecttype = "form_inquestrecord";
+                        l.AssociationobjectID = formid;
+                        l.CreateDate = DateTime.Now;
+                        QueryDb.Save(l);
+                    }
                 }
                 CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 //PDF打印预生成
