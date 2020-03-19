@@ -45,7 +45,6 @@ export default {
   methods: {
     // 页面数据
     initPage () {
-      // 请求现场巡查详情
       getFormsDetailByEventInfoId(this.EventInfoId, FromType.caseReport).then(res => {
         if (res) {
           console.log(res)

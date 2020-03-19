@@ -169,8 +169,7 @@ export default {
       // 查询规则
       rules: [],
       // 交叉查询规则
-      groups: [],
-      newGroups: []
+      groups: []
     }
   },
   methods: {
@@ -213,6 +212,12 @@ export default {
           return item.ItemCode !== 'case_cover'
         })
         this.FormType = data
+        // 全部按钮生成
+        this.FormType.unshift({
+          ID: null,
+          Title: '全部',
+          ItemCode: null
+        })
       })
     },
     // 筛选 cll 改 筛选菜单
@@ -236,13 +241,18 @@ export default {
       statusBtns[index].className = 'from_state_active'
       this.screenPage() // 关闭弹窗 cll
       this.SformType = item.ItemCode // 搜索用
-      this.listData = [] // 重新搜索将 搜索结果清空
-      this.loadData(
-        'formwith_eventcase',
-        1,
-        10,
+      // 判断是否是全部类型按钮
+      if (this.SformType !== null) {
+        // this.listData = [] // 重新搜索将 搜索结果清空
+        // this.loadData(
+        //   'formwith_eventcase',
+        //   1,
+        //   10,
+        //   this.dealParameter(this.searchKeyWords, this.SformType)
+        // ) // 调用请求
         this.dealParameter(this.searchKeyWords, this.SformType)
-      ) // 调用请求
+      }
+      this.onSearch()
     },
     // 处理参数
     dealParameter (searchKeyWords, SformType) {
@@ -309,7 +319,6 @@ export default {
       }
     },
     // 获取列表信息
-
     loadData (parameter) {
       this.$toast.loading({
         message: '加载中...',
@@ -317,24 +326,16 @@ export default {
       })
       // 第一次请求 筛选规则为空
       // var rules = []
-      return getPageDate(
-        'formwith_eventcase',
-        1,
-        10,
-        this.dealParameter(this.searchKeyWords, this.SformType)
-      ).then(res => {
-        if (res.Rows) {
-          this.$toast.clear()
-          res.Rows.forEach(item => {
-            this.listData.push(item)
-          })
-          // 时间排序
-          this.listData.sort(function (a, b) {
-            return a.InitiationTime > b.InitiationTime ? -1 : 1
-          })
-        }
-        return res
-      })
+      return getPageDate('formwith_eventcase', parameter.pageIndex, parameter.pageSize, this.dealParameter(this.searchKeyWords, this.SformType))
+        .then(res => {
+          if (res.Rows) {
+            this.$toast.clear() // 清除弹窗
+            res.Rows.forEach(item => {
+              this.listData.push(item)
+            })
+          }
+          return res
+        })
     },
     // 去详情
     goTodetail (item) {
