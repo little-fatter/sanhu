@@ -275,7 +275,7 @@ export default {
         this.$router.push({
           path: '',
           query: { id: record.ID, formType: record.FormType }
-        })
+        }) 
       } else if (record.FormType === 'form_inquiryrecord') { // 询问记录
         this.$router.push({
           path: '',

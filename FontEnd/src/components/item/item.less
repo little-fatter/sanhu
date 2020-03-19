@@ -19,17 +19,19 @@
     color: #64697C;
     &-header {
       display: flex;
-      align-items: center;
     }
   }
   &-title {
     width: 0;
     flex: 1;
+    padding-top: 4px;
     font-size: 16px;
     color: #222328;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
+    &.ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   &-info {
     display: flex;

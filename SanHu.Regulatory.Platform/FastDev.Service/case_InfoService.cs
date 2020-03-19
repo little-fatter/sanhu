@@ -64,19 +64,22 @@ namespace FastDev.Service
             //sqlBuild.AppendLine(whereTxt);
             //var cases = QueryDb.Query<case_Info>(sqlBuild.ToString());
 
+            var filter = descriptor.Condition;
+            if (filter == null) filter = new FilterGroup();
+
             #region 新增定义当事人名称(party),当事人号码(partyPhone)
 
-            var partyWhere = DeepPartyGroups(descriptor.Condition.groups);
+            FilterGroup filterParty = new FilterGroup() { op = "or" };
+            var partyWhere = DeepPartyGroups(filter.groups);
             if (partyWhere.Count > 0)
             {
                 var parties = QueryDb.Query<law_party>("select * from law_party where " + string.Join(descriptor.Condition.op, partyWhere));
 
                 if (parties.Count() > 0)
                 {
-                    var filerGroup = new FilterGroup() { op = "or" };
                     foreach (var item in parties)
                     {
-                        filerGroup.rules.Add(new FilterRule
+                        filterParty.rules.Add(new FilterRule
                         {
                             field = "ID",
                             op = "in",
@@ -84,11 +87,9 @@ namespace FastDev.Service
                             value = item.CaseId
                         });
                     }
-
-                    descriptor.Condition.groups.Add(filerGroup);
                 }
 
-                DeletePartyRules(descriptor.Condition.groups);
+                DeletePartyRules(filter.groups);
 
                 //FilterTranslator filterTranslator = new FilterTranslator();
                 //if (descriptor.Condition != null)
@@ -104,20 +105,19 @@ namespace FastDev.Service
 
             #region 过滤掉PreviousformID为空的数据
 
-            var filter = descriptor.Condition;
-            if (filter == null) filter = new FilterGroup();
-
             FilterGroup filterNew = new FilterGroup();
             filterNew.rules = new List<FilterRule>
                 {
                     new FilterRule("PreviousformID", null, "isnotnull")
                 };
+
             FilterGroup filterOut = new FilterGroup();
             filterOut.op = "and";
             filterOut.groups = new List<FilterGroup>
                 {
                     filter,
-                    filterNew
+                    filterNew,
+                    filterParty
                 };
             descriptor.Condition = filterOut;
 

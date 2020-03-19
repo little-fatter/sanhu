@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-11 09:52:57
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-17 14:43:52
+ * @LastEditTime: 2020-03-18 17:26:40
  * @Description:  案件详情
  -->
 
@@ -25,7 +25,7 @@
     </panel>
     <template v-if="current === 0">
       <panel title="基本信息">
-        <info-panel :data="detail" :columns="baseColumns">
+        <info-panel :data="detail.MainForm" :columns="baseColumns">
           <template slot="party">
             <people-popover v-for="(item, index) in detail.LawPartys" :key="index" :data="item">
               <span class="case-detail-people">{{ item.Name }}</span>
@@ -39,12 +39,13 @@
       <panel title="证据附件" :body-style="{ padding: '0 20px' }" v-if="files[0]">
         <file-review :files="files" :showImgCount="3" />
       </panel>
-      <panel title="案件流程" :body-style="{ maxWidth: '800px', padding: '30px 60px' }">
-        <process />
+      <panel title="案件流程" :body-style="{ maxWidth: '800px', padding: '30px 60px' }" v-if="process[0]">
+        <process :list="process" />
       </panel>
     </template>
     <template v-else>
       <panel hide-header v-if="caseId">
+        <span @click="test">测试</span>
         <dossier-list :case-id="caseId" />
       </panel>
     </template>
@@ -58,20 +59,15 @@ import Process from './Process'
 import InfoPanel from '@/components/info/InfoPanel'
 import DossierList from './DossierList'
 import PeoplePopover from './PeoplePopover'
-import { getFormDetail, getDetails } from '@/api/sampleApi'
-import { formatTime, formatDay } from '@/utils/util'
+import { getFormDetail, getDetails, getPageData } from '@/api/sampleApi'
+import { formatTime, formatDay, toFormDetail } from '@/utils/util'
+import { CASE_INFO, EVENT_INFO } from '@/config/model.config'
 
 /**
  * 本页面调用4个接口，获取表单详情、事件信息、案件流程、案卷列表
  */
 
-// 案件mode
-const CASE_MODEL = 'case_Info'
-// 事件mode
-const EVENT_MODEL = 'event_info'
-// 案件流程
-
-const TABS = ['案件详情', '案卷列表']
+const tabs = ['案件详情', '案卷列表']
 
 const genBaseColumns = context => [
   {
@@ -199,7 +195,7 @@ export default {
     PeoplePopover
   },
   data () {
-    this.tabs = TABS
+    this.tabs = tabs
     this.baseColumns = genBaseColumns(this)
     this.eventColumns = genEventColumns(this)
     return {
@@ -207,32 +203,9 @@ export default {
       // 表单id
       caseId: null,
       // 文件列表
-      files: [
-        {
-          title: '污染源.jpg',
-          path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-04/6457641638b8ee17a95c930d624f63a3.png'
-        },
-        {
-          title: '污染源.jpg',
-          path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-05/a8801141956d617cda49c85c9c3f4627.jpg'
-        },
-        {
-          title: '污染源.jpg',
-          path: 'http://ci.biketo.com/d/file/news/girl/2020-03-07/7d2de48e737e6249a479e2b6f211050a.jpg'
-        },
-        {
-          title: '污染源.jpg',
-          path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-07/dd3f1d954fcafa8f93135b47f8b5fd75.jpg'
-        },
-        {
-          title: '执法附件  抚仙湖政府管理决策法规第367条',
-          path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-04/6457641638b8ee17a95c930d624f63a3.png'
-        },
-        {
-          title: '执法附件  抚仙湖政府管理决策法规第367条',
-          path: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-07/dd3f1d954fcafa8f93135b47f8b5fd75.jpg'
-        }
-      ],
+      files: [],
+      // 流程
+      process: [],
       detail: {
         // 主要信息
         MainForm: {},
@@ -254,15 +227,23 @@ export default {
   methods: {
     // 获取详情
     async getDetail () {
-      const data = await getFormDetail(CASE_MODEL, null, this.caseId, null)
+      const data = await getFormDetail(CASE_INFO, null, this.caseId, null)
       if (data) {
         this.detail = data
         this.detail.EventId && this.getEventDetail()
+        this.getProcess()
       }
     },
     // 获取事件详情
     async getEventDetail () {
-      this.eventInfo = await getDetailsO(EVENT_MODEL, this.detail.EventId)
+      this.eventInfo = await getDetailsO(EVENT_INFO, this.detail.EventId)
+    },
+    // 获取流程
+    async getProcess () {
+      // this.process = await getPageData()
+    },
+    test () {
+      toFormDetail()
     }
   }
 }

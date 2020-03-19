@@ -8,8 +8,8 @@
 
 <template>
   <s-table ref="table" :columns="columns" :data-callback="loadData">
-    <template slot="action">
-      <a>查看</a>
+    <template slot="action" slot-scope="text, record">
+      <a @click="viewItem(record)">查看</a>
     </template>
   </s-table>
 </template>
@@ -17,9 +17,7 @@
 <script>
 import STable from '@/components/table/'
 import { getPageData } from '@/api/sampleApi'
-
-// 案卷列表mode
-const MODE = 'formwith_eventcase'
+import { FORMWITH_EVENTCASE } from '@/config/model.config'
 
 // 生成查询规则
 const genRule = context => ({
@@ -98,7 +96,11 @@ export default {
   methods: {
     // 获取案卷列表
     loadData ({ pageIndex, pageSize }) {
-      return getPageData(MODE, genCaseFileRule(this), pageIndex, pageSize)
+      return getPageData(FORMWITH_EVENTCASE, genCaseFileRule(this), pageIndex, pageSize)
+    },
+    // 查看
+    viewItem (record) {
+
     }
   }
 }
