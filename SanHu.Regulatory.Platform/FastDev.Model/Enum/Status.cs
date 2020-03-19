@@ -118,4 +118,15 @@ namespace FD.Model.Enum
         [Display(Name = "结案报告")]
         finalReport
     }
+    public enum ApprovalStatus
+    {
+        [Display(Name = "待审核")]
+        Close = 0,
+        [Display(Name = "审核中")]
+        Normal = 1,
+        [Display(Name = "完结")]
+        Reject = 2,
+        [Display(Name = "中止")]
+        HandOver = 3
+    }
 }
