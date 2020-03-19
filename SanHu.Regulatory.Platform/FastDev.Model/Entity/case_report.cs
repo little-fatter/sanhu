@@ -54,11 +54,6 @@ public string ProcessInstanceId
 get;
 set;
 }
-public string state
-{
-get;
-set;
-}
 public string FormState
 {
 get;
