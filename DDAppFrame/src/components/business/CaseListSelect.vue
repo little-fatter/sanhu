@@ -45,7 +45,7 @@
                 <div class="item"><van-tag plain type="success" v-show="item.CaseStatus">{{ item.CaseStatus }}</van-tag></div>
               </div>
               <div class="footer_right">
-                <div class="item">{{ item.CreateDate }}</div>
+                <div class="item">{{ item.CreateDate | dayjs('YYYY-MM-DD') }}</div>
               </div>
             </div>
           </van-panel>
