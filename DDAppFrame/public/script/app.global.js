@@ -17,13 +17,8 @@ var publicAppConfig = {
     appHost: {
       admin: 'http://182.150.28.58:27011/framework',
       file: 'http://182.150.28.58:27012/filesystem',
-      // regulatory: 'http://192.168.11.49:8082/webapi', // 黎朗机器
+      regulatory: 'http://192.168.0.169:8030/webapi'
       // regulatory: 'http://192.168.0.125:8030/webapi', // 唐周机器
-      regulatory: 'http://192.168.0.169:8030/webapi', // 本地公用服务器
-      // regulatory: 'http://14.205.92.142:10680/webapi', // 远程服务器
-      // 四方德信接口
-      sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
-      // regulatory: 'http://182.150.28.58:8030/webapi',
     },
     mapConfig: {
       regulatory: 'http://zhsh.8e9bcb.grapps.cn/regulatory'
@@ -64,7 +59,7 @@ var publicAppConfig = {
   /**
      * 请求超时的毫秒数
      */
-  httpClientTimeout: 30000,
+  httpClientTimeout: 10000,
   /**
      * signalr服务端地址
      */

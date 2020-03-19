@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-17 11:15:07
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-17 16:03:21
+ * @LastEditTime: 2020-03-18 17:58:53
  * @Description:  表单详情
  -->
 
@@ -10,27 +10,25 @@
   <div class="form-detail">
     <div class="form-detail-container">
       <div class="form-detail-header">
-        <template v-if="detail.avatar">
-          <a-avatar :src="detail.avatar" :size="60" />
+        <template v-if="headerInfo.avatar">
+          <a-avatar :src="headerInfo.avatar" :size="60" />
         </template>
         <template v-else>
           <a-avatar :size="60" :style="{ backgroundColor: '#3A9DFA', verticalAlign: 'middle' }">
-            {{ detail.username }}
+            {{ headerInfo.username }}
           </a-avatar>
         </template>
-        <span class="form-detail-header-main">执法人：{{ detail.username }}</span>
-        <span>已完成</span>
+        <span class="form-detail-header-main">执法人：{{ headerInfo.username }}</span>
+        <span>{{ headerInfo.status }}</span>
       </div>
       <div class="form-detail-info">
-        <info-panel :data="detail" :columns="columns">
-          <img class="form-detail-signature" :src="detail.signature" />
-        </info-panel>
+        <slot />
       </div>
       <div class="form-detail-file" v-if="files[0]">
         <file-review :files="files" />
       </div>
       <div class="form-detail-process">
-        <process />
+        <process :list="process" />
       </div>
     </div>
   </div>
@@ -39,55 +37,32 @@
 <script>
 import FileReview from '@/components/file/FileReview'
 import Process from './Process'
-import InfoPanel from '@/components/info/InfoPanel'
 import { formatTime } from '@/utils/util'
-
-const COLUMNS = [
-  {
-    label: '当事人',
-    key: 'a'
-  },
-  {
-    label: '时间',
-    key: 'b',
-    customContent: text => text ? formatTime(text) : ''
-  },
-  {
-    label: '违法事实及证据',
-    key: 'c'
-  },
-  {
-    label: '违法依据',
-    key: 'd'
-  },
-  {
-    label: '案件详情',
-    key: 'e'
-  },
-  {
-    label: '处理结果',
-    key: 'f'
-  },
-  {
-    label: '被执行人签字',
-    slot: 'signature'
-  },
-]
 
 export default {
   components: {
     FileReview,
-    Process,
-    InfoPanel
+    Process
+  },
+  props: {
+    // 头部信息
+    headerInfo: {
+      type: Object,
+      default: () => ({})
+    },
+    // 文件列表
+    files: {
+      type: Array,
+      default: () => []
+    },
+    // 流程
+    process: {
+      type: Array,
+      default: () => []
+    },
   },
   data () {
-    this.columns = COLUMNS
     return {
-      detail: {
-        username: '张三',
-        signature: '/img/commmon/signature_demo.png'
-      },
-      files: []
     }
   }
 }
@@ -124,10 +99,6 @@ export default {
   }
   &-process {
     padding-top: 15px;
-  }
-  // 签字
-  &-signature {
-    height: 50px;
   }
 }
 </style>

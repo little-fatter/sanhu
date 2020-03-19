@@ -26,7 +26,6 @@
       <item
         v-for="item in list"
         :key="item.objId"
-        :item="item"
         :title="item.evtTypeDisplayName"
         :cover="getCover(item.evtFileUrl)"
       >
@@ -61,16 +60,15 @@ import SelectModal from '@/components/modal/SelectModal'
 import List from '@/components/list/List'
 import Item from '@/components/item/Item'
 import { getPageData } from '@/api/sampleApi'
+import { EVENT_INFO } from '@/config/model.config'
 
-// 查询mode
-const MODE = 'event_info'
 // 查询字段集合
-const FIELDS = ['evtCode', 'remark', 'evtTypeDisplayName']
+const fields = ['evtCode', 'remark', 'evtTypeDisplayName']
 // 查询规则
 const genSearchRules = key => {
   if (!key) return {}
   return {
-    rules: FIELDS.map(i => ({
+    rules: fields.map(i => ({
       field: i,
       value: key,
       op: 'like',
@@ -85,9 +83,6 @@ export default {
     SelectModal,
     List,
     Item
-  },
-  props: {
-
   },
   data () {
     return {
@@ -104,7 +99,7 @@ export default {
       this.$nextTick(() => this.$refs.list.loadData(true))
     },
     loadData ({ pageIndex, pageSize }) {
-      return getPageData(MODE, genSearchRules(this.queryParam.Keyword), pageIndex, pageSize)
+      return getPageData(EVENT_INFO, genSearchRules(this.queryParam.Keyword), pageIndex, pageSize)
     },
     // 解析封面图
     getCover (urls) {

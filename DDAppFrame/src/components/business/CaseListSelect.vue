@@ -22,7 +22,6 @@
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
         <van-cell-group>
-
         </van-cell-group>
       </div>
       <div>

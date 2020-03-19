@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 15:54:30
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-17 11:30:15
+ * @LastEditTime: 2020-03-18 14:11:14
  * @Description:  流程
  -->
 
@@ -35,30 +35,27 @@
 </template>
 
 <script>
-const list = [
-  {
-    username: '张三',
-    avatar: 'https://images.pexels.com/photos/2444429/pexels-photo-2444429.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    title: '张三',
-    status: '发起上传',
-    content: '李四，王五，赵六',
-    time: '2020-03-13'
-  },
-  {
-    username: '李四',
-    avatar: '',
-    title: '张三',
-    status: '发起上传',
-    content: '李四，王五，赵六',
-    time: '2020-03-13'
-  }
-]
+// const list = [
+//   {
+//     username: '张三',
+//     avatar: 'https://images.pexels.com/photos/2444429/pexels-photo-2444429.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+//     title: '张三',
+//     content: '李四，王五，赵六',
+//     time: '2020-03-13'
+//   },
+//   {
+//     username: '李四',
+//     title: '李四',
+//     content: '李四，王五，赵六',
+//     time: '2020-03-13'
+//   }
+// ]
 
 export default {
   props: {
     list: {
       type: Array,
-      default: () => list
+      required: true
     }
   }
 }

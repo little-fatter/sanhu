@@ -84,6 +84,7 @@
           label="协办人"
           placeholder="请选择协办人"
           :readonly="true"
+          @click="handleSelecOrganiser"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecOrganiser" size="30" />
         </van-field>
@@ -164,18 +165,21 @@ export default {
         this.loadEventCheck(res.EventInfoId)
       })
     },
-    loadCaseInfo (CaseID) {
-      getDetaildata('case_Info', CaseID).then((res) => {
-        if (res) {
-          this.caseInfo = res
-        }
-      })
-    },
     loadEventCheck (EventInfoId) {
       getFormsDetailByEventInfoId(EventInfoId, 'task_survey').then((res) => {
         if (res) {
-          this.LawParties = res.law_party
           this.Attachment = res.attachment
+        }
+      })
+    },
+    loadCaseInfo (caseId) {
+      getFormsDetailByEventInfoId(null, 'case_Info', caseId).then((res) => {
+        if (res) {
+          this.caseInfo = {
+            ...res.MainForm
+          }
+          this.LawParties = res.law_party
+          console.log('LawParties', res.law_party)
         }
       })
     },
@@ -187,6 +191,7 @@ export default {
     },
     onCaseConfirm (caseInfo) {
       this.caseInfo = caseInfo
+      this.loadCaseInfo(caseInfo.ID)
       this.loadEventCheck(caseInfo.EventInfoId)
       this.showPopup = false
     },

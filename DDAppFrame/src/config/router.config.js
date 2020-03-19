@@ -34,6 +34,15 @@ export const asyncRouterMap = [{
     }
   },
   {
+    path: '/chatSelect',
+    name: 'chatSelect',
+    component: () => import('@/views/chat/ChatSelect.vue'),
+    meta: {
+      title: '群选择',
+      keepAlive: false
+    }
+  },
+  {
     path: '/layformWapper',
     name: 'layformWapper',
     redirect: '/layforms',

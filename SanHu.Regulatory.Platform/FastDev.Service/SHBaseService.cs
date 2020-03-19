@@ -131,7 +131,7 @@ namespace FastDev.Service
             if (data.Model.ToLower() == "task_survey")  // 现场勘查 EventType 显示中文title
             {
                 var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
-                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
                 var eventType = obj["EventType"].ToString();
                 if (dicItems.ContainsKey(eventType))
                 {
