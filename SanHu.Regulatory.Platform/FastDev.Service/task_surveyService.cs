@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 
@@ -25,10 +26,43 @@ namespace FastDev.Service
         {
             OnGetAPIHandler += Task_surveyService_OnGetAPIHandler;
             OnAfterGetDetailData += task_surveyService_OnAfterGetDetailData;
-
-
+            OnAfterGetListData += Task_surveyService_OnAfterGetListData;
+            OnAfterGetPagedData += Task_surveyService_OnAfterGetPagedData;
         }
 
+        private void Task_surveyService_OnAfterGetPagedData(object query, object data)
+        {
+            //var lst = (data as PagedData).Records;
+            //var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+            //var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+
+            //foreach (var item in lst)
+            //{
+            //    var itemData = item as Dictionary<string, object>;
+            //    var eventType = itemData["EventType"].ToString();
+            //    if (dicItems.ContainsKey(eventType))
+            //    {
+            //        itemData["EventType"] = dicItems[eventType];
+            //    }
+            //}
+        }
+
+        private void Task_surveyService_OnAfterGetListData(object query, object data)
+        {
+            //var lst = (data as PagedData).Records;
+            //var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+            //var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+
+            //foreach (var item in lst)
+            //{
+            //    var itemData = item as Dictionary<string, object>;
+            //    var eventType = itemData["EventType"].ToString();
+            //    if (dicItems.ContainsKey(eventType))
+            //    {
+            //        itemData["EventType"] = dicItems[eventType];
+            //    }
+            //}
+        }
 
         private void task_surveyService_OnAfterGetDetailData(object query, object data)
         {
@@ -40,6 +74,14 @@ namespace FastDev.Service
                 o["ProcessingDecisions"] = "移送其他部门";
             if (taskType == "3")
                 o["ProcessingDecisions"] = "处罚程序";
+
+            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+            var eventType = o["EventType"].ToString();
+            if (dicItems.ContainsKey(eventType))
+            {
+                o["EventType"] = dicItems[eventType];
+            }
         }
 
         /*

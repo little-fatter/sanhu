@@ -370,3 +370,24 @@ html
   }
 
 }
+.van-cell__title{
+  width: 2.4rem;
+  flex: unset !important;
+}
+.van-cell__value{
+  flex: 1;
+  text-align: left !important;
+}
+.van-cell:not(:last-child)::after {
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  right: 0;
+  bottom: 0;
+  left: 0 !important;
+  border-bottom: 1px solid #ebedf0;
+  transform: scaleY(0.5);
+  width: 93%;
+  margin-left: 3.5%;
+}

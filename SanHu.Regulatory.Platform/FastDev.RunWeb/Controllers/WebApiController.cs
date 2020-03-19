@@ -17,7 +17,7 @@ using WanJiang.Framework.Web.Core;
 
 namespace FastDev.RunWeb.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class WebApiController : BaseController
     {
         private core_printTemplate core_printTemplate_0;

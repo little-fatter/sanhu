@@ -1,14 +1,10 @@
 import Map from 'ol/Map'
 import View from 'ol/View'
-// import MapBrowserEvent from 'ol/MapBrowserEvent'
 import TileLayer from 'ol/layer/Tile'
-// import OSM from 'ol/source/OSM'
-import WMTS from 'ol/source/WMTS'
-import WMTSTileGrid from 'ol/tilegrid/WMTS'
 import TileWMS from 'ol/source/TileWMS'
-import XYZ from 'ol/source/XYZ'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
+import Cluster from 'ol/source/Cluster'
 import Heatmap from 'ol/layer/Heatmap'
 import { defaults as defaultControls, Zoom } from 'ol/control'
 import { GeoJSON } from 'ol/format'
@@ -16,21 +12,28 @@ import { register } from 'ol/proj/proj4'
 import proj4 from 'proj4'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-import { fromLonLat, toLonLat, get as getProjection } from 'ol/proj'
+import { fromLonLat, toLonLat } from 'ol/proj'
 import { click } from 'ol/events/condition'
 import Select from 'ol/interaction/Select'
-import { buffer as extentBuffer, getHeight as getExtentHeight, getWidth, getTopLeft } from 'ol/extent'
+import { buffer as extentBuffer, getHeight as getExtentHeight } from 'ol/extent'
 import { point, lineString, polygon, buffer, toWgs84, toMercator, randomPoint, bbox, booleanPointInPolygon } from '@turf/turf'
-// import $ from 'jquery'
 import appConfig from '@/config/app.config'
-
+import { isEmpty } from '@/utils/util'
+import gisUtils from '@/utils/gisUtils'
+/**
+ * 地图中的矢量图层 样式
+ */
 import styleTable from './styleTable'
-
+/**
+ *geojson
+ */
 import M_HM_FXH from './data/M_HM_FXH.json'
 import M_HM_XYH from './data/M_HM_XYH.json'
 import M_HM_QLH from './data/M_HM_QLH.json'
-import { isEmpty } from '@/utils/util'
-
+import M_RED_LINE from './data/M_RED_LINE.json'
+/**
+ * 三个湖的geojson
+ */
 const lakeJsons = [M_HM_FXH, M_HM_XYH, M_HM_QLH]
 
 // proj4.defs('EPSG:4490', '+proj=longlat +ellps=GRS80 +no_defs')
@@ -40,41 +43,7 @@ proj4.defs('EPSG:900913', '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0
 register(proj4)
 
 const WMS_URL = appConfig.MapOption.WMS_URL
-// function createTdtLayer1 () {
-//   var projection = getProjection('EPSG:3857')
-//   var projectionExtent = projection.getExtent()
-//   var size = getWidth(projectionExtent) / 256
-//   var resolutions = new Array(18)
-//   var matrixIds = new Array(18)
-//   for (var z = 1; z < 19; ++z) {
-//     // generate resolutions and matrixIds arrays for this WMTS
-//     resolutions[z] = size / Math.pow(2, z)
-//     matrixIds[z] = z
-//   }
 
-//   var webKey = 'fca2dd0a5d97b284fe802d646ad6430c'
-
-//   var wmtsUrl1 = 'http://t{0-7}.tianditu.gov.cn/vec_w/wmts?tk=' // 矢量底图
-
-//   var layer = new TileLayer({
-//     source: new WMTS({
-//       url: wmtsUrl1 + webKey,
-//       layer: 'vec',
-//       matrixSet: 'w',
-//       format: 'tiles',
-//       style: 'default',
-//       projection: projection,
-//       tileGrid: new WMTSTileGrid({
-//         origin: getTopLeft(projectionExtent),
-//         resolutions: resolutions,
-//         matrixIds: matrixIds
-//       }),
-//       wrapX: true
-//     }),
-//     name: 'tdt'
-//   })
-//   return layer
-// }
 var timer = {
   runId: 0,
   pathBeforeFeature: undefined,
@@ -94,16 +63,10 @@ var timer = {
     this.parent.refreshMap()
   }
 }
-
-var afterFunc = function (func, ms) {
-  var _id_ = setInterval(() => {
-    clearInterval(_id_)
-    if (func) {
-      func()
-    }
-  }, ms
-  )
-}
+/**
+ * 异步延后执行函数
+ */
+var afterFunc = gisUtils.afterFunc
 
 var paths = {
   equipmentLayer: { // 无人机轨迹模拟
@@ -295,30 +258,7 @@ export default {
     }, 1000)
   },
   initLayers: function () {
-    // var baseLayer = new TileLayer({
-    //   source: new WMTS({
-    //     url: imageLayerUrl,
-    //     layer: 'image',
-    //     matrixSet: 'Custom_image',
-    //     projection: EPSG_4490,
-    //     tileGrid: new WMTSTileGrid({
-    //       origin: [102.15495174700004, 24.85292923200018],
-    //       resolutions: resolutions,
-    //       matrixIds: matrixIds
-    //     }),
-    //     style: 'default',
-    //     wrapX: true
-    //   }),
-    //   name: 'base'
-    // })
     // 底图
-    // var osm = new TileLayer({
-    //   source: new OSM(),
-    //   name: 'baseLayer',
-    //   zIndex: 0
-    // })
-    // this.layers.push(osm)
-
     // var tdtCvaLayer = createTdtLayer1()
     // this.layers.push(tdtCvaLayer)
     var baseLayer = new TileLayer({
@@ -349,10 +289,16 @@ export default {
     this.layers.push(lakeLayer)
     // 生态红线
     var redLineLayer = new VectorLayer({
-      source: new VectorSource(),
-      // style: (f) => styleTable.lakeStyle(f),
+      source: new VectorSource({
+        features: new GeoJSON().readFeatures(M_RED_LINE, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857'
+        })
+      }),
+      style: (f) => styleTable.redLineLayerStyle(f),
       zIndex: 3,
-      name: 'redLineLayer'
+      name: 'redLineLayer',
+      visible: false
     })
     this.layers.push(redLineLayer)
     // 热力图
@@ -360,7 +306,8 @@ export default {
       source: new VectorSource(),
       // style: (f) => styleTable.lakeStyle(f),
       zIndex: 4,
-      name: 'heatLayer'
+      name: 'heatLayer',
+      visible: false
     })
     this.layers.push(heatLayer)
     // 管辖范围、飞行范围 图层
@@ -388,8 +335,12 @@ export default {
     })
     this.layers.push(peopleLayer)
     // 事件
+    var alertEventSource = new Cluster({
+      distance: 50,
+      source: new VectorSource()
+    })
     var alertEventLayer = new VectorLayer({
-      source: new VectorSource(),
+      source: alertEventSource,
       style: (f) => styleTable.alertEventStyle(f),
       zIndex: 8,
       name: 'alertEventLayer'
@@ -436,7 +387,9 @@ export default {
     this.selects['peopleLayerSelectClick'] = peopleLayerSelectClick
     // 事件图层的select 事件
     var alertEventLayerSelectClick = new Select({
-      condition: click,
+      condition: function (evt) {
+        return evt.type === 'singleclick'
+      },
       layers: [this.findLayer('alertEventLayer')],
       style: (f) => styleTable.alertEventSelectedStyle(f)
     })
@@ -446,7 +399,18 @@ export default {
         that.onAlertFeatureClick()
       } else {
         var featureSelected = e.selected[0]
-        that.onAlertFeatureClick(featureSelected)
+        if (!featureSelected.get('features')) { // 不是聚合
+          that.onAlertFeatureClick(featureSelected)
+          return
+        }
+        var size = featureSelected.get('features').length
+        var fea = featureSelected.get('features')[0]
+        if (size > 1) {
+          that.view.setCenter(fea.getGeometry().getCoordinates())
+          that.view.setZoom(that.view.getZoom() + 1)
+          return
+        }
+        that.onAlertFeatureClick(fea)
       }
     })
     this.selects['alertEventLayerSelectClick'] = alertEventLayerSelectClick
@@ -571,7 +535,7 @@ export default {
         name: a.name
       })
       fea.setProperties(a)
-      source.addFeature(fea)
+      source.getSource().addFeature(fea)
     }
   },
   updateEquipmentLayer: function (equipmentList) {
@@ -581,7 +545,7 @@ export default {
     for (let i = 0; i < equipmentList.length; i++) {
       const a = equipmentList[i]
       var fea = new Feature({
-        geometry: new Point(a.location),
+        geometry: new Point(fromLonLat(a.location)),
         name: a.name
       })
       fea.setProperties(a)
@@ -682,7 +646,12 @@ export default {
 
     var layer = this.findLayer(layerName)
     if (!layer) return undefined
-    var features = layer.getSource().getFeatures()
+    var features = []
+    if (layer.getSource().getSource) {
+      features = layer.getSource().getSource().getFeatures()
+    } else {
+      features = layer.getSource().getFeatures()
+    }
     for (let i = 0; i < features.length; i++) {
       const element = features[i]
       var properties = element.getProperties()

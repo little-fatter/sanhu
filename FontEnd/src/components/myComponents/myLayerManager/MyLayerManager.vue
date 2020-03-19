@@ -114,15 +114,15 @@ export default {
           layerName: 'heatLayer',
           img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/bingzhuangtu-tianchong.png',
           aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/bingzhuangtu-tianchong1.png',
-          active: true,
+          active: false,
           subs: []
         },
         {
           title: '建筑',
-          layerName: '',
+          layerName: 'redLineLayer',
           img: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu.png',
           aimg: appConfig.StaticWebContext + '/img/yzt-renyuanceng/jianzhuwu1.png',
-          active: true,
+          active: false,
           subs: []
         }
       ],

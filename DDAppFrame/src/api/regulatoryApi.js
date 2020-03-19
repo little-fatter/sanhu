@@ -31,6 +31,33 @@ export const DictionaryCode = {
   //
   CheckType: 'CheckType'
 }
+/**
+ * 表单类型
+ */
+export const FromType = {
+  // 物品清单
+  goodsList: 'form_confiscated_item',
+  // 案件详情
+  caseDetails: 'case_info',
+  // 当场处罚决定书
+  PromptlyPunishNote: 'law_punishmentInfo',
+  // 勘验记录
+  RecordOfInquest: 'form_inquestrecord',
+  // 结案报告
+  caseReport: 'case_report',
+  // 卷宗封面
+  caseCover: 'case_cover',
+  // 询问当事笔录
+  AskPartyNote: 'form_inquiryrecord_litigant',
+  // 询问证人笔录
+  AskWitnessNote: 'form_inquiryrecord_witness',
+  // 询问第三人笔录
+  AskThirdPartyNote: 'form_inquiryrecord_third',
+  // 现场勘查
+  sceneInvestigationDetail: 'task_survey',
+  // 事件核查
+  eventDetail: 'task_patrol'
+}
 
 /**
  * 通用分页查询接口

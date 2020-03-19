@@ -102,6 +102,27 @@ namespace FastDev.Service
 
             #endregion
 
+            #region 过滤掉PreviousformID为空的数据
+
+            var filter = descriptor.Condition;
+            if (filter == null) filter = new FilterGroup();
+
+            FilterGroup filterNew = new FilterGroup();
+            filterNew.rules = new List<FilterRule>
+                {
+                    new FilterRule("PreviousformID", null, "isnotnull")
+                };
+            FilterGroup filterOut = new FilterGroup();
+            filterOut.op = "and";
+            filterOut.groups = new List<FilterGroup>
+                {
+                    filter,
+                    filterNew
+                };
+            descriptor.Condition = filterOut;
+
+            #endregion
+
             return base.GetPageData(descriptor);
         }
 
@@ -178,6 +199,15 @@ namespace FastDev.Service
             //    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid[0] }");
             //    caseinfo.Add("Jobnumber",user.Jobnumber);
             //}
+
+            var caseinfo = data as Dictionary<string, object>;
+            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
+            var caseType = caseinfo["CaseType"].ToString();
+            if (dicItems.ContainsKey(caseType))
+            {
+                caseinfo["CaseType"] = dicItems[caseType];
+            }
         }
 
 

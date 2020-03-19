@@ -29,13 +29,13 @@
           <p>
             <span>当事人：</span>
             <span v-if="item.LawPartys && item.LawPartys.length > 0">
-              <span v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
+              <span style="margin-right:0.15rem" v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
             </span>
-            <span v-else>测试数据</span>
+            <span v-else>无数据</span>
           </p>
           <p>
             <span>办案人：</span>
-            <span>{{ item.Investigators ? item.Investigators : '测试数据' }}</span>
+            <span>{{ item.Investigators ? item.Investigators : '无数据' }}</span>
           </p>
           <h4 class="case-tag">
             <van-tag plain>{{ item.CaseNumber }}</van-tag>
@@ -55,7 +55,8 @@ import SList from '../../components/list/SList'
 import {
   isNotEmpty,
   getQueryConditon,
-  getQueryConditonMore
+  getQueryConditonMore,
+  formatDate
 } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi' // 引入封装的请求
 export default {
@@ -240,11 +241,6 @@ export default {
             this.caseList.push(item)
           })
         }
-        console.log(res.Rows)
-        // 时间排序
-        // this.listData.sort(function (a, b) {
-        //   return a.InitiationTime > b.InitiationTime ? -1 : 1
-        // })
         return res
       })
     },
@@ -311,7 +307,7 @@ export default {
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
-      this.$router.push({ path: 'caseDetails', query: { id: msg } }) // 案件详情id
+      this.$router.push({ path: 'caseDetails', query: { ID: msg } }) // 案件详情id
     }
   },
   // 生命周期函数
@@ -343,7 +339,7 @@ export default {
   width: calc(100% - 0rem);
   /* margin-left: 0.26rem;
   margin-right: 0.56rem; */
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
   overflow: hidden;
   /* padding: 0 0.26rem 0.26rem 0.26rem; */
   padding: 0 0.3rem 0.26rem 0.3rem;
@@ -352,7 +348,7 @@ export default {
 .panel_one .van-cell {
   background-color: #fff;
   padding: 0.22rem 0px !important;
-  margin-bottom: 0.12rem;
+  /* margin-bottom: 0.12rem; */
 }
 
 .panel_one .van-cell:not(:last-child)::after {
@@ -361,6 +357,7 @@ export default {
 }
 .panel_one .van-cell__title {
   font-weight: bold;
+  font-size: 0.42667rem;
   color: #64697c;
 }
 
@@ -404,5 +401,8 @@ export default {
 }
 /deep/.van-ellipsis {
   color: #64697c !important;
+}
+.van-cell__title{
+  width: auto !important;
 }
 </style>

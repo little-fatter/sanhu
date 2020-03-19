@@ -1,7 +1,33 @@
-import { Style, Icon, Fill, Stroke, Circle } from 'ol/style'
+import { Style, Icon, Fill, Stroke, Circle, Text } from 'ol/style'
 import appConfig from '@/config/app.config'
+// 事件图标
+import event0 from '@/assets/icons/map/event0.png'
+import event1 from '@/assets/icons/map/event1.png'
+import event2 from '@/assets/icons/map/event2.png'
+import event3 from '@/assets/icons/map/event3.png'
+// 人员
+import personZhifa from '@/assets/icons/map/person_zhifa.png'
+import personXunjian from '@/assets/icons/map/person_xunjian.png'
+import personZhifaBack from '@/assets/icons/map/person_zhifa_back.png'
+import personXunjianBack from '@/assets/icons/map/person_xunjian_back.png'
+import personBusy from '@/assets/icons/map/person_busy.png'
+// 设备图标
+import daifei from '@/assets/icons/map/daifei.png'
+import shexiangtou from '@/assets/icons/map/shexiangtou.png'
+import wurenji from '@/assets/icons/map/wurenji.png'
+// 船只
+import youchuan from '@/assets/icons/map/youchuan.png'
+import yuchuan from '@/assets/icons/map/yuchuan.png'
+// 选中状态
+import selectB from '@/assets/icons/map/select-b.png'
+import selectG from '@/assets/icons/map/select-g.png'
+import event0s from '@/assets/icons/map/event0s.png'
+import event1s from '@/assets/icons/map/event1s.png'
+import event2s from '@/assets/icons/map/event2s.png'
+import event3s from '@/assets/icons/map/event3s.png'
 
 export default {
+  mapApp: {},
   selectIson: appConfig.StaticWebContext + '/img/yzt-shijian/select.png',
   layerShow: {
     peopleLayer: {
@@ -64,10 +90,10 @@ export default {
     // }
   },
   peopleIcons: [
-    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan1.png', // 执法人员
-    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan2.png', // 巡检人员
-    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyaun1s.png', // 选择状态执法人员
-    appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan2s.png' // 选择状态巡检人员
+    // appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan1.png', // 执法人员
+    // appConfig.StaticWebContext + '/img/yzt-renyuanceng/renyuan2.png' // 巡检人员
+    // personZhifa, personXunjian, selectG, selectG
+    personZhifaBack, personXunjianBack, event2s, event3s
   ],
   evtStateMap: {
     list: ['待处理', '事件核查中', '跟踪整改中', '现场勘察中', '处理完成', '转为案件办理'],
@@ -85,28 +111,34 @@ export default {
       '跟踪整改中': 1,
       '现场勘察中': 1,
       '处理完成': 2,
-      '转为案件办理': 2
+      '转为案件办理': 3
     }
   },
   alertEventIcons: [
-    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(1).png', // 任务未接受
-    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(3).png', // 任务已接受
-    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei.png', // 任务已完成
-    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(2).png', // 任务失败
-    appConfig.StaticWebContext + '/img/yzt-shijian/dingwei_w.png' // 任务失败
+    // appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(1).png', // 任务未接受
+    // appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(3).png', // 任务已接受
+    // appConfig.StaticWebContext + '/img/yzt-shijian/dingwei.png', // 任务已完成
+    // appConfig.StaticWebContext + '/img/yzt-shijian/dingwei(2).png', // 任务失败
+    // appConfig.StaticWebContext + '/img/yzt-shijian/dingwei_w.png' // 任务失败
+    event0, event1, event2, event3, event0s, event1s, event2s, event3s
   ],
   equipmentIcons: [
-    appConfig.StaticWebContext + '/img/yzt-shebei/sxt.png', // 摄像头
-    appConfig.StaticWebContext + '/img/yzt-shebei/wrj1.png', // 起飞无人机
-    appConfig.StaticWebContext + '/img/yzt-shebei/wrj2.png', // 待飞无人机
-    appConfig.StaticWebContext + '/img/yzt-shebei/sxt_s.png', // 选中状态
-    appConfig.StaticWebContext + '/img/yzt-shebei/wrj1_s.png', //
-    appConfig.StaticWebContext + '/img/yzt-shebei/wrj2_s.png' //
+    // appConfig.StaticWebContext + '/img/yzt-shebei/sxt.png', // 摄像头
+    // appConfig.StaticWebContext + '/img/yzt-shebei/wrj1.png', // 起飞无人机
+    // appConfig.StaticWebContext + '/img/yzt-shebei/wrj2.png', // 待飞无人机
+    // appConfig.StaticWebContext + '/img/yzt-shebei/sxt_s.png', // 选中状态
+    // appConfig.StaticWebContext + '/img/yzt-shebei/wrj1_s.png', //
+    // appConfig.StaticWebContext + '/img/yzt-shebei/wrj2_s.png' //
+    shexiangtou, wurenji, daifei
   ],
   equipmentTypes: [
     '摄像头', '无人机'
   ],
-  shipIcons: [appConfig.StaticWebContext + '/img/yzt-ship/fish-ship.png', appConfig.StaticWebContext + '/img/yzt-ship/ship.png'],
+  shipIcons: [
+    // appConfig.StaticWebContext + '/img/yzt-ship/fish-ship.png',
+    // appConfig.StaticWebContext + '/img/yzt-ship/ship.png'
+    yuchuan, youchuan
+  ],
   lakeStyle: function () {
     return new Style({
       fill: new Fill({
@@ -123,54 +155,108 @@ export default {
     var src = this.peopleIcons[type]
     var show = this.layerShow.peopleLayer.subs[type].active
     if (!show) return undefined
-
-    return new Style({
-      image: new Icon({
-        anchor: [0.5, 0.86],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'fraction',
-        src: src
-        // scale: 0.3
-      })
-    })
-  },
-  peopleLayerSelectedStyle: function (feature) {
-    var type = feature.getProperties()['teamType']
-    var src = this.peopleIcons[type + 2]
-    return new Style({
-      image: new Icon({
-        anchor: [0.5, 0.63],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'fraction',
-        src: src
-        // scale: 0.3
-      })
-    })
-  },
-  alertEventStyle: function (feature) {
-    var status = feature.getProperties()['status']
-    var statusName = this.evtStateMap.list[status]
-    var index = this.evtStateMap.level[statusName]
-    var src = this.alertEventIcons[index]
-    return new Style({
+    var staffName = feature.getProperties()['name']
+    var lastName = staffName ? staffName[0] : ''
+    var isBusy = true
+    var styles = [new Style({
       image: new Icon({
         anchor: [0.5, 1],
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         src: src,
-        scale: 1.5
+        scale: 1
+      }),
+      text: new Text({
+        text: lastName,
+        font: '18px bolder',
+        // offsetX: 0,
+        offsetY: -22.5,
+        fill: new Fill({
+          color: '#fff'
+        })
       })
-    })
+    })]
+    if (isBusy) {
+      styles.push(new Style({
+        image: new Icon({
+          anchor: [-0.5, 1.5],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: personBusy,
+          scale: 1
+        })
+      }))
+    }
+    return styles
+  },
+  peopleLayerSelectedStyle: function (feature) {
+    var type = feature.getProperties()['teamType']
+    var src = this.peopleIcons[type + 2]
+    return [new Style({
+      image: new Icon({
+        anchor: [0.5, 0.63],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'fraction',
+        src: src,
+        scale: 1.2
+      })
+    }), ...this.peopleLayerStyle(feature)]
+  },
+  alertEventStyle: function (feature) {
+    var size = feature.get('features').length
+    if (size === 1) {
+      feature = feature.get('features')[0]
+      var status = feature.getProperties()['status']
+      var statusName = this.evtStateMap.list[status]
+      var index = this.evtStateMap.level[statusName]
+      var src = this.alertEventIcons[index]
+      return new Style({
+        image: new Icon({
+          anchor: [0.5, 1],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: src,
+          scale: 1.2
+        })
+      })
+    } else {
+      return new Style({
+        image: new Circle({
+          radius: 20,
+          stroke: new Stroke({
+            color: '#fff'
+          }),
+          fill: new Fill({
+            color: '#3399CC'
+          })
+        }),
+        text: new Text({
+          text: size.toString(),
+          fill: new Fill({
+            color: '#fff'
+          })
+        })
+      })
+    }
   },
   alertEventSelectedStyle: function (feature) {
+    console.log(feature.get('features'))
+    if (feature.get('features').length > 1) { // 聚合
+      return this.alertEventStyle(feature)
+    }
+    var feature1 = feature.get('features')[0]
+    var status = feature1.getProperties()['status']
+    var statusName = this.evtStateMap.list[status]
+    var index = this.evtStateMap.level[statusName]
+    var src = this.alertEventIcons[index + 4]
     return [
       new Style({
         image: new Icon({
           anchor: [0.5, 0.5],
           anchorXUnits: 'fraction',
           anchorYUnits: 'fraction',
-          src: this.selectIson
-          // scale: 1.5
+          src: src,
+          scale: 1.2
         })
       }),
       this.alertEventStyle(feature)
@@ -196,31 +282,37 @@ export default {
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         src: src,
-        scale: 1
+        scale: 1.2
       })
     })
   },
   equipmentSelectedStyle: function (feature) {
     var type = feature.getProperties()['typeIndex']
-    var online = feature.getProperties()['online']
-    var srcIndex = 3
+    var src = selectG
     if (type === 0) {
-      srcIndex = 3
-    } else if (online) {
-      srcIndex = 4
+      src = selectG
     } else {
-      srcIndex = 5
+      src = selectB
     }
-    var src = this.equipmentIcons[srcIndex]
-    return new Style({
+
+    return [new Style({
       image: new Icon({
         anchor: [0.5, 0.5],
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         src: src,
-        scale: 1
+        scale: 1.2
       })
-    })
+    }), this.equipmentStyle(feature)]
+    // return new Style({
+    //   image: new Icon({
+    //     anchor: [0.5, 0.5],
+    //     anchorXUnits: 'fraction',
+    //     anchorYUnits: 'fraction',
+    //     src: src,
+    //     scale: 1
+    //   })
+    // })
   },
   shipStyle: function (feature) {
     var type = feature.getProperties().type
@@ -233,26 +325,21 @@ export default {
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         src: src,
-        scale: 0.5
+        scale: 1.2
       })
     })
   },
   shipSelectedStyle: function (feature) {
+    var type = feature.getProperties().type
+    var src = type === 0 ? selectG : selectB
     return [
       new Style({
-        image: new Circle({
-          radius: 40,
-          fill: new Fill({
-            color: [49, 167, 235, 0.2]
-          })
-        })
-      }),
-      new Style({
-        image: new Circle({
-          radius: 20,
-          fill: new Fill({
-            color: [47, 167, 239, 0.2]
-          })
+        image: new Icon({
+          anchor: [0.5, 0.5],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: src,
+          scale: 1
         })
       }),
       this.shipStyle(feature)
@@ -298,11 +385,23 @@ export default {
   regionLayerStyle: function (feature) {
     return new Style({
       fill: new Fill({
-        color: [0, 0, 255, 0.3]
+        color: [31, 192, 142, 0.2]
       }),
       stroke: new Stroke({
-        color: [0, 0, 255, 1],
-        width: 3
+        color: [31, 192, 142, 1],
+        width: 3,
+        lineDash: [4, 16]
+      })
+    })
+  },
+  redLineLayerStyle: function (feature) {
+    return new Style({
+      fill: new Fill({
+        color: [255, 255, 255, 0.1]
+      }),
+      stroke: new Stroke({
+        color: '#f65d4d',
+        width: 1
       })
     })
   }

@@ -45,7 +45,8 @@ import {
   Popconfirm,
   message,
   notification,
-  Pagination
+  Pagination,
+  Timeline
 } from 'ant-design-vue'
 Vue.use(Pagination)
 Vue.use(LocaleProvider)
@@ -86,6 +87,7 @@ Vue.use(Progress)
 Vue.use(Skeleton)
 Vue.use(Popconfirm)
 Vue.use(notification)
+Vue.use(Timeline)
 
 /**
  * 在VUE的原型链上加入的And的消息组件

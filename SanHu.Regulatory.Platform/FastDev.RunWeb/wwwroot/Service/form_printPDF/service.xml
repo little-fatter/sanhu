@@ -3,10 +3,10 @@
     <model name="form_printPDF" title="表单打印" textField="FormID" moduleName="form" moduleTitle="表单" dbName="" />
     <fields>
         <field name="FormID" dbName="FormID" title="表单ID" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
-        <field name="FormName" dbName="FormName" title="表单名" type="string" length="50" enabledSearch="Y" isPK="N" />
         <field name="FilePath" dbName="FilePath" title="文件路径" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="Sign" dbName="Sign" title="签名base64" type="text" length="4000" relationModel="" relationField="" isPK="N" />
         <field name="ReferenceFilePath" dbName="ReferenceFilePath" title="参考文件路径" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
+        <field name="formtypes" dbName="formtypes" title="表单类型" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

@@ -1,102 +1,64 @@
 <style lang="less" scoped>
-@import '~@assets/css/mixins.less';
-
-@width: 940px;
-@margin: 24px;
-
-.de-wrapper {
-  margin-top: 45px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #64697C;
-
-  > div {
-    margin-top: @margin;
-  }
-
-  > div:nth-child(1) , > div:nth-child(2){
-    border-radius: 8px;
-    border: 1px solid #DCDEE2;
-  }
-
-  .pdf-wrapper {
-    width: @width;
-    height: 1150px;
-  }
-
-  .attach-wrapper {
-    width: @width;
-
-    .attach-item-wrapper {
-      padding: 20px;
-      .attach-title {
-      }
-
-      .attach-item {
-        margin: 15px 0 0 65px;
-        background-color: #ccc;
-      }
-    }
-  }
-
-  .handle-wrapper {
-    margin-bottom: @margin;
-    width: @width;
-    display: flex;
-    justify-content: space-between;
-
-    .btns-group {
-
-      button {
-        .wh(160px,48px);
-      }
-
-      button:nth-child(2) {
-        margin-left: 16px;
-      }
-    }
-  }
+.pdf-page {
+  min-height: 100%;
+  padding: 10px;
+  background-color: #F6F7FB;
 }
 </style>
 
 <template>
-  <div class="de-wrapper">
-    <div class="pdf-wrapper">
-      <img src="" alt="处罚决定书pdf">
-    </div>
-    <div class="attach-wrapper">
-      <div class="attach-item-wrapper">
-        <div class="attach-title">证据附件：</div>
-        <div class="attach-item">
-          <s-upload></s-upload>
-          <s1-upload></s1-upload>
-          <s2-upload></s2-upload>
-        </div>
-      </div>
-    </div>
-    <div class="handle-wrapper">
-      <div class="btns-group">
-        <a-button type="primary" ghost>打印</a-button>
-        <a-button type="primary" ghost>下载</a-button>
-      </div>
-      <div class="btns-group">
-        <a-button class="btn-success">送达</a-button>
-        <a-button type="primary">转发</a-button>
-      </div>
-    </div>
+  <div class="pdf-page">
+    <pdf-panel :pdf="pdf" :files="files" pdfName="处罚决定" />
   </div>
 </template>
 
 <script>
-import SUpload from '@/components/file/ImportFile'
-import S1Upload from '@/components/file/DownFile'
-import S2Upload from '@/components/file/StandardUploadFile'
+import PdfPanel from '@/components/business/PdfPanel'
+import { isNotEmpty } from '../../utils/util'
+import { getFormDetail, getFormsDetailByEventInfoIdPdf } from '../../api/sampleApi'
+import { formType } from '@/config/api.config'
+
 export default {
   components: {
-    SUpload,
-    S1Upload,
-    S2Upload
+    'pdfPanel': PdfPanel
+  },
+  data () {
+    return {
+      // pdf页数
+      pdf: '/pdf/test.pdf',
+      id: '',
+      files: [
+        {
+          fileName: '污染源.jpg',
+          FileCode: 'http://ci.biketo.com/d/file/news/bikenews/2020-03-04/6457641638b8ee17a95c930d624f63a3.png'
+        }
+      ]
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.id = this.$route.query.id
+      if (isNotEmpty(this.id)) {
+        this.loadData(this.id)
+      }
+    },
+    loadData (id) {
+      const type = formType.law_punishmentInfo
+      getFormDetail(type, null, id, ['attachment']).then((res) => {
+        if (res) {
+          console.log('getFormDetail -> res', res)
+          this.files = res
+        }
+      })
+      getFormsDetailByEventInfoIdPdf(id, type).then(res => {
+        if (isNotEmpty(res)) {
+          this.pdf = res
+        }
+      })
+    }
   }
 }
 </script>

@@ -39,13 +39,12 @@ namespace FastDev.Service
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
-                CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
+                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
-
                 //打印预生成
                 var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formName"":""law_punishmentInfo""}" });
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formType"":""law_punishmentInfo""}" });
             }
             catch (Exception e)
             {
@@ -62,9 +61,10 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
+        private void  CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
         {
             var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
+            lawpunishmentInfo.ID = lawpunishment_Info;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
             var _attachment= ServiceHelper.GetService("attachmentService");
 
@@ -75,6 +75,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "law_punishmentInfo";
                     l.AssociationobjectID = lawpunishment_Info;
                     l.ID = Guid.NewGuid().ToString();
+                    l.CreateDate = DateTime.Now;
                     QueryDb.Insert(l);
                     //_Lawpartys.Create(l);
                 }
@@ -86,28 +87,43 @@ namespace FastDev.Service
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
                     a.ID = Guid.NewGuid().ToString();
+                   a.CreateDate = DateTime.Now;
                     QueryDb.Insert(a);
                    // _attachment.Create(a);           
                 }
             }
             ///更新案件信息
-
-            var tasknow = ServiceHelper.GetService("work_task").GetDetailData(lawpunishmentInfo.TaskId,null);
-            if (tasknow!=null)
+            if (string.IsNullOrEmpty(lawpunishmentInfo.TaskId))
             {
-                var caseid = (string)tasknow["CaseID"];
-                if (string.IsNullOrEmpty(caseid))
+                if (!string.IsNullOrEmpty(lawpunishmentInfo.CaseId))
                 {
-                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where CaseId=@0", caseid);
+                    var caseinfo = QueryDb.FirstOrDefault<case_Info>("where Id=@0", lawpunishmentInfo.CaseId);
                     if (caseinfo != null)
                     {
-                        caseinfo.CaseStatus = "已做出处罚决定";
+                        caseinfo.CaseStatus = "做出处罚决定";
                         QueryDb.Update(caseinfo);
                     }
                 }
             }
+            else
+            {
+                var tasknow = ServiceHelper.GetService("work_task").GetDetailData(lawpunishmentInfo.TaskId, null);
+                if (tasknow != null)
+                {
+                    var caseid = (string)tasknow["CaseID"];
+                    if (!string.IsNullOrEmpty(caseid))
+                    {
+                        var caseinfo = QueryDb.FirstOrDefault<case_Info>("where Id=@0", caseid);
+                        if (caseinfo != null)
+                        {
+                            caseinfo.CaseStatus = "做出处罚决定";
+                            QueryDb.Update(caseinfo);
+                        }
+                    }
+                }
+            }
 
-
+          //  return lawpunishment_Info;
         }
     }
 }

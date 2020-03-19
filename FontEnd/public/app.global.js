@@ -29,7 +29,7 @@ var publicAppConfig = {
     sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
   },
   /** PDF拼接地址 */
-  pdfHost: 'http://192.168.0.125:8030',
+  pdfHost: 'http://192.168.0.169:8030',
   /** 微应用ID 如果只有一个微应用可以配置在这里，否则请配置为链接参数 */
   agentId: '456468162',
   /** 配置业务localStorage的key值 */
@@ -44,8 +44,8 @@ var publicAppConfig = {
   /**
      * API跟目录
      */
-  // ApiWebContext: '/regulatory',
-  ApiWebContext: 'http://zhsh.8e9bcb.grapps.cn/regulatory',
+  // ApiWebContext: 'http://192.168.0.169:8030',
+  ApiWebContext: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/regulatory',
   /**
    * 静态文件根目录
    */
@@ -57,7 +57,7 @@ var publicAppConfig = {
   MapOption: {
     WMS_URL: 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_white',
     // WMS_URL: 'http://14.205.92.142:8090/iserver/services/map-jichudili/wms130/%E5%9F%BA%E7%A1%80%E5%9C%B0%E7%90%86%E5%9B%BE%E5%B1%82_blue',
-    ZOOM_TO_POINT_RADIUS: 5 // 缩放至点目标时的半径范围，单位千米
+    ZOOM_TO_POINT_RADIUS: 0.05 // 缩放至点目标时的半径范围，单位千米
   },
   /**
      * 请求超时的毫秒数
