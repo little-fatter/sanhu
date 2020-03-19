@@ -104,9 +104,12 @@
   <div class="case-box">
     <div class="case-top">
       <a-row type="flex" justify="center">
-        <a-col :span="20" class="border-bottom">
+        <a-col :span="17" class="border-bottom">
           <span class="page-title-border"></span>
           <span class="page-title">物品清单</span>
+        </a-col>
+        <a-col :span="3" class="border-bottom">
+          <a-button @click="openEventModal" type="primary">选择关联案件</a-button>
         </a-col>
       </a-row>
     </div>
@@ -115,21 +118,24 @@
         <a-col :span="10">
           <span class="ant-col-4">案由</span>
           <span class="ant-col-16">
-            {{ caseInfo.CauseOfAction || '乱丢垃圾' }}
+            {{ caseInfo.CauseOfAction }}
           </span>
         </a-col>
         <a-col :span="10">
           <span class="ant-col-4">案件号</span>
           <span class="ant-col-16">
-            {{ caseInfo.CaseNumber || '案456【12】36号' }}
+            {{ caseInfo.CaseNumber }}
           </span>
         </a-col>
       </a-row>
       <a-row class="margin-bottom30" type="flex" justify="center">
         <a-col :span="20">
           <span class="ant-col-2">当事人</span>
-          <a-select class="ant-col-20" labelInValue v-model="dsr.id" @change="objectChange" placeholder="请选择">
+          <a-select class="ant-col-20" labelInValue @change="objectChange" v-if="caseInfo.LawPartys && caseInfo.LawPartys.length > 0" placeholder="请选择">
             <a-select-option v-for="(item) in caseInfo.LawPartys" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
+          </a-select>
+          <a-select class="ant-col-20" labelInValue @change="objectChange" v-else placeholder="请选择">
+            <a-select-option v-for="(item) in lawPersonOption" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
           </a-select>
         </a-col>
       </a-row>
@@ -195,7 +201,8 @@
         <a-col :span="8">
           <span class="ant-col-4"></span>
           <span class="ant-col-16">
-            <a-button block type="primary" icon="check" @click="onSubmit">确认提交</a-button>
+            <a-button @click="onReturn" style="margin-right:20px;">返回</a-button>
+            <a-button v-show="isRelated" type="primary" icon="check" @click="onSubmit">确认提交</a-button>
           </span>
         </a-col>
       </a-row>
@@ -220,6 +227,7 @@ export default {
   data () {
     return {
       loading: false,
+      isRelated: false,
       caseInfo: {
         ay: null
       },
@@ -241,19 +249,27 @@ export default {
           pack: '',
           remark: ''
         }
-      ] // 物品信息
+      ], // 物品信息
+      lawPersonOption: [{ id: '1', name: '李柳' }, { id: '2', name: '李思' }, { id: '3', name: '王琴' }, { id: '4', name: '陈琴' }] // 执法检查人
     }
   },
   created () {
     this.init()
   },
   mounted () {
-    this.$refs.selectCase.open()
   },
   methods: {
+    // 返回表单类型
+    onReturn () {
+      this.$router.push('/data-manage/form/form-add-list')
+    },
+    openEventModal () {
+      this.$refs.selectCase.open()
+    },
+    // 选择案件
     selectCase (record) {
       this.caseInfo = record
-      console.log(record)
+      this.isRelated = true
     },
     // 添加物品
     addList () {
@@ -274,8 +290,10 @@ export default {
       this.list.splice(index, 1)
     },
     objectChange (value) {
+      console.log(value)
       this.dsr.id = value.key
-      this.dsr.name = value.name
+      this.dsr.name = value.label
+      console.log(this.dsr)
     },
     init () {
       const queryParam = this.$route.query
@@ -306,6 +324,7 @@ export default {
         getDetails('case_Info', CaseID)
           .then(res => {
             this.caseInfo = res
+            this.isRelated = true
           })
           .catch(err => {
             console.log(err)
@@ -315,7 +334,7 @@ export default {
     onSubmit () {
       var forms = {
         caseInfo: this.caseInfo,
-        inventory: { dsr: this.dsr, list: this.list, otherItem: this.others }
+        inventory: { lawParty: this.dsr.id, lawPartyName: this.dsr.name, list: this.list, Othergoods: this.others }
       }
       this.showPopup = true
       console.log(forms)

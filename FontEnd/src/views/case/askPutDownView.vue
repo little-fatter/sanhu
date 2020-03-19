@@ -95,7 +95,7 @@
         <a-col :span="20">
           <span class="ant-col-2">案由</span>
           <span class="ant-col-20">
-            {{ model.CauseOfAction }}
+            {{ model.form.Originofcase }}
           </span>
         </a-col>
       </a-row>
@@ -103,13 +103,13 @@
         <a-col :span="10">
           <span class="ant-col-4">询问对象</span>
           <span class="ant-col-16">
-            {{ model.objectTypeDesc }}
+            {{ model.form.InquiryType }}
           </span>
         </a-col>
         <a-col :span="10">
           <span class="ant-col-4">询问地点</span>
           <span class="ant-col-16">
-            {{ model.eventAddress }}
+            {{ model.form.Enquiryplace }}
           </span>
         </a-col>
       </a-row>
@@ -117,13 +117,13 @@
         <a-col :span="10">
           <span class="ant-col-4">开始时间</span>
           <span class="ant-col-16">
-            {{ model.startTime }}
+            {{ model.form.startTime }}
           </span>
         </a-col>
         <a-col :span="10">
           <span class="ant-col-4">结束时间</span>
           <span class="ant-col-16">
-            {{ model.endTime }}
+            {{ model.form.endTime }}
           </span>
         </a-col>
       </a-row>
@@ -131,7 +131,7 @@
         <a-col :span="20">
           <span class="ant-col-2">当事人</span>
           <span class="ant-col-16">
-            <party-view :caseBreakLow="model.dsrs"></party-view>
+            <party-view :caseBreakLow="model.lawParties"></party-view>
           </span>
         </a-col>
       </a-row>
@@ -154,7 +154,7 @@
           <a-row>
             <span class="ant-col-4">被询问人是否看清执法证件</span>
             <span class="ant-col-16">
-              <a-radio-group class="ant-col-24" disabled v-model="model.isLookCredential">
+              <a-radio-group class="ant-col-24" disabled v-model="model.form.Isseeclearly">
                 <a-radio :style="radioStyle" :value="1">看清</a-radio>
                 <a-radio :style="radioStyle" :value="2">不清除</a-radio>
               </a-radio-group>
@@ -169,7 +169,7 @@
         <a-col :span="10">
           <span class="ant-col-4">被询问人是否明白权责义务</span>
           <span class="ant-col-16">
-            <a-radio-group disabled class="ant-col-24" v-model="model.isUnderstandRights">
+            <a-radio-group disabled class="ant-col-24" v-model="model.form.Isunderstand">
               <a-radio :style="radioStyle" :value="1">明白</a-radio>
               <a-radio :style="radioStyle" :value="2">不明白</a-radio>
             </a-radio-group>
@@ -180,13 +180,13 @@
         <a-col :span="20">
           <span class="ant-col-2">询问记录</span>
           <span class="ant-col-20">
-            {{ model.remark }}
+            {{ model.form.Inquiryrecord }}
           </span>
         </a-col>
       </a-row>
       <a-row type="flex" justify="center">
-        <a-col :span="5">
-          <span style="margin-right:20px">当事人:</span>  <a-button type="default" size="small" @click="handleShowSignature('dsrSignature')" >手签</a-button>
+        <a-col :span="5" v-for="(item,index) in model.lawParties" :key="index">
+          <span style="margin-right:20px">{{ `${model.form.InquiryType}${index+1}` }}:</span>  <a-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" >手签</a-button>
           <a-icon name="success" color="green" v-show="dsrSignature" style="margin-left:20px"></a-icon>
         </a-col>
         <a-col :span="5">
@@ -198,7 +198,7 @@
           <a-icon name="success" color="green" v-show="zfr2Signature" style="margin-left:20px"></a-icon>
         </a-col>
         <a-col :span="5">
-          <a-button type="primary" :loading="loading" class="single-save">保存</a-button>
+          <a-button type="primary" :loading="loading" class="single-save" @click="submit">保存</a-button>
         </a-col>
       </a-row>
     </div>
@@ -209,6 +209,10 @@
 <script>
 import Signature from '../../components/tools/Signature'
 import PartyView from './components/partyView'
+import { isNotEmpty } from '../../utils/util'
+import { commonOperateApi } from '../../api/sampleApi'
+var timer
+
 export default {
   name: 'AskPutdownPreview',
 
@@ -218,7 +222,8 @@ export default {
       loading: false,
       model: null,
       signatureType: null,
-      dsrSignature: null,
+      dsrSignature: [],
+      index: null,
       zfr1Signature: null,
       zfr2Signature: null,
       showPopup: false,
@@ -234,11 +239,10 @@ export default {
     init () {
       var forms = this.$route.params.forms
       this.model = forms
-      this.model.isLookCredentialDesc = this.model.isLookCredential === 1 ? '清楚' : '不清楚'
-      this.model.isUnderstandRightsDesc = this.model.isUnderstandRights === 1 ? '明白' : '不明白'
     },
-    handleShowSignature (signatureType) {
+    handleShowSignature (signatureType, index = null) {
       this.signatureType = signatureType
+      if (isNotEmpty(index)) { this.index = index }
       this.showPopup = true
     },
     onCloseSignature () {
@@ -246,7 +250,12 @@ export default {
     },
     onSignatureConfirm (signature) {
       if (this.signatureType === 'dsrSignature') {
-        this.dsrSignature = signature
+        if (isNotEmpty(this.index)) {
+          this.dsrSignature[this.index] = signature
+          this.index = null
+        } else {
+          this.dsrSignature[0] = signature
+        }
       }
 
       if (this.signatureType === 'zfr1Signature') {
@@ -257,10 +266,50 @@ export default {
         this.zfr2Signature = signature
       }
       this.showPopup = false
+    },
+    submit () {
+      var formInquiryrecord = {
+        ...this.model.form,
+        CaseId: this.model.caseInfo.ID,
+        EventInfoId: this.model.caseInfo.EventInfoId,
+        Recorder: this.model.recordPersionNames
+      }
+      var data = {
+        formInquiryrecord,
+        LawParties: this.model.caseInfo.LawParties,
+        lawStaff: []
+      }
+      data.LawParties.forEach(item => {
+        item.InquiryType = this.model.form.InquiryType
+      })
+      this.model.lawPersions.forEach(item => {
+        var user = {
+          UserId: item.key,
+          Username: item.label
+        }
+        data.lawStaff.push(user)
+      })
+      this.save(data)
+    },
+    save (data) {
+      commonOperateApi('FINISH', 'form_inquiryrecord', data).then((res) => {
+        this.$message.success('操作成功')
+        this.goToLawForm()
+      })
+    },
+    goToLawForm () {
+      timer = setTimeout(() => {
+        this.$router.push('/data-manage/form/form-add-list')
+      }, 1000)
     }
   },
   created () {
     this.init()
+  },
+  beforeDestroy () {
+    if (isNotEmpty(timer)) {
+      clearTimeout(timer)
+    }
   },
   mounted () {
 
