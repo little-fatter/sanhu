@@ -21,7 +21,7 @@
                 <div class="clear"></div>
               </a-list-item>
               <a-list-item class="item-lyr">
-                <div class="item-person-info">当前处理人: {{ item.dep + ' ' + item.dealerName + ' ' }} </div>
+                <div class="item-person-info">当前处理人: {{ item.dealerName }} </div>
               </a-list-item>
               <a-list-item class="item-lyr">
                 <div class="item-status-info">
