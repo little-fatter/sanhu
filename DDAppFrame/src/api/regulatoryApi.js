@@ -56,7 +56,9 @@ export const FromType = {
   // 现场勘查
   sceneInvestigationDetail: 'task_survey',
   // 事件核查
-  eventDetail: 'task_patrol'
+  eventDetail: 'task_patrol',
+  // 没收物品清单
+  confiscatoryGoodsList: 'form_confiscated'
 }
 
 /**

@@ -21,19 +21,31 @@ namespace FastDev.Service
         {
             var lst = (data as PagedData).Records;
 
-            //ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
 
-            //for (int i = 0; i < lst.Count; i++)
-            //{
-            //    var item = lst[i] as Dictionary<string, object>;
+            for (int i = 0; i < lst.Count; i++)
+            {
+                var item = lst[i] as Dictionary<string, object>;
 
-            //    string userid = item["CreateUserID"] == null ? string.Empty : item["CreateUserID"].ToString();
-            //    if (!string.IsNullOrWhiteSpace(userid))
-            //    {
-            //        var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
-            //        item["handler"] = user.Name;
-            //    }
-            //}
+                string userid = item["CreateUserID"] == null ? string.Empty : item["CreateUserID"].ToString();
+                if (!string.IsNullOrWhiteSpace(userid))
+                {
+                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
+                    item["handler"] = user.Name;
+                }
+
+                var formType = item["FormType"].ToString().ToLower();
+                if (formType == "form_confiscated")   // 没收清单表查询出对应的当事人姓名
+                {
+                    var lawpartyName = QueryDb.FirstOrDefault<string>("SELECT b.Name FROM form_confiscated a left join law_party b on a.LawpartyId=b.ID where a.ID=@0", item["FormID"].ToString());
+                    item.Add("LawpartyName", lawpartyName);
+                }
+
+                if (formType == "law_punishmentInfo" || formType == "form_inquiryrecord" || formType == "case_report") //处罚当场决定书、勘察、结案、没收、询问表单新增详情的pdf文件地址
+                {
+                    
+                }
+            }
         }
 
         private Func<APIContext, object> Formwith_eventcaseService_OnGetAPIHandler(string id)

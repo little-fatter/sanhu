@@ -19,7 +19,7 @@
 </template>
 
 <script>
-const COLUMNS = [
+const columns = [
   {
     label: '姓名',
     key: 'Name'
@@ -54,7 +54,7 @@ export default {
     }
   },
   data () {
-    this.columns = COLUMNS
+    this.columns = columns
     return {
 
     }

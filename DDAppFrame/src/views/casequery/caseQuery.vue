@@ -6,16 +6,8 @@
     <van-dropdown-menu>
       <van-dropdown-item v-model="searchType" :options="searchTypeOptions" @change="searchTypeEvn" />
       <van-dropdown-item v-model="searchFlow" :options="searchFlowOptions" @change="searchFlowEvn" />
-      <van-dropdown-item
-        v-model="searchState"
-        :options="searchStateOptions"
-        @change="searchStateEvn"
-      />
-      <van-dropdown-item
-        v-model="searchRegion"
-        :options="searchRegionOptions"
-        @change="searchRegionEvn"
-      />
+      <van-dropdown-item v-model="searchState" :options="searchStateOptions" @change="searchStateEvn"/>
+      <van-dropdown-item v-model="searchRegion" :options="searchRegionOptions" @change="searchRegionEvn"/>
     </van-dropdown-menu>
     <div class="case-panel-roll">
       <s-list :dataCallback="loadData" ref="mylist">
@@ -42,7 +34,7 @@
             <!-- <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>-->
             <van-tag plain type="primary">简易程序</van-tag>
             <van-tag plain type="success">{{ item.CaseStatus ? item.CaseStatus : `已创建` }}</van-tag>
-            <span>{{ item.ModifyDate }}</span>
+            <span>{{ item.ModifyDate | dayjs('YYYY-MM-DD') }}</span>
           </h4>
         </div>
       </s-list>
@@ -52,12 +44,7 @@
 
 <script>
 import SList from '../../components/list/SList'
-import {
-  isNotEmpty,
-  getQueryConditon,
-  getQueryConditonMore,
-  formatDate
-} from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
+import { getQueryConditon, getQueryConditonMore } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi' // 引入封装的请求
 export default {
   name: 'CaseQuery',
@@ -69,76 +56,26 @@ export default {
       tips: { type: 'primary', message: '未找到符合条件的信息!' },
       caseList: [], // 案件列表信息
       searchText: '', // 搜索框文字
-      searchType: '0',
+      searchType: 0,
       searchTypeOptions: [
-        { text: '类型', value: '0' } // ItemCode
+        { text: '类型', value: 0 } // ItemCode
       ],
-      searchFlow: '0',
+      searchFlow: 0,
       searchFlowOptions: [
-        { text: '程序', value: '0' } // ID
+        { text: '程序', value: 0 } // ID
       ],
-      searchState: '0',
+      searchState: 0,
       searchStateOptions: [
-        { text: '状态', value: '0' } // 中文字符串
+        { text: '状态', value: 0 } // Title
       ],
-      searchRegion: '0',
+      searchRegion: 0,
       searchRegionOptions: [
-        { text: '区域', value: '0' } //
+        { text: '区域', value: 0 } // ID
       ],
       // 查询规则
-      rules: [
-        {
-          field: 'CauseOfAction', // 案由
-          op: 'like',
-          value: this.serchText,
-          type: 'string'
-        },
-        {
-          field: 'CaseTitle', // 案件标题
-          op: 'like',
-          value: this.serchText,
-          type: 'string'
-        },
-        {
-          field: 'Investigators', // 办案人员
-          op: 'like',
-          value: this.serchText,
-          type: 'string'
-        }
-      ],
+      rules: [],
       // 交叉查询规则
-      groups: [
-        {
-          rules: [
-            {
-              field: 'CaseType', // 案件类型
-              op: 'equal',
-              value: this.searchType,
-              type: 'string'
-            },
-            {
-              field: 'ApplicableProcedureID', //
-              value: this.serchFlow,
-              op: 'equal',
-              type: 'select'
-            },
-            {
-              field: 'CaseStatus', // 案件状态
-              op: 'equal',
-              value: this.serchState,
-              type: 'string'
-            },
-            {
-              field: 'RegionID', // 地区区域
-              op: 'equal',
-              value: this.serchRegion,
-              type: 'select'
-            }
-          ],
-          op: 'and'
-        }
-      ],
-      newGroups: []
+      groups: []
     }
   },
   methods: {
@@ -147,25 +84,19 @@ export default {
       this.caseList = []
       this.$refs.mylist.refresh()
     },
-    // 处理参数
-    dealParameter () {
-      this.rules.map(item => {
-        item.value = this.serchText
-      })
-      this.groups[0].rules[0].value = this.searchType
-      this.groups[0].rules[1].value = this.searchFlow
-      this.groups[0].rules[2].value = this.searchState
-      this.groups[0].rules[3].value = this.searchRegion
+    // 搜索规则判断 自己增加 ===0 ==='0'
+    isEmpty (val) {
+      return (val === '' || val === 0 || val === '0')
+    },
+    isNotEmpty (val) {
+      return !this.isEmpty(val)
     },
     // 搜索菜单
     getsearchMenu () {
       // 案件类型
       getDictionaryItems('CaseType').then(res => {
         res.map(item => {
-          this.searchTypeOptions.push({
-            text: item.Title,
-            value: item.ItemCode
-          })
+          this.searchTypeOptions.push({ text: item.Title, value: item.ItemCode })
         })
       })
       // 案件处理程序
@@ -187,133 +118,135 @@ export default {
         })
       })
     },
+    // 处理参数
+    dealParameterNew (searchText, searchType, searchFlow, searchState, searchRegion) {
+      // 搜索框不为空  筛选条件为空
+      if (this.isNotEmpty(searchText) && (this.isEmpty(searchType) && this.isEmpty(searchFlow) && this.isEmpty(searchState) && this.isEmpty(searchRegion))) {
+        this.rules.splice(0, this.rules.length, this.searchTextPublic(searchText))
+        const data = getQueryConditon(this.rules, 'or')
+        return data
+      } else if (this.isEmpty(searchText) && (this.isNotEmpty(searchType) || this.isNotEmpty(searchFlow) || this.isNotEmpty(searchState) || this.isNotEmpty(searchRegion))) {
+        // 搜索框为空  筛选条件不为空
+        this.groups.splice(0, this.groups.length, { rules: this.parmsMore(searchType, searchFlow, searchState, searchRegion), op: 'and' })
+        const data = getQueryConditonMore(this.rules, 'and', this.groups)
+        return data
+      } else if (this.isNotEmpty(searchText) && (this.isNotEmpty(searchType) || this.isNotEmpty(searchFlow) || this.isNotEmpty(searchState) || this.isNotEmpty(searchRegion))) {
+        // 搜索框不为空  筛选条件不为空
+        this.rules.splice(0, this.rules.length, this.searchTextPublic(searchText))
+        this.groups.splice(0, this.groups.length, { rules: this.parmsMore(searchType, searchFlow, searchState, searchRegion), op: 'and' })
+        const data = getQueryConditonMore(this.rules, 'and', this.groups)
+        return data
+      } else {
+        const data = getQueryConditon([], 'or')
+        return data
+      }
+    },
+    // 搜索框 条件
+    searchTextPublic (searchText) {
+      return (
+        {
+          field: 'CauseOfAction', // 案由
+          op: 'like',
+          value: searchText,
+          type: 'string'
+        },
+        {
+          field: 'CaseTitle', // 案件标题
+          op: 'like',
+          value: searchText,
+          type: 'string'
+        },
+        {
+          field: 'Investigators', // 办案人员
+          op: 'like',
+          value: searchText,
+          type: 'string'
+        },
+        {
+          field: 'party', // 当事人
+          op: 'like',
+          value: searchText,
+          type: 'string'
+        },
+        {
+          field: 'CaseNumber', // 案件编号
+          op: 'like',
+          value: searchText,
+          type: 'string'
+        }
+      )
+    },
+    // 多重搜索条件处理函数
+    parmsMore (searchType, searchFlow, searchState, searchRegion) {
+      const parms = [
+        {
+          field: 'CaseType', // 案件类型
+          op: 'equal',
+          value: searchType,
+          type: 'string'
+        },
+        {
+          field: 'ApplicableProcedureID', //
+          value: searchFlow,
+          op: 'equal',
+          type: 'select'
+        },
+        {
+          field: 'CaseStatus', // 案件状态
+          op: 'equal',
+          value: searchState,
+          type: 'string'
+        },
+        {
+          field: 'RegionID', // 地区区域
+          op: 'equal',
+          value: searchRegion,
+          type: 'select'
+        }
+      ]
+      const parmsIsOk = parms.filter(item => item.value !== 0)
+      return parmsIsOk
+    },
     // 条件搜索
     searchTypeEvn () {
       // console.log(this.searchType)
-      this.loadDataMore()
+      this.onSearch()
     },
     searchFlowEvn () {
       // console.log(this.searchFlow)
-      this.loadDataMore()
+      this.onSearch()
     },
     searchStateEvn () {
       // console.log(this.searchState)
-      this.loadDataMore()
+      this.onSearch()
     },
     searchRegionEvn () {
       // console.log(this.searchRegion)
-      this.loadDataMore()
+      this.onSearch()
     },
     // 初次请求
     loadData (parameter) {
-      var rules = []
-      if (isNotEmpty(this.searchText)) {
-        rules = [
-          {
-            field: 'CauseOfAction', // 案由
-            op: 'like',
-            value: this.searchText,
-            type: 'string'
-          },
-          {
-            field: 'CaseTitle', // 案件标题
-            op: 'like',
-            value: this.searchText,
-            type: 'string'
-          },
-          {
-            field: 'Investigators', // 办案人员
-            op: 'like',
-            value: this.searchText,
-            type: 'string'
-          }
-        ]
-      }
-      var conditon = getQueryConditon(rules, 'or')
-      return getPageDate(
-        'case_Info',
-        parameter.pageIndex,
-        parameter.pageSize,
-        conditon
-      ).then(res => {
-        if (res.Rows) {
-          res.Rows.forEach(item => {
-            this.caseList.push(item)
-          })
-        }
-        return res
-      })
-    },
-    // 请求页面数据
-    loadDataMore () {
-      this.dealParameter()
-      const newGroups = this.groups[0].rules.filter(item => {
-        return (
-          item.value !== '' &&
-          item.value !== undefined &&
-          item.value !== '0' &&
-          item.value !== 0
-        )
-      })
-      var groups = []
-      groups = [
-        {
-          rules: newGroups,
-          op: 'and'
-        }
-      ]
-      // console.log(newGroups.length, '新的规则数组长度')
-
-      if (newGroups.length > 0 && isNotEmpty(this.serchText)) {
-        var conditonNew = getQueryConditonMore(this.rules, 'and', groups)
-        return getPageDate('case_Info', 1, 10, conditonNew).then(res => {
+      console.log('参数:', this.dealParameterNew(this.searchText, this.searchType, this.searchFlow, this.searchState, this.searchRegion))
+      return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, this.dealParameterNew(this.searchText, this.searchType, this.searchFlow, this.searchState, this.searchRegion))
+        .then(res => {
           if (res.Rows) {
-            // res.Rows.forEach(item => {
-            //   this.caseList.push(item)
-            // })
-            this.caseList = res.Rows
+            res.Rows.forEach(item => {
+              this.caseList.push(item)
+            })
           }
-          // console.log(this.caseList)
           return res
         })
-      } else if (newGroups.length > 0 && !isNotEmpty(this.serchText)) {
-        const conditonNew = getQueryConditonMore([], 'and', groups)
-        return getPageDate('case_Info', 1, 10, conditonNew).then(res => {
-          if (res.Rows) {
-            // res.Rows.forEach(item => {
-            //   this.caseList.push(item)
-            // })
-            this.caseList = res.Rows
-          }
-
-          // console.log(this.caseList)
-          return res
-        })
-      } else if (newGroups.length === 0 && isNotEmpty(this.serchText)) {
-        const conditon = getQueryConditon(this.rules, 'and')
-        return getPageDate('case_Info', 1, 10, conditon).then(res => {
-          if (res.Rows) {
-            // res.Rows.forEach(item => {
-            //   this.caseList.push(item)
-            // })
-            this.caseList = res.Rows
-          }
-          // console.log(this.caseList)
-          return res
-        })
-      } else {
-        // conditonNew = getQueryConditon(this.rules, 'or')
-      }
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
       this.$router.push({ path: 'caseDetails', query: { ID: msg } }) // 案件详情id
     }
   },
-  // 生命周期函数
-  mounted () {
-    // 加载搜索菜单
+  created () { // 加载搜索菜单
     this.getsearchMenu()
+  },
+  mounted () {
+
   }
 }
 </script>
