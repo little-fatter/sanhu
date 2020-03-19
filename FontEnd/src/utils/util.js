@@ -1,6 +1,8 @@
 import { saveAs } from 'file-saver'
 import { downfileHttp } from '@/utils/apiRequest'
 import { message } from 'ant-design-vue'
+import { formTypes } from '@/config/list.config'
+import router from '@/router'
 import moment from 'moment'
 
 const COVER = '/img/common/cover.jpg'
@@ -366,4 +368,21 @@ export const formatDay = date => {
 export const formatTime = date => {
   if (!date) return '-'
   return moment(date).format('YYYY-MM-DD HH:mm:ss')
+}
+
+/**
+ * 跳转表单详情
+ * @param {string} type 表单类型
+ * @param {object} record 当前数据对象
+ */
+export const toFormDetail = (type, record = {}) => {
+  const data = formTypes.find(i => i.model === type)
+  if (data) {
+    router.push({
+      path: data.path,
+      query: { id: record.ID }
+    })
+  } else {
+    message.warning('当前表单类型不存在')
+  }
 }

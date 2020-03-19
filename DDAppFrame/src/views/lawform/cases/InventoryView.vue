@@ -1,24 +1,24 @@
 <template>
   <div>
     <van-cell-group>
-      <van-cell title="案件号" :value="inventory.caseInfo.CaseNumber"></van-cell>
-      <van-cell title="案由" :value="inventory.caseInfo.CauseOfAction"></van-cell>
-      <inventory-form-view :inventory="inventory.inventory"></inventory-form-view>
+      <van-cell title="案件号" :value="model.caseInfo.CaseNumber"></van-cell>
+      <van-cell title="案由" :value="model.caseInfo.CauseOfAction"></van-cell>
+      <inventory-form-view :inventory="model.inventory"></inventory-form-view>
       <div class="operate-area">
         <div class="person_item">
           <span style="margin-right:20px">当事人:</span>  <van-button type="default" size="small" @click="handleShowSignature('dsrSignature')" >手签</van-button>
           <van-icon name="success" color="green" v-show="dsrSignature" style="margin-left:20px"></van-icon>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">执法人I:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')">手签</van-button>
+          <span style="margin-right:20px">执法人1:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')">手签</van-button>
           <van-icon name="success" color="green" v-show="zfr1Signature" style="margin-left:20px"></van-icon>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">执法人II:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')">手签</van-button>
+          <span style="margin-right:20px">执法人2:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')">手签</van-button>
           <van-icon name="success" color="green" v-show="zfr2Signature" style="margin-left:20px"></van-icon>
         </div>
         <div class="single-save">
-          <van-button type="info" :loading="loading" size="large" class="single-save">保存</van-button>
+          <van-button type="info" :loading="loading" size="large" class="single-save" @click="submit">保存</van-button>
         </div>
 
       </div>
@@ -30,6 +30,9 @@
 <script>
 import InventoryFormView from '../../../components/business/InventoryFormView'
 import Signature from '../../../components/tools/Signature'
+import { commonOperateApi } from '../../../api/regulatoryApi'
+import { isNotEmpty } from '../../../utils/util'
+var timer = null
 /**
  * 物品清单明细
  */
@@ -56,11 +59,16 @@ export default {
   created () {
     this.init()
   },
+  beforeDestroy () {
+    if (isNotEmpty(timer)) {
+      clearTimeout(timer)
+    }
+  },
   methods: {
     init () {
       var forms = this.$route.params.forms
       console.log('forms', forms)
-      this.inventory = forms
+      this.model = forms
     },
     handleShowSignature (signatureType) {
       this.signatureType = signatureType
@@ -82,6 +90,42 @@ export default {
         this.zfr2Signature = signature
       }
       this.showPopup = false
+    },
+    submit () {
+      var formConfiscated = {
+        LawpartyId: this.model.inventory.lawParty,
+        CaseId: this.model.caseInfo.ID,
+        EventInfoId: this.model.caseInfo.EventInfoId,
+        Othergoods: this.model.inventory.Othergoods
+      }
+      var data = {
+        formConfiscated,
+        formConfiscatedItems: []
+      }
+      this.model.inventory.list.forEach(item => {
+        var formConfiscatedItem = {
+          lawPartyID: this.model.inventory.lawParty,
+          CaseId: this.model.caseInfo.ID,
+          EventInfoId: this.model.caseInfo.EventInfoId,
+          ...item
+        }
+        data.formConfiscatedItems.push(formConfiscatedItem)
+      })
+      this.save(data)
+    },
+    save (data) {
+      this.loading = true
+      commonOperateApi('FINISH', 'form_confiscated', data).then((res) => {
+        this.$toast.success('操作成功')
+        this.goToLawForm()
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    goToLawForm () {
+      timer = setTimeout(() => {
+        this.$router.push({ name: 'layforms' })
+      }, 1000)
     }
   }
 }

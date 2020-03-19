@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 17:12:25
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-11 17:54:58
+ * @LastEditTime: 2020-03-18 10:43:01
  * @Description:  选择案件
  -->
 
@@ -26,7 +26,6 @@
       <item
         v-for="item in list"
         :key="item.objId"
-        :item="item"
         :title="item.CauseOfAction"
         :cover="getCover(item.evtFileUrl)"
       >
@@ -67,16 +66,15 @@ import SelectModal from '@/components/modal/SelectModal'
 import List from '@/components/list/List'
 import Item from '@/components/item/Item'
 import { getPageData } from '@/api/sampleApi'
+import { CASE_INFO } from '@/config/model.config'
 
-// 查询mode
-const MODE = 'case_Info'
 // 查询字段集合
-const FIELDS = ['CauseOfAction', 'CaseType', 'CaseTitle']
+const fields = ['CauseOfAction', 'CaseType', 'CaseTitle']
 // 查询规则
 const genSearchRules = key => {
   if (!key) return {}
   return {
-    rules: FIELDS.map(i => ({
+    rules: fields.map(i => ({
       field: i,
       value: key,
       op: 'like',
@@ -91,9 +89,6 @@ export default {
     SelectModal,
     List,
     Item
-  },
-  props: {
-
   },
   data () {
     return {
@@ -110,7 +105,7 @@ export default {
       this.$nextTick(() => this.$refs.list.loadData(true))
     },
     loadData ({ pageIndex, pageSize }) {
-      return getPageData(MODE, genSearchRules(this.queryParam.Keyword), pageIndex, pageSize)
+      return getPageData(CASE_INFO, genSearchRules(this.queryParam.Keyword), pageIndex, pageSize)
     },
     // 解析封面图
     getCover (urls) {

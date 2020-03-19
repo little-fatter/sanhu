@@ -32,8 +32,8 @@ namespace FastDev.Service
         {
             var data = JsonHelper.DeserializeJsonToObject<form_confiscatedFinishReq>(context.Data);
             if (data.formConfiscated == null) return null;
-            data.formConfiscated.EventInfoId = data.EventInfoId;
-            data.formConfiscated.TaskId = data.SourceTaskId;
+            if(!string.IsNullOrEmpty(data.EventInfoId))  data.formConfiscated.EventInfoId = data.EventInfoId;
+            if(!string.IsNullOrEmpty(data.SourceTaskId))  data.formConfiscated.TaskId = data.SourceTaskId;
             QueryDb.BeginTransaction();
             try
             {
@@ -62,7 +62,7 @@ namespace FastDev.Service
             {
                 QueryDb.BeginTransaction();
                 _sHBaseService.UpdateWorkTaskState(TaskId, WorkTaskStatus.Close);//关闭任务
-                _sHBaseService.UpdateEventState(EventId, EventStatus.finish);//事件改为完成                         
+               // _sHBaseService.UpdateEventState(EventId, EventStatus.finish);//事件改为完成                         
             }
             catch (Exception)
             {

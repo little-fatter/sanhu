@@ -231,7 +231,7 @@ export default {
     // 进入详情页面
     intoDetails (eventId, id, Tasktype) {
       // 现场勘查
-      if (Tasktype === 'OnSpot') { this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } }) }
+      // if (Tasktype === 'OnSpot') { this.$router.push({ name: 'SceneInvestigation', params: { eventId: eventId, id: id } }) }
       // // 事件核查
       // if (Tasktype === 'EventCheck') { this.$router.push({ name: 'EventInspeion', params: { eventId: eventId, id: id } }) }
       // // 日常巡查

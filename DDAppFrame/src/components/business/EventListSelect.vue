@@ -38,18 +38,27 @@
                 <a @click="onPopupConfirm(item)">选择</a>
               </div>
             </div>
-            <van-cell title="事件地点" :value="item.address"></van-cell>
-            <van-cell title="上报时间" :value="item.reportTime"></van-cell>
-            <van-cell title="上报来源" :value="item.reportType"></van-cell>
-            <van-cell title="事件描述" :value="item.remark"></van-cell>
-            <!-- <van-field
-              v-model="item.remark"
-              rows="2"
-              autosize
-              label="事件描述"
-              type="textarea"
-              readonly
-            /> -->
+            <van-row class="list-item_content">
+              <van-col span="8">
+                <!-- <img :src="item.imgUrl" class="list-item_content_img"> -->
+                <!-- <van-image
+                  lazy-load
+                  :src="item.imgUrl"
+                  class="list-item_content_img"
+                /> -->
+                <img-view :url="item.imgUrl" wapperClass="img-wapper"></img-view>
+              </van-col>
+              <van-col span="16">
+                <van-cell title="事件地点" :value="item.address" style="padding-top:0"></van-cell>
+                <van-cell title="上报时间">
+                  <div>
+                    {{ item.reportTime | dayjs('YYYY-MM-DD HH:mm') }}
+                  </div>
+                </van-cell>
+                <van-cell title="上报来源" :value="item.ReportSource"></van-cell>
+                <van-cell title="事件描述" :value="item.remark"></van-cell>
+              </van-col>
+            </van-row>
           </van-panel>
         </s-list>
       </div>
@@ -64,10 +73,12 @@
 import SList from '../../components/list/SList.vue'
 import { getPageDate } from '../../api/regulatoryApi'
 import { isNotEmpty, getQueryConditon } from '../../utils/util'
+import ImgView from '../../components/file/ImgView'
 export default {
   name: 'EventListSelect',
   components: {
-    SList
+    SList,
+    ImgView
   },
   props: {
     showPopup: {
@@ -127,6 +138,9 @@ export default {
       return getPageDate('event_info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
           res.Rows.forEach(item => {
+            if (isNotEmpty(item.evtFileUrl)) {
+              item.imgUrl = item.evtFileUrl.split(',')[0]
+            }
             this.list.push(item)
           })
         }
@@ -174,6 +188,19 @@ export default {
            top: 10px;
            right: 20px;
        }
+    }
+
+    .list-item_content
+    {
+      /deep/ .img-wapper
+      {
+        width: 100%;
+        height: 170px;
+      }
+      .van-cell__title
+      {
+         max-width: 100px !important;
+      }
     }
 
     .list-item

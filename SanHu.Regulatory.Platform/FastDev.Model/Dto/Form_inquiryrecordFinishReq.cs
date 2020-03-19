@@ -13,14 +13,14 @@ namespace FD.Model.Dto
         /// <summary>
         /// 询问信息
         /// </summary>
-        public form_inquiryrecord form_Inquiryrecord { get; set; }
+        public form_inquiryrecord formInquiryrecord { get; set; }
         /// <summary>
         /// 执法人
         /// </summary>
-        public law_staff[] law_Staffs { get; set; }
+        public law_staff[] lawStaffs { get; set; }
         /// <summary>
         /// 当事人
         /// </summary>
-        public law_party[] law_Parties { get; set; }
+        public law_party[] lawParties { get; set; }
     }
 }

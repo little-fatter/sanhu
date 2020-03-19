@@ -104,9 +104,12 @@
   <div class="case-box">
     <div class="case-top">
       <a-row type="flex" justify="center">
-        <a-col :span="20" class="border-bottom">
+        <a-col :span="17" class="border-bottom">
           <span class="page-title-border"></span>
           <span class="page-title">结案报告</span>
+        </a-col>
+        <a-col :span="3" class="border-bottom">
+          <a-button @click="openEventModal" type="primary">选择关联案件</a-button>
         </a-col>
       </a-row>
     </div>
@@ -115,13 +118,13 @@
         <a-col :span="10">
           <span class="ant-col-4">案由</span>
           <span class="ant-col-16">
-            {{ caseInfo.CauseOfAction || '乱丢垃圾' }}
+            {{ caseInfo.CauseOfAction }}
           </span>
         </a-col>
         <a-col :span="10">
           <span class="ant-col-4">案件号</span>
           <span class="ant-col-16">
-            {{ caseInfo.CaseNumber || '案456【12】36号' }}
+            {{ caseInfo.CaseNumber }}
           </span>
         </a-col>
       </a-row>
@@ -137,7 +140,7 @@
         <a-col :span="10">
           <span class="ant-col-4">案件类型</span>
           <span class="ant-col-16">
-            {{ caseInfo.CaseType || 'other' }}
+            {{ caseInfo.CaseType }}
           </span>
         </a-col>
         <a-col :span="10">
@@ -150,7 +153,7 @@
       <a-row class="margin-bottom30" type="flex" justify="center">
         <a-col :span="10">
           <span class="ant-col-4">处罚决定</span>
-          <div class="ant-col-16" @click="handelViewPenalizeBook">
+          <div class="ant-col-16" @click="handelViewPenalizeBook" style="cursor: pointer">
             {{ penalizeBook.BookTitle }}
           </div>
         </a-col>
@@ -165,7 +168,8 @@
         <a-col :span="8">
           <span class="ant-col-4"></span>
           <span class="ant-col-16">
-            <a-button block type="primary" icon="check" @click="onSubmit">提交审批</a-button>
+            <a-button @click="onReturn" style="margin-right:20px;">返回</a-button>
+            <a-button v-show="isRelated" type="primary" icon="check" @click="onSubmit">提交审批</a-button>
           </span>
         </a-col>
       </a-row>
@@ -191,12 +195,12 @@ export default {
   data () {
     return {
       loading: false,
+      isRelated: false,
       showPopup: false,
       showRelFormsPopup: false,
       taskInfo: null,
       caseInfo: {},
       penalizeBook: {
-        BookTitle: '当场执法决定书'
       },
       caseFinalReport: {
         CaseDetail: ''
@@ -207,13 +211,21 @@ export default {
   created () {
   },
   mounted () {
-    if (!this.$route.query.taskid) { this.$refs.selectCase.open() } else {
+    if (this.$route.query.taskid) {
       this.init()
     }
   },
   methods: {
+    // 返回表单类型
+    onReturn () {
+      this.$router.push('/data-manage/form/form-add-list')
+    },
+    openEventModal () {
+      this.$refs.selectCase.open()
+    },
     selectCase (record) {
       this.caseInfo = record
+      this.isRelated = true
       console.log(this.caseInfo)
       this.loadPenalizeBook(record.EventInfoId)
       this.loadDic()
@@ -244,6 +256,7 @@ export default {
       getDetails('case_Info', CaseID).then((res) => {
         if (res) {
           this.caseInfo = res
+          this.isRelated = true
         }
       })
     },
@@ -252,7 +265,8 @@ export default {
         if (res) {
           this.penalizeBook = {
             ...res.MainForm,
-            LawParties: res.law_party
+            LawParties: res.law_party,
+            BookTitle: '当场执法决定书'
           }
           console.log('LawParties', this.penalizeBook)
           this.caseFinalReport.CaseDetail = this.penalizeBook.Illegalfacts + this.penalizeBook.IllegalbasisIDs + this.penalizeBook.PunishmentbasisIDs

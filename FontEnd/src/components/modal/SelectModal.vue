@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 16:48:34
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-12 14:00:23
+ * @LastEditTime: 2020-03-18 10:57:46
  * @Description:  
  -->
 
@@ -28,7 +28,7 @@
         </span>
       </div>
       <slot name="other" />
-      <div class="select-modal-body">
+      <div class="select-modal-body scroll-small">
         <slot />
       </div>
     </div>

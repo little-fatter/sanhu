@@ -1,5 +1,6 @@
 ﻿using FastDev.Common;
 using FastDev.DevDB;
+using FastDev.DevDB.Model.Config;
 using FastDev.IServices;
 using FastDev.Model.Entity;
 using FD.Common;
@@ -59,6 +60,16 @@ namespace FastDev.Service
         {
             return base.QueryDb.Execute("update event_info set evtState = @0 where objid=@1", (int)eventStatus, eventId) > 0;
         }
+        /// <summary>
+        /// 修改事件状态和办理人信息
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="eventStatus"></param>
+        /// <returns></returns>
+        public bool UpdateEventStateHandler(string eventId, EventStatus eventStatus,string handler)
+        {
+            return base.QueryDb.Execute("update event_info set evtState = @0,finishUserName=@1 where objid=@2", (int)eventStatus,handler, eventId) > 0;
+        }
 
         /// <summary>
         /// 保存任务
@@ -98,6 +109,8 @@ namespace FastDev.Service
 
         public object FormData(FormDataReq data)
         {
+            var res_dictionarycase = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItemscase = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionarycase.ID).ToDictionary(k => k.ItemCode, v => v.Title);
             if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
                 data.Model = "case_Info";
@@ -106,7 +119,7 @@ namespace FastDev.Service
 
             //根据事件id或者id查询数据
             var filter = new FilterGroup();
-         
+
             if (!string.IsNullOrEmpty(data.FormId))
             {
                 filter.rules.Add(new FilterRule("ID", data.FormId, "equal"));
@@ -115,22 +128,37 @@ namespace FastDev.Service
             {
                 filter.rules.Add(new FilterRule("EventInfoId", data.EventInfoId, "equal"));
             }
-              //案件特殊判断
+            object atlist =null;
+            //案件特殊判断
             if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
-
                 filter.rules.Add(new FilterRule("PreviousformID", "", "notequal"));
+                atlist = Getpunishattchment(data.FormId);
             }
-            
+
             //查询主表数据
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
+            if (data.Model.ToUpper() == "case_Info".ToUpper())
+            {
+                if (obj.ContainsKey("CaseType"))
+                {
+                    if (obj["CaseType"] != null)
+                    {
+                        if (dicItemscase.ContainsKey(obj["CaseType"].ToString()))  // CaseType 显示中文title
+                        {
+                            obj["CaseType"] = dicItemscase[obj["CaseType"].ToString()];
+                        }
+                    }
+                }
+            }
             string formId = obj["ID"].ToString();  //得到id
-
-            if (data.Model.ToLower()== "task_survey")  // 现场勘查 EventType 显示中文title
+            string eventinfoid = null; 
+            if(obj.ContainsKey("EventInfoId"))eventinfoid = obj["EventInfoId"]!=null? obj["EventInfoId"].ToString():string.Empty;
+            if (data.Model.ToLower() == "task_survey")  // 现场勘查 EventType 显示中文title
             {
                 var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
-                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+                var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
                 var eventType = obj["EventType"].ToString();
                 if (dicItems.ContainsKey(eventType))
                 {
@@ -139,12 +167,36 @@ namespace FastDev.Service
             }
 
             //构建其他需要查询的数据
-            var dicData = BuildData(data, formId);
-            dicData.Add("MainForm", obj);
+            var dicData = BuildData(data, formId,eventinfoid);
 
+            dicData.Add("MainForm", obj);
+            //添加处罚决定书证据附件
+            if (atlist != null)
+            {
+                if (dicData.ContainsKey("attachment"))
+                {
+                    var als = dicData["attachment"] as List<attachment>;
+                    if (als != null)
+                    {
+                        als.AddRange(atlist as List<attachment>);
+                        dicData["attachment"] = als;
+ 
+
+                    }
+                    else
+                    {
+                        dicData["attachment"] = atlist;
+                    }
+
+                }
+                else
+                {
+                    dicData.Add("attachment", atlist);
+                }
+            }
             return dicData;
         }
-        private Dictionary<string, object> BuildData(FormDataReq data, string formId)
+        private Dictionary<string, object> BuildData(FormDataReq data, string formId,string eventinfoid)
         {
             var dic = new Dictionary<string, object>();
             if (data.FilterModels == null || data.FilterModels.Count() < 1)
@@ -167,13 +219,19 @@ namespace FastDev.Service
             {
                 dic.Add("attachment", GetattachmentByFormId(formId));
             }
+            if (data.FilterModels.Contains("casedetail"))
+            {
+                dic.Add("law_party", Getlaw_partyByFormId(formId));
+                dic.Add("attachment", GetattachmentByFormId(formId));
+                dic.Add("casetimeline", GetAllFormByEventId(eventinfoid));
+            }
             return dic;
         }
         private object Getlaw_partyByFormId(string formId)
         {
             var filter = new FilterGroup();
             filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
-            var list= ServiceHelper.GetService("law_party").GetListData(filter);
+            var list = ServiceHelper.GetService("law_party").GetListData(filter);
             return ServiceHelper.GetService("law_party").GetListData(filter);
         }
         private object Getlaw_staffByFormId(string formId)
@@ -186,6 +244,15 @@ namespace FastDev.Service
         {
             var filter = new FilterGroup();
             filter.rules.Add(new FilterRule("AssociationobjectID", formId, "equal"));
+            return ServiceHelper.GetService("attachment").GetListData(filter);
+        }
+
+        private object Getpunishattchment(string formId)
+        {
+            var filter = new FilterGroup();
+            var law = QueryDb.FirstOrDefault<law_punishmentInfo>("select * from law_punishmentInfo where CaseId=@0", formId);
+            if (law == null) return null;
+            filter.rules.Add(new FilterRule("AssociationobjectID", law.ID, "equal"));
             return ServiceHelper.GetService("attachment").GetListData(filter);
         }
 
@@ -214,6 +281,44 @@ namespace FastDev.Service
                 return lawParties;
             }
             return null;
+        }
+
+
+        private object GetAllFormByEventId(string eventinfoid)
+        {
+            if (string.IsNullOrEmpty(eventinfoid)) return null;
+            ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");            
+            var formall = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 order by CreateDate",eventinfoid);
+            Dictionary<string, object> formlist = new Dictionary<string, object>();            
+            foreach (var f in formall)
+            {
+                try
+                {
+                    Dictionary<string, object> temp = new Dictionary<string, object>();
+                    if (!string.IsNullOrEmpty(f.CreateUserID))
+                    {
+                        var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{f.CreateUserID}'");
+                        temp.Add("CreateUser", user.Name);
+                    }
+                    else
+                    {
+                        temp.Add("CreateUser", "");
+                    }
+                    temp.Add("CreateDate", f.CreateDate);
+
+                    if (f.FormType == "case_report")
+                    {
+                        temp.Add("state",f.FormState);
+                    }
+                    else { temp.Add("state", "已完成"); }
+                    formlist.Add(f.FormName, temp);
+                }
+                catch(Exception e)
+                {
+                    continue;
+                }
+            }
+            return formlist;        
         }
 
 
@@ -252,7 +357,6 @@ namespace FastDev.Service
                 }
                 string id = SaveWorkTask(Task);
                 Task.ID = id;
-
                 //发送待办
                 if (!string.IsNullOrEmpty(Task.AppLinks))
                     Task.AppLinks += (Task.AppLinks.Contains("?") ? "&" : "?") + "taskid=" + Task.ID;

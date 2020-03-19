@@ -32,7 +32,11 @@
       <slot name="action" />
     </div>
     <div class="data-panel-info" v-if="showInfo">
-      <a-alert type="info" message="已选择10条" banner />
+      <a-alert type="info" banner>
+        <template slot="message">
+          <slot name="info" />
+        </template>
+      </a-alert>
     </div>
     <div class="data-panel-body">
       <slot name="body" />

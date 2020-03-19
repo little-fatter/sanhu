@@ -111,14 +111,6 @@ const menus = [
             menuName: '案件创建表',
             menuLevel: 2,
             parentId: '1-4'
-          },
-          {
-            menuId: '1-2-2',
-            menuUrl: '',
-            menuIcon: './img/forms/form9.png',
-            menuName: '案件受理记录',
-            menuLevel: 2,
-            parentId: '1-4'
           }
         ]
       },

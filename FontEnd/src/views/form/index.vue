@@ -240,6 +240,7 @@ export default {
     getFormType () {
       getDictionary({ model: 'res_dictionary', context: 'FormType' }).then(res => {
         this.formTypeOptions = res
+        console.log(res)
         const option = { ID: 'allType',
           ItemCode: '',
           Title: '全部类型' }
@@ -270,41 +271,70 @@ export default {
       this.EEndTime = dateString[1]
     },
     gotoDetail (record) {
-      console.log(record)
       if (record.FormType === 'form_confiscated_item') { // 物品清单
         this.$router.push({
           path: '',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
         })
       } else if (record.FormType === 'form_inquiryrecord') { // 询问记录
         this.$router.push({
           path: '',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
         })
       } else if (record.FormType === 'case_Info') { // 案件
         this.$router.push({
           path: '',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
         })
-      } else if (record.FormType === 'law_punishmentInfo') { // 处罚决定书
+      } else if (record.FormType === 'law_punishmentInfo') { // 处罚当场决定书
         this.$router.push({
           path: '',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
         })
       } else if (record.FormType === 'case_report') { // 结案报告
         this.$router.push({
           path: '/data-manage/form/close-person-report',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
         })
       } else if (record.FormType === 'case_cover') { // 卷宗封面
         this.$router.push({
           path: '',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
         })
       } else if (record.FormType === 'form_inquestrecord') { // 勘验记录
         this.$router.push({
           name: 'sceneInvestigationDetail',
-          query: { id: record.ID, formType: record.FormType }
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'form_inquiryrecord_third') { // 询问第三人笔录
+        this.$router.push({
+          name: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'form_inquiryrecord_litigant') { // 询问当事人笔录
+        this.$router.push({
+          name: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'task_patrol') { // 事件核查
+        this.$router.push({
+          name: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'task_survey') { // 现场勘查
+        this.$router.push({
+          name: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'form_confiscated') { // 没收清单
+        this.$router.push({
+          name: '',
+          query: { id: record.ID }
+        })
+      } else if (record.FormType === 'form_inquiryrecord_witness') { // 询问证人笔录
+        this.$router.push({
+          name: '',
+          query: { id: record.ID }
         })
       }
     },

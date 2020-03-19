@@ -32,36 +32,36 @@ namespace FastDev.Service
 
         private void Task_surveyService_OnAfterGetPagedData(object query, object data)
         {
-            var lst = (data as PagedData).Records;
-            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
-            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+            //var lst = (data as PagedData).Records;
+            //var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+            //var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
 
-            foreach (var item in lst)
-            {
-                var itemData = item as Dictionary<string, object>;
-                var eventType = itemData["EventType"].ToString();
-                if (dicItems.ContainsKey(eventType))
-                {
-                    itemData["EventType"] = dicItems[eventType];
-                }
-            }
+            //foreach (var item in lst)
+            //{
+            //    var itemData = item as Dictionary<string, object>;
+            //    var eventType = itemData["EventType"].ToString();
+            //    if (dicItems.ContainsKey(eventType))
+            //    {
+            //        itemData["EventType"] = dicItems[eventType];
+            //    }
+            //}
         }
 
         private void Task_surveyService_OnAfterGetListData(object query, object data)
         {
-            var lst = (data as PagedData).Records;
-            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
-            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
+            //var lst = (data as PagedData).Records;
+            //var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "EventType");
+            //var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ID, v => v.Title);
 
-            foreach (var item in lst)
-            {
-                var itemData = item as Dictionary<string, object>;
-                var eventType = itemData["EventType"].ToString();
-                if (dicItems.ContainsKey(eventType))
-                {
-                    itemData["EventType"] = dicItems[eventType];
-                }
-            }
+            //foreach (var item in lst)
+            //{
+            //    var itemData = item as Dictionary<string, object>;
+            //    var eventType = itemData["EventType"].ToString();
+            //    if (dicItems.ContainsKey(eventType))
+            //    {
+            //        itemData["EventType"] = dicItems[eventType];
+            //    }
+            //}
         }
 
         private void task_surveyService_OnAfterGetDetailData(object query, object data)
