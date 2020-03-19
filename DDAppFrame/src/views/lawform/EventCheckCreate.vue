@@ -30,7 +30,7 @@
             {{ event.reportTime | dayjs('YYYY-MM-DD HH:mm') }}
           </div>
         </van-cell>
-        <van-cell title="上报来源" :value="event.reportType"></van-cell>
+        <van-cell title="上报来源" :value="event.ReportSource"></van-cell>
         <van-cell title="上报人" :value="event.reporterName"></van-cell>
         <van-cell title="事件类型" :value="event.evtTypeDisplayName"></van-cell>
         <van-cell title="事件描述" :value="event.remark"></van-cell>
@@ -286,6 +286,7 @@ export default {
     },
     loadEventCheck (EventInfoId, event) {
       getFormsDetailByEventInfoId(EventInfoId, 'task_patrol').then((res) => {
+        console.log('res111', res)
         if (res) {
           this.eventCheck = {
             ...this.eventCheck,
@@ -294,7 +295,7 @@ export default {
           }
         } else {
           this.eventCheck.EventDescribe = event.remark
-          this.eventCheck.EventType = event.evtTypeId
+          // this.eventCheck.EventType = event.evtTypeId
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
           this.eventCheck.IncidentAddress = event.address
           var incidentAddressXY = ''
@@ -376,7 +377,7 @@ export default {
             Attachment: res.attachment
           }
         } else {
-          this.eventCheck.EventType = event.evtTypeId
+          // this.eventCheck.EventType = event.evtTypeId
           this.eventCheck.EventDescribe = event.remark
           this.eventCheck.IncidentTime = formatDate(event.reportTime, 'YYYY-MM-DD HH:mm')
           this.eventCheck.IncidentAddress = event.address

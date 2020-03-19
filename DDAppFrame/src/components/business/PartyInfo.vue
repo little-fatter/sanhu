@@ -162,7 +162,7 @@ export default {
       partys: [],
       typesofparties: [
         { text: '个人', value: '个人' },
-        { text: '个人', value: '单位' }
+        { text: '单位', value: '单位' }
       ],
       defaultTypesofpartieID: '个人'
     }
