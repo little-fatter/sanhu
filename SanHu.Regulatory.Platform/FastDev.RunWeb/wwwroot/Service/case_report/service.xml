@@ -11,7 +11,6 @@
         <field name="Url" dbName="Url" title="Url" type="string" length="500" relationModel="" relationField="" isPK="N" />
         <field name="EventInfoId" dbName="EventInfoId" title="事件Id" type="string" length="50" relationModel="" relationField="" isPK="N" />
         <field name="ProcessInstanceId" dbName="ProcessInstanceId" title="钉钉审核ID" type="string" length="50" relationModel="" relationField="" isPK="N" />
-        <field name="state" dbName="state" title="状态" type="string" length="50" relationModel="" relationField="" enabledSearch="Y" isPK="N" />
         <field name="FormState" dbName="FormState" title="状态" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

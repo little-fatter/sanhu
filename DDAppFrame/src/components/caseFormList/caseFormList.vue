@@ -59,13 +59,13 @@ export default {
             this.caseFileList.push(item)
           })
         }
-        console.log(this.caseFileList)
+        // console.log(this.caseFileList)
         return res
       })
     },
     // 去该案件表单详情
     goFromDetails (item) {
-      // console.log(item)
+      // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === FromType.confiscatoryGoodsList) {
         // 没收物品清单
         this.$router.push({
@@ -88,19 +88,10 @@ export default {
           query: { ID: item.FormID }
         })
       } else if (item.FormType === FromType.caseReport) {
-        if (item.FormState === 1) {
-          // 结案报告
-          this.$router.push({
-            path: '/caseReport',
-            query: { ID: item.FormID }
-          })
-        } else {
-          // 结案报告未审批
-          this.$router.push({
-            path: '/closingReportDetail',
-            query: { ID: item.FormID }
-          })
-        }
+        this.$router.push({
+          path: '/caseReport',
+          query: { ID: item.FormID }
+        })
       } else if (item.FormType === FromType.caseCover) {
         // 卷宗封面
         this.$router.push({

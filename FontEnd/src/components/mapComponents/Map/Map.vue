@@ -291,9 +291,11 @@ export default {
      */
     createTaskDescription: function () {
       var reportTime = this.infobox.alertEventLayer.content.reportTime
+      reportTime = moment(reportTime, dictionary.timeFormat).format(dictionary.timeFormat2)
       var address = this.infobox.alertEventLayer.content.address
       var evtTypeName = this.infobox.alertEventLayer.header.title
-      var txt = reportTime + ',上报在' + address + ',发现' + evtTypeName + '事件'
+      // 06日17:52上报在江川县XF24(环湖西路)发现执法事件事件
+      var txt = reportTime + '上报在' + address + '发现' + evtTypeName + '事件'
       return txt
     },
     /**
@@ -311,10 +313,11 @@ export default {
       var TaskContent = taskPanel.description
       var EventInfoId = this.infobox.alertEventLayer.content.id
       var ExpectedCompletionTime = taskPanel.time.format(dictionary.timeFormat)
+      var workaddress = person.Organization
       var MainHandler = taskPanel.mainPerson
       var CoOrganizer = taskPanel.subPeople.length ? taskPanel.subPeople.toLocaleString() : ''
       this.dataGet.doPostTastHandout(
-        AssignUsers, TaskContent, EventInfoId, ExpectedCompletionTime, MainHandler, CoOrganizer
+        AssignUsers, TaskContent, EventInfoId, ExpectedCompletionTime, workaddress, MainHandler, CoOrganizer
       )
         .then(function (res) {
           console.log('onClick_handoutTask', res)

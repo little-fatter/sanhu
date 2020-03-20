@@ -226,7 +226,6 @@ export default {
     },
     // 初次请求
     loadData (parameter) {
-      console.log('参数:', this.dealParameterNew(this.searchText, this.searchType, this.searchFlow, this.searchState, this.searchRegion))
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, this.dealParameterNew(this.searchText, this.searchType, this.searchFlow, this.searchState, this.searchRegion))
         .then(res => {
           if (res.Rows) {

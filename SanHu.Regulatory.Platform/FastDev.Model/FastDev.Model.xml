@@ -129,17 +129,17 @@
             勘验记录
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.form_inquestrecord">
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.forminquestrecord">
             <summary>
             勘验记录
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.law_Staffs">
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.lawStaffs">
             <summary>
             执法人
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.law_Parties">
+        <member name="P:FD.Model.Dto.form_inquestrecordFinishReq.lawParties">
             <summary>
             当事人
             </summary>
@@ -149,17 +149,17 @@
             询问
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.form_Inquiryrecord">
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.formInquiryrecord">
             <summary>
             询问信息
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.law_Staffs">
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.lawStaffs">
             <summary>
             执法人
             </summary>
         </member>
-        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.law_Parties">
+        <member name="P:FD.Model.Dto.Form_inquiryrecordFinishReq.lawParties">
             <summary>
             当事人
             </summary>

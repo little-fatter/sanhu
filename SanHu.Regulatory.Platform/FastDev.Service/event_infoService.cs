@@ -72,6 +72,9 @@ namespace FastDev.Service
         }
         public override object GetPageData(QueryDescriptor descriptor)
         {
+            //按照上报时间倒序排列
+            descriptor.OrderBy = new List<OrderByClause> { new OrderByClause { Key = "reportTime", Order = OrderSequence.DESC } };
+
             DbContext db = QueryDb;
             var filter = descriptor.Condition;
             if (filter == null) filter = new FilterGroup();
