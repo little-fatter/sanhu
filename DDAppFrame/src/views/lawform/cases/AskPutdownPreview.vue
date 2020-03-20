@@ -142,7 +142,7 @@ export default {
       var data = {
         formInquiryrecord,
         LawParties: this.model.lawParties,
-        lawStaff: []
+        lawStaffs: []
       }
       data.LawParties.forEach(item => {
         item.InquiryType = this.model.form.InquiryType
@@ -153,7 +153,7 @@ export default {
           Username: item.name,
           SignImg: item.SignImg
         }
-        data.lawStaff.push(user)
+        data.lawStaffs.push(user)
       })
       this.save(data)
     },
