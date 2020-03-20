@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 17:12:25
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-20 15:19:51
+ * @LastEditTime: 2020-03-20 15:31:23
  * @Description:  选择人员
  -->
 
@@ -35,9 +35,11 @@
               :data-callback="loadData"
               :is-load="false"
               :optimize-scroll-bar="true"
+              :page-size="20"
               page-type="small"
               v-slot:default="{ list }"
               style="height: 100%"
+              @on-load-data="handleOnLoadData"
             >
               <div class="sp-user" v-for="(item, index) in list" :key="index">
                 <!-- 如果为多选，则显示选择框 -->
@@ -145,6 +147,21 @@ export default {
       }
       this.$refs.list.list = [...list]
       this.selects = [...selects]
+    },
+    // 数据加载完成后
+    handleOnLoadData () {
+      this.$nextTick(() => {
+        const list = this.$refs.list.list
+        const { multiple, selects } = this
+        // 如果为单选，或无选中数据，或无人员列表
+        if (!multiple || !selects[0] || !list[0]) return
+        list.forEach(i => {
+          if (selects.find(sub => sub.Id === i.Id)) {
+            i.checked = true
+          }
+        })
+        this.$refs.list.list = [...list]
+      })
     },
     ok () {
       const { selects, multiple } = this

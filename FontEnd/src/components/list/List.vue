@@ -83,6 +83,7 @@ export default {
         const { pageIndex, pageSize } = this
         const { Rows = [], Total = 0 } = await this.dataCallback({ pageIndex, pageSize })
         Object.assign(this, { list: Rows, total: Total })
+        this.$emit('on-load-data', { list: this.list, total: this.total })
       } catch (error) {
         console.error(error)
       }
