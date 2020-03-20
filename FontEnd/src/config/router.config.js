@@ -98,7 +98,8 @@ export const asyncRouterMap = [
               {
                 path: 'form-add-list',
                 name: 'FormAddList',
-                component: () => import('@/views/form/formAddList'),
+                // component: () => import('@/views/form/formAddList'),
+                component: () => import('@/views/form/formList'),
                 meta: { title: '表单', keepAlive: true }
               },
               {

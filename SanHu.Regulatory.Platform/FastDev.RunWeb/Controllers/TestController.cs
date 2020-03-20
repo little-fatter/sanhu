@@ -4,18 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using DingTalk.Api.Request;
 using DinkToPdf.Contracts;
+using FastDev.Common;
 using FastDev.Common.Extensions;
+using FastDev.DevDB;
 using FastDev.IServices;
+using FastDev.Model.Entity;
+using FastDev.Service;
 using FD.Common.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ControllerBase = Microsoft.AspNetCore.Mvc.ControllerBase;
 
 namespace FastDev.RunWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class TestController : BaseController
     {
         IDingDingServices _dingDingServices;
         IConverter _converter;
@@ -207,6 +212,26 @@ namespace FastDev.RunWeb.Controllers
 </div>";
             var filebyte= _converter.HmtlToPDF(html);
             return File(filebyte, "application/pdf");
+        }
+
+        [HttpPost]
+        public ActionResult ASD(string id, string model, string data, string context)
+        {
+            try
+            {
+                var service = ServiceHelper.GetService("case_reportService") as case_reportService;
+                //service.UpdateFormState<case_report>("");
+            }
+            catch (Exception ex)
+            {
+                ServiceHelper.Log(ex);
+                return Json(new AjaxResult
+                {
+                    statusCode = ((ex is UserException) ? "2" : "3"),
+                    message = ex.Message
+                });
+            }
+            return null;
         }
     }
 }

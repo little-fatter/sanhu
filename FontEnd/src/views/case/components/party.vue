@@ -43,6 +43,17 @@
 
 export default {
   name: 'Party',
+  props: {
+    /**
+     * 初始化数组
+     */
+    initData: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
+  },
   components: {},
   data () {
     return {
@@ -64,8 +75,25 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    initData (val) {
+      if (val && val.length >= 1) {
+        this.initParty(val)
+      }
+    }
+  },
   methods: {
+    initParty (initData) {
+      if (initData.length === 0) {
+        this.addCaseBreakLow()
+      } else {
+        const caseBreakLow = []
+        this.initData.forEach(item => {
+          caseBreakLow.push(item)
+        })
+        this.caseBreakLow = caseBreakLow
+      }
+    },
     // 新增当事
     addCaseBreakLow () {
       this.caseBreakLow.push({

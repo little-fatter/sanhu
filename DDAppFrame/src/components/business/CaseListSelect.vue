@@ -2,7 +2,7 @@
   <van-popup
     v-model="showModel"
     position="bottom"
-    :style="{ height: '80%' }"
+    :style="{ height: '100%' }"
     @close="onClosePopup"
   >
     <div class="list_wapper">
@@ -38,7 +38,7 @@
               </div>
             </div>
             <van-cell title="案件类型" :value="item.CaseType"></van-cell>
-            <van-cell title="办案人" :value="item.Investigators"></van-cell>
+            <van-cell title="办案人" :value="item.CreatUser"></van-cell>
             <div slot="footer" class="footer-wapper">
               <div class="footer_left">
                 <div class="item"><van-tag plain type="primary" v-show="item.CaseNumber">{{ item.CaseNumber }}</van-tag></div>

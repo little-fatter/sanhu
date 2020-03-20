@@ -45,7 +45,7 @@
         <van-button type="info" :loading="loading" size="large" native-type="button">保存</van-button>
       </div> -->
         <van-field
-          v-model="penalizeBook.BookTitle"
+          v-model="penalizeBook.PunishmentTitle"
           label="处罚决定"
           :readonly="true"
         >
@@ -99,7 +99,7 @@ export default {
       taskInfo: null,
       caseInfo: {},
       penalizeBook: {
-        BookTitle: '当场执法决定书'
+        PunishmentTitle: '当场执法决定书'
       },
       caseFinalReport: {
         CaseDetail: ''
@@ -147,6 +147,9 @@ export default {
             ...res.MainForm,
             LawParties: res.law_party
           }
+          if (isEmpty(this.penalizeBook.PunishmentTitle)) {
+            this.penalizeBook.PunishmentTitle = '当场执法决定书'
+          }
           this.caseFinalReport.CaseDetail = this.penalizeBook.Illegalfacts + this.penalizeBook.IllegalbasisIDs + this.penalizeBook.PunishmentbasisIDs
         }
       })
@@ -175,6 +178,10 @@ export default {
       this.$router.push({ path: '/PromptlyPunishNote', query: { id: id } })
     },
     onSubmit (values) {
+      if (isEmpty(this.penalizeBook.ID)) {
+        this.$toast('该案件还未做出处罚确定不能结案')
+        return
+      }
       ddcomplexPicker().then((approve) => {
         var caseReport = {
           CaseId: this.caseInfo.ID,
