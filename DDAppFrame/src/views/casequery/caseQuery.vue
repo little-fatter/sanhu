@@ -3,7 +3,7 @@
     <van-search v-model="searchText" show-action placeholder="请输入搜索关键词">
       <div slot="action" @click="onSearch">搜索</div>
     </van-search>
-    <van-dropdown-menu>
+    <van-dropdown-menu class="caseSearch">
       <van-dropdown-item v-model="searchType" :options="searchTypeOptions" @change="searchTypeEvn" />
       <van-dropdown-item v-model="searchFlow" :options="searchFlowOptions" @change="searchFlowEvn" />
       <van-dropdown-item v-model="searchState" :options="searchStateOptions" @change="searchStateEvn"/>
@@ -375,5 +375,8 @@ display: flex;
 }
 .case-info-img div:first-child{
   margin-right: 0.3rem;
+}
+/deep/.caseSearch .van-cell__title{
+  width: 100% !important;;
 }
 </style>
