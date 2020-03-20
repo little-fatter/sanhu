@@ -222,6 +222,10 @@ export default {
     {
       float: left;
       padding-left: 25px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 300px;
     }
 
     .list-item_title_right

@@ -178,7 +178,8 @@ export default {
         PunishmentbasisIDs: this.penalizeBook.punishmentbasis,
         CoOrganizer: this.penalizeBook.CoOrganizer,
         CoorganizerID: this.penalizeBook.CoOrganizerId,
-        ...decision
+        ...decision,
+        MainHanderSign: this.mainSignature
         // MainHanderSign: this.mainSignature,
         // CoOrganizerSign: this.organiserSignature
       }

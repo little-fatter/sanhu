@@ -12,8 +12,9 @@
         label="事件"
         placeholder="请选择事件"
         :readonly="true"
+        @click="handleShowSelectEvent"
       >
-        <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectEvent" size="25" />
+        <van-icon name="arrow" color="#1989fa" slot="right-icon" size="25" />
       </van-field>
     </van-cell-group>
     <template v-if="event.evtTypeDisplayName">
