@@ -67,28 +67,28 @@ export const goFormDetail = (item, that) => {
   if (item.FormType === FromType.confiscatoryGoodsList) {
     // 没收物品清单
     that.$router.push({
-      path: '/goodsList', query: { ID: item.FormID }
+      path: '/goodsList', query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.caseDetails) {
     // 案件详情
     that.$router.push({
-      path: '/caseDetails', query: { ID: item.FormID }
+      path: '/caseDetails', query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.PromptlyPunishNote) {
     // 处罚当场决定书
     that.$router.push({
-      path: '/PromptlyPunishNote', query: { ID: item.FormID }
+      path: '/PromptlyPunishNote', query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.RecordOfInquest) {
     // 勘验记录
     that.$router.push({
       path: '/RecordOfInquest',
-      query: { ID: item.FormID }
+      query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.caseReport) {
     that.$router.push({
       path: '/caseReport',
-      query: { ID: item.FormID }
+      query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.caseCover) {
     // 卷宗封面
@@ -100,31 +100,31 @@ export const goFormDetail = (item, that) => {
     // 询问第三人笔录
     that.$router.push({
       path: '/AskThirdPartyNote',
-      query: { ID: item.FormID }
+      query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.AskPartyNote) {
     // 询问当事人笔录
     that.$router.push({
       path: '/AskPartyNote',
-      query: { ID: item.FormID }
+      query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.AskWitnessNote) {
     // 询问证人笔录
     that.$router.push({
       path: '/AskWitnessNote',
-      query: { ID: item.FormID }
+      query: { id: item.FormID }
     })
   } else if (item.FormType === FromType.sceneInvestigationDetail) {
     // 现场勘查
     that.$router.push({
       path: '/sceneInvestigationDetail',
-      query: { ID: item.EventInfoId }
+      query: { id: item.EventInfoId }
     })
   } else if (item.FormType === FromType.eventDetail) {
     // 事件核查
     that.$router.push({
       path: '/eventDetail',
-      query: { ID: item.EventInfoId }
+      query: { id: item.EventInfoId }
     })
   }
 }

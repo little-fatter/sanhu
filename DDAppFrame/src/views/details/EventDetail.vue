@@ -70,7 +70,7 @@ export default {
     }
   },
   created () {
-    this.EventInfoId = this.$route.query.ID // 事件ID
+    this.EventInfoId = this.$route.query.id // 事件ID
     this.initPage()
   },
   mounted () {

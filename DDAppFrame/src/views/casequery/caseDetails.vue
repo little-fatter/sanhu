@@ -150,7 +150,7 @@ export default {
   },
   created () {
     // 接收路由案件ID传参
-    this.caseId = this.$route.query.ID
+    this.caseId = this.$route.query.id
     // 执行数据请求
     this.getCaseInfo()
   },
