@@ -24,6 +24,16 @@ public string lat
 get;
 set;
 }
+public string wlng
+{
+get;
+set;
+}
+public string wlat
+{
+get;
+set;
+}
 public DateTime? CreateDate
 {
 get;
