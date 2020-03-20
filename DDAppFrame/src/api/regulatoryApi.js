@@ -281,3 +281,16 @@ export const commonSaveApi = (data, model, method = 'create') => {
     }
   })
 }
+
+/**
+ * 保存人员经纬度
+ * @param {*} lng
+ * @param {*} lat
+ */
+export const savePatrolPoints = (lng, lat) => {
+  var data = {
+    lng,
+    lat
+  }
+  return commonSaveApi(data, 'patrol_points')
+}

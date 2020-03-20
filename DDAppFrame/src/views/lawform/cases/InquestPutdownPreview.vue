@@ -112,7 +112,7 @@ export default {
       var data = {
         formInquestrecord,
         LawParties: this.model.caseInfo.LawParties,
-        lawStaff: []
+        lawStaffs: []
       }
       this.model.lawPersions.forEach(item => {
         var user = {
@@ -120,7 +120,7 @@ export default {
           Username: item.name,
           SignImg: item.SignImg
         }
-        data.lawStaff.push(user)
+        data.lawStaffs.push(user)
       })
       this.save(data)
     },

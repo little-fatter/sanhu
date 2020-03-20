@@ -74,7 +74,36 @@ function transformLon (x, y) {
   ret += (150.0 * Math.sin(x / 12.0 * PI) + 300.0 * Math.sin(x / 30.0 * PI)) * 2.0 / 3.0
   return ret
 }
-
+/**
+ * 两点距离的平方
+ * @param {*} p1 点[x, y]
+ * @param {*} p2 点[x, y]
+ */
+function distanceSquare (p1, p2) {
+  var dx = p2[0] - p1[0]
+  var dy = p2[1] - p1[1]
+  return dx * dx + dy * dy
+}
+/**
+ * 计算points中距离p最近的点
+ * @param {*} p 目标点[x, y]
+ * @param {*} points 点集
+ */
+function nearestPoint (p, points) {
+  var index = -1
+  var ds = points.map(_p => {
+    return distanceSquare(_p, p)
+  })
+  var min = 1E10
+  for (var i = 0; i < ds.length; i++) {
+    var element = ds[i]
+    if (element <= min) {
+      min = element
+      index = i
+    }
+  }
+  return index
+}
 /**
  * 创建天地图图层
  */
@@ -147,5 +176,5 @@ var hasKey = function (object, key) {
   return false
 }
 export default {
-  baiduTomars, transformGCJ2WGS, baiduToWGS84, createTdtLayer, afterFunc, trimToStr, hasKey
+  baiduTomars, transformGCJ2WGS, baiduToWGS84, createTdtLayer, afterFunc, trimToStr, distanceSquare, nearestPoint, hasKey
 }
