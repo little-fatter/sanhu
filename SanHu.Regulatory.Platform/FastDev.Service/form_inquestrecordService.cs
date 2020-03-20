@@ -46,6 +46,7 @@ namespace FastDev.Service
                     {
                         l.Associatedobjecttype = "form_inquestrecord";
                         l.AssociatedobjectID = formidt;
+                        l.ID = Guid.NewGuid().ToString();
                         l.CreateDate = DateTime.Now;
                         l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
@@ -56,6 +57,7 @@ namespace FastDev.Service
                     foreach (var l in data.lawParties)
                     {
                         l.Associatedobjecttype = "form_inquestrecord";
+                        l.ID = Guid.NewGuid().ToString();
                         l.AssociationobjectID = formidt;
                         l.CreateDate = DateTime.Now;
                         l.CreateUserID = SysContext.WanJiangUserID;
