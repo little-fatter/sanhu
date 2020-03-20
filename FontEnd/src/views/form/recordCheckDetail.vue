@@ -16,7 +16,7 @@
 import PdfPanel from '@/components/business/PdfPanel'
 import { isNotEmpty } from '../../utils/util'
 import { getFormDetail, getFormsDetailByEventInfoIdPdf } from '../../api/sampleApi'
-import { formType } from '@/config/api.config'
+import { FORM_INQUEST_RECORD } from '@/config/model.config'
 
 export default {
   components: {
@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       // pdf页数
-      pdf: '/pdf/test.pdf',
+      pdf: 'pdf/test.pdf',
       id: '',
       files: []
     }
@@ -41,11 +41,10 @@ export default {
       }
     },
     loadData (id) {
-      const type = formType.form_inquestrecord
+      const type = FORM_INQUEST_RECORD
       getFormDetail(type, null, id, ['attachment']).then((res) => {
-        if (res) {
-          console.log('getFormDetail -> res', res)
-          this.files = res
+        if (res && isNotEmpty(res.attachment)) {
+          this.files = res.attachment
         }
       })
       getFormsDetailByEventInfoIdPdf(id, type).then(res => {

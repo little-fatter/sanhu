@@ -16,14 +16,14 @@
 import PdfPanel from '@/components/business/PdfPanel'
 import { isNotEmpty } from '../../utils/util'
 import { getFormDetail, getFormsDetailByEventInfoIdPdf } from '../../api/sampleApi'
-import { formType } from '@/config/api.config'
+import { FORM_CONFISCATED } from '@/config/model.config'
 export default {
   components: {
     'pdfPanel': PdfPanel
   },
   data () {
     return {
-      pdf: '/pdf/test.pdf',
+      pdf: 'pdf/test.pdf',
       id: '',
       files: [
         {
@@ -44,10 +44,10 @@ export default {
       }
     },
     loadData (id) {
-      const type = formType.form_confiscated_item
+      const type = FORM_CONFISCATED
       getFormDetail(type, null, id, ['attachment']).then((res) => {
-        if (res) {
-          this.files = res
+        if (res && isNotEmpty(res.attachment)) {
+          this.files = res.attachment
         }
       })
       getFormsDetailByEventInfoIdPdf(id, type).then(res => {
