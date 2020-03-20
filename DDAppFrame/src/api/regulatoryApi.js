@@ -62,7 +62,72 @@ export const FromType = {
   // confiscatoryGoodsList: 'form_confiscated_item'   //废弃
   confiscatoryGoodsList: 'form_confiscated'
 }
-
+// 去表单详情
+export const goFormDetail = (item, that) => {
+  if (item.FormType === FromType.confiscatoryGoodsList) {
+    // 没收物品清单
+    that.$router.push({
+      path: '/goodsList', query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.caseDetails) {
+    // 案件详情
+    that.$router.push({
+      path: '/caseDetails', query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.PromptlyPunishNote) {
+    // 处罚当场决定书
+    that.$router.push({
+      path: '/PromptlyPunishNote', query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.RecordOfInquest) {
+    // 勘验记录
+    that.$router.push({
+      path: '/RecordOfInquest',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.caseReport) {
+    that.$router.push({
+      path: '/caseReport',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.caseCover) {
+    // 卷宗封面
+    that.$router.push({
+      path: '/form_inquiryrecord',
+      query: { id: item.CaseId }
+    })
+  } else if (item.FormType === FromType.AskThirdPartyNote) {
+    // 询问第三人笔录
+    that.$router.push({
+      path: '/AskThirdPartyNote',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.AskPartyNote) {
+    // 询问当事人笔录
+    that.$router.push({
+      path: '/AskPartyNote',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.AskWitnessNote) {
+    // 询问证人笔录
+    that.$router.push({
+      path: '/AskWitnessNote',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.sceneInvestigationDetail) {
+    // 现场勘查
+    that.$router.push({
+      path: '/sceneInvestigationDetail',
+      query: { ID: item.EventInfoId }
+    })
+  } else if (item.FormType === FromType.eventDetail) {
+    // 事件核查
+    that.$router.push({
+      path: '/eventDetail',
+      query: { ID: item.EventInfoId }
+    })
+  }
+}
 /**
  * 通用分页查询接口
  * @param {*} model 模块名称
