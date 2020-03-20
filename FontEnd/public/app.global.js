@@ -34,6 +34,11 @@ var publicAppConfig = {
   pdfHost: 'http://192.168.0.169:8030',
   /** 微应用ID 如果只有一个微应用可以配置在这里，否则请配置为链接参数 */
   agentId: '456468162',
+  /** 审批配置 */
+  auditCondig: {
+    // 结案报告审批模板
+    CaseFinalReportProcessCode: 'PROC-24B1FD66-D778-40E4-A0E3-82CEC072C24F'
+  },
   /** 配置业务localStorage的key值 */
   localStorageKey: {
     userInfo: 'userInfo', // 获取用户信息

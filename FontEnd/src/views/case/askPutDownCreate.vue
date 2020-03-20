@@ -178,22 +178,26 @@
         <a-col :span="10">
           <span class="ant-col-4">执法检查人员</span>
           <span class="ant-col-16">
-            <a-select
+            <span v-show="caseInfo.CoOrganizer" style="margin-right:20px;">{{ lawPersionNames }}</span>
+              <a-button type="primary" @click="$refs.selectJCPeople.open()">选择人员</a-button>
+            <!-- <a-select
               class="ant-col-24"
               mode="multiple"
               v-model="lawPersions"
               labelInValue
               placeholder="请选择">
               <a-select-option v-for="(item,index) in lawPersonOption" :value="item.id" :key="index + '12'">{{ item.name }}</a-select-option>
-            </a-select>
+            </a-select> -->
           </span>
         </a-col>
         <a-col :span="10">
           <span class="ant-col-4">记录人</span>
           <span class="ant-col-16">
-            <a-select class="ant-col-24" labelInValue @change="recorderChange" placeholder="请选择">
+              <span v-show="caseInfo.CoOrganizer" style="margin-right:20px;">{{ recordPersionNames }}</span>
+              <a-button type="primary" @click="$refs.selectJLPeople.open()">选择人员</a-button>
+            <!-- <a-select class="ant-col-24" labelInValue @change="recorderChange" placeholder="请选择">
               <a-select-option v-for="(item,index) in recordPersonOption" :value="item.id" :key="index + '12'">{{ item.name }}</a-select-option>
-            </a-select>
+            </a-select> -->
           </span>
         </a-col>
       </a-row>
@@ -247,6 +251,8 @@
       </a-row>
     </div>
     <div>
+      <select-people ref="selectJLPeople" @on-select="handleSelectJL" />
+      <select-people ref="selectJCPeople" @on-select="handleSelectJC" />
       <select-case ref="selectCase" @on-select="selectCase"></select-case>
     </div>
   </div>
@@ -255,13 +261,14 @@
 <script>
 import { getDictionary, commonOperateApi, getFormDetail } from '../../api/sampleApi'
 import { getCurrentUser } from '../../config/currentUser'
+import SelectPeople from '@/components/business/SelectPeople'
 import { isNotEmpty } from '../../utils/util'
 import SelectCase from '../../components/business/SelectCase'
 import PartyInfo from './components/party'
 import moment from 'moment'
 export default {
   name: 'AskPutDownCreate',
-  components: { PartyInfo, SelectCase },
+  components: { PartyInfo, SelectCase, SelectPeople },
   data () {
     return {
       isRelated: false,
@@ -291,9 +298,9 @@ export default {
           text: '第三人', value: '第三人'
         }
       ],
-      lawPersions: [], // 执法检查人员
+      lawPersions: '', // 执法检查人员
       lawPersionNames: '',
-      recordPersions: [], // 记录人员
+      recordPersions: '', // 记录人员
       recordPersionNames: null, // 记录人员
       lawPersonOption: [{ id: '1', name: '李柳' }, { id: '2', name: '李思' }, { id: '3', name: '王琴' }, { id: '4', name: '陈琴' }], // 执法检查人
       recordPersonOption: [{ id: '1', name: '张柳' }, { id: '2', name: '张思' }, { id: '3', name: '王华' }, { id: '4', name: '陈华' }] // 执法检查人
@@ -329,23 +336,30 @@ export default {
       if (this.mode.InquiryType !== '当事人') {
         lawParties = this.$refs.partyInfo.getResult()
       }
-      var lawPersions = []
-      this.lawPersions.forEach(item => {
-        lawPersions.push(item.label)
-      })
+      // var lawPersions = []
+      // this.lawPersions.forEach(item => {
+      //   lawPersions.push(item.label)
+      // })
       var forms = {
         caseInfo: this.caseInfo,
         lawParties: lawParties,
         form: this.mode,
-        lawPersions: this.lawPersions,
-        lawPersionNames: lawPersions.join(),
+        lawPersions: [this.lawPersions],
+        lawPersionNames: this.lawPersionNames,
         recordPersionNames: this.recordPersionNames
       }
       this.$router.push({ name: 'askPutdownPreview', params: { forms: forms } })
     },
+    handleSelectJL (record) {
+      this.recordPersionNames = record.Name
+      this.recordPersions = record.Id
+    },
+    handleSelectJC (record) {
+      this.lawPersionNames = record.Name
+      this.lawPersions = record.Id
+    },
     recorderChange (value) {
-      this.recordPersionNames = value.label
-      this.recordPersions = value.key
+      
     },
     // 开始时间
     selectStartTime (value, dateString) {

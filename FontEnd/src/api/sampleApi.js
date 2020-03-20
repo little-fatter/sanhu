@@ -15,7 +15,19 @@ function condition (params = {}, pageiIndex = 1, pageSize = 10) {
     SortOrder: 'desc'
   }
 }
-
+/** 任务类型 */
+export const TaskTypeDic = {
+  // 事件巡查
+  EventCheck: 'EventCheck',
+  // 现场勘查
+  OnSpot: 'OnSpot',
+  // 案件创建
+  CaseInfo: 'CaseInfo',
+  // 现场处罚决定书
+  Punishment: 'Punishment',
+  // 结案报告
+  finalReport: 'finalReport'
+}
 /**
  * 根据过滤器获取详情接口
  * @param {*} model 模块名称

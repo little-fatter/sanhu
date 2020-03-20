@@ -176,28 +176,29 @@
     </div>
     <div>
       <select-case ref="selectCase" @on-select="selectCase"></select-case>
+      <select-people ref="selectPeople" @on-select="handleSelect" />
     </div>
   </div>
 </template>
 
 <script>
+import SelectPeople from '@/components/business/SelectPeople'
 import { getDictionary, commonOperateApi, getDetails, getFormDetail } from '../../api/sampleApi'
+import appConfig from '@/config/app.config'
 import SelectCase from '../../components/business/SelectCase'
 import PartyView from './components/partyView'
+import moment from 'moment'
 import { isNotEmpty } from '../../utils/util'
 export default {
   name: 'InventoryCreate',
-  components: { SelectCase, PartyView },
+  components: { SelectCase, PartyView, SelectPeople },
 
   props: {
 
   },
   data () {
     return {
-      loading: false,
       isRelated: false,
-      showPopup: false,
-      showRelFormsPopup: false,
       taskInfo: null,
       caseInfo: {},
       penalizeBook: {
@@ -226,7 +227,6 @@ export default {
     selectCase (record) {
       this.caseInfo = record
       this.isRelated = true
-      console.log(this.caseInfo)
       this.loadPenalizeBook(record.EventInfoId)
       this.loadDic()
     },
@@ -268,7 +268,6 @@ export default {
             LawParties: res.law_party,
             BookTitle: '当场执法决定书'
           }
-          console.log('LawParties', this.penalizeBook)
           this.caseFinalReport.CaseDetail = this.penalizeBook.Illegalfacts + this.penalizeBook.IllegalbasisIDs + this.penalizeBook.PunishmentbasisIDs
         }
       })
@@ -280,6 +279,135 @@ export default {
     },
     onSubmit () {
       // 提交结案报告审批
+      this.$refs.selectPeople.open()
+    },
+    handleSelect (record) {
+      console.log(record)
+      this.onApproval(record.AccountId)
+    },
+    getLawPartys () {
+      const lawPartys = []
+      if (this.penalizeBook.LawParties) {
+        this.penalizeBook.LawParties.forEach(item => {
+          var partyItem = this.getLawPartyItem(item)
+          lawPartys.push(partyItem)
+        })
+      }
+      return lawPartys
+    },
+    getLawPartyItem (party) {
+      var partyItem = []
+      if (party.TypesofpartiesID === this.defaultTypesofpartieID) {
+        var title = `${party.Name} | ${party.Gender} | ${party.Occupation}`
+        party.title = title
+        partyItem = [
+          { name: '名称', value: party.title },
+          { name: '身份证', value: party.IDcard },
+          { name: '电话', value: party.Contactnumber },
+          { name: '地址', value: party.address }
+        ]
+      } else {
+        party.title = party.Name
+        partyItem = [
+          { name: '名称', value: party.title },
+          { name: '法人', value: party.Nameoflegalperson },
+          { name: '身份证', value: party.IDcard },
+          { name: '电话', value: party.Contactnumber },
+          { name: '地址', value: party.address }
+        ]
+      }
+      return partyItem
+    },
+    getFormComponentValues () {
+      var webUrl = appConfig.AppHost
+      var lawPartys = this.getLawPartys()
+      var formComponentValues = [
+        {
+          name: '案由',
+          value: this.caseInfo.CauseOfAction
+        },
+        {
+          name: '案件类型',
+          value: '网络上报'
+        },
+        {
+          name: '立案时间',
+          value: moment(this.caseInfo.CreateDate).format('YYYY-MM-DD')
+        },
+        {
+          name: '案发地点',
+          value: isNotEmpty(this.caseInfo.IncidentAddress) ? this.caseInfo.IncidentAddress : ''
+        },
+        {
+          name: '简要案情及调查经过',
+          value: this.caseFinalReport.CaseDetail
+        },
+        {
+          name: '执行情况',
+          value: '已执行'
+        },
+        {
+          name: '处罚决定',
+          value: `${webUrl}#/PromptlyPunishNote?id=${this.penalizeBook.ID}`
+        },
+        {
+          name: '案件详情',
+          value: `${webUrl}#/caseDetails?id=${this.caseInfo.ID}`
+        },
+        {
+          name: '当事人',
+          value: [
+            ...lawPartys
+          ]
+        }
+      ]
+      var barInfo = null
+      if (isNotEmpty(this.caseInfo.CreateUser)) {
+        barInfo = {
+          name: '案件承办人',
+          value: this.caseInfo.CreateUser
+        }
+      }
+      var zjmhInfo = null
+      if (isNotEmpty(this.caseInfo.Jobnumber)) {
+        zjmhInfo = {
+          name: '证件编号',
+          value: this.caseInfo.Jobnumber
+        }
+      }
+      if (isNotEmpty(barInfo)) {
+        formComponentValues.push(barInfo)
+      }
+      if (isNotEmpty(zjmhInfo)) {
+        formComponentValues.push(zjmhInfo)
+      }
+      return formComponentValues
+    },
+    onApproval (id) {
+      var FormComponentValues = JSON.stringify(this.getFormComponentValues())
+      var caseReport = {
+        CaseId: this.caseInfo.ID,
+        CaseDetail: this.caseFinalReport.CaseDetail,
+        PunishmentId: isNotEmpty(this.penalizeBook) ? this.penalizeBook.ID : null,
+        ExecuteState: '已执行'
+      }
+      var oapiProcessinstanceCreateRequest = {
+        AgentId: appConfig.agentId,
+        ProcessCode: appConfig.auditCondig.CaseFinalReportProcessCode,
+        approvers: id,
+        FormComponentValues
+      }
+      var model = {
+        SourceTaskId: isNotEmpty(this.caseInfo) ? this.caseInfo.TaskId : null,
+        EventInfoId: this.caseInfo.EventInfoId,
+        CaseId: this.caseInfo.ID,
+        caseReport,
+        oapiProcessinstanceCreateRequest
+      }
+      commonOperateApi('FINISH', 'case_report', model).then((result) => {
+        this.$message.success('操作成功')
+        this.$router.push('/data-manage/form/form-add-list')
+      })
     }
   }
 }

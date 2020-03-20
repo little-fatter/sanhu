@@ -166,9 +166,8 @@
           <a-col :span="20">
             <span class="ant-col-2">协办人</span>
             <span class="ant-col-20">
-              <a-select class="ant-col-9" labelInValue @change="handleChange" placeholder="请选择">
-                <a-select-option v-for="(item,index) in waitingCasePartin" :value="item.id" :key="index + '12'">{{ item.name }}</a-select-option>
-              </a-select>
+              <span v-show="caseInfo.CoOrganizer" style="margin-right:20px;">{{ caseInfo.CoOrganizer }}</span>
+              <a-button type="primary" @click="$refs.selectPeople.open()">选择人员</a-button>
             </span>
           </a-col>
         </a-row>
@@ -182,30 +181,22 @@
           </a-col>
         </a-row>
       </div>
-      <a-modal
-        v-model="visible"
-        onOk="handleOk"
-      >
-        <template slot="title">
-          <span v-show="!titleInputShow" @click="titleInputShow = true">{{ taskTitle }}</span>
-        <!-- <a-input v-show="titleInputShow" v-model="taskTitle" @pressEnter="onblur"></a-input> -->
-        </template>
-        <p v-show="!bodyInputShow" @click="bodyInputShow = true">{{ taskContent }}</p>
-        <a-input v-show="bodyInputShow" v-model="taskContent" @pressEnter="onblur"></a-input>
-      </a-modal>
+      <select-people ref="selectPeople" @on-select="handleSelect" />
+      <next-task-modal @onPopupConfirm="onTaskConfirm" ref="taskModel"></next-task-modal>
     </div>
   </div>
 </template>
 
 <script>
-import { getDictionary, commonOperateApi, getDetails, getFormDetail } from '../../api/sampleApi'
-import { getCurrentUser } from '../../config/currentUser'
+import { getDictionary, commonOperateApi, getDetails, getFormDetail, TaskTypeDic } from '../../api/sampleApi'
+import SelectPeople from '@/components/business/SelectPeople'
 import PartyInfo from './components/party'
-import SelectEvent from '../../components/business/SelectEvent'
-import { isNotEmpty, formatTime } from '../../utils/util'
+import NextTaskModal from '@/components/business/NextTaskModal'
+import SelectEvent from '@/components/business/SelectEvent'
+import { isNotEmpty, formatTime, getCaseTaskDefault, getNextTask } from '../../utils/util'
 export default {
   name: 'NewCase',
-  components: { PartyInfo, SelectEvent },
+  components: { PartyInfo, SelectEvent, SelectPeople, NextTaskModal },
   data () {
     return {
       titleInputShow: false,
@@ -296,6 +287,14 @@ export default {
         }
       })
     },
+    onTaskConfirm (result) {
+      var data = result.data
+      var nextTask = null
+      var userInfo = {}
+      nextTask = getNextTask(TaskTypeDic.Punishment, userInfo.userid, 'penalizeBookCreate', result.taskTitle, result.taskContent, data.Attachments, this.event.evtFileUrl, this.event.objId)
+      data.NextTasks.push(nextTask)
+      this.save(data)
+    },
     onSubmit () {
       var caseBreakLow = this.$refs.partyInfo.getResult()
       var caseInfo = {
@@ -310,7 +309,6 @@ export default {
         NextTasks: []
       }
       data.LawParties = caseBreakLow
-      // var userInfo = getCurrentUser()
       var nextTask = null
       nextTask = {
         TaskType: '1', // 任务类型
@@ -327,11 +325,8 @@ export default {
         PCLinks: '' // pc跳转地址
       }
       data.NextTasks.push(nextTask)
-      if (isNotEmpty(caseInfo.CauseOfAction) && isNotEmpty(caseInfo.CoOrganizer)) {
-        this.save(data)
-      } else {
-        this.$message.error('填写不完整', 1)
-      }
+      var defaultTask = getCaseTaskDefault(this.caseInfo, '当场处罚')
+      this.$refs.taskModel.show(defaultTask.title, defaultTask.content, data)
     },
     // 返回表单类型
     onReturn () {
@@ -347,11 +342,6 @@ export default {
           this.$message.error('创建失败', 1)
         }
       })
-    },
-    // 协办人输入
-    handleChange (value, index) {
-      this.caseInfo.CoOrganizer = value.label
-      this.caseInfo.CoOrganizerId = value.key
     },
     // 案发时间选择
     selectTime (value, dateString) {
@@ -398,6 +388,10 @@ export default {
     // 选中案件 处理程序
     CaseApplicableProcedureTypeEvn (msg) {
       console.log(msg)
+    },
+    handleSelect (record) {
+      this.caseInfo.CoOrganizer = record.Name
+      this.caseInfo.CoOrganizerId = record.Id
     }
   },
   // 生命周期钩子

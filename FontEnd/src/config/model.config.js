@@ -7,7 +7,7 @@
  */
 
 // 案件
-export const CASE_INFO = 'case_info'
+export const CASE_INFO = 'case_Info'
 // 事件
 export const EVENT_INFO = 'event_info'
 // 案卷列表
