@@ -75,7 +75,6 @@ export default {
   methods: {
     init () {
       var forms = this.$route.params.forms
-      console.log('forms', forms)
       this.model = forms
     },
     handleShowSignature (signatureType) {
@@ -128,7 +127,7 @@ export default {
       this.loading = true
       commonOperateApi('FINISH', 'form_confiscated', data).then((res) => {
         this.$toast.success('操作成功')
-        // this.goToLawForm()
+        this.goToLawForm()
       }).finally(() => {
         this.loading = false
       })

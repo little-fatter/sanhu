@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-11 09:52:57
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-18 17:26:40
+ * @LastEditTime: 2020-03-20 10:59:20
  * @Description:  案件详情
  -->
 
@@ -10,8 +10,8 @@
   <div class="case-detail">
     <panel hide-header :body-style="{ padding: 0 }">
       <div class="case-detail-top">
-        <span class="case-detail-title">案〔2020〕3206号</span>
-        <span class="case-detail-status">已结案</span>
+        <span class="case-detail-title">{{ detail.CaseTitle }}</span>
+        <span class="case-detail-status">{{ detail.CaseStatus }}</span>
       </div>
       <div class="case-detail-tab">
         <div
@@ -25,27 +25,26 @@
     </panel>
     <template v-if="current === 0">
       <panel title="基本信息">
-        <info-panel :data="detail.MainForm" :columns="baseColumns">
+        <info-panel :data="detail" :columns="baseColumns">
           <template slot="party">
-            <people-popover v-for="(item, index) in detail.LawPartys" :key="index" :data="item">
+            <people-popover v-for="(item, index) in lawPartys" :key="index" :data="item">
               <span class="case-detail-people">{{ item.Name }}</span>
             </people-popover>
           </template>
         </info-panel>
       </panel>
-      <panel title="事件信息" v-if="detail.EventId">
+      <panel title="事件信息" v-if="detail.EventInfoId">
         <info-panel :data="eventInfo" :columns="eventColumns" />
       </panel>
-      <panel title="证据附件" :body-style="{ padding: '0 20px' }" v-if="files[0]">
+      <panel title="证据附件" v-if="files && files[0]" :body-style="{ padding: '0 20px' }">
         <file-review :files="files" :showImgCount="3" />
       </panel>
-      <panel title="案件流程" :body-style="{ maxWidth: '800px', padding: '30px 60px' }" v-if="process[0]">
+      <panel title="案件流程" v-if="process && process[0]" :body-style="{ maxWidth: '800px', padding: '30px 60px' }">
         <process :list="process" />
       </panel>
     </template>
     <template v-else>
       <panel hide-header v-if="caseId">
-        <span @click="test">测试</span>
         <dossier-list :case-id="caseId" />
       </panel>
     </template>
@@ -59,13 +58,9 @@ import Process from './Process'
 import InfoPanel from '@/components/info/InfoPanel'
 import DossierList from './DossierList'
 import PeoplePopover from './PeoplePopover'
-import { getFormDetail, getDetails, getPageData } from '@/api/sampleApi'
-import { formatTime, formatDay, toFormDetail } from '@/utils/util'
+import { getFormDetail, getDetails } from '@/api/sampleApi'
+import { formatTime, formatDay } from '@/utils/util'
 import { CASE_INFO, EVENT_INFO } from '@/config/model.config'
-
-/**
- * 本页面调用4个接口，获取表单详情、事件信息、案件流程、案卷列表
- */
 
 const tabs = ['案件详情', '案卷列表']
 
@@ -206,15 +201,11 @@ export default {
       files: [],
       // 流程
       process: [],
+      // 当事人
+      lawPartys: [],
       detail: {
-        // 主要信息
-        MainForm: {},
-        // 当事人
-        LawPartys: [],
         // 处罚种类
-        PenaltyType: [],
-        ApplicableProcedure: [],
-        Region: []
+        PenaltyType: []
       },
       // 事件信息
       eventInfo: {}
@@ -227,23 +218,31 @@ export default {
   methods: {
     // 获取详情
     async getDetail () {
-      const data = await getFormDetail(CASE_INFO, null, this.caseId, null)
-      if (data) {
-        this.detail = data
-        this.detail.EventId && this.getEventDetail()
-        this.getProcess()
+      const params = [CASE_INFO, null, this.caseId, ['casedetail']]
+      const { 
+        law_party = [],
+        attachment = [], 
+        MainForm = { PenaltyType: {} }, 
+        casetimeline = []
+      } = await getFormDetail(...params) || {}
+      Object.assign(this, {
+        lawPartys: law_party,
+        files: attachment,
+        detail: MainForm,
+        process: casetimeline.map(i => ({
+          username: i.CreateUser,
+          title: i.CreateUser,
+          content: `${i.FormType || ''} ${i.state || ''}`,
+          time: i.CreateDate
+        }))
+      })
+      if (MainForm && MainForm.EventInfoId) {
+        this.getEventDetail()
       }
     },
     // 获取事件详情
     async getEventDetail () {
-      this.eventInfo = await getDetailsO(EVENT_INFO, this.detail.EventId)
-    },
-    // 获取流程
-    async getProcess () {
-      // this.process = await getPageData()
-    },
-    test () {
-      toFormDetail()
+      this.eventInfo = await getDetails(EVENT_INFO, this.detail.EventInfoId)
     }
   }
 }

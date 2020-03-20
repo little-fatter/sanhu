@@ -150,6 +150,7 @@ namespace FastDev.Service
                     FilterModels = new string[] { "law_staff", "law_party" }
                 });
 
+                var partyDetail = new List<string>();
                 List<string> staff = new List<string>();
                 //寻找模板获取html字符串
                 foreach (var ss in jsonData as Dictionary<string, object>)
@@ -172,6 +173,7 @@ namespace FastDev.Service
                                 //当事人名字使用,增加到一个字段内
                                 if (lparty[i].ContainsKey("Name"))
                                     staff.Add(lparty[i]["Name"].ToString());
+                                partyDetail.Add(GetDetailMsg(JsonHelper.DeserializeJsonToObject<law_party>(JsonHelper.SerializeObject(lparty[i]))));
                             }
                             break;
                         case "law_staff": //执法人
@@ -233,29 +235,30 @@ namespace FastDev.Service
                                     }
                                 }
                             }
+
                             break;
                         default: break;
                     }
 
                 }
                 //单独处理当事人
-                if (pDic.ContainsKey("FullStaff"))
+                if (!pDic.ContainsKey("FullStaff"))
                     pDic.Add("FullStaff", string.Join(",", staff));
-
+                pDic.Add("PartyDetail", string.Join(",", partyDetail));
                 //处罚决定书
-                if (data.formType == "law_punishmentInfo" && false)
+                if (data.formType == "law_punishmentInfo")
                 {
                     //主办人
                     ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
                     var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
 
                     ///CoOrganizer 协办人 1239796367061291008 CreateUserID 主办人的ID
-                    //执法人1
-                    var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from processinstance where Name=@0");
-                    //执法人2
-                    var JobNum2 = OTDB.FirstOrDefault<string>("select Jobnumber from processinstance where Name=@0");
-                    pDic.Add("JobNum1", JobNum1);
-                    pDic.Add("JobNum2", JobNum2);
+                    //执法人1编号
+                    var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CreateUserID"));
+                    //执法人2编号
+                    var JobNum2 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CoOrganizer"));
+                    pDic.Add("JobNum1", JobNum1 ?? "");
+                    pDic.Add("JobNum2", JobNum2 ?? "");
 
                 }
 
@@ -322,7 +325,6 @@ namespace FastDev.Service
                     if (item.Value is string && !pDic.ContainsKey(item.Key + (i + 1)))
                         pDic.Add(item.Key + (i + 1), item.Value.ToString());
                 }
-
             }
 
         }

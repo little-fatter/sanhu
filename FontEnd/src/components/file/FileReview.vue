@@ -86,7 +86,7 @@ export default {
       const file = { imgs: [], others: [] }
       files.forEach(i => {
         const title = i.FileName || i.fileName
-        const path = apiConfig.file.download(i.FileCode || i.fileCode)
+        const path = i.url || apiConfig.file.download(i.FileCode || i.fileCode)
         const isi = isImg(i.FileName || i.fileName)
         file[isi ? 'imgs' : 'others'].push({ title, path })
       })
