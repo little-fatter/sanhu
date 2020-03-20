@@ -35,8 +35,8 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                data.forminquestrecord.TaskId = data.SourceTaskId;
-                data.forminquestrecord.EventInfoId = data.EventInfoId;
+                if (data.SourceTaskId != null) data.forminquestrecord.TaskId = data.SourceTaskId;
+                if (data.EventInfoId != null) data.forminquestrecord.EventInfoId = data.EventInfoId;
                 var form = ServiceHelper.GetService("form_inquestrecord").Create(data.forminquestrecord);
                 if (string.IsNullOrEmpty((string)form)) throw new Exception();
                  formidt = form.ToString();

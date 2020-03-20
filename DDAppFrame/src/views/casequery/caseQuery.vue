@@ -3,7 +3,7 @@
     <van-search v-model="searchText" show-action placeholder="请输入搜索关键词">
       <div slot="action" @click="onSearch">搜索</div>
     </van-search>
-    <van-dropdown-menu>
+    <van-dropdown-menu class="caseSearch">
       <van-dropdown-item v-model="searchType" :options="searchTypeOptions" @change="searchTypeEvn" />
       <van-dropdown-item v-model="searchFlow" :options="searchFlowOptions" @change="searchFlowEvn" />
       <van-dropdown-item v-model="searchState" :options="searchStateOptions" @change="searchStateEvn"/>
@@ -364,12 +364,19 @@ export default {
   color: #64697c !important;
 }
 .van-cell__title{
-  width: auto !important;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: calc(100vw - 0.9rem);
+  /* width: auto !important; */
 }
 .case-info-img{
 display: flex;
 }
 .case-info-img div:first-child{
   margin-right: 0.3rem;
+}
+/deep/.caseSearch .van-cell__title{
+  width: 100% !important;;
 }
 </style>
