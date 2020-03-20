@@ -43,14 +43,6 @@
 </style>
 <template>
   <div class="formContent">
-    <div class="tags" >
-      <!-- <a-button class="button" :type="clickIndex == 1 ? 'primary' : 'default'" @click="clickIndex = 1">全部</a-button>
-      <a-button class="button" :type="clickIndex == 2 ? 'primary' : 'default'" @click="clickIndex = 2">我发起的</a-button>
-      <a-button class="button" :type="clickIndex == 3 ? 'primary' : 'default'" @click="clickIndex = 3">我审批的</a-button>
-      <a-button class="button" :type="clickIndex == 4 ? 'primary' : 'default'" @click="clickIndex = 4">待我审批的</a-button>
-      <a-button class="button" :type="clickIndex == 5 ? 'primary' : 'default'" @click="clickIndex = 5">抄送我的</a-button>
-      <a-button class="button" type="primary" @click="$router.push('/form/form-add-list')">新增</a-button> -->
-    </div>
     <div class="searchItemBox">
       <div>
         <div>
@@ -103,56 +95,6 @@
         </template>
       </s-table>
     </div>
-    <!-- <a-modal
-      v-model="visible"
-    >
-      <template slot="header">
-      </template>
-      <template slot="footer">
-        <div style="display:flex;justify-content:center;">
-          <a-button style="margin-right:20px;" key="back" @click="visible = false">发送</a-button>
-          <a-button key="submit" >
-            拨打电话
-          </a-button>
-        </div>
-      </template>
-      <a-form style="margin-top:20px;" class="form">
-        <a-form-item
-          label="通知对象"
-          :labelCol="{span:6}"
-          :wrapperCol="{span:14}">
-          <a-input placeholder="Basic usage"/>
-        </a-form-item>
-        <a-form-item
-          label="通知方式"
-          :labelCol="{span:6}"
-          :wrapperCol="{span:14}">
-          <a-input-group size="large">
-            <a-col :span="7">
-              <a-select defaultValue="短信">
-                <a-select-option value="短信">短信</a-select-option>
-                <a-select-option value="邮箱">邮箱</a-select-option>
-              </a-select>
-            </a-col>
-            <a-col :span="17">
-              <a-input defaultValue="26888888" />
-            </a-col>
-          </a-input-group>
-        </a-form-item>
-        <a-form-item
-          label="通知内容"
-          :labelCol="{span:6}"
-          :wrapperCol="{span:14}">
-          <a-input placeholder="Basic usage"/>
-        </a-form-item>
-        <a-form-item
-          label="链接"
-          :labelCol="{span:6}"
-          :wrapperCol="{span:14}">
-          <a-input placeholder="Basic usage"/>
-        </a-form-item>
-      </a-form>
-    </a-modal> -->
   </div>
 </template>
 
@@ -160,7 +102,6 @@
 import { getPageData, getDictionary } from '@/api/sampleApi'
 import STable from '@/components/table/'
 import { isNotEmpty, toFormDetail } from '@/utils/util'
-import { CASE_REPORT } from '@/config/model.config'
 
 export default {
   name: 'Index',
@@ -272,12 +213,8 @@ export default {
       this.EEndTime = dateString[1]
     },
     gotoDetail (record) {
-      if (record.FormType === CASE_REPORT) {
-        console.log('gotoDetail -> record', record)
-        toFormDetail(record)
-      } else {
-        toFormDetail(record)
-      }
+      console.log('gotoDetail -> record', record)
+      toFormDetail(record)
     },
     // 处理参数
     dealParameter () {

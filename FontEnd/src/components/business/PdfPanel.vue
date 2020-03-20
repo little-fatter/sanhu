@@ -82,8 +82,7 @@ export default {
   },
   computed: {
     pdfUrl () {
-      console.log(`${appConfig.pdfHost}/${this.pdf}`)
-      return Pdf.createLoadingTask(`${appConfig.pdfHost}/${this.pdf}`)
+      return this.pdf ? Pdf.createLoadingTask(`${appConfig.pdfHost}/${this.pdf}`) : ''
     }
   },
   methods: {
