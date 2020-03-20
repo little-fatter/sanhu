@@ -297,21 +297,29 @@ namespace FastDev.Service
                 if (data.formType == "form_confiscated")
                 {
                     var confiscatedInfo = QueryDb.FirstOrDefault<form_confiscated>("where Id = @0", data.formID);
-                    if (confiscatedInfo != null && string.IsNullOrWhiteSpace(confiscatedInfo.CreateUserID))
+                    if (confiscatedInfo != null && !string.IsNullOrWhiteSpace(confiscatedInfo.CreateUserID))
                     {
                         var OTDB = SysContext.GetOtherDB(ServiceHelper.GetServiceConfig("user").model.dbName);
-                        var user = OTDB.FirstOrDefault<user>("select Jobnumber from user where Id=@0", confiscatedInfo.CreateUserID);
-
-                        pDic.Add("CreateUserName", user.Name);
-                        pDic.Add("JobNum1", user.Jobnumber);
+                        var user = OTDB.FirstOrDefault<user>("where Id=@0", confiscatedInfo.CreateUserID);
+                        if (user != null)
+                        {
+                            pDic.Add("CreateUserName", user.Name ?? "");
+                            pDic.Add("JobNum1", user.Jobnumber ?? "");
+                        }
+             
                         //pDic.Add("JobNum1", "");
                     }
 
                 }
                 if (data.formType == "form_confiscated" && pDic.ContainsKey("CaseId"))
                 {
-                    var OTDB = SysContext.GetOtherDB(ServiceHelper.GetServiceConfig("user").model.dbName);
-                    var lawParty = OTDB.FirstOrDefault<law_party>("where AssociationobjectID = @0", pDic["CaseId"]);
+                    var lawParty = QueryDb.FirstOrDefault<law_party>("where AssociationobjectID = @0", pDic["CaseId"]);
+
+                    partyDetail.Add(GetDetailMsg(lawParty));
+                }
+                if (data.formType == "case_report" && pDic.ContainsKey("CaseId"))
+                {
+                    var lawParty = QueryDb.FirstOrDefault<law_party>("where AssociationobjectID = @0", pDic["CaseId"]);
 
                     partyDetail.Add(GetDetailMsg(lawParty));
                 }
@@ -457,13 +465,13 @@ namespace FastDev.Service
         private string GetDetailMsg(law_party party) => party switch
         {
             //单位
-            { Typesofparties: "单位" } => $@"单位名称{party.Name},法人名称{party.Nameoflegalperson},性别{party.Gender},民族{party.Nationality}
-                                           ,出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard},
-                                           单位地址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
+            { Typesofparties: "单位" } => $"单位名称{party.Name},法人名称{party.Nameoflegalperson},性别{party.Gender},民族{party.Nationality}"
+                                           + $",出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard}," +
+                                           $"单位地址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
             //其他的都视作个人
-            _ => $@"姓名{party.Name},性别{party.Gender},民族{party.Nationality}
-                                           ,出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard},
-                                           住址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
+            _ => $@"姓名{party.Name},性别{party.Gender},民族{party.Nationality}"
+                + $",出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard}," +
+                $"住址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
         };
 
         private string GetYearMonth(string idCardNum)
