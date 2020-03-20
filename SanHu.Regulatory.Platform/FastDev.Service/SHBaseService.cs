@@ -27,6 +27,7 @@ namespace FastDev.Service
 
         string publishtypet = null;
         string closeDate = null;
+        string publishTitle = null;
         /// <summary>
         /// 发送待办
         /// </summary>
@@ -142,6 +143,7 @@ namespace FastDev.Service
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             obj.Add("publishtype", publishtypet);
+            obj.Add("PunishmentTitle", publishTitle);
             if (obj["CreateUserID"] != null)
             {
                 var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{obj["CreateUserID"]}'");
@@ -269,6 +271,7 @@ namespace FastDev.Service
                 publishtype = publishtype + " " + "罚款";
             }
             publishtypet = publishtype;
+            publishTitle = law.PunishmentTitle;
             filter.rules.Add(new FilterRule("AssociationobjectID", law.ID, "equal"));
             return ServiceHelper.GetService("attachment").GetListData(filter);
         }
