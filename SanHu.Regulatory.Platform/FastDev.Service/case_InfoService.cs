@@ -441,6 +441,7 @@ namespace FastDev.Service
                     l.AssociationobjectID = CaseInfoSource;
                     l.ID = Guid.NewGuid().ToString();
                     l.CreateDate = DateTime.Now;
+                    l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
                 }
                 foreach (var l in law_Parties)//创建新建的
@@ -449,6 +450,7 @@ namespace FastDev.Service
                     l.AssociationobjectID = CaseInfoNew;
                     l.ID = Guid.NewGuid().ToString();
                     l.CreateDate = DateTime.Now;
+                    l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
                 }
 

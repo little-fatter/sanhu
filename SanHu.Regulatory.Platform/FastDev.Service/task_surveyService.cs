@@ -283,6 +283,7 @@ namespace FastDev.Service
                     l.Associatedobjecttype = "task_survey";
                     l.AssociationobjectID = tasksurvey;
                    l.ID = Guid.NewGuid().ToString();
+                    l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
                    // ServiceHelper.GetService("law_partyService").Create(l);
                 }
@@ -293,6 +294,7 @@ namespace FastDev.Service
                         a.Associatedobjecttype = "task_survey";
                         a.AssociationobjectID = tasksurvey;
                         a.ID = Guid.NewGuid().ToString();
+                        a.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(a);
                         // _attachment.Create(a);           
                     }

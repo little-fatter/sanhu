@@ -202,6 +202,7 @@ export default {
             })
           })
           this.model.Inspectiontype = items[0].ItemCode
+          this.model.InspectiontypeName = items[0].Title
         }
         this.inspectiontypeOptions = inspectiontypeOptions
       })

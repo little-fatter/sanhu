@@ -73,7 +73,7 @@ import SUpload from '../../../components/file/StandardUploadFile'
 import PartyInfoView from '../../../components/business/PartyInfoView'
 import PenaltyDecisionView from '../../../components/business/PenaltyDecisionView'
 import { commonOperateApi, TaskTypeDic, getDetaildata } from '../../../api/regulatoryApi'
-import { isNotEmpty, getNextTask, getCaseTaskDefault } from '../../../utils/util'
+import { isNotEmpty, getNextTask, getCaseTaskDefault, isEmpty } from '../../../utils/util'
 import { getCurrentUserInfo } from '../../../service/currentUser.service'
 import NextTaskModal from '../../../components/business/NextTaskModal'
 var timer = null
@@ -151,10 +151,10 @@ export default {
       this.save(data)
     },
     onSubmit () {
-      // if (isEmpty(this.mainSignature)) {
-      //   this.$toast('请主办人签字')
-      //   return
-      // }
+      if (isEmpty(this.mainSignature)) {
+        this.$toast('请主办人签字')
+        return
+      }
       // if (isEmpty(this.organiserSignature) && isNotEmpty(this.penalizeBook.CoOrganizer)) {
       //   this.$toast('协办人签字')
       //   return
@@ -179,9 +179,8 @@ export default {
         CoOrganizer: this.penalizeBook.CoOrganizer,
         CoorganizerID: this.penalizeBook.CoOrganizerId,
         ...decision,
-        MainHanderSign: this.mainSignature
-        // MainHanderSign: this.mainSignature,
-        // CoOrganizerSign: this.organiserSignature
+        MainHanderSign: this.mainSignature,
+        CoOrganizerSign: this.organiserSignature
       }
       var data = {
         SourceTaskId: isNotEmpty(this.penalizeBook.taskInfo) ? this.penalizeBook.taskInfo.ID : null,
