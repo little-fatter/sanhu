@@ -18,6 +18,7 @@
         v-model="pageIndex"
         :page-size="pageSize"
         :total="total"
+        :size="pageType"
         @change="handlePageIndexChange"
       />
     </div>
@@ -43,6 +44,11 @@ export default {
     pageSize: {
       type: Number,
       default: 10
+    },
+    // 分页类型
+    pageType: {
+      type: String,
+      default: ''
     },
     // 数据请求方法
     dataCallback: {

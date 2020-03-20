@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-10 17:12:25
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-12 17:40:52
+ * @LastEditTime: 2020-03-20 15:19:51
  * @Description:  选择人员
  -->
 
@@ -21,7 +21,7 @@
         maxlength="11"
         style="width: 200px; margin-right: 10px"
       />
-      <a-button type="primary" @click="getUsers">查询</a-button>
+      <a-button type="primary" @click="$refs.list.loadData(true)">查询</a-button>
     </div>
     <div class="sp-container">
       <div class="sp-main">
@@ -29,14 +29,27 @@
           <div class="sp-panel-header">
             <span class="sp-panel-title">人员列表({{ list.length }})</span>
           </div>
-          <div class="sp-panel-body scroll-small">
-            <div class="sp-user" v-for="(item, index) in list" :key="index">
-              <a-checkbox class="sp-user-check" :checked="item.checked" @change="e => handleSelect(e, item, index)" />
-              <a-avatar :size="30" :style="{ backgroundColor: '#3A9DFA', verticalAlign: 'middle' }">
-                {{ item.Name }}
-              </a-avatar>
-              <span class="sp-user-name">{{ item.Name }}</span>
-            </div>
+          <div class="sp-panel-body">
+            <list
+              ref="list"
+              :data-callback="loadData"
+              :is-load="false"
+              :optimize-scroll-bar="true"
+              page-type="small"
+              v-slot:default="{ list }"
+              style="height: 100%"
+            >
+              <div class="sp-user" v-for="(item, index) in list" :key="index">
+                <!-- 如果为多选，则显示选择框 -->
+                <template v-if="multiple">
+                  <a-checkbox class="sp-user-check" :checked="item.checked" @change="e => handleSelectCheck(e, item, index)" />
+                </template>
+                <a-avatar :size="30" @click="handleSelectItem(item)" :style="{ backgroundColor: '#3A9DFA', verticalAlign: 'middle' }">
+                  {{ item.Name }}
+                </a-avatar>
+                <span class="sp-user-name" @click="handleSelectItem(item)">{{ item.Name }}</span>
+              </div>
+            </list>
           </div>
         </div>
         
@@ -50,7 +63,7 @@
                 {{ item.Name }}
               </a-avatar>
               <span class="sp-user-name">{{ item.Name }}</span>
-              <span class="sp-user-close" title="删除" @click="handleDelete(item, index)"><a-icon type="close" /></span>
+              <span class="sp-user-close" v-if="multiple" title="删除" @click="handleDelete(item, index)"><a-icon type="close" /></span>
             </div>
           </div>
         </div>
@@ -64,6 +77,7 @@
 
 <script>
 import SelectModal from '@/components/modal/SelectModal'
+import List from '@/components/list/List'
 import { getUsers } from '@/api/frameworkApi'
 
 const genRestData = (params = {}) => ({
@@ -77,7 +91,15 @@ const genRestData = (params = {}) => ({
 
 export default {
   components: {
-    SelectModal
+    SelectModal,
+    List
+  },
+  props: {
+    // 多选模式
+    multiple: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -87,16 +109,16 @@ export default {
   methods: {
     open () {
       Object.assign(this, genRestData())
-      this.getUsers()
+      this.$nextTick(() => this.$refs.list.loadData(true))
       this.$refs.modal.open()
     },
-    async getUsers () {
-      const { Rows = [] } = await getUsers({ ...this.queryParam, pageIndex: 0, pageSize: 1 })
-      this.list = Rows
+    loadData ({ pageIndex, pageSize }) {
+      return getUsers({ ...this.queryParam, pageIndex, pageSize })
     },
-    // 选中人员
-    handleSelect (e, record, index) {
-      const { list, selects } = this
+    // 选中人员（多选）
+    handleSelectCheck (e, record, index) {
+      const list = this.$refs.list.list
+      const { selects } = this
       const { checked } = e.target
       list[index].checked = checked
       if (checked) {
@@ -104,27 +126,38 @@ export default {
       } else {
         selects.splice(selects.findIndex(i => i.Id === record.Id), 1)
       }
-      this.list = [...list]
+      this.$refs.list.list = [...list]
       this.selects = [...selects]
+    },
+    // 选中人员（单选）
+    handleSelectItem (record) {
+      if (this.multiple) return
+      this.selects = [{...record}]
     },
     // 删除已选中的人员
     handleDelete (record, index) {
-      const { list, selects } = this
+      const list = this.$refs.list.list
+      const { selects } = this
       const _index = list.findIndex(i => i.Id === record.Id)
       selects.splice(index, 1)
       if (_index !== -1) {
         list[_index].checked = false
       }
-      this.list = [...list]
+      this.$refs.list.list = [...list]
       this.selects = [...selects]
     },
     ok () {
-      const { selects } = this
+      const { selects, multiple } = this
       this.$refs.modal.close()
-      this.$emit('on-select', {
-        selects: [...selects],
-        values: selects.map(item => item.AccountId)
-      })
+      if (!selects[0]) return
+      if (multiple) {
+        this.$emit('on-select', {
+          selects: [...selects],
+          values: selects.map(item => item.AccountId)
+        })
+      } else {
+        this.$emit('on-select', {...selects[0]})
+      }
     }
   }
 }
