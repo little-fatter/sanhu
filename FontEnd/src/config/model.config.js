@@ -26,12 +26,12 @@ export const CASE_REPORT = 'case_report'
 export const CASE_COVER = 'case_cover'
 // 询问记录
 export const FORM_INQUIRY_RECORD = 'form_inquiryrecord'
-// 询问当事笔录
-export const FORM_INQUIRY_RECORD_LITIGANT = 'form_inquiryrecord_litigant'
-// 询问证人笔录
-export const FORM_INQUIRY_RECORD_WITNESS = 'form_inquiryrecord_witness'
-// 询问第三人笔录
-export const FORM_INQUIRY_RECORD_THIRD = 'form_inquiryrecord_third'
+// // 询问当事笔录
+// export const FORM_INQUIRY_RECORD_LITIGANT = 'form_inquiryrecord_litigant'
+// // 询问证人笔录
+// export const FORM_INQUIRY_RECORD_WITNESS = 'form_inquiryrecord_witness'
+// // 询问第三人笔录
+// export const FORM_INQUIRY_RECORD_THIRD = 'form_inquiryrecord_third'
 // 现场勘查
 export const TASK_SURVEY = 'task_survey'
 // 事件核查

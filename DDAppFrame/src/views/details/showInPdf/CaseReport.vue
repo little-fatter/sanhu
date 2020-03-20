@@ -86,7 +86,7 @@ export default {
     }
   },
   created () {
-    this.FormID = this.$route.query.ID // 事件ID
+    this.FormID = this.$route.query.id // 表单ID
     this.initPage()
   },
   mounted () {

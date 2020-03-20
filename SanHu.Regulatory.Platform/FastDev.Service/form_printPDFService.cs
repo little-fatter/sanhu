@@ -29,7 +29,7 @@ namespace FastDev.Service
             _converter = SysContext.GetService<IConverter>();
             OnGetAPIHandler += form_printPDFService_OnGetAPIHandler;
         }
-
+        private bool isTest { get => isTest; set => isTest = false; }
         private Func<APIContext, object> form_printPDFService_OnGetAPIHandler(string id)
         {
             //return PrintTPdf;
@@ -137,12 +137,15 @@ namespace FastDev.Service
             try
             {
                 //检查表中是否已经生成
-                if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID))
+                if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID) && false)
                     return QueryDb.FirstOrDefault<form_printPDF>("where FormId = @0", data.formID).FilePath;
 
                 //根据模板名的相关数据更改模板目标
                 var pDic = new Dictionary<string, string>();
-
+                if (string.IsNullOrEmpty(data.formType) || string.IsNullOrEmpty(data.formID))
+                {
+                    return "无数据";
+                }
                 var jsonData = FormData(new FormDataReq()
                 {
                     FormId = data.formID,
@@ -244,10 +247,7 @@ namespace FastDev.Service
                     }
 
                 }
-                //单独处理当事人
-                if (!pDic.ContainsKey("FullStaff"))
-                    pDic.Add("FullStaff", string.Join(",", staff));
-                pDic.Add("PartyDetail", string.Join(",", partyDetail));
+
                 //处罚决定书
                 if (data.formType == "law_punishmentInfo")
                 {
@@ -294,6 +294,40 @@ namespace FastDev.Service
                                 break;
                         }
                 }
+                if (data.formType == "form_confiscated")
+                {
+                    var confiscatedInfo = QueryDb.FirstOrDefault<form_confiscated>("where Id = @0", data.formID);
+                    if (confiscatedInfo != null && !string.IsNullOrWhiteSpace(confiscatedInfo.CreateUserID))
+                    {
+                        var OTDB = SysContext.GetOtherDB(ServiceHelper.GetServiceConfig("user").model.dbName);
+                        var user = OTDB.FirstOrDefault<user>("where Id=@0", confiscatedInfo.CreateUserID);
+                        if (user != null)
+                        {
+                            pDic.Add("CreateUserName", user.Name ?? "");
+                            pDic.Add("JobNum1", user.Jobnumber ?? "");
+                        }
+             
+                        //pDic.Add("JobNum1", "");
+                    }
+
+                }
+                if (data.formType == "form_confiscated" && pDic.ContainsKey("CaseId"))
+                {
+                    var lawParty = QueryDb.FirstOrDefault<law_party>("where AssociationobjectID = @0", pDic["CaseId"]);
+
+                    partyDetail.Add(GetDetailMsg(lawParty));
+                }
+                if (data.formType == "case_report" && pDic.ContainsKey("CaseId"))
+                {
+                    var lawParty = QueryDb.FirstOrDefault<law_party>("where AssociationobjectID = @0", pDic["CaseId"]);
+
+                    partyDetail.Add(GetDetailMsg(lawParty));
+                }
+
+                //单独处理当事人
+                if (!pDic.ContainsKey("FullStaff"))
+                    pDic.Add("FullStaff", string.Join(",", staff));
+                pDic.Add("PartyDetail", string.Join(",", partyDetail));
 
                 //字典存入完毕 开启并替换
                 FilePath = ReplaceAspose(templatePath, pDic);
@@ -304,7 +338,7 @@ namespace FastDev.Service
 
                 //File.WriteAllBytes($"wwwroot/{FilePath}", pdfByte);
                 //插数
-                if (!SysContext.IsDev)
+                if (true)
                 {
                     QueryDb.Insert(new form_printPDF()
                     {
@@ -431,13 +465,13 @@ namespace FastDev.Service
         private string GetDetailMsg(law_party party) => party switch
         {
             //单位
-            { Typesofparties: "单位" } => $@"单位名称{party.Name},法人名称{party.Nameoflegalperson},性别{party.Gender},民族{party.Nationality}
-                                           ,出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard},
-                                           单位地址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
+            { Typesofparties: "单位" } => $"单位名称{party.Name},法人名称{party.Nameoflegalperson},性别{party.Gender},民族{party.Nationality}"
+                                           + $",出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard}," +
+                                           $"单位地址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
             //其他的都视作个人
-            _ => $@"姓名{party.Name},性别{party.Gender},民族{party.Nationality}
-                                           ,出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard},
-                                           住址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
+            _ => $@"姓名{party.Name},性别{party.Gender},民族{party.Nationality}"
+                + $",出生月份{GetYearMonth(party.IDcard)},身份证号{party.IDcard}," +
+                $"住址{party.address},工作单位{party.WorkUnit},联系方式{party.Contactnumber}",
         };
 
         private string GetYearMonth(string idCardNum)

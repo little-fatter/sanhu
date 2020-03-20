@@ -24,11 +24,10 @@ var publicAppConfig = {
     admin: 'http://192.168.0.169:27011',
     list: 'http://192.168.0.169:8030',
     framework: 'http://192.168.0.169:27011/framework',
-    // framework: 'http://182.150.28.58:3308/framework'
+    file: 'http://182.150.28.58:27012/filesystem',
     // 四方德信接口
-    sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50',
+    sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
     //  文件服务
-    file: 'http://182.150.28.58:27012/filesystem'
   },
   /** PDF拼接地址 */
   pdfHost: 'http://192.168.0.169:8030',
@@ -51,8 +50,8 @@ var publicAppConfig = {
   /**
      * API跟目录
      */
-  //   ApiWebContext: 'http://192.168.0.169:8030',
-  ApiWebContext: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/regulatory',
+  ApiWebContext: 'http://192.168.0.169:8030',
+  //   ApiWebContext: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn/regulatory',
   /**
    * 静态文件根目录
    */

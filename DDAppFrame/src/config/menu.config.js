@@ -51,14 +51,6 @@ const menus = [
             menuName: '现场勘查',
             menuLevel: 2,
             parentId: '1-2'
-          },
-          {
-            menuId: '1-2-2',
-            menuUrl: '/penalizeBookCreate',
-            menuIcon: './img/forms/form4.png',
-            menuName: '当场处罚决定书',
-            menuLevel: 2,
-            parentId: '1-2'
           }
         ]
       },
@@ -109,6 +101,14 @@ const menus = [
             menuUrl: '/caseCreate',
             menuIcon: './img/forms/form8.png',
             menuName: '案件创建表',
+            menuLevel: 2,
+            parentId: '1-4'
+          },
+          {
+            menuId: '1-4-2',
+            menuUrl: '/penalizeBookCreate',
+            menuIcon: './img/forms/form4.png',
+            menuName: '当场处罚决定书',
             menuLevel: 2,
             parentId: '1-4'
           }

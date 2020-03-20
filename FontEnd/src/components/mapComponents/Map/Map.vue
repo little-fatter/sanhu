@@ -165,6 +165,7 @@ import laiyuanPng from '../../../assets/icons/map/infobox/laiyuan.png'
 import shijianWaitingPng from '../../../assets/icons/map/infobox/shijian@3x.png'
 import shijianDonePng from '../../../assets/icons/map/infobox/wancheng@3x.png'
 import gisUtils from '../../../utils/gisUtils'
+import { isEmpty } from '../../../utils/util'
 
 const INIT_CENTER_POINT = [11453501.9292637, 2813740.344427822]
 const INIT_ZOOM = 12
@@ -282,7 +283,10 @@ export default {
     openTaskPanel: function () {
       this.infobox.alertEventLayer.other.show = true
       this.infobox.alertEventLayer.other.list = this.dataGet.getPeopleListForMap()
-      this.infobox.alertEventLayer.other.mainPerson = this.infobox.alertEventLayer.content.dealerName
+      var dealerName = this.infobox.alertEventLayer.content.dealerName
+      var dd = dealerName.split(' ')
+      dealerName = isEmpty(dealerName) ? '' : dd[dd.length - 1]
+      this.infobox.alertEventLayer.other.mainPerson = dealerName
       this.infobox.alertEventLayer.other.description = this.createTaskDescription()
       this.infobox.alertEventLayer.other.time = moment().add(10, 'minutes')
     },

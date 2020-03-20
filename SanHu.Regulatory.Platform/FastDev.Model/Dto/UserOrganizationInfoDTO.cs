@@ -78,4 +78,22 @@
         public string Remark { get; set; }
         public string Position { get; set; }
     }
+
+    /// <summary>
+    /// 用户与所属部门的名称
+    /// </summary>
+    public class UserOrganizationName
+    {
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// 部门名称
+        /// </summary>
+        public string OrgName { get; set; }
+    }
 }

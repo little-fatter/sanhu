@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace FastDev.Service
 {
@@ -55,16 +56,19 @@ namespace FastDev.Service
 
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
 
+            var dicUserOrg = SysContext.GetOtherDB(userServiceConfig.model.dbName).Query<FD.Model.Dto.UserOrganizationName>("SELECT a.Id AS UserId,a.`Name` as UserName,c.`Name` as OrgName FROM	USER a LEFT JOIN organizationuser b ON a.Id = b.UserId LEFT JOIN organization c ON b.OrganizationId = c.Id WHERE c.Id !=1")
+                .GroupBy(m => m.UserId).ToDictionary(g => g.Key, g => g.ToList());
+
             for (int i = 0; i < lst.Count; i++)
             {
                 var item = lst[i] as Dictionary<string, object>;
 
                 string userid = item["CreateUserID"] == null ? string.Empty : item["CreateUserID"].ToString();
 
-                if (!string.IsNullOrWhiteSpace(userid))
+                if (!string.IsNullOrWhiteSpace(userid) && dicUserOrg.ContainsKey(userid))
                 {
-                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={userid}");
-                    item["handler"] = user.Name;
+                    item["handler"] = dicUserOrg[userid].FirstOrDefault()?.UserName;
+                    item["Department"] = dicUserOrg[userid].FirstOrDefault()?.OrgName;
                 }
 
                 var formType = item["FormType"].ToString().ToLower();

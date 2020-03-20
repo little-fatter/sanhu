@@ -16,7 +16,7 @@
 import PdfPanel from '@/components/business/PdfPanel'
 import { isNotEmpty } from '../../utils/util'
 import { getFormDetail, getFormsDetailByEventInfoIdPdf } from '../../api/sampleApi'
-import { FORM_INQUIRY_RECORD_THIRD } from '@/config/model.config'
+import { FORM_INQUIRY_RECORD } from '@/config/model.config'
 export default {
   components: {
     'pdfPanel': PdfPanel
@@ -44,7 +44,7 @@ export default {
       }
     },
     loadData (id) {
-      const type = FORM_INQUIRY_RECORD_THIRD
+      const type = FORM_INQUIRY_RECORD
       getFormDetail(type, null, id, ['attachment']).then((res) => {
         if (res && isNotEmpty(res.attachment)) {
           this.files = res.attachment
