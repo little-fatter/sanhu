@@ -121,9 +121,9 @@ export default {
     ok () {
       const { selects } = this
       this.$refs.modal.close()
-      this.$emit('on-select', { 
-        selects: [...selects], 
-        values: selects.map(item => item.Id)
+      this.$emit('on-select', {
+        selects: [...selects],
+        values: selects.map(item => item.AccountId)
       })
     }
   }
