@@ -36,8 +36,9 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                data.formInquiryrecord.TaskId = data.SourceTaskId;
-                data.formInquiryrecord.EventInfoId = data.EventInfoId;
+
+               if(data.SourceTaskId!=null) data.formInquiryrecord.TaskId = data.SourceTaskId;
+               if(data.EventInfoId!=null) data.formInquiryrecord.EventInfoId = data.EventInfoId;
                 var form = ServiceHelper.GetService("form_inquiryrecord").Create(data.formInquiryrecord);
                 if (string.IsNullOrEmpty((string)form)) throw new Exception();
                 var formid = form.ToString();
@@ -47,6 +48,8 @@ namespace FastDev.Service
                     {
                         l.Associatedobjecttype = "form_inquiryrecord";
                         l.AssociatedobjectID= formid;
+                        l.ID = Guid.NewGuid().ToString()
+                            ;
                         l.CreateDate = DateTime.Now;
                         l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
@@ -58,6 +61,7 @@ namespace FastDev.Service
                     {
                         l.Associatedobjecttype = "form_inquiryrecord";
                         l.AssociationobjectID = formid;
+                        l.ID = Guid.NewGuid().ToString();
                         l.CreateDate = DateTime.Now;
                         l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
