@@ -74,6 +74,7 @@ namespace FastDev.Service
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
+                throw e;
                 return false;
             }
 
