@@ -66,9 +66,6 @@ namespace FastDev.Service
         {
             var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
             lawpunishmentInfo.ID = lawpunishment_Info;
-            var _Lawpartys = ServiceHelper.GetService("law_partyService");
-            var _attachment = ServiceHelper.GetService("attachmentService");
-
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
                 foreach (var l in law_Parties)
@@ -79,7 +76,6 @@ namespace FastDev.Service
                     l.CreateDate = DateTime.Now;
                     l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
-                    //_Lawpartys.Create(l);
                 }
             }
             if (attachments != null && attachments.Count > 0)
@@ -91,11 +87,10 @@ namespace FastDev.Service
                     a.ID = Guid.NewGuid().ToString();
                     a.CreateDate = DateTime.Now;
                     a.CreateUserID = SysContext.WanJiangUserID;
-                    QueryDb.Insert(a);
-                    // _attachment.Create(a);           
+                    QueryDb.Insert(a);     
                 }
             }
-            ///更新案件信息
+            //更新案件信息
             if (string.IsNullOrEmpty(lawpunishmentInfo.TaskId))
             {
                 if (!string.IsNullOrEmpty(lawpunishmentInfo.CaseId))
@@ -126,7 +121,6 @@ namespace FastDev.Service
                 }
             }
 
-            //  return lawpunishment_Info;
         }
     }
 }
