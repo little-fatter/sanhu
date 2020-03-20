@@ -35,7 +35,8 @@ export default {
     /**
      * 记录所有人员的位置(临时使用)
      */
-    peopleLocation: {}
+    peopleLocation: {},
+    peopleOnlineList: {}
   },
   /**
    * 发起 post请求，返回Promise对象
@@ -201,6 +202,48 @@ export default {
     })
   },
   /**
+   * 获取在线用户列表
+   */
+  doPostPeopleOnlineList: function () {
+    var url = appConfig.ApiWebContext + '/web/api'
+    var body = {
+      'id': 'SFAPI',
+      'model': 'cross_domain',
+      'data': {
+        'keyword': '',
+        'pageNo': '1',
+        'pageSize': '100',
+        'ApiType': 'user_online_list'
+      }
+    }
+    var that = this
+    return new Promise((resolve, reject) => {
+      postHttp(
+        {
+          url: url,
+          params: {},
+          data: body
+        }
+      ).then(function (res) {
+        if (!res.data) {
+          resolve()
+          return
+        }
+        var data = JSON.parse(res.data)
+        if (gisUtils.hasKey(data, 'successful')) {
+          // successful 是四方德信接口返回的结果字段，接口出错才有
+          resolve()
+          return
+        }
+        that.data.peopleOnlineList = data
+        resolve()
+      }, function (err) {
+        console.log(err)
+        reject(err)
+      })
+    })
+  },
+  /**
    * 任务派发
    * @param {*} AssignUsers 执行人id
    * @param {*} TaskContent 任务描述
@@ -256,8 +299,11 @@ export default {
       var lat = element.lat
       var _p = gisUtils.baiduToWGS84(lng, lat)
       var finishLimitTime = element.finishLimitTime ? element.finishLimitTime : moment().add(10, 'minutes').format(timeFormat)
-      // var dealerName = isEmpty(element.dealerName) ? '' : element.dealerName
-      // var dealerName = isEmpty(element.Dealers) || isEmpty(element.Dealers[0].realName) ? '' : element.Dealers[0].realName
+      var dealerName = element.dealerName
+      if (isEmpty(element.dealerName)) {
+        var person = this.findNearestPerson([_p.lon, _p.lat])
+        dealerName = person ? person.Organization + ' ' + person.userName : ''
+      }
       var dep = isEmpty(element.Dealers) ? undefined : this.findDepById(element.Dealers[0].deptId)
       var depName = dep ? dep['Name'] : ''
       var evtFileUrl = isEmpty(element.evtFileUrl) ? '' : element.evtFileUrl.split(',')[0]
@@ -273,7 +319,7 @@ export default {
         finishLimitTime: finishLimitTime, // 流转时限
         countdown: '00:00:00', // 倒计时,
         dep: depName, // 处理人部门
-        dealerName: element.dealerName, // 处理人姓名
+        dealerName: dealerName, // 处理人姓名
         evtFileUrl: evtFileUrl, // 上报图片
         remark: element.remark, // 描述
         address: element.address, // 地点
@@ -281,6 +327,22 @@ export default {
       })
     }
     return list
+  },
+  /**
+   * 判断人员是否在线
+   * @param {*} name 人员姓名
+   */
+  judgePersonOnline: function (name) {
+    if (isEmpty(name)) return false
+    var rows = this.data.peopleOnlineList.rows
+    if (!rows) return false
+    for (let i = 0; i < rows.length; i++) {
+      const element = rows[i]
+      if (name === element['personName']) {
+        return true
+      }
+    }
+    return false
   },
   /**
    * 根据id查找部门
@@ -322,13 +384,13 @@ export default {
       // var Longitude = element.Longitude
       // var Latitude = element.Latitude
       var ID = element.userId
-
+      var online = this.judgePersonOnline(StaffName)
       depMap[depName].list.push({
         id: ID,
         type: 1, // 1-执法，0-巡检
         StaffName: StaffName, // 姓名
         depName: depName, // 部门名称
-        online: i % 2 === 0 // 模拟在线状态
+        online: online // 模拟在线状态
         // location: [Longitude, Latitude],
         // isBusy: i % 2 === 0 // 模拟忙碌状态
       })
@@ -363,6 +425,18 @@ export default {
    */
   getLocationByPersonName: function (name) {
     return this.data.peopleLocation[name]
+  },
+  /**
+   * 查找距离最近的人员
+   * @param {*} p 点坐标[x, y]
+   */
+  findNearestPerson: function (p) {
+    var that = this
+    var ps = this.data.peopleList.Records.map(x => {
+      return that.getLocationByPersonName(x.userName)
+    })
+    var index = gisUtils.nearestPoint(p, ps)
+    return this.data.peopleList.Records[index]
   },
   /**
    * 根据人员姓名查询人员信息
@@ -422,6 +496,7 @@ export default {
       this.doPostDataAjax(urlApi, { model: 'event_info' }, bodyNotDoneAlert, 'alertEventList'),
       this.doPostPeopleListAjax(),
       this.doGetPeopleLocationAjax(),
+      this.doPostPeopleOnlineList(),
       this.doPostDataAjax(urlApi, { model: 'organization' }, bodyAllDep, 'depList')
     ]).then(() => {
       // 获取默认处理人

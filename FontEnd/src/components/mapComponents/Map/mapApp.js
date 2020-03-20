@@ -337,10 +337,10 @@ var mapApp = {
     }
   },
   /**
-   * 地图中的事件图标被点击
+   * 聚合图层的要素选择事件
    * @param {*} e
    */
-  onSelectedAlertEventLayer: function (e) {
+  onSelectedclusetrFeatureLayer: function (e) {
     if (e.selected.length < 1) {
       this.closeAllInfobox()
     } else {
@@ -354,13 +354,23 @@ var mapApp = {
           this.zoomToExtent(extent)
         } else {
           // 点击的单一要素
-          this.openAlertEventInfobox(features[0])
+          return features[0]
         }
       } else {
         // 通过代码触发，不是地图点击触发
-        this.zoomToPointFeature(clusetrFeature, 0.5)
-        this.openAlertEventInfobox(clusetrFeature)
+        return clusetrFeature
       }
+    }
+  },
+  /**
+   * 地图中的事件图标被点击
+   * @param {*} e
+   */
+  onSelectedAlertEventLayer: function (e) {
+    var f = this.onSelectedclusetrFeatureLayer(e)
+    if (f) {
+      this.zoomToPointFeature(f, 0.1)
+      this.openAlertEventInfobox(f)
     }
   },
   /**
@@ -368,26 +378,9 @@ var mapApp = {
    * @param {*} e
    */
   onSelectedpeopleLayer: function (e) {
-    if (e.selected.length < 1) {
-      this.closeAllInfobox()
-    } else {
-      var clusetrFeature = e.selected[0]
-      var features = clusetrFeature.get('features')
-      if (features) {
-        // 通过地图点击触发
-        if (features.length > 1) {
-          // 点击的聚合要素
-          var extent = this.getExtentOfClusterFeature(clusetrFeature)
-          this.zoomToExtent(extent)
-        } else {
-          // 点击的单一要素
-
-        }
-      } else {
-        // 通过代码触发，不是地图点击触发
-        this.zoomToPointFeature(clusetrFeature, 0.5)
-        //
-      }
+    var f = this.onSelectedclusetrFeatureLayer(e)
+    if (f) {
+      this.zoomToPointFeature(f, 0.5)
     }
   },
   /**
