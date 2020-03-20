@@ -264,8 +264,6 @@ namespace FastDev.Service
                     //判断类型
 
 
-
-
                     ///CoOrganizer 协办人 1239796367061291008 CreateUserID 主办人的ID
                     //执法人1编号
                     var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CreateUserID"));
