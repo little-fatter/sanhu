@@ -8,19 +8,18 @@
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
-        v-model="caseInfo.CauseOfAction"
+        v-model="caseInfo.CaseNumber"
         label="案件"
         placeholder="请选择案件"
         :readonly="true"
         clickable
         @click="handleShowSelectCase"
       >
-        <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
+        <van-icon name="arrow" color="#1989fa" slot="right-icon" size="25" />
       </van-field>
     </van-cell-group>
     <van-cell-group v-if="caseInfo.CauseOfAction" title="案件信息">
       <van-form @submit="onSubmit" @failed="onFailed">
-        <van-cell title="案件号" :value="caseInfo.CaseNumber"></van-cell>
         <van-cell title="案件类型" :value="caseInfo.CaseType"></van-cell>
         <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
         <party-info :initData="LawParties" ref="party"></party-info>
@@ -54,11 +53,8 @@
           autosize
           type="textarea"
           maxlength="200"
-          :readonly="true"
-          clickable
           required
           :rules="requiredRule"
-          @click="handleShowSelectLaw('illegalbasis')"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectLaw('illegalbasis')" size="25" />
         </van-field>
@@ -66,15 +62,12 @@
           v-model="punishmentbasis"
           label="处罚依据"
           placeholder="请选择处罚依据"
-          :readonly="true"
           rows="4"
           autosize
           type="textarea"
           maxlength="200"
-          clickable
           required
           :rules="requiredRule"
-          @click="handleShowSelectLaw('punishmentbasis')"
         >
           <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectLaw('punishmentbasis')" size="25" />
         </van-field>
@@ -86,7 +79,7 @@
           :readonly="true"
           @click="handleSelecOrganiser"
         >
-          <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecOrganiser" size="30" />
+          <van-icon name="arrow" color="#1989fa" slot="right-icon" size="30" />
         </van-field>
 
         <div class="operate-area single-save">

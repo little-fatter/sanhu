@@ -18,6 +18,7 @@
         v-model="pageIndex"
         :page-size="pageSize"
         :total="total"
+        :size="pageType"
         @change="handlePageIndexChange"
       />
     </div>
@@ -43,6 +44,11 @@ export default {
     pageSize: {
       type: Number,
       default: 10
+    },
+    // 分页类型
+    pageType: {
+      type: String,
+      default: ''
     },
     // 数据请求方法
     dataCallback: {
@@ -77,6 +83,7 @@ export default {
         const { pageIndex, pageSize } = this
         const { Rows = [], Total = 0 } = await this.dataCallback({ pageIndex, pageSize })
         Object.assign(this, { list: Rows, total: Total })
+        this.$emit('on-load-data', { list: this.list, total: this.total })
       } catch (error) {
         console.error(error)
       }

@@ -7,13 +7,15 @@
  */
 
 // 案件
-export const CASE_INFO = 'case_Info'
+export const CASE_INFO = 'case_info'
 // 事件
 export const EVENT_INFO = 'event_info'
 // 案卷列表
 export const FORMWITH_EVENTCASE = 'formwith_eventcase'
 // 物品清单
 export const FORM_CONFISCATED_ITEM = 'form_confiscated_item'
+// 没收清单
+export const FORM_CONFISCATED = 'form_confiscated'
 // 当场处罚决定书
 export const LAW_PUNISHMENT_INFO = 'law_punishmentInfo'
 // 勘验记录
@@ -24,12 +26,12 @@ export const CASE_REPORT = 'case_report'
 export const CASE_COVER = 'case_cover'
 // 询问记录
 export const FORM_INQUIRY_RECORD = 'form_inquiryrecord'
-// 询问当事笔录
-export const FORM_INQUIRY_RECORD_LITIGANT = 'form_inquiryrecord_litigant'
-// 询问证人笔录
-export const FORM_INQUIRY_RECORD_WITNESS = 'form_inquiryrecord_witness'
-// 询问第三人笔录
-export const FORM_INQUIRY_RECORD_THIRD = 'form_inquiryrecord_third'
+// // 询问当事笔录
+// export const FORM_INQUIRY_RECORD_LITIGANT = 'form_inquiryrecord_litigant'
+// // 询问证人笔录
+// export const FORM_INQUIRY_RECORD_WITNESS = 'form_inquiryrecord_witness'
+// // 询问第三人笔录
+// export const FORM_INQUIRY_RECORD_THIRD = 'form_inquiryrecord_third'
 // 现场勘查
 export const TASK_SURVEY = 'task_survey'
 // 事件核查

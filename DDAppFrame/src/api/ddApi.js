@@ -160,3 +160,18 @@ export const sendChatMsg = (parameter) => {
     data: parameter
   })
 }
+
+/**
+ * 保存群ID和Title到数据库
+ * @param {*} chatId
+ * @param {*} title
+ */
+export const addChat = (chatId, title) => {
+  return postHttp({
+    url: apiConfig.admin.dd.addChat,
+    data: {
+      chatId,
+      title
+    }
+  })
+}

@@ -12,20 +12,8 @@
         <van-cell title="案由：" :value="caseInfo.CauseOfAction" title-class="title-cell " />
       </template>
       <van-cell title="案件类型" :value="caseInfo.CaseType" value-class="con-style" title-class="title-cell" />
-      <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
-      <template>
-        <!--当事人信息-->
-        <PartyInfo :initData="initData" ref="MyPartyInfo"></PartyInfo>
-        <!-- <van-cell
-          title="当事人"
-          v-for="item in lawPartyInfoL"
-          :key="item.ID+'@'"
-          :value="item.Name"
-          :label="caseInfo.IDcard"
-          value-class="con-style"
-          title-class="title-cell" /> -->
-      </template>
-
+      <!-- <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" /> -->
+      <van-cell title="适用程序" value="简易程序" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发地点" :value="caseInfo.IncidentAddress" value-class="con-style" title-class="title-cell">
         <!-- <van-button
@@ -36,15 +24,47 @@
           type="info"
           @click="viewMap"/> -->
       </van-cell>
-      <van-cell title="处罚决定文书号" :value="caseInfo.PenaltyDecisionNo" value-class="con-style" title-class="title-cell" />
-      <van-cell title="处罚种类" v-if="caseInfo.PenaltyType" :value="caseInfo.PenaltyType[1]" value-class="con-style" title-class="title-cell" />
-      <van-cell title="执行情况" :value="caseInfo.CaseDescription" value-class="con-style" title-class="title-cell" />
-      <van-cell title="立案日期" :value="caseInfo.CaseRegisterDay" value-class="con-style" title-class="title-cell" />
-      <van-cell title="结案日期" :value="caseInfo.CaseCloseDay" value-class="con-style" title-class="title-cell" />
-      <van-cell title="办案人员" :value="caseInfo.Investigators" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚决定文书号" :value="caseInfo.PunishmentTitle" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚种类" :value="caseInfo.publishtype" value-class="con-style" title-class="title-cell" />
+      <van-cell title="执行情况" value="已执行" value-class="con-style" title-class="title-cell" />
+      <van-cell title="立案日期" :value="caseInfo.CreateDate" value-class="con-style" title-class="title-cell" />
+      <van-cell title="结案日期" :value="caseInfo.closeDate" value-class="con-style" title-class="title-cell" />
+      <van-cell title="办案人员" :value="caseInfo.CreateUserID" value-class="con-style" title-class="title-cell" />
       <!-- <van-cell title="归档人员" :value="caseInfo.DocPeople" value-class="con-style" title-class="title-cell" />
       <van-cell title="归档号" :value="caseInfo.CaseNumber" value-class="con-style" title-class="title-cell" />
       <van-cell title="保存期限" :value="caseInfo.DocRetentionTimes" value-class="con-style" title-class="title-cell" /> -->
+    </van-cell-group>
+    <van-cell-group style="margin-top:0.3rem">
+      <van-cell >
+        <h5>当事人信息</h5>
+      </van-cell>
+      <van-cell>
+        <!--当事人信息-->
+        <PartyInfo :initData="initData" ref="MyPartyInfo"></PartyInfo>
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group>
+      <van-cell style="margin-top:0.3rem">
+        <h5>附件信息</h5>
+      </van-cell>
+      <S-upload
+        ref="myupload"
+        :sync2Dingding="false"
+        :isOnlyView="true"
+        :initResult="attachment"
+      ></S-upload>
+    </van-cell-group>
+    <van-cell-group>
+      <van-cell style="margin-top:0.3rem">
+        <h5>案件进度</h5>
+      </van-cell>
+      <van-steps direction="vertical" :active="caseFlow.length-1">
+        <van-step v-for="item in caseFlow" :key="item.id">
+          <h6>{{ item.FormType }}</h6>
+          <p class="flowState">{{ item.state }}</p>
+          <p class="flowState">{{ item.CreateUser }}  {{ item.CreateDate | dayjs('YYYY-MM-DD hh:mm') }}</p>
+        </van-step>
+      </van-steps>
     </van-cell-group>
     <!--        地图加载-->
     <van-dialog v-model="show" title="地图地址查看">
@@ -79,27 +99,25 @@
 </template>
 
 <script>
-import { getDetaildata, getPageDate, getDetialdataByEventInfoId } from '../../api/regulatoryApi'// 引入请求
+import { getDetaildata, getPageDate, getDetialdataByEventInfoId, getFormsDetailByEventInfoId, FromType } from '../../api/regulatoryApi'// 引入请求
 import PartyInfo from '../../components/business/PartyInfoView'
+import SUpload from '../../components/file/StandardUploadFile'
 export default {
   name: 'CaseDetails',
   components: {
-    PartyInfo
+    PartyInfo,
+    SUpload
   },
   data () {
     return {
       caseId: '', // 案件ID
       show: false,
-      caseInfo: {
-
-      },
-      lawPartyInfoL: {
-
-      },
-      eventInfo: {
-
-      },
-      initData: []// 组件当事人
+      caseInfo: {},
+      lawPartyInfoL: {},
+      eventInfo: {},
+      attachment: [], // 附件信息
+      initData: [], // 组件当事人
+      caseFlow: [] // 案件流程
     }
   },
   methods: {
@@ -115,37 +133,18 @@ export default {
     },
     // 数据请求
     getCaseInfo () {
-      const conditon = {
-        rules: [
-          {
-            field: 'CaseID',
-            op: 'equal',
-            value: this.caseId,
-            type: 'string'
-          },
-          {// 关联查询
-            field: 'Associatedobjecttype',
-            op: 'equal',
-            value: 'case_Info', // 模块名
-            type: 'string'
-          }
-        ]
-      }
-      // 请求案件详情
-      getDetaildata('case_Info', this.caseId).then((res) => {
-        this.caseInfo = res
-        // console.log('案件详情', this.caseInfo)
-      })
-      // 请求当事人
-      getPageDate('law_party', 1, 100, conditon).then((res) => {
-        // this.lawPartyInfoL = res.Rows
-        this.initData = res.Rows
-        // console.log('当事人', this.lawPartyInfoL)
-      })
-      // 请求案件 关联事件
-      getDetialdataByEventInfoId('event_info', this.caseInfo.EventInfoId).then((res) => {
-        this.eventInfo = res
-        // console.log('事件信息', res)
+      getFormsDetailByEventInfoId(null, FromType.caseDetails, this.caseId, ['casedetail']).then(res => {
+        console.log(res)
+        this.caseInfo = res.MainForm // 案件信息
+        this.initData = res.law_party // 当事人
+        this.attachment = res.attachment // 附件信息
+        this.caseFlow = res.casetimeline // 案件流程
+        // 请求案件关联事件
+        getDetialdataByEventInfoId('event_info', res.EventInfoId).then((res) => {
+          console.log(res)
+
+          this.eventInfo = res
+        })
       })
     }
   },
@@ -202,5 +201,8 @@ export default {
     }
     .van-cell__label{
       margin-left: 2.4rem;
+    }
+    .flowState{
+      font-size: 0.28rem;
     }
 </style>

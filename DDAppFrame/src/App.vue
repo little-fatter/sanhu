@@ -7,6 +7,8 @@
   </div>
 </template>
 <script>
+import { ddgetMapLocation } from './service/ddJsApi.service'
+import { savePatrolPoints } from './api/regulatoryApi'
 // import { isHomePageByCurrentPath } from './utils/helper/menu.helper'
 export default {
   name: 'App',
@@ -45,7 +47,11 @@ export default {
   },
   methods: {
     init () {
-
+      ddgetMapLocation().then(location => {
+        savePatrolPoints(location.longitude, location.latitude).then((res) => {
+          console.log('同步经纬度成功')
+        })
+      })
     },
     keybackEventListener () {
       // if (isAppEnv()) {

@@ -35,8 +35,8 @@ export const DictionaryCode = {
  * 表单类型
  */
 export const FromType = {
-  // 物品清单
-  goodsList: 'form_confiscated_item',
+  // 物品清单  废弃
+  // goodsList: 'form_confiscated_item',
   // 案件详情
   caseDetails: 'case_info',
   // 当场处罚决定书
@@ -48,19 +48,86 @@ export const FromType = {
   // 卷宗封面
   caseCover: 'case_cover',
   // 询问当事笔录
-  AskPartyNote: 'form_inquiryrecord_litigant',
+  // AskPartyNote: 'form_inquiryrecord_litigant',
+  AskPartyNote: 'form_inquiryrecord',
   // 询问证人笔录
-  AskWitnessNote: 'form_inquiryrecord_witness',
+  // AskWitnessNote: 'form_inquiryrecord_witness',   //废弃
   // 询问第三人笔录
-  AskThirdPartyNote: 'form_inquiryrecord_third',
+  // AskThirdPartyNote: 'form_inquiryrecord_third',  //废弃
   // 现场勘查
   sceneInvestigationDetail: 'task_survey',
   // 事件核查
   eventDetail: 'task_patrol',
   // 没收物品清单
+  // confiscatoryGoodsList: 'form_confiscated_item'   //废弃
   confiscatoryGoodsList: 'form_confiscated'
 }
-
+// 去表单详情
+export const goFormDetail = (item, that) => {
+  if (item.FormType === FromType.confiscatoryGoodsList) {
+    // 没收物品清单
+    that.$router.push({
+      path: '/goodsList', query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.caseDetails) {
+    // 案件详情
+    that.$router.push({
+      path: '/caseDetails', query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.PromptlyPunishNote) {
+    // 处罚当场决定书
+    that.$router.push({
+      path: '/PromptlyPunishNote', query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.RecordOfInquest) {
+    // 勘验记录
+    that.$router.push({
+      path: '/RecordOfInquest',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.caseReport) {
+    that.$router.push({
+      path: '/caseReport',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.caseCover) {
+    // 卷宗封面
+    that.$router.push({
+      path: '/form_inquiryrecord',
+      query: { id: item.CaseId }
+    })
+  } else if (item.FormType === FromType.AskThirdPartyNote) {
+    // 询问第三人笔录
+    that.$router.push({
+      path: '/AskThirdPartyNote',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.AskPartyNote) {
+    // 询问当事人笔录
+    that.$router.push({
+      path: '/AskPartyNote',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.AskWitnessNote) {
+    // 询问证人笔录
+    that.$router.push({
+      path: '/AskWitnessNote',
+      query: { ID: item.FormID }
+    })
+  } else if (item.FormType === FromType.sceneInvestigationDetail) {
+    // 现场勘查
+    that.$router.push({
+      path: '/sceneInvestigationDetail',
+      query: { ID: item.EventInfoId }
+    })
+  } else if (item.FormType === FromType.eventDetail) {
+    // 事件核查
+    that.$router.push({
+      path: '/eventDetail',
+      query: { ID: item.EventInfoId }
+    })
+  }
+}
 /**
  * 通用分页查询接口
  * @param {*} model 模块名称
@@ -213,4 +280,17 @@ export const commonSaveApi = (data, model, method = 'create') => {
       method
     }
   })
+}
+
+/**
+ * 保存人员经纬度
+ * @param {*} lng
+ * @param {*} lat
+ */
+export const savePatrolPoints = (lng, lat) => {
+  var data = {
+    lng,
+    lat
+  }
+  return commonSaveApi(data, 'patrol_points')
 }

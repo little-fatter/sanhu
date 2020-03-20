@@ -31,38 +31,56 @@ namespace FastDev.Service
         public object Finish(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<form_inquestrecordFinishReq>(context.Data);
-
+            string formidt = null;
             QueryDb.BeginTransaction();
             try
             {
-                data.forminquestrecord.TaskId = data.SourceTaskId;
-                data.forminquestrecord.EventInfoId = data.EventInfoId;
+                if (data.SourceTaskId != null) data.forminquestrecord.TaskId = data.SourceTaskId;
+                if (data.EventInfoId != null) data.forminquestrecord.EventInfoId = data.EventInfoId;
                 var form = ServiceHelper.GetService("form_inquestrecord").Create(data.forminquestrecord);
                 if (string.IsNullOrEmpty((string)form)) throw new Exception();
-                var formid = form.ToString();
+                 formidt = form.ToString();
                 if (data.lawStaffs != null)
                 {
-                    data.lawStaffs.ToList().ForEach(s => { s.AssociatedobjectID = formid; });
-                    ServiceHelper.GetService("law_staff").SaveList(data.lawStaffs);
+                    foreach (var l in data.lawStaffs)
+                    {
+                        l.Associatedobjecttype = "form_inquestrecord";
+                        l.AssociatedobjectID = formidt;
+                        l.ID = Guid.NewGuid().ToString();
+                        l.CreateDate = DateTime.Now;
+                        l.CreateUserID = SysContext.WanJiangUserID;
+                        QueryDb.Insert(l);
+                    }
                 }
                 if (data.lawParties != null)
                 {
-                    data.lawParties.ToList().ForEach(s => { s.AssociationobjectID = formid; });
-                    ServiceHelper.GetService("law_party").SaveList(data.lawParties);
+                    foreach (var l in data.lawParties)
+                    {
+                        l.Associatedobjecttype = "form_inquestrecord";
+                        l.ID = Guid.NewGuid().ToString();
+                        l.AssociationobjectID = formidt;
+                        l.CreateDate = DateTime.Now;
+                        l.CreateUserID = SysContext.WanJiangUserID;
+                        QueryDb.Insert(l);
+                    }
                 }
                 CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
-                //PDF打印预生成
-                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formid + @""",""formType"":""form_inquestrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
+                throw e;
                 return false;
             }
-            
-            return true;
+
+            if (!string.IsNullOrEmpty(formidt))
+            {
+                //PDF打印预生成
+                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formidt + @""",""formType"":""form_inquestrecord""}" });            
+            }
+                return true;
         }
     }
 }

@@ -50,7 +50,7 @@ import { downloadFile } from '@/utils/util'
 export default {
   components: {
     Pdf,
-    FileReview,
+    FileReview
     // SelectPeople
   },
   props: {
@@ -82,7 +82,7 @@ export default {
   },
   computed: {
     pdfUrl () {
-      return Pdf.createLoadingTask(`${appConfig.pdfHost}/${this.pdf}`)
+      return this.pdf ? Pdf.createLoadingTask(`${appConfig.pdfHost}/${this.pdf}`) : ''
     }
   },
   methods: {

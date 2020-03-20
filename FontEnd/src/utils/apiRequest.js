@@ -160,6 +160,10 @@ export const httpRequest = ({ url, params, data, method = httpGetMethod, options
  * 请求拦截器
  */
 axios.interceptors.request.use(function (config) {
+  const token = appConfig.token
+  if (isNotEmpty(token)) {
+    config.headers['Authorization'] = `Bearer ${token}` // 让每个请求携带自定义 token 请根据实际情况自行修改
+  }
   // 用于服务端识别是ajax请求
   config.headers['X-Requested-With'] = 'XMLHttpRequest'
   return config

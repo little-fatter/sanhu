@@ -42,13 +42,13 @@ export const asyncRouterMap = [
             meta: { title: '我发起的任务' }
           },
           {
-            path: 'eventDetail',
+            path: 'event-detail',
             name: 'eventDetail',
             component: () => import('@/views/mymission/eventDetail'),
             meta: { title: '事件核查' }
           },
           {
-            path: 'sceneInvestigationDetail',
+            path: 'scene-investigation-detail',
             name: 'sceneInvestigationDetail',
             component: () => import('@/views/form/sceneInvestigation'),
             meta: { title: '现场勘查' }
@@ -126,12 +126,12 @@ export const asyncRouterMap = [
                 component: () => import('@/views/form/closePersonReport'),
                 meta: { title: '结案报告(个人)', keepAlive: false }
               },
-              {
-                path: 'close-org-report',
-                name: 'CloseOrgReport',
-                component: () => import('@/views/form/closeOrgReport'),
-                meta: { title: '结案报告（单位）', keepAlive: false }
-              },
+              // {
+              //   path: 'close-org-report',
+              //   name: 'CloseOrgReport',
+              //   component: () => import('@/views/form/closeOrgReport'),
+              //   meta: { title: '结案报告（单位）', keepAlive: false }
+              // },
               {
                 path: 'file-cover',
                 name: 'FileCover',
@@ -184,37 +184,37 @@ export const asyncRouterMap = [
                 meta: { title: '案件详情', keepAlive: false }
               },
               {
-                path: 'caseCreate',
+                path: 'case-create',
                 name: 'caseCreate',
                 component: () => import('@/views/case/newCase'),
                 meta: { title: '创建案件', keepAlive: false }
               },
               {
-                path: 'askPutdownCreate',
+                path: 'ask-putdown-create',
                 name: 'askPutDownCreate',
                 component: () => import('@/views/case/askPutDownCreate'),
                 meta: { title: '询问笔录', keepAlive: false }
               },
               {
-                path: 'askPutdownPreview',
+                path: 'ask-putdown-preview',
                 name: 'askPutdownPreview',
                 component: () => import('@/views/case/askPutDownView'),
                 meta: { title: '询问笔录明细', keepAlive: false }
               },
               {
-                path: 'inventoryCreate',
+                path: 'inventory-create',
                 name: 'inventoryCreate',
                 component: () => import('@/views/case/inventoryCreate'),
                 meta: { title: '物品清单', keepAlive: false }
               },
               {
-                path: 'inventoryView',
+                path: 'inventory-view',
                 name: 'inventoryView',
                 component: () => import('@/views/case/inventoryView'),
                 meta: { title: '物品清单明细', keepAlive: false }
               },
               {
-                path: 'caseFinalReportCreate',
+                path: 'case-final-report-create',
                 name: 'caseFinalReportCreate',
                 component: () => import('@/views/case/caseFinalReportCreate'),
                 meta: { title: '结案报告创建', keepAlive: false }

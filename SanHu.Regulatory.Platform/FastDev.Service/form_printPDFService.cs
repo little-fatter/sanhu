@@ -29,7 +29,7 @@ namespace FastDev.Service
             _converter = SysContext.GetService<IConverter>();
             OnGetAPIHandler += form_printPDFService_OnGetAPIHandler;
         }
-
+        private bool isTest { get => isTest; set => isTest = false; }
         private Func<APIContext, object> form_printPDFService_OnGetAPIHandler(string id)
         {
             //return PrintTPdf;
@@ -133,23 +133,28 @@ namespace FastDev.Service
             var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
             string templatePath = $"wwwroot/template/{data.formType}.doc";
             string FilePath = "";
-            //QueryDb.BeginTransaction();
+            QueryDb.BeginTransaction();
             try
             {
                 //检查表中是否已经生成
-                if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID))
+                if (QueryDb.Exists<form_printPDF>("where FormId = @0", data.formID) && false)
                     return QueryDb.FirstOrDefault<form_printPDF>("where FormId = @0", data.formID).FilePath;
 
                 //根据模板名的相关数据更改模板目标
                 var pDic = new Dictionary<string, string>();
-
+                if (string.IsNullOrEmpty(data.formType) || string.IsNullOrEmpty(data.formID))
+                {
+                    return "无数据";
+                }
                 var jsonData = FormData(new FormDataReq()
                 {
                     FormId = data.formID,
                     Model = data.formType,
                     FilterModels = new string[] { "law_staff", "law_party" }
                 });
-
+                if (jsonData == null)
+                    return "该FormId无数据";
+                var partyDetail = new List<string>();
                 List<string> staff = new List<string>();
                 //寻找模板获取html字符串
                 foreach (var ss in jsonData as Dictionary<string, object>)
@@ -172,6 +177,7 @@ namespace FastDev.Service
                                 //当事人名字使用,增加到一个字段内
                                 if (lparty[i].ContainsKey("Name"))
                                     staff.Add(lparty[i]["Name"].ToString());
+                                partyDetail.Add(GetDetailMsg(JsonHelper.DeserializeJsonToObject<law_party>(JsonHelper.SerializeObject(lparty[i]))));
                             }
                             break;
                         case "law_staff": //执法人
@@ -196,6 +202,8 @@ namespace FastDev.Service
                             {
                                 if (j.Value is string && !pDic.ContainsKey(j.Key))
                                     pDic.Add(j.Key, j.Value.ToString());
+                                else if (j.Value is DateTime && !pDic.ContainsKey(j.Key))
+                                    pDic.Add(j.Key, DateTime.Parse(j.Value.ToString()).ToLongDateString().ToString());
                                 else
                                 {
                                     if (j.Key == "InspectionType" && (j.Value is IList<string>))
@@ -233,51 +241,85 @@ namespace FastDev.Service
                                     }
                                 }
                             }
+
                             break;
                         default: break;
                     }
 
                 }
-                //单独处理当事人
-                if (pDic.ContainsKey("FullStaff"))
-                    pDic.Add("FullStaff", string.Join(",", staff));
 
                 //处罚决定书
-                if (data.formType == "law_punishmentInfo" && false)
+                if (data.formType == "law_punishmentInfo")
                 {
                     //主办人
                     ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
                     var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
 
+                    //查询数据是否为真
+                    var punishmentInfo = QueryDb.FirstOrDefault<law_punishmentInfo>("where Id = @0", data.formID);
+                    if (punishmentInfo.Isfine)
+                        pDic.Add("DecisionContent", "给予50元的处罚");
+                    else if (punishmentInfo.IsConfiscationgoods)
+                        pDic.Add("DecisionContent", "给予没收物品处罚");
+                    //判断类型
+
+
                     ///CoOrganizer 协办人 1239796367061291008 CreateUserID 主办人的ID
-                    //执法人1
-                    var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from processinstance where Name=@0");
-                    //执法人2
-                    var JobNum2 = OTDB.FirstOrDefault<string>("select Jobnumber from processinstance where Name=@0");
-                    pDic.Add("JobNum1", JobNum1);
-                    pDic.Add("JobNum2", JobNum2);
+                    //执法人1编号
+                    var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CreateUserID"));
+                    //执法人2编号
+                    var JobNum2 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CoOrganizer"));
+                    pDic.Add("JobNum1", JobNum1 ?? "");
+                    pDic.Add("JobNum2", JobNum2 ?? "");
 
                 }
+                if (data.formType == "form_inquiryrecord")
+                {
+                    var inquiryrecordInfo = QueryDb.FirstOrDefault<form_inquiryrecord>("where Id = @0", data.formID);
 
-                ////特殊处理
-                //if (data.formType == "form_inquiryrecord" && pDic.ContainsKey("Type"))
-                //{
-                //    //判断类型
-                //    switch (pDic["Type"])
-                //    {
-                //        case "当事人":
-                //            templatePath = $"wwwroot/pdf/{data.formType}1.doc";
-                //            break;
-                //        case "证人":
-                //            templatePath = $"wwwroot/pdf/{data.formType}2.doc";
-                //            break;
-                //        case "第三人":
-                //            templatePath = $"wwwroot/pdf/{data.formType}3.doc";
-                //            break;
-                //        default:
-                //            break;
-                //    }
-                //}
+                    var ObjType = QueryDb.FirstOrDefault<law_party>("where AssociationobjectID = @0", data.formID);
+                    if (ObjType != null)
+                        switch (ObjType.InquiryType)
+                        {
+                            case "当事人":
+                                templatePath = $"wwwroot/template/{data.formType}_litigant.doc";
+                                break;
+                            case "证人"://witness
+                                templatePath = $"wwwroot/template/{data.formType}_witness.doc";
+                                break;
+                            case "第三人":
+                                templatePath = $"wwwroot/template/{data.formType}_third.doc";
+                                break;
+                            default:
+                                break;
+                        }
+                }
+                if (data.formType == "form_confiscated")
+                {
+                    var confiscatedInfo = QueryDb.FirstOrDefault<form_confiscated>("where Id = @0", data.formID);
+                    if (confiscatedInfo != null && string.IsNullOrWhiteSpace(confiscatedInfo.CreateUserID))
+                    {
+                        var OTDB = SysContext.GetOtherDB(ServiceHelper.GetServiceConfig("user").model.dbName);
+                        var user = OTDB.FirstOrDefault<user>("select Jobnumber from user where Id=@0", confiscatedInfo.CreateUserID);
+
+                        pDic.Add("CreateUserName", user.Name);
+                        pDic.Add("JobNum1", user.Jobnumber);
+                        //pDic.Add("JobNum1", "");
+                    }
+
+                }
+                if (data.formType == "form_confiscated" && pDic.ContainsKey("CaseId"))
+                {
+                    var OTDB = SysContext.GetOtherDB(ServiceHelper.GetServiceConfig("user").model.dbName);
+                    var lawParty = OTDB.FirstOrDefault<law_party>("where AssociationobjectID = @0", pDic["CaseId"]);
+
+                    partyDetail.Add(GetDetailMsg(lawParty));
+                }
+
+                //单独处理当事人
+                if (!pDic.ContainsKey("FullStaff"))
+                    pDic.Add("FullStaff", string.Join(",", staff));
+                pDic.Add("PartyDetail", string.Join(",", partyDetail));
 
                 //字典存入完毕 开启并替换
                 FilePath = ReplaceAspose(templatePath, pDic);
@@ -288,7 +330,7 @@ namespace FastDev.Service
 
                 //File.WriteAllBytes($"wwwroot/{FilePath}", pdfByte);
                 //插数
-                if (SysContext.IsDev)
+                if (true)
                 {
                     QueryDb.Insert(new form_printPDF()
                     {
@@ -303,10 +345,10 @@ namespace FastDev.Service
             }
             catch (Exception e)
             {
-                //QueryDb.AbortTransaction();
+                QueryDb.AbortTransaction();
                 throw e;
             }
-            //QueryDb.CompleteTransaction();
+            QueryDb.CompleteTransaction();
             return FilePath;
         }
 
@@ -322,7 +364,6 @@ namespace FastDev.Service
                     if (item.Value is string && !pDic.ContainsKey(item.Key + (i + 1)))
                         pDic.Add(item.Key + (i + 1), item.Value.ToString());
                 }
-
             }
 
         }
@@ -340,7 +381,7 @@ namespace FastDev.Service
                 doc.Range.Replace($"@{kv.Key}", kv.Value, replaceOPT);
             }
             //替换剩下不需要的
-            if (SysContext.IsDev)
+            if (!SysContext.IsDev)
             {
                 doc.Range.Replace(new Regex("@[0-9a-zA-Z]+"), "", replaceOPT);
             }

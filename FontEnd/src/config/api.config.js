@@ -32,7 +32,7 @@ const apiConfig = {
     regulations: `${getHost('sfdx')}/law_rule_page`
   },
   // 信息中心
-  msgCenter: `${getHost('framework')}/webapi/api/JobMessage`,
+  msgCenter: `${getHost('framework')}/api/JobMessage`,
   // 用户ID
   userId: `${getHost('list')}/webapi/getuserinfo`,
   // 字典查询
@@ -50,17 +50,6 @@ const apiConfig = {
   // dd审批
   startProcessInstance: `${getHost('admin')}/api/DingDing/ProcessInstanceCreate`
 
-}
-
-export const formType = {
-  // 询问笔录
-  form_inquiryrecord_third: 'form_inquiryrecord_third',
-  // 勘验笔录
-  form_inquestrecord: 'form_inquestrecord',
-  // 处罚当场决定书
-  law_punishmentInfo: 'law_punishmentInfo',
-  // 物品清单
-  form_confiscated_item: 'form_confiscated_item'
 }
 
 export default apiConfig

@@ -5,6 +5,8 @@
         <field name="UserId" dbName="UserId" title="执行人员ID" type="string" length="50" enabledSearch="Y" isPK="N" />
         <field name="lng" dbName="lng" title="百度坐标经度" type="string" length="50" isPK="N" />
         <field name="lat" dbName="lat" title="百度坐标纬度" type="string" length="50" isPK="N" />
+        <field name="wlng" dbName="wlng" title="地球坐标系经度" type="string" length="50" relationModel="" relationField="" isPK="N" />
+        <field name="wlat" dbName="wlat" title="地球坐标系纬度" type="string" length="50" relationModel="" relationField="" isPK="N" />
     </fields>
     <create base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />
     <update base_fields="*" base_ignore_fields="" many2one="*" one2many="" many2many="" />

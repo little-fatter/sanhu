@@ -21,9 +21,6 @@
         >
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
-        <van-cell-group>
-
-        </van-cell-group>
       </div>
       <div>
         <s-list
@@ -40,12 +37,6 @@
             </div>
             <van-row class="list-item_content">
               <van-col span="8">
-                <!-- <img :src="item.imgUrl" class="list-item_content_img"> -->
-                <!-- <van-image
-                  lazy-load
-                  :src="item.imgUrl"
-                  class="list-item_content_img"
-                /> -->
                 <img-view :url="item.imgUrl" wapperClass="img-wapper"></img-view>
               </van-col>
               <van-col span="16">

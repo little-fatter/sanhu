@@ -24,7 +24,7 @@ export default {
   methods: {
     // 获取表单详情
     getFormInfo () {
-      getFormsDetailByEventInfoIdPdf(this.FormID, FromType.goodsList)
+      getFormsDetailByEventInfoIdPdf(this.FormID, FromType.confiscatoryGoodsList)
         .then((res) => {
           this.PdfFileUrl = res // PDF 文件路径
           this.PdfFileName = this.FormType

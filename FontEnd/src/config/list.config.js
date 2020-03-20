@@ -7,15 +7,17 @@
  */
 
 import {
+  FORM_CONFISCATED,
   FORM_CONFISCATED_ITEM,
   CASE_INFO,
   LAW_PUNISHMENT_INFO,
   FORM_INQUEST_RECORD,
   CASE_REPORT,
   CASE_COVER,
-  FORM_INQUIRY_RECORD_LITIGANT,
-  FORM_INQUIRY_RECORD_WITNESS,
-  FORM_INQUIRY_RECORD_THIRD,
+  FORM_INQUIRY_RECORD,
+  // FORM_INQUIRY_RECORD_LITIGANT,
+  // FORM_INQUIRY_RECORD_WITNESS,
+  // FORM_INQUIRY_RECORD_THIRD,
   TASK_SURVEY,
   TASK_PATROL
 } from './model.config'
@@ -25,25 +27,31 @@ export const formTypes = [
   {
     title: '物品清单',
     model: FORM_CONFISCATED_ITEM,
-    path: '',
+    path: '/data-manage/form/confiscated-detail',
+    name: ''
+  },
+  {
+    title: '没收清单',
+    model: FORM_CONFISCATED,
+    path: '/data-manage/form/confiscated-detail',
     name: ''
   },
   {
     title: '案件详情',
     model: CASE_INFO,
-    path: '',
+    path: '/data-manage/case/case-details',
     name: ''
   },
   {
     title: '当场处罚决定书',
     model: LAW_PUNISHMENT_INFO,
-    path: '',
+    path: '/data-manage/form/judgment-detail',
     name: ''
   },
   {
     title: '勘验记录',
     model: FORM_INQUEST_RECORD,
-    path: '',
+    path: '/data-manage/form/record-check-detail',
     name: ''
   },
   {
@@ -55,38 +63,44 @@ export const formTypes = [
   {
     title: '卷宗封面',
     model: CASE_COVER,
-    path: '',
+    path: '/data-manage/form/file-cover',
     name: ''
   },
   {
-    title: '询问当事笔录',
-    model: FORM_INQUIRY_RECORD_LITIGANT,
-    path: '',
+    title: '询问笔录',
+    model: FORM_INQUIRY_RECORD,
+    path: '/data-manage/form/record-query-detail',
     name: ''
   },
-  {
-    title: '询问证人人笔录',
-    model: FORM_INQUIRY_RECORD_WITNESS,
-    path: '',
-    name: ''
-  },
-  {
-    title: '询问第三人笔录',
-    model: FORM_INQUIRY_RECORD_THIRD,
-    path: '',
-    name: ''
-  },
+  // {
+  //   title: '询问当事笔录',
+  //   model: FORM_INQUIRY_RECORD_LITIGANT,
+  //   path: '',
+  //   name: ''
+  // },
+  // {
+  //   title: '询问证人人笔录',
+  //   model: FORM_INQUIRY_RECORD_WITNESS,
+  //   path: '',
+  //   name: ''
+  // },
+  // {
+  //   title: '询问第三人笔录',
+  //   model: FORM_INQUIRY_RECORD_THIRD,
+  //   path: '',
+  //   name: ''
+  // },
   {
     title: '现场勘查',
     model: TASK_SURVEY,
-    path: '',
+    path: '/mission/scene-investigation-detail',
     name: ''
   },
   {
     title: '事件核查',
     model: TASK_PATROL,
-    path: '',
+    path: '/mission/event-detail',
     name: ''
-  },
-  
+  }
+
 ]

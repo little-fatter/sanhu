@@ -42,12 +42,18 @@
       <van-cell title="协办人" :value="penalizeBook.CoOrganizer"></van-cell>
       <div class="operate-area">
         <div class="person_item">
-          <span style="margin-right:20px">主办人:</span>  <van-button type="default" size="small" @click="handleShowSignature('mainSignature')" >手签</van-button>
-          <van-icon name="success" color="green" v-show="mainSignature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">主办人:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('mainSignature')" v-if="!mainSignature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="mainSignature">
+          </div>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">协办人:</span>  <van-button type="default" size="small" @click="handleShowSignature('organiserSignature')">手签</van-button>
-          <van-icon name="success" color="green" v-show="organiserSignature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">协办人:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('organiserSignature')" v-if="!organiserSignature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="organiserSignature">
+          </div>
         </div>
         <div class="single-save">
           <van-button type="info" :loading="loading" size="large" class="single-save" @click="onSubmit">保存</van-button>
@@ -67,7 +73,7 @@ import SUpload from '../../../components/file/StandardUploadFile'
 import PartyInfoView from '../../../components/business/PartyInfoView'
 import PenaltyDecisionView from '../../../components/business/PenaltyDecisionView'
 import { commonOperateApi, TaskTypeDic, getDetaildata } from '../../../api/regulatoryApi'
-import { isNotEmpty, getNextTask, getCaseTaskDefault } from '../../../utils/util'
+import { isNotEmpty, getNextTask, getCaseTaskDefault, isEmpty } from '../../../utils/util'
 import { getCurrentUserInfo } from '../../../service/currentUser.service'
 import NextTaskModal from '../../../components/business/NextTaskModal'
 var timer = null
@@ -145,10 +151,10 @@ export default {
       this.save(data)
     },
     onSubmit () {
-      // if (isEmpty(this.mainSignature)) {
-      //   this.$toast('请主办人签字')
-      //   return
-      // }
+      if (isEmpty(this.mainSignature)) {
+        this.$toast('请主办人签字')
+        return
+      }
       // if (isEmpty(this.organiserSignature) && isNotEmpty(this.penalizeBook.CoOrganizer)) {
       //   this.$toast('协办人签字')
       //   return
@@ -172,9 +178,9 @@ export default {
         PunishmentbasisIDs: this.penalizeBook.punishmentbasis,
         CoOrganizer: this.penalizeBook.CoOrganizer,
         CoorganizerID: this.penalizeBook.CoOrganizerId,
-        ...decision
-        // MainHanderSign: this.mainSignature,
-        // CoOrganizerSign: this.organiserSignature
+        ...decision,
+        MainHanderSign: this.mainSignature,
+        CoOrganizerSign: this.organiserSignature
       }
       var data = {
         SourceTaskId: isNotEmpty(this.penalizeBook.taskInfo) ? this.penalizeBook.taskInfo.ID : null,

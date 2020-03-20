@@ -304,7 +304,7 @@ export const createPostMessageEvent = (receivePostMessageFunc) => {
 
 /**
  * 根据文件名判断该文件是否为图片
- * @param {string} fileName 
+ * @param {string} fileName
  */
 export const isImg = fileName => {
   const imgTypes = ['png', 'jpg', 'gif', 'bmp', 'jpeg']
@@ -318,10 +318,10 @@ export const isImg = fileName => {
 
 /**
  * 下载文件
- * @param {string} url 
- * @param {string} name 
+ * @param {string} url
+ * @param {string} name
  */
-export const downloadFile = async ({ url, name = moment().format('YYYY年MM月DD日'), isOpenBrowser = false} = {}) => {
+export const downloadFile = async ({ url, name = moment().format('YYYY年MM月DD日'), isOpenBrowser = false } = {}) => {
   if (isOpenBrowser) {
     window.open(url)
   } else {
@@ -342,7 +342,7 @@ export const downloadFile = async ({ url, name = moment().format('YYYY年MM月DD
 
 /**
  * 根据图片生成保留短边居中的背景图样式
- * @param {string} img 
+ * @param {string} img
  */
 export const genImgBackground = (img) => {
   return {
@@ -354,7 +354,7 @@ export const genImgBackground = (img) => {
 
 /**
  * 格式化日期
- * @param {string/object} date 
+ * @param {string/object} date
  */
 export const formatDay = date => {
   if (!date) return '-'
@@ -363,7 +363,7 @@ export const formatDay = date => {
 
 /**
  * 格式化时间
- * @param {string/object} date 
+ * @param {string/object} date
  */
 export const formatTime = date => {
   if (!date) return '-'
@@ -375,8 +375,8 @@ export const formatTime = date => {
  * @param {string} type 表单类型
  * @param {object} record 当前数据对象
  */
-export const toFormDetail = (type, record = {}) => {
-  const data = formTypes.find(i => i.model === type)
+export const toFormDetail = (record = {}) => {
+  const data = formTypes.find(i => i.model === record.FormType)
   if (data) {
     router.push({
       path: data.path,

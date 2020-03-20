@@ -16,7 +16,7 @@ namespace FastDev.Service
             OnGetAPIHandler += law_punishmentInfoService_OnGetAPIHandler;
         }
 
- 
+
 
 
         private SHBaseService _sHBaseService;
@@ -26,10 +26,11 @@ namespace FastDev.Service
             //switch (id.ToUpper())
             //{
             //    case "FINISH":
-                    return Handle;
+            return Handle;
             //}
             //return null;
         }
+        //注意isfine isgood是不是被添加字段修改了
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
@@ -39,12 +40,9 @@ namespace FastDev.Service
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
-                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
+                CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
-                //打印预生成
-                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formType"":""law_punishmentInfo""}" });
             }
             catch (Exception e)
             {
@@ -52,6 +50,9 @@ namespace FastDev.Service
                 throw new Exception(e.Message);
             }
             QueryDb.CompleteTransaction();
+            //打印预生成
+            var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+            PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formType"":""law_punishmentInfo""}" });
             return true;
         }
 
@@ -61,13 +62,10 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void  CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
+        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties, List<attachment> attachments)
         {
             var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
             lawpunishmentInfo.ID = lawpunishment_Info;
-            var _Lawpartys = ServiceHelper.GetService("law_partyService");
-            var _attachment= ServiceHelper.GetService("attachmentService");
-
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
                 foreach (var l in law_Parties)
@@ -76,8 +74,8 @@ namespace FastDev.Service
                     l.AssociationobjectID = lawpunishment_Info;
                     l.ID = Guid.NewGuid().ToString();
                     l.CreateDate = DateTime.Now;
+                    l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
-                    //_Lawpartys.Create(l);
                 }
             }
             if (attachments != null && attachments.Count > 0)
@@ -87,12 +85,12 @@ namespace FastDev.Service
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
                     a.ID = Guid.NewGuid().ToString();
-                   a.CreateDate = DateTime.Now;
-                    QueryDb.Insert(a);
-                   // _attachment.Create(a);           
+                    a.CreateDate = DateTime.Now;
+                    a.CreateUserID = SysContext.WanJiangUserID;
+                    QueryDb.Insert(a);     
                 }
             }
-            ///更新案件信息
+            //更新案件信息
             if (string.IsNullOrEmpty(lawpunishmentInfo.TaskId))
             {
                 if (!string.IsNullOrEmpty(lawpunishmentInfo.CaseId))
@@ -123,7 +121,6 @@ namespace FastDev.Service
                 }
             }
 
-          //  return lawpunishment_Info;
         }
     }
 }

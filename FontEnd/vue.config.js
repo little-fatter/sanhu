@@ -88,14 +88,14 @@ module.exports = {
     // 配置开发环境代理
     proxy: {
       // 必须使用/easymock开头的接口才使用该代理
-      '/api': {
+      '/framework': {
         // target: 'http://8030.gr2abce8.fhmpsbz4.8e9bcb.grapps.cn',
-        target: 'http://192.168.0.125:8030/',
+        target: 'http://192.168.0.169:27011/framework',
         ws: false,
         changeOrigin: true,
         // 真实接口是/api开头的，使用pathRewrite将/gateway替换为/api
         pathRewrite: {
-          '^/api': ''
+          '^/framework': ''
         }
       },
       '/filesystem': {

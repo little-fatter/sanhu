@@ -15,7 +15,7 @@
         clickable
         @click="handleShowSelectCase"
       >
-        <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
+        <van-icon name="arrow" color="#1989fa" slot="right-icon" size="25" />
       </van-field>
     </van-cell-group>
     <van-cell-group v-if="caseInfo.CauseOfAction">
@@ -175,7 +175,7 @@ export default {
     },
     handelViewPenalizeBook () {
       var id = this.penalizeBook.ID
-      this.$router.push({ name: 'PenalizeBookDetial', query: { id: id } })
+      this.$router.push({ path: '/PromptlyPunishNote', query: { id: id } })
     },
     onSubmit (values) {
       if (isEmpty(this.penalizeBook.ID)) {
@@ -262,7 +262,7 @@ export default {
         },
         {
           name: '处罚决定',
-          value: `${webUrl}#/PenalizeBookDetial?id=${this.penalizeBook.ID}`
+          value: `${webUrl}#/PromptlyPunishNote?id=${this.penalizeBook.ID}`
         },
         {
           name: '案件详情',

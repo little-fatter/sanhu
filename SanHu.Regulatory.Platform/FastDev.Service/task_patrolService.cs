@@ -109,6 +109,7 @@ namespace FastDev.Service
                         a.Associatedobjecttype = "task_patrol";
                         a.AssociationobjectID = formId.ToString();
                         a.ID = Guid.NewGuid().ToString();
+                        a.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(a);
                         // _attachment.Create(a);           
                     }
