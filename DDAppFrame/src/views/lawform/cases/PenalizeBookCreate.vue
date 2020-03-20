@@ -8,7 +8,7 @@
     </van-cell-group>
     <van-cell-group v-else>
       <van-field
-        v-model="caseInfo.CauseOfAction"
+        v-model="caseInfo.CaseNumber"
         label="案件"
         placeholder="请选择案件"
         :readonly="true"
@@ -20,7 +20,6 @@
     </van-cell-group>
     <van-cell-group v-if="caseInfo.CauseOfAction" title="案件信息">
       <van-form @submit="onSubmit" @failed="onFailed">
-        <van-cell title="案件号" :value="caseInfo.CaseNumber"></van-cell>
         <van-cell title="案件类型" :value="caseInfo.CaseType"></van-cell>
         <van-cell title="案由" :value="caseInfo.CauseOfAction"></van-cell>
         <party-info :initData="LawParties" ref="party"></party-info>

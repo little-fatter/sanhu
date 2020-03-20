@@ -46,16 +46,16 @@
       <div class="operate-area">
         <div class="person_item" v-for="(item,index) in model.lawParties" :key="index">
           <span style="margin-right:20px">{{ `${model.form.InquiryType}${index+1}` }}:</span>
-          <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" v-if="!item.SignImg1">手签</van-button>
+          <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" v-if="!item.SignImg">手签</van-button>
           <div class="signature-img-wapper" v-else>
-            <img :src="item.SignImg1">
+            <img :src="item.SignImg">
           </div>
         </div>
         <div class="person_item" v-for="(item,index) in model.lawPersions" :key="index">
           <span style="margin-right:20px">{{ `执法人${index+1}` }}:</span>
-          <van-button type="default" size="small" @click="handleShowSignature('zfrSignature',index)" v-if="!item.SignImg1">手签</van-button>
+          <van-button type="default" size="small" @click="handleShowSignature('zfrSignature',index)" v-if="!item.SignImg">手签</van-button>
           <div class="signature-img-wapper" v-else>
-            <img :src="item.SignImg1">
+            <img :src="item.SignImg">
           </div>
         </div>
         <div class="single-save">
@@ -119,14 +119,14 @@ export default {
       if (this.signatureType === 'dsrSignature') {
         this.model.lawParties.forEach((item, mindex) => {
           if (mindex === this.setIndex) {
-            item.SignImg1 = signature
+            item.SignImg = signature
           }
         })
       }
       if (this.signatureType === 'zfrSignature') {
         this.model.lawPersions.forEach((item, mindex) => {
           if (mindex === this.setIndex) {
-            item.SignImg1 = signature
+            item.SignImg = signature
           }
         })
       }
@@ -150,7 +150,8 @@ export default {
       this.model.lawPersions.forEach(item => {
         var user = {
           UserId: item.emplId,
-          Username: item.name
+          Username: item.name,
+          SignImg: item.SignImg
         }
         data.lawStaff.push(user)
       })
