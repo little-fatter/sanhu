@@ -256,8 +256,9 @@ namespace FastDev.Service
                     item.Add("CreatUser", user.Name);
                     item.Add("Jobnumber", user.Jobnumber);
                 }
-                var partys = svc.GetListData(filterGroup) ;
-                 
+                //var partys = svc.GetListData(filterGroup) ;
+                var partys= QueryDb.Query<law_party>("where ASSOCIATIONOBJECTID=@0", item["ID"].ToString());
+
                 //添加附件
                 var pulishment = QueryDb.FirstOrDefault<law_punishmentInfo>("where caseid=@0", item["ID"].ToString());
                 if (pulishment != null)
