@@ -91,7 +91,8 @@ export default {
       this.$refs.modal.open()
     },
     async getUsers () {
-      this.list = await getUsers({ ...this.queryParam, pageIndex: 0, pageSize: 1 })
+      const { Rows = [] } = await getUsers({ ...this.queryParam, pageIndex: 0, pageSize: 1 })
+      this.list = Rows
     },
     // 选中人员
     handleSelect (e, record, index) {
@@ -120,9 +121,9 @@ export default {
     ok () {
       const { selects } = this
       this.$refs.modal.close()
-      this.$emit('on-select', { 
-        selects: [...selects], 
-        values: selects.map(item => item.Id)
+      this.$emit('on-select', {
+        selects: [...selects],
+        values: selects.map(item => item.AccountId)
       })
     }
   }
