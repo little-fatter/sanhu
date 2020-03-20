@@ -48,7 +48,8 @@ const apiConfig = {
       workrecordAdd: getHost('admin') + '/api/DingDing/workrecordAdd',
       workrecordUpdate: getHost('admin') + '/api/DingDing/workrecordUpdate',
       getWorkrecordPageListbyCurrent: getHost('admin') + '/api/DingDing/getWorkrecordPageListbyCurrent',
-      sendChatMsg: getHost('admin') + '/api/DingDing/SendChatMsg'
+      sendChatMsg: getHost('admin') + '/api/DingDing/SendChatMsg',
+      addChat: getHost('admin') + '/api/DingDing/AddChat'
     },
     // 文件信息模块
     file: {
