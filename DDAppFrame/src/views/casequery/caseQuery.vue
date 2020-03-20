@@ -175,13 +175,13 @@ export default {
           op: 'like',
           value: searchText,
           type: 'string'
-        },
-        {
-          field: 'CaseNumber', // 案件编号
-          op: 'like',
-          value: searchText,
-          type: 'string'
         }
+        // {
+        //   field: 'CaseNumber', // 案件编号
+        //   op: 'like',
+        //   value: searchText,
+        //   type: 'string'
+        // }
       )
     },
     // 多重搜索条件处理函数
