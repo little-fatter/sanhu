@@ -75,7 +75,7 @@ export default {
           const partys = []
           this.initData.forEach(item => { // 遍历页面传过来的当事人信息
             if (item.Typesofparties === this.defaultTypesofpartie) {
-              var title = `${item.Name}  |  ${item.Gender}  |  ${item.Occupation}`
+              var title = `${item.Name}   |   ${item.Gender}   |   ${item.Occupation}`
               item.title = title
             } else {
               item.title = item.Name

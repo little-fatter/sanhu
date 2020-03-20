@@ -34,7 +34,12 @@ namespace FastDev.Service
         private void Event_infoService_OnAfterGetDetailData(object query, object data)
         {
             var o = data as Dictionary<string, object>;
-            if (o["evtTypeDisplayName"] == null) o["evtTypeDisplayName"] = "综合执法";
+
+            if (o["evtTypeDisplayName"] == null)
+            { 
+            
+            }
+               
         }
 
         /// <summary>
@@ -67,6 +72,9 @@ namespace FastDev.Service
         }
         public override object GetPageData(QueryDescriptor descriptor)
         {
+            //按照上报时间倒序排列
+            descriptor.OrderBy = new List<OrderByClause> { new OrderByClause { Key = "reportTime", Order = OrderSequence.DESC } };
+
             DbContext db = QueryDb;
             var filter = descriptor.Condition;
             if (filter == null) filter = new FilterGroup();

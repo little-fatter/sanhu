@@ -125,10 +125,15 @@ export default {
       getLawFileList().then(res => {
         if (res) {
           res = JSON.parse(res)
+          var isFirst = true
           res.forEach(item => {
             var option = {
               text: item.fileName,
               value: item.objId
+            }
+            if (isFirst) {
+              this.queryParam.plawRuleFileId = item.objId
+              isFirst = false
             }
             this.lawFileoptions.push(option)
           })

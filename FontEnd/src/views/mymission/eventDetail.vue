@@ -164,7 +164,7 @@
             {{ loadData.Needtracking === 0 ? '否' : '是' }}
           </a-col>
         </a-row>
-        <a-row class="row">
+        <!-- <a-row class="row">
           <a-col class="colSize colLine" :span="4">关联表单：</a-col>
           <a-col class="colSize contentColor" :span="12">
             <span>
@@ -184,10 +184,10 @@
                   p-id="5584"
                 />
               </svg>
-              <!-- {{ loadData.Associatedforms }} -->
+              {{ loadData.Associatedforms }}
             </span>
           </a-col>
-        </a-row>
+        </a-row> -->
       </div>
     </div>
     <div class="footer">

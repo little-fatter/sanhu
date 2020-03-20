@@ -218,6 +218,14 @@ namespace FastDev.Service
             var db = this.QueryDb;
             IService svc = ServiceHelper.GetService("law_party");
 
+            var res_dictionary = QueryDb.FirstOrDefault<res_dictionary>("where DicCode=@0", "CaseType");
+            var dicItems = QueryDb.Query<res_dictionaryItems>("SELECT * FROM res_dictionaryitems where DicID=@0", res_dictionary.ID).ToDictionary(k => k.ItemCode, v => v.Title);
+
+            IService psm= ServiceHelper.GetService("law_punishmentInfo");
+
+
+
+
 
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
 
@@ -249,9 +257,44 @@ namespace FastDev.Service
                     item.Add("Jobnumber", user.Jobnumber);
                 }
                 var partys = svc.GetListData(filterGroup) ;
+                 
+                //添加附件
+                var pulishment = QueryDb.FirstOrDefault<law_punishmentInfo>("where caseid=@0", item["ID"].ToString());
+                if (pulishment != null)
+                {
+                    var atts = QueryDb.Query<attachment>("where ASSOCIATIONOBJECTID=@0", pulishment.ID);
+                    if (atts != null)
+                    {
+                        item.Add("attachments", atts);
+                    }
+                }
+                else
+                {
+                    item.Add("attachments", null);
+                }
 
+                //事件图片返回
+                if (!string.IsNullOrEmpty((string)item["EventInfoId"]))
+                {
+                    var eventinfo = QueryDb.FirstOrDefault<event_info>("where objId=@0", item["EventInfoId"].ToString());
+                    if (eventinfo != null)
+                    {
+                        item.Add("evtFileUrl", eventinfo.evtFileUrl);
+                        item.Add("posFileUrl", eventinfo.posFileUrl);
+                    }
+                }
+                else
+                {
+                    item.Add("evtFileUrl", null);
+                    item.Add("posFileUrl", null);
+                }
                 item.Add("LawPartys", partys);
 
+                var caseType = item["CaseType"].ToString();
+                if (dicItems.ContainsKey(caseType))  // CaseType 显示中文title
+                {
+                    item["CaseType"] = dicItems[caseType];
+                }
             }
         }
         private void Case_InfoService_OnAfterListData(object query, object data)

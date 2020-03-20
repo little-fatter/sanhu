@@ -6,7 +6,7 @@
       v-for="(item,index) in caseBreakLow"
       :key="index+'@23'">
       <div class="ant-col-24 lay_part_info margin-bottom15" >
-        <template v-if="item.Typesofparties=='gr'">
+        <template v-if="item.Typesofparties=='个人'">
           <div class="sub_info">
             <span >姓名:</span>
             <span>{{ item.Name }} </span>

@@ -42,12 +42,18 @@
       <van-cell title="协办人" :value="penalizeBook.CoOrganizer"></van-cell>
       <div class="operate-area">
         <div class="person_item">
-          <span style="margin-right:20px">主办人:</span>  <van-button type="default" size="small" @click="handleShowSignature('mainSignature')" >手签</van-button>
-          <van-icon name="success" color="green" v-show="mainSignature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">主办人:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('mainSignature')" v-if="!mainSignature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="mainSignature">
+          </div>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">协办人:</span>  <van-button type="default" size="small" @click="handleShowSignature('organiserSignature')">手签</van-button>
-          <van-icon name="success" color="green" v-show="organiserSignature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">协办人:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('organiserSignature')" v-if="!organiserSignature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="organiserSignature">
+          </div>
         </div>
         <div class="single-save">
           <van-button type="info" :loading="loading" size="large" class="single-save" @click="onSubmit">保存</van-button>
@@ -172,7 +178,8 @@ export default {
         PunishmentbasisIDs: this.penalizeBook.punishmentbasis,
         CoOrganizer: this.penalizeBook.CoOrganizer,
         CoorganizerID: this.penalizeBook.CoOrganizerId,
-        ...decision
+        ...decision,
+        MainHanderSign: this.mainSignature
         // MainHanderSign: this.mainSignature,
         // CoOrganizerSign: this.organiserSignature
       }

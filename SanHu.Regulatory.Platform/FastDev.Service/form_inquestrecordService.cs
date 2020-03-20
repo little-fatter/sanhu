@@ -35,19 +35,35 @@ namespace FastDev.Service
             QueryDb.BeginTransaction();
             try
             {
-                data.form_inquestrecord.TaskId = data.SourceTaskId;
-                data.form_inquestrecord.EventInfoId = data.EventInfoId;
-                var form = ServiceHelper.GetService("form_inquestrecord").Create(data.form_inquestrecord) as form_inquestrecord;
-                data.law_Staffs.ToList().ForEach(s => { s.AssociatedobjectID = form.ID; });
-                data.law_Parties.ToList().ForEach(s => { s.AssociationobjectID = form.ID; });
-                ServiceHelper.GetService("law_staff").SaveList(data.law_Staffs);
-                ServiceHelper.GetService("law_party").SaveList(data.law_Parties);
-
+                data.forminquestrecord.TaskId = data.SourceTaskId;
+                data.forminquestrecord.EventInfoId = data.EventInfoId;
+                var form = ServiceHelper.GetService("form_inquestrecord").Create(data.forminquestrecord);
+                if (string.IsNullOrEmpty((string)form)) throw new Exception();
+                var formid = form.ToString();
+                if (data.lawStaffs != null)
+                {
+                    foreach (var l in data.lawStaffs)
+                    {
+                        l.Associatedobjecttype = "form_inquestrecord";
+                        l.AssociatedobjectID = formid;
+                        l.CreateDate = DateTime.Now;
+                        QueryDb.Insert(l);
+                    }
+                }
+                if (data.lawParties != null)
+                {
+                    foreach (var l in data.lawParties)
+                    {
+                        l.Associatedobjecttype = "form_inquestrecord";
+                        l.AssociationobjectID = formid;
+                        l.CreateDate = DateTime.Now;
+                        QueryDb.Insert(l);
+                    }
+                }
                 CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
-
                 //PDF打印预生成
                 var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + form.ID + @""",""formType"":""form_inquestrecord""}" });
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formid + @""",""formType"":""form_inquestrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
@@ -55,7 +71,7 @@ namespace FastDev.Service
                 QueryDb.AbortTransaction();
                 return false;
             }
-
+            
             return true;
         }
     }

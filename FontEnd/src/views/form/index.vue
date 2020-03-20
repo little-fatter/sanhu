@@ -90,6 +90,7 @@
       <s-table
         ref="table"
         size="default"
+        rowKey="ID"
         :columns="columns"
         :dataCallback="loadData"
       >
@@ -158,7 +159,8 @@
 <script>
 import { getPageData, getDictionary } from '@/api/sampleApi'
 import STable from '@/components/table/'
-import { isNotEmpty } from '@/utils/util'
+import { isNotEmpty, toFormDetail } from '@/utils/util'
+import { CASE_REPORT } from '@/config/model.config'
 
 export default {
   name: 'Index',
@@ -240,11 +242,11 @@ export default {
     getFormType () {
       getDictionary({ model: 'res_dictionary', context: 'FormType' }).then(res => {
         this.formTypeOptions = res
+        console.log(res)
         const option = { ID: 'allType',
           ItemCode: '',
           Title: '全部类型' }
         this.formTypeOptions.splice(0, 0, option)
-        console.log(this.formTypeOptions)
       }).catch((err) => {
         console.log(err)
       })
@@ -270,42 +272,11 @@ export default {
       this.EEndTime = dateString[1]
     },
     gotoDetail (record) {
-      console.log(record)
-      if (record.FormType === 'form_confiscated_item') { // 物品清单
-        this.$router.push({
-          path: '',
-          query: { id: record.ID, formType: record.FormType }
-        }) 
-      } else if (record.FormType === 'form_inquiryrecord') { // 询问记录
-        this.$router.push({
-          path: '',
-          query: { id: record.ID, formType: record.FormType }
-        })
-      } else if (record.FormType === 'case_Info') { // 案件
-        this.$router.push({
-          path: '',
-          query: { id: record.ID, formType: record.FormType }
-        })
-      } else if (record.FormType === 'law_punishmentInfo') { // 处罚决定书
-        this.$router.push({
-          path: '',
-          query: { id: record.ID, formType: record.FormType }
-        })
-      } else if (record.FormType === 'case_report') { // 结案报告
-        this.$router.push({
-          path: '/data-manage/form/close-person-report',
-          query: { id: record.ID, formType: record.FormType }
-        })
-      } else if (record.FormType === 'case_cover') { // 卷宗封面
-        this.$router.push({
-          path: '',
-          query: { id: record.ID, formType: record.FormType }
-        })
-      } else if (record.FormType === 'form_inquestrecord') { // 勘验记录
-        this.$router.push({
-          name: 'sceneInvestigationDetail',
-          query: { id: record.ID, formType: record.FormType }
-        })
+      if (record.FormType === CASE_REPORT) {
+        console.log('gotoDetail -> record', record)
+        toFormDetail(record)
+      } else {
+        toFormDetail(record)
       }
     },
     // 处理参数

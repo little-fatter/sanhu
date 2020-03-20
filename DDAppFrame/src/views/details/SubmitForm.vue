@@ -169,8 +169,7 @@ export default {
       // 查询规则
       rules: [],
       // 交叉查询规则
-      groups: [],
-      newGroups: []
+      groups: []
     }
   },
   methods: {
@@ -213,6 +212,12 @@ export default {
           return item.ItemCode !== 'case_cover'
         })
         this.FormType = data
+        // 全部按钮生成
+        this.FormType.unshift({
+          ID: null,
+          Title: '全部',
+          ItemCode: null
+        })
       })
     },
     // 筛选 cll 改 筛选菜单
@@ -236,13 +241,11 @@ export default {
       statusBtns[index].className = 'from_state_active'
       this.screenPage() // 关闭弹窗 cll
       this.SformType = item.ItemCode // 搜索用
-      this.listData = [] // 重新搜索将 搜索结果清空
-      this.loadData(
-        'formwith_eventcase',
-        1,
-        10,
+      // 判断是否是全部类型按钮
+      if (this.SformType !== null) {
         this.dealParameter(this.searchKeyWords, this.SformType)
-      ) // 调用请求
+      }
+      this.onSearch()
     },
     // 处理参数
     dealParameter (searchKeyWords, SformType) {
@@ -309,7 +312,6 @@ export default {
       }
     },
     // 获取列表信息
-
     loadData (parameter) {
       this.$toast.loading({
         message: '加载中...',
@@ -317,24 +319,16 @@ export default {
       })
       // 第一次请求 筛选规则为空
       // var rules = []
-      return getPageDate(
-        'formwith_eventcase',
-        1,
-        10,
-        this.dealParameter(this.searchKeyWords, this.SformType)
-      ).then(res => {
-        if (res.Rows) {
-          this.$toast.clear()
-          res.Rows.forEach(item => {
-            this.listData.push(item)
-          })
-          // 时间排序
-          this.listData.sort(function (a, b) {
-            return a.InitiationTime > b.InitiationTime ? -1 : 1
-          })
-        }
-        return res
-      })
+      return getPageDate('formwith_eventcase', parameter.pageIndex, parameter.pageSize, this.dealParameter(this.searchKeyWords, this.SformType))
+        .then(res => {
+          if (res.Rows) {
+            this.$toast.clear() // 清除弹窗
+            res.Rows.forEach(item => {
+              this.listData.push(item)
+            })
+          }
+          return res
+        })
     },
     // 去详情
     goTodetail (item) {
@@ -351,10 +345,11 @@ export default {
         AskThirdPartyNote: 'form_inquiryrecord_third', // 询问第三人笔录
         sceneInvestigationDetail: 'task_survey', // 现场勘查
         eventDetail: 'task_patrol'// 事件核查
+         confiscatoryGoodsList: 'form_confiscated' //没收物品清单
        */
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
-      if (item.FormType === FromType.goodsList) {
-        // 物品清单
+      if (item.FormType === FromType.confiscatoryGoodsList) {
+        // 没收物品清单
         this.$router.push({
           path: '/goodsList', query: { ID: item.FormID }
         })
@@ -375,19 +370,10 @@ export default {
           query: { ID: item.FormID }
         })
       } else if (item.FormType === FromType.caseReport) {
-        if (item.FormState === 1) {
-          // 结案报告
-          this.$router.push({
-            path: '/caseReport',
-            query: { ID: item.FormID }
-          })
-        } else {
-          // 结案报告未审批
-          this.$router.push({
-            path: '/closingReportDetail',
-            query: { ID: item.FormID }
-          })
-        }
+        this.$router.push({
+          path: '/caseReport',
+          query: { ID: item.FormID }
+        })
       } else if (item.FormType === FromType.caseCover) {
         // 卷宗封面
         this.$router.push({
@@ -531,6 +517,10 @@ export default {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    &:after{
+    content: ""; width: 30%; display: block; height:0;
+      /*只需要添加父元素的after伪元素中 高度0 ，宽度与item的宽一样*/
+}
     button {
       //cll改
       // width: auto;

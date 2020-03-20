@@ -81,14 +81,17 @@
 <template>
   <div>
     <div>
-      <select-case ref="selectCase" @on-select="selectCase"></select-case>
+      <select-event ref="selectEvent" @on-select="selectEvent"></select-event>
     </div>
     <div class="case-box">
       <div class="case-top">
         <a-row type="flex" justify="center">
-          <a-col :span="20" class="border-bottom">
+          <a-col :span="17" class="border-bottom">
             <span class="page-title-border"></span>
             <span class="page-title">创建案件</span>
+          </a-col>
+          <a-col :span="3" class="border-bottom">
+            <a-button @click="openEventModal" type="primary">选择关联事件</a-button>
           </a-col>
         </a-row>
       </div>
@@ -156,7 +159,7 @@
         <a-row class="margin-bottom30" type="flex" justify="center">
           <a-col :span="20">
             <span class="ant-col-2">当事人</span>
-            <party-info ref="partyInfo"></party-info>
+            <party-info ref="partyInfo" :initData="caseInfo.LawParties"></party-info>
           </a-col>
         </a-row>
         <a-row class="margin-bottom30" type="flex" justify="center">
@@ -173,7 +176,8 @@
           <a-col :span="8">
             <span class="ant-col-4"></span>
             <span class="ant-col-16">
-              <a-button block type="primary" icon="check" @click="onSubmit">确认提交</a-button>
+              <a-button @click="onReturn" style="margin-right:20px;">返回</a-button>
+              <a-button v-show="isRelated" type="primary" icon="check" @click="onSubmit">确认提交</a-button>
             </span>
           </a-col>
         </a-row>
@@ -194,18 +198,19 @@
 </template>
 
 <script>
-import { getDictionary, commonOperateApi, getDetails } from '../../api/sampleApi'
+import { getDictionary, commonOperateApi, getDetails, getFormDetail } from '../../api/sampleApi'
 import { getCurrentUser } from '../../config/currentUser'
 import PartyInfo from './components/party'
-import SelectCase from '../../components/business/SelectCase'
-import { isNotEmpty } from '../../utils/util'
+import SelectEvent from '../../components/business/SelectEvent'
+import { isNotEmpty, formatTime } from '../../utils/util'
 export default {
   name: 'NewCase',
-  components: { PartyInfo, SelectCase },
+  components: { PartyInfo, SelectEvent },
   data () {
     return {
       titleInputShow: false,
       bodyInputShow: false,
+      isRelated: false,
       taskTitle: 'title', // 任务名
       taskContent: 'content', // 任务内容
       visible: false, // 弹窗默认不显示,
@@ -217,11 +222,12 @@ export default {
         CaseType: null, // 案件类型
         Sourceofcase: null, // 案件来源
         caseFunction: '请选择', // 案件适用程序
-        IncidentTime: '', // 案发时间
-        IncidentAddress: '',
+        IncidentTime: '', // 事发时间
+        IncidentAddress: '', // 事发地点
         IncidentAddressXY: '',
         CoOrganizerId: '',
-        CoOrganizer: '' // 协办人数组
+        CoOrganizer: '', // 协办人数组
+        LawParties: []
       },
       waitingCasePartin: [{ id: '1', name: '张柳' }, { id: '2', name: '李思' }, { id: '3', name: '王琴' }, { id: '4', name: '陈华' }], // 候选协办人
       Case_Type: [], // 案件类型
@@ -233,9 +239,13 @@ export default {
     this.init()
   },
   methods: {
-    selectCase (record) {
-      this.caseInfo = record
-      console.log(record)
+    openEventModal () {
+      this.$refs.selectEvent.open()
+    },
+    selectEvent (record) {
+      this.event = record
+      this.isRelated = true
+      this.loadEventCheck(record)
     },
     onblur () {
       this.titleInputShow = false
@@ -262,6 +272,27 @@ export default {
       getDetails('event_info', EventInfoId).then((res) => {
         if (res) {
           this.event = res
+          this.isRelated = true
+          this.loadEventCheck(res)
+        }
+      })
+    },
+    loadEventCheck (event) {
+      getFormDetail('task_survey', event.objId).then((res) => {
+        if (res) {
+          this.caseInfo = {
+            ...this.caseInfo,
+            ...res.MainForm,
+            LawParties: res.law_party
+          }
+        } else {
+          this.caseInfo.IncidentTime = formatTime(event.reportTime, 'YYYY-MM-DD HH:mm')
+          this.caseInfo.IncidentAddress = event.address
+          var incidentAddressXY = ''
+          if (isNotEmpty(event.lng) && isNotEmpty(event.lat)) {
+            incidentAddressXY = event.lng + ',' + event.lat
+          }
+          this.caseInfo.IncidentAddressXY = incidentAddressXY
         }
       })
     },
@@ -302,6 +333,11 @@ export default {
         this.$message.error('填写不完整', 1)
       }
     },
+    // 返回表单类型
+    onReturn () {
+      this.$router.push('/data-manage/form/form-add-list')
+    },
+    // 创建案件
     save (data) {
       commonOperateApi('FINISH', 'case_Info', data).then((res) => {
         if (res) {
@@ -310,7 +346,6 @@ export default {
         } else {
           this.$message.error('创建失败', 1)
         }
-      }).finally(() => {
       })
     },
     // 协办人输入
@@ -325,7 +360,6 @@ export default {
     // 获取案件类型
     getCaseType () {
       getDictionary({ model: 'res_dictionary', context: 'CaseType' }).then(res => {
-        console.log(res)
         res.map(item => {
           this.Case_Type.push({ ID: item.ID, Title: item.Title, ItemCode: item.ItemCode })
         })
@@ -368,7 +402,6 @@ export default {
   },
   // 生命周期钩子
   mounted () {
-    this.$refs.selectCase.open()
   }
 }
 </script>

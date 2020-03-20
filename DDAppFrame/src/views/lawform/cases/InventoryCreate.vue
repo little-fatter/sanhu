@@ -9,7 +9,7 @@
         clickable
         @click="handleShowSelectCase"
       >
-        <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectCase" size="25" />
+        <van-icon name="arrow" color="#1989fa" slot="right-icon" size="25" />
       </van-field>
     </van-cell-group>
     <van-cell-group v-if="caseInfo.CauseOfAction">

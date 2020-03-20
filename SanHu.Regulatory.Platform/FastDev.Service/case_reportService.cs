@@ -11,7 +11,7 @@ using System.Text;
 
 namespace FastDev.Service
 {
-    class case_reportService : ServiceBase, IService
+    public class case_reportService : ServiceBase, IService
     {
         public case_reportService()
         {
@@ -22,7 +22,15 @@ namespace FastDev.Service
         private Func<APIContext, object> case_reportService_OnGetAPIHandler(string id)
         {
             _sHBaseService = ServiceHelper.GetService("SHBaseService") as SHBaseService;
-            return Handle;
+            switch (id)
+            {
+                case "ChangeState":
+                    return UpdateStatus;
+                case "FINISH":
+                    return Handle;
+                default:
+                    return Handle;
+            }
         }
         public object Handle(APIContext context)
         {
@@ -61,27 +69,29 @@ namespace FastDev.Service
 
                     var result = ddService.ProcessInstaceCreateAsync(data.oapiProcessinstanceCreateRequest);
                     var test = result.Result;
-                    if (result.Result?.Errmsg.ToLower() != "ok")
-                        throw new Exception("发起审核流失败");
+                    if (result.Result.Errcode != 0)
+                        throw new Exception("发起审核流失败" + result.Result.ErrMsg);
+                    data.CaseReport.ProcessInstanceId = result.Result.ProcessInstanceId;
+                    //更新该Report上的信息
                     //var targetId = result.Result.ProcessInstanceId;
-                    if (data.CaseReport.TaskId == null || data.CaseReport.TaskId == "")
-                        throw new Exception("Task为空");
-                    var taskObj = QueryDb.FirstOrDefault<work_task>("where TaskID =@0", data.CaseReport.TaskId);
-                    if (taskObj == null)
-                        throw new Exception("该Task不存在");
-                    //更新值
-                    taskObj.processInstanceId = result.Result.ProcessInstanceId;
-                    data.CaseReport.FormState = "待审批";
-                    //data.CaseReport.
-                    QueryDb.Update(taskObj);
+                    //if (data.CaseReport.TaskId == null || data.CaseReport.TaskId == "")
+                    //    throw new Exception("Task为空");
+                    //var taskObj = QueryDb.FirstOrDefault<work_task>("where TaskID =@0", data.CaseReport.TaskId);
+                    //if (taskObj == null)
+                    //    throw new Exception("该Task不存在");
+                    ////更新值
+                    //taskObj.processInstanceId = result.Result.ProcessInstanceId;
+                    //data.CaseReport.FormState = "待审批";
+                    ////data.CaseReport.
+                    //QueryDb.Update(taskObj);
                     //ServiceHelper.GetService("work_task").Update(taskObj);
                 }
                 #endregion
-                 CreateInfo(data.CaseReport);
-                if (string.IsNullOrEmpty(data.CaseReport.CaseId))
+                CreateInfo(data.CaseReport);
+                if (!string.IsNullOrEmpty(data.CaseReport.CaseId))
                 {
                     var caseinfo = QueryDb.FirstOrDefault<case_Info>("select * from case_Info where Id=@0", data.CaseReport.CaseId);
-                    if(caseinfo==null)
+                    if (caseinfo == null)
                         throw new Exception("没有案件信息");
                     caseinfo.CaseStatus = "完成处罚";
                     QueryDb.Update(caseinfo);
@@ -131,6 +141,44 @@ namespace FastDev.Service
             //        }
             //    }
             //}
+
+        }
+        private object UpdateStatus(APIContext ctx)
+        {
+            var data = JsonHelper.DeserializeJsonToObject<Case_Report_StateChange>(ctx.Data);
+            UpdateFormState<case_report>(data.InstaceId, data.FormState);
+            return "更新成功";
+        }
+
+        /// <summary>
+        /// 传入instance_id来更改业务表上的数据上的审批状态
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance_id"></param>
+        /// <param name="FormState"></param>
+        private void UpdateFormState<T>(string instance_id, string FormState)
+        {
+            QueryDb.BeginTransaction();
+            try
+            {
+                if (!QueryDb.Exists<T>("where processInstanceId = @0", instance_id))
+                {
+                    throw new Exception("该instanceID不存在");
+                }
+                QueryDb.Update<T>("set FormState = @0 where processInstanceId = @1", FormState, instance_id);
+            }
+            catch (Exception e)
+            {
+                QueryDb.AbortTransaction();
+                throw e;
+            }
+            QueryDb.OnEndTransaction();
+        }
+
+        //根据表单去查询是否有案件 若没有案件关联 而是通过事件过来 需要将此事件关联的案件关闭且此事件也关闭
+        private void JudgeFormState(string EventId)
+        {
+            //查询eventId 查看case_info关联的数据
 
         }
 

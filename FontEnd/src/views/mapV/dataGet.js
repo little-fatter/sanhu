@@ -2,7 +2,7 @@ import moment from 'moment'
 
 import gisUtils from '@/utils/gisUtils'
 import dictionary from '@/utils/dictionary'
-import { postHttp } from '@/utils/apiRequest'
+import { postHttp, getHttp } from '@/utils/apiRequest'
 import appConfig from '@/config/app.config'
 import { isEmpty } from '@/utils/util'
 // 事件状态对应
@@ -31,7 +31,11 @@ export default {
      */
     alertEventList: {},
     wurenjiList: {},
-    shexiangtouList: {}
+    shexiangtouList: {},
+    /**
+     * 记录所有人员的位置(临时使用)
+     */
+    peopleLocation: {}
   },
   /**
    * 发起 post请求，返回Promise对象
@@ -85,6 +89,27 @@ export default {
         that.data.peopleList.Records.length = 0
         that.data.peopleList.Records.push(...res.data)
         that.data.peopleList.Total = res.data.length
+        resolve()
+      }, function (err) {
+        console.log(err)
+        reject(err)
+      })
+    })
+  },
+  /**
+   * 读取peopleLocation.location中的人员位置
+   */
+  doGetPeopleLocationAjax: function () {
+    var that = this
+    var url = appConfig.StaticWebContext + '/json/peopleLocation.json'
+    return new Promise((resolve, reject) => {
+      getHttp(
+        {
+          url: url,
+          params: {}
+        }
+      ).then(function (res) {
+        that.data.peopleLocation = res
         resolve()
       }, function (err) {
         console.log(err)
@@ -181,20 +206,22 @@ export default {
    * @param {*} TaskContent 任务描述
    * @param {*} EventInfoId 事件id
    * @param {*} ExpectedCompletionTime 期望完成时间
+   * @param {*} workaddress 主办人部门
    * @param {*} MainHandler 主办人姓名
    * @param {*} CoOrganizer 协办人姓名
    */
-  doPostTastHandout: function (AssignUsers, TaskContent, EventInfoId, ExpectedCompletionTime, MainHandler, CoOrganizer) {
+  doPostTastHandout: function (AssignUsers, TaskContent, EventInfoId, ExpectedCompletionTime, workaddress, MainHandler, CoOrganizer) {
     var url = appConfig.ApiWebContext + '/web/api'
     var RemoteLinks = appConfig.AppHost + 'eventCheckCreate'
     var data = {
-      // 'TaskType': 'EventCheck', // 任务类型
+      'TaskType': 'EventCheck', // 任务类型
       'AssignUsers': AssignUsers, // 执行人
       'RemoteLinks': RemoteLinks, // 钉钉url连接
       'TaskContent': TaskContent, // 任务描述
       'EventInfoId': EventInfoId, // 事件id
       // 'CaseID': '', // 案件id
       'ExpectedCompletionTime': ExpectedCompletionTime, // 期望完成时间
+      'workaddress': workaddress, // 主办人部门
       'MainHandler': MainHandler, // 主办人
       'CoOrganizer': CoOrganizer // 协办人
     }
@@ -230,7 +257,7 @@ export default {
       var _p = gisUtils.baiduToWGS84(lng, lat)
       var finishLimitTime = element.finishLimitTime ? element.finishLimitTime : moment().add(10, 'minutes').format(timeFormat)
       // var dealerName = isEmpty(element.dealerName) ? '' : element.dealerName
-      var dealerName = isEmpty(element.Dealers) || isEmpty(element.Dealers[0].realName) ? '' : element.Dealers[0].realName
+      // var dealerName = isEmpty(element.Dealers) || isEmpty(element.Dealers[0].realName) ? '' : element.Dealers[0].realName
       var dep = isEmpty(element.Dealers) ? undefined : this.findDepById(element.Dealers[0].deptId)
       var depName = dep ? dep['Name'] : ''
       var evtFileUrl = isEmpty(element.evtFileUrl) ? '' : element.evtFileUrl.split(',')[0]
@@ -238,7 +265,7 @@ export default {
       list.push({
         id: element.OriginalID,
         evtState: element.evtState, // 事件状态
-        evtTypeName: element.evtTypeName, // 事件类型
+        evtTypeName: element.evtTypeDisplayName, // 事件类型
         reportType: element.reportType, // 上报类型
         lng: _p.lon,
         lat: _p.lat,
@@ -246,7 +273,7 @@ export default {
         finishLimitTime: finishLimitTime, // 流转时限
         countdown: '00:00:00', // 倒计时,
         dep: depName, // 处理人部门
-        dealerName: dealerName, // 处理人姓名
+        dealerName: element.dealerName, // 处理人姓名
         evtFileUrl: evtFileUrl, // 上报图片
         remark: element.remark, // 描述
         address: element.address, // 地点
@@ -319,20 +346,23 @@ export default {
       const element = Records[i]
       element['isBusy'] = i % 2 === 0
       // 模拟 人员位置
-      var Longitude = element.Longitude
-      var Latitude = element.Latitude
-      if (i === 0) {
-        // [102.95488289188184, 24.58046294382578]
-        Longitude = 102.95488289188184
-        Latitude = 24.58046294382578
-      } else {
-        Longitude = 102.95488289188184 + (Math.random() - 0.5) * 0.2
-        Latitude = 24.58046294382578 + (Math.random() - 0.5) * 0.2
+      var location = this.getLocationByPersonName(element.userName)
+      if (!location) {
+        location = [0, 0]
       }
+      var Longitude = location[0]
+      var Latitude = location[1]
       element.Longitude = Longitude
       element.Latitude = Latitude
     }
     return Records
+  },
+  /**
+   * 根据人员名称获取位置
+   * @param {*} name 人员名称
+   */
+  getLocationByPersonName: function (name) {
+    return this.data.peopleLocation[name]
   },
   /**
    * 根据人员姓名查询人员信息
@@ -350,7 +380,7 @@ export default {
    * 事件统计
    */
   getCountList: function () {
-    var countList = [ 0, 0, 0, 0 ]
+    var countList = [0, 0, 0, 0]
     var now = moment()
     var Records = this.data.alertEventList.Records
     for (var i = 0; i < Records.length; i++) {
@@ -391,6 +421,7 @@ export default {
     Promise.all([
       this.doPostDataAjax(urlApi, { model: 'event_info' }, bodyNotDoneAlert, 'alertEventList'),
       this.doPostPeopleListAjax(),
+      this.doGetPeopleLocationAjax(),
       this.doPostDataAjax(urlApi, { model: 'organization' }, bodyAllDep, 'depList')
     ]).then(() => {
       // 获取默认处理人
@@ -414,21 +445,6 @@ export default {
           after()
         }
       })
-    })
-  },
-  test: function () {
-    var url = 'http://192.168.0.125:8030/web/api'
-    var body = { 'id': 'SFAPI', 'model': 'cross_domain', 'data': { 'ObjId': '5CDDB9645D894C09B834C537E48DEDD9', 'ApiType': 'ess_evt_logs' } }
-    postHttp(
-      {
-        url: url,
-        params: {},
-        data: body
-      }
-    ).then(function (res) {
-      console.log(res)
-    }, function (err) {
-      console.log(err)
     })
   }
 }

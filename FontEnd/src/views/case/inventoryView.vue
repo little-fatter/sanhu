@@ -110,7 +110,7 @@
         <a-col :span="20">
           <span class="ant-col-2">当事人</span>
           <span class="ant-col-20">
-            {{ inventory.inventory.dsr.name }}
+            {{ inventory.inventory.lawPartyName }}
           </span>
         </a-col>
       </a-row>
@@ -191,7 +191,7 @@
         <a-col :span="20">
           <span class="ant-col-2">其他物品</span>
           <div class="ant-col-20" >
-            {{ inventory.inventory.others }}
+            {{ inventory.inventory.Othergoods }}
           </div>
         </a-col>
       </a-row>
@@ -209,7 +209,7 @@
           <a-icon name="success" color="green" v-show="zfr2Signature" style="margin-left:20px"></a-icon>
         </a-col>
         <a-col :span="5">
-          <a-button type="primary" :loading="loading" class="single-save">保存</a-button>
+          <a-button type="primary" :loading="loading" class="single-save" @click="submit">保存</a-button>
         </a-col>
       </a-row>
     </div>
@@ -219,6 +219,9 @@
 
 <script>
 import Signature from '../../components/tools/Signature'
+import { isNotEmpty } from '../../utils/util'
+import { commonOperateApi } from '../../api/sampleApi'
+var timer
 
 export default {
   name: 'InventoryView',
@@ -263,11 +266,52 @@ export default {
         this.zfr2Signature = signature
       }
       this.showPopup = false
+    },
+    submit () {
+      var formConfiscated = {
+        LawpartyId: this.inventory.inventory.lawParty,
+        CaseId: this.inventory.caseInfo.ID,
+        EventInfoId: this.inventory.caseInfo.EventInfoId,
+        Othergoods: this.inventory.inventory.Othergoods
+      }
+      var data = {
+        formConfiscated,
+        formConfiscatedItems: []
+      }
+      this.inventory.inventory.list.forEach(item => {
+        var formConfiscatedItem = {
+          lawPartyID: this.inventory.inventory.lawParty,
+          CaseId: this.inventory.caseInfo.ID,
+          EventInfoId: this.inventory.caseInfo.EventInfoId,
+          ...item
+        }
+        data.formConfiscatedItems.push(formConfiscatedItem)
+      })
+      this.save(data)
+    },
+    save (data) {
+      this.loading = true
+      commonOperateApi('FINISH', 'form_confiscated', data).then((res) => {
+        this.$message.success('操作成功')
+        this.goToLawForm()
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    goToLawForm () {
+      timer = setTimeout(() => {
+        this.$router.push('/data-manage/form/form-add-list')
+      }, 1000)
     }
 
   },
   created () {
     this.init()
+  },
+  beforeDestroy () {
+    if (isNotEmpty(timer)) {
+      clearTimeout(timer)
+    }
   },
   mounted () {
 

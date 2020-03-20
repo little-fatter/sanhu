@@ -25,8 +25,8 @@ namespace FastDev.Service
             {
                 case "CHECKSTAFFLIST":
                     return CheckStaffList;
-                //case "TAKEUSERTASK":
-                //    return TakeUserTask;
+                    //case "TAKEUSERTASK":
+                    //    return TakeUserTask;
             }
             return null;
         }
@@ -71,7 +71,7 @@ namespace FastDev.Service
                     var ur = SysContext.GetOtherDB(userConfig.model.dbName).FirstOrDefault<user>($"select * from user where Id={u.UserId}");
                     if (ur != null)
                     {
-                        int taskunm=QueryDb.ExecuteScalar<int>("select count(*) from work_task where MainHandler=@0 and TaskStatus=1", ur.Id);
+                        int taskunm = QueryDb.ExecuteScalar<int>("select count(*) from work_task where MainHandler=@0 and TaskStatus=1", ur.Id);
                         udic.Add("Organization", organzation.Name);
                         udic.Add("OrganizationId", organzation.Id);
                         udic.Add("userId", ur.Id);
@@ -124,7 +124,18 @@ namespace FastDev.Service
 
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
             var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
-            OTDB.FirstOrDefault<string>("");
+            var Status = OTDB.FirstOrDefault<string>("select Status from processinstance where Id=@0", formId);
+            if (Status == null)
+                return null;
+            switch (Status)
+            {
+                case "TERMINATED":
+                    break;
+                case "COMPLETED":
+                    break;
+                case "RUNNING":
+                    break;
+            }
             return "";
         }
 

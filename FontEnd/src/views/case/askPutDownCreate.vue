@@ -103,9 +103,12 @@
   <div class="case-box">
     <div class="case-top">
       <a-row type="flex" justify="center">
-        <a-col :span="20" class="border-bottom">
+        <a-col :span="17" class="border-bottom">
           <span class="page-title-border"></span>
           <span class="page-title">创建笔录</span>
+        </a-col>
+        <a-col :span="3" class="border-bottom">
+          <a-button @click="openEventModal" type="primary">选择关联案件</a-button>
         </a-col>
       </a-row>
     </div>
@@ -115,7 +118,7 @@
           <span class="ant-col-2">案由</span>
           <span class="ant-col-20">
             <a-textarea
-              v-model="mode.CauseOfAction"
+              v-model="mode.Originofcase"
               placeholder="请填写案由"
               :autosize="{ minRows: 2, maxRows: 10 }"
             />
@@ -126,7 +129,7 @@
         <a-col :span="10">
           <span class="ant-col-4">询问对象</span>
           <span class="ant-col-16">
-            <a-select class="ant-col-24" labelInValue @change="objectChange" placeholder="请选择">
+            <a-select class="ant-col-24" v-model="mode.InquiryType" placeholder="请选择">
               <a-select-option v-for="(item) in pbjectOption" :value="item.value" :key="item.value+'123@'">{{ item.text }}</a-select-option>
             </a-select>
           </span>
@@ -134,7 +137,7 @@
         <a-col :span="10">
           <span class="ant-col-4">询问地点</span>
           <span class="ant-col-16">
-            <a-input placeholder="请输入事询问地点" class="ant-col-24" v-model="mode.eventAddress">
+            <a-input placeholder="请输入事询问地点" class="ant-col-24" v-model="mode.Enquiryplace">
             </a-input>
           </span>
         </a-col>
@@ -168,14 +171,19 @@
       <a-row class="margin-bottom30" type="flex" justify="center">
         <a-col :span="20">
           <span class="ant-col-2">当事人</span>
-          <party-info ref="partyInfo"></party-info>
+          <party-info ref="partyInfo" :initData="caseInfo.LawParties"></party-info>
         </a-col>
       </a-row>
       <a-row class="margin-bottom30" type="flex" justify="center">
         <a-col :span="10">
           <span class="ant-col-4">执法检查人员</span>
           <span class="ant-col-16">
-            <a-select class="ant-col-24" labelInValue @change="lawerChange" placeholder="请选择">
+            <a-select
+              class="ant-col-24"
+              mode="multiple"
+              v-model="lawPersions"
+              labelInValue
+              placeholder="请选择">
               <a-select-option v-for="(item,index) in lawPersonOption" :value="item.id" :key="index + '12'">{{ item.name }}</a-select-option>
             </a-select>
           </span>
@@ -194,7 +202,7 @@
           <a-row>
             <span class="ant-col-4">被询问人是否看清执法证件</span>
             <span class="ant-col-16">
-              <a-radio-group class="ant-col-24" v-model="mode.isLookCredential">
+              <a-radio-group class="ant-col-24" v-model="mode.Isseeclearly">
                 <a-radio :style="radioStyle" :value="1">看清</a-radio>
                 <a-radio :style="radioStyle" :value="2">不清除</a-radio>
               </a-radio-group>
@@ -209,7 +217,7 @@
         <a-col :span="10">
           <span class="ant-col-4">被询问人是否明白权责义务</span>
           <span class="ant-col-16">
-            <a-radio-group class="ant-col-24" v-model="mode.isUnderstandRights">
+            <a-radio-group class="ant-col-24" v-model="mode.Isunderstand">
               <a-radio :style="radioStyle" :value="1">明白</a-radio>
               <a-radio :style="radioStyle" :value="2">不明白</a-radio>
             </a-radio-group>
@@ -221,7 +229,7 @@
           <span class="ant-col-2">询问记录</span>
           <span class="ant-col-20">
             <a-textarea
-              v-model="mode.remark"
+              v-model="mode.Inquiryrecord"
               placeholder="请填写询问记录"
               :autosize="{ minRows: 2, maxRows: 10 }"
             />
@@ -232,7 +240,8 @@
         <a-col :span="8">
           <span class="ant-col-4"></span>
           <span class="ant-col-16">
-            <a-button block type="primary" icon="check" @click="onSubmit">确认提交</a-button>
+            <a-button @click="onReturn" style="margin-right:20px;">返回</a-button>
+            <a-button v-show="isRelated" type="primary" icon="check" @click="onSubmit">确认提交</a-button>
           </span>
         </a-col>
       </a-row>
@@ -244,7 +253,7 @@
 </template>
 1
 <script>
-import { getDictionary, commonOperateApi } from '../../api/sampleApi'
+import { getDictionary, commonOperateApi, getFormDetail } from '../../api/sampleApi'
 import { getCurrentUser } from '../../config/currentUser'
 import { isNotEmpty } from '../../utils/util'
 import SelectCase from '../../components/business/SelectCase'
@@ -255,36 +264,35 @@ export default {
   components: { PartyInfo, SelectCase },
   data () {
     return {
+      isRelated: false,
       caseInfo: {},
       radioStyle: {
         height: '30px',
         margin: '20px'
       },
       mode: {
-        objectType: 1, // 对象ID
-        objectTypeDesc: '当事人', // 对象类型
-        CauseOfAction: '', // 案由
-        remark: '', // 询问记录
-        // accompanys: '', // 被检查陪同人
-        isLookCredential: 1, // 是否清楚
-        isUnderstandRights: 1, // 是否明白
-        eventAddress: null, // 询问地点
+        InquiryType: null, // 询问对象
+        Originofcase: '', // 案由
+        Inquiryrecord: '', // 询问记录
+        Isseeclearly: 1, // 是否清楚
+        Isunderstand: 1, // 是否明白
+        Enquiryplace: null, // 询问地点
         startTime: null,
         endTime: null
       },
       pbjectOption: [
         {
-          text: '当事人', value: 1
+          text: '当事人', value: '当事人'
         },
         {
-          text: '证人', value: 2
+          text: '证人', value: '证人'
         },
         {
-          text: '第三人', value: 3
+          text: '第三人', value: '第三人'
         }
       ],
-      lawPersions: [],
-      lawPersionNames: null, // 执法检查人员
+      lawPersions: [], // 执法检查人员
+      lawPersionNames: '',
       recordPersions: [], // 记录人员
       recordPersionNames: null, // 记录人员
       lawPersonOption: [{ id: '1', name: '李柳' }, { id: '2', name: '李思' }, { id: '3', name: '王琴' }, { id: '4', name: '陈琴' }], // 执法检查人
@@ -294,48 +302,50 @@ export default {
   created () {
   },
   methods: {
-    selectCase (record) {
-      this.caseInfo = record
-      this.mode.CauseOfAction = record.CauseOfAction
+    // 返回表单类型
+    onReturn () {
+      this.$router.push('/data-manage/form/form-add-list')
     },
+    openEventModal () {
+      this.$refs.selectCase.open()
+    },
+    selectCase (record) {
+      getFormDetail('case_Info', null, record.ID).then((res) => {
+        this.caseInfo = {
+          ...res.MainForm,
+          LawParties: res.law_party
+        }
+        this.mode.Originofcase = record.CauseOfAction
+        this.mode.Enquiryplace = record.IncidentAddress
+      })
+      this.isRelated = true
+    },
+    // 禁用时间
     disabledDate (current) {
       return current && current > moment().endOf('day')
     },
     onSubmit () {
-      var dsrs = this.$refs.partyInfo.getResult()
+      var lawParties = this.caseInfo.LawParties
+      if (this.mode.InquiryType !== '当事人') {
+        lawParties = this.$refs.partyInfo.getResult()
+      }
+      var lawPersions = []
+      this.lawPersions.forEach(item => {
+        lawPersions.push(item.label)
+      })
       var forms = {
         caseInfo: this.caseInfo,
-        dsrs: dsrs,
-        ...this.mode,
-        lawPersionNames: this.lawPersionNames,
-        recordPersions: this.recordPersions,
+        lawParties: lawParties,
+        form: this.mode,
+        lawPersions: this.lawPersions,
+        lawPersionNames: lawPersions.join(),
         recordPersionNames: this.recordPersionNames
       }
-      console.log(forms)
       this.$router.push({ name: 'askPutdownPreview', params: { forms: forms } })
-    },
-    save (data) {
-      commonOperateApi('FINISH', 'case_Info', data).then((res) => {
-        if (res) {
-          this.$message.success('创建成功', 1)
-          this.$router.push('/data-manage/form/form-add-list')
-        } else {
-          this.$message.error('创建失败', 1)
-        }
-      }).finally(() => {
-      })
-    },
-    lawerChange (value) {
-      this.lawPersionNames = value.label
     },
     recorderChange (value) {
       this.recordPersionNames = value.label
       this.recordPersions = value.key
-    },
-    // 对象输入
-    objectChange (value) {
-      this.mode.objectTypeDesc = value.label
-      this.mode.objectType = value.key
     },
     // 开始时间
     selectStartTime (value, dateString) {
@@ -348,7 +358,6 @@ export default {
   },
   // 生命周期钩子
   mounted () {
-    this.$refs.selectCase.open()
   }
 }
 </script>

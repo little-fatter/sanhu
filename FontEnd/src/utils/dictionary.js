@@ -77,5 +77,6 @@ export default {
     '河面保洁': 3
   },
   timeFormat: 'YYYY-MM-DD HH:mm:ss',
-  timeFormat1: 'YYYYMMDDHHmmss'
+  timeFormat1: 'YYYYMMDDHHmmss',
+  timeFormat2: 'D日HH:mm'
 }

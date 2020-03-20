@@ -13,6 +13,7 @@ using DinkToPdf.Contracts;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using Aspose.Words.Replacing;
+using FastDev.DevDB.Model.Config;
 
 namespace FastDev.Service
 {
@@ -130,9 +131,9 @@ namespace FastDev.Service
         public object AsposeToPdf(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
-            string templatePath = $"wwwroot/pdf/{data.formType}.doc";
+            string templatePath = $"wwwroot/template/{data.formType}.doc";
             string FilePath = "";
-            QueryDb.BeginTransaction();
+            //QueryDb.BeginTransaction();
             try
             {
                 //检查表中是否已经生成
@@ -145,15 +146,18 @@ namespace FastDev.Service
                 var jsonData = FormData(new FormDataReq()
                 {
                     FormId = data.formID,
-                    Model = data.formType.Contains("form_inquiryrecord") ? "form_inquiryrecord" : data.formType,
+                    Model = data.formType,
                     FilterModels = new string[] { "law_staff", "law_party" }
                 });
+
+                var partyDetail = new List<string>();
+                List<string> staff = new List<string>();
                 //寻找模板获取html字符串
                 foreach (var ss in jsonData as Dictionary<string, object>)
                 {
                     switch (ss.Key)
                     {
-                        case "law_party"://执行人
+                        case "law_party"://当事人
                             var lparty = ss.Value as List<Dictionary<string, object>>;
                             for (int i = 0; i < lparty?.Count; i++)
                             {
@@ -166,9 +170,13 @@ namespace FastDev.Service
 
                                     }
                                 }
+                                //当事人名字使用,增加到一个字段内
+                                if (lparty[i].ContainsKey("Name"))
+                                    staff.Add(lparty[i]["Name"].ToString());
+                                partyDetail.Add(GetDetailMsg(JsonHelper.DeserializeJsonToObject<law_party>(JsonHelper.SerializeObject(lparty[i]))));
                             }
                             break;
-                        case "law_staff": //当事人
+                        case "law_staff": //执法人
                             var lstaff = ss.Value as List<Dictionary<string, object>>;
                             for (int i = 0; i < lstaff?.Count; i++)
                             {
@@ -181,6 +189,7 @@ namespace FastDev.Service
                                         //if ()
                                     }
                                 }
+
                             }
                             break;
                         case "MainForm"://主表信息
@@ -205,6 +214,10 @@ namespace FastDev.Service
                                     }
                                 }
                             }
+                            //没收物品暂时临时处理
+                            if (data.formType == "form_confiscated" && main.ContainsKey("ID") && main["ID"] != null)
+                                GetConfiscatedItem(main["ID"].ToString(), pDic);
+
                             if (main.ContainsKey("CaseId") && main["CaseId"] != null)
                             {
                                 var caseInfo = QueryDb.FirstOrDefault<case_Info>("where ID = @0", main["CaseId"].ToString());
@@ -222,9 +235,30 @@ namespace FastDev.Service
                                     }
                                 }
                             }
+
                             break;
                         default: break;
                     }
+
+                }
+                //单独处理当事人
+                if (!pDic.ContainsKey("FullStaff"))
+                    pDic.Add("FullStaff", string.Join(",", staff));
+                pDic.Add("PartyDetail", string.Join(",", partyDetail));
+                //处罚决定书
+                if (data.formType == "law_punishmentInfo")
+                {
+                    //主办人
+                    ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
+                    var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
+
+                    ///CoOrganizer 协办人 1239796367061291008 CreateUserID 主办人的ID
+                    //执法人1编号
+                    var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CreateUserID"));
+                    //执法人2编号
+                    var JobNum2 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CoOrganizer"));
+                    pDic.Add("JobNum1", JobNum1 ?? "");
+                    pDic.Add("JobNum2", JobNum2 ?? "");
 
                 }
 
@@ -272,12 +306,29 @@ namespace FastDev.Service
             }
             catch (Exception e)
             {
-                QueryDb.AbortTransaction();
+                //QueryDb.AbortTransaction();
                 throw e;
             }
-            QueryDb.CompleteTransaction();
+            //QueryDb.CompleteTransaction();
             return FilePath;
         }
+
+        private void GetConfiscatedItem(string confiscatedId, Dictionary<String, string> pDic)
+        {
+            var itemList = QueryDb.Fetch<form_confiscated_item>("where AssociationobjectID = @0", confiscatedId);
+            var jsonData = JsonHelper.SerializeObject(itemList);
+            var dicData = JsonHelper.DeserializeJsonToObject<List<Dictionary<string, object>>>(jsonData);
+            for (int i = 0; i < dicData.Count; i++)
+            {
+                foreach (var item in dicData[i])
+                {
+                    if (item.Value is string && !pDic.ContainsKey(item.Key + (i + 1)))
+                        pDic.Add(item.Key + (i + 1), item.Value.ToString());
+                }
+            }
+
+        }
+
         //替换Aspose标签内容
         private string ReplaceAspose(string filePath, Dictionary<string, string> pDic)
         {

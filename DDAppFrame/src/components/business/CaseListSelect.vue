@@ -2,7 +2,7 @@
   <van-popup
     v-model="showModel"
     position="bottom"
-    :style="{ height: '80%' }"
+    :style="{ height: '100%' }"
     @close="onClosePopup"
   >
     <div class="list_wapper">
@@ -21,8 +21,6 @@
         >
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
-        <van-cell-group>
-        </van-cell-group>
       </div>
       <div>
         <s-list
@@ -37,15 +35,23 @@
                 <a @click="onPopupConfirm(item)">选择</a>
               </div>
             </div>
-            <van-cell title="案件类型" :value="item.CaseType"></van-cell>
-            <van-cell title="办案人" :value="item.Investigators"></van-cell>
+            <van-row class="list-item_content">
+              <van-col span="8">
+                <img-view :url="item.imgUrl" wapperClass="img-wapper"></img-view>
+              </van-col>
+              <van-col span="16">
+                <van-cell title="事发地点" :value="item.IncidentAddress" style="padding-top:0"></van-cell>
+                <van-cell title="案件类型" :value="item.CaseType"></van-cell>
+                <van-cell title="办案人" :value="item.CreatUser"></van-cell>
+              </van-col>
+            </van-row>
             <div slot="footer" class="footer-wapper">
               <div class="footer_left">
                 <div class="item"><van-tag plain type="primary" v-show="item.CaseNumber">{{ item.CaseNumber }}</van-tag></div>
                 <div class="item"><van-tag plain type="success" v-show="item.CaseStatus">{{ item.CaseStatus }}</van-tag></div>
               </div>
               <div class="footer_right">
-                <div class="item">{{ item.CreateDate }}</div>
+                <div class="item">{{ item.CreateDate | dayjs('YYYY-MM-DD') }}</div>
               </div>
             </div>
           </van-panel>
@@ -60,12 +66,14 @@
  * 案件选择组件
  */
 import SList from '../../components/list/SList.vue'
-import { getQueryConditon, isNotEmpty } from '../../utils/util'
+import { getQueryConditon, isNotEmpty, isImg, getFileReadUrl, isEmpty } from '../../utils/util'
 import { getPageDate } from '../../api/regulatoryApi'
+import ImgView from '../../components/file/ImgView'
 export default {
   name: 'CaseListSelect',
   components: {
-    SList
+    SList,
+    ImgView
   },
   props: {
     showPopup: {
@@ -125,11 +133,29 @@ export default {
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, conditon).then((res) => {
         if (res.Rows) {
           res.Rows.forEach(item => {
+            item.imgUrl = this.getCaseFile(item)
             this.list.push(item)
           })
         }
         return res
       })
+    },
+    getCaseFile (caseInfo) {
+      var img = ''
+      if (isNotEmpty(caseInfo.attachments) && caseInfo.attachments.length > 0) {
+        for (const attachment of caseInfo.attachments) {
+          var fileName = attachment.fileName || attachment.FileName
+          var fileCode = attachment.fileCode || attachment.FileCode
+          if (isImg(fileName)) {
+            img = getFileReadUrl(fileCode)
+            break
+          }
+        }
+      }
+      if (isEmpty(img) && isNotEmpty(caseInfo.evtFileUrl)) {
+        img = caseInfo.evtFileUrl.split(',')[0]
+      }
+      return img
     },
     onSearch () {
       this.list = []
@@ -176,13 +202,30 @@ export default {
     {
         height: 30px;
         line-height: 30px;
-        padding: 20px 0px;
+        padding: 10px 0px;
+    }
+
+    .list-item_content
+    {
+      /deep/ .img-wapper
+      {
+        width: 100%;
+        height: 170px;
+      }
+      .van-cell__title
+      {
+         max-width: 100px !important;
+      }
     }
 
     .list-item_title_left
     {
       float: left;
-      padding-left: 30px;
+      padding-left: 25px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 300px;
     }
 
     .list-item_title_right
@@ -202,7 +245,7 @@ export default {
       .footer_left
       {
          float: left;
-         margin-left: 20px;
+         margin-left: 0px;
          .item
          {
            display: inline-block;

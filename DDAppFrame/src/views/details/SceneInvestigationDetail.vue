@@ -33,15 +33,14 @@
       <van-cell title="处理结论" :value="loadData.Result" ></van-cell>
       <van-cell title="处理决定" :value="ProcessingDecisions" />
       <van-cell title="是否涉嫌犯罪" :value="loadData.ExistCrim === 0 ? '否' : '是'" />
-      <van-cell title="附件">
-        <S-upload
-          style="margin-left:80px;margin-bottom:5px;"
-          ref="myupload"
-          :sync2Dingding="false"
-          :isOnlyView="true"
-          :initResult="eventFile"
-        ></S-upload>
-      </van-cell>
+      <van-cell title="附件"></van-cell>
+      <S-upload
+        style="margin-left:80px;margin-bottom:5px;"
+        ref="myupload"
+        :sync2Dingding="false"
+        :isOnlyView="true"
+        :initResult="eventFile"
+      ></S-upload>
     </van-cell-group>
   </div>
 </template>

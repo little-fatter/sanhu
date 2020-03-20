@@ -21,9 +21,6 @@
         >
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
-        <van-cell-group>
-
-        </van-cell-group>
       </div>
       <div>
         <s-list
@@ -40,12 +37,7 @@
             </div>
             <van-row class="list-item_content">
               <van-col span="8">
-                <!-- <img :src="item.imgUrl" class="list-item_content_img"> -->
-                <van-image
-                  lazy-load
-                  :src="item.imgUrl"
-                  class="list-item_content_img"
-                />
+                <img-view :url="item.imgUrl" wapperClass="img-wapper"></img-view>
               </van-col>
               <van-col span="16">
                 <van-cell title="事件地点" :value="item.address" style="padding-top:0"></van-cell>
@@ -72,10 +64,12 @@
 import SList from '../../components/list/SList.vue'
 import { getPageDate } from '../../api/regulatoryApi'
 import { isNotEmpty, getQueryConditon } from '../../utils/util'
+import ImgView from '../../components/file/ImgView'
 export default {
   name: 'EventListSelect',
   components: {
-    SList
+    SList,
+    ImgView
   },
   props: {
     showPopup: {
@@ -189,9 +183,9 @@ export default {
 
     .list-item_content
     {
-      .list-item_content_img
+      /deep/ .img-wapper
       {
-        width: 170px;
+        width: 100%;
         height: 170px;
       }
       .van-cell__title
