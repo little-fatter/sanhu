@@ -364,7 +364,11 @@ export default {
   color: #64697c !important;
 }
 .van-cell__title{
-  width: auto !important;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: calc(100vw - 0.9rem);
+  /* width: auto !important; */
 }
 .case-info-img{
 display: flex;
