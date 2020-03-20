@@ -91,7 +91,8 @@ export default {
       this.$refs.modal.open()
     },
     async getUsers () {
-      this.list = await getUsers({ ...this.queryParam, pageIndex: 0, pageSize: 1 })
+      const { Rows = [] } = await getUsers({ ...this.queryParam, pageIndex: 0, pageSize: 1 })
+      this.list = Rows
     },
     // 选中人员
     handleSelect (e, record, index) {

@@ -21,15 +21,14 @@ var publicAppConfig = {
 
   /** 不启用网关时配置模块host地址 */
   hostConfig: {
-    admin: 'http://192.168.0.169:8030',
+    admin: 'http://192.168.0.169:27011',
     list: 'http://192.168.0.169:8030',
-    framework: 'http://192.168.0.169:8030/framework',
-    file: 'http://182.150.28.58:27012/filesystem',
+    framework: '/framework',
     // framework: 'http://182.150.28.58:3308/framework'
     // 四方德信接口
     sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50',
-   //  文件服务
-   file: 'http://182.150.28.58:27012/filesystem'
+    //  文件服务
+    file: 'http://182.150.28.58:27012/filesystem'
   },
   /** PDF拼接地址 */
   pdfHost: 'http://192.168.0.169:8030',
@@ -65,7 +64,11 @@ var publicAppConfig = {
   /**
      * 请求超时的毫秒数
      */
-  httpClientTimeout: 10000
+  httpClientTimeout: 10000,
+  /**
+   * 临时开发使用
+   */
+  token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IkduX0FVX2ZmVk1ITlZjWE9laGpaT0EiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1ODQ2ODU1NjUsImV4cCI6MTU4NDc3MTk2NSwiaXNzIjoiaHR0cDovLzE4Mi4xNTAuMjguNTg6MjcwMTEvZnJhbWV3b3JrIiwiYXVkIjoiV2l0M0xha2VBcGkiLCJjbGllbnRfaWQiOiI5OTk5MTY3OTA1OTMxMjg4MDIiLCJjbGllbnRfVG9vbElkIjoiRlciLCJjbGllbnRfVGVuYW50SWQiOiIxIiwic3ViIjoiMTA1NzE0OTI2NzAzNjIxMzI0OCIsImF1dGhfdGltZSI6MTU4NDY4NTU2MywiaWRwIjoibG9jYWwiLCJuYW1lIjoi6LaF57qn566h55CG5ZGYIiwiQWNjb3VudElkIjoiU3lzQWRtaW4iLCJUZW5hbnRJZCI6IjEiLCJwaG9uZV9udW1iZXIiOiIxMzU1ODc3MTg3MyIsIlRvb2xJZCI6IlNISkciLCJyb2xlIjoiU0hKRy5BZG1pbiIsInNjb3BlIjpbIm9wZW5pZCIsIldpdDNMYWtlQXBpIiwib2ZmbGluZV9hY2Nlc3MiXSwiYW1yIjpbInB3ZCJdfQ.NEex3oxlU9KkxhXPo7QcVbO2WikYlFQKy8UEmHP88QIht69440g0Yagc4HMKhbOoDHSeUcyKo-m4wwqS_EDdED4m2pRATL5tqsNtQfwmFs632Y5nWEJEKZlTbCuPXHQ_F-B7xJ1ek-ryjROGAECRZOYNH7yGPaR_F0i5MOippTd8Gps6nMCFx_MAS8FB7kdqXcK5_84qa7hNFeEbDsWbMftGFr-TOE-m_HO7FnWlXvf3vChwzK_VhUC-AXliWr-Kre-51Ne_n665FaouCLmh2wIbeA1rClhfDemlwzfs01Z79Nnc4_-kcfFVEDWxPGzIe3KyZIe-JAueecsSaZBUjA'
 }
 
 localStorage.setItem('publicAppConfig', JSON.stringify(publicAppConfig))
