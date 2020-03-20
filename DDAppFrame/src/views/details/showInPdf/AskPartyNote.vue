@@ -32,7 +32,7 @@ export default {
     }
   },
   created () {
-    this.FormID = this.$route.query.ID // 表单ID
+    this.FormID = this.$route.query.id // 表单ID
     this.getFormInfo()
   },
   mounted () {
