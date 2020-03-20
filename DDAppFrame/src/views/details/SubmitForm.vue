@@ -334,19 +334,19 @@ export default {
     goTodetail (item) {
       // console.log(item)
       /**
-        goodsList: 'form_confiscated_item', // 物品清单
-        caseDetails: 'case_info', // 案件详情
-        PromptlyPunishNote: 'law_punishmentInfo', // 当场处罚决定书
-        RecordOfInquest: 'form_inquestrecord', // 勘验记录
-        caseReport: 'case_report', // 结案报告
-        caseCover: 'case_cover', // 卷宗封面
-        AskPartyNote: 'form_inquiryrecord_litigant', // 询问当事笔录
-        AskWitnessNote: 'form_inquiryrecord_witness', // 询问证人笔录
-        AskThirdPartyNote: 'form_inquiryrecord_third', // 询问第三人笔录
-        sceneInvestigationDetail: 'task_survey', // 现场勘查
-        eventDetail: 'task_patrol'// 事件核查
-         confiscatoryGoodsList: 'form_confiscated' //没收物品清单
-       */
+      goodsList: 'form_confiscated_item', // 物品清单
+      caseDetails: 'case_info', // 案件详情
+      PromptlyPunishNote: 'law_punishmentInfo', // 当场处罚决定书
+      RecordOfInquest: 'form_inquestrecord', // 勘验记录
+      caseReport: 'case_report', // 结案报告
+      caseCover: 'case_cover', // 卷宗封面
+      AskPartyNote: 'form_inquiryrecord_litigant', // 询问当事笔录
+      AskWitnessNote: 'form_inquiryrecord_witness', // 询问证人笔录
+      AskThirdPartyNote: 'form_inquiryrecord_third', // 询问第三人笔录
+      sceneInvestigationDetail: 'task_survey', // 现场勘查
+      eventDetail: 'task_patrol'// 事件核查
+       confiscatoryGoodsList: 'form_confiscated' //没收物品清单
+     */
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === FromType.confiscatoryGoodsList) {
         // 没收物品清单

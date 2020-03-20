@@ -12,7 +12,8 @@
         <van-cell title="案由：" :value="caseInfo.CauseOfAction" title-class="title-cell " />
       </template>
       <van-cell title="案件类型" :value="caseInfo.CaseType" value-class="con-style" title-class="title-cell" />
-      <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" />
+      <!-- <van-cell title="适用程序" v-if="caseInfo.ApplicableProcedure" :value="caseInfo.ApplicableProcedure[1]" value-class="con-style" title-class="title-cell" /> -->
+      <van-cell title="适用程序" value="简易程序" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发时间" :value="caseInfo.IncidentTime" value-class="con-style" title-class="title-cell" />
       <van-cell title="案发地点" :value="caseInfo.IncidentAddress" value-class="con-style" title-class="title-cell">
         <!-- <van-button
@@ -23,12 +24,12 @@
           type="info"
           @click="viewMap"/> -->
       </van-cell>
-      <van-cell title="处罚决定文书号" :value="caseInfo.PenaltyDecisionNo" value-class="con-style" title-class="title-cell" />
-      <van-cell title="处罚种类" v-if="caseInfo.PenaltyType" :value="caseInfo.PenaltyType[1]" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚决定文书号" :value="caseInfo.PunishmentTitle" value-class="con-style" title-class="title-cell" />
+      <van-cell title="处罚种类" :value="caseInfo.publishtype" value-class="con-style" title-class="title-cell" />
       <van-cell title="执行情况" value="已执行" value-class="con-style" title-class="title-cell" />
       <van-cell title="立案日期" :value="caseInfo.CreateDate" value-class="con-style" title-class="title-cell" />
-      <van-cell title="结案日期" :value="caseInfo.CaseCloseDay" value-class="con-style" title-class="title-cell" />
-      <van-cell title="办案人员" :value="caseInfo.Investigators" value-class="con-style" title-class="title-cell" />
+      <van-cell title="结案日期" :value="caseInfo.closeDate" value-class="con-style" title-class="title-cell" />
+      <van-cell title="办案人员" :value="caseInfo.CreateUserID" value-class="con-style" title-class="title-cell" />
       <!-- <van-cell title="归档人员" :value="caseInfo.DocPeople" value-class="con-style" title-class="title-cell" />
       <van-cell title="归档号" :value="caseInfo.CaseNumber" value-class="con-style" title-class="title-cell" />
       <van-cell title="保存期限" :value="caseInfo.DocRetentionTimes" value-class="con-style" title-class="title-cell" /> -->
@@ -61,7 +62,7 @@
         <van-step v-for="item in caseFlow" :key="item.id">
           <h6>{{ item.FormType }}</h6>
           <p class="flowState">{{ item.state }}</p>
-          <p class="flowState">{{ item.CreateUser }}  {{ item.CreateDate }}</p>
+          <p class="flowState">{{ item.CreateUser }}  {{ item.CreateDate | dayjs('YYYY-MM-DD hh:mm') }}</p>
         </van-step>
       </van-steps>
     </van-cell-group>

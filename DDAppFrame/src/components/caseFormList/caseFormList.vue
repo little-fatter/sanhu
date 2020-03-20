@@ -65,6 +65,7 @@ export default {
     },
     // 去该案件表单详情
     goFromDetails (item) {
+      console.log(item.FormType)
       // cll 获取字典后判断跳转          // this.$toast('提示信息')
       if (item.FormType === FromType.confiscatoryGoodsList) {
         // 没收物品清单

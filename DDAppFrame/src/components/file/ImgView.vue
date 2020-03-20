@@ -85,4 +85,10 @@ export default {
     width: 100%;
     height: 170px;
 }
+.imgWaper{
+  width: 2.5rem !important;
+  height:2rem !important;
+  overflow: hidden;
+      border: solid 1px #ececec;
+}
 </style>
