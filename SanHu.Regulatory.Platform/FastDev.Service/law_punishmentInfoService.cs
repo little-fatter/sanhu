@@ -39,7 +39,24 @@ namespace FastDev.Service
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
-                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
+                bool rf = false;
+                bool rg = false;
+                if (bool.TryParse(data.LawPunishmentInfo.Isfine,out rf))
+                    data.LawPunishmentInfo.Isfine = "1";//1为真
+                else
+                    data.LawPunishmentInfo.Isfine = "0";
+
+                if(bool.TryParse(data.LawPunishmentInfo.IsConfiscationgoods, out rg))
+                    data.LawPunishmentInfo.IsConfiscationgoods = "1";
+                else
+                    data.LawPunishmentInfo.IsConfiscationgoods = "0";
+
+                if(!rf)
+                    data.LawPunishmentInfo.Isfine = "0";
+                if (!rg)
+                        data.LawPunishmentInfo.IsConfiscationgoods = "0";
+
+                CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
                 //打印预生成

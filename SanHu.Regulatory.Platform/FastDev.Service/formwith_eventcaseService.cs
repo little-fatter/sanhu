@@ -19,8 +19,33 @@ namespace FastDev.Service
 
         private void Formwith_eventcaseService_OnAfterGetPagedData(object query, object data)
         {
-            var lst = (data as PagedData).Records;
+            var filtercase = query as FilterGroup;
             string eventinfoid = null;
+            if (filtercase != null)
+            {
+                if (filtercase.groups.Count > 0)
+                {
+                    foreach (var f in filtercase.groups)
+                    {
+                        if (f.groups.Count > 0)
+                        {
+                            foreach (var f0 in f.groups)
+                            {
+                                if (f0.rules != null)
+                                {
+                                    if (f0.rules[0].field == "CaseId")
+                                    {
+                                        var caseinfo = QueryDb.FirstOrDefault<formwith_eventcase>("where FormID=@0", f0.rules[0].value);
+                                        eventinfoid = caseinfo.EventInfoId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            var lst = (data as PagedData).Records;
+       
 
             ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
 
@@ -63,8 +88,22 @@ namespace FastDev.Service
                 }
                 if (formType == "case_info")
                 {
-                    eventinfoid = item["EventInfoId"].ToString();
+                    eventinfoid = (string)item["EventInfoId"];
                 }
+            }
+            if (!string.IsNullOrEmpty(eventinfoid))
+            {
+                var patrol = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 and FormType='task_patrol'", eventinfoid);
+                if (patrol != null)
+                {
+                    lst.Add(patrol as Dictionary<string, object>);
+                }
+                var survey = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 and FormType='task_survey'", eventinfoid);
+                if (survey != null)
+                {
+                    lst.Add(survey as Dictionary<string,object>);
+                }
+                
             }
         }
 

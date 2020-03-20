@@ -47,7 +47,7 @@ namespace FastDev.Service
                         l.Associatedobjecttype = "form_inquestrecord";
                         l.AssociatedobjectID = formid;
                         l.CreateDate = DateTime.Now;
-                        QueryDb.Save(l);
+                        QueryDb.Insert(l);
                     }
                 }
                 if (data.lawParties != null)
@@ -57,7 +57,7 @@ namespace FastDev.Service
                         l.Associatedobjecttype = "form_inquestrecord";
                         l.AssociationobjectID = formid;
                         l.CreateDate = DateTime.Now;
-                        QueryDb.Save(l);
+                        QueryDb.Insert(l);
                     }
                 }
                 CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);

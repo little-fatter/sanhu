@@ -257,7 +257,7 @@ namespace FastDev.Service
             var law = QueryDb.FirstOrDefault<law_punishmentInfo>("select * from law_punishmentInfo where CaseId=@0", formId);
             if (law == null) return null;
             string publishtype = "";
-            if (law.IsConfiscationgoods=="1")
+            if (law.IsConfiscationgoods=="1")//1为真
            {
                 publishtype = "没收物品";
             }
