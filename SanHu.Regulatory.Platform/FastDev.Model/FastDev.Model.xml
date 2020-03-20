@@ -424,6 +424,21 @@
             用于登录名
             </summary>
         </member>
+        <member name="T:FD.Model.Dto.UserOrganizationName">
+            <summary>
+            用户与所属部门的名称
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationName.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:FD.Model.Dto.UserOrganizationName.OrgName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
         <member name="T:FD.Model.Enum.EventStatus">
             <summary>
             事件状态
