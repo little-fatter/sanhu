@@ -104,7 +104,10 @@ export default {
         LawpartyId: this.model.inventory.lawParty,
         CaseId: this.model.caseInfo.ID,
         EventInfoId: this.model.caseInfo.EventInfoId,
-        Othergoods: this.model.inventory.Othergoods
+        Othergoods: this.model.inventory.Othergoods,
+        Lawpartysign: this.dsrSignature,
+        MainHandlersign: this.zfr1Signature,
+        CoOrganizersign: this.zfr2Signature
       }
       var data = {
         formConfiscated,

@@ -21,18 +21,11 @@
             <img :src="item.SignImg1">
           </div>
         </div>
-        <div class="person_item">
-          <span style="margin-right:20px">执法人1:</span>
-          <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')" v-if="!zfr1Signature">手签</van-button>
+        <div class="person_item" v-for="(item,index) in model.lawPersions" :key="index">
+          <span style="margin-right:20px">{{ `执法人${index+1}` }}:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfrSignature',index)" v-if="!item.SignImg1">手签</van-button>
           <div class="signature-img-wapper" v-else>
-            <img :src="zfr1Signature">
-          </div>
-        </div>
-        <div class="person_item">
-          <span style="margin-right:20px">执法人2:</span>
-          <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')" v-if="!zfr2Signature">手签</van-button>
-          <div class="signature-img-wapper" v-else>
-            <img :src="zfr2Signature">
+            <img :src="item.SignImg1">
           </div>
         </div>
         <div class="single-save">
@@ -67,9 +60,6 @@ export default {
       loading: false,
       model: null,
       signatureType: null,
-      dsrSignature: [],
-      zfr1Signature: null,
-      zfr2Signature: null,
       showPopup: false,
       setIndex: null
     }
@@ -102,14 +92,13 @@ export default {
             item.SignImg1 = signature
           }
         })
-        console.log('this.model.caseInfo.LawParties', this.model.caseInfo.LawParties)
       }
-      if (this.signatureType === 'zfr1Signature') {
-        this.zfr1Signature = signature
-      }
-
-      if (this.signatureType === 'zfr2Signature') {
-        this.zfr2Signature = signature
+      if (this.signatureType === 'zfrSignature') {
+        this.model.lawPersions.forEach((item, mindex) => {
+          if (mindex === this.setIndex) {
+            item.SignImg1 = signature
+          }
+        })
       }
       this.showPopup = false
     },

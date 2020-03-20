@@ -15,7 +15,7 @@
         clickable
         @click="handleShowSelectEvent"
       >
-        <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleShowSelectEvent" size="25" />
+        <van-icon name="arrow" color="#1989fa" slot="right-icon" size="25" />
       </van-field>
     </van-cell-group>
     <van-cell-group title="案件信息" v-if="event.evtTypeDisplayName">
