@@ -35,7 +35,7 @@ export const DictionaryCode = {
  * 表单类型
  */
 export const FromType = {
-  // 物品清单
+  // 物品清单  废弃
   goodsList: 'form_confiscated_item',
   // 案件详情
   caseDetails: 'case_info',
@@ -58,7 +58,7 @@ export const FromType = {
   // 事件核查
   eventDetail: 'task_patrol',
   // 没收物品清单
-  confiscatoryGoodsList: 'form_confiscated'
+  confiscatoryGoodsList: 'form_confiscated_item'
 }
 
 /**

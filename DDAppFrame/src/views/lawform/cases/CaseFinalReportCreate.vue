@@ -172,7 +172,7 @@ export default {
     },
     handelViewPenalizeBook () {
       var id = this.penalizeBook.ID
-      this.$router.push({ name: 'PenalizeBookDetial', query: { id: id } })
+      this.$router.push({ path: '/PromptlyPunishNote', query: { id: id } })
     },
     onSubmit (values) {
       ddcomplexPicker().then((approve) => {
@@ -255,7 +255,7 @@ export default {
         },
         {
           name: '处罚决定',
-          value: `${webUrl}#/PenalizeBookDetial?id=${this.penalizeBook.ID}`
+          value: `${webUrl}#/PromptlyPunishNote?id=${this.penalizeBook.ID}`
         },
         {
           name: '案件详情',

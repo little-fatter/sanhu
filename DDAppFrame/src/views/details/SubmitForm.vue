@@ -370,19 +370,10 @@ export default {
           query: { ID: item.FormID }
         })
       } else if (item.FormType === FromType.caseReport) {
-        if (item.FormState === 1) {
-          // 结案报告
-          this.$router.push({
-            path: '/caseReport',
-            query: { ID: item.FormID }
-          })
-        } else {
-          // 结案报告未完成状态
-          this.$router.push({
-            path: '/closingReportDetail',
-            query: { ID: item.FormID }
-          })
-        }
+        this.$router.push({
+          path: '/caseReport',
+          query: { ID: item.FormID }
+        })
       } else if (item.FormType === FromType.caseCover) {
         // 卷宗封面
         this.$router.push({
