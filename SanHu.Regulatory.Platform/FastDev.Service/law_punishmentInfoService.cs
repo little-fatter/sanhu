@@ -40,23 +40,6 @@ namespace FastDev.Service
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
-                //bool rf = false;
-                //bool rg = false;
-                //if (bool.TryParse(data.LawPunishmentInfo.Isfine,out rf))
-                //    data.LawPunishmentInfo.Isfine = "1";//1为真
-                //else
-                //    data.LawPunishmentInfo.Isfine = "0";
-
-                //if(bool.TryParse(data.LawPunishmentInfo.IsConfiscationgoods, out rg))
-                //    data.LawPunishmentInfo.IsConfiscationgoods = "1";
-                //else
-                //    data.LawPunishmentInfo.IsConfiscationgoods = "0";
-
-                //if(!rf)
-                //    data.LawPunishmentInfo.Isfine = "0";
-                //if (!rg)
-                //        data.LawPunishmentInfo.IsConfiscationgoods = "0";
-
                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
@@ -94,6 +77,7 @@ namespace FastDev.Service
                     l.AssociationobjectID = lawpunishment_Info;
                     l.ID = Guid.NewGuid().ToString();
                     l.CreateDate = DateTime.Now;
+                    l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
                     //_Lawpartys.Create(l);
                 }
@@ -105,7 +89,8 @@ namespace FastDev.Service
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
                     a.ID = Guid.NewGuid().ToString();
-                   a.CreateDate = DateTime.Now;
+                    a.CreateDate = DateTime.Now;
+                    a.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(a);
                    // _attachment.Create(a);           
                 }

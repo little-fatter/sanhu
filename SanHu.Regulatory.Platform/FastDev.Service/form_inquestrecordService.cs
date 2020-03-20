@@ -47,6 +47,7 @@ namespace FastDev.Service
                         l.Associatedobjecttype = "form_inquestrecord";
                         l.AssociatedobjectID = formid;
                         l.CreateDate = DateTime.Now;
+                        l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
                     }
                 }
@@ -57,6 +58,7 @@ namespace FastDev.Service
                         l.Associatedobjecttype = "form_inquestrecord";
                         l.AssociationobjectID = formid;
                         l.CreateDate = DateTime.Now;
+                        l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
                     }
                 }
