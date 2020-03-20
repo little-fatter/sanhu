@@ -50,7 +50,7 @@
           :readonly="true"
           @click="handleSelecLawPersions"
         >
-          <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecLawPersions" size="30" />
+          <van-icon name="arrow" color="#1989fa" slot="right-icon" size="30" />
         </van-field>
         <van-field
           v-model="recordPersionNames"
@@ -59,7 +59,7 @@
           :readonly="true"
           @click="handleSelecRecordPersions"
         >
-          <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecRecordPersions" size="30" />
+          <van-icon name="arrow" color="#1989fa" slot="right-icon" size="30" />
         </van-field>
 
         <van-field

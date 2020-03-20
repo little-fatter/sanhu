@@ -86,7 +86,7 @@
           :readonly="true"
           @click="handleSelecOrganiser"
         >
-          <van-icon name="arrow" color="#1989fa" slot="right-icon" @click="handleSelecOrganiser" size="30" />
+          <van-icon name="arrow" color="#1989fa" slot="right-icon" size="30" />
         </van-field>
 
         <div class="operate-area single-save">

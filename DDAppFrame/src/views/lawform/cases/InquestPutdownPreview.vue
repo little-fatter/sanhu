@@ -15,16 +15,25 @@
       <van-cell title="勘验记录" :value="model.form.Inspectionrecord"></van-cell>
       <div class="operate-area">
         <div class="person_item" v-for="(item,index) in model.caseInfo.LawParties" :key="index">
-          <span style="margin-right:20px">{{ `当事人${index+1}` }}:</span>  <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" >手签</van-button>
-          <van-icon name="success" color="green" v-show="dsrSignature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">{{ `当事人${index+1}` }}:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" v-if="!item.SignImg1">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="item.SignImg1">
+          </div>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">执法人1:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')">手签</van-button>
-          <van-icon name="success" color="green" v-show="zfr1Signature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">执法人1:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')" v-if="!zfr1Signature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="zfr1Signature">
+          </div>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">执法人2:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')">手签</van-button>
-          <van-icon name="success" color="green" v-show="zfr2Signature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">执法人2:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')" v-if="!zfr2Signature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="zfr2Signature">
+          </div>
         </div>
         <div class="single-save">
           <van-button type="info" :loading="loading" size="large" class="single-save" @click="submit">保存</van-button>
@@ -61,7 +70,8 @@ export default {
       dsrSignature: [],
       zfr1Signature: null,
       zfr2Signature: null,
-      showPopup: false
+      showPopup: false,
+      setIndex: null
     }
   },
   beforeDestroy () {
@@ -77,16 +87,22 @@ export default {
       var forms = this.$route.params.forms
       this.model = forms
     },
-    handleShowSignature (signatureType) {
+    handleShowSignature (signatureType, index) {
       this.signatureType = signatureType
+      this.setIndex = index
       this.showPopup = true
     },
     onCloseSignature () {
       this.showPopup = false
     },
-    onSignatureConfirm (signature, index) {
+    onSignatureConfirm (signature) {
       if (this.signatureType === 'dsrSignature') {
-        this.dsrSignature.push(signature)
+        this.model.caseInfo.LawParties.forEach((item, mindex) => {
+          if (mindex === this.setIndex) {
+            item.SignImg1 = signature
+          }
+        })
+        console.log('this.model.caseInfo.LawParties', this.model.caseInfo.LawParties)
       }
       if (this.signatureType === 'zfr1Signature') {
         this.zfr1Signature = signature
@@ -141,4 +157,5 @@ export default {
  {
     margin-bottom: 20px;
  }
+
 </style>

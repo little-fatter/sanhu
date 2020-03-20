@@ -6,16 +6,24 @@
       <inventory-form-view :inventory="model.inventory"></inventory-form-view>
       <div class="operate-area">
         <div class="person_item">
-          <span style="margin-right:20px">当事人:</span>  <van-button type="default" size="small" @click="handleShowSignature('dsrSignature')" >手签</van-button>
-          <van-icon name="success" color="green" v-show="dsrSignature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">当事人:</span><van-button type="default" size="small" @click="handleShowSignature('dsrSignature')" v-if="!dsrSignature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="dsrSignature">
+          </div>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">执法人1:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')">手签</van-button>
-          <van-icon name="success" color="green" v-show="zfr1Signature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">执法人1:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')" v-if="!zfr1Signature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="zfr1Signature">
+          </div>
         </div>
         <div class="person_item">
-          <span style="margin-right:20px">执法人2:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')">手签</van-button>
-          <van-icon name="success" color="green" v-show="zfr2Signature" style="margin-left:20px"></van-icon>
+          <span style="margin-right:20px">执法人2:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')" v-if="!zfr2Signature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="zfr2Signature">
+          </div>
         </div>
         <div class="single-save">
           <van-button type="info" :loading="loading" size="large" class="single-save" @click="submit">保存</van-button>
@@ -117,7 +125,7 @@ export default {
       this.loading = true
       commonOperateApi('FINISH', 'form_confiscated', data).then((res) => {
         this.$toast.success('操作成功')
-        this.goToLawForm()
+        // this.goToLawForm()
       }).finally(() => {
         this.loading = false
       })

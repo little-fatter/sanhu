@@ -41,3 +41,12 @@ export const deleteFile = (fileCode) => {
     }
   )
 }
+
+/**
+ * 根据fileCode获取访问文件的完整路径
+ * @param {*} fileCode
+ */
+export const getReadFileUrl = (fileCode) => {
+  var url = apiConfig.admin.file.downloadFile + '/' + fileCode
+  return url
+}
