@@ -14,9 +14,10 @@ import {
   FORM_INQUEST_RECORD,
   CASE_REPORT,
   CASE_COVER,
-  FORM_INQUIRY_RECORD_LITIGANT,
-  FORM_INQUIRY_RECORD_WITNESS,
-  FORM_INQUIRY_RECORD_THIRD,
+  FORM_INQUIRY_RECORD,
+  // FORM_INQUIRY_RECORD_LITIGANT,
+  // FORM_INQUIRY_RECORD_WITNESS,
+  // FORM_INQUIRY_RECORD_THIRD,
   TASK_SURVEY,
   TASK_PATROL
 } from './model.config'
@@ -66,23 +67,29 @@ export const formTypes = [
     name: ''
   },
   {
-    title: '询问当事笔录',
-    model: FORM_INQUIRY_RECORD_LITIGANT,
-    path: '',
-    name: ''
-  },
-  {
-    title: '询问证人人笔录',
-    model: FORM_INQUIRY_RECORD_WITNESS,
-    path: '',
-    name: ''
-  },
-  {
-    title: '询问第三人笔录',
-    model: FORM_INQUIRY_RECORD_THIRD,
+    title: '询问笔录',
+    model: FORM_INQUIRY_RECORD,
     path: '/data-manage/form/record-query-detail',
     name: ''
   },
+  // {
+  //   title: '询问当事笔录',
+  //   model: FORM_INQUIRY_RECORD_LITIGANT,
+  //   path: '',
+  //   name: ''
+  // },
+  // {
+  //   title: '询问证人人笔录',
+  //   model: FORM_INQUIRY_RECORD_WITNESS,
+  //   path: '',
+  //   name: ''
+  // },
+  // {
+  //   title: '询问第三人笔录',
+  //   model: FORM_INQUIRY_RECORD_THIRD,
+  //   path: '',
+  //   name: ''
+  // },
   {
     title: '现场勘查',
     model: TASK_SURVEY,

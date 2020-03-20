@@ -23,9 +23,8 @@ var publicAppConfig = {
   hostConfig: {
     admin: 'http://192.168.0.169:8030',
     list: 'http://192.168.0.169:8030',
-    framework: 'http://192.168.0.169:8030/framework',
+    framework: 'http://192.168.0.169:27011/framework',
     file: 'http://182.150.28.58:27012/filesystem',
-    // framework: 'http://182.150.28.58:3308/framework'
     // 四方德信接口
     sfdx: 'http://yuxi.mysinosoft.com/yuxi//api/7FFA47F368D84E1FAD68A57E22975E50'
   },

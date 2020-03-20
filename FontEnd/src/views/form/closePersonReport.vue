@@ -79,17 +79,17 @@
 </style>
 <template>
   <div>
-    <div v-if="!pdfUrl">
+    <div v-if="this.formState">
       <pdf-panel :pdf="pdfUrl" :files="attachment"></pdf-panel>
     </div>
     <div v-else class="wrapper">
       <div class="title">
         <div class="staff-box">
           <div class="pic">
-            {{ lawStaff[0] ? lawStaff[0].Username.slice(0,2) : '王五' }}
+            {{ mainForm.CreateUserID }}
           </div>
           <div class="staff">
-            <span>执法人:</span><span>{{ lawStaff[0] ? lawStaff[0].Username : '王五' }}</span>
+            <span>办案人:</span><span>{{ mainForm.CreateUserID }}</span>
           </div>
         </div>
         <div class="state">
@@ -110,10 +110,6 @@
             <a-col class="colSize colLine" :span="4">创建时间：</a-col>
             <a-col class="colSize contentColor" :span="12">{{ caseData.CreateDate || '2020-03-09 13:43:04' }}</a-col>
           </a-row>
-          <!-- <a-row class="row">
-          <a-col class="colSize colLine" :span="4">案件类型：</a-col>
-          <a-col class="colSize contentColor" :span="12">{{ caseData.CaseType || 'other' }}</a-col>
-        </a-row> -->
           <div v-for="(item,index) in lawParty" :key="item.AssociationobjectID" >
             <a-row class="row" v-if="item.Typesofparties==1">
               <a-col class="colSize colLine" :span="4">当事人({{ index+1 }}):</a-col>
@@ -161,21 +157,11 @@
           <a-row class="row">
             <a-col class="colSize colLine" :span="4">简要案情及调查经过:</a-col>
             <a-col class="colSize contentColor" :span="12">
-              <a-textarea autosize style="min-height:100px;" v-model="mainData.CaseDetail"></a-textarea>
+              <a-textarea autosize style="min-height:100px;" v-model="caseData.CaseDetail"></a-textarea>
             </a-col>
           </a-row>
           <a-row class="row">
-            <a-col class="colSize colLine" :span="4">处罚结果:</a-col>
-            <a-col class="colSize contentColor" :span="12">
-              <div>
-                <span>
-                </span>
-                <span> {{ mainData.ExecuteState || '已执行' }}</span>
-              </div>
-            </a-col>
-          </a-row>
-          <a-row class="row">
-            <a-col class="colSize colLine" :span="4">关联表单</a-col>
+            <a-col class="colSize colLine" :span="4">处罚决定书</a-col>
             <a-col class="colSize contentColor" :span="12">
               <div>
                 <span>
@@ -195,8 +181,7 @@
                       p-id="5584"
                     />
                   </svg>
-                  <span v-if="relateForm.length > 0" style="cursor: pointer;" @click="checkPunishInfo"> 处罚决定书 </span>
-                  <span v-else>无</span>
+                  <span style="cursor: pointer;" @click="checkPunishInfo"> {{ mainForm.PunishmentTitle || '处罚决定书' }} </span>
                 </span>
               </div>
             </a-col>
@@ -223,7 +208,8 @@
 </template>
 
 <script>
-import { getDetails, getPageData, getFormDetail, getFormsDetailByEventInfoIdPdf } from '@/api/sampleApi'
+
+import { getDetails, getFormDetail, getFormsDetailByEventInfoIdPdf } from '@/api/sampleApi'
 import PdfPanel from '@/components/business/PdfPanel'
 import {
   isNotEmpty
@@ -233,7 +219,9 @@ export default {
   components: { PdfPanel },
   data () {
     return {
-      mainData: {},
+      formState: '',
+      publishId: '',
+      mainForm: {},
       caseData: {},
       lawParty: [], // 当事人
       lawStaff: [], // 执法人
@@ -247,45 +235,30 @@ export default {
   mounted () {
     if (this.$route.query.id) {
       this.id = this.$route.query.id
-      const formType = this.$route.query.formType
-      console.log(formType)
     }
     this.init()
-    this.test()
   },
   methods: {
-    test () {
-      getFormDetail('case_info', null, '75159f38-cec3-4688-ba5b-cbc70a5eaadb', ['casedetail']).then(res => {
-        console.log('case_info', res)
-      })
-    },
     // 获取页面数据
     init () {
-      this.getFormsDetailByEventInfoIdPdf()
       getDetails('case_report', this.id).then((res) => {
-        console.log('222', res)
-      })
-      getFormDetail('case_report', null, this.id).then(res => {
-        console.log('1111', res)
-        this.mainData = res.MainForm
-        this.attachment = res.attachment
-        this.lawParty = res.law_party
-        this.lawStaff = res.law_staff
-        getDetails('case_Info', res.MainForm.CaseId || '04a75156-d0e2-449d-81b7-bf382d93b8e7').then(res => {
-          this.caseData = res
-        })
-        getFormDetail('law_punishmentInfo', res.MainForm.EventInfoId).then(res => {
-          this.lawParty = res.law_party
-          this.relateForm = res.attachment
-          console.log(this.relateForm)
-        })
-        // this.loadEventInfo(res.MainForm.EventInfoId)
+        if (res.FormState === '完结') {
+          this.getFormsDetailByEventInfoIdPdf()
+        } else {
+          const caseId = res.CaseId
+          this.publishId = res.PunishmentId
+          this.caseData.CaseDetail = res.CaseDetail
+          getFormDetail('case_info', null, caseId, ['casedetail']).then(res => {
+            this.mainForm = res.MainForm
+            this.attachment = res.attachment
+            this.lawParty = res.law_party
+            this.lawStaff = res.law_staff
+          })
+        }
       })
     },
     getFormsDetailByEventInfoIdPdf () {
       getFormsDetailByEventInfoIdPdf(this.id, 'case_report').then(res => {
-        // const pdfHost = JSON.parse(localStorage.getItem('publicAppConfig')).pdfHost
-        // this.pdfUrl = `${pdfHost}/${res}`
         this.pdfUrl = res
       })
     },
@@ -299,7 +272,7 @@ export default {
     },
     // 查看处罚决定书
     checkPunishInfo () {
-      this.$router.push({ name: '', query: { id: this.relateForm[0].ID } })
+      this.$router.push({ name: 'judgmentDetail', query: { id: this.publishId } })
     }
   }
 }

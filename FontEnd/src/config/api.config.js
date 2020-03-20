@@ -32,7 +32,7 @@ const apiConfig = {
     regulations: `${getHost('sfdx')}/law_rule_page`
   },
   // 信息中心
-  msgCenter: `${getHost('framework')}/webapi/api/JobMessage`,
+  msgCenter: `${getHost('framework')}/api/JobMessage`,
   // 用户ID
   userId: `${getHost('list')}/webapi/getuserinfo`,
   // 字典查询
