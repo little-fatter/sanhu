@@ -30,6 +30,7 @@ namespace FastDev.Service
             //}
             //return null;
         }
+        //注意isfine isgood是不是被添加字段修改了
         public object Handle(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<law_punishmentInfoFinishReq>(context.Data);
@@ -39,22 +40,22 @@ namespace FastDev.Service
             data.LawPunishmentInfo.TaskId = data.SourceTaskId;
             try
             {
-                bool rf = false;
-                bool rg = false;
-                if (bool.TryParse(data.LawPunishmentInfo.Isfine,out rf))
-                    data.LawPunishmentInfo.Isfine = "1";//1为真
-                else
-                    data.LawPunishmentInfo.Isfine = "0";
+                //bool rf = false;
+                //bool rg = false;
+                //if (bool.TryParse(data.LawPunishmentInfo.Isfine,out rf))
+                //    data.LawPunishmentInfo.Isfine = "1";//1为真
+                //else
+                //    data.LawPunishmentInfo.Isfine = "0";
 
-                if(bool.TryParse(data.LawPunishmentInfo.IsConfiscationgoods, out rg))
-                    data.LawPunishmentInfo.IsConfiscationgoods = "1";
-                else
-                    data.LawPunishmentInfo.IsConfiscationgoods = "0";
+                //if(bool.TryParse(data.LawPunishmentInfo.IsConfiscationgoods, out rg))
+                //    data.LawPunishmentInfo.IsConfiscationgoods = "1";
+                //else
+                //    data.LawPunishmentInfo.IsConfiscationgoods = "0";
 
-                if(!rf)
-                    data.LawPunishmentInfo.Isfine = "0";
-                if (!rg)
-                        data.LawPunishmentInfo.IsConfiscationgoods = "0";
+                //if(!rf)
+                //    data.LawPunishmentInfo.Isfine = "0";
+                //if (!rg)
+                //        data.LawPunishmentInfo.IsConfiscationgoods = "0";
 
                 CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);

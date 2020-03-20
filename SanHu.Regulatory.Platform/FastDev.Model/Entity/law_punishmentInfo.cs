@@ -34,12 +34,12 @@ public string PunishmentdecisionID
 get;
 set;
 }
-public string Isfine
+public bool Isfine
 {
 get;
 set;
 }
-public string IsConfiscationgoods
+public bool IsConfiscationgoods
 {
 get;
 set;

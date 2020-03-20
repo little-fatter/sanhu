@@ -142,9 +142,12 @@ namespace FastDev.Service
             var obj = service.GetListData(filter).OrderByDescending(s => s.Keys.Contains("createTime") ? s["createTime"] : s["CreateDate"]).FirstOrDefault();  //查询主表单
             if (obj == null) return null;//throw new Exception("未取得关联数据");
             obj.Add("publishtype", publishtypet);
-            var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{obj["CreateUserID"].ToString()}'");
-            obj["CreateUserID"]=user.Name;
-
+            if (obj["CreateUserID"] != null)
+            {
+                var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id='{obj["CreateUserID"]}'");
+                if (user != null)
+                    obj["CreateUserID"] = user.Name;
+            }
             if (data.Model.ToUpper() == "case_Info".ToUpper())
             {
                 if (obj.ContainsKey("CaseType"))
@@ -257,11 +260,11 @@ namespace FastDev.Service
             var law = QueryDb.FirstOrDefault<law_punishmentInfo>("select * from law_punishmentInfo where CaseId=@0", formId);
             if (law == null) return null;
             string publishtype = "";
-            if (law.IsConfiscationgoods=="1")//1为真
+            if (law.IsConfiscationgoods)//1为真
            {
                 publishtype = "没收物品";
             }
-            if (law.Isfine=="1")
+            if (law.Isfine)
             {
                 publishtype = publishtype + " " + "罚款";
             }
