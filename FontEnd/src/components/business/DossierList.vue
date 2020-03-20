@@ -2,7 +2,7 @@
  * @Author: 616749285@qq.com
  * @Date: 2020-03-16 14:12:03
  * @LastEditors: 616749285@qq.com
- * @LastEditTime: 2020-03-16 14:36:07
+ * @LastEditTime: 2020-03-20 11:05:19
  * @Description:  案卷列表
  -->
 
@@ -18,6 +18,7 @@
 import STable from '@/components/table/'
 import { getPageData } from '@/api/sampleApi'
 import { FORMWITH_EVENTCASE } from '@/config/model.config'
+import { formatTime, toFormDetail } from '@/utils/util'
 
 // 生成查询规则
 const genRule = context => ({
@@ -55,12 +56,12 @@ const genColumns = context => [
   {
     title: '创建时间',
     dataIndex: 'InitiationTime',
-    width: 120,
+    width: 200,
     customRender: text => formatTime(text)
   },
   {
     title: '最后更新时间',
-    width: 120,
+    width: 200,
     dataIndex: 'ModifyDate',
     customRender: text => formatTime(text)
   },
@@ -99,8 +100,8 @@ export default {
       return getPageData(FORMWITH_EVENTCASE, genCaseFileRule(this), pageIndex, pageSize)
     },
     // 查看
-    viewItem (record) {
-
+    viewItem (record = {}) {
+      toFormDetail(record.FormType, record)
     }
   }
 }
