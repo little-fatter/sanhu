@@ -21,15 +21,14 @@
       <van-cell title="事发时间" :value="loadData.IncidentTime"></van-cell>
       <van-cell title="事发地点" :value="loadData.IncidentAddress"></van-cell>
       <van-cell title="处理结果" :value="loadData.Result"></van-cell>
-      <van-cell title="附件">
-        <S-upload
-          style="margin-left:80px;margin-bottom:5px;"
-          ref="myupload"
-          :sync2Dingding="false"
-          :isOnlyView="true"
-          :initResult="eventFile"
-        ></S-upload>
-      </van-cell>
+      <van-cell title="附件"></van-cell>
+      <S-upload
+        style="margin-left:80px;margin-bottom:5px;"
+        ref="myupload"
+        :sync2Dingding="false"
+        :isOnlyView="true"
+        :initResult="eventFile"
+      ></S-upload>
       <van-cell title="是否请求执法人员处理" :value="loadData.Needlawenforcement === 0 ? '自行处理' : '请求执法'"></van-cell>
       <van-cell title="是否需要跟踪整改" :value="loadData.Needtracking === 0 ? '不需要' : '需要跟踪'"></van-cell>
     </van-cell-group>

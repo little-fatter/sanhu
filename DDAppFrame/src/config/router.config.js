@@ -343,7 +343,7 @@ export const asyncRouterMap = [{
         name: 'caseReport',
         component: () => import('@/views/details/showInPdf/CaseReport.vue'),
         meta: {
-          title: '结案报告', // 看后面情况是否使用
+          title: '结案报告',
           keepAlive: false
         }
       }
@@ -364,16 +364,6 @@ export const asyncRouterMap = [{
         keepAlive: false
       }
     },
-    // 备份测试不要删除
-    // {
-    //   path: '/caseQueryNew',
-    //   name: 'caseQueryNew',
-    //   component: () => import('@/views/casequery/caseQueryNew.vue'),
-    //   meta: {
-    //     title: '案件查询',
-    //     keepAlive: false
-    //   }
-    // },
     {
       path: '/caseDetails',
       name: 'caseDetails',

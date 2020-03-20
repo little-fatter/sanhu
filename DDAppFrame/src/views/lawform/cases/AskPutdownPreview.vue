@@ -25,7 +25,7 @@
         placeholder="请输入询问记录"
         readonly
       />
-      <div class="operate-area">
+      <!-- <div class="operate-area">
         <div class="person_item" v-for="(item,index) in model.lawParties" :key="index">
           <span style="margin-right:20px">{{ `${model.form.InquiryType}${index+1}` }}:</span>  <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" >手签</van-button>
           <van-icon name="success" color="green" v-show="dsrSignature" style="margin-left:20px"></van-icon>
@@ -37,6 +37,33 @@
         <div class="person_item">
           <span style="margin-right:20px">执法人2:</span>  <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')">手签</van-button>
           <van-icon name="success" color="green" v-show="zfr2Signature" style="margin-left:20px"></van-icon>
+        </div>
+        <div class="single-save">
+          <van-button type="info" :loading="loading" size="large" class="single-save" @click="submit">保存</van-button>
+        </div>
+      </div> -->
+
+      <div class="operate-area">
+        <div class="person_item" v-for="(item,index) in model.lawParties" :key="index">
+          <span style="margin-right:20px">{{ `${model.form.InquiryType}${index+1}` }}:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('dsrSignature',index)" v-if="!item.SignImg1">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="item.SignImg1">
+          </div>
+        </div>
+        <div class="person_item">
+          <span style="margin-right:20px">执法人1:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfr1Signature')" v-if="!zfr1Signature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="zfr1Signature">
+          </div>
+        </div>
+        <div class="person_item">
+          <span style="margin-right:20px">执法人2:</span>
+          <van-button type="default" size="small" @click="handleShowSignature('zfr2Signature')" v-if="!zfr2Signature">手签</van-button>
+          <div class="signature-img-wapper" v-else>
+            <img :src="zfr2Signature">
+          </div>
         </div>
         <div class="single-save">
           <van-button type="info" :loading="loading" size="large" class="single-save" @click="submit">保存</van-button>
@@ -73,7 +100,8 @@ export default {
       dsrSignature: null,
       zfr1Signature: null,
       zfr2Signature: null,
-      showPopup: false
+      showPopup: false,
+      setIndex: null
     }
   },
   beforeDestroy () {
@@ -89,8 +117,9 @@ export default {
       var forms = this.$route.params.forms
       this.model = forms
     },
-    handleShowSignature (signatureType) {
+    handleShowSignature (signatureType, index) {
       this.signatureType = signatureType
+      this.setIndex = index
       this.showPopup = true
     },
     onCloseSignature () {
@@ -98,9 +127,12 @@ export default {
     },
     onSignatureConfirm (signature) {
       if (this.signatureType === 'dsrSignature') {
-        this.dsrSignature = signature
+        this.model.lawParties.forEach((item, mindex) => {
+          if (mindex === this.setIndex) {
+            item.SignImg1 = signature
+          }
+        })
       }
-
       if (this.signatureType === 'zfr1Signature') {
         this.zfr1Signature = signature
       }
@@ -119,7 +151,7 @@ export default {
       }
       var data = {
         formInquiryrecord,
-        LawParties: this.model.caseInfo.LawParties,
+        LawParties: this.model.lawParties,
         lawStaff: []
       }
       data.LawParties.forEach(item => {

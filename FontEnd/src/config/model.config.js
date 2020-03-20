@@ -7,13 +7,15 @@
  */
 
 // 案件
-export const CASE_INFO = 'case_Info'
+export const CASE_INFO = 'case_info'
 // 事件
 export const EVENT_INFO = 'event_info'
 // 案卷列表
 export const FORMWITH_EVENTCASE = 'formwith_eventcase'
 // 物品清单
 export const FORM_CONFISCATED_ITEM = 'form_confiscated_item'
+// 没收清单
+export const FORM_CONFISCATED = 'form_confiscated'
 // 当场处罚决定书
 export const LAW_PUNISHMENT_INFO = 'law_punishmentInfo'
 // 勘验记录

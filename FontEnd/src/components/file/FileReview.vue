@@ -8,7 +8,7 @@
 
 <template>
   <div class="file-riview">
-    <template v-if="file.imgs.length">
+    <template v-if="files.length && file.imgs.length">
       <div class="file-riview-header">
         <span class="file-riview-header-title">
           <slot name="imgHeaderTitle">证据:</slot>
@@ -42,7 +42,7 @@
         </div>
       </div>
     </template>
-    <template v-if="file.others.length">
+    <template v-if=" files.length && file.others.length">
       <div class="file-riview-header">
         <span class="file-riview-header-title">
           <slot name="fileHeaderTitle">附件:</slot>
@@ -61,8 +61,7 @@
 <script>
 import apiConfig from '@/config/api.config'
 import { ImgPreview, AspectImage } from 'vue-imgs'
-import { isImg } from '@/utils/util'
-import { downloadFile, genImgBackground } from '@/utils/util'
+import { isImg, downloadFile, genImgBackground } from '@/utils/util'
 
 export default {
   components: {
@@ -89,7 +88,7 @@ export default {
         const title = i.FileName || i.fileName
         const path = apiConfig.file.download(i.FileCode || i.fileCode)
         const isi = isImg(i.FileName || i.fileName)
-        file[isi ? 'imgs' : 'others'].push({title, path})
+        file[isi ? 'imgs' : 'others'].push({ title, path })
       })
       return file
     }
