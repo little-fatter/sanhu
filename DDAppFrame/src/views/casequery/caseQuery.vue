@@ -17,18 +17,23 @@
           :key="item.ID + index"
           @click="goCaseDetails(item.ID)"
         >
-          <van-cell :title="item.CauseOfAction" />
-          <p>
-            <span>当事人：</span>
-            <span v-if="item.LawPartys && item.LawPartys.length > 0">
-              <span style="margin-right:0.15rem" v-for="(msg, i) in item.LawPartys" :key="i + '@'">{{ msg.Name }}</span>
-            </span>
-            <span v-else>无数据</span>
-          </p>
-          <p>
-            <span>办案人：</span>
-            <span>{{ item.Investigators ? item.Investigators : '无数据' }}</span>
-          </p>
+          <van-cell :title="item.CauseOfAction" ></van-cell>
+          <div class="case-info-img">
+            <ImgView :url="item.imgUrl" :wapperClass="imgWaper"></ImgView>
+            <div>
+              <p>
+                <span>当事人：</span>
+                <span v-if="item.LawPartys && item.LawPartys.length > 0">
+                  <span style="margin-right:0.15rem" v-for="item in item.LawPartys" :key="item.ID">{{ item.Name }}</span>
+                </span>
+                <span v-else>无数据</span>
+              </p>
+              <p>
+                <span>办案人：</span>
+                <span>{{ item.CreatUser ? item.CreatUser : '无数据' }}</span>
+              </p>
+            </div>
+          </div>
           <h4 class="case-tag">
             <van-tag plain>{{ item.CaseNumber }}</van-tag>
             <!-- <van-tag plain>{{ item.ApplicableProcedure[1] }}</van-tag>-->
@@ -44,16 +49,19 @@
 
 <script>
 import SList from '../../components/list/SList'
-import { getQueryConditon, getQueryConditonMore } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
+import ImgView from '../../components/file/ImgView'
+import { getQueryConditon, getQueryConditonMore, isNotEmpty, isImg, getFileReadUrl, isEmpty } from '../../utils/util' // 引入搜索框判断是否为空,以及搜索规则
 import { getPageDate, getDictionaryItems } from '../../api/regulatoryApi' // 引入封装的请求
 export default {
   name: 'CaseQuery',
   components: {
-    SList
+    SList,
+    ImgView
   },
   data () {
     return {
-      tips: { type: 'primary', message: '未找到符合条件的信息!' },
+      url: '',
+      imgWaper: 'imgWaper',
       caseList: [], // 案件列表信息
       searchText: '', // 搜索框文字
       searchType: 0,
@@ -229,12 +237,33 @@ export default {
       return getPageDate('case_Info', parameter.pageIndex, parameter.pageSize, this.dealParameterNew(this.searchText, this.searchType, this.searchFlow, this.searchState, this.searchRegion))
         .then(res => {
           if (res.Rows) {
+            // console.log(res.Rows)
             res.Rows.forEach(item => {
+              item.imgUrl = this.getCaseFile(item).toString()
               this.caseList.push(item)
             })
           }
           return res
         })
+    },
+
+    // 图片
+    getCaseFile (caseInfo) {
+      var img = ''
+      if (isNotEmpty(caseInfo.attachments) && caseInfo.attachments.length > 0) {
+        for (const attachment of caseInfo.attachments) {
+          var fileName = attachment.fileName || attachment.FileName
+          var fileCode = attachment.fileCode || attachment.FileCode
+          if (isImg(fileName)) {
+            img = getFileReadUrl(fileCode)
+            break
+          }
+        }
+      }
+      if (isEmpty(img) && isNotEmpty(caseInfo.evtFileUrl)) {
+        img = caseInfo.evtFileUrl.split(',')[0]
+      }
+      return img
     },
     // 跳转到案件详情
     goCaseDetails (msg) {
@@ -336,5 +365,11 @@ export default {
 }
 .van-cell__title{
   width: auto !important;
+}
+.case-info-img{
+display: flex;
+}
+.case-info-img div:first-child{
+  margin-right: 0.3rem;
 }
 </style>

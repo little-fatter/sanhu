@@ -36,7 +36,7 @@ export const DictionaryCode = {
  */
 export const FromType = {
   // 物品清单  废弃
-  goodsList: 'form_confiscated_item',
+  // goodsList: 'form_confiscated_item',
   // 案件详情
   caseDetails: 'case_info',
   // 当场处罚决定书
@@ -48,17 +48,19 @@ export const FromType = {
   // 卷宗封面
   caseCover: 'case_cover',
   // 询问当事笔录
-  AskPartyNote: 'form_inquiryrecord_litigant',
+  // AskPartyNote: 'form_inquiryrecord_litigant',
+  AskPartyNote: 'form_inquiryrecord',
   // 询问证人笔录
-  AskWitnessNote: 'form_inquiryrecord_witness',
+  // AskWitnessNote: 'form_inquiryrecord_witness',   //废弃
   // 询问第三人笔录
-  AskThirdPartyNote: 'form_inquiryrecord_third',
+  // AskThirdPartyNote: 'form_inquiryrecord_third',  //废弃
   // 现场勘查
   sceneInvestigationDetail: 'task_survey',
   // 事件核查
   eventDetail: 'task_patrol',
   // 没收物品清单
-  confiscatoryGoodsList: 'form_confiscated_item'
+  // confiscatoryGoodsList: 'form_confiscated_item'   //废弃
+  confiscatoryGoodsList: 'form_confiscated'
 }
 
 /**
