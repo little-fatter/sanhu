@@ -21,28 +21,34 @@ namespace FastDev.Service
         {
             var filtercase = query as FilterGroup;
             string eventinfoid = null;
-            if (filtercase != null)
+            try
             {
-                if (filtercase.groups.Count > 0)
+                if (filtercase != null)
                 {
-                    foreach (var f in filtercase.groups)
+                    if (filtercase.groups.Count > 0)
                     {
-                        if (f.groups.Count > 0)
+                        foreach (var f in filtercase.groups)
                         {
-                            foreach (var f0 in f.groups)
+                            if (f.groups.Count > 0)
                             {
-                                if (f0.rules != null)
+                                foreach (var f0 in f.groups)
                                 {
-                                    if (f0.rules[0].field == "CaseId")
+                                    if (f0.rules != null)
                                     {
-                                        var caseinfo = QueryDb.FirstOrDefault<formwith_eventcase>("where FormID=@0", f0.rules[0].value);
-                                        eventinfoid = caseinfo.EventInfoId;
+                                        if (f0.rules[0].field == "CaseId")
+                                        {
+                                            var caseinfo = QueryDb.FirstOrDefault<formwith_eventcase>("where FormID=@0", f0.rules[0].value);
+                                            eventinfoid = caseinfo.EventInfoId;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+            }
+            catch {
+                eventinfoid = null;
             }
             var lst = (data as PagedData).Records;
        
@@ -86,28 +92,33 @@ namespace FastDev.Service
                     var lawpartyName = QueryDb.FirstOrDefault<string>("SELECT InquiryType FROM law_party where AssociationobjectID=@0", item["FormID"].ToString());
                     item["FormName"] = "[" + lawpartyName + "]" + item["FormName"];
                 }
-                if (formType == "case_info")
-                {
-                    eventinfoid = (string)item["EventInfoId"];
-                }
             }
+            //添加事件巡查勘察
             if (!string.IsNullOrEmpty(eventinfoid))
             {
-                var patrol = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 and FormType='task_patrol'", eventinfoid);
+              
+                var patrol = QueryDb.FirstOrDefault<formwith_eventcase>("where EventInfoId=@0 and FormType='task_patrol'", eventinfoid);
                 if (patrol != null)
                 {
-                    lst.Add(patrol as Dictionary<string, object>);
+                    var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(JsonConvert.SerializeObject(patrol));
+                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={obj["CreateUserID"]}");
+                    obj["handler"] = user.Name;
+                    lst.Add(obj);
                 }
-                var survey = QueryDb.Query<formwith_eventcase>("where EventInfoId=@0 and FormType='task_survey'", eventinfoid);
+                var survey = QueryDb.FirstOrDefault<formwith_eventcase>("where EventInfoId=@0 and FormType='task_survey'", eventinfoid);
                 if (survey != null)
                 {
-                    lst.Add(survey as Dictionary<string,object>);
+                    var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(JsonConvert.SerializeObject(survey));
+                    var user = SysContext.GetOtherDB(userServiceConfig.model.dbName).First<user>($"select * from user where Id={obj["CreateUserID"]}");
+                    obj["handler"] = user.Name;
+                    lst.Add(obj);
                 }
                 
             }
         }
 
         private Func<APIContext, object> Formwith_eventcaseService_OnGetAPIHandler(string id)
+
         {          
                 switch (id.ToUpper())
                 {
