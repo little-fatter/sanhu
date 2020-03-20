@@ -16,7 +16,7 @@ namespace FastDev.Service
             OnGetAPIHandler += law_punishmentInfoService_OnGetAPIHandler;
         }
 
- 
+
 
 
         private SHBaseService _sHBaseService;
@@ -26,7 +26,7 @@ namespace FastDev.Service
             //switch (id.ToUpper())
             //{
             //    case "FINISH":
-                    return Handle;
+            return Handle;
             //}
             //return null;
         }
@@ -57,12 +57,9 @@ namespace FastDev.Service
                 //if (!rg)
                 //        data.LawPunishmentInfo.IsConfiscationgoods = "0";
 
-                CreateInfo(data.LawPunishmentInfo, data.LawParties,data.Attachments);
+                CreateInfo(data.LawPunishmentInfo, data.LawParties, data.Attachments);
                 _sHBaseService.CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
                 _sHBaseService.UpdateWorkTaskState(data.SourceTaskId, WorkTaskStatus.Close);//关闭任务
-                //打印预生成
-                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formType"":""law_punishmentInfo""}" });
             }
             catch (Exception e)
             {
@@ -70,6 +67,9 @@ namespace FastDev.Service
                 throw new Exception(e.Message);
             }
             QueryDb.CompleteTransaction();
+            //打印预生成
+            var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+            PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + data.LawPunishmentInfo.ID + @""",""formType"":""law_punishmentInfo""}" });
             return true;
         }
 
@@ -79,12 +79,12 @@ namespace FastDev.Service
         /// <param name="TaskSurvey"></param>
         /// <param name="law_Parties"></param>
         /// <returns></returns>
-        private void  CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties,List<attachment> attachments)
+        private void CreateInfo(law_punishmentInfo lawpunishmentInfo, List<law_party> law_Parties, List<attachment> attachments)
         {
             var lawpunishment_Info = base.Create(lawpunishmentInfo) as string;//保存原始信息
             lawpunishmentInfo.ID = lawpunishment_Info;
             var _Lawpartys = ServiceHelper.GetService("law_partyService");
-            var _attachment= ServiceHelper.GetService("attachmentService");
+            var _attachment = ServiceHelper.GetService("attachmentService");
 
             if (law_Parties != null && law_Parties.Count > 0)//创建当事人
             {
@@ -105,9 +105,9 @@ namespace FastDev.Service
                     a.Associatedobjecttype = "law_punishmentInfo";
                     a.AssociationobjectID = lawpunishment_Info;
                     a.ID = Guid.NewGuid().ToString();
-                   a.CreateDate = DateTime.Now;
+                    a.CreateDate = DateTime.Now;
                     QueryDb.Insert(a);
-                   // _attachment.Create(a);           
+                    // _attachment.Create(a);           
                 }
             }
             ///更新案件信息
@@ -141,7 +141,7 @@ namespace FastDev.Service
                 }
             }
 
-          //  return lawpunishment_Info;
+            //  return lawpunishment_Info;
         }
     }
 }
