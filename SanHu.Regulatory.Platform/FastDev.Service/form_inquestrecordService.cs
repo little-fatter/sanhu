@@ -31,7 +31,7 @@ namespace FastDev.Service
         public object Finish(APIContext context)
         {
             var data = JsonHelper.DeserializeJsonToObject<form_inquestrecordFinishReq>(context.Data);
-
+            string formidt = null;
             QueryDb.BeginTransaction();
             try
             {
@@ -39,14 +39,15 @@ namespace FastDev.Service
                 data.forminquestrecord.EventInfoId = data.EventInfoId;
                 var form = ServiceHelper.GetService("form_inquestrecord").Create(data.forminquestrecord);
                 if (string.IsNullOrEmpty((string)form)) throw new Exception();
-                var formid = form.ToString();
+                 formidt = form.ToString();
                 if (data.lawStaffs != null)
                 {
                     foreach (var l in data.lawStaffs)
                     {
                         l.Associatedobjecttype = "form_inquestrecord";
-                        l.AssociatedobjectID = formid;
+                        l.AssociatedobjectID = formidt;
                         l.CreateDate = DateTime.Now;
+                        l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
                     }
                 }
@@ -55,24 +56,29 @@ namespace FastDev.Service
                     foreach (var l in data.lawParties)
                     {
                         l.Associatedobjecttype = "form_inquestrecord";
-                        l.AssociationobjectID = formid;
+                        l.AssociationobjectID = formidt;
                         l.CreateDate = DateTime.Now;
+                        l.CreateUserID = SysContext.WanJiangUserID;
                         QueryDb.Insert(l);
                     }
                 }
                 CreatTasksAndCreatWorkrecor(data.NextTasks, data.SourceTaskId);
-                //PDF打印预生成
-                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
-                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formid + @""",""formType"":""form_inquestrecord""}" });
                 QueryDb.CompleteTransaction();
             }
             catch (Exception e)
             {
                 QueryDb.AbortTransaction();
+                throw e;
                 return false;
             }
-            
-            return true;
+
+            if (!string.IsNullOrEmpty(formidt))
+            {
+                //PDF打印预生成
+                var PDFSerivce = ServiceHelper.GetService("form_printPDFService") as form_printPDFService;
+                PDFSerivce.AsposeToPdf(new APIContext() { Data = @"{""formId"":""" + formidt + @""",""formType"":""form_inquestrecord""}" });            
+            }
+                return true;
         }
     }
 }

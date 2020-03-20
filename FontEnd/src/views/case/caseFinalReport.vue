@@ -108,42 +108,47 @@ export default {
       this.$router.push({ name: 'PenalizeBookDetial', query: { id: id } })
     },
     onSubmit (values) {
-      ddcomplexPicker().then((approve) => {
-        var caseReport = {
-          CaseId: this.caseInfo.Id,
-          CaseDetail: this.caseFinalReport.CaseDetail,
-          PunishmentId: isNotEmpty(this.penalizeBook) ? this.penalizeBook.ID : null,
-          ExecuteState: '已执行'
-        }
-        var model = {
-          SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
-          EventInfoId: this.caseInfo.EventInfoId,
-          caseReport
-        }
-        this.loading = true
-        commonOperateApi('FINISH', 'case_report', model).then((result) => {
-          if (result) {
-            var userInfo = getCurrentUserInfo()
-            const data = {}
-            data.AgentId = parseInt(getAgentId())
-            data.ProcessCode = 'PROC-CEF3CE57-8E80-4718-8B56-44973CF24FA9'
-            data.OriginatorUserId = userInfo.userid
-            data.DeptId = userInfo.deptid
-            data.Approvers = getApproverIds(approve)
-            data.FormComponentValues = JSON.stringify(this.getFormComponentValues())
-            startProcessInstance(data).then(res => {
-              var msg = '提交审批流程成功'
-              this.$toast.success(msg)
-              this.goToLawForm()
-            }).finally(() => {
-              this.loading = false
-            })
-          } else {
-            this.loading = false
-          }
-        }).catch(() => {
-          this.loading = false
-        })
+      var caseReport = {
+        CaseId: this.caseInfo.Id,
+        CaseDetail: this.caseFinalReport.CaseDetail,
+        PunishmentId: isNotEmpty(this.penalizeBook) ? this.penalizeBook.ID : null,
+        ExecuteState: '已执行'
+      }
+      var oapiProcessinstanceCreateRequest = {
+        AgentId: ' ',
+        ProcessCode: ' ',
+        approvers: ' '
+      }
+      var model = {
+        SourceTaskId: isNotEmpty(this.taskInfo) ? this.taskInfo.ID : null,
+        EventInfoId: this.caseInfo.EventInfoId,
+        CaseId: '',
+        caseReport,
+        oapiProcessinstanceCreateRequest
+      }
+      this.loading = true
+      commonOperateApi('FINISH', 'case_report', model).then((result) => {
+        // if (result) {
+        //   var userInfo = getCurrentUserInfo()
+        //   const data = {}
+        //   data.AgentId = parseInt(getAgentId())
+        //   data.ProcessCode = 'PROC-CEF3CE57-8E80-4718-8B56-44973CF24FA9'
+        //   data.OriginatorUserId = userInfo.userid
+        //   data.DeptId = userInfo.deptid
+        //   data.Approvers = getApproverIds(approve)
+        //   data.FormComponentValues = JSON.stringify(this.getFormComponentValues())
+        //   startProcessInstance(data).then(res => {
+        //     var msg = '提交审批流程成功'
+        //     this.$toast.success(msg)
+        //     this.goToLawForm()
+        //   }).finally(() => {
+        //     this.loading = false
+        //   })
+        // } else {
+        //   this.loading = false
+        // }
+      }).catch(() => {
+        this.loading = false
       })
     },
     onFailed (errorInfo) {

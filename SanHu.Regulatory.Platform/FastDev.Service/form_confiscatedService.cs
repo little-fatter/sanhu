@@ -92,6 +92,7 @@ namespace FastDev.Service
                     l.AssociationobjectID = formConfiscated_Info;
                     l.ID = Guid.NewGuid().ToString();
                     l.CreateDate = DateTime.Now;
+                    l.CreateUserID = SysContext.WanJiangUserID;
                     QueryDb.Insert(l);
                 }
             }

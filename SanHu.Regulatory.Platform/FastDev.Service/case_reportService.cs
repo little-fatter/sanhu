@@ -72,6 +72,7 @@ namespace FastDev.Service
                     if (result.Result.Errcode != 0)
                         throw new Exception("发起审核流失败" + result.Result.ErrMsg);
                     data.CaseReport.ProcessInstanceId = result.Result.ProcessInstanceId;
+                    data.CaseReport.FormState = "待审核";
                     //更新该Report上的信息
                     //var targetId = result.Result.ProcessInstanceId;
                     //if (data.CaseReport.TaskId == null || data.CaseReport.TaskId == "")
