@@ -133,7 +133,7 @@ namespace FastDev.Service
             var data = JsonHelper.DeserializeJsonToObject<Form_printPDFReq>(context.Data);
             string templatePath = $"wwwroot/template/{data.formType}.doc";
             string FilePath = "";
-            //QueryDb.BeginTransaction();
+            QueryDb.BeginTransaction();
             try
             {
                 //检查表中是否已经生成
@@ -149,7 +149,8 @@ namespace FastDev.Service
                     Model = data.formType,
                     FilterModels = new string[] { "law_staff", "law_party" }
                 });
-
+                if (jsonData == null)
+                    return "该FormId无数据";
                 var partyDetail = new List<string>();
                 List<string> staff = new List<string>();
                 //寻找模板获取html字符串
@@ -198,6 +199,8 @@ namespace FastDev.Service
                             {
                                 if (j.Value is string && !pDic.ContainsKey(j.Key))
                                     pDic.Add(j.Key, j.Value.ToString());
+                                else if (j.Value is DateTime && !pDic.ContainsKey(j.Key))
+                                    pDic.Add(j.Key, DateTime.Parse(j.Value.ToString()).ToLongDateString().ToString());
                                 else
                                 {
                                     if (j.Key == "InspectionType" && (j.Value is IList<string>))
@@ -252,6 +255,17 @@ namespace FastDev.Service
                     ServiceConfig userServiceConfig = ServiceHelper.GetServiceConfig("user");
                     var OTDB = SysContext.GetOtherDB(userServiceConfig.model.dbName);
 
+                    //查询数据是否为真
+                    var punishmentInfo = QueryDb.FirstOrDefault<law_punishmentInfo>("where Id = @0", data.formID);
+                    if (punishmentInfo.Isfine)
+                        pDic.Add("DecisionContent", "给予50元的处罚");
+                    else if (punishmentInfo.IsConfiscationgoods)
+                        pDic.Add("DecisionContent", "给予没收物品处罚");
+                    //判断类型
+
+
+
+
                     ///CoOrganizer 协办人 1239796367061291008 CreateUserID 主办人的ID
                     //执法人1编号
                     var JobNum1 = OTDB.FirstOrDefault<string>("select Jobnumber from user where Name=@0", pDic.GetValueOrDefault("CreateUserID"));
@@ -261,26 +275,27 @@ namespace FastDev.Service
                     pDic.Add("JobNum2", JobNum2 ?? "");
 
                 }
+                if (data.formType == "form_inquiryrecord")
+                {
+                    var inquiryrecordInfo = QueryDb.FirstOrDefault<form_inquiryrecord>("where Id = @0", data.formID);
 
-                ////特殊处理
-                //if (data.formType == "form_inquiryrecord" && pDic.ContainsKey("Type"))
-                //{
-                //    //判断类型
-                //    switch (pDic["Type"])
-                //    {
-                //        case "当事人":
-                //            templatePath = $"wwwroot/pdf/{data.formType}1.doc";
-                //            break;
-                //        case "证人":
-                //            templatePath = $"wwwroot/pdf/{data.formType}2.doc";
-                //            break;
-                //        case "第三人":
-                //            templatePath = $"wwwroot/pdf/{data.formType}3.doc";
-                //            break;
-                //        default:
-                //            break;
-                //    }
-                //}
+                    var ObjType = QueryDb.FirstOrDefault<law_party>("where AssociationobjectID = @0", data.formID);
+                    if (ObjType != null)
+                        switch (ObjType.InquiryType)
+                        {
+                            case "当事人":
+                                templatePath = $"wwwroot/template/{data.formType}_litigant.doc";
+                                break;
+                            case "证人"://witness
+                                templatePath = $"wwwroot/template/{data.formType}_witness.doc";
+                                break;
+                            case "第三人":
+                                templatePath = $"wwwroot/template/{data.formType}_third.doc";
+                                break;
+                            default:
+                                break;
+                        }
+                }
 
                 //字典存入完毕 开启并替换
                 FilePath = ReplaceAspose(templatePath, pDic);
@@ -306,10 +321,10 @@ namespace FastDev.Service
             }
             catch (Exception e)
             {
-                //QueryDb.AbortTransaction();
+                QueryDb.AbortTransaction();
                 throw e;
             }
-            //QueryDb.CompleteTransaction();
+            QueryDb.CompleteTransaction();
             return FilePath;
         }
 
