@@ -12,7 +12,7 @@
     "@aspnet/signalr": "^1.1.4",
     "@turf/turf": "^5.1.6",
     "amfe-flexible": "^2.2.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "dingtalk-jsapi": "^2.8.33",
     "file-saver": "^2.0.2",
     "jquery": "^3.4.1",
